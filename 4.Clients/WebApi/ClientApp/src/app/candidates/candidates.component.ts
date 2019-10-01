@@ -142,10 +142,10 @@ export class CandidatesComponent implements OnInit {
   }
 
   search(): void {
-    //Mult variable was added to save some code later on, when the sorting method is used.
-    let mult = 1;
+    //Order variable was added to save some lines later on, when the sorting method is used.
+    let order = 1;
     if (this.sortValue === 'descend')
-      mult = -1;
+      order = -1;
     const filterFunc = (item) => {
       return (this.listOfSearchCandidates.length ? this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
         (item.name.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1);
@@ -157,30 +157,29 @@ export class CandidatesComponent implements OnInit {
     if (this.sortName === 'name' && this.sortValue) {
       this.listOfDisplayData = data.sort((a, b) => {
         if (a[this.sortName] > b[this.sortName])
-          return mult * 1;
+          return order * 1;
         if (a[this.sortName] < b[this.sortName])
-          return mult * -1;
+          return order * -1;
         if (a[this.sortName] === b[this.sortName]) {
           if (a.lastName > b.lastName)
-            return mult * 1;
+            return order * 1;
           if (a.lastName < b.lastName)
-            return mult * -1;
+            return order * -1;
           if (a.lastName === b.lastName) {
             if (a.dni > b.dni)
-              return mult * 1;
-            if (a.dni < b.dni)
-              return mult * -1;
+              return order * 1;
+            return order * -1;
           }
         }
 
       }
       );
     }
-    if (this.sortName && this.sortValue) {
+    else if (this.sortName && this.sortValue) {
       this.listOfDisplayData = data.sort((a, b) =>
         a[this.sortName] > b[this.sortName]
-          ? mult * 1
-          : mult * -1
+          ? order * 1
+          : order * -1
       );
     } else {
       this.listOfDisplayData = data;

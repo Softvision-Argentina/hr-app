@@ -24,7 +24,6 @@ export class DaysOffComponent implements OnInit {
 
   validateForm: FormGroup;
   listOfDaysOff: DaysOff[] = [];
-  daysOffofEmp: DaysOff[];
   employee;
   searchValue = '';
   searchValueType = '';
@@ -157,12 +156,6 @@ export class DaysOffComponent implements OnInit {
                       this.facade.toastrService.error('There is no employee with that DNI.');
                     } else {
                       let isCompleted: boolean = true;
-
-                      this.daysOffofEmp = this.listOfDaysOff.filter(function (d) {
-                        d.employee === this.employee;
-                      });
-
-                      console.log(this.daysOffofEmp.values);
                       for (const i in this.validateForm.controls) {
                         this.validateForm.controls[i].markAsDirty();
                         this.validateForm.controls[i].updateValueAndValidity();
@@ -355,21 +348,10 @@ export class DaysOffComponent implements OnInit {
     this.search();
   }
 
-  // search(): void {
-  //   const filterFunc = (item) => {
-  //     return (this.listOfSearch.length ? this.listOfSearch.some(daysOff => item.employee.dni.indexOf(daysOff) !== -1) : true) &&
-  //       (item.employee.dni.toString().indexOf(this.searchValue.trim()) !== -1); // trimvalidator
-  //   };
-  //   const data = this.listOfDaysOff.filter(item => filterFunc(item));
-  //   this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortDni] > b[this.sortDni] ? 1 : -1) : (b[this.sortDni] > a[this.sortDni] ? 1 : -1));
-  //   this.searchValue = '';
-  //   this.nameDropdown.nzVisible = false;
-  // }
-
   searchType(): void {
-    let mult=1;
-    if(this.sortValue==='ascend')
-      mult=-1;
+    let mult = 1;
+    if (this.sortValue === 'ascend')
+      mult = -1;
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.type === p) : true) &&
         (item.type === this.searchValueType)
@@ -378,9 +360,9 @@ export class DaysOffComponent implements OnInit {
     /** sort data **/
     if (this.sortName && this.sortValue) {
       this.listOfDisplayData = data.sort((a, b) =>
-      a[this.sortName!] > b[this.sortName!]
-            ? mult*1
-            : mult*-1
+        a[this.sortName!] > b[this.sortName!]
+          ? mult * 1
+          : mult * -1
       );
     } else {
       this.listOfDisplayData = data;
@@ -396,9 +378,10 @@ export class DaysOffComponent implements OnInit {
   }
 
   searchStatus(): void {
-    let mult=1;
-    if(this.sortValue==='ascend')
-      mult=-1;
+    let order = 1;
+    if (this.sortValue === 'ascend') {
+      order = -1;
+    }
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.status === p) : true) &&
         (item.status === this.searchValueStatus)
@@ -407,9 +390,9 @@ export class DaysOffComponent implements OnInit {
     /** sort data **/
     if (this.sortName && this.sortValue) {
       this.listOfDisplayData = data.sort((a, b) =>
-          a[this.sortName!] > b[this.sortName!]
-            ? mult*1
-            : mult*-1
+        a[this.sortName!] > b[this.sortName!]
+          ? order * 1
+          : order * -1
       );
     } else {
       this.listOfDisplayData = data;
@@ -446,11 +429,13 @@ export class DaysOffComponent implements OnInit {
 
   search(): void {
     /** filter data **/
-    //Mult variable was added to save some code later on, when the sorting method is used.
+    //Order variable was added to save some lines later on, when the sorting method is used.
     //It controls the sorting order. 1 for Ascending and -1 for descending.
-    let mult = 1;
-    if (this.sortValue === 'descend')
-      mult = -1;
+    let order = 1;
+    if (this.sortValue === 'descend') {
+      order = -1;
+    }
+
     const filterFunc = (item) =>
       (item.employee.dni.toString().indexOf(this.searchValue.trim()) !== -1) &&
       (this.listOfSearch.length ? this.listOfSearch.some(daysOff => item.employee.dni.indexOf(daysOff) !== -1) : true);
@@ -462,15 +447,15 @@ export class DaysOffComponent implements OnInit {
       if (this.sortName === "employee.dni") {
         this.listOfDisplayData = data.sort((a, b) =>
           a.employee.dni > b.employee.dni
-            ? mult * 1
-            : mult * -1
+            ? order * 1
+            : order * -1
         );
       }
       else {
         this.listOfDisplayData = data.sort((a, b) =>
           a[this.sortName!] > b[this.sortName!]
-            ? mult * 1
-            : mult * -1
+            ? order * 1
+            : order * -1
         );
       }
 
@@ -482,14 +467,4 @@ export class DaysOffComponent implements OnInit {
     this.nameDropdown.nzVisible = false;
   }
 
-  // search(): void {
-  //   const filterFunc = (item) => {
-  //     return (this.listOfSearch.length ? this.listOfSearch.some(daysOff => item.employee.dni.indexOf(daysOff) !== -1) : true) &&
-  //       (item.employee.dni.toString().indexOf(this.searchValue.trim()) !== -1); // trimvalidator
-  //   };
-  //   const data = this.listOfDaysOff.filter(item => filterFunc(item));
-  //   this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortDni] > b[this.sortDni] ? 1 : -1) : (b[this.sortDni] > a[this.sortDni] ? 1 : -1));
-  // this.searchValue = '';
-  // this.nameDropdown.nzVisible = false;
-  // }
 }
