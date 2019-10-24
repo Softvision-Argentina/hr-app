@@ -495,7 +495,6 @@ export class ProcessContactComponent implements OnInit {
 
   startNewProcess(candidateId: number) {
     this.facade.candidateService.idExists(candidateId).subscribe(res => {
-      console.log("respuesta", res);
       if (res !== null) {
         if (res.status == 1) {
           // status 1 means InProgress
