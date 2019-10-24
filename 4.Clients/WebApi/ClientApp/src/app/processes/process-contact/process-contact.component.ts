@@ -1,32 +1,36 @@
-import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges } from '@angular/core';
-import { FacadeService } from 'src/app/services/facade.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
-import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
-import { AppComponent } from 'src/app/app.component';
-import { User } from 'src/entities/user';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
-import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ProcessesComponent } from 'src/app/processes/processes/processes.component';
-import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
-import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
-import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
-import { Globals } from 'src/app/app-globals/globals';
-import { Community } from 'src/entities/community';
-import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  TemplateRef,
+  SimpleChanges
+} from "@angular/core";
+import { FacadeService } from "src/app/services/facade.service";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { trimValidator } from "src/app/directives/trim.validator";
+import { Candidate } from "src/entities/candidate";
+import { Consultant } from "src/entities/consultant";
+import { AppComponent } from "src/app/app.component";
+import { User } from "src/entities/user";
+import { NzModalRef, NzModalService } from "ng-zorro-antd";
+import { CandidateDetailsComponent } from "src/app/candidates/details/candidate-details.component";
+import { ProcessesComponent } from "src/app/processes/processes/processes.component";
+import { CandidateAddComponent } from "src/app/candidates/add/candidate-add.component";
+import { CandidateStatusEnum } from "../../../entities/enums/candidate-status.enum";
+import { EnglishLevelEnum } from "../../../entities/enums/english-level.enum";
+import { Globals } from "src/app/app-globals/globals";
+import { Community } from "src/entities/community";
+import { CandidateProfile } from "src/entities/Candidate-Profile";
+import { replaceAccent } from "src/app/helpers/string-helpers";
 
 @Component({
-  selector: 'app-process-contact',
-  templateUrl: './process-contact.component.html',
-  styleUrls: ['./process-contact.component.css']
+  selector: "app-process-contact",
+  templateUrl: "./process-contact.component.html",
+  styleUrls: ["./process-contact.component.css"]
 })
-
 export class ProcessContactComponent implements OnInit {
-
-
-  @ViewChild('dropdown') nameDropdown;
+  @ViewChild("dropdown") nameDropdown;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
 
   @Input()
@@ -81,11 +85,11 @@ export class ProcessContactComponent implements OnInit {
   profiles: CandidateProfile[] = [];
   currentConsultant: User;
   candidateForm: FormGroup = this.fb.group({
-    name: ['', [trimValidator]],
+    name: ["", [trimValidator]],
     firstName: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
     email: [null, [Validators.email]],
-    phoneNumberPrefix: ['+54'],
+    phoneNumberPrefix: ["+54"],
     phoneNumber: [null, trimValidator],
     recruiter: [null, [Validators.required]],
     contactDay: [null, [Validators.required]],
@@ -100,7 +104,7 @@ export class ProcessContactComponent implements OnInit {
   isEditCandidate: boolean = false;
   candidates: Candidate[] = [];
 
-  searchValue = '';
+  searchValue = "";
   listOfSearchProcesses = [];
 
   filteredCandidate: Candidate[] = [];
@@ -112,57 +116,65 @@ export class ProcessContactComponent implements OnInit {
   editingCandidateId: number = 0;
   // candidateForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
-    private modalService: NzModalService, private process: ProcessesComponent) {
+  constructor(
+    private fb: FormBuilder,
+    private facade: FacadeService,
+    private app: AppComponent,
+    private detailsModal: CandidateDetailsComponent,
+    private modalService: NzModalService,
+    private process: ProcessesComponent
+  ) {
     this.currentConsultant = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
     this.recruiters = this._consultants;
     this.comms = this._communities;
-    this.profiles = this._candidateProfiles
+    this.profiles = this._candidateProfiles;
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getConsultants();
     this.getCandidates();
   }
 
-
-
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
-      .subscribe(res => {
+    this.facade.candidateService.get<Candidate>().subscribe(
+      res => {
         this.candidates = res;
-      }, err => {
+      },
+      err => {
         console.log(err);
-      })
+      }
+    );
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
-      .subscribe(res => {
+    this.facade.consultantService.get<Consultant>().subscribe(
+      res => {
         this.consultants = res;
-      }, err => {
+      },
+      err => {
         console.log(err);
-      });
+      }
+    );
   }
 
   searchedCandidateModal(modalContent: TemplateRef<{}>): void {
     const modal: NzModalRef = this.modalService.create({
-      nzTitle: 'Candidate founded',
+      nzTitle: "Candidate founded",
       nzContent: modalContent,
       nzFooter: [
         {
-          label: 'NEW',
-          type: 'primary',
+          label: "NEW",
+          type: "primary",
           onClick: () => {
             modal.destroy();
             this.handleOk();
           }
         },
         {
-          label: 'Close',
-          shape: 'default',
+          label: "Close",
+          shape: "default",
           onClick: () => modal.destroy()
         }
       ]
@@ -174,8 +186,14 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['recruiter'].setValue(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentConsultant.Email.toLowerCase())[0].id);
-    this.candidateForm.controls['contactDay'].setValue(new Date());
+    this.candidateForm.controls["recruiter"].setValue(
+      this.recruiters.filter(
+        r =>
+          r.emailAddress.toLowerCase() ===
+          this.currentConsultant.Email.toLowerCase()
+      )[0].id
+    );
+    this.candidateForm.controls["contactDay"].setValue(new Date());
   }
 
   edit(id: number): void {
@@ -184,63 +202,98 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    let editedCandidate: Candidate = this.candidates.filter(
+      Candidate => Candidate.id == id
+    )[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    let CandidateDelete: Candidate = this.candidates.filter(
+      c => c.id == CandidateID
+    )[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
-      nzContent: '',
-      nzOkText: 'Yes',
-      nzOkType: 'danger',
-      nzCancelText: 'No',
-      nzOnOk: () => this.facade.candidateService.delete<Candidate>(CandidateID)
-        .subscribe(res => {
-          this.getCandidates();
-          this.facade.toastrService.success('Candidate was deleted !');
-        }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
-        })
+      nzTitle:
+        "Are you sure delete " +
+        CandidateDelete.name +
+        " " +
+        CandidateDelete.lastName +
+        " ?",
+      nzContent: "",
+      nzOkText: "Yes",
+      nzOkType: "danger",
+      nzCancelText: "No",
+      nzOnOk: () =>
+        this.facade.candidateService.delete<Candidate>(CandidateID).subscribe(
+          res => {
+            this.getCandidates();
+            this.facade.toastrService.success("Candidate was deleted !");
+          },
+          err => {
+            if (err.message != undefined)
+              this.facade.toastrService.error(err.message);
+            else
+              this.facade.toastrService.error(
+                "The service is not available now. Try again later."
+              );
+          }
+        )
     });
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     console.log(this.filteredCandidate);
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.emptyCandidate = this.filteredCandidate.filter(
+      candidate => candidate.id == candidateID
+    )[0];
+    this.detailsModal.showModal(
+      modalContent,
+      this.emptyCandidate.name + " " + this.emptyCandidate.lastName
+    );
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    let candidate = this.candidates.filter(s => {
+      return (
+        (
+          replaceAccent(s.name).toLowerCase() +
+          " " +
+          replaceAccent(s.lastName).toLowerCase()
+        ).indexOf(replaceAccent(searchString).toLowerCase()) !== -1
+      );
+    });
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
 
   fillCandidateForm(Candidate: Candidate) {
-    this.candidateForm.controls['firstName'].setValue(Candidate.name);
-    this.candidateForm.controls['lastName'].setValue(Candidate.lastName);
-    this.candidateForm.controls['phoneNumberPrefix'].setValue(Candidate.phoneNumber.substring(1, Candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(Candidate.phoneNumber.split(')')[1]);
-    this.candidateForm.controls['email'].setValue(Candidate.emailAddress);
-    this.candidateForm.controls['recruiter'].setValue(Candidate.recruiter);
-    this.candidateForm.controls['id'].setValue(Candidate.id);
-    this.candidateForm.controls['contactDay'].setValue(new Date(Candidate.contactDay));
-    this.candidateForm.controls['profile'].setValue(Candidate.profile);
-    this.candidateForm.controls['community'].setValue(Candidate.community);
-    this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
+    this.candidateForm.controls["firstName"].setValue(Candidate.name);
+    this.candidateForm.controls["lastName"].setValue(Candidate.lastName);
+    this.candidateForm.controls["phoneNumberPrefix"].setValue(
+      Candidate.phoneNumber.substring(1, Candidate.phoneNumber.indexOf(")"))
+    );
+    this.candidateForm.controls["phoneNumber"].setValue(
+      Candidate.phoneNumber.split(")")[1]
+    );
+    this.candidateForm.controls["email"].setValue(Candidate.emailAddress);
+    this.candidateForm.controls["recruiter"].setValue(Candidate.recruiter);
+    this.candidateForm.controls["id"].setValue(Candidate.id);
+    this.candidateForm.controls["contactDay"].setValue(
+      new Date(Candidate.contactDay)
+    );
+    this.candidateForm.controls["profile"].setValue(Candidate.profile);
+    this.candidateForm.controls["community"].setValue(Candidate.community);
+    this.candidateForm.controls["isReferred"].setValue(Candidate.isReferred);
   }
 
   resetForm() {
     this.candidateForm = this.fb.group({
-      name: ['', [trimValidator]],
+      name: ["", [trimValidator]],
       firstName: [null, [Validators.required, trimValidator]],
       lastName: [null, [Validators.required, trimValidator]],
       email: [null, [Validators.email]],
-      phoneNumberPrefix: ['+54'],
+      phoneNumberPrefix: ["+54"],
       phoneNumber: [null],
       recruiter: [null, [Validators.required]],
       contactDay: [null, [Validators.required]],
@@ -254,7 +307,9 @@ export class ProcessContactComponent implements OnInit {
 
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(
+      Candidate => Candidate.id == idCandidate
+    )[0];
 
     // for (const i in this.candidateForm.controls) {
     //   this.candidateForm.controls[i].markAsDirty();
@@ -264,13 +319,20 @@ export class ProcessContactComponent implements OnInit {
     if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
-        name: this.candidateForm.controls['firstName'].value.toString(),
-        lastName: this.candidateForm.controls['lastName'].value.toString(),
-        phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
+        name: this.candidateForm.controls["firstName"].value.toString(),
+        lastName: this.candidateForm.controls["lastName"].value.toString(),
+        phoneNumber:
+          "(" +
+          this.candidateForm.controls["phoneNumberPrefix"].value.toString() +
+          ")",
         dni: editedCandidate.dni,
-        emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        recruiter: this.candidateForm.controls['recruiter'].value,
-        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
+        emailAddress: this.candidateForm.controls["email"].value
+          ? this.candidateForm.controls["email"].value.toString()
+          : null,
+        recruiter: this.candidateForm.controls["recruiter"].value,
+        contactDay: new Date(
+          this.candidateForm.controls["contactDay"].value.toString()
+        ),
         linkedInProfile: editedCandidate.linkedInProfile,
         englishLevel: editedCandidate.englishLevel,
         additionalInformation: editedCandidate.additionalInformation,
@@ -280,26 +342,46 @@ export class ProcessContactComponent implements OnInit {
         profile: editedCandidate.profile,
         community: editedCandidate.community,
         isReferred: editedCandidate.isReferred
+      };
+      if (this.candidateForm.controls["phoneNumber"].value) {
+        editedCandidate.phoneNumber += this.candidateForm.controls[
+          "phoneNumber"
+        ].value.toString();
       }
-      if (this.candidateForm.controls['phoneNumber'].value) {
-        editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
-      }
-      this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
-        .subscribe(res => {
-          this.getCandidates();
-          this.facade.toastrService.success('Candidate was successfully edited !');
-        }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
-        })
+      this.facade.candidateService
+        .update<Candidate>(idCandidate, editedCandidate)
+        .subscribe(
+          res => {
+            this.getCandidates();
+            this.facade.toastrService.success(
+              "Candidate was successfully edited !"
+            );
+          },
+          err => {
+            if (err.message != undefined)
+              this.facade.toastrService.error(err.message);
+            else
+              this.facade.toastrService.error(
+                "The service is not available now. Try again later."
+              );
+          }
+        );
     }
     this.isEditCandidate = false;
     this.visible = false;
   }
 
   Recontact(idCandidate: number) {
-    console.log(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentConsultant.Email.toLowerCase())[0].id);
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    console.log(
+      this.recruiters.filter(
+        r =>
+          r.emailAddress.toLowerCase() ===
+          this.currentConsultant.Email.toLowerCase()
+      )[0].id
+    );
+    let editedCandidate: Candidate = this.candidates.filter(
+      Candidate => Candidate.id == idCandidate
+    )[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -307,7 +389,11 @@ export class ProcessContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      recruiter: this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentConsultant.Email.toLowerCase())[0].id,
+      recruiter: this.recruiters.filter(
+        r =>
+          r.emailAddress.toLowerCase() ===
+          this.currentConsultant.Email.toLowerCase()
+      )[0].id,
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,
@@ -318,16 +404,26 @@ export class ProcessContactComponent implements OnInit {
       profile: editedCandidate.profile,
       community: editedCandidate.community,
       isReferred: editedCandidate.isReferred
-    }
+    };
 
-    this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
-      .subscribe(res => {
-        this.getCandidates();
-        this.facade.toastrService.success('Candidate was successfully edited !');
-      }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
-      })
+    this.facade.candidateService
+      .update<Candidate>(idCandidate, editedCandidate)
+      .subscribe(
+        res => {
+          this.getCandidates();
+          this.facade.toastrService.success(
+            "Candidate was successfully edited !"
+          );
+        },
+        err => {
+          if (err.message != undefined)
+            this.facade.toastrService.error(err.message);
+          else
+            this.facade.toastrService.error(
+              "The service is not available now. Try again later."
+            );
+        }
+      );
   }
 
   createNewCandidate() {
@@ -343,72 +439,104 @@ export class ProcessContactComponent implements OnInit {
     if (isCompleted) {
       let newCandidate: Candidate = {
         id: 0,
-        name: this.candidateForm.controls['firstName'].value.toString(),
-        lastName: this.candidateForm.controls['lastName'].value.toString(),
-        phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
+        name: this.candidateForm.controls["firstName"].value.toString(),
+        lastName: this.candidateForm.controls["lastName"].value.toString(),
+        phoneNumber:
+          "(" +
+          this.candidateForm.controls["phoneNumberPrefix"].value.toString() +
+          ")",
         dni: 0,
-        emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        recruiter: this.candidateForm.controls['recruiter'].value,
-        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
+        emailAddress: this.candidateForm.controls["email"].value
+          ? this.candidateForm.controls["email"].value.toString()
+          : null,
+        recruiter: this.candidateForm.controls["recruiter"].value,
+        contactDay: new Date(
+          this.candidateForm.controls["contactDay"].value.toString()
+        ),
+        linkedInProfile: this.candidateForm.controls[
+          "linkedInProfile"
+        ].value.toString(),
         englishLevel: EnglishLevelEnum.None,
-        additionalInformation: '',
+        additionalInformation: "",
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
         candidateSkills: [],
-        isReferred: this.candidateForm.controls['isReferred'].value,
-        community: this.candidateForm.controls['community'].value,
-        profile: this.candidateForm.controls['profile'].value
+        isReferred: this.candidateForm.controls["isReferred"].value,
+        community: this.candidateForm.controls["community"].value,
+        profile: this.candidateForm.controls["profile"].value
+      };
+      if (this.candidateForm.controls["phoneNumber"].value) {
+        newCandidate.phoneNumber += this.candidateForm.controls[
+          "phoneNumber"
+        ].value.toString();
       }
-      if (this.candidateForm.controls['phoneNumber'].value) {
-        newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
-      }
-      this.facade.candidateService.add<Candidate>(newCandidate)
-        .subscribe(res => {
-
+      this.facade.candidateService.add<Candidate>(newCandidate).subscribe(
+        res => {
           this.getCandidates();
-          this.facade.toastrService.success('Candidate was successfully created !');
+          this.facade.toastrService.success(
+            "Candidate was successfully created !"
+          );
           this.isNewCandidate = false;
           this.visible = false;
           this.app.hideLoading;
-          
-
-        }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+        },
+        err => {
+          if (err.message != undefined)
+            this.facade.toastrService.error(err.message);
+          else
+            this.facade.toastrService.error(
+              "The service is not available now. Try again later."
+            );
           this.app.hideLoading;
-        })
+        }
+      );
     }
-
   }
 
   startNewProcess(candidateId: number) {
-
-    this.facade.candidateService.idExists(candidateId)
-      .subscribe(res => {
-        if (res !== null) {
+    this.facade.candidateService.idExists(candidateId).subscribe(res => {
+      console.log("respuesta", res);
+      if (res !== null) {
+        if (res.status == 1) {
+          // status 1 means InProgress
           this.facade.modalService.confirm({
-            nzTitle: 'There is already another process of ' + res.lastName + ', ' + res.name + '. Do you want to open a new one ?',
-            nzContent: '',
-            nzOkText: 'Yes',
-            nzOkType: 'danger',
-            nzCancelText: 'No',
+            nzTitle:
+              "There is already another process of " +
+              res.lastName +
+              ", " +
+              res.name +
+              ". Do you want to open a new one ?",
+            nzContent: "",
+            nzOkText: "Yes",
+            nzOkType: "danger",
+            nzCancelText: "No",
             nzOnOk: () => {
               this.modalService.closeAll();
-              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-              this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
+              let processCandidate: Candidate = this.candidates.filter(
+                Candidate => Candidate.id == candidateId
+              )[0];
+              this.process.newProcessStart(
+                this.processStartModal,
+                this.processFooterModal,
+                processCandidate
+              );
             }
             //  ,
             // nzOnCancel: () => this.modalService.closeAll()
-
           });
-        }
-        else {
+        } else {
           this.modalService.closeAll();
-          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-          this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-          //this.candidateAdd.fillCandidateForm(processCandidate);        
+          let processCandidate: Candidate = this.candidates.filter(
+            Candidate => Candidate.id == candidateId
+          )[0];
+          this.process.newProcessStart(
+            this.processStartModal,
+            this.processFooterModal,
+            processCandidate
+          );
+          //this.candidateAdd.fillCandidateForm(processCandidate);
         }
-      })
+      }
+    });
   }
 }
