@@ -142,7 +142,7 @@ export class ReportsComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidates.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id == candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
