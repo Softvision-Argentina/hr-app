@@ -126,6 +126,7 @@ import { ProfilesComponent } from './profiles/profiles.component';
 import { SlickModule } from "ngx-slick";
 import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
+import { ReportTimetofill2Component } from './dashboard/report-timetofill2/report-timetofill2.component';
 
 
 
@@ -187,6 +188,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportSkillsComponent,
       ReportHireProjectionComponent,
       ReportHireCasualtiesComponent,
+      ReportTimetofill2Component,
       ProcessContactComponent,
       DaysOffComponent,
       ProcessContactComponent,

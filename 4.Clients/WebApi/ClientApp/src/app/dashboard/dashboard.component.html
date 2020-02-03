@@ -1,5 +1,8 @@
 <div style="background: #ECECEC;padding:30px;">
   <div nz-row [nzGutter]="8">
+    <app-report-timetofill2 [_processes]="processes"></app-report-timetofill2>    
+  </div>
+  <div nz-row [nzGutter]="8">
     <app-report-processes [_detailedProcesses]="processes"></app-report-processes>
     <div nz-col [nzSpan]="12">
       <app-report-skills  [_processes]="processes"> </app-report-skills>
