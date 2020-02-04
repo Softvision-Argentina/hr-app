@@ -53,17 +53,17 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <nz-form-item [style.width.%]="90">
-        <nz-form-control>
-          <br />
-          <button nz-button nzType="primary" [disabled]="!validateSkillsForm.valid">
-            <i nz-icon type="search"></i>Search</button>
-        </nz-form-control>
-      </nz-form-item>
+      <br />
       <nz-form-item [style.width.%]="90">
         <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:0}">
           <button nz-button nzType="dashed" style="width:20%" (click)="addField($event)"><i nz-icon type="plus"></i>
             Add Skill</button>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item [style.width.%]="90">
+        <nz-form-control>
+          <button nz-button nzType="primary" [disabled]="!validateSkillsForm.valid">
+            <i nz-icon type="search"></i>Search</button>
         </nz-form-control>
       </nz-form-item>
     </form>
