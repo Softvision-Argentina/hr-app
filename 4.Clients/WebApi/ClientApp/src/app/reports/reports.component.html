@@ -8,7 +8,7 @@
           <nz-form-label nzFor="communitySelector">Community</nz-form-label>
           <nz-select formControlName="community" nzShowSearch nzAllowClear [nzAllowClear]="false"
             nzPlaceHolder="Select a community">
-            <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" nzValue="{{c.id}}"></nz-option>
+            <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" [nzValue]="c">{{c.name}}</nz-option>
           </nz-select>
           <!--    <nz-form-explain
             *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
@@ -19,8 +19,8 @@
         <nz-form-control [style.width.%]="90" style="text-align: left;">
           <nz-form-label nzFor="officeSelector">Preferred Office</nz-form-label>
           <nz-select formControlName="preferredOffice" nzShowSearch nzAllowClear [nzAllowClear]="false"
-            nzPlaceHolder="Select a preferred office">
-            <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id"></nz-option>
+            nzPlaceHolder="Select a preferred office" >
+            <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o">{{ o.name }}</nz-option>
           </nz-select>
           <!--    <nz-form-explain
             *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">

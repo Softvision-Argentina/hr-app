@@ -83,6 +83,19 @@ export class ReportsComponent implements OnInit {
   searchValue = '';
   listOfSearchCandidates = [];
   listOfDisplayData = [...this.filteredCandidates];
+  defaultOffice : Office = {
+    id: null,
+    name: 'NA',
+    description: '',
+    roomItems: []
+  }
+  defaultCommunity : Community = {
+    id: null,
+    name: 'NA',
+    description: '',
+    profileId: 0,
+    profile: null
+  }
 
 
   numberOfWait: number = 0;
@@ -110,8 +123,8 @@ export class ReportsComponent implements OnInit {
     this.getCommunities();
     this.getOffices();
     this.validateSkillsForm = this.fb.group({
-      community: '',
-      preferredOffice: ''
+      community: [this.defaultCommunity],
+      preferredOffice: [this.defaultOffice]
     });
     this.addField()
     this.app.hideLoading();
@@ -169,7 +182,8 @@ export class ReportsComponent implements OnInit {
   getCommunities() {
     this.facade.communityService.get<Community>()
     .subscribe(res => {
-      this.communities = res;
+      this.communities.push(this.defaultCommunity)
+      this.communities.push(...res);
     }, err => {
       console.log(err);
     });
@@ -178,7 +192,8 @@ export class ReportsComponent implements OnInit {
   getOffices() {
     this.facade.OfficeService.get<Office>()
       .subscribe(res => {
-        this._offices = res;
+        this._offices.push(this.defaultOffice)
+        this._offices.push(...res);
       }, err => {
         console.log(err);
       });
@@ -279,8 +294,8 @@ export class ReportsComponent implements OnInit {
         , preferredOffice : number
         , selectedSkills:  Array<{ skillId: number; minRate: number; maxRate: number }> } = 
         {
-          community : parseInt(this.validateSkillsForm.get('community').value),
-          preferredOffice : parseInt(this.validateSkillsForm.get('preferredOffice').value),
+          community : parseInt(this.validateSkillsForm.get('community').value.id),
+          preferredOffice : parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
           selectedSkills : selectedSkills
         }
 
