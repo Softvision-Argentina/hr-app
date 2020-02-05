@@ -1,29 +1,28 @@
 <div >
-  <nz-card nzTitle="Time to fill" [nzHoverable]="true">
+  <nz-card nzTitle="Time to fill 2" [nzHoverable]="true">
     <div style="display: block">
       <div nz-row>
         <div nz-col nzSpan="24" style="text-align: center;">
             <nz-button-group [nzSize]="'default'">
-                <button nz-button nzType="default" (click)="previousHireMonth()"><i nz-icon type="left"></i></button>
-                <nz-month-picker [(ngModel)]="month" (ngModelChange)="getHireProjectionReport()" nzPlaceHolder="Select a month" >
+                <button nz-button nzType="default" (click)="previousMonth()"><i nz-icon type="left"></i></button>
+                <nz-month-picker [(ngModel)]="month" (ngModelChange)="getProjectionReport()" nzPlaceHolder="Select a month" >
                   </nz-month-picker>
-                <button nz-button nzType="default" (click)="nextHireMonth()"><i nz-icon type="right"></i></button>
+                <button nz-button nzType="default" (click)="nextMonth()"><i nz-icon type="right"></i></button>
               </nz-button-group>                
         </div>
       </div>
-      <div>
-        <button (click)="doSomething()"></button>
-      </div>
-      <br />
+      <br/>
+      <br/>
       <div nz-row>
           <div nz-col nzSpan="24" *ngIf="hasProjections">
-              <canvas baseChart
-              [datasets]="hireChartData"
-              [labels]="hireChartLabels"
-              [options]="hireChartOptions"
-              [plugins]="hireChartPlugins"
-              [legend]="hireChartLegend"
-              [chartType]="hireChartType">
+              <canvas baseChart              
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [plugins]="chartPlugins"
+              [legend]="chartLegend"
+              [chartType]="chartType"
+              [colors]="chartColors">
             </canvas>
           </div>
           <div nz-col nzSpan="24" *ngIf="!hasProjections" style="text-align: center;">
