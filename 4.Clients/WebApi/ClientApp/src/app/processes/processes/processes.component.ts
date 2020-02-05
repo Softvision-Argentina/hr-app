@@ -324,40 +324,49 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.rejectProcessForm.reset();
     let process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
 
-    const modal = this.facade.modalService.confirm({
+    const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      nzOkText: 'Yes',
-      nzOkType: 'danger',
-      nzCancelText: 'No',
-      nzOnOk: () => {
-        this.app.showLoading();
-        let isCompleted: boolean = true;
-        for (const i in this.rejectProcessForm.controls) {
-          this.rejectProcessForm.controls[i].markAsDirty();
-          this.rejectProcessForm.controls[i].updateValueAndValidity();
-          if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+      nzFooter: [
+        {
+          label: 'Cancel',
+          shape: 'default',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Submit',
+          type: 'danger',
+          onClick: () => {
+            this.app.showLoading();
+            let isCompleted: boolean = true;
+            for (const i in this.rejectProcessForm.controls) {
+              this.rejectProcessForm.controls[i].markAsDirty();
+              this.rejectProcessForm.controls[i].updateValueAndValidity();
+              if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+            }
+            if (isCompleted) {
+    
+              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+    
+              this.facade.processService.reject(processID, rejectionReason)
+                .subscribe(res => {
+                  this.getCandidates();
+                  this.getProcesses();
+                  this.app.hideLoading();
+                  modal.destroy();
+                  this.facade.toastrService.success('Process and associated candidate were rejected');
+                }, err => {
+                  this.app.hideLoading();
+                  this.facade.toastrService.error(err.message);
+                })
+            }
+            this.app.hideLoading();
+          }          
         }
-        if (isCompleted) {
-
-          let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-
-          this.facade.processService.reject(processID, rejectionReason)
-            .subscribe(res => {
-              this.getCandidates();
-              this.getProcesses();
-              this.app.hideLoading();
-              modal.destroy();
-              this.facade.toastrService.success('Process and associated candidate were rejected');
-            }, err => {
-              this.app.hideLoading();
-              this.facade.toastrService.error(err.message);
-            })
-        }
-        this.app.hideLoading();
-      }
+      ]      
     });
   }
+
   /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
   openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
     this.declineProcessForm.reset();
@@ -365,9 +374,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      //nzOkText: 'Yes',
-      //nzOkType: 'danger',
-      //nzCancelText: 'No',
+      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
       nzZIndex: 5,
       nzFooter: [
         {
@@ -389,18 +396,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-              //let a :number = this.declineProcessForm.controls['declineReasonName'].value
               let declineReason : DeclineReason = { 
                   id: this.declineProcessForm.controls['declineReasonName'].value,
                   name: "",
                   description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
                 }
-              //this.declineProcessForm.controls['declineReasonDescription'].value.toString();
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
-                  //this.getCandidates();
-                  //this.getProcesses();
                   this.app.hideLoading();
                   modal.destroy();
                   this.facade.toastrService.success('Process and associated candidate were declined');
@@ -413,39 +416,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           }          
         }
       ]
-      /*nzOnOk: () => {
-        this.app.showLoading();
-        let isCompleted: boolean = true;
-        for (const i in this.declineProcessForm.controls) {
-          this.declineProcessForm.controls[i].markAsDirty();
-          this.declineProcessForm.controls[i].updateValueAndValidity();
-          if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
-            isCompleted = false;
-          }
-        }
-        if (isCompleted) {
-          //let a :number = this.declineProcessForm.controls['declineReasonName'].value
-          let declineReason : DeclineReason = { 
-              id: this.declineProcessForm.controls['declineReasonName'].value,
-              name: "",
-              description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-            }
-          //this.declineProcessForm.controls['declineReasonDescription'].value.toString();
-          process.declineReason = declineReason;
-          this.facade.processService.update(process.id, process)
-            .subscribe(res => {
-              this.getCandidates();
-              this.getProcesses();
-              this.app.hideLoading();
-              modal.destroy();
-              this.facade.toastrService.success('Process and associated candidate were declined');
-            }, err => {
-              this.app.hideLoading();
-              this.facade.toastrService.error(err.message);
-            })
-        }
-        this.app.hideLoading();
-      }*/
     });
     return modal;
   }
