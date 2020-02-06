@@ -126,7 +126,8 @@ import { ProfilesComponent } from './profiles/profiles.component';
 import { SlickModule } from "ngx-slick";
 import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
-
+import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
+import { DeclineReasonService } from './services/decline-reason.service';
 
 
 
@@ -199,7 +200,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       NoticeCalendarComponent,
       LocationsComponent,
       ProfilesComponent,
-      PostulantsComponent
+      PostulantsComponent,
+      DeclineReasonComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -253,6 +255,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         {path: 'profiles/:tab', component: ProfilesComponent},
         {path: 'locations/:tab', component: LocationsComponent},
         {path: 'roles', component: RoleComponent},
+        {path: 'declining-reasons', component: DeclineReasonComponent},
 
       ] },
 
@@ -307,6 +310,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     RoleService,
     CompanyCalendarService,
     PostulantsService,
+    DeclineReasonService,
     // MatDatepickerModule,
     // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }
