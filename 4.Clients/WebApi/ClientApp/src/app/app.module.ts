@@ -128,7 +128,8 @@ import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
 import { ReportTimetofill2Component } from './dashboard/report-timetofill2/report-timetofill2.component';
 import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
-
+import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
+import { DeclineReasonService } from './services/decline-reason.service';
 
 
 
@@ -203,6 +204,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
+      DeclineReasonComponent      
       ReportTimetofill1Component
    ],
    imports: [
@@ -257,6 +259,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         {path: 'profiles/:tab', component: ProfilesComponent},
         {path: 'locations/:tab', component: LocationsComponent},
         {path: 'roles', component: RoleComponent},
+        {path: 'declining-reasons', component: DeclineReasonComponent},
 
       ] },
 
@@ -311,6 +314,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     RoleService,
     CompanyCalendarService,
     PostulantsService,
+    DeclineReasonService,
     // MatDatepickerModule,
     // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }

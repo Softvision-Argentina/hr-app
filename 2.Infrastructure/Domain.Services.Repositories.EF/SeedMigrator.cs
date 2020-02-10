@@ -70,6 +70,7 @@ namespace Domain.Services.Repositories.EF
             var consultant13 = new Consultant { Name = "Tomas", LastName = "Rebollo", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.rebollo@softvision.com" };
             var consultant14 = new Consultant { Name = "Matias", LastName = "Otero", PhoneNumber = "(+54)12359742", EmailAddress = "matias.otero@softvision.com" };
             var consultant15 = new Consultant { Name = "Matias", LastName = "Totaro", PhoneNumber = "(+54)12359742", EmailAddress = "matias.totaro@softvision.com" };
+            var consultant19 = new Consultant { Name = "Teo", LastName = "Benavides", PhoneNumber = "(+54)12359742", EmailAddress = "teo.benavides@softvision.com" };
             context.Consultants.Add(consultant1);
             context.Consultants.Add(consultant2);
             context.Consultants.Add(consultant3);
@@ -85,6 +86,7 @@ namespace Domain.Services.Repositories.EF
             context.Consultants.Add(consultant13);
             context.Consultants.Add(consultant14);
             context.Consultants.Add(consultant15);
+            context.Consultants.Add(consultant19);
             context.SaveChanges();
             #endregion
 
@@ -612,6 +614,7 @@ namespace Domain.Services.Repositories.EF
             var user16 = new User { FirstName = "Matias", LastName = "Totaro", Username = "matias.totaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user17 = new User { FirstName = "Francisco", LastName = "Ghersi", Username = "francisco.ghersi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
 
             context.Users.Add(user2);
             context.Users.Add(user3);
@@ -630,6 +633,7 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user16);
             context.Users.Add(user17);
             context.Users.Add(user18);
+            context.Users.Add(user19);
             context.SaveChanges();
             #endregion
 
@@ -706,6 +710,21 @@ namespace Domain.Services.Repositories.EF
             context.Reservation.Add(Reservation4);
             context.SaveChanges();
             #endregion
+
+            #region DeclineReason
+            var declineReason1 = new DeclineReason { Name = "Salary", Description = "Didn't like the offered figure." };
+            var declineReason2 = new DeclineReason { Name = "Different Job", Description = "Took an offer from another employer." };
+            var declineReason3 = new DeclineReason { Name = "Position", Description = "Didn't like the offered position." };
+            var declineReason4 = new DeclineReason { Name = "Other", Description = "Was on vacation and couldn't join." };
+            var declineReason5 = new DeclineReason { Name = "Other", Description = "Disagreed with the political views of the company." };
+            context.DeclineReasons.Add(declineReason1);
+            context.DeclineReasons.Add(declineReason2);
+            context.DeclineReasons.Add(declineReason3);
+            context.DeclineReasons.Add(declineReason4);
+            context.DeclineReasons.Add(declineReason5);
+            context.SaveChanges();
+            #endregion
+
         }
     }
 }
