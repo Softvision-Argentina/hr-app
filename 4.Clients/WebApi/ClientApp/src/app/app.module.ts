@@ -128,6 +128,7 @@ import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { HasRoleDirective } from 'src/directives/appHasRole.directive';
 
 
 
@@ -201,7 +202,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
-      DeclineReasonComponent
+      DeclineReasonComponent,
+      HasRoleDirective
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
