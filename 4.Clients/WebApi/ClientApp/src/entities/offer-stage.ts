@@ -4,11 +4,11 @@ import { Stage } from './stage';
 
 export class OfferStage {
     id: number;
-    date: Date;
+    date?: Date;
     feedback: string;
     status: StageStatusEnum;
-    consultantOwnerId: number;
-    consultantDelegateId: number;
+    consultantOwnerId?: number;
+    consultantDelegateId?: number;
     processId: number;
     rejectionReason?: string;
     offerDate: Date;

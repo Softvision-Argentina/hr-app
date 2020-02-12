@@ -8,12 +8,12 @@ export class HrStage {
     date: Date;
     feedback: string;
     status: StageStatusEnum;
-    consultantOwnerId: number;
-    consultantDelegateId: number;
     processId: number;
-    rejectionReason?: string;
     actualSalary: number;
     wantedSalary: number;
     englishLevel: EnglishLevelEnum;
     rejectionReasonsHr?: RejectionReasonsHrEnum;
+    consultantOwnerId?: number;
+    consultantDelegateId?: number;
+    rejectionReason?: string;
 }

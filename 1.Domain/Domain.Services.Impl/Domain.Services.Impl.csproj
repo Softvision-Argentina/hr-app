@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\2.Infrastructure\Domain.Services.Repositories.EF\Domain.Services.Repositories.EF.csproj" />
     <ProjectReference Include="..\Domain.Model\Domain.Model.csproj" />
     <ProjectReference Include="..\Domain.Services\Domain.Services.csproj" />
   </ItemGroup>
