@@ -20,6 +20,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.40.2.1643" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup>

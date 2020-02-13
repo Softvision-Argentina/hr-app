@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\0.Core\Core.Persistance\Core.Persistance.csproj" />
+    <ProjectReference Include="..\..\1.Domain\Domain.Model\Domain.Model.csproj" />
   </ItemGroup>
 
 </Project>

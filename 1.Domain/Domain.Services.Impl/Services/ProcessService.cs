@@ -181,18 +181,21 @@ namespace Domain.Services.Impl.Services
             _technicalStageRepository.Update(process.TechnicalStage);
             _clientStageRepository.Update(process.ClientStage);
             _offerStageRepository.Update(process.OfferStage);
-            if (process.DeclineReason.Id == -1)
+            if(process.DeclineReasonId != null)
             {
-                process.DeclineReason = _declineReasonRepository.Create(new DeclineReason
+                if (process.DeclineReason.Id == -1)
                 {
-                    Name = "Other",
-                    Description = updateProcessContract.DeclineReason.Description
-                });
-                process.DeclineReasonId = process.DeclineReason.Id;
-            }
-            else
-            {
-                process.DeclineReason = _declineReasonRepository.Get(process.DeclineReason.Id);
+                    process.DeclineReason = _declineReasonRepository.Create(new DeclineReason
+                    {
+                        Name = "Other",
+                        Description = updateProcessContract.DeclineReason.Description
+                    });
+                    process.DeclineReasonId = process.DeclineReason.Id;
+                }
+                else
+                {
+                    process.DeclineReason = _declineReasonRepository.Get(process.DeclineReason.Id);
+                }
             }
 
             //this.AddRecruiterToCandidate(process.Candidate, updateProcessContract.Candidate.Recruiter.Id);
