@@ -13,6 +13,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 })
 export class ReportTimetofill1Component implements OnInit {
 
+  // Average: Interview date - Offer Accepted
   @Input() _processes;
 
   constructor(private app: AppComponent) { }
