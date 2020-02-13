@@ -1,0 +1,23 @@
+<div >
+  <nz-card nzTitle="Decline reasons" [nzHoverable]="true">
+    <div style="display: block">
+      <br />
+      <button (click)="doSomething()"></button>
+      <div nz-row>
+          <div nz-col nzSpan="24" *ngIf="hasProjections">
+            <canvas baseChart              
+              [datasets]="chartData"
+              [options]="chartOptions"
+              [labels]="chartLabels"  
+              [legend]="chartLegend"  
+              [plugins]="chartPlugins"    
+              [chartType]="chartType">              
+            </canvas>
+          </div>
+          <div nz-col nzSpan="24" *ngIf="!hasProjections" style="text-align: center;">
+              <span><strong>THERE IS NO DATA TO SHOW</strong></span>
+          </div>
+        </div>          
+    </div>
+  </nz-card>
+</div>
