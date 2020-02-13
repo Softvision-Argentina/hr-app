@@ -11,8 +11,7 @@ namespace Domain.Services.Impl.Profiles
     {
         public TechnicalStageProfile()
         {
-            CreateMap<TechnicalStage, ReadedTechnicalStageContract>()
-                    .IncludeBase<Stage, ReadedStageContract>();
+            CreateMap<TechnicalStage, ReadedTechnicalStageContract>();
             //.ForMember(dest => dest.TechnicalStageItems, opt => opt.MapFrom(src => src.TechnicalStageItems));
 
             CreateMap<CreateTechnicalStageContract, TechnicalStage>()

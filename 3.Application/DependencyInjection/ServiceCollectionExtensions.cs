@@ -143,7 +143,7 @@ namespace DependencyInjection
                 if (dbConfigs.InMemoryMode)
                     options.UseInMemoryDatabase("DBInMemory");
                 else
-                    options.UseSqlServer(dbConfigs.ConnectionString);
+                    options.UseSqlServer(dbConfigs.ConnectionString, b => b.MigrationsAssembly("ApiServer"));
 
                 //Use this to debug client evaluations
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
