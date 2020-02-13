@@ -170,9 +170,6 @@
                         <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimEndError')">
                             The input has trailing whitespace!
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('required')">
-                            Please input a the URL, or mark the N/A option!
-                        </ng-container>
                     </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
