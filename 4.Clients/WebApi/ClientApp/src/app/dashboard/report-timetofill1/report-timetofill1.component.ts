@@ -102,8 +102,8 @@ export class ReportTimetofill1Component implements OnInit {
     let validArray : Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() +1  == date.getMonth() + 1 && proc.status == ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() == date.getFullYear());
     if (validArray.length > 0) {
       validArray.forEach(va => {                          
-        averageDays+= Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));       
-        days.push(Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
+        averageDays+= Math.ceil((Math.abs(new Date(va.offerStage.offerDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));       
+        days.push(Math.ceil((Math.abs(new Date(va.offerStage.offerDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
         dayChartLabels.push(new Date(va.hrStage.date).toDateString());         
       });      
       days.push(Number((averageDays/days.length).toFixed(2)));

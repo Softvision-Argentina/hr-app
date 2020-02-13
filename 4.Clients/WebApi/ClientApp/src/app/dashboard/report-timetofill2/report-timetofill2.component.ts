@@ -23,7 +23,7 @@ export class ReportTimetofill2Component implements OnInit {
   hasProjections: boolean = false;
 
   isChartComplete: boolean = false;
-
+  
   ngOnInit() {
     this.app.showLoading();
     this.getProjectionReport();
