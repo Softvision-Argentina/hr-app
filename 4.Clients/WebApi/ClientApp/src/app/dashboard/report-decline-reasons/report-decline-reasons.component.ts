@@ -68,6 +68,12 @@ export class ReportDeclineReasonsComponent implements OnInit {
         anchor: 'end',
         align: 'end',
       }
+    },    
+    scale: {
+      ticks: {
+          beginAtZero: true,
+          stepSize : 1,                    
+      }
     }
   };
 
@@ -75,20 +81,29 @@ export class ReportDeclineReasonsComponent implements OnInit {
     let reasons : string[] = [];
     let dataArray : number[] = [];
     let quantity : number;
+    let otherCount: number = 0;
     let procArray = this.processes.filter(proc => proc.status == ProcessStatusEnum.Declined);
     if (procArray.length > 0){
       this.filteredDeclineReasons.forEach(decR => {
         quantity = 0;
         procArray.forEach(procA =>{
-          if(decR.name == procA.declineReason.name){
-            quantity++;
+          if(decR.id == procA.declineReason.id){
+            if(decR.name != 'Other'){
+              quantity++;
+            }else{
+              otherCount++;
+            }            
           }
         })
         if (quantity >0){
           reasons.push(decR.name);
-          dataArray.push(quantity);
-        }
+          dataArray.push(quantity);     
+        }   
       });
+      if (otherCount > 0){
+        reasons.push('Other');
+        dataArray.push(otherCount);
+      }      
       this.chartData = [
         { data: dataArray, label: 'Times' }        
       ];
@@ -102,5 +117,6 @@ export class ReportDeclineReasonsComponent implements OnInit {
     console.log(this.filteredDeclineReasons);
     console.log(this.chartLabels);
     console.log(this.chartData[0].data);
+    console.log(this.chartData[0].label);
   }
 }

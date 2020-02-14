@@ -1,15 +1,14 @@
 <div >
   <nz-card nzTitle="Decline reasons" [nzHoverable]="true">
     <div style="display: block">
-      <br />
-      <button (click)="doSomething()"></button>
+      <br />      
       <div nz-row>
           <div nz-col nzSpan="24" *ngIf="hasProjections">
-            <canvas baseChart              
+            <canvas baseChart
               [datasets]="chartData"
               [options]="chartOptions"
-              [labels]="chartLabels"  
-              [legend]="chartLegend"  
+              [labels]="chartLabels"
+              [legend]="chartLegend"
               [plugins]="chartPlugins"    
               [chartType]="chartType">              
             </canvas>
