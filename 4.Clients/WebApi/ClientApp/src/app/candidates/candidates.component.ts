@@ -152,7 +152,7 @@ export class CandidatesComponent implements OnInit {
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null],
-      linkedin: [null, [Validators.required, trimValidator]],
+      linkedin: [null, [trimValidator]],
       additionalInformation: [null, [trimValidator]],
       recruiter: [null, [Validators.required]],
       englishLevel: 'none',

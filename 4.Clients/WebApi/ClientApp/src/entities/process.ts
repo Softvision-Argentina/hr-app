@@ -13,16 +13,10 @@ import { DeclineReason } from './declineReason';
 
 export class Process {
     id: number;
-    startDate: Date;
-    endDate: Date;
     status: ProcessStatusEnum;
     currentStage: ProcessCurrentStageEnum;
-    candidateId: number;
     candidate: Candidate;
-    consultantOwnerId: number;
     consultantOwner: Consultant;
-    consultantDelegateId: number;
-    consultantDelegate: Consultant;
     rejectionReason: string;
     declineReason: DeclineReason;
     actualSalary: number;
@@ -34,4 +28,11 @@ export class Process {
     technicalStage: TechnicalStage;
     clientStage: ClientStage;
     offerStage: OfferStage;
+    startDate?: Date;
+    endDate?: Date;
+    candidateId?: number;
+    consultantDelegateId?: number;
+    consultantOwnerId?: number;
+    consultantDelegate?: Consultant;
+    declineReasonId?: number;
 }

@@ -106,7 +106,7 @@ export class ProcessContactComponent implements OnInit {
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
     profile: [null, [Validators.required]],
-    linkedInProfile: [null, [Validators.required, trimValidator]],
+    linkedInProfile: [null, [trimValidator]],
     isReferred: false,
     id: [null]
   });
@@ -275,7 +275,7 @@ export class ProcessContactComponent implements OnInit {
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
-      linkedInProfile: [null, [Validators.required, trimValidator]],
+      linkedInProfile: [null, [trimValidator]],
       isReferred: false,
       id: [null]
     });
@@ -379,7 +379,8 @@ export class ProcessContactComponent implements OnInit {
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         recruiter: new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
+        //linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
+        linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
         additionalInformation: '',
         status: CandidateStatusEnum.New,

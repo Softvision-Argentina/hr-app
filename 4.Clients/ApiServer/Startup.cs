@@ -148,6 +148,15 @@ namespace ApiServer
             //This is not working
             //loggerFactory.AddFile(Configuration.GetSection("Logging"));
 
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 204)
+                {
+                    ctx.Response.ContentLength = 0;
+                }
+            });
+
             app.UseCors((option) =>
                 option.WithOrigins(Configuration["corsWhiteList"].Split(','))
                 .AllowAnyMethod()

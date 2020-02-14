@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Domain.Model
 {
-    public abstract class Stage : Entity<int>
+    public class Stage : Entity<int>
     {
         public StageType Type { get; set; }
 
