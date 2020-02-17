@@ -17,14 +17,15 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers'
 import { Process } from 'src/entities/process';
+import { ReferralsComponent } from '../referrals/referrals.component';
 
 @Component({
-  selector: 'app-process-contact',
-  templateUrl: './process-contact.component.html',
-  styleUrls: ['./process-contact.component.css']
+  selector: 'app-referrals-contact',
+  templateUrl: './referrals-contact.component.html',
+  styleUrls: ['./referrals-contact.component.css']
 })
 
-export class ProcessContactComponent implements OnInit {
+export class ReferralsContactComponent implements OnInit {
 
 
   @ViewChild('dropdown') nameDropdown;
@@ -109,9 +110,9 @@ export class ProcessContactComponent implements OnInit {
     linkedInProfile: [null, [trimValidator]],
     isReferred: false,
     id: [null],
-    cv: [null],
     knownFrom: [null],
-    referredBy: [null]
+    cv: [null],
+    referredBy: [null, [Validators.required]]
   });
   visible: boolean = false;
   isNewCandidate: boolean = false;
@@ -131,7 +132,7 @@ export class ProcessContactComponent implements OnInit {
   // candidateForm: FormGroup;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
-    private modalService: NzModalService, private process: ProcessesComponent) {
+    private modalService: NzModalService, private process: ReferralsComponent) {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
@@ -264,7 +265,7 @@ export class ProcessContactComponent implements OnInit {
     this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
     this.candidateForm.controls['community'].setValue(Candidate.community.id);
     this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
-    this.candidateForm.controls['referredBy'].setValue(Candidate.referredBy);
+    this.candidateForm.controls['referredBy'].get(Candidate.referredBy);
     this.candidateForm.controls['cv'].setValue(Candidate.cv);
     this.candidateForm.controls['knownFrom'].setValue(Candidate.knownFrom);
   }
@@ -286,7 +287,7 @@ export class ProcessContactComponent implements OnInit {
       id: [null],
       knownFrom: [null],
       cv: [null],
-      referredBy: [null]
+      referredBy: [null, [Validators.required]]
     });
   }
 
@@ -320,7 +321,7 @@ export class ProcessContactComponent implements OnInit {
         isReferred: editedCandidate.isReferred,
         cv: editedCandidate.cv,
         knownFrom: editedCandidate.knownFrom,
-        referredBy: editedCandidate.referredBy,
+        referredBy: editedCandidate.referredBy
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -406,7 +407,7 @@ export class ProcessContactComponent implements OnInit {
         profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
         cv: null,
         knownFrom: null,
-        referredBy: null
+        referredBy: this.currentUser.Name,
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();

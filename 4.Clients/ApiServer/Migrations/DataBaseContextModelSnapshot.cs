@@ -35,6 +35,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Cv");
+
                     b.Property<int>("DNI");
 
                     b.Property<string>("EmailAddress");
@@ -42,6 +44,8 @@ namespace ApiServer.Migrations
                     b.Property<int>("EnglishLevel");
 
                     b.Property<bool>("IsReferred");
+
+                    b.Property<string>("KnownFrom");
 
                     b.Property<string>("LastModifiedBy");
 
@@ -60,6 +64,8 @@ namespace ApiServer.Migrations
                     b.Property<int?>("ProfileId");
 
                     b.Property<int?>("RecruiterId");
+
+                    b.Property<string>("ReferredBy");
 
                     b.Property<int>("Status");
 

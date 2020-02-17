@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class test : Migration
+    public partial class firstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -487,7 +487,10 @@ namespace ApiServer.Migrations
                     ProfileId = table.Column<int>(nullable: true),
                     IsReferred = table.Column<bool>(nullable: false),
                     PreferredOfficeId = table.Column<int>(nullable: true),
-                    ContactDay = table.Column<DateTime>(nullable: false)
+                    ContactDay = table.Column<DateTime>(nullable: false),
+                    Cv = table.Column<string>(nullable: true),
+                    KnownFrom = table.Column<string>(nullable: true),
+                    ReferredBy = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -22,8 +22,7 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.Recruiter, opt => opt.Ignore())
                 .ForMember(x => x.PreferredOffice, opt => opt.Ignore())
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
-                ;
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
 
             CreateMap<Candidate, CreateCandidateContract>()
                 .ForMember(x => x.Recruiter, opt => opt.Ignore())
