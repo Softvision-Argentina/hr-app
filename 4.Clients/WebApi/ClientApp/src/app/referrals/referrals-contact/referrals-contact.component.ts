@@ -110,9 +110,9 @@ export class ReferralsContactComponent implements OnInit {
     linkedInProfile: [null, [trimValidator]],
     isReferred: false,
     id: [null],
-    knownFrom: [null],
     cv: [null],
-    referredBy: [null, [Validators.required]]
+    knownFrom: [null],
+    referredBy: [null]
   });
   visible: boolean = false;
   isNewCandidate: boolean = false;
@@ -265,7 +265,7 @@ export class ReferralsContactComponent implements OnInit {
     this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
     this.candidateForm.controls['community'].setValue(Candidate.community.id);
     this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
-    this.candidateForm.controls['referredBy'].get(Candidate.referredBy);
+    this.candidateForm.controls['referredBy'].setValue(Candidate.referredBy);
     this.candidateForm.controls['cv'].setValue(Candidate.cv);
     this.candidateForm.controls['knownFrom'].setValue(Candidate.knownFrom);
   }
@@ -287,7 +287,7 @@ export class ReferralsContactComponent implements OnInit {
       id: [null],
       knownFrom: [null],
       cv: [null],
-      referredBy: [null, [Validators.required]]
+      referredBy: [null]
     });
   }
 
@@ -321,7 +321,7 @@ export class ReferralsContactComponent implements OnInit {
         isReferred: editedCandidate.isReferred,
         cv: editedCandidate.cv,
         knownFrom: editedCandidate.knownFrom,
-        referredBy: editedCandidate.referredBy
+        referredBy: editedCandidate.referredBy,
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -407,7 +407,7 @@ export class ReferralsContactComponent implements OnInit {
         profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
         cv: null,
         knownFrom: null,
-        referredBy: this.currentUser.Name,
+        referredBy: this.currentUser.Name
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
