@@ -55,8 +55,8 @@ export class ReportDeclineReasonsComponent implements OnInit {
   }
 
   public chartLabels: Label[] = [];
-  public chartType: ChartType = 'radar';
-  public chartLegend = false;
+  public chartType: ChartType = 'doughnut';
+  public chartLegend = true;
   public chartPlugins = [pluginDataLabels];
   public chartData: ChartDataSets[] = [
     { data: [], label: '' }    
@@ -65,14 +65,8 @@ export class ReportDeclineReasonsComponent implements OnInit {
     responsive: true,
     plugins: {
       datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    },    
-    scale: {
-      ticks: {
-          beginAtZero: true,
-          stepSize : 1,                    
+        anchor: 'center',
+        align: 'center',
       }
     }
   };
@@ -111,12 +105,5 @@ export class ReportDeclineReasonsComponent implements OnInit {
       this.hasProjections = true;
     }
     else this.hasProjections = false;
-  }
-
-  doSomething(){
-    console.log(this.filteredDeclineReasons);
-    console.log(this.chartLabels);
-    console.log(this.chartData[0].data);
-    console.log(this.chartData[0].label);
   }
 }
