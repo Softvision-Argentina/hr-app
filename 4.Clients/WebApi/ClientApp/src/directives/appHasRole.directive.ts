@@ -6,7 +6,7 @@ import { User } from 'src/entities/user';
 })
 export class HasRoleDirective implements OnInit {
 
-    @Input() appHasRole: string;
+    @Input() appHasRole: string[];
     currentUser: User;
     constructor(
         private viewContainerRef: ViewContainerRef,
@@ -16,7 +16,7 @@ export class HasRoleDirective implements OnInit {
     }
 
     ngOnInit() {
-        if (this.currentUser.Role == this.appHasRole) {
+        if (this.appHasRole.indexOf(this.currentUser.Role) !== -1) {
             this.viewContainerRef.createEmbeddedView(this.templateRef);
         }
     }
