@@ -6,6 +6,14 @@
 </div>
 <br />
 
+<div class="container mt-4">
+    <div class="row">
+        <div *ngFor="let c of candidateReferred" class="col-lg-2 col-md-3 col-sm-6"> 
+            <app-referrals-card [cand]="c"></app-referrals-card>
+        </div>
+    </div>
+</div>
+
 <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null" (nzOnCancel)="handleCancel()">
     <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
     <nz-divider></nz-divider>

@@ -419,43 +419,11 @@ export class ReferralsContactComponent implements OnInit {
           this.visible = false;
           this.app.hideLoading();
           this.getCandidates();
-          this.startNewProcess(res.id);
         }, err => {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
           this.app.hideLoading;
         })
     }
-
-  }
-
-  startNewProcess(candidateId: number) {
-
-    this.facade.processService.getActiveProcessByCandidate(candidateId)
-      .subscribe((res: Process[]) => {
-        if (res.length > 0) {
-          this.facade.modalService.confirm({
-            nzTitle: 'There is already another process of ' + res[0].candidate.lastName + ', ' + res[0].candidate.name + '. Do you want to open a new one ?',
-            nzContent: '',
-            nzOkText: 'Yes',
-            nzOkType: 'danger',
-            nzCancelText: 'No',
-            nzOnOk: () => {
-              this.modalService.closeAll();
-              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-              this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-            }
-            //  ,
-            // nzOnCancel: () => this.modalService.closeAll()
-
-          });
-        }
-        else {
-          this.modalService.closeAll();
-          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-          this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-          //this.candidateAdd.fillCandidateForm(processCandidate);        
-        }
-      })
   }
 }

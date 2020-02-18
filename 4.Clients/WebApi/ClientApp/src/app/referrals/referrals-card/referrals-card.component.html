@@ -1,0 +1,77 @@
+<div>
+  <div *ngIf="cand.status === 0">
+    <div class="card border-secondary mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+      <p class="card-text text-muted text-center">Status: New</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="cand.status === 1">
+    <div class="card border-info mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+        <p class="card-text text-muted text-center">Status: In progress</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="cand.status === 2">
+    <div class="card border-warning mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+        <p class="card-text text-muted text-center">Status: Recall</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="cand.status === 3">
+    <div class="card border-success mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+        <p class="card-text text-muted text-center">Status: Hired</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="cand.status === 4">
+    <div class="card border-dark mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+        <p class="card-text text-muted text-center">Status: Rejected</p>
+      </div>
+    </div>
+  </div>
+</div>

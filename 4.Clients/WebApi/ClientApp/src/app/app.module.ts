@@ -132,6 +132,7 @@ import { DeclineReasonComponent } from './decline-reasons/decline-reasons.compon
 import { DeclineReasonService } from './services/decline-reason.service';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
+import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 
 
 
@@ -198,6 +199,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ProcessContactComponent,
       ReferralsComponent,
       ReferralsContactComponent,
+      ReferralsCardComponent,
       ReservationsComponent,
       OfficeComponent,
       RoomComponent,

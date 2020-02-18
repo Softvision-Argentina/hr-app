@@ -81,6 +81,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
+  candidateReferred: Candidate[] = [];
+
   consultants: Consultant[] = [];
 
   profileSearch: number = 0;
@@ -192,7 +194,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.facade.candidateService.get<Candidate>()
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
-        this.candidatesFullList = res.filter(x => x.isReferred == true);
+        this.candidatesFullList = res.filter(x => x.isReferred === true);
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.Name);
       }, err => {
         console.log(err);
       });
