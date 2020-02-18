@@ -1,29 +1,6 @@
 <form nz-form [formGroup]="candidateForm" [nzLayout]="'horizontal'">
     <nz-divider nzText="CONTACTED REFERRAL "></nz-divider>
     <br />
-    <div nz-row [hidden]="visible">
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="12" nzFor="name">Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
-                    <nz-form-explain *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
-                            Please input the name!
-                        </ng-container>
-                    </nz-form-explain>
-                </nz-form-control>
-                <button nz-button nzType="primary" style="background-color: green; margin: 0.5% 0% 0% 1%;" (click)="searchCandidate(candidateForm.get('name').value,consultantDetailModal)">Check</button>
-            </nz-form-item>
-        </div>
-    </div>
-
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
@@ -174,7 +151,6 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="knownFrom" [hidden]="!visible">Known From
@@ -186,12 +162,8 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="knownFrom" [hidden]="!visible">Referred By
-                </nz-form-label> {{currentUser.Name}}
-            </nz-form-item>
-        </div>
+    </div>
+    <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cv" [hidden]="!visible"> CV
@@ -200,6 +172,15 @@
                     <input nz-input formControlName="cv" id="cv" placeholder="Please input his/her cv">
                     <nz-form-explain *ngIf="candidateForm.get('cv').dirty">
                     </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" [hidden]="!visible">Referred By
+                </nz-form-label>
+                <nz-form-control [nzSm]="14">
+                <input nz-input formControlName="referredBy" id="referredBy" value="{{currentUser.Name}}" disabled="true">
                 </nz-form-control>
             </nz-form-item>
         </div>

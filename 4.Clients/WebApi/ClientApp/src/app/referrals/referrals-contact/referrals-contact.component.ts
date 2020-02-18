@@ -419,6 +419,7 @@ export class ReferralsContactComponent implements OnInit {
           this.visible = false;
           this.app.hideLoading();
           this.getCandidates();
+          this.modalService.closeAll();
         }, err => {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
