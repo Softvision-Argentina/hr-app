@@ -11,8 +11,7 @@ namespace Domain.Services.Impl.Profiles
     {
         public OfferStageProfile()
         {
-            CreateMap<OfferStage, ReadedOfferStageContract>()
-                .IncludeBase<Stage, ReadedStageContract>();
+            CreateMap<OfferStage, ReadedOfferStageContract>();
             //.ForMember(dest => dest.StageItems, opt => opt.MapFrom(src => src.StageItems));
 
             CreateMap<CreateOfferStageContract, OfferStage>()

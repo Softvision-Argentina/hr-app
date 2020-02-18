@@ -12,8 +12,7 @@ namespace Domain.Services.Impl.Profiles
         public HrStageProfile()
         {
 
-            CreateMap<HrStage, ReadedHrStageContract>()
-                .IncludeBase<Stage, ReadedStageContract>();
+            CreateMap<HrStage, ReadedHrStageContract>();
                 //.ForMember(dest => dest.StageItems, opt => opt.MapFrom(src => src.StageItems));
 
             CreateMap<CreateHrStageContract, HrStage>()

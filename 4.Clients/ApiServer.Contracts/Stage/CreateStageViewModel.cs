@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApiServer.Contracts.Stage
 {
-    public abstract class CreateStageViewModel
+    public class CreateStageViewModel
     {
         public int Id { get; set; }
         public int ProcessId { get; set; }

@@ -46,6 +46,18 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="consultantDelegateId" nzPlaceHolder="Select a delegate for the process">
+                        <nz-option *ngFor="let c of _consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+                    
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority">Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select #seniority formControlName="seniority" (ngModelChange)="updateSeniority(seniority.value)">

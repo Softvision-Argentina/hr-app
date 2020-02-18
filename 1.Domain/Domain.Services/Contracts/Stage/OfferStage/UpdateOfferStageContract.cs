@@ -6,8 +6,25 @@ using Domain.Services.Contracts.Stage.StageItem;
 
 namespace Domain.Services.Contracts.Stage
 {
-    public class UpdateOfferStageContract: UpdateStageContract
-    {        
+    public class UpdateOfferStageContract
+    {
+        public int Id { get; set; }
+
+        public int ProcessId { get; set; }
+
+        public DateTime? Date { get; set; }
+
+        public StageStatus Status { get; set; }
+
+        public string Feedback { get; set; }
+
+        public List<CreateStageItemContract> StageItems { get; set; }
+
+        public int? ConsultantOwnerId { get; set; }
+
+        public int? ConsultantDelegateId { get; set; }
+        public string RejectionReason { get; set; }
+        public DateTime OfferDate { get; set; }
         public DateTime HireDate { get; set; }
         public Seniority Seniority { get; set; }        
         public bool BackgroundCheckDone { get; set; }

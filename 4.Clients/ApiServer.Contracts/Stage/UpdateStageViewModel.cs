@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ApiServer.Contracts.Stage
 {
-    public abstract class UpdateStageViewModel
+    public class UpdateStageViewModel
     {
         public int Id { get; set; }
 

@@ -13,7 +13,6 @@ export class Candidate {
   dni: number;
   emailAddress: string;
   phoneNumber: string;
-  linkedInProfile: string;
   additionalInformation: string;
   englishLevel: EnglishLevelEnum;
   status: CandidateStatusEnum;
@@ -24,4 +23,5 @@ export class Candidate {
   profile: CandidateProfile;
   community: Community;
   isReferred: boolean;
+  linkedInProfile?: string;
 }

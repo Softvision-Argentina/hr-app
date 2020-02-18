@@ -23,6 +23,7 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<CandidateProfile> _candidateProfileRepository;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Office> _officeRepository;
+        private readonly IRepository<DeclineReason> _declineReasonRepository;
         private readonly IHrStageRepository _hrStageRepository;
         private readonly ITechnicalStageRepository _technicalStageRepository;
         private readonly IClientStageRepository _clientStageRepository;
@@ -34,6 +35,7 @@ namespace Domain.Services.Impl.Services
             IRepository<CandidateProfile> candidateProfileRepository,
             IRepository<Community> communityRepository,
             IRepository<Office> officeRepository,
+            IRepository<DeclineReason> declineReasonRepository,
             IProcessRepository processRepository,
             IProcessStageRepository processStageRepository,
             IHrStageRepository hrStageRepository,
@@ -47,6 +49,7 @@ namespace Domain.Services.Impl.Services
             _candidateProfileRepository = candidateProfileRepository;
             _communityRepository = communityRepository;
             _officeRepository = officeRepository;
+            _declineReasonRepository = declineReasonRepository;
             _mapper = mapper;
             _processRepository = processRepository;
             _processStageRepository = processStageRepository;
@@ -178,7 +181,22 @@ namespace Domain.Services.Impl.Services
             _technicalStageRepository.Update(process.TechnicalStage);
             _clientStageRepository.Update(process.ClientStage);
             _offerStageRepository.Update(process.OfferStage);
-
+            if(process.DeclineReasonId != null)
+            {
+                if (process.DeclineReason.Id == -1)
+                {
+                    process.DeclineReason = _declineReasonRepository.Create(new DeclineReason
+                    {
+                        Name = "Other",
+                        Description = updateProcessContract.DeclineReason.Description
+                    });
+                    process.DeclineReasonId = process.DeclineReason.Id;
+                }
+                else
+                {
+                    process.DeclineReason = _declineReasonRepository.Get(process.DeclineReason.Id);
+                }
+            }
 
             //this.AddRecruiterToCandidate(process.Candidate, updateProcessContract.Candidate.Recruiter.Id);
             //this.AddCommunityToCandidate(process.Candidate, updateProcessContract.Candidate.Community);

@@ -35,6 +35,7 @@ using Domain.Services.Impl.Validators.Employee;
 using Domain.Services.Impl.Validators.DaysOff;
 using Domain.Services.Impl.Validators.Role;
 using Domain.Services.Impl.Validators.CompanyCalendar;
+using Domain.Services.Impl.Validators;
 
 namespace DependencyInjection
 {
@@ -68,6 +69,9 @@ namespace DependencyInjection
             services.AddScoped<UpdateConsultantContractValidator, UpdateConsultantContractValidator>();
             services.AddScoped<CreateSkillTypeContractValidator, CreateSkillTypeContractValidator>();
             services.AddScoped<UpdateSkillTypeContractValidator, UpdateSkillTypeContractValidator>();
+            services.AddScoped<CreateDeclineReasonContractValidator, CreateDeclineReasonContractValidator>();
+            services.AddScoped<UpdateDeclineReasonContractValidator, UpdateDeclineReasonContractValidator>();
+
 
             services.AddScoped<CreateTaskContractValidator, CreateTaskContractValidator>();
             services.AddScoped<UpdateTaskContractValidator, UpdateTaskContractValidator>();
@@ -119,6 +123,7 @@ namespace DependencyInjection
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ICompanyCalendarService, CompanyCalendarService>();
             services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
+            services.AddTransient<IDeclineReasonService, DeclineReasonService>();
 
         }
 
@@ -138,7 +143,7 @@ namespace DependencyInjection
                 if (dbConfigs.InMemoryMode)
                     options.UseInMemoryDatabase("DBInMemory");
                 else
-                    options.UseSqlServer(dbConfigs.ConnectionString);
+                    options.UseSqlServer(dbConfigs.ConnectionString, b => b.MigrationsAssembly("ApiServer"));
 
                 //Use this to debug client evaluations
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
@@ -171,6 +176,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<DaysOff>, DaysOffRepository>();
             services.AddScoped<IRepository<CompanyCalendar>, CompanyCalendarRepository>();
             services.AddScoped<IRepository<Role>, RoleRepository>();
+            services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
 
             services.AddScoped<IStageItemRepository, StageItemRepository>();
             services.AddScoped<IProcessStageRepository, ProcessStageRepository>();
