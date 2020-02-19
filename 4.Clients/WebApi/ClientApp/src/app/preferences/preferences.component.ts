@@ -6,14 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./preferences.component.css']
 })
 export class PreferencesComponent implements OnInit {
-  switchProcesses = false;
-  switchSkills = false;
-  switchProgress = false;
-  switchCompleted = false;
-  switchProjection = false;
-  switchCasualties = false;
-  switchTimeToFill1 = false;
-  switchTimeToFill2 = false;
+  switchProcesses = true;
+  switchSkills = true;
+  switchProgress = true;
+  switchCompleted = true;
+  switchProjection = true;
+  switchCasualties = true;
+  switchTimeToFill1 = true;
+  switchTimeToFill2 = true;
   
   constructor() { }
 
