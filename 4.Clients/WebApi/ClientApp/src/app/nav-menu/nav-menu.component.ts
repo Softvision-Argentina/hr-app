@@ -13,6 +13,7 @@ import { FacadeService } from '../services/facade.service';
   providers: [GoogleSigninComponent]
 })
 export class NavMenuComponent {
+
   constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
     private facade: FacadeService) { }
 
@@ -56,4 +57,14 @@ export class NavMenuComponent {
     this.google.logout();
   }
 
+  showPreferencesModal(modalContent: TemplateRef<{}>) {
+    const modal = this.facade.modalService.create({
+      nzTitle: 'Manage Preferences',
+      nzContent: modalContent,
+      nzClosable: true,
+      nzFooter: null,
+      nzWidth: '25%'
+    });
+  }
+ 
 }

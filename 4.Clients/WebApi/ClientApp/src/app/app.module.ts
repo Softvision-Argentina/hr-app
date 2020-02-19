@@ -130,6 +130,7 @@ import { ReportTimetofill2Component } from './dashboard/report-timetofill2/repor
 import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 
 
@@ -205,7 +206,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ProfilesComponent,
       PostulantsComponent,
       DeclineReasonComponent,      
-      ReportTimetofill1Component
+      ReportTimetofill1Component,
+      PreferencesComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
