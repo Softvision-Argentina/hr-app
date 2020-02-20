@@ -128,7 +128,7 @@ import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
-import { HasRoleDirective } from 'src/directives/appHasRole.directive';
+import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 
 
 
