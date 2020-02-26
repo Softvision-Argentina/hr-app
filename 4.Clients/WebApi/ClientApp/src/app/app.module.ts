@@ -209,13 +209,10 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
-<<<<<<< HEAD
       DeclineReasonComponent,
-      HasRoleDirective
-=======
+      HasRoleDirective,
       DeclineReasonComponent,      
       ReportTimetofill1Component
->>>>>>> develop
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
