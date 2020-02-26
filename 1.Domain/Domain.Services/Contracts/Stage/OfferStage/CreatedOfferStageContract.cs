@@ -5,7 +5,9 @@ using Domain.Services.Contracts.Stage.StageItem;
 
 namespace Domain.Services.Contracts.Stage
 {
-    public class CreatedOfferStageContract : CreatedStageContract
+    public class CreatedOfferStageContract
     {
+        public int Id { get; set; }
+
     }
 }

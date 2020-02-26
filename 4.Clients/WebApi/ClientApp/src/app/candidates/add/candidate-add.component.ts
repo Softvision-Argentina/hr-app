@@ -81,7 +81,7 @@ export class CandidateAddComponent implements OnInit {
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
-    linkedin: [null, [Validators.required, trimValidator]],
+    linkedin: [null, [trimValidator]],
     additionalInformation: [null, [trimValidator]],
     recruiter: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
@@ -90,7 +90,10 @@ export class CandidateAddComponent implements OnInit {
     contacDay : [null],
     profile: [null, [Validators.required]],
     community: [null, [Validators.required]],
-    isReferred: [null]
+    isReferred: [null],
+    cv: [null],
+    knownFrom: [null],
+    referredBy: [null]
   });
   isDniValid: boolean = false;
   isDniLoading: boolean = false;
@@ -202,6 +205,9 @@ export class CandidateAddComponent implements OnInit {
     this.candidateForm.controls['community'].setValue(candidate.community.id);
     this.candidateForm.controls['profile'].setValue(candidate.profile.id);
     this.candidateForm.controls['isReferred'].setValue(candidate.isReferred);
+    this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
+    this.candidateForm.controls['cv'].setValue(candidate.cv);
+    this.candidateForm.controls['knownFrom'].setValue(candidate.knownFrom);
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = skill.skillId || skill.skill.id;
@@ -249,8 +255,11 @@ export class CandidateAddComponent implements OnInit {
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value===null?null:this.candidateForm.controls['community'].value
+      isReferred: this.candidateForm.controls['isReferred'].value===null?null:this.candidateForm.controls['community'].value,
       // contactDay: this.candidateForm.controls['contactDay'].value
+      cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
+      knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
+      referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
     }
     newCandidate.phoneNumber.toString();
     return newCandidate;

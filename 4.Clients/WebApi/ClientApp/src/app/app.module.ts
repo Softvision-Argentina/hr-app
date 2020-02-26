@@ -126,11 +126,14 @@ import { ProfilesComponent } from './profiles/profiles.component';
 import { SlickModule } from "ngx-slick";
 import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
+import { ReportTimetofill2Component } from './dashboard/report-timetofill2/report-timetofill2.component';
+import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
 import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
-
-
+import { ReferralsComponent } from './referrals/referrals/referrals.component';
+import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
+import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 
 registerLocaleData(en);
 
@@ -189,9 +192,13 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportSkillsComponent,
       ReportHireProjectionComponent,
       ReportHireCasualtiesComponent,
+      ReportTimetofill2Component,
       ProcessContactComponent,
       DaysOffComponent,
       ProcessContactComponent,
+      ReferralsComponent,
+      ReferralsContactComponent,
+      ReferralsCardComponent,
       ReservationsComponent,
       OfficeComponent,
       RoomComponent,
@@ -202,8 +209,13 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
+<<<<<<< HEAD
       DeclineReasonComponent,
       HasRoleDirective
+=======
+      DeclineReasonComponent,      
+      ReportTimetofill1Component
+>>>>>>> develop
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -234,6 +246,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       { path: 'processes', component: ProcessesComponent, canActivate: [CommonGuard] },
       { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [CommonGuard] },
       { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [CommonGuard] },
+
+      { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
 
       { path: 'stage-details/:id', component: StageDetailComponent, canActivate: [CommonGuard] },
       { path: 'stage-edit/:id', component: StageEditComponent, canActivate: [CommonGuard] },

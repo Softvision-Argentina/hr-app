@@ -29,5 +29,8 @@ namespace ApiServer.Contracts.Candidates
         public DateTime ContactDay { get; set; }
         public ReadedOfficeViewModel PreferredOffice { get; set; }
         public ICollection<ReadedCandidateAppSkillViewModel> CandidateSkills { get; set; }
+        public string Cv { get; set; }
+        public string KnownFrom { get; set; }
+        public string ReferredBy { get; set; }
     }
 }

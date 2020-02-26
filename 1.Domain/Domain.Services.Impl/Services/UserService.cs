@@ -5,6 +5,7 @@ using Domain.Model;
 using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
+using Domain.Services.Repositories.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,23 +19,22 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<UserService> _log;
+        private readonly DataBaseContext _dbcontext;
 
         public UserService(IMapper mapper, IRepository<User> userRepository,
-                           IUnitOfWork unitOfWork, ILog<UserService> log)
+                           IUnitOfWork unitOfWork, ILog<UserService> log, DataBaseContext dbContext)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _log = log;
+            _dbcontext = dbContext;
         }
 
         public ReadedUserContract Authenticate(string username, string password)
         {
             #region V1
-            var user = this._userRepository
-                                .Query()
-                                .Where(u => string.Equals(u.Username, username, StringComparison.InvariantCultureIgnoreCase) && string.Equals(u.Password, Core.HashUtility.GetStringSha256Hash(password), StringComparison.InvariantCultureIgnoreCase))
-                                .FirstOrDefault();
+            var user = Login(username, password);
 
             if (user != null)
             {
@@ -51,11 +51,8 @@ namespace Domain.Services.Impl.Services
         }
 
         public ReadedUserContract Authenticate(string username)
-        {            
-            var user = this._userRepository
-                                .Query()
-                                .Where(u => string.Equals(u.Username, username, StringComparison.InvariantCultureIgnoreCase))
-                                .FirstOrDefault();
+        {
+            var user = ExternalLogin(username);
 
             if (user != null)
             {
@@ -87,6 +84,26 @@ namespace Domain.Services.Impl.Services
         {
             var user = _userRepository.Query().FirstOrDefault(x => x.Username.ToUpper() == username.ToUpper());
             return _mapper.Map<ReadedUserRoleContract>(user);
+        }
+
+        private User Login(string username, string password)
+        {
+            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
+
+            if (user == null)
+                return null;
+
+            return user;
+        }
+
+        private User ExternalLogin(string username)
+        {
+            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
+
+            if (user == null)
+                return null;
+
+            return user;
         }
     }
 }
