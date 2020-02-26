@@ -205,7 +205,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
-      DeclineReasonComponent,      
+      DeclineReasonComponent,
       ReportTimetofill1Component,
       PreferencesComponent
    ],

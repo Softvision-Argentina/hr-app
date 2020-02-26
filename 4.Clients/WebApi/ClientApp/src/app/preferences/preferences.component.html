@@ -1,26 +1,26 @@
 <nz-list>    
-       <nz-list-item>
-         <span class="ant-typography"> Processes Report <nz-switch [(ngModel)]="switchProcesses"></nz-switch> </span>        
+       <nz-list-item class="list-container">
+         <span class="ant-typography"> Processes Dashboard  </span>  <nz-switch class="list-item" [(ngModel)]="preference.processesDashboard" (ngModelChange)="updatePreferences()"></nz-switch>      
        </nz-list-item>     
        <nz-list-item>
-          <span class="ant-typography"> Skills Report <nz-switch [(ngModel)]="switchSkills"></nz-switch> </span>        
+          <span class="ant-typography"> Skills Dashboard <nz-switch [(ngModel)]="preference.skillsDashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> Progress Processes Report <nz-switch [(ngModel)]="switchProgress"></nz-switch> </span>        
+          <span class="ant-typography"> Progress Processes Dashboard <nz-switch [(ngModel)]="preference.progressDashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> Completed Processes Report <nz-switch [(ngModel)]="switchCompleted"></nz-switch> </span>        
+          <span class="ant-typography"> Completed Processes Dashboard <nz-switch [(ngModel)]="preference.completedDashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> Hire Casualties Report <nz-switch [(ngModel)]="switchCasualties"></nz-switch> </span>        
+          <span class="ant-typography"> Hire Casualties Dashboard <nz-switch [(ngModel)]="preference.casualtiesDashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> Hire Projection Report <nz-switch [(ngModel)]="switchProjection"></nz-switch> </span>        
+          <span class="ant-typography"> Hire Projection Dashboard <nz-switch [(ngModel)]="preference.projectionDashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> TimeToFill1 Report <nz-switch [(ngModel)]="switchTimeToFill1"></nz-switch> </span>        
+          <span class="ant-typography"> TimeToFill1 Dashboard <nz-switch [(ngModel)]="preference.timeToFill1Dashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
         <nz-list-item>
-          <span class="ant-typography"> TimeToFill2 Report <nz-switch [(ngModel)]="switchTimeToFill2"></nz-switch> </span>        
+          <span class="ant-typography"> TimeToFill2 Dashboard <nz-switch [(ngModel)]="preference.timeToFIll2Dashboard" (ngModelChange)="updatePreferences()"></nz-switch> </span>        
         </nz-list-item>
 </nz-list>

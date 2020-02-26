@@ -12,7 +12,6 @@ namespace Domain.Model
         public string EmailAddress { get; set; }
         public string LinkedInProfile { get; set; }
         public string Cv { get; set; }
-        public DateTime CreatedDate { get; set; }
-
+        
     }
 }

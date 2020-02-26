@@ -674,7 +674,13 @@ namespace Domain.Services.Repositories.EF
             context.SaveChanges();
             #endregion
 
+            #region Preference
+            var preference1 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
+           
+            context.Preferences.Add(preference1);
             
+            context.SaveChanges();
+            #endregion
 
             #region DaysOff
             var daysOff1 = new DaysOff {  Date = DateTime.Today.AddDays(-12), EndDate= DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
