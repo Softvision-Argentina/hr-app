@@ -30,5 +30,8 @@ namespace ApiServer.Contracts.Candidates
         public int PreferredOfficeId { get; set; }        
 
         public ICollection<ReadedCandidateSkillViewModel> CandidateSkills { get; set; }
+        public string Cv { get; set; }
+        public string KnownFrom { get; set; }
+        public string ReferredBy { get; set; }
     }
 }

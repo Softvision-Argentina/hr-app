@@ -194,8 +194,11 @@ namespace Domain.Services.Impl.Services
 
             try
             {
-                Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile!="N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
-                if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
+                if(linkedInProfile != null)
+                {
+                    Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile != "N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
+                    if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
+                }
             }
             catch (ValidationException ex)
             {

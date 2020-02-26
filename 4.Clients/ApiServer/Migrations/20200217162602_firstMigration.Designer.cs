@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200211171558_test")]
-    partial class test
+    [Migration("20200217162602_firstMigration")]
+    partial class firstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Cv");
+
                     b.Property<int>("DNI");
 
                     b.Property<string>("EmailAddress");
@@ -44,6 +46,8 @@ namespace ApiServer.Migrations
                     b.Property<int>("EnglishLevel");
 
                     b.Property<bool>("IsReferred");
+
+                    b.Property<string>("KnownFrom");
 
                     b.Property<string>("LastModifiedBy");
 
@@ -62,6 +66,8 @@ namespace ApiServer.Migrations
                     b.Property<int?>("ProfileId");
 
                     b.Property<int?>("RecruiterId");
+
+                    b.Property<string>("ReferredBy");
 
                     b.Property<int>("Status");
 

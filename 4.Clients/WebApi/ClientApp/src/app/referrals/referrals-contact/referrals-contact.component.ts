@@ -17,14 +17,15 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers'
 import { Process } from 'src/entities/process';
+import { ReferralsComponent } from '../referrals/referrals.component';
 
 @Component({
-  selector: 'app-process-contact',
-  templateUrl: './process-contact.component.html',
-  styleUrls: ['./process-contact.component.css']
+  selector: 'app-referrals-contact',
+  templateUrl: './referrals-contact.component.html',
+  styleUrls: ['./referrals-contact.component.css']
 })
 
-export class ProcessContactComponent implements OnInit {
+export class ReferralsContactComponent implements OnInit {
 
 
   @ViewChild('dropdown') nameDropdown;
@@ -131,7 +132,7 @@ export class ProcessContactComponent implements OnInit {
   // candidateForm: FormGroup;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
-    private modalService: NzModalService, private process: ProcessesComponent) {
+    private modalService: NzModalService, private process: ReferralsComponent) {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
@@ -406,7 +407,7 @@ export class ProcessContactComponent implements OnInit {
         profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
         cv: null,
         knownFrom: null,
-        referredBy: null
+        referredBy: this.currentUser.Name
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -418,43 +419,12 @@ export class ProcessContactComponent implements OnInit {
           this.visible = false;
           this.app.hideLoading();
           this.getCandidates();
-          this.startNewProcess(res.id);
+          this.modalService.closeAll();
         }, err => {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
           this.app.hideLoading;
         })
     }
-
-  }
-
-  startNewProcess(candidateId: number) {
-
-    this.facade.processService.getActiveProcessByCandidate(candidateId)
-      .subscribe((res: Process[]) => {
-        if (res.length > 0) {
-          this.facade.modalService.confirm({
-            nzTitle: 'There is already another process of ' + res[0].candidate.lastName + ', ' + res[0].candidate.name + '. Do you want to open a new one ?',
-            nzContent: '',
-            nzOkText: 'Yes',
-            nzOkType: 'danger',
-            nzCancelText: 'No',
-            nzOnOk: () => {
-              this.modalService.closeAll();
-              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-              this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-            }
-            //  ,
-            // nzOnCancel: () => this.modalService.closeAll()
-
-          });
-        }
-        else {
-          this.modalService.closeAll();
-          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
-          this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-          //this.candidateAdd.fillCandidateForm(processCandidate);        
-        }
-      })
   }
 }
