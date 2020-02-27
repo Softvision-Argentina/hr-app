@@ -11,6 +11,13 @@
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
       <p class="card-text text-muted text-center">Status: New</p>
+
+      <input type="file" ng2FileSelect [uploader]="uploader" />
+      <button type="button" class="btn btn-success btn-s"
+      (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+  <span class="fa fa-upload"></span> Upload
+</button>
+
       </div>
     </div>
   </div>

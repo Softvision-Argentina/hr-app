@@ -109,6 +109,7 @@ import { RoleService } from './services/role.service';
 import { RoleComponent } from './role/role.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { CompanyCalendarService } from './services/company-calendar.service';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientJsonpModule } from '@angular/common/http';
@@ -219,6 +220,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CommonModule,
     HttpClientModule,
     FormsModule,
+    FileUploadModule,
     ReactiveFormsModule,
     HttpModule,
     MatInputModule,

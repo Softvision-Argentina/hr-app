@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200217162602_firstMigration")]
-    partial class firstMigration
+    [Migration("20200227123808_firstmigration")]
+    partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -261,6 +261,35 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Consultants");
+                });
+
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CandidateId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("PublicId");
+
+                    b.Property<string>("Url");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Cv");
                 });
 
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
@@ -1082,6 +1111,14 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.CandidateProfile", "Profile")
                         .WithMany("CommunityItems")
                         .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.HasOne("Domain.Model.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
