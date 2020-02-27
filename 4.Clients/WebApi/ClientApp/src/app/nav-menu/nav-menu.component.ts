@@ -63,7 +63,7 @@ export class NavMenuComponent {
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: null,
-      nzWidth: '25%'
+      nzWidth: '30%'
     });
   }
  

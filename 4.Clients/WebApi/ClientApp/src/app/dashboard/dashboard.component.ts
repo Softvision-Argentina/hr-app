@@ -76,10 +76,9 @@ export class DashboardComponent implements OnInit {
     { id: 0, name: '', points: 0 }
   ];
 
-  preference: Preference;
+  preference: Preference = new Preference();
 
   constructor(private facade: FacadeService, private app: AppComponent) {
-
   }
 
   ngOnInit(): void {

@@ -9,7 +9,7 @@ import { User } from 'src/entities/user';
   styleUrls: ['./preferences.component.css']
 })
 export class PreferencesComponent implements OnInit {
-  preference: Preference;
+  preference: Preference = new Preference();
 
   constructor(private facade: FacadeService) {}
 
