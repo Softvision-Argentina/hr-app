@@ -52,7 +52,9 @@ namespace ApiServer.Controllers
         [HttpPost]
         public IActionResult AddPhoto(int candId, [FromForm] CvContractAdd cvContract)
         {
-            var candidate = _candidateService.Read(candId);
+            //var candidate = _candidateService.Read(candId);
+
+            var candidate = _candidateService.GetCandidate(candId);
 
             var file = cvContract.File;
 
@@ -74,8 +76,10 @@ namespace ApiServer.Controllers
             cvContract.Url = uploadResult.Uri.ToString();
             cvContract.PublicId = uploadResult.PublicId;
             cvContract.CandidateId = candidate.Id;
+            candidate.Cv = cvContract.Url;
 
             var cv = _mapper.Map<Cv>(cvContract);
+            var cand = _mapper.Map<Candidate>(candidate);
 
             if(_repo.SaveAll(cv))
             {
