@@ -12,6 +12,10 @@
                         <a class="nav-link text-dark" [routerLink]='["/"]'><i nz-icon nzType="solution"
                 style="vertical-align: middle" nzTheme="outline"></i>Processes</a>
                     </li>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['ALL'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                        <a class="nav-link text-dark" [routerLink]='["/referrals"]'><i nz-icon nzType="solution"
+                style="vertical-align: middle" nzTheme="outline"></i>Referrals</a>
+                    </li>
                     <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/tasks"]'><i nz-icon nzType="book"
                 style="vertical-align: middle" nzTheme="outline"></i>Tasks</a>

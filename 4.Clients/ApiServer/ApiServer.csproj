@@ -22,6 +22,7 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.10.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.40.2.1643" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />

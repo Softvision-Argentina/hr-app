@@ -283,9 +283,12 @@ export class CandidatesComponent implements OnInit {
                 contactDay: new Date(),
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),
-                isReferred: this.validateForm.controls['isReferred'].value
+                isReferred: this.validateForm.controls['isReferred'].value,
                 // contactDay: this.validateForm.controls['contactDay'].value
-              };
+                cv: this.validateForm.controls['isReferred'].value,
+                knownFrom: this.validateForm.controls['knownFrom'].value,
+                referredBy: this.validateForm.controls['referredBy'].value
+              }
               if (this.validateForm.controls['phoneNumber'].value) {
                 editedCandidate.phoneNumber += this.validateForm.controls['phoneNumber'].value.toString();
               }

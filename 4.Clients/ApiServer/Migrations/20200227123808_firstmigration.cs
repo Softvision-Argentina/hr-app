@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class test : Migration
+    public partial class firstmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -487,7 +487,10 @@ namespace ApiServer.Migrations
                     ProfileId = table.Column<int>(nullable: true),
                     IsReferred = table.Column<bool>(nullable: false),
                     PreferredOfficeId = table.Column<int>(nullable: true),
-                    ContactDay = table.Column<DateTime>(nullable: false)
+                    ContactDay = table.Column<DateTime>(nullable: false),
+                    Cv = table.Column<string>(nullable: true),
+                    KnownFrom = table.Column<string>(nullable: true),
+                    ReferredBy = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -569,6 +572,32 @@ namespace ApiServer.Migrations
                         name: "FK_CandidateSkills_Skills_SkillId",
                         column: x => x.SkillId,
                         principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cv",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    CandidateId = table.Column<int>(nullable: false),
+                    PublicId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cv", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cv_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -928,6 +957,11 @@ namespace ApiServer.Migrations
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cv_CandidateId",
+                table: "Cv",
+                column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DaysOff_EmployeeId",
                 table: "DaysOff",
                 column: "EmployeeId");
@@ -1076,6 +1110,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompanyCalendar");
+
+            migrationBuilder.DropTable(
+                name: "Cv");
 
             migrationBuilder.DropTable(
                 name: "DaysOff");
