@@ -33,7 +33,8 @@ namespace Domain.Services.Repositories.EF
             }
             else
             {
-                throw new ArgumentException("This user has a CV already");
+                _context.Cv.Attach(cv);
+                _context.Entry(cv).State = EntityState.Modified;
             }
 
             var save = _context.SaveChanges() > 0;

@@ -1,5 +1,5 @@
 <div>
-  <div *ngIf="cand.status === 0">
+  <div *ngIf="cand.status === 0 && cand.cv === null">
     <div class="card border-secondary mb-3">
       <div class="card-img-wrapper text-center mt-2">
         <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
@@ -10,17 +10,49 @@
         </h6>
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
-      <p class="card-text text-muted text-center">Status: New</p>
+      <p class="card-text text-muted text-center mb-3">Status: New</p>
+        <p class="card-text text-muted text-center mb-1">CV: </p>
+        <p class="card-text text-muted text-center mb-1">
+          
+          <input type="file" name="file" id="file" class="inputfile" ng2FileSelect [uploader]="uploader" />
+          <label for="file" class="text-center mb-1">Choose a file</label>
 
-      <input type="file" ng2FileSelect [uploader]="uploader" />
-      <button type="button" class="btn btn-success btn-s"
-      (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-  <span class="fa fa-upload"></span> Upload
-</button>
+        </p>
+        <p class="card-text text-muted text-center mb-1">
 
+          <button type="button" name="button" id="button" class="btn btn-success btn-s"
+          (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          <span class="fa fa-upload"></span> Upload
+          </button>
+          <label for="button" class="text-center mb-1">Upload</label>
+
+        </p>
       </div>
     </div>
   </div>
+
+  <div *ngIf="cand.status === 0 && cand.cv != null">
+    <div class="card border-secondary mb-3">
+      <div class="card-img-wrapper text-center mt-2">
+        <nz-avatar [nzShape]="'square'" [nzSize]="128" [nzIcon]="'user'"></nz-avatar>
+      </div>
+      <div class="card-body p-1">
+        <h6 class="card-title text-center mb-2">
+          {{cand.name}} {{cand.lastName}}
+        </h6>
+        <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
+        <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
+      <p class="card-text text-muted text-center mb-3">Status: New</p>
+      <p class="card-text text-muted text-center mb-1">CV: </p>
+      <p class="card-text text-muted text-center mb-1">
+        
+        <a link href="{{cand.cv}}" target="_blanck"><nz-avatar [nzShape]="'square'" [nzSize]="64" [nzIcon]="'file'" ></nz-avatar></a>
+
+      </p>
+      </div>
+    </div>
+  </div>
+
   <div *ngIf="cand.status === 1">
     <div class="card border-info mb-3">
       <div class="card-img-wrapper text-center mt-2">
@@ -33,6 +65,11 @@
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
         <p class="card-text text-muted text-center">Status: In progress</p>
+        <p class="card-text text-muted text-center mb-1">CV: </p>
+        <p class="card-text text-muted text-center mb-1">
+          
+          <a link href="{{cand.cv}}" target="_blanck"><nz-avatar [nzShape]="'square'" [nzSize]="64" [nzIcon]="'file'" ></nz-avatar></a>
+
       </div>
     </div>
   </div>
@@ -48,6 +85,12 @@
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
         <p class="card-text text-muted text-center">Status: Recall</p>
+        <p class="card-text text-muted text-center mb-1">CV: </p>
+        <p class="card-text text-muted text-center mb-1">
+          
+          <a link href="{{cand.cv}}" target="_blanck"><nz-avatar [nzShape]="'square'" [nzSize]="64" [nzIcon]="'file'" ></nz-avatar></a>
+
+        </p>
       </div>
     </div>
   </div>
@@ -63,6 +106,11 @@
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
         <p class="card-text text-muted text-center">Status: Hired</p>
+        <p class="card-text text-muted text-center mb-1">CV: </p>
+        <p class="card-text text-muted text-center mb-1">
+          
+          <a link href="{{cand.cv}}" target="_blanck"><nz-avatar [nzShape]="'square'" [nzSize]="64" [nzIcon]="'file'" ></nz-avatar></a>
+
       </div>
     </div>
   </div>
@@ -78,6 +126,12 @@
         <p class="card-text text-muted text-center mb-1">Profile: {{cand.profile.name}}</p>
         <p class="card-text text-muted text-center mb-1">Community: {{cand.community.name}}</p>
         <p class="card-text text-muted text-center">Status: Rejected</p>
+        <p class="card-text text-muted text-center mb-1">CV: </p>
+        <p class="card-text text-muted text-center mb-1">
+          
+          <a link href="{{cand.cv}}" target="_blanck"><nz-avatar [nzShape]="'square'" [nzSize]="64" [nzIcon]="'file'" ></nz-avatar></a>
+
+        </p>
       </div>
     </div>
   </div>
