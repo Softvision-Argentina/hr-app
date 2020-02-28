@@ -29,3 +29,7 @@
 nz-step {
     cursor: pointer;
 }
+
+.alert-info {
+    text-align: center;
+}

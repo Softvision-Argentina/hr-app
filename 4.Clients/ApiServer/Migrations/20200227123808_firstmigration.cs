@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class firstMigration : Migration
+    public partial class firstmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -577,6 +577,32 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cv",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    CandidateId = table.Column<int>(nullable: false),
+                    PublicId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cv", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cv_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Processes",
                 columns: table => new
                 {
@@ -931,6 +957,11 @@ namespace ApiServer.Migrations
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cv_CandidateId",
+                table: "Cv",
+                column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DaysOff_EmployeeId",
                 table: "DaysOff",
                 column: "EmployeeId");
@@ -1079,6 +1110,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompanyCalendar");
+
+            migrationBuilder.DropTable(
+                name: "Cv");
 
             migrationBuilder.DropTable(
                 name: "DaysOff");
