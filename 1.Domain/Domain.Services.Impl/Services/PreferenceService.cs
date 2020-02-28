@@ -33,7 +33,18 @@ namespace Domain.Services.Impl.Services
             _UserRepository = UserRepository;
             _log = log;
         }
-        
+
+        public CreatedPreferenceContract Create(CreatePreferenceContract contract)
+        {
+            var Preference = _mapper.Map<Preference>(contract);
+
+            var createdPreference = _PreferenceRepository.Create(Preference);
+            _log.LogInformation($"Complete preference for user {contract.UserId}");
+            _unitOfWork.Complete();
+            _log.LogInformation($"Return preference for user {contract.UserId}");
+            return _mapper.Map<CreatedPreferenceContract>(createdPreference);
+        }
+
         public void Update(UpdatePreferenceContract contract)
         {
             _log.LogInformation($"Validating contract {contract.Id}");

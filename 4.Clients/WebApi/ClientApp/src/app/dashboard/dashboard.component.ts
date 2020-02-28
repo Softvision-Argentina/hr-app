@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
     this.getEmployeeCasualties();
     this.app.hideLoading();
     this.getPreferences();
+    this.facade.preferenceService.preference.subscribe(res => this.preference = res);
   }
 
   // ngAfterViewChecked(): void {

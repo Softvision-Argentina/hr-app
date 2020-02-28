@@ -69,5 +69,18 @@ namespace ApiServer.Controllers
             });
         }
 
+        // POST api/preference
+        [HttpPost]
+        public IActionResult Post([FromBody] CreatePreferenceViewModel vm)
+        {
+            return ApiAction(() =>
+            {
+                var contract = _mapper.Map<CreatePreferenceContract>(vm);
+                var returnContract = _preferenceService.Create(contract);
+
+                return Created("Get", _mapper.Map<CreatedPreferenceViewModel>(returnContract));
+            });
+        }
+
     }
 }

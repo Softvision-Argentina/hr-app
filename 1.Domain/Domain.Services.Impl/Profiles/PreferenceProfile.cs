@@ -12,6 +12,8 @@ namespace Domain.Services.Impl.Profiles
         public PreferenceProfile()
         {
             CreateMap<Preference, ReadedPreferenceContract>();
+            CreateMap<CreatePreferenceContract, Preference>();
+            CreateMap<Preference, ReadedPreferenceContract>();
             CreateMap<UpdatePreferenceContract, Preference>();
         }
     }

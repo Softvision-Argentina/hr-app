@@ -8,6 +8,7 @@ namespace Domain.Services.Interfaces.Services
 {
     public interface IPreferenceService
     {
+        CreatedPreferenceContract Create(CreatePreferenceContract contract);
         IEnumerable<ReadedPreferenceContract> List();
         ReadedPreferenceContract Read(int id);
         void Update(UpdatePreferenceContract contract);

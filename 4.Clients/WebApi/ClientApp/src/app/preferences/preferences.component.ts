@@ -14,20 +14,18 @@ export class PreferencesComponent implements OnInit {
   constructor(private facade: FacadeService) {}
 
   ngOnInit() {
-    this.getPreferences();
+    this.getPreferences();   
   }
 
   updatePreferences() {
     this.facade.preferenceService
       .update<Preference>(this.preference.id, this.preference)
       .subscribe(
-        res => {
-          console.log(res);
-        },
         error => {
           console.log(error);
         }
       );
+      this.facade.preferenceService.changePreference(this.preference);
   }
 
   getPreferences() {
