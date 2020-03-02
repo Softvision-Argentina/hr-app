@@ -31,7 +31,7 @@ export class HireProjectedComponent implements OnInit {
   }
 
   getHireProjections() {
-    this.facade.hireProjectionService.get<HireProjection>()
+    this.facade.hireProjectionService.get()
       .subscribe(res => {
         this.hireProjections = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         this.listOfDisplayData = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
@@ -83,7 +83,7 @@ export class HireProjectedComponent implements OnInit {
                 month: month,
                 year: year
               }
-              this.facade.hireProjectionService.add<HireProjection>(newProjection)
+              this.facade.hireProjectionService.add(newProjection)
                 .subscribe(res => {
                   this.getHireProjections();
                   this.app.hideLoading();
@@ -136,7 +136,7 @@ export class HireProjectedComponent implements OnInit {
                 month: month,
                 year: year
               }
-              this.facade.hireProjectionService.update<HireProjection>(editedProjection.id, editedProjection)
+              this.facade.hireProjectionService.update(editedProjection.id, editedProjection)
                 .subscribe(res => {
                   this.getHireProjections();
                   this.app.hideLoading();
@@ -164,7 +164,7 @@ export class HireProjectedComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.hireProjectionService.delete<HireProjection>(hireProjectionId)
+      nzOnOk: () => this.facade.hireProjectionService.delete(hireProjectionId)
         .subscribe(res => {
           this.getHireProjections();
           this.facade.toastrService.success('Projection was deleted !');

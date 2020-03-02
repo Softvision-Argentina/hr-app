@@ -89,7 +89,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.filteredCandidates = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
@@ -99,7 +99,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   getRecruiters() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.recruiters = res;
       }, err => {
@@ -108,7 +108,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   getProfiles() {
-    this.facade.candidateProfileService.get<CandidateProfile>()
+    this.facade.candidateProfileService.get()
     .subscribe(res => {
       this.profiles = res;
     }, err => {
@@ -117,7 +117,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   getCommunities() {
-    this.facade.communityService.get<Community>()
+    this.facade.communityService.get()
     .subscribe(res => {
       this.communities = res;
     }, err => {
@@ -127,7 +127,7 @@ export class CandidatesComponent implements OnInit {
 
 
   getSkills() {
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.skills = res;
       }, err => {
@@ -136,7 +136,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>()
+    this.facade.OfficeService.get()
       .subscribe(res => {
         this._offices = res;
       }, err => {
@@ -276,13 +276,16 @@ export class CandidatesComponent implements OnInit {
                 contactDay: new Date(),
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),
-                isReferred: this.validateForm.controls['isReferred'].value
+                isReferred: this.validateForm.controls['isReferred'].value,
                 // contactDay: this.validateForm.controls['contactDay'].value
+                cv: this.validateForm.controls['isReferred'].value,
+                knownFrom: this.validateForm.controls['knownFrom'].value,
+                referredBy: this.validateForm.controls['referredBy'].value
               }
               if (this.validateForm.controls['phoneNumber'].value) {
                 editedCandidate.phoneNumber += this.validateForm.controls['phoneNumber'].value.toString();
               }
-              this.facade.candidateService.update<Candidate>(id, editedCandidate)
+              this.facade.candidateService.update(id, editedCandidate)
                 .subscribe(res => {
                   this.getCandidates();
                   this.app.hideLoading();
@@ -315,7 +318,7 @@ export class CandidatesComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.candidateService.delete<Candidate>(candidateID)
+      nzOnOk: () => this.facade.candidateService.delete(candidateID)
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');

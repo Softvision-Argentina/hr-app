@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Skill } from 'src/entities/skill';
 import { Candidate } from 'src/entities/candidate';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective, Label, SingleDataSet } from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
@@ -11,6 +11,8 @@ import { Process } from 'src/entities/process';
 import { AppComponent } from '../app.component';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { Community } from 'src/entities/community';
+import { Office } from 'src/entities/office';
 
 
 
@@ -67,17 +69,33 @@ export class ReportsComponent implements OnInit {
   //CandidateFilter
   @ViewChild('dropdown') nameDropdown;
   validateSkillsForm: FormGroup;
+  listOfControl: Array<{ id: number; controlInstance: string[] }> = [];
 
   emptyCandidate: Candidate;
   skills: Skill[] = [];
   candidates: Candidate[] = [];
   processes: Process[] = [];
   filteredCandidates: Candidate[] = [];
+  communities: Community[] = [];
+  _offices: Office[] = [];
   isLoadingResults = false;
   selectedSkill: number;
   searchValue = '';
   listOfSearchCandidates = [];
   listOfDisplayData = [...this.filteredCandidates];
+  defaultOffice : Office = {
+    id: null,
+    name: 'NA',
+    description: '',
+    roomItems: []
+  }
+  defaultCommunity : Community = {
+    id: null,
+    name: 'NA',
+    description: '',
+    profileId: 0,
+    profile: null
+  }
 
 
   numberOfWait: number = 0;
@@ -102,22 +120,47 @@ export class ReportsComponent implements OnInit {
     this.getSkills();
     this.getCandidates();
     this.getProcesses();
-
+    this.getCommunities();
+    this.getOffices();
     this.validateSkillsForm = this.fb.group({
-      skillSelector: [null, [Validators.required]],
-      skillRateSlidder: [[0, 100]]
+      community: [this.defaultCommunity],
+      preferredOffice: [this.defaultOffice]
     });
-
+    this.addField()
     this.app.hideLoading();
+  }
+  addField(e?: MouseEvent): void {
+    if (e) {
+      e.preventDefault();
+    }
+    const id = this.listOfControl.length > 0 ? this.listOfControl[this.listOfControl.length - 1].id + 1 : 0;
+
+    const control = {
+      id,
+      controlInstance: [`skill${id}`, `rate${id}`]
+    };
+    const index = this.listOfControl.push(control);
+    this.validateSkillsForm.addControl(this.listOfControl[index - 1].controlInstance[0], new FormControl(null, Validators.required));
+    this.validateSkillsForm.addControl(this.listOfControl[index - 1].controlInstance[1], new FormControl([0, 100]));
+  }
+
+  removeField(i: { id: number; controlInstance: string[] }, e: MouseEvent): void {
+    e.preventDefault();
+    if (this.listOfControl.length > 1) {
+      const index = this.listOfControl.indexOf(i);
+      this.listOfControl.splice(index, 1);
+      this.validateSkillsForm.removeControl(i.controlInstance[0]);
+      this.validateSkillsForm.removeControl(i.controlInstance[1]);
+    }
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidates.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id == candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
   getSkills() {
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.skills = res;
       }, err => {
@@ -128,7 +171,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.candidates = res;
       }, err => {
@@ -136,8 +179,28 @@ export class ReportsComponent implements OnInit {
       });
   }
 
+  getCommunities() {
+    this.facade.communityService.get<Community>()
+    .subscribe(res => {
+      this.communities.push(this.defaultCommunity)
+      this.communities.push(...res);
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  getOffices() {
+    this.facade.OfficeService.get<Office>()
+      .subscribe(res => {
+        this._offices.push(this.defaultOffice)
+        this._offices.push(...res);
+      }, err => {
+        console.log(err);
+      });
+  }
+
   getProcesses() {
-    this.facade.processService.get<Process>()
+    this.facade.processService.get()
       .subscribe(res => {
         this.processes = res;
         let labels: string[] = [];
@@ -188,15 +251,18 @@ export class ReportsComponent implements OnInit {
   }
 
   getCandidatesBySkill(): void {
+
     this.app.showLoading();
     for (const i in this.validateSkillsForm.controls) {
       this.validateSkillsForm.controls[i].markAsDirty();
       this.validateSkillsForm.controls[i].updateValueAndValidity();
     }
 
-    this.filteredCandidates = [];
-    let selectedSkill: number = this.validateSkillsForm.controls['skillSelector'].value;
-    let rateRange: string[] = this.validateSkillsForm.controls['skillRateSlidder'].value.toString().split(',');
+    /* this.filteredCandidates = [];
+    let selectedSkill: number = this.validateSkillsForm.get("skill0").value;
+    let selectedSkills: number[] = this.listOfControl.map(control => this.validateSkillsForm.get(control.controlInstance[1]).value);
+    
+    let rateRange: string[] = this.validateSkillsForm.get("rate0").value.toString().split(',');
     let skilledCandidates: number = 0;
     let totalCandidates: number = 0;
     this.candidates.forEach(candidate => {
@@ -209,17 +275,49 @@ export class ReportsComponent implements OnInit {
           }
         }
       })
-    });
-    this.listOfDisplayData = this.filteredCandidates;
+    }); */
 
-    //Cards de porcentajes
-    this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
-    if (this.stadisticAbove === 100) this.stadisticBelow = 0;
-    else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
-    if (this.stadisticBelow === 100) this.stadisticAbove = 0;
-    if (this.stadisticAbove.toString() == 'NaN') this.stadisticAbove = 0;
-    if (this.stadisticBelow.toString() == 'NaN') this.stadisticBelow = 0;
-    this.app.hideLoading();
+    //this.listOfDisplayData = this.filteredCandidates;
+
+    let selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
+      this.listOfControl.map(control => {
+        const result = {
+          skillId: parseInt(this.validateSkillsForm.get(control.controlInstance[0]).value),
+          minRate: this.validateSkillsForm.get(control.controlInstance[1]).value[0],
+          maxRate: this.validateSkillsForm.get(control.controlInstance[1]).value[1]
+        }
+
+        return result;
+      });
+
+      const filteredCandidateRequest : { community : number
+        , preferredOffice : number
+        , selectedSkills:  Array<{ skillId: number; minRate: number; maxRate: number }> } = 
+        {
+          community : parseInt(this.validateSkillsForm.get('community').value.id),
+          preferredOffice : parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
+          selectedSkills : selectedSkills
+        }
+
+      
+     
+    this.facade.candidateService.getCandidatesBySkills(filteredCandidateRequest)
+      .subscribe(res => {
+        this.listOfDisplayData = res;
+        let skilledCandidates: number = this.listOfDisplayData.filter(candidate => candidate.candidateSkills[0].rate >= 50).length;
+        let totalCandidates: number = this.listOfDisplayData.length;
+
+        //Cards de porcentajes
+        this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
+        if (this.stadisticAbove === 100) this.stadisticBelow = 0;
+        else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
+        if (this.stadisticBelow === 100) this.stadisticAbove = 0;
+        if (this.stadisticAbove.toString() == 'NaN') this.stadisticAbove = 0;
+        if (this.stadisticBelow.toString() == 'NaN') this.stadisticBelow = 0;
+        this.app.hideLoading();
+      }, err => {
+        console.log(err);
+      });
   }
 
   reset(): void {

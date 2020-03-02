@@ -31,7 +31,7 @@ export class LocationsComponent implements OnInit {
   }
 
   getRooms() {
-    this.facade.RoomService.get<Room>()
+    this.facade.RoomService.get()
     .subscribe(res => {
       this.emptyRoom = res;
       this.listOfDisplayDataRoom = res;
@@ -41,7 +41,7 @@ export class LocationsComponent implements OnInit {
   }  
 
   getOffices() {
-    this.facade.OfficeService.get<Office>().subscribe(res => {
+    this.facade.OfficeService.get().subscribe(res => {
       this.emptyOffice = res;
       this.listOfDisplayDataOffice = res;
     }, err => {

@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Globals } from '../app-globals/globals';
 
 @Injectable()
-export class ProcessService extends BaseService {
+export class ProcessService extends BaseService<Process> {
 
   private selectedSenioritysSource: BehaviorSubject<any[]>;
   selectedSeniorities: Observable<any[]>;

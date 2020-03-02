@@ -5,9 +5,10 @@ import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { Candidate } from 'src/entities/candidate';
 
 @Injectable()
-export class CandidateService extends BaseService {
+export class CandidateService extends BaseService<Candidate> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
@@ -26,6 +27,17 @@ export class CandidateService extends BaseService {
 
   public idExists(id: number): Observable<any>{
     return this.http.get(this.apiUrl + '/exists/' + id, {
+      headers: this.headersWithAuth
+    })
+      .pipe(
+        tap(data => {}),
+        catchError(this.handleErrors)
+      );
+  }
+
+  public getCandidatesBySkills(candidatesFilters): Observable<any>{
+
+    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters ,{
       headers: this.headersWithAuth
     })
       .pipe(

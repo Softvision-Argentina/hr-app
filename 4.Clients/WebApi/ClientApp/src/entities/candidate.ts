@@ -24,4 +24,7 @@ export class Candidate {
   community: Community;
   isReferred: boolean;
   linkedInProfile?: string;
+  referredBy: string;
+  knownFrom: string;
+  cv: string;
 }

@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService extends BaseService {
+export class EmployeeService extends BaseService<Employee> {
   employees = [{ id: 1, name: "Kevin", lastName: "Zatel", email: "kevin.zatel@softvision.com" },
   { id: 2, name: "Carlos", lastName: "Hemingway", email: "soycarlitos66@gmail.com" }];
   
