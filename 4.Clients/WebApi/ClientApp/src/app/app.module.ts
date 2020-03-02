@@ -131,11 +131,10 @@ import { ReportTimetofill2Component } from './dashboard/report-timetofill2/repor
 import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
-
-
 
 registerLocaleData(en);
 
@@ -211,6 +210,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
+      DeclineReasonComponent,
+      HasRoleDirective,
       DeclineReasonComponent,      
       ReportTimetofill1Component
    ],
