@@ -170,20 +170,7 @@
                         <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimEndError')">
                             The input has trailing whitespace!
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('required')">
-                            Please input a the URL, or mark the N/A option!
-                        </ng-container>
                     </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12" style="display: flex; justify-content: center">
-            <nz-form-item>
-                <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReferred" [hidden]="!visible">Is Referred
-                </nz-form-label> -->
-                <nz-form-control [hidden]="!visible">
-                    <label nz-checkbox formControlName="isReferred" nzFor="isReferred">Is Referred</label>
-                    <!--in the future we could use something like (ngModelChange)="referredBy($event)" to show an input for the referring employee.-->
                 </nz-form-control>
             </nz-form-item>
         </div>

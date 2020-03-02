@@ -1,4 +1,5 @@
-﻿using Domain.Model.Enum;
+﻿using Domain.Model;
+using Domain.Model.Enum;
 using Domain.Services.Contracts.Candidate;
 using Domain.Services.Contracts.Stage;
 using System;
@@ -18,7 +19,7 @@ namespace Domain.Services.Contracts.Process
         public string Profile { get; set; }
 
         public string RejectionReason { get; set; }
-
+        public DeclineReason DeclineReason { get; set; }
         public int? CandidateId { get; set; }
 
         public int? ConsultantOwnerId { get; set; }

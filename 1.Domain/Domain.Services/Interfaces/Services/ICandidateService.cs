@@ -17,5 +17,6 @@ namespace Domain.Services.Interfaces.Services
         IEnumerable<ReadedCandidateContract> List();
         IEnumerable<ReadedCandidateAppContract> ListApp();
         IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filter);
+        Candidate GetCandidate(int id);
     }
 }

@@ -28,9 +28,9 @@ namespace ApiServer.Contracts.Candidates
         public ReadedCandidateProfileViewModel Profile { get; set; }
         public ReadedCommunityViewModel Community { get; set; }
         public bool IsReferred { get; set; }
-
-
-
         public ICollection<CreateCandidateSkillViewModel> CandidateSkills { get; set; }
+        public string Cv { get; set; }
+        public string KnownFrom { get; set; }
+        public string ReferredBy { get; set; }
     }
 }

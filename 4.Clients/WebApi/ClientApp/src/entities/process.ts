@@ -9,20 +9,16 @@ import { ClientStage } from './client-stage';
 import { OfferStage } from './offer-stage';
 import { EnglishLevelEnum } from './enums/english-level.enum';
 import { ProcessCurrentStageEnum } from './enums/process-current-stage';
+import { DeclineReason } from './declineReason';
 
 export class Process {
     id: number;
-    startDate: Date;
-    endDate: Date;
     status: ProcessStatusEnum;
     currentStage: ProcessCurrentStageEnum;
-    candidateId: number;
     candidate: Candidate;
-    consultantOwnerId: number;
     consultantOwner: Consultant;
-    consultantDelegateId: number;
-    consultantDelegate: Consultant;
     rejectionReason: string;
+    declineReason: DeclineReason;
     actualSalary: number;
     wantedSalary: number;
     agreedSalary: number;
@@ -32,4 +28,11 @@ export class Process {
     technicalStage: TechnicalStage;
     clientStage: ClientStage;
     offerStage: OfferStage;
+    startDate?: Date;
+    endDate?: Date;
+    candidateId?: number;
+    consultantDelegateId?: number;
+    consultantOwnerId?: number;
+    consultantDelegate?: Consultant;
+    declineReasonId?: number;
 }

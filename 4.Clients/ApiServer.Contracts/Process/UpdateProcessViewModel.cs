@@ -17,6 +17,7 @@ namespace ApiServer.Contracts.Process
         public ProcessCurrentStage CurrentStage { get; set; }
 
         public string RejectionReason { get; set; }
+        public DeclineReason DeclineReason { get; set; }
 
         public int? CandidateId { get; set; }
 

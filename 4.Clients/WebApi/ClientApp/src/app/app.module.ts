@@ -109,6 +109,7 @@ import { RoleService } from './services/role.service';
 import { RoleComponent } from './role/role.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { CompanyCalendarService } from './services/company-calendar.service';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientJsonpModule } from '@angular/common/http';
@@ -126,9 +127,14 @@ import { ProfilesComponent } from './profiles/profiles.component';
 import { SlickModule } from "ngx-slick";
 import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
-
-
-
+import { ReportTimetofill2Component } from './dashboard/report-timetofill2/report-timetofill2.component';
+import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
+import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
+import { DeclineReasonService } from './services/decline-reason.service';
+import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
+import { ReferralsComponent } from './referrals/referrals/referrals.component';
+import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
+import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 
 registerLocaleData(en);
 
@@ -187,9 +193,13 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportSkillsComponent,
       ReportHireProjectionComponent,
       ReportHireCasualtiesComponent,
+      ReportTimetofill2Component,
       ProcessContactComponent,
       DaysOffComponent,
       ProcessContactComponent,
+      ReferralsComponent,
+      ReferralsContactComponent,
+      ReferralsCardComponent,
       ReservationsComponent,
       OfficeComponent,
       RoomComponent,
@@ -199,7 +209,11 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       NoticeCalendarComponent,
       LocationsComponent,
       ProfilesComponent,
-      PostulantsComponent
+      PostulantsComponent,
+      DeclineReasonComponent,
+      HasRoleDirective,
+      DeclineReasonComponent,      
+      ReportTimetofill1Component
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -207,6 +221,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CommonModule,
     HttpClientModule,
     FormsModule,
+    FileUploadModule,
     ReactiveFormsModule,
     HttpModule,
     MatInputModule,
@@ -231,6 +246,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [CommonGuard] },
       { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [CommonGuard] },
 
+      { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
+
       { path: 'stage-details/:id', component: StageDetailComponent, canActivate: [CommonGuard] },
       { path: 'stage-edit/:id', component: StageEditComponent, canActivate: [CommonGuard] },
 
@@ -253,6 +270,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         {path: 'profiles/:tab', component: ProfilesComponent},
         {path: 'locations/:tab', component: LocationsComponent},
         {path: 'roles', component: RoleComponent},
+        {path: 'declining-reasons', component: DeclineReasonComponent},
 
       ] },
 
@@ -307,6 +325,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     RoleService,
     CompanyCalendarService,
     PostulantsService,
+    DeclineReasonService,
     // MatDatepickerModule,
     // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }
