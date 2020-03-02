@@ -35,6 +35,7 @@
     "jquery": "3.4.1",
     "ng-zorro-antd": "^7.0.2",
     "ng2-charts": "^2.2.3",
+    "ng2-file-upload": "^1.4.0",
     "ng2-loading-spinner": "^1.3.0",
     "ngx-slick": "^0.2.1",
     "ngx-toastr": "^9.1.2",

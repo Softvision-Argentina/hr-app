@@ -23,6 +23,7 @@ import { OfficeService } from './office.service';
 import { RoleService } from "./role.service";
 import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
+import { DeclineReasonService } from "./decline-reason.service";
 
 @Injectable()
 export class FacadeService {
@@ -227,6 +228,14 @@ export class FacadeService {
       this._authService = this.injector.get(AuthService);
     }
     return this._authService;
+  }
+
+  private _declineReasonService: DeclineReasonService;
+  public get declineReasonService(): DeclineReasonService {
+    if (!this._declineReasonService) {
+      this._declineReasonService = this.injector.get(DeclineReasonService);
+    }
+    return this._declineReasonService;
   }
 
   constructor(private injector: Injector) {

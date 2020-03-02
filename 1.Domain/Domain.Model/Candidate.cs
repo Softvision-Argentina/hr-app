@@ -24,5 +24,8 @@ namespace Domain.Model
         public Office PreferredOffice { get; set; }  
         public DateTime ContactDay { get; set; }
         public IList<CandidateSkill> CandidateSkills { get; set; }
+        public string Cv { get; set; }
+        public string KnownFrom { get; set; }
+        public string ReferredBy { get; set; }
     }
 }

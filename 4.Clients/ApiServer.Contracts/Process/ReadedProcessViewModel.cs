@@ -2,6 +2,7 @@
 using ApiServer.Contracts.Consultant;
 using ApiServer.Contracts.Postulant;
 using ApiServer.Contracts.Stage;
+using Domain.Model;
 using Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace ApiServer.Contracts.Process
         public ProcessCurrentStage CurrentStage { get; set; }
 
         public string RejectionReason { get; set; }
-
+        public DeclineReason DeclineReason { get; set; }
         public int? CandidateId { get; set; }
         public ReadedCandidateViewModel Candidate { get; set; }
         public ReadedPostulantViewModel Postulant { get; set; }

@@ -48,7 +48,7 @@ namespace ApiServer.Controllers
                 MinutesToExpiration = int.Parse(_configuration["jwtSettings:minutesToExpiration"])
             };
 
-            var _user = this._userService.Authenticate(user.UserName, user.Password);
+            var _user = _userService.Authenticate(user.UserName, user.Password);
 
             if (_user != null)
             {

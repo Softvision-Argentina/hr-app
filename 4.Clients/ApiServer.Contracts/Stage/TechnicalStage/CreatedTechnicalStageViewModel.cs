@@ -1,6 +1,8 @@
 ﻿namespace ApiServer.Contracts.Stage
 {
-    public class CreatedTechnicalStageViewModel : CreatedStageViewModel
+    public class CreatedTechnicalStageViewModel
     {
+        public int Id { get; set; }
+
     }
 }

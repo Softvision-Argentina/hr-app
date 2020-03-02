@@ -6,7 +6,7 @@ using Domain.Model.Enum;
 
 namespace ApiServer.Contracts.Stage
 {
-    public abstract class ReadedStageViewModel
+    public class ReadedStageViewModel
     {
         public int Id { get; set; }
 

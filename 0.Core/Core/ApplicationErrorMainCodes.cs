@@ -23,6 +23,7 @@
         Office = 1800,
         Role = 1900,
         CompanyCalendar = 2000,
+        DeclineReason = 2100,
 
         Dummy = 99999
     }

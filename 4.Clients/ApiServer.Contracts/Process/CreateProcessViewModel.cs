@@ -1,5 +1,6 @@
 ﻿using ApiServer.Contracts.Candidates;
 using ApiServer.Contracts.Stage;
+using Domain.Model;
 using Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace ApiServer.Contracts.Process
         public ProcessCurrentStage CurrentStage { get; set; }
 
         public string RejectionReason { get; set; }
+        public DeclineReason DeclineReason { get; set; }
 
         public int? CandidateId { get; set; }
 

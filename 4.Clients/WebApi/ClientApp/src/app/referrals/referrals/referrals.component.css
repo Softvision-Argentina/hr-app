@@ -1,0 +1,35 @@
+.search-box {
+    padding: 8px;
+}
+
+.search-box input {
+    width: 188px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.search-box button {
+    width: 90px;
+}
+
+.search-button {
+    margin-right: 8px;
+}
+
+.pop {
+    height: 50px;
+    width: 40%;
+    margin-left: 20px;
+    border: 1px solid saddlebrown;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nz-step {
+    cursor: pointer;
+}
+
+.alert-info {
+    text-align: center;
+}

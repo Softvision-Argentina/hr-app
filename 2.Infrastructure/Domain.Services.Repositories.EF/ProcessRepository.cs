@@ -25,6 +25,7 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.OfferStage)
                 .Include(x => x.ConsultantOwner)
                 .Include(x => x.ConsultantDelegate)
+                .Include(x => x.DeclineReason)
                 .Include(x => x.Candidate)
                 .ThenInclude(c => c.CandidateSkills)
                 .ThenInclude(cs => cs.Skill)

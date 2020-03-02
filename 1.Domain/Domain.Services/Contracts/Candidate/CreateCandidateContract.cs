@@ -28,5 +28,8 @@ namespace Domain.Services.Contracts.Candidate
         //public int PreferredOfficeId { get; set; }
         public DateTime ContactDay { get; set; }
         public ICollection<CreateCandidateSkillContract> CandidateSkills { get; set; }
+        public string Cv { get; set; }
+        public string KnownFrom { get; set; }
+        public string ReferredBy { get; set; }
     }
 }

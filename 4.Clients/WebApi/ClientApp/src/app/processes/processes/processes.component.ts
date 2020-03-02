@@ -29,6 +29,7 @@ import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
+import { DeclineReason } from 'src/entities/declineReason';
 
 @Component({
   selector: 'app-processes',
@@ -74,6 +75,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   processForm: FormGroup;
   rejectProcessForm: FormGroup;
+  declineProcessForm: FormGroup;
   isDetailsVisible: boolean = false;
   emptyProcess: Process;
 
@@ -84,7 +86,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   profileSearch: number = 0;
   profileSearchName: string = 'ALL';
 
-  communitySearch: number =0;
+  communitySearch: number = 0;
   communitySearchName: string = 'ALL';
 
   profileList: any[];
@@ -112,6 +114,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   profiles: CandidateProfile[] = [];
   stepIndex: number = 0;
 
+  declineReasons: DeclineReason[] = [];
+  isDeclineReasonOther: boolean = false;
+
   isOwnedProcesses: boolean = false;
 
   forms: FormGroup[] = [];
@@ -133,6 +138,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.getOffices();
     this.getCommunities();
     this.getProfiles();
+    this.getDeclineReasons();
     this.facade.consultantService.GetByEmail(this.currentUser.Email)
       .subscribe(res => {
         this.currentConsultant = res.body;
@@ -140,6 +146,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
+    });
+
+    this.declineProcessForm = this.formBuilder.group({
+      declineReasonDescription: [null, [Validators.required]],
+      declineReasonName : [null, [Validators.required]]
     });
 
     this.setRejectionReasonValidators();
@@ -227,6 +238,15 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  getDeclineReasons() {
+    this.facade.declineReasonService.get<DeclineReason>("Named")
+      .subscribe(res => {
+        this.declineReasons = res;
+      }, err => {
+        console.log(err);
+      });
+  }
+
   getProfile(profile: number): string {
     return this.profiles.filter(x =>x.id === profile)[0].name;
   }
@@ -272,7 +292,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     let processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
 
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all the stages associated with the process',
+      nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all stages associated with the process',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
@@ -288,7 +308,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.getProcesses();
         this.getCandidates();
         this.app.hideLoading();
-        this.facade.toastrService.success('Process was approved !');
+        this.facade.toastrService.success('Process approved!');
       }, err => {
         this.app.hideLoading();
         console.log(err);
@@ -301,44 +321,103 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
-
     this.rejectProcessForm.reset();
     let process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
 
-    const modal = this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete the process for ' + process.candidate.name + '' + process.candidate.lastName + ' ?',
+    const modal = this.facade.modalService.create({
+      nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      nzOkText: 'Yes',
-      nzOkType: 'danger',
-      nzCancelText: 'No',
-      nzOnOk: () => {
-        this.app.showLoading();
-        let isCompleted: boolean = true;
-        for (const i in this.rejectProcessForm.controls) {
-          this.rejectProcessForm.controls[i].markAsDirty();
-          this.rejectProcessForm.controls[i].updateValueAndValidity();
-          if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+      nzFooter: [
+        {
+          label: 'Cancel',
+          shape: 'default',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Submit',
+          type: 'danger',
+          onClick: () => {
+            this.app.showLoading();
+            let isCompleted: boolean = true;
+            for (const i in this.rejectProcessForm.controls) {
+              this.rejectProcessForm.controls[i].markAsDirty();
+              this.rejectProcessForm.controls[i].updateValueAndValidity();
+              if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+            }
+            if (isCompleted) {
+    
+              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+    
+              this.facade.processService.reject(processID, rejectionReason)
+                .subscribe(res => {
+                  this.getCandidates();
+                  this.getProcesses();
+                  this.app.hideLoading();
+                  modal.destroy();
+                  this.facade.toastrService.success('Process and associated candidate were rejected');
+                }, err => {
+                  this.app.hideLoading();
+                  this.facade.toastrService.error(err.message);
+                })
+            }
+            this.app.hideLoading();
+          }          
         }
-        if (isCompleted) {
-
-          let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-
-          this.facade.processService.reject(processID, rejectionReason)
-            .subscribe(res => {
-              this.getCandidates();
-              this.getProcesses();
-              this.app.hideLoading();
-              modal.destroy();
-              this.facade.toastrService.success('Process and associated candidate were rejected');
-            }, err => {
-              this.app.hideLoading();
-              this.facade.toastrService.error(err.message);
-            })
-        }
-        this.app.hideLoading();
-      }
+      ]      
     });
+  }
 
+  /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
+  openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
+    this.declineProcessForm.reset();
+
+    const modal = this.facade.modalService.create({
+      nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
+      nzContent: modalContent,
+      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
+      nzZIndex: 5,
+      nzFooter: [
+        {
+          label: 'Cancel',
+          shape: 'default',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Submit',
+          type: 'primary',
+          onClick: () => {
+            this.app.showLoading();
+            let isCompleted: boolean = true;
+            for (const i in this.declineProcessForm.controls) {
+              this.declineProcessForm.controls[i].markAsDirty();
+              this.declineProcessForm.controls[i].updateValueAndValidity();
+              if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
+                isCompleted = false;
+              }
+            }
+            if (isCompleted) {
+              let declineReason : DeclineReason = { 
+                  id: this.declineProcessForm.controls['declineReasonName'].value,
+                  name: "",
+                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
+                }
+              process.declineReason = declineReason;
+              this.facade.processService.update(process.id, process)
+                .subscribe(res => {
+                  this.app.hideLoading();
+                  modal.destroy();
+                  this.facade.toastrService.success('Process and associated candidate were declined');
+                }, err => {
+                  this.app.hideLoading();
+                  this.facade.toastrService.error(err.message);
+                })
+            }
+            this.app.hideLoading();
+          }          
+        }
+      ]
+    });
+    return modal;
   }
 
   reset(): void {
@@ -634,7 +713,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
 
-  saveProcess() {
+  saveProcess(declineProcessModal: TemplateRef<{}>) {
     if (this.validateForms()) {
       this.app.showLoading();
       let newCandidate: Candidate;
@@ -644,7 +723,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate.candidateSkills=this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       newProcess.consultantOwnerId = newCandidate.recruiter.id;
-
       newProcess.candidate = newCandidate;
 
       if (!this.isEdit) {
@@ -661,18 +739,40 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           });
       }
       else {
-        this.facade.processService.update(newProcess.id, newProcess)
+        this.facade.processService.getByID<Process>(newProcess.id)
           .subscribe(res => {
-            this.getProcesses();
-            this.getCandidates();
-            this.app.hideLoading();
-            this.facade.toastrService.success('The process was successfully saved !');
-            this.createEmptyProcess(newCandidate);
-            this.closeModal();
+            if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
+              // Used for verifying whether user pressed OK or Cancel on decline modal.
+              let declineReason = newProcess.declineReason;
+              this.openDeclineModal(newProcess, declineProcessModal).afterClose
+                .subscribe(sel => {
+                  if (declineReason !== newProcess.declineReason) {
+                    this.getCandidates();
+                    this.getProcesses();
+                    this.app.hideLoading();
+                    this.facade.toastrService.success('The process was successfully saved!');
+                    this.createEmptyProcess(newCandidate);
+                    this.closeModal();
+                  }
+                });
+            } else {
+              this.facade.processService.update<Process>(newProcess.id, newProcess)
+                .subscribe(res => {
+                  this.getProcesses();
+                  this.getCandidates();
+                  this.app.hideLoading();
+                  this.facade.toastrService.success('The process was successfully saved !');
+                  this.createEmptyProcess(newCandidate);
+                  this.closeModal();
+                }, err => {
+                  this.app.hideLoading();
+                  this.facade.toastrService.error(err.message);
+                });
+            }
           }, err => {
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
-          });
+          }); 
       }
     }
   }
@@ -689,9 +789,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       candidate: null,
       consultantOwnerId: 0,
       consultantOwner: null,
-      consultantDelegateId: 0,
       consultantDelegate: null,
+      consultantDelegateId: null,
       rejectionReason: null,
+      declineReason: null,
       actualSalary: 0,
       wantedSalary: 0,
       agreedSalary: 0,
@@ -790,11 +891,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      consultantOwnerId: 0,
-      consultantOwner: null,
-      consultantDelegateId: 0,
+      consultantOwnerId: candidate.recruiter.id,
+      consultantOwner: candidate.recruiter,
+      consultantDelegateId: null,
       consultantDelegate: null,
       rejectionReason: null,
+      declineReasonId: null,
+      declineReason: null,
       actualSalary: 0,
       wantedSalary: 0,
       agreedSalary: 0,
@@ -843,7 +946,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         status: StageStatusEnum.NA,
         feedback: '',
         consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        consultantDelegateId: null,
         processId: 0,
         agreedSalary: 0,
         seniority: SeniorityEnum.NA,
@@ -855,5 +958,25 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         preocupationalDoneDate: new Date()
       },
     };
+  }
+
+  isDeclined(process: Process) : Boolean {
+    if (process.hrStage.status === StageStatusEnum.Declined ||
+        process.technicalStage.status === StageStatusEnum.Declined ||
+        process.clientStage.status === StageStatusEnum.Declined ||
+        process.offerStage.status === StageStatusEnum.Declined) {
+          return true;
+        }
+    return false;
+  }
+
+  declineReasonNameChanged() {
+    if (this.declineProcessForm.controls['declineReasonName'].value === -1) {
+      this.isDeclineReasonOther = true;
+      this.declineProcessForm.controls['declineReasonDescription'].enable();
+    } else {
+      this.isDeclineReasonOther = false;
+      this.declineProcessForm.controls['declineReasonDescription'].disable();
+    }
   }
 }

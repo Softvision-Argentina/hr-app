@@ -17,8 +17,6 @@ namespace Domain.Services.Impl.Validators.Candidate
             RuleFor(_ => _.Recruiter).NotEmpty();
             RuleFor(_ => _.Community).NotEmpty();
             RuleFor(_ => _.Profile).NotEmpty();
-            RuleFor(_ => _.LinkedInProfile).NotEmpty();
-
         }
 
     }
