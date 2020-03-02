@@ -54,7 +54,7 @@ export class RoomComponent implements OnInit {
   }
 
   // getRooms() {
-  //   this.facade.RoomService.get<Room>()
+  //   this.facade.RoomService.get()
   //   .subscribe(res => {
   //     this.rooms = res;
   //     }, err => {
@@ -68,7 +68,7 @@ export class RoomComponent implements OnInit {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>()
+    this.facade.OfficeService.get()
     .subscribe(res => {
       this.offices = res;
     }, err => {
@@ -119,7 +119,7 @@ export class RoomComponent implements OnInit {
                 office: null,
                 reservationItems: null
               }
-              this.facade.RoomService.add<Room>(newRoom)
+              this.facade.RoomService.add(newRoom)
                 .subscribe(res => {          
                   this.settings.getRooms();
                   this.controlArray = [];
@@ -181,7 +181,7 @@ export class RoomComponent implements OnInit {
                 office: null,
                 reservationItems: null
               }
-              this.facade.RoomService.update<Room>(id, editedRoom)
+              this.facade.RoomService.update(id, editedRoom)
                 .subscribe(res => {
                   this.settings.getRooms();
                   this.facade.toastrService.success('Room was successfully edited !');
@@ -206,7 +206,7 @@ export class RoomComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.RoomService.delete<Room>(RoomID)
+      nzOnOk: () => this.facade.RoomService.delete(RoomID)
         .subscribe(res => {
           this.settings.getRooms();
           this.facade.toastrService.success('Room was deleted !');

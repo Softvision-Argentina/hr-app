@@ -160,7 +160,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getSkills() {
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.skills = res;
       }, err => {
@@ -171,7 +171,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.candidates = res;
       }, err => {
@@ -200,7 +200,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getProcesses() {
-    this.facade.processService.get<Process>()
+    this.facade.processService.get()
       .subscribe(res => {
         this.processes = res;
         let labels: string[] = [];

@@ -44,7 +44,7 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
     }
 
     getRecruiterName(){
-        this.facade.consultantService.get<Consultant>()
+        this.facade.consultantService.get()
         .subscribe(res => {
           this.recruiterName = res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].name + " " +
                                     res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].lastName;
@@ -54,7 +54,7 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
       }
 
       getCommunityName(){
-        this.facade.communityService.get<Community>()
+        this.facade.communityService.get()
         .subscribe(res => {
           this.communityName = res.filter(x => x.id === this._detailedCandidate.community.id)[0].name;
         }, err => {
@@ -63,7 +63,7 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
       }
 
       getProfileName(){
-        this.facade.candidateProfileService.get<CandidateProfile>()
+        this.facade.candidateProfileService.get()
         .subscribe(res => {
           this.profileName = res.filter(x => x.id === this._detailedCandidate.profile.id)[0].name;
         }, err => {

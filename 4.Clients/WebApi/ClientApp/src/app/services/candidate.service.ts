@@ -5,9 +5,10 @@ import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { Candidate } from 'src/entities/candidate';
 
 @Injectable()
-export class CandidateService extends BaseService {
+export class CandidateService extends BaseService<Candidate> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);

@@ -61,7 +61,7 @@ export class OfficeComponent implements OnInit {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>().subscribe(res => {
+    this.facade.OfficeService.get().subscribe(res => {
       this.offices = res;
     }, err => {
       console.log(err);
@@ -69,7 +69,7 @@ export class OfficeComponent implements OnInit {
   }
   
   getRooms() {
-    this.facade.RoomService.get<Room>()
+    this.facade.RoomService.get()
     .subscribe(res => {
       this.rooms = res;
       }, err => {
@@ -85,7 +85,7 @@ export class OfficeComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.OfficeService.delete<Office>(officeId)
+      nzOnOk: () => this.facade.OfficeService.delete(officeId)
         .subscribe(res => {
           this.settings.getOffices();
           this.facade.toastrService.success('Office was deleted !');
@@ -135,7 +135,7 @@ export class OfficeComponent implements OnInit {
               description: this.officeForm.controls["description"].value,
               roomItems: null
             }
-            this.facade.OfficeService.add<Office>(addOffice)
+            this.facade.OfficeService.add(addOffice)
               .subscribe(res => {
                 this.settings.getOffices();
                 this.app.hideLoading();
@@ -186,7 +186,7 @@ export class OfficeComponent implements OnInit {
             if (isCompleted) {
               editOffice.name = this.officeForm.controls['name'].value;
               editOffice.description = this.officeForm.controls['description'].value;
-              this.facade.OfficeService.update<Office>(officeId, editOffice).subscribe(res => {
+              this.facade.OfficeService.update(officeId, editOffice).subscribe(res => {
                 this.settings.getOffices();
                 this.facade.toastrService.success('Office was successfully edited !');
                 modal.destroy();

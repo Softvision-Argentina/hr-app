@@ -31,7 +31,7 @@ export class RoleComponent implements OnInit {
 
 
   getRoles() {
-    this.facade.RoleService.get<Role>()
+    this.facade.RoleService.get()
       .subscribe(res => {
         this.roles = res;
       }, err => {
@@ -52,7 +52,7 @@ export class RoleComponent implements OnInit {
           this.facade.toastrService.error("The are some employees with this associated role.");
         }
         else {
-          this.facade.RoleService.delete<Role>(role.id).subscribe(res => {
+          this.facade.RoleService.delete(role.id).subscribe(res => {
             this.getRoles();
             this.facade.toastrService.success('Role was deleted !');
           }, err => {
@@ -65,7 +65,7 @@ export class RoleComponent implements OnInit {
   }
 
   getEmployeesWithDeleteRole(role: Role) {
-    this.facade.employeeService.get<Employee>("GetAll")
+    this.facade.employeeService.get("GetAll")
       .subscribe(res => {
         this.employeesWithDeleteRole = res.filter(e => e.role.id == role.id);
       }, err => {
@@ -105,7 +105,7 @@ export class RoleComponent implements OnInit {
                 name: this.roleForm.controls["name"].value,
                 isActive: this.roleForm.controls["isActive"].value,
               }
-              this.facade.RoleService.add<Role>(addRole).subscribe(res => {
+              this.facade.RoleService.add(addRole).subscribe(res => {
                 this.getRoles();
                 this.facade.toastrService.success('Role was successfully created !');
                 modal.destroy();
@@ -152,7 +152,7 @@ export class RoleComponent implements OnInit {
               let editRole: Role = role;
               editRole.name = this.roleForm.controls["name"].value;
               editRole.isActive = this.roleForm.controls["isActive"].value;
-              this.facade.RoleService.update<Role>(role.id, editRole).subscribe(res => {
+              this.facade.RoleService.update(role.id, editRole).subscribe(res => {
                 this.getRoles();
                 this.facade.toastrService.success('Role was successfully edited !');
                 modal.destroy();

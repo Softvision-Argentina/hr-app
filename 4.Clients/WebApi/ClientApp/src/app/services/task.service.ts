@@ -5,9 +5,10 @@ import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Task } from 'src/entities/task';
 
 @Injectable()
-export class TaskService extends BaseService {
+export class TaskService extends BaseService<Task> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);

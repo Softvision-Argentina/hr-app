@@ -29,7 +29,7 @@ export class ProcessStepsComponent implements OnInit {
   }
 
   getProcessByID(id) {
-    this.facade.processService.getByID<Process>(id)
+    this.facade.processService.getByID(id)
             .subscribe(res => {
               this.process = res;
               console.log(res);
