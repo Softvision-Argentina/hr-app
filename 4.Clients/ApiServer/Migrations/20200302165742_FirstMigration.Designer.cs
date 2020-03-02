@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200221135703_PreferenceTable")]
-    partial class PreferenceTable
+    [Migration("20200302165742_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Cv");
+
                     b.Property<int>("DNI");
 
                     b.Property<string>("EmailAddress");
@@ -44,6 +46,8 @@ namespace ApiServer.Migrations
                     b.Property<int>("EnglishLevel");
 
                     b.Property<bool>("IsReferred");
+
+                    b.Property<string>("KnownFrom");
 
                     b.Property<string>("LastModifiedBy");
 
@@ -62,6 +66,8 @@ namespace ApiServer.Migrations
                     b.Property<int?>("ProfileId");
 
                     b.Property<int?>("RecruiterId");
+
+                    b.Property<string>("ReferredBy");
 
                     b.Property<int>("Status");
 
@@ -255,6 +261,35 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Consultants");
+                });
+
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CandidateId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("PublicId");
+
+                    b.Property<string>("Url");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Cv");
                 });
 
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
@@ -1118,6 +1153,14 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.CandidateProfile", "Profile")
                         .WithMany("CommunityItems")
                         .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.HasOne("Domain.Model.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
