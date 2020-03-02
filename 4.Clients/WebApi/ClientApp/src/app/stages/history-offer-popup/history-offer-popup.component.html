@@ -1,8 +1,12 @@
-  <div nz-row>
+<div nz-row>
   <div nz-col nzSpan="24">
-    <button nz-button (click)="addOffer(editModal)">Add offer</button>
+    <button nz-button (click)="addOffer(editModal)" [disabled]="!allowAddOffer">Add offer</button>
+  </div>
+  <div nz-col nzSpan="24" *ngIf="!allowAddOffer">
+    <p>You can't add an offer if the last one is pending or accepted</p>
   </div>
 </div>
+<br>
 <nz-table nzBordered nzShowSizeChanger>  
   <thead>
       <tr>
@@ -14,7 +18,7 @@
       </tr>
   </thead>
   <tbody>
-    <tr *ngFor ="let offer of offerHistory; let i = index">
+    <tr *ngFor ="let offer of ofertas">
       <td scope="row"> 
         {{ offer.offerDate | date: 'dd/MM/yyyy' }}
       </td>
@@ -22,20 +26,23 @@
         {{ offer.salary }}
       </td>
       <td scope="row"> 
-        {{ offer.status}}
+        {{ getStatus(offer.status) }}
       </td>
       <td scope="row">         
-        {{ offer.rejectionReason }}
+        <input type="text" nz-input id="rejectionReason" [disabled]="offer.status != 'Declined'" [readonly]="offer.status != 'Declined'" placeholder="Please input the rejection reason" pattern="[0-9]+([\.,][0-9]+)?">        
       </td>
       <td [style.text-align]="center">        
-        <i nzTitle="Edit" (click)="showEditModal(editModal, i)" style="cursor: pointer;" nz-tooltip nz-icon type="edit" theme="outline"></i>
+        <i nzTitle="Decline" (click)="editStatus('Declined', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
           <nz-divider nzType="vertical"></nz-divider>
-        <i nzTitle="Delete" (click)="showDeleteConfirm(i)" style="cursor: pointer;" nz-tooltip nz-icon type="delete" theme="outline"></i>        
+        <i nzTitle="Accept" (click)="editStatus('Accepted', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
+          <nz-divider nzType="vertical"></nz-divider>
+        <i nzTitle="Delete" (click)="showDeleteConfirm(offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="delete" theme="outline"></i>        
       </td>
     </tr>
   </tbody>
 </nz-table>
-<button nz-button nzType="primary" (click)="doSomething()"></button>
+<button nz-button nzType="primary" (click)="doSomething()">Printear</button>
+<button nz-button nzType="primary" (click)="doSomething2()">Agregar offer al service</button>
 
 <ng-template #editModal>
   <form nz-form [formGroup]="editForm" [nzLayout]="'horizontal'">
@@ -64,39 +71,6 @@
                 </nz-form-control>
             </nz-form-item>
           </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rejectionReason">Rejection reason</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <input type="text" nz-input formControlName="rejectionReason" id="rejectionReason" placeholder="Please input the rejection reason">
-                <nz-form-explain *ngIf="editForm.get('rejectionReason').dirty && editForm.get('rejectionReason').errors">
-                    <ng-container *ngIf="editForm.get('rejectionReason')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="editForm.get('rejectionReason')?.hasError('trimEndError')">
-                        The input has trailing whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="editForm.get('rejectionReason')?.hasError('required')">
-                        Please input the rejectionReason!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
-              <nz-radio-group formControlName="status">
-                    <label *ngFor="let offerStatus of offerStatusList" [nzDisabled]="disabled" nz-radio-button [nzValue]="offerStatus.id"><span>{{offerStatus.name}}</span></label>
-              </nz-radio-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
       </div>
   </form>
 </ng-template>

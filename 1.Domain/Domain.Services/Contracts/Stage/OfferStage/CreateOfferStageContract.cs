@@ -28,7 +28,6 @@ namespace Domain.Services.Contracts.Stage
         public bool BackgroundCheckDone { get; set; }
         public DateTime? BackgroundCheckDoneDate { get; set; }
         public bool PreocupationalDone { get; set; }
-        public DateTime? PreocupationalDoneDate { get; set; }
-        public List<Offer> Offers { get; set; }
+        public DateTime? PreocupationalDoneDate { get; set; }        
     }
 }

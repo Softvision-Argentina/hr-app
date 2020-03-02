@@ -56,6 +56,8 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
+    </div>
+    <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority">Seniority</nz-form-label>
@@ -67,7 +69,12 @@
                     <nz-form-explain *ngIf="offerForm.get('seniority').dirty && offerForm.get('seniority').errors">Please select a seniority</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
-        </div>
+        </div>        
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <button nz-button nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
+            </nz-form-item>
+        </div>        
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
@@ -174,16 +181,10 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <button nz-button nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="circle">
-                </button>
-            </nz-form-item>
-        </div>
     </div>
 
 </form>
 
 <ng-template #historyOfferModal>
-    <history-offer-popup [_offerHistory]=temporalOffers></history-offer-popup> 
+    <history-offer-popup [_processId]=offerStage.processId></history-offer-popup> 
 </ng-template>

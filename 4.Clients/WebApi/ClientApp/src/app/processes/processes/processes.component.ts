@@ -607,8 +607,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
-    console.log(this.emptyProcess);
-    console.log(this.emptyProcess.offerStage.offers);
+    console.log(this.emptyProcess);    
   }
 
   showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
@@ -957,8 +956,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date(),
-        offers : new Array<Offer>()
+        preocupationalDoneDate: new Date()        
       },
     };    
   }

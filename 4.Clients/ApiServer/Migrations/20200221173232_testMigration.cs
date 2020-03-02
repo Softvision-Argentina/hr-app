@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class test : Migration
+    public partial class testMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -126,6 +126,28 @@ namespace ApiServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HireProjection", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Offer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    OfferDate = table.Column<DateTime>(nullable: true),
+                    Salary = table.Column<float>(nullable: false),
+                    RejectionReason = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    ProcessId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -737,7 +759,6 @@ namespace ApiServer.Migrations
                     OfferDate = table.Column<DateTime>(nullable: false),
                     HireDate = table.Column<DateTime>(nullable: false),
                     Seniority = table.Column<int>(nullable: false),
-                    AgreedSalary = table.Column<float>(nullable: false),
                     BackgroundCheckDone = table.Column<bool>(nullable: false),
                     BackgroundCheckDoneDate = table.Column<DateTime>(nullable: true),
                     PreocupationalDone = table.Column<bool>(nullable: false),
@@ -1091,6 +1112,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "HrStages");
+
+            migrationBuilder.DropTable(
+                name: "Offer");
 
             migrationBuilder.DropTable(
                 name: "OfferStages");

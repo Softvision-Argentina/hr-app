@@ -36,6 +36,7 @@ using Domain.Services.Impl.Validators.DaysOff;
 using Domain.Services.Impl.Validators.Role;
 using Domain.Services.Impl.Validators.CompanyCalendar;
 using Domain.Services.Impl.Validators;
+using Domain.Services.Impl.Validators.Offer;
 
 namespace DependencyInjection
 {
@@ -100,6 +101,8 @@ namespace DependencyInjection
             services.AddScoped<UpdateReservationContractValidator, UpdateReservationContractValidator>();
             services.AddScoped<CreateRoleContractValidator, CreateRoleContractValidator>();
             services.AddScoped<UpdateRoleContractValidator, UpdateRoleContractValidator>();
+            services.AddScoped<CreateOfferContractValidator, CreateOfferContractValidator>();
+            services.AddScoped<UpdateOfferContractValidator, UpdateOfferContractValidator>();
 
             services.AddTransient<IDummyService, DummyService>();
             services.AddTransient<ISkillService, SkillService>();
@@ -124,6 +127,7 @@ namespace DependencyInjection
             services.AddTransient<ICompanyCalendarService, CompanyCalendarService>();
             services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
+            services.AddTransient<IOfferService, OfferService>();
 
         }
 
@@ -177,6 +181,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<CompanyCalendar>, CompanyCalendarRepository>();
             services.AddScoped<IRepository<Role>, RoleRepository>();
             services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
+            services.AddScoped<IRepository<Offer>, OfferRepository>();
 
             services.AddScoped<IStageItemRepository, StageItemRepository>();
             services.AddScoped<IProcessStageRepository, ProcessStageRepository>();

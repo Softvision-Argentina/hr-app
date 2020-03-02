@@ -66,7 +66,7 @@ export class OfferStageComponent implements OnInit {
   }
 
   showOfferHistoryModal(modalContent: TemplateRef<{}>){    
-    this.historyOfferModal.showModal(modalContent);
+    this.historyOfferModal.showModal(modalContent);    
   }
 
   ngOnInit() {
@@ -75,9 +75,7 @@ export class OfferStageComponent implements OnInit {
       this.offerForm.controls['seniority'].setValue(this.seniorityList[0].id);
     });
     this.changeFormStatus(false);
-    if (this.offerStage) { this.fillForm(this.offerStage); }    
-    // this.temporalOffers = cloneDeep(this.offerStage.offers);    
-    this.temporalOffers = [...this.offerStage.offers];
+    if (this.offerStage) { this.fillForm(this.offerStage); }        
     console.log(this.offerStage);
   }
 
@@ -129,9 +127,7 @@ export class OfferStageComponent implements OnInit {
     stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
     stage.processId = processId;
     stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
-    stage.seniority = this.getControlValue(form.controls.seniority);    
-    stage.offers = this.temporalOffers;    
-    // this.offerStage.offers = this.temporalOffers;
+    stage.seniority = this.getControlValue(form.controls.seniority);            
     stage.hireDate = this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
     stage.backgroundCheckDoneDate = stage.backgroundCheckDone ? this.getControlValue(form.controls.backgroundCheckDoneDate) : null;

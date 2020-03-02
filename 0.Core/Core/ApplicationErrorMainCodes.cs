@@ -24,6 +24,7 @@
         Role = 1900,
         CompanyCalendar = 2000,
         DeclineReason = 2100,
+        Offer = 2200,
 
         Dummy = 99999
     }

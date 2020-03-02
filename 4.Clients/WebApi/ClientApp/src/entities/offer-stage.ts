@@ -18,6 +18,5 @@ export class OfferStage {
     backgroundCheckDone: boolean;
     backgroundCheckDoneDate: Date;
     preocupationalDone: boolean;
-    preocupationalDoneDate: Date;
-    offers : Offer[];
+    preocupationalDoneDate: Date;    
 }
