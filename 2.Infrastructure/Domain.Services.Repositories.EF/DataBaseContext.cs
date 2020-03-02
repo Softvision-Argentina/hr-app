@@ -56,7 +56,10 @@ namespace Domain.Services.Repositories.EF
         public DbSet<CompanyCalendar> CompanyCalendar { get; set; }
         public DbSet<DeclineReason> DeclineReasons { get; set; }
 
+        public DbSet<Preference> Preferences { get; set; }
+
         public DbSet<Cv> Cv { get; set; }
+
 
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)

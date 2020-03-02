@@ -14,7 +14,7 @@ import { Globals } from '../app-globals/globals';
 import { Office } from '../../entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 
 
 
@@ -46,20 +46,20 @@ export class CandidatesComponent implements OnInit {
   communities: Community[] = [];
   _offices: Office[] = [];
 
-  //Modals
+  // Modals
   skills: Skill[] = [];
   private completeSkillList: Skill[] = [];
   validateForm: FormGroup;
-  isAddVisible: boolean = false;
-  isAddOkLoading: boolean = false;
+  isAddVisible = false;
+  isAddOkLoading = false;
   emptyCandidate: Candidate;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit: boolean = false;
-  editingCandidateId: number = 0;
+  isEdit = false;
+  editingCandidateId = 0;
 
-  isDniLoading: boolean = false;
-  isDniValid: boolean = false;
+  isDniLoading = false;
+  isDniValid = false;
 
   currentConsultant: User;
 
@@ -92,7 +92,8 @@ export class CandidatesComponent implements OnInit {
     this.facade.candidateService.get<Candidate>()
       .subscribe(res => {
         this.filteredCandidates = res;
-        this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
+        this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
+        : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
         console.log(err);
       });
@@ -173,21 +174,25 @@ export class CandidatesComponent implements OnInit {
 
   search(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchCandidates.length ? this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
-        (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
+      return (this.listOfSearchCandidates.length ?
+        this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
+        (replaceAccent(item.name.toString().toUpperCase() +
+        item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
+     ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
 
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchCandidates.length ? this.listOfSearchCandidates.some(p => item.status.indexOf(p) !== -1) : true) &&
-        (item.status === this.searchValueStatus)
+        (item.status === this.searchValueStatus);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
+    ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.statusDropdown.nzVisible = false;
   }
@@ -199,15 +204,15 @@ export class CandidatesComponent implements OnInit {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Consultant Modal
+    // Edit Consultant Modal
     this.resetForm();
     this.getSkills();
-    if (this.completeSkillList.length == 0) this.skills.forEach(sk => this.completeSkillList.push(sk));
+    if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }
     this.editingCandidateId = id;
     this.isEdit = true;
     this.controlArray = [];
     this.controlEditArray = [];
-    let editedCandidate: Candidate = this.filteredCandidates.filter(candidate => candidate.id == id)[0];
+    let editedCandidate: Candidate = this.filteredCandidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
 
     const modal = this.facade.modalService.create({
@@ -228,35 +233,35 @@ export class CandidatesComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
               if ((!this.validateForm.controls[i].valid) &&
-                (this.validateForm.controls[i] != this.validateForm.controls['phoneNumberPrefix'])) isCompleted = false;
+                (this.validateForm.controls[i] !== this.validateForm.controls['phoneNumberPrefix'])) { isCompleted = false; }
             }
             if (isCompleted) {
-              let candidateSkills: CandidateSkill[] = [];
+              const candidateSkills: CandidateSkill[] = [];
               this.controlEditArray.forEach(skillEdit => {
-                let skill: CandidateSkill = {
+                const skill: CandidateSkill = {
                   candidateId: id,
                   candidate: null,
                   skillId: skillEdit.id,
                   skill: null,
                   rate: this.validateForm.controls[skillEdit.controlInstance[1]].value,
                   comment: this.validateForm.controls[skillEdit.controlInstance[2]].value
-                }
+                };
                 candidateSkills.push(skill);
               });
               this.controlArray.forEach(skillControl => {
-                let skill: CandidateSkill = {
+                const skill: CandidateSkill = {
                   candidateId: id,
                   candidate: null,
                   skillId: this.validateForm.controls[skillControl.controlInstance[0]].value,
                   skill: null,
                   rate: this.validateForm.controls[skillControl.controlInstance[1]].value,
                   comment: this.validateForm.controls[skillControl.controlInstance[2]].value
-                }
+                };
                 candidateSkills.push(skill);
               });
               editedCandidate = {
@@ -266,9 +271,11 @@ export class CandidatesComponent implements OnInit {
                 dni: this.validateForm.controls['dni'].value,
                 emailAddress: this.validateForm.controls['email'].value ? this.validateForm.controls['email'].value.toString() : null,
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')',
-                linkedInProfile: this.validateForm.controls['linkedin'].value === null ? null : this.validateForm.controls['linkedin'].value.toString(),
+                linkedInProfile: this.validateForm.controls['linkedin'].value === null
+                ? null : this.validateForm.controls['linkedin'].value.toString(),
                 candidateSkills: candidateSkills,
-                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString(),
+                additionalInformation: this.validateForm.controls['additionalInformation'].value === null
+                ? null : this.validateForm.controls['additionalInformation'].value.toString(),
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
@@ -294,11 +301,10 @@ export class CandidatesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error('The service is not available now. Try again later.');
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  if (err.message = undefined) { this.facade.toastrService.error(err.message); } else
+                  { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -306,12 +312,12 @@ export class CandidatesComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidates.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.filteredCandidates.filter(candidate => candidate.id === candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   showDeleteConfirm(candidateID: number): void {
-    let candidateDelete: Candidate = this.filteredCandidates.filter(candidate => candidate.id == candidateID)[0];
+    const candidateDelete: Candidate = this.filteredCandidates.filter(candidate => candidate.id === candidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + candidateDelete.lastName + ', ' + candidateDelete.name + ' ?',
       nzContent: '',
@@ -323,8 +329,8 @@ export class CandidatesComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error('The service is not available now. Try again later.');
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
+           { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
@@ -341,16 +347,16 @@ export class CandidatesComponent implements OnInit {
     };
 
     if (id > 0) {
-      let skills = this.skills;
-      let newSetOfSkills: Skill[] = [];
-      let skill: Skill = this.skills.filter(s => s.id == this.validateForm.controls[`skill${id - 1}`].value)[0];
+      const skills = this.skills;
+      const newSetOfSkills: Skill[] = [];
+      const skill: Skill = this.skills.filter(s => s.id === this.validateForm.controls[`skill${id - 1}`].value)[0];
       skills.forEach(sk => {
-        if (sk != skill) newSetOfSkills.push(sk);
+        if (sk !== skill) { newSetOfSkills.push(sk); }
       });
       this.skills = newSetOfSkills;
     }
 
-    if (this.editingCandidateId > 0) this.removeCandidateSkills();
+    if (this.editingCandidateId > 0) { this.removeCandidateSkills(); }
 
     const index = this.controlArray.push(control);
     this.validateForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
@@ -359,46 +365,45 @@ export class CandidatesComponent implements OnInit {
   }
 
   removeCandidateSkills() {
-    let skills: Skill[] = [];
+    const skills: Skill[] = [];
     this.completeSkillList.forEach(sk => {
-      let exists: boolean = false;
+      let exists = false;
       this.controlEditArray.forEach(control => {
-        if (this.validateForm.controls[control.controlInstance[0]].value == sk.name) exists = true;
+        if (this.validateForm.controls[control.controlInstance[0]].value === sk.name) { exists = true; }
       });
       this.controlArray.forEach(control => {
-        if (this.validateForm.controls[control.controlInstance[0]].value == sk.id) exists = true;
+        if (this.validateForm.controls[control.controlInstance[0]].value === sk.id) { exists = true; }
       });
-      if (!exists && skills.filter(s => s.id == sk.id).length == 0) skills.push(sk);
+      if (!exists && skills.filter(s => s.id === sk.id).length === 0) { skills.push(sk); }
     });
     this.skills = skills;
   }
 
   removeField(i: { id: number, controlInstance: string[] }, e: MouseEvent, isEdit: boolean): void {
     e.preventDefault();
-    let skillList: Skill[] = [];
+    const skillList: Skill[] = [];
     this.completeSkillList.forEach(sk => skillList.push(sk));
     if (isEdit) {
       if (this.controlEditArray.length >= 1) {
         if (this.validateForm.controls[i.controlInstance[0]].value != null) {
-          this.skills.push(skillList.filter(skill => skill.name == this.validateForm.controls[i.controlInstance[0]].value)[0]);
+          this.skills.push(skillList.filter(skill => skill.name === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
-        let j: number = 0;
+        let j = 0;
         const index = this.controlEditArray.indexOf(i);
         this.controlEditArray.splice(index, 1);
-        for (j; j < 3; j++) this.validateForm.removeControl(i.controlInstance[j]);
+        for (j; j < 3; j++) { this.validateForm.removeControl(i.controlInstance[j]); }
       }
-    }
-    else {
+    } else {
       if (this.controlArray.length >= 1) {
         if (this.validateForm.controls[i.controlInstance[0]].value != null) {
-          this.skills.push(skillList.filter(skill => skill.id == this.validateForm.controls[i.controlInstance[0]].value)[0]);
+          this.skills.push(skillList.filter(skill => skill.id === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
-        let j: number = 0;
+        let j = 0;
         const index = this.controlArray.indexOf(i);
         this.controlArray.splice(index, 1);
-        for (j; j < 3; j++) this.validateForm.removeControl(i.controlInstance[j]);
+        for (j; j < 3; j++) { this.validateForm.removeControl(i.controlInstance[j]); }
       }
     }
   }
@@ -408,7 +413,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   fillCandidateForm(candidate: Candidate) {
-    //let statusIndex = this.statusList.filter(status => status.name.toLowerCase() === candidate.status.toLowerCase())[0].id;
+    // let statusIndex = this.statusList.filter(status => status.name.toLowerCase() === candidate.status.toLowerCase())[0].id;
     this.validateForm.controls['dni'].setValue(candidate.dni);
     this.validateForm.controls['name'].setValue(candidate.name);
     this.validateForm.controls['lastName'].setValue(candidate.lastName);
@@ -437,21 +442,21 @@ export class CandidatesComponent implements OnInit {
         const index = this.controlEditArray.push(control);
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[0], new FormControl(skill.skill.name));
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[1], new FormControl(skill.rate));
-        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[2], new FormControl(skill.comment, Validators.required));
+        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[2],
+          new FormControl(skill.comment, Validators.required));
       });
     }
   }
 
-  dniChanged(){
+  dniChanged() {
     this.isDniValid = false;
     this.changeFormStatus(false);
   }
 
-  changeFormStatus(enable: boolean){
+  changeFormStatus(enable: boolean) {
     for (const i in this.validateForm.controls) {
-      if(this.validateForm.controls[i] != this.validateForm.controls['dni']){
-        if(enable) this.validateForm.controls[i].enable();
-        else this.validateForm.controls[i].disable();
+      if (this.validateForm.controls[i] !== this.validateForm.controls['dni']) {
+        if (enable) { this.validateForm.controls[i].enable(); } else { this.validateForm.controls[i].disable(); }
       }
     }
   }

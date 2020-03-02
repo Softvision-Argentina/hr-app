@@ -64,10 +64,14 @@
         </nz-card-meta>
         <br />
         <ul class="ant-card-actions">
+            <li [style.width.%]="100" nzTitle="Manage Preferences">
+                <span (click)="showPreferencesModal(preferencesModal)" style="cursor: pointer;"><i nz-icon nzType="tool"
+            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Manage Preferences</span>
+            </li>
             <li [style.width.%]="100" nzTitle="Logout">
                 <span (click)="logout()" style="cursor: pointer;"><i nz-icon nzType="logout"
             style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout</span>
-            </li>
+            </li>            
         </ul>
     </nz-card>
 </ng-template>
@@ -100,3 +104,10 @@
         <div nz-col nzSpan="2"></div>
     </div>
 </ng-template>
+
+<ng-template #preferencesModal>
+   <app-preferences></app-preferences>
+</ng-template>
+
+
+
