@@ -619,7 +619,8 @@ namespace Domain.Services.Repositories.EF
             var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+ 
+
 
             context.Users.Add(user2);
             context.Users.Add(user3);
@@ -640,7 +641,7 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user18);
             context.Users.Add(user19);
             context.Users.Add(user20);
-            context.Users.Add(user21);
+
             context.SaveChanges();
             #endregion
 
@@ -694,7 +695,6 @@ namespace Domain.Services.Repositories.EF
             var preference17 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user18 };
             var preference18 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user19 };
             var preference19 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user20 };
-            var preference20 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
 
             context.Preferences.Add(preference1);
             context.Preferences.Add(preference2);
@@ -715,7 +715,6 @@ namespace Domain.Services.Repositories.EF
             context.Preferences.Add(preference17);
             context.Preferences.Add(preference18);
             context.Preferences.Add(preference19);
-            context.Preferences.Add(preference20);
 
             context.SaveChanges();
             #endregion

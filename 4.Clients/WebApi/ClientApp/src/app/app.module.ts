@@ -135,8 +135,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
-
-
+import { HasRoleDirective } from './directives/appHasRole.directive';
 
 registerLocaleData(en);
 
@@ -214,7 +213,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       PostulantsComponent,
       DeclineReasonComponent,
       ReportTimetofill1Component,
-      PreferencesComponent
+      PreferencesComponent,
+      HasRoleDirective,     
+      ReportTimetofill1Component
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
