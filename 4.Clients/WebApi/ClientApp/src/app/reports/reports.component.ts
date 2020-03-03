@@ -180,7 +180,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getCommunities() {
-    this.facade.communityService.get<Community>()
+    this.facade.communityService.get()
     .subscribe(res => {
       this.communities.push(this.defaultCommunity)
       this.communities.push(...res);
@@ -190,7 +190,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>()
+    this.facade.OfficeService.get()
       .subscribe(res => {
         this._offices.push(this.defaultOffice)
         this._offices.push(...res);
