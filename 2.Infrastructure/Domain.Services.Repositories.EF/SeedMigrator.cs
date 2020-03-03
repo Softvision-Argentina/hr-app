@@ -618,19 +618,9 @@ namespace Domain.Services.Repositories.EF
             var user17 = new User { FirstName = "Francisco", LastName = "Ghersi", Username = "francisco.ghersi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-<<<<<<< HEAD
-<<<<<<< HEAD
-            var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
- 
-=======
-            var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user21 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
->>>>>>> 8e255c696dde3467ace84411510a1497c88c340f
-=======
             var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
->>>>>>> cc71cbaefa32615213e4d5ab31b2489ac748353d
 
 
             context.Users.Add(user2);
@@ -652,16 +642,9 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user18);
             context.Users.Add(user19);
             context.Users.Add(user20);
-<<<<<<< HEAD
-
-=======
             context.Users.Add(user21);
-<<<<<<< HEAD
->>>>>>> 8e255c696dde3467ace84411510a1497c88c340f
-=======
             context.Users.Add(user22);
             
->>>>>>> cc71cbaefa32615213e4d5ab31b2489ac748353d
             context.SaveChanges();
             #endregion
 
@@ -715,13 +698,9 @@ namespace Domain.Services.Repositories.EF
             var preference17 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user18 };
             var preference18 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user19 };
             var preference19 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user20 };
-<<<<<<< HEAD
-
-=======
             var preference20 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
             var preference21 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user22 };
             
->>>>>>> cc71cbaefa32615213e4d5ab31b2489ac748353d
             context.Preferences.Add(preference1);
             context.Preferences.Add(preference2);
             context.Preferences.Add(preference3);
@@ -741,11 +720,8 @@ namespace Domain.Services.Repositories.EF
             context.Preferences.Add(preference17);
             context.Preferences.Add(preference18);
             context.Preferences.Add(preference19);
-<<<<<<< HEAD
-=======
             context.Preferences.Add(preference20);
             context.Preferences.Add(preference21);
->>>>>>> cc71cbaefa32615213e4d5ab31b2489ac748353d
 
             context.SaveChanges();
             #endregion
