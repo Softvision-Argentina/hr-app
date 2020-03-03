@@ -22,6 +22,8 @@ namespace ApiServer.Contracts.Preference
 
         public bool TimeToFIll2Dashboard { get; set; }
 
+        public bool DeclineReasonsDashboard { get; set; }
+
         public int UserId { get; set; }
     }
 }

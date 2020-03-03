@@ -22,6 +22,8 @@ namespace Domain.Services.Contracts.Preference
         public bool TimeToFill1Dashboard { get; set; }
 
         public bool TimeToFIll2Dashboard { get; set; }
+
+        public bool DeclineReasonsDashboard { get; set; }
         public int UserId { get; set; }
     }
 }

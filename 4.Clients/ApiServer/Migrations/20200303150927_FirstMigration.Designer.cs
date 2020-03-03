@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200302165742_FirstMigration")]
+    [Migration("20200303150927_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -636,6 +636,8 @@ namespace ApiServer.Migrations
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("DeclineReasonsDashboard");
 
                     b.Property<string>("LastModifiedBy");
 

@@ -23,6 +23,8 @@ namespace Domain.Model
 
         public bool TimeToFIll2Dashboard { get; set; }
 
+        public bool DeclineReasonsDashboard { get; set; }
+
         public int UserId { get; set; }
         public User User { get; set; }
 

@@ -635,6 +635,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<bool>("DeclineReasonsDashboard");
+
                     b.Property<string>("LastModifiedBy");
 
                     b.Property<DateTime>("LastModifiedDate");

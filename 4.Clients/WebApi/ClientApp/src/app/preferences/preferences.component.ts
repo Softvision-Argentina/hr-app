@@ -20,7 +20,9 @@ export class PreferencesComponent implements OnInit {
   updatePreferences() {
     this.facade.preferenceService
       .update(this.preference.id, this.preference)
-      .subscribe(
+      .subscribe(res => {
+        this.getPreferences();
+      },
         error => {
           console.log(error);
         }

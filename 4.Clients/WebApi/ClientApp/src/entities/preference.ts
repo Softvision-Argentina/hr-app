@@ -10,5 +10,6 @@ export class Preference {
     skillsDashboard: boolean;
     timeToFill1Dashboard: boolean;
     timeToFIll2Dashboard: boolean;
+    declineReasonsDashboard: boolean;
     userId: number;
 }

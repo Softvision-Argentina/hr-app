@@ -421,6 +421,7 @@ namespace ApiServer.Migrations
                     SkillsDashboard = table.Column<bool>(nullable: false),
                     TimeToFill1Dashboard = table.Column<bool>(nullable: false),
                     TimeToFIll2Dashboard = table.Column<bool>(nullable: false),
+                    DeclineReasonsDashboard = table.Column<bool>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
