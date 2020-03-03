@@ -239,7 +239,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getDeclineReasons() {
-    this.facade.declineReasonService.get<DeclineReason>("Named")
+    this.facade.declineReasonService.get("Named")
       .subscribe(res => {
         this.declineReasons = res;
       }, err => {
@@ -739,7 +739,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           });
       }
       else {
-        this.facade.processService.getByID<Process>(newProcess.id)
+        this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
@@ -756,7 +756,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                   }
                 });
             } else {
-              this.facade.processService.update<Process>(newProcess.id, newProcess)
+              this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(res => {
                   this.getProcesses();
                   this.getCandidates();
