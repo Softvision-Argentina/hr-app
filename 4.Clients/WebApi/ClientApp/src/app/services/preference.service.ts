@@ -9,7 +9,7 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PreferenceService extends BaseService {
+export class PreferenceService extends BaseService<Preference> {
   preferenceSource = new Subject<Preference>();
   preference = this.preferenceSource.asObservable();
 

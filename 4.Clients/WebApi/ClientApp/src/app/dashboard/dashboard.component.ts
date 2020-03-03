@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit {
   getPreferences(){
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
 
-    this.facade.preferenceService.get<Preference>().subscribe(res => {
+    this.facade.preferenceService.get().subscribe(res => {
       this.preference = res.filter( x => x.userId === currentUser.ID)[0];
     }, error => {
       console.log(error);
