@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getProcesses() {
-    this.facade.processService.get<Process>()
+    this.facade.processService.get()
       .subscribe(res => {
         this.processes = res;
         this.processCompleted = res.filter(process => process => process.status === ProcessStatusEnum.Declined ||
@@ -126,14 +126,14 @@ export class DashboardComponent implements OnInit {
   }
 
   getHireProjection() {
-    this.facade.hireProjectionService.get<HireProjection>()
+    this.facade.hireProjectionService.get()
       .subscribe(res => {
         this.hireProjections = res;
       });
   }
 
   getEmployeeCasualties() {
-    this.facade.employeeCasulatyService.get<EmployeeCasualty>()
+    this.facade.employeeCasulatyService.get()
       .subscribe(res => {
         this.employeeCasualty = res;
       });

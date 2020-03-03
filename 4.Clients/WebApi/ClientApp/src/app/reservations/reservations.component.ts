@@ -69,7 +69,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -78,7 +78,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   async getReservations() {
-    await this.facade.ReservationService.get<Reservation>()
+    await this.facade.ReservationService.get()
       .toPromise()
       .then(res => this.reservations = res.filter(r => r.room.officeId.toString() == this.selectedOffice))
       .catch(err => console.log(err));
@@ -90,7 +90,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   getRooms() {
-    this.facade.RoomService.get<Room>()
+    this.facade.RoomService.get()
       .subscribe(res => {
         this.room = res;
         this.filteredRoom = this.room.filter(c => c.officeId == this.reservationForm.controls['office'].value);
@@ -100,7 +100,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>()
+    this.facade.OfficeService.get()
       .subscribe(res => {
         this.offices = res;
       }, err => {
@@ -170,7 +170,7 @@ export class ReservationsComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.ReservationService.delete<Reservation>(reservationId)
+      nzOnOk: () => this.facade.ReservationService.delete(reservationId)
         .subscribe(async res => {
           await this.getReservations();
           this.getCurrentDayReservations();
@@ -264,7 +264,7 @@ export class ReservationsComponent implements OnInit {
           this.facade.toastrService.error('There is already a reservation for this moment.');
         }
         else {
-          this.facade.ReservationService.add<Reservation>(newReservation)
+          this.facade.ReservationService.add(newReservation)
             .subscribe(async res => {
               await this.getReservations();
               this.getCurrentDayReservations();
@@ -302,7 +302,7 @@ export class ReservationsComponent implements OnInit {
         let reservationUntil = new Date(Date.parse(reservation.untilReservation.toString())).getDate();
         if (editReservationSince != reservationSince ||
           editReservationUntil != reservationUntil) {
-          this.facade.ReservationService.delete<Reservation>(reservation.id)
+          this.facade.ReservationService.delete(reservation.id)
             .subscribe(async res => {
               await this.getReservations();
               this.reservateDay(modal);
@@ -312,7 +312,7 @@ export class ReservationsComponent implements OnInit {
             })
         }
         else {
-          this.facade.ReservationService.update<Reservation>(reservation.id, editReservation)
+          this.facade.ReservationService.update(reservation.id, editReservation)
             .subscribe(async res => {
               await this.getReservations();
               this.getCurrentDayReservations();
