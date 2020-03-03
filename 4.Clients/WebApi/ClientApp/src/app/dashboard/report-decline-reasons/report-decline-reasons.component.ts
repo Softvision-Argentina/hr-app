@@ -42,7 +42,7 @@ export class ReportDeclineReasonsComponent implements OnInit {
   }
 
   getDeclineReasons(){
-    this.facade.declineReasonService.get<DeclineReason>()
+    this.facade.declineReasonService.get()
       .subscribe(res => {
         this.filteredDeclineReasons = res;        
       }, err => {
