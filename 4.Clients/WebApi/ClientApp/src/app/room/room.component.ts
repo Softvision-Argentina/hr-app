@@ -180,7 +180,7 @@ export class RoomComponent implements OnInit {
                 officeId: this.roomForm.controls['profileId'].value.toString(),
                 office: null,
                 reservationItems: null
-              };             
+              };
               this.facade.RoomService.update(id, editedRoom)
                 .subscribe(res => {
                   this.settings.getRooms();

@@ -17,6 +17,10 @@
     <Compile Remove="Migrations\20200220191215_PreferenceTable.Designer.cs" />
     <Compile Remove="Migrations\20200220194335_PreferenceTable.cs" />
     <Compile Remove="Migrations\20200220194335_PreferenceTable.Designer.cs" />
+    <Compile Remove="Migrations\20200221135703_PreferenceTable.cs" />
+    <Compile Remove="Migrations\20200221135703_PreferenceTable.Designer.cs" />
+    <Compile Remove="Migrations\20200227123808_firstmigration.cs" />
+    <Compile Remove="Migrations\20200227123808_firstmigration.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
