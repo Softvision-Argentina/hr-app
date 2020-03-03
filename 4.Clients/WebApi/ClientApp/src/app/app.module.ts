@@ -135,6 +135,7 @@ import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
+import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
 
 registerLocaleData(en);
 
@@ -212,7 +213,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       PostulantsComponent,
       DeclineReasonComponent,
       HasRoleDirective,
-      DeclineReasonComponent,      
+      ReportDeclineReasonsComponent,      
       ReportTimetofill1Component
    ],
    imports: [
