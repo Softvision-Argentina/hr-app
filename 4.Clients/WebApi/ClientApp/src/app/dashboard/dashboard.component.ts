@@ -10,6 +10,9 @@ import { AppComponent } from '../app.component';
 import { HireProjection } from 'src/entities/hireProjection';
 import { EmployeeCasualty } from 'src/entities/employeeCasualty';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
+import { Preference } from 'src/entities/preference';
+import { e } from '@angular/core/src/render3';
+import { User } from 'src/entities/user';
 
 @Component({
   selector: 'app-dashboard',
@@ -73,8 +76,9 @@ export class DashboardComponent implements OnInit {
     { id: 0, name: '', points: 0 }
   ];
 
-  constructor(private facade: FacadeService, private app: AppComponent) {
+  preference: Preference = new Preference();
 
+  constructor(private facade: FacadeService, private app: AppComponent) {
   }
 
   ngOnInit(): void {
@@ -84,6 +88,8 @@ export class DashboardComponent implements OnInit {
     this.getHireProjection();
     this.getEmployeeCasualties();
     this.app.hideLoading();
+    this.getPreferences();
+    this.facade.preferenceService.preference.subscribe(res => this.preference = res);
   }
 
   // ngAfterViewChecked(): void {
@@ -94,6 +100,16 @@ export class DashboardComponent implements OnInit {
   //     });
   //   }
   // }
+
+  getPreferences(){
+    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+
+    this.facade.preferenceService.get().subscribe(res => {
+      this.preference = res.filter( x => x.userId === currentUser.ID)[0];
+    }, error => {
+      console.log(error);
+    });
+  }
 
   getProcesses() {
     this.facade.processService.get()

@@ -4,6 +4,8 @@ using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
 using Domain.Services.ExternalServices.Config;
+using Domain.Services.Impl.Services;
+using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -99,7 +101,7 @@ namespace ApiServer
             });
 
             services.AddCors();
-
+           
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.Configure<CookiePolicyOptions>(options =>

@@ -131,6 +131,7 @@ import { ReportTimetofill2Component } from './dashboard/report-timetofill2/repor
 import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { PreferencesComponent } from './preferences/preferences.component';
 import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
@@ -211,6 +212,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
+      PreferencesComponent,
+      ReportTimetofill1Component,
       DeclineReasonComponent,
       HasRoleDirective,
       ReportDeclineReasonsComponent,      
