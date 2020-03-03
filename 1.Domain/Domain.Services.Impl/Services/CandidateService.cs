@@ -131,6 +131,19 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
+        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate,bool> filterRule)
+        {
+          
+            var candidateQuery = _candidateRepository
+                .QueryEager()
+                .Where(filterRule);
+
+
+            var candidateResult = candidateQuery.ToList();
+
+            return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
+        }
+
         //public ReadedCandidateContract Exists(int dni)
         //{
         //    var candidateQuery = _candidateRepository

@@ -36,14 +36,14 @@ export class ReportSkillsComponent implements OnInit {
   }
   
   getSkills() {
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.skillList = res;
       });
   }
 
   getCandidatesSkills() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         res.forEach(candidate => {
           candidate.candidateSkills.forEach(skill => this.candidatesSkills.push(skill));

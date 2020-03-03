@@ -47,7 +47,7 @@ export class SkillTypeComponent implements OnInit {
   }
 
   getSkillTypes(){
-    this.facade.skillTypeService.get<SkillType>()
+    this.facade.skillTypeService.get()
       .subscribe(res => {
         this.filteredSkillTypes = res;
         this.listOfDisplayData = res;
@@ -103,7 +103,7 @@ export class SkillTypeComponent implements OnInit {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
               }
-              this.facade.skillTypeService.add<SkillType>(newSkillType)
+              this.facade.skillTypeService.add(newSkillType)
                       .subscribe(res => {
                         this.getSkillTypes();
                         this.app.hideLoading();
@@ -159,7 +159,7 @@ export class SkillTypeComponent implements OnInit {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
               }
-              this.facade.skillTypeService.update<SkillType>(editedSkillType.id, editedSkillType)
+              this.facade.skillTypeService.update(editedSkillType.id, editedSkillType)
             .subscribe(res => {
               this.getSkillTypes();
               this.app.hideLoading();
@@ -187,7 +187,7 @@ export class SkillTypeComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.skillTypeService.delete<SkillType>(skillTypeID)
+      nzOnOk: () => this.facade.skillTypeService.delete(skillTypeID)
         .subscribe(res => {
           this.getSkillTypes();
           this.facade.toastrService.success('SkillType was deleted !');

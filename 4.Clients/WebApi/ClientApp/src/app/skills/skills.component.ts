@@ -58,7 +58,7 @@ export class SkillsComponent implements OnInit {
   }
 
   getSkillTypes(){
-    this.facade.skillTypeService.get<SkillType>()
+    this.facade.skillTypeService.get()
       .subscribe(res => {
         this.skillTypes = res;
       }, err => {
@@ -67,7 +67,7 @@ export class SkillsComponent implements OnInit {
   }
 
   getSkills(){
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.filteredSkills = res;
         this.listOfDisplayData = res;
@@ -135,7 +135,7 @@ export class SkillsComponent implements OnInit {
                 type: this.skillForm.controls['type'].value.toString(),
                 candidateSkills: []
               }
-              this.facade.skillService.add<Skill>(newSkill)
+              this.facade.skillService.add(newSkill)
             .subscribe(res => {
               this.getSkills();
               this.app.hideLoading();
@@ -201,7 +201,7 @@ export class SkillsComponent implements OnInit {
                 type: this.skillForm.controls['type'].value.toString(),
                 candidateSkills: []
               }
-              this.facade.skillService.update<Skill>(id, editedSkill)
+              this.facade.skillService.update(id, editedSkill)
             .subscribe(res => {
               this.getSkills();
               this.app.hideLoading();
@@ -229,7 +229,7 @@ export class SkillsComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.skillService.delete<Skill>(skillID)
+      nzOnOk: () => this.facade.skillService.delete(skillID)
         .subscribe(res => {
           this.getSkills();
           this.facade.toastrService.success('Skill was deleted !');

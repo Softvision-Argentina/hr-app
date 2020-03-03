@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { DaysOff } from 'src/entities/days-off';
 
 @Injectable()
-export class DaysOffService extends BaseService {
+export class DaysOffService extends BaseService<DaysOff> {
   private baseUrl: string = 'http://localhost:61059/';  
   public headers: HttpHeaders;
 

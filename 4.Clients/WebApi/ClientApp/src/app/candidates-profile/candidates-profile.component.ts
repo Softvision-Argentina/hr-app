@@ -70,7 +70,7 @@ export class CandidatesProfileComponent implements OnInit {a
 
 
   getCommunity(){
-    this.facade.communityService.get<Community>()
+    this.facade.communityService.get()
       .subscribe(res => {
         this.communitys = res;
       }, err => {
@@ -127,7 +127,7 @@ export class CandidatesProfileComponent implements OnInit {a
                 description: this.validateForm.controls['description'].value.toString(),
                 communityItems: []
               }              
-              this.facade.candidateProfileService.add<CandidateProfile>(newCandidatesProfile)
+              this.facade.candidateProfileService.add(newCandidatesProfile)
                 .subscribe(res => {
                   this.settings.getCandidatesProfile();
                   this.controlArray = [];
@@ -185,7 +185,7 @@ export class CandidatesProfileComponent implements OnInit {a
                 description: this.validateForm.controls['description'].value.toString(),
                 communityItems: []
               }
-              this.facade.candidateProfileService.update<CandidateProfile>(id, editedCandidateProfile)
+              this.facade.candidateProfileService.update(id, editedCandidateProfile)
                 .subscribe(res => {                  
                   this.settings.getCandidatesProfile();
                   this.facade.toastrService.success('Candidate was successfully edited !');
@@ -215,7 +215,7 @@ export class CandidatesProfileComponent implements OnInit {a
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.candidateProfileService.delete<CandidateProfile>(CandidateProfileID)
+      nzOnOk: () => this.facade.candidateProfileService.delete(CandidateProfileID)
         .subscribe(res => {          
           this.settings.getCandidatesProfile();
           this.facade.toastrService.success('Candidate was deleted !');

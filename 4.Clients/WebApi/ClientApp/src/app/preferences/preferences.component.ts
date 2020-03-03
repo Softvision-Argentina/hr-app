@@ -19,7 +19,7 @@ export class PreferencesComponent implements OnInit {
 
   updatePreferences() {
     this.facade.preferenceService
-      .update<Preference>(this.preference.id, this.preference)
+      .update(this.preference.id, this.preference)
       .subscribe(
         error => {
           console.log(error);
@@ -31,7 +31,7 @@ export class PreferencesComponent implements OnInit {
   getPreferences() {
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
 
-    this.facade.preferenceService.get<Preference>().subscribe(
+    this.facade.preferenceService.get().subscribe(
       res => {
         this.preference = res.filter(x => x.userId === currentUser.ID)[0];
       },

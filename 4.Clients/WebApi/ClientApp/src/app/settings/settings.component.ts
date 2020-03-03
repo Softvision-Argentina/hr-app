@@ -39,7 +39,7 @@ export class SettingsComponent implements OnInit {
 
   
   getCandidatesProfile() {
-    this.facade.candidateProfileService.get<CandidateProfile>()
+    this.facade.candidateProfileService.get()
       .subscribe(res => {
        this.emptyCandidateProfile = res;
        this.listOfDisplayData = res;
@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit {
   }
   
   getCommunities() {
-    this.facade.communityService.get<Community>()
+    this.facade.communityService.get()
       .subscribe(res => {
         this.emptyCommunity = res;
         this.listOfDisplayDataCommunity = res;
@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit {
   }
   
   getRooms() {
-    this.facade.RoomService.get<Room>()
+    this.facade.RoomService.get()
     .subscribe(res => {
       this.emptyRoom = res;
       this.listOfDisplayDataRoom = res;
@@ -69,7 +69,7 @@ export class SettingsComponent implements OnInit {
   }  
 
   getOffices() {
-    this.facade.OfficeService.get<Office>().subscribe(res => {
+    this.facade.OfficeService.get().subscribe(res => {
       this.emptyOffice = res;
       this.listOfDisplayDataOffice = res;
     }, err => {

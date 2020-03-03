@@ -83,7 +83,7 @@ export class ProcessDetailComponent implements OnInit {
   }
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.candidates = res;
       }, err => {
@@ -92,7 +92,7 @@ export class ProcessDetailComponent implements OnInit {
   }
 
   getProcessByID(id) {
-    this.facade.processService.getByID<Process>(id)
+    this.facade.processService.getByID(id)
       .subscribe(res => {
         this.process = res;
         //this.filteredStages = this.process.stages;
@@ -106,7 +106,7 @@ export class ProcessDetailComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -169,7 +169,7 @@ export class ProcessDetailComponent implements OnInit {
                 consultantDelegateId: this.stageForm.controls['consultantDelegateId'].value.toString(),
                 processId: this.processID
               }
-              this.facade.stageService.add<Stage>(newStage)
+              this.facade.stageService.add(newStage)
                 .subscribe(res => {
                   this.getProcessByID(this.processID);
                   modal.destroy();
@@ -239,7 +239,7 @@ export class ProcessDetailComponent implements OnInit {
     //             consultantOwnerId: this.stageForm.controls['consultantOwnerId'].value.toString(),
     //             consultantDelegateId: this.stageForm.controls['consultantDelegateId'].value.toString()
     //           }
-    //           this.facade.stageService.update<Stage>(id, editedStage)
+    //           this.facade.stageService.update(id, editedStage)
     //             .subscribe(res => {
     //               this.getProcessByID(this.processID);
     //               this.facade.toastrService.success('Stage successfully edited !');
@@ -265,7 +265,7 @@ export class ProcessDetailComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.stageService.delete<Stage>(stageID)
+      nzOnOk: () => this.facade.stageService.delete(stageID)
         .subscribe(res => {
           this.getProcessByID(this.processID);
           this.facade.toastrService.success('Stage was deleted !')
