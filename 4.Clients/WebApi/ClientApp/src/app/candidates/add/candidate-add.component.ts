@@ -104,6 +104,8 @@ export class CandidateAddComponent implements OnInit {
 
   statusList: any[];
 
+  selectedValue = 1;
+
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
               private globals: Globals) {
                 this.statusList = globals.candidateStatusList;
@@ -121,11 +123,11 @@ export class CandidateAddComponent implements OnInit {
       this.candidateForm.controls['dni'].disable();
       this.candidateForm.controls['additionalInformation'].disable();
       this.candidateForm.controls['linkedin'].disable();
-      this.candidateForm.controls['preferredOffice'].disable();
+      this.candidateForm.controls['preferredOffice'].disable();     
     }
+    this.selectedValue = this._process.candidate.preferredOfficeId === 0 ? 1 : this._process.candidate.preferredOfficeId;
     this.changeFormStatus(false);
   }
-
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
       this.checkForm();
