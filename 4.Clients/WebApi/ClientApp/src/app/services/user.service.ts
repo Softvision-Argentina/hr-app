@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { User } from "src/entities/user";
 
 @Injectable()
-export class UserService extends BaseService {
+export class UserService extends BaseService<User> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);

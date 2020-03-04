@@ -162,7 +162,7 @@ export class ProcessContactComponent implements OnInit {
   
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.candidates = res;
       }, err => {
@@ -171,7 +171,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -229,7 +229,7 @@ export class ProcessContactComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.candidateService.delete<Candidate>(CandidateID)
+      nzOnOk: () => this.facade.candidateService.delete(CandidateID)
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
@@ -325,7 +325,7 @@ export class ProcessContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
+      this.facade.candidateService.update(idCandidate, editedCandidate)
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
@@ -364,7 +364,7 @@ export class ProcessContactComponent implements OnInit {
       referredBy: editedCandidate.referredBy
     }
 
-    this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
+    this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
@@ -411,7 +411,7 @@ export class ProcessContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      this.facade.candidateService.add<Candidate>(newCandidate)
+      this.facade.candidateService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;

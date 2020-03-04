@@ -47,7 +47,7 @@ export class DeclineReasonComponent implements OnInit {
   }
 
   getDeclineReasons(){
-    this.facade.declineReasonService.get<DeclineReason>("Named")
+    this.facade.declineReasonService.get("Named")
       .subscribe(res => {
         this.filteredDeclineReasons = res;
         this.listOfDisplayData = res;
@@ -103,7 +103,7 @@ export class DeclineReasonComponent implements OnInit {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
               }
-              this.facade.declineReasonService.add<DeclineReason>(newDeclineReason)
+              this.facade.declineReasonService.add(newDeclineReason)
                       .subscribe(res => {
                         this.getDeclineReasons();
                         this.app.hideLoading();
@@ -159,7 +159,7 @@ export class DeclineReasonComponent implements OnInit {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
               }
-              this.facade.declineReasonService.update<DeclineReason>(editedDeclineReason.id, editedDeclineReason)
+              this.facade.declineReasonService.update(editedDeclineReason.id, editedDeclineReason)
             .subscribe(res => {
               this.getDeclineReasons();
               this.app.hideLoading();
@@ -187,7 +187,7 @@ export class DeclineReasonComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.declineReasonService.delete<DeclineReason>(declineReasonID)
+      nzOnOk: () => this.facade.declineReasonService.delete(declineReasonID)
         .subscribe(res => {
           this.getDeclineReasons();
           this.facade.toastrService.success('DeclineReason was deleted !');

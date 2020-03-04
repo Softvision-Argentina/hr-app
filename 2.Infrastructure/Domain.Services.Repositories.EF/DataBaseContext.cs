@@ -2,6 +2,8 @@
 using Domain.Model.Seed;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
+using Core;
+using System.Linq;
 
 namespace Domain.Services.Repositories.EF
 {
@@ -53,7 +55,12 @@ namespace Domain.Services.Repositories.EF
         public DbSet<Role> Roles { get; set; }
         public DbSet<CompanyCalendar> CompanyCalendar { get; set; }
         public DbSet<DeclineReason> DeclineReasons { get; set; }
- 
+
+        public DbSet<Preference> Preferences { get; set; }
+
+        public DbSet<Cv> Cv { get; set; }
+
+
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {

@@ -6,9 +6,10 @@ import { AppConfig } from '../app-config/app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Postulant } from 'src/entities/postulant';
 
 @Injectable()
-export class PostulantsService extends BaseService {
+export class PostulantsService extends BaseService<Postulant> {
   private baseUrl: string = 'http://localhost:61059/';
   public headers: HttpHeaders;  
 

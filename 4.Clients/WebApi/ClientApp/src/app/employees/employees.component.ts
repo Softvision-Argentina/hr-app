@@ -79,7 +79,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   getEmployees() {
-    this.facade.employeeService.get<Employee>("GetAll")
+    this.facade.employeeService.get("GetAll")
       .subscribe(res => {
         this.listOfDisplayData = res.filter(e => e.id != 1);
         this.employees = res;
@@ -103,7 +103,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -112,7 +112,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   getRoles() {
-    this.facade.RoleService.get<Role>()
+    this.facade.RoleService.get()
       .subscribe(res => {
         this.activeRoles = res.filter(role => role.isActive);
       }, err => {
@@ -128,7 +128,7 @@ export class EmployeesComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.employeeService.delete<Employee>(employeeID)
+      nzOnOk: () => this.facade.employeeService.delete(employeeID)
         .subscribe(res => {
           this.getEmployees();
           this.facade.toastrService.success('Employee was deleted !');
@@ -184,7 +184,7 @@ export class EmployeesComponent implements OnInit {
               this.employeeForm.controls['reviewerName'].value == "" || this.employeeForm.controls['reviewerName'].value == null ?
                 newEmployee.reviewerId = 1 :
                 this.reviewersFullNameAndId.find(r => r.fullName == this.employeeForm.controls['reviewerName'].value).id;
-              this.facade.employeeService.add<Employee>(newEmployee)
+              this.facade.employeeService.add(newEmployee)
                 .subscribe(res => {
                   this.getEmployees();
                   this.app.hideLoading();
@@ -265,7 +265,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   showDetailsModal(employeeId: number, modalContent: TemplateRef<{}>): void {
-    this.facade.employeeService.get<Employee>('GetById/' + employeeId)
+    this.facade.employeeService.get('GetById/' + employeeId)
       .subscribe(res => {
         this.detailedEmployee = res
         this.detailsModal.showModal(modalContent, this.detailedEmployee.name + " " + this.detailedEmployee.lastName);

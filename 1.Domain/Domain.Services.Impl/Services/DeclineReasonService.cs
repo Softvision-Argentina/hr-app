@@ -6,7 +6,6 @@ using Domain.Model.Exceptions.Skill;
 using Domain.Model.Exceptions;
 using Domain.Services.Contracts;
 using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
 using System;

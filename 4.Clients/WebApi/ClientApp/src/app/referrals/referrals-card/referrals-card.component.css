@@ -2,3 +2,42 @@
     border-style:solid;
     border-width: thick;
 }
+
+input[type="file"] { display: none; }
+
+.inputfile + label {
+    font-size: 1.24em;
+    font-weight: 500;
+    color: grey;
+    background-color: white;
+    display: inline-block;
+}
+
+.inputfile + label {
+	cursor: pointer;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    color: black;
+}
+
+
+.btn[type="button"] { display: none; }
+
+.btn + label {
+    font-size: 1.24em;
+    font-weight: 500;
+    color: grey;
+    background-color: white;
+    display: inline-block;
+}
+
+.btn + label {
+	cursor: pointer;
+}
+
+.btn:focus + label,
+.btn + label:hover {
+    color: black;
+}

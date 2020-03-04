@@ -68,3 +68,7 @@ span.buttonText {
 #loginBtn:hover {
   cursor: pointer;
 }
+
+.ant-card-actions li span{
+  display: grid;
+}

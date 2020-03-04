@@ -1,30 +1,68 @@
 <app-nav-menu></app-nav-menu>
 <br /><br />
 <nz-collapse class="padding">
-  <nz-collapse-panel [nzHeader]="'Candidate Filter'">
+  <nz-collapse-panel [nzHeader]="'Candidate Filter'" *appHasRole = "['Admin']">
     <form nz-form [nzLayout]="'inline'" [style.width.%]="90" [style.padding-left.%]="10"
       [formGroup]="validateSkillsForm" (ngSubmit)="getCandidatesBySkill()">
       <nz-form-item [style.width.%]="35">
         <nz-form-control [style.width.%]="90" style="text-align: left;">
-          <nz-form-label nzFor="skillSelector">Skill</nz-form-label>
-          <nz-select formControlName="skillSelector" nzShowSearch nzAllowClear [nzAllowClear]="false"
-            nzPlaceHolder="Select a skill">
-            <nz-option *ngFor="let skill of skills" nzLabel="{{skill.name}}" nzValue="{{skill.id}}"></nz-option>
+          <nz-form-label nzFor="communitySelector">Community</nz-form-label>
+          <nz-select formControlName="community" nzShowSearch nzAllowClear [nzAllowClear]="false"
+            nzPlaceHolder="Select a community">
+            <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" [nzValue]="c">{{c.name}}</nz-option>
           </nz-select>
-          <nz-form-explain
+          <!--    <nz-form-explain
             *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
-            Please select a skill!</nz-form-explain>
+            Please select a skill!</nz-form-explain> -->
         </nz-form-control>
       </nz-form-item>
       <nz-form-item [style.width.%]="35">
-        <nz-form-control [style.width.%]="100" style="text-align: center;">
-          <nz-form-label style="text-align: left; float:left" nzFor="skillRateSlidder">Rate</nz-form-label><br />
-          <nz-slider nzRange formControlName="skillRateSlidder"></nz-slider>
+        <nz-form-control [style.width.%]="90" style="text-align: left;">
+          <nz-form-label nzFor="officeSelector">Preferred Office</nz-form-label>
+          <nz-select formControlName="preferredOffice" nzShowSearch nzAllowClear [nzAllowClear]="false"
+            nzPlaceHolder="Select a preferred office" >
+            <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o">{{ o.name }}</nz-option>
+          </nz-select>
+          <!--    <nz-form-explain
+            *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
+            Please select a skill!</nz-form-explain> -->
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item [style.width.%]="20">
-        <nz-form-control style="float:right;">
-          <br />
+      <div *ngFor="let control of listOfControl; let i = index">
+        <nz-form-item [style.width.%]="35">
+          <nz-form-control [style.width.%]="90" style="text-align: left;">
+            <nz-form-label nzFor="skillSelector">Skill</nz-form-label>
+            <nz-select [formControlName]="control.controlInstance[0]" nzShowSearch nzAllowClear [nzAllowClear]="false"
+              nzPlaceHolder="Select a skill">
+              <nz-option *ngFor="let skill of skills" nzLabel="{{skill.name}}" nzValue="{{skill.id}}"></nz-option>
+            </nz-select>
+            <!--    <nz-form-explain
+                *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
+                Please select a skill!</nz-form-explain> -->
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item [style.width.%]="35">
+          <nz-form-control [style.width.%]="90" style="text-align: center;">
+            <nz-form-label style="text-align: left; float:left" nzFor="skillRateSlidder">Rate</nz-form-label><br />
+            <nz-slider nzRange [formControlName]="control.controlInstance[1]"></nz-slider>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item [style.width.%]="20">
+          <nz-form-control [style.width.%]="90" style="text-align: center;">
+          <br>
+            <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <br />
+      <nz-form-item [style.width.%]="90">
+        <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:0}">
+          <button nz-button nzType="dashed" style="width:20%" (click)="addField($event)"><i nz-icon type="plus"></i>
+            Add Skill</button>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item [style.width.%]="90">
+        <nz-form-control>
           <button nz-button nzType="primary" [disabled]="!validateSkillsForm.valid">
             <i nz-icon type="search"></i>Search</button>
         </nz-form-control>
@@ -43,7 +81,8 @@
                   <i nz-icon nzType="search" class="ant-table-filter-icon"
                     [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                   <div class="search-box">
-                    <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
+                    <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue"
+                      (keyup.enter)="search()">
                     <button nz-button nzSize="small" nzType="primary" (click)="search()"
                       class="search-button">Search</button>
                     <button nz-button nzSize="small" (click)="reset()">Reset</button>
@@ -97,9 +136,9 @@
 <nz-collapse class="dropdown-padding">
   <nz-collapse-panel [nzHeader]="'Skills Report'" (click)="getSkillsPercentage()">
     <div *ngIf="skills.length == 0 || candidates.length == 0">
-        <span style="margin-left: 25%;">
-            <strong>THERE IS NO DATA TO SHOW</strong>
-          </span>
+      <span style="margin-left: 25%;">
+        <strong>THERE IS NO DATA TO SHOW</strong>
+      </span>
     </div>
     <div *ngIf="skills.length > 0 && candidates.length > 0">
       <div>

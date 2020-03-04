@@ -63,7 +63,7 @@ export class DaysOffComponent implements OnInit {
 
   getDaysOff() {
     if (this.isHr) {
-      this.facade.daysOffService.get<DaysOff>()
+      this.facade.daysOffService.get()
         .subscribe(res => {
           this.listOfDaysOff = res;
           this.listOfDisplayData = res;
@@ -252,7 +252,7 @@ export class DaysOffComponent implements OnInit {
                   employeeId: this.employee.id,
                   employee: this.employee
                 };
-                this.facade.daysOffService.update<DaysOff>(id, editedDayOff)
+                this.facade.daysOffService.update(id, editedDayOff)
                   .subscribe(res => {
                     this.getDaysOff();
                     // this.app.hideLoading();
@@ -281,7 +281,7 @@ export class DaysOffComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.daysOffService.delete<DaysOff>(dayOff.id)
+      nzOnOk: () => this.facade.daysOffService.delete(dayOff.id)
         .subscribe(res => {
           this.getDaysOff();
           this.facade.toastrService.success('Day off was deleted !');
@@ -312,7 +312,7 @@ export class DaysOffComponent implements OnInit {
 
   acceptPetition(daysOff: DaysOff) {
     daysOff.status = DaysOffStatusEnum.Accepted;
-    this.facade.daysOffService.update<DaysOff>(daysOff.id, daysOff)
+    this.facade.daysOffService.update(daysOff.id, daysOff)
       .subscribe(res => {
         this.getDaysOff();
         // this.app.hideLoading();

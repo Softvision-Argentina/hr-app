@@ -7,6 +7,7 @@ using Domain.Services.Contracts.Candidate;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Candidate;
 using Domain.Services.Interfaces.Services;
+using Domain.Services.Repositories.EF;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Domain.Services.Impl.Services
         private readonly ILog<CandidateService> _log;
         private readonly UpdateCandidateContractValidator _updateCandidateContractValidator;
         private readonly CreateCandidateContractValidator _createCandidateContractValidator;
+        private readonly DataBaseContext _context;
 
         public CandidateService(IMapper mapper,
             IRepository<Candidate> candidateRepository,
@@ -39,7 +41,8 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<CandidateService> log,
             UpdateCandidateContractValidator updateCandidateContractValidator,
-            CreateCandidateContractValidator createCandidateContractValidator)
+            CreateCandidateContractValidator createCandidateContractValidator,
+             DataBaseContext context)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -52,6 +55,7 @@ namespace Domain.Services.Impl.Services
             _log = log;
             _updateCandidateContractValidator = updateCandidateContractValidator;
             _createCandidateContractValidator = createCandidateContractValidator;
+            _context = context;
         }
 
         public CreatedCandidateContract Create(CreateCandidateContract contract)
@@ -127,6 +131,19 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
+        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate,bool> filterRule)
+        {
+          
+            var candidateQuery = _candidateRepository
+                .QueryEager()
+                .Where(filterRule);
+
+
+            var candidateResult = candidateQuery.ToList();
+
+            return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
+        }
+
         //public ReadedCandidateContract Exists(int dni)
         //{
         //    var candidateQuery = _candidateRepository
@@ -165,6 +182,13 @@ namespace Domain.Services.Impl.Services
 
             var candidateResult = candidateQuery.ToList();
             return _mapper.Map<List<ReadedCandidateAppContract>>(candidateResult);
+        }
+
+        public Candidate GetCandidate(int id)
+        {
+            var users = _context.Candidates.Find(id);
+
+            return users;
         }
 
         private void ValidateContract(CreateCandidateContract contract)

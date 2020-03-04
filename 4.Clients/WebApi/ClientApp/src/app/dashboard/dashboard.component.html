@@ -1,36 +1,49 @@
 <app-nav-menu></app-nav-menu>
 <div class="padding">
   <div nz-row [nzGutter]="8">
-    <app-report-processes [_detailedProcesses]="processes"></app-report-processes>
-    <div nz-col [nzSpan]="12">
+    <div *ngIf="preference.processesDashboard">
+      <app-report-processes [_detailedProcesses]="processes"></app-report-processes>
+    </div>
+    <div *ngIf="preference.skillsDashboard" nz-col [nzSpan]="12">
       <app-report-skills  [_processes]="processes"> </app-report-skills>
     </div>
   </div>
   <br />
   <div nz-row [nzGutter]="8">
-    <app-report-progress-processes [_detailedProcesses]="processes"></app-report-progress-processes>
-    <div nz-col [nzSpan]="12">
+    <div *ngIf="preference.progressDashboard">
+      <app-report-progress-processes [_detailedProcesses]="processes"></app-report-progress-processes>
+    </div>      
+    <div *ngIf="preference.completedDashboard" nz-col [nzSpan]="12">
       <app-report-completed-processes  [_processes]="processes"></app-report-completed-processes>
     </div>
   </div>
 <br/>
   <div nz-row [nzGutter]="8">
-    <div nz-col [nzSpan]="12">
+    <div *ngIf="preference.projectionDashboard" nz-col [nzSpan]="12">
       <app-report-hire-projection [_processes]="processes" [_hireProjections]="hireProjections"> </app-report-hire-projection>
     </div>
-    <div nz-col [nzSpan]="12">
+    <div *ngIf="preference.casualtiesDashboard" nz-col [nzSpan]="12">
       <app-report-hire-casualties [_processes]="processes" [_employeeCasualty]="employeeCasualty"> </app-report-hire-casualties>
     </div>
   </div>
 <br />
   <div nz-row [nzGutter]="8">
-    <div nz-col [nzSpan]="12">  
+    <div *ngIf="preference.timeToFill1Dashboard" nz-col [nzSpan]="12">  
       <app-report-timetofill1 [_processes]="processes"></app-report-timetofill1>    
     </div>
-    <div nz-col [nzSpan]="12">      
+    <div *ngIf="preference.timeToFIll2Dashboard" nz-col [nzSpan]="12">      
       <app-report-timetofill2 [_processes]="processes"></app-report-timetofill2>
     </div>
   </div>
+<br/>  
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+      <app-report-decline-reasons [_processes]="processes"></app-report-decline-reasons>
+    </div>
+    <div nz-col [nzSpan]="12">      
+    </div>
+  </div>
+<br />
 <footer style="text-align: center;">
   <p><code>Interview</code> is been developed in Buenos Aires Studio using <code>.NET Core</code>,
     <code>Angular 7</code> and some components of <code>NgZorro</code>.</p>
