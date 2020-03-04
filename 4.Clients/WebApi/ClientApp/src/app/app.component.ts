@@ -52,8 +52,6 @@ export class AppComponent implements OnInit {
   }
 
   renderBgImage() {
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild,
-     'background-image', 'url(\'./../assets/images/welcomeAbstract.jpg\')');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', '100% 100%');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-position', 'top center');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-repeat', 'no-repeat');
