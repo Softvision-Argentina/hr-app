@@ -43,3 +43,12 @@
   font-weight: bold;
   color: white;
 }
+
+@media screen and (max-width: 1380px) and (min-width: 1024px){
+  .recru-container {
+    width: 27%;
+  }
+  .logo {
+    width: 100%;
+  }
+}

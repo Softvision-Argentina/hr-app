@@ -29,3 +29,8 @@
     
     font-family: 'Roboto', sans-serif;
   }
+  @media screen and (max-width: 1380px) and (min-width: 1024px){
+    #googleBtn {
+      width: 100%;
+    }
+  }
