@@ -1,13 +1,93 @@
-<div>
-    <div class="welcome">
-        <div nz-row>
-            <div nz-col nzSpan="24">
-                <h1 style="padding-top: 20%;">WELCOME TO INTERVIEW!</h1>
-            </div>
+<ng-template #contentTemplate>
+    <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
+        <nz-card-meta nzTitle="{{currentUser.Name}}" nzDescription="{{currentUser.Email}}">
+        </nz-card-meta>
+        <br />
+        <ul class="ant-card-actions">
+            <li [style.width.%]="100" nzTitle="Logout">
+                <span (click)="logout()" style="cursor: pointer;"><i nz-icon nzType="logout"
+            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout</span>
+            </li>
+        </ul>
+    </nz-card>
+</ng-template>
+
+<ng-template #coverTemplate>
+    <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
+</ng-template>
+
+<ng-template #loginModal>
+    <div nz-row>
+        <div nz-col nzSpan="2"></div>
+        <div nz-col nzSpan="20">
+            <csoft-login></csoft-login>
         </div>
+        <div nz-col nzSpan="2"></div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="2"></div>
+        <div nz-col nzSpan="20">
+            <nz-divider nzText="OR"></nz-divider>
+        </div>
+        <div nz-col nzSpan="2"></div>
+    </div>
+    <br />
+    <div nz-row>
+        <div nz-col nzSpan="2"></div>
+        <div nz-col nzSpan="20">
+            <google-signin></google-signin>
+        </div>
+        <div nz-col nzSpan="2"></div>
+    </div>
+</ng-template>
+<div  nz-row  style="height: 100%">
+    <div class="background" nz-col nzSpan="16">
+        <div>
+            <div class="welcome">
+                <div nz-row>
+                    <div nz-col nzSpan="18">
+                        <div class="recru-container" nz-col nzSpan="5">
+
+                            <h3 class="recru">recru</h3>
+                            <div nz-row nzType="flex" nzJustify="end">
+
+                            <img class="logo" src="../../assets/images/logo-header-csv.svg" [ngStyle]="logoStyle">
+                            </div>
+                            </div>
+
+                        <div nz-col nzSpan="17"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10%" nz-row>
+                    <div nz-col nzSpan="18">
+                        <div nz-row class="title">EMPOWERING</div>
+                        <div nz-row class="title">OUR BEST</div>
+                        <div nz-row class="title">TALENT</div>
+                    </div>
+                </div>
+                <div nz-row>
+                    <div nz-col nzSpan="18">
+                        <h5 class="subtitle">The Cognizant Softvision app for recruiters</h5>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="loginForm" nz-col nzSpan="8">
+        <div style="padding: 200px 95px 0px 50px" nz-row>
+            <h2 style="padding-bottom: 40px" ><b>Login</b> or <b>register</b></h2>
+
+            <div style="padding-bottom: 30px">
+                <csoft-login></csoft-login>
+            </div>
+            <google-signin></google-signin>
+
+        </div>
+        <br />
         <div nz-row>
-            <div nz-col nzSpan="24">
-                <h3>You need to be logged in to use this app.</h3>
+            <div nz-col nzSpan="20">
             </div>
         </div>
     </div>

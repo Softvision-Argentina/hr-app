@@ -1,3 +1,11 @@
 .login-form-button {
     width: 100%;
+    background-image: linear-gradient(to right, #F4633A , #C900A1);
+    border: none;
+    border-radius: 0px;
+    color: white;
+    font-weight: bold;
+}
+.login-button {
+    width: 40%;
 }

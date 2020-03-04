@@ -29,3 +29,9 @@
 nz-step {
     cursor: pointer;
 }
+.padding {
+    padding: 70px 50px 0 95px;
+}
+.grid-padding{
+    padding: 0 90px;
+}

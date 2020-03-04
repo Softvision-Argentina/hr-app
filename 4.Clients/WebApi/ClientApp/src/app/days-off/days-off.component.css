@@ -34,3 +34,11 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
   ::ng-deep .vertical-center-modal .ant-modal {
     top: 0;
   }
+
+  .padding {
+    padding: 80px 50px 0px 50px;
+  }
+
+  .grid-padding {
+    padding: 0px 50px 0 50px;
+  }
