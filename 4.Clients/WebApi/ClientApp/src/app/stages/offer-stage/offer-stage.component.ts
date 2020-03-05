@@ -43,7 +43,7 @@ export class OfferStageComponent implements OnInit {
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
     preocupationalDone: false,
     preocupationalDoneDate: [new Date(), [Validators.required]],
-    rejectionReason: [null, [Validators.required]]
+    rejectionReason: [null, [Validators.required]],    
     });
 
   statusList: any[];
@@ -141,7 +141,7 @@ export class OfferStageComponent implements OnInit {
     return (control === null ? null : control.value);
   }
 
-  fillForm(offerStage: OfferStage){
+  fillForm(offerStage: OfferStage){    
     const status: number = this.statusList.filter(s => s.id === offerStage.status)[0].id;
     if (status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
     this.offerForm.controls['status'].setValue(status);
@@ -150,10 +150,7 @@ export class OfferStageComponent implements OnInit {
     if (offerStage.consultantOwnerId != null) {
       this.offerForm.controls['consultantOwnerId'].setValue(offerStage.consultantOwnerId);
     }
-    if (offerStage.seniority != null) { this.offerForm.controls['seniority'].setValue(offerStage.seniority); }    
-    // if(this.temporalOffers != null && this.temporalOffers[length-1].offerDate != null)  {this.offerForm.controls['offerDate'].setValue(this.temporalOffers[length-1].offerDate); }
-    // if(this.temporalOffers != null && this.temporalOffers[length-1].salary != null)  {this.offerForm.controls['agreedSalary'].setValue(this.temporalOffers[length-1].salary); }
-
+    if (offerStage.seniority != null) { this.offerForm.controls['seniority'].setValue(offerStage.seniority); }        
     if (offerStage.hireDate != null) { this.offerForm.controls['hireDate'].setValue(offerStage.hireDate); }
     if (offerStage.feedback != null) { this.offerForm.controls['feedback'].setValue(offerStage.feedback); }
     if (offerStage.backgroundCheckDone != null) {

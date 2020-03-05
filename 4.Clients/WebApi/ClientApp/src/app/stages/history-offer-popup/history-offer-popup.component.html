@@ -1,13 +1,13 @@
 <div nz-row>
   <div nz-col nzSpan="24">
-    <button nz-button (click)="addOffer(editModal)" [disabled]="!allowAddOffer">Add offer</button>
+    <button nz-button nzType='primary' (click)="addOffer(editModal)" [disabled]="offerConcluded()">Add offer</button>
   </div>
-  <div nz-col nzSpan="24" *ngIf="!allowAddOffer">
-    <p>You can't add an offer if the last one is pending or accepted</p>
-  </div>
+  <span class="text-danger" *ngIf="offerConcluded()">
+    You can't add an offer if the last one is pending or accepted
+  </span>  
 </div>
 <br>
-<nz-table nzBordered nzShowSizeChanger>  
+<nz-table nzBordered nzShowSizeChanger [nzData]="listOfDisplayData">  
   <thead>
       <tr>
           <th>Date</th>
@@ -17,32 +17,47 @@
           <th>Actions</th>
       </tr>
   </thead>
-  <tbody>
-    <tr *ngFor ="let offer of ofertas">
+  <tbody>    
+    <tr *ngFor ="let offer of ofertas;let i = index">
       <td scope="row"> 
         {{ offer.offerDate | date: 'dd/MM/yyyy' }}
       </td>
       <td scope="row"> 
-        {{ offer.salary }}
+        ${{ offer.salary }}
       </td>
       <td scope="row"> 
-        {{ getStatus(offer.status) }}
+        <nz-badge [nzStatus]="getStatusColor(offer.status)" style="margin-right: 3%; margin-top: -2%;"></nz-badge>
+        {{ getStatusName(offer.status) }}
       </td>
-      <td scope="row">         
-        <input type="text" nz-input id="rejectionReason" [disabled]="offer.status != 'Declined'" [readonly]="offer.status != 'Declined'" placeholder="Please input the rejection reason" pattern="[0-9]+([\.,][0-9]+)?">        
+      <td scope="row">              
+          <input 
+          required
+          [ngModel]="offer.rejectionReason"           
+          #reasonInput="ngModel"
+          (focusout)="editRejectionReason(offer.id, reasonInput.value)" 
+          type="text" 
+          nz-input          
+          [disabled]="offer.status != 0" 
+          [readonly]="offer.status != 0" 
+          value= "{{ offer.rejectionReason }}"            
+          pattern="[0-9]+([\.,][0-9]+)?"        
+          >     
+          <div>
+            <span class="text-danger" *ngIf= "reasonInput.value == '' && !reasonInput.disabled">
+              Please input the rejection reason
+            </span>
+          </div>
       </td>
-      <td [style.text-align]="center">        
-        <i nzTitle="Decline" (click)="editStatus('Declined', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
-          <nz-divider nzType="vertical"></nz-divider>
-        <i nzTitle="Accept" (click)="editStatus('Accepted', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
-          <nz-divider nzType="vertical"></nz-divider>
+      <td [style.text-align]="center">              
+        <i *ngIf="offer.status == 2" nzTitle="Decline" (click)="editStatus('Declined', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
+          <nz-divider *ngIf="offer.status == 2" nzType="vertical"></nz-divider>
+        <i *ngIf="offer.status == 2" nzTitle="Accept" (click)="editStatus('Accepted', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
+          <nz-divider *ngIf="offer.status == 2" nzType="vertical"></nz-divider>        
         <i nzTitle="Delete" (click)="showDeleteConfirm(offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="delete" theme="outline"></i>        
       </td>
-    </tr>
+    </tr>    
   </tbody>
 </nz-table>
-<button nz-button nzType="primary" (click)="doSomething()">Printear</button>
-<button nz-button nzType="primary" (click)="doSomething2()">Agregar offer al service</button>
 
 <ng-template #editModal>
   <form nz-form [formGroup]="editForm" [nzLayout]="'horizontal'">

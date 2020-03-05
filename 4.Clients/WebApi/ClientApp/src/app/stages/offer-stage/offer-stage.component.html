@@ -69,11 +69,9 @@
                     <nz-form-explain *ngIf="offerForm.get('seniority').dirty && offerForm.get('seniority').errors">Please select a seniority</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
-        </div>        
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <button nz-button nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
-            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6" nzOffset="6">            
+            <button nz-button [disabled]="offerForm.get('status').value != 1" nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>            
         </div>        
     </div>
     <div nz-row>

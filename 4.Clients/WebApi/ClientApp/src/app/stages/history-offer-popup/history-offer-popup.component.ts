@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, ViewChild } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Offer } from 'src/entities/offer';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -23,18 +23,21 @@ export class HistoryOfferPopupComponent implements OnInit {
 
   editForm: FormGroup;
   offerStatusList: any[];
-  ofertas : Offer[];
-  listOfDisplayData : Offer[];
+  ofertas : Offer[] = [];  
+  inputForm : FormGroup;
+
+  listOfDisplayData : Offer[] = [];
   sortValue = null;
   sortName = null;
-  allowAddOffer : boolean;
     
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {    
     this.offerStatusList = globals.offerStatusList;    
   }
 
   ngOnInit() {
-    this.getOffers();        
+    this.getOffers();   
+    this.listOfDisplayData = [...this.ofertas]
+    this.inputForm = new FormGroup({});       
   }
 
   getOffers(){
@@ -48,36 +51,21 @@ export class HistoryOfferPopupComponent implements OnInit {
   }
   
   showModal(modalContent: TemplateRef <{}>){    
-    this.facade.modalService.create({
+    const modal = this.facade.modalService.create({
         nzTitle: "Offer history",
         nzContent: modalContent,
-        nzClosable: true,
+        nzClosable: false,
         nzWrapClassName: 'vertical-center-modal',
-        nzFooter: null ,     
-        nzWidth : 1000
-    })
-  }
-
-  doSomething(){        
-    console.log(this.ofertas);
-    console.log(!(this.ofertas[this.ofertas.length-1].status == OfferStatusEnum.Declined));
-  }
-
-  doSomething2(){        
-    let toAdd : Offer = new Offer();  
-    toAdd.id = 0;
-    toAdd.offerDate = new Date();
-    toAdd.salary = 123;
-    toAdd.rejectionReason = "pinto";
-    toAdd.status = OfferStatusEnum.Pending;
-    toAdd.processId = this.processId;
-     this.facade.offerService.add<Offer>(toAdd)
-      .subscribe(res => {
-        this.getOffers();        
-        this.facade.toastrService.success("Offer was successfuly created !");        
-      }, err => {        
-        if(err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
+        nzFooter: [
+          {
+            label: 'Back to stages',
+            shape: 'primary',
+            onClick: () =>  
+            {
+              if(this.validateReasons) modal.destroy();                   
+            }                           
+          }],
+        nzWidth : 1000                
     })
   }
 
@@ -87,7 +75,7 @@ export class HistoryOfferPopupComponent implements OnInit {
       nzTitle: 'Add Offer',
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '90%',
+      nzWidth: '50%',
       nzFooter: [
         {
           label: 'Cancel',
@@ -117,8 +105,7 @@ export class HistoryOfferPopupComponent implements OnInit {
               this.facade.offerService.add<Offer>(toAdd)
                 .subscribe(res => {
                   this.getOffers();        
-                  this.facade.toastrService.success("Offer was successfuly created !");      
-                  this.allowAddOffer = false;                    
+                  this.facade.toastrService.success("Offer was successfuly created !");                                           
                   modal.destroy();
                 }, err => {        
                   if(err.message != undefined) this.facade.toastrService.error(err.message);
@@ -131,15 +118,35 @@ export class HistoryOfferPopupComponent implements OnInit {
     });
   }
 
-  editStatus(status : string, id: number): void {             
+  editStatus(status : string, id: number): void {     
+    this.facade.modalService.confirm({
+      nzTitle: 'Are you sure to change the status?',
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzCancelText: 'No',                        
+      nzOnOk: () => {
+        let editedOffer : Offer = this.ofertas.filter(offer => offer.id == id)[0];                             
+        if (status == 'Declined'){
+          editedOffer.status = OfferStatusEnum.Declined;      
+        }else{
+          editedOffer.status = OfferStatusEnum.Accepted;      
+        }    
+        this.facade.offerService.update<Offer>(id, editedOffer)
+        .subscribe(res => {
+          this.getOffers();                
+          this.facade.toastrService.success('Offer was successfully edited !');                
+        }, err => {                                
+          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          else this.facade.toastrService.error('The service is not available now. Try again later.');
+        })
+      }
+    });                                                
+  }
+
+  editRejectionReason(id: number, reason :string){
     let editedOffer : Offer = this.ofertas.filter(offer => offer.id == id)[0];                             
-    if (status == 'Declined'){
-      editedOffer.status = OfferStatusEnum.Declined;
-      this.allowAddOffer = true;      
-    }else{
-      editedOffer.status = OfferStatusEnum.Accepted;
-      this.allowAddOffer = false;
-    }    
+    editedOffer.rejectionReason = reason;
     this.facade.offerService.update<Offer>(id, editedOffer)
     .subscribe(res => {
       this.getOffers();                
@@ -147,10 +154,10 @@ export class HistoryOfferPopupComponent implements OnInit {
     }, err => {                                
       if (err.message != undefined) this.facade.toastrService.error(err.message);
       else this.facade.toastrService.error('The service is not available now. Try again later.');
-    })                                                    
+    })   
   }
 
-  getStatus(status: number): string {
+  getStatusName(status: number): string {
     return this.offerStatusList.find(st => st.id === status).name;
   }
 
@@ -169,8 +176,7 @@ export class HistoryOfferPopupComponent implements OnInit {
         if(err.message != undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error("The service is not available now. Try again later.");
       })
-    });
-    this.lastOfferConcluded();
+    });    
   }
 
   resetEditForm() { 
@@ -180,11 +186,24 @@ export class HistoryOfferPopupComponent implements OnInit {
     });
   }
 
-  lastOfferConcluded(){
+  offerConcluded(): boolean{
     if (this.ofertas.length == 0){
-      this.allowAddOffer = false;
+      return false;
     }else{
-      this.allowAddOffer = this.ofertas[this.ofertas.length-1].status == OfferStatusEnum.Declined;
+      return !(this.ofertas[this.ofertas.length-1].status == OfferStatusEnum.Declined);
     }    
+  }
+
+  getStatusColor(status: number): string {
+    let statusName = this.getStatusName(status);
+    switch (statusName) {            
+      case 'Declined': return 'error';
+      case 'Accepted': return 'success';
+      case 'Pending': return 'processing';
+    }
+  }
+
+  validateReasons() : boolean{    
+    return (this.ofertas.filter(x=> x.rejectionReason == '' && x.status == OfferStatusEnum.Declined)).length == 0
   }
 }
