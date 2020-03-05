@@ -11,6 +11,19 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Migrations\20200220190246_PreferencesTable.cs" />
+    <Compile Remove="Migrations\20200220190246_PreferencesTable.Designer.cs" />
+    <Compile Remove="Migrations\20200220191215_PreferenceTable.cs" />
+    <Compile Remove="Migrations\20200220191215_PreferenceTable.Designer.cs" />
+    <Compile Remove="Migrations\20200220194335_PreferenceTable.cs" />
+    <Compile Remove="Migrations\20200220194335_PreferenceTable.Designer.cs" />
+    <Compile Remove="Migrations\20200221135703_PreferenceTable.cs" />
+    <Compile Remove="Migrations\20200221135703_PreferenceTable.Designer.cs" />
+    <Compile Remove="Migrations\20200227123808_firstmigration.cs" />
+    <Compile Remove="Migrations\20200227123808_firstmigration.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
@@ -18,7 +31,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>

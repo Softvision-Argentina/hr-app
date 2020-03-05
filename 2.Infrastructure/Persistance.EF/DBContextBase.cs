@@ -1,4 +1,5 @@
 ﻿using Core;
+using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 

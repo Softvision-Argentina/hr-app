@@ -64,7 +64,7 @@ export class StageEditComponent implements OnInit {
   }
 
   getStageByID(id) {
-    this.facade.stageService.getByID<Stage>(id)
+    this.facade.stageService.getByID(id)
       .subscribe(data => {
         console.log(data)
         this.stage = data;
@@ -91,7 +91,7 @@ export class StageEditComponent implements OnInit {
   }
 
   getAllConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
         console.log(this.consultants);

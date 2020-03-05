@@ -120,10 +120,10 @@ namespace Domain.Services.Repositories.EF
             var candidate5 = new Candidate { Profile = Profile1, Community = Community1, Name = "Juan Pablo", LastName = "Maldonado", DNI = 1345678, PhoneNumber = "(+54)1122334455", EmailAddress = "juanpablo.maldonado@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.InProgress, Recruiter = consultant5, PreferredOffice = Office2};
             var candidate6 = new Candidate { Profile = Profile3, Community = Community2, Name = "Matías", LastName = "Caniglia", DNI = 1234568, PhoneNumber = "(+1)1122334455", EmailAddress = "matias.caniglia@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant6, PreferredOffice = Office2};
             var candidate7 = new Candidate { Profile = Profile2, Community = Community3, Name = "Gustavo", LastName = "Gilberto", DNI = 2345678, PhoneNumber = "(+54)1122334455", EmailAddress = "gustavo.gilberto@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant1, PreferredOffice = Office2};
-            var candidate8 = new Candidate { Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant2, PreferredOffice = Office1};
-            var candidate9 = new Candidate { Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, Recruiter = consultant3, PreferredOffice = Office1};
-            var candidate10 = new Candidate { Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, Recruiter = consultant4, PreferredOffice = Office1};
-            var candidate11 = new Candidate { Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, Recruiter = consultant5, PreferredOffice = Office1};
+            var candidate8 = new Candidate { Profile = Profile1, Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant2, PreferredOffice = Office1};
+            var candidate9 = new Candidate { Profile = Profile2, Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, Recruiter = consultant3, PreferredOffice = Office1};
+            var candidate10 = new Candidate { Profile = Profile3, Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, Recruiter = consultant4, PreferredOffice = Office1};
+            var candidate11 = new Candidate { Profile = Profile1, Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, Recruiter = consultant5, PreferredOffice = Office1};
             context.Candidates.Add(candidate1);
             context.Candidates.Add(candidate2);
             context.Candidates.Add(candidate3);
@@ -619,6 +619,9 @@ namespace Domain.Services.Repositories.EF
             var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+
 
             context.Users.Add(user2);
             context.Users.Add(user3);
@@ -639,6 +642,9 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user18);
             context.Users.Add(user19);
             context.Users.Add(user20);
+            context.Users.Add(user21);
+            context.Users.Add(user22);
+            
             context.SaveChanges();
             #endregion
 
@@ -672,7 +678,53 @@ namespace Domain.Services.Repositories.EF
             context.SaveChanges();
             #endregion
 
+            #region Preference
+            var preference1 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user2 };
+            var preference2 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user3 };
+            var preference3 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user4 };
+            var preference4 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user5 };
+            var preference5 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user6 };
+            var preference6 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user7 };
+            var preference7 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user8 };
+            var preference8 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user9 };
+            var preference9 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user10 };
+            var preference10 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user11 };
+            var preference11 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user12 };
+            var preference12 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user13 };
+            var preference13 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user14 };
+            var preference14 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user15 };
+            var preference15 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user16 };
+            var preference16 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user17 };
+            var preference17 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user18 };
+            var preference18 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user19 };
+            var preference19 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user20 };
+            var preference20 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
+            var preference21 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user22 };
             
+            context.Preferences.Add(preference1);
+            context.Preferences.Add(preference2);
+            context.Preferences.Add(preference3);
+            context.Preferences.Add(preference4);
+            context.Preferences.Add(preference5);
+            context.Preferences.Add(preference6);
+            context.Preferences.Add(preference7);
+            context.Preferences.Add(preference8);
+            context.Preferences.Add(preference9);
+            context.Preferences.Add(preference10);
+            context.Preferences.Add(preference11);
+            context.Preferences.Add(preference12);
+            context.Preferences.Add(preference13);
+            context.Preferences.Add(preference14);
+            context.Preferences.Add(preference15);
+            context.Preferences.Add(preference16);
+            context.Preferences.Add(preference17);
+            context.Preferences.Add(preference18);
+            context.Preferences.Add(preference19);
+            context.Preferences.Add(preference20);
+            context.Preferences.Add(preference21);
+
+            context.SaveChanges();
+            #endregion
 
             #region DaysOff
             var daysOff1 = new DaysOff {  Date = DateTime.Today.AddDays(-12), EndDate= DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };

@@ -190,7 +190,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res;
@@ -200,7 +200,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -209,7 +209,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getOffices() {
-    this.facade.OfficeService.get<Office>()
+    this.facade.OfficeService.get()
       .subscribe(res => {
         this.offices = res;
       }, err => {
@@ -222,7 +222,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getCommunities() {
-    this.facade.communityService.get<Community>()
+    this.facade.communityService.get()
       .subscribe(res => {
         this.communities = res;
       }, err => {
@@ -231,7 +231,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProfiles() {
-    this.facade.candidateProfileService.get<CandidateProfile>()
+    this.facade.candidateProfileService.get()
       .subscribe(res => {
         this.profiles = res;
       }, err => {
@@ -240,7 +240,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getDeclineReasons() {
-    this.facade.declineReasonService.get<DeclineReason>("Named")
+    this.facade.declineReasonService.get("Named")
       .subscribe(res => {
         this.declineReasons = res;
       }, err => {
@@ -253,7 +253,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProcesses() {
-    this.facade.processService.get<Process>()
+    this.facade.processService.get()
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
@@ -266,7 +266,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       });
   }
   getProcessesByConsultant() {
-    this.facade.processService.get<Process>()
+    this.facade.processService.get()
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
@@ -626,7 +626,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.processService.delete<Process>(processID)
+      nzOnOk: () => this.facade.processService.delete(processID)
         .subscribe(res => {
           this.getProcesses();
           this.facade.toastrService.success('Process was deleted !');
@@ -728,7 +728,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newProcess.candidate = newCandidate;
 
       if (!this.isEdit) {
-        this.facade.processService.add<Process>(newProcess)
+        this.facade.processService.add(newProcess)
           .subscribe(res => {
             this.getProcesses();
             this.app.hideLoading();
@@ -741,7 +741,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           });
       }
       else {
-        this.facade.processService.getByID<Process>(newProcess.id)
+        this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
@@ -758,7 +758,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                   }
                 });
             } else {
-              this.facade.processService.update<Process>(newProcess.id, newProcess)
+              this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(res => {
                   this.getProcesses();
                   this.getCandidates();

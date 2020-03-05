@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../app-config/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
+import { Consultant } from 'src/entities/consultant';
 
 @Injectable()
-export class ConsultantService extends BaseService {
+export class ConsultantService extends BaseService<Consultant> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);

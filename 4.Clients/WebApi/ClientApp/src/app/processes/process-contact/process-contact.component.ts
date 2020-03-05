@@ -108,7 +108,10 @@ export class ProcessContactComponent implements OnInit {
     profile: [null, [Validators.required]],
     linkedInProfile: [null, [trimValidator]],
     isReferred: false,
-    id: [null]
+    id: [null],
+    cv: [null],
+    knownFrom: [null],
+    referredBy: [null]
   });
   visible: boolean = false;
   isNewCandidate: boolean = false;
@@ -159,7 +162,7 @@ export class ProcessContactComponent implements OnInit {
   
 
   getCandidates() {
-    this.facade.candidateService.get<Candidate>()
+    this.facade.candidateService.get()
       .subscribe(res => {
         this.candidates = res;
       }, err => {
@@ -168,7 +171,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
       }, err => {
@@ -226,7 +229,7 @@ export class ProcessContactComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.candidateService.delete<Candidate>(CandidateID)
+      nzOnOk: () => this.facade.candidateService.delete(CandidateID)
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
@@ -261,6 +264,9 @@ export class ProcessContactComponent implements OnInit {
     this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
     this.candidateForm.controls['community'].setValue(Candidate.community.id);
     this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
+    this.candidateForm.controls['referredBy'].setValue(Candidate.referredBy);
+    this.candidateForm.controls['cv'].setValue(Candidate.cv);
+    this.candidateForm.controls['knownFrom'].setValue(Candidate.knownFrom);
   }
 
   resetForm() {
@@ -277,7 +283,10 @@ export class ProcessContactComponent implements OnInit {
       profile: [null, [Validators.required]],
       linkedInProfile: [null, [trimValidator]],
       isReferred: false,
-      id: [null]
+      id: [null],
+      knownFrom: [null],
+      cv: [null],
+      referredBy: [null]
     });
   }
 
@@ -308,12 +317,15 @@ export class ProcessContactComponent implements OnInit {
         preferredOfficeId: editedCandidate.preferredOfficeId,
         profile: editedCandidate.profile,
         community: editedCandidate.community,
-        isReferred: editedCandidate.isReferred
+        isReferred: editedCandidate.isReferred,
+        cv: editedCandidate.cv,
+        knownFrom: editedCandidate.knownFrom,
+        referredBy: editedCandidate.referredBy,
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
+      this.facade.candidateService.update(idCandidate, editedCandidate)
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
@@ -346,10 +358,13 @@ export class ProcessContactComponent implements OnInit {
       candidateSkills: editedCandidate.candidateSkills,
       profile: editedCandidate.profile,
       community: editedCandidate.community,
-      isReferred: editedCandidate.isReferred
+      isReferred: editedCandidate.isReferred,
+      cv: editedCandidate.cv,
+      knownFrom: editedCandidate.knownFrom,
+      referredBy: editedCandidate.referredBy
     }
 
-    this.facade.candidateService.update<Candidate>(idCandidate, editedCandidate)
+    this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
@@ -388,12 +403,15 @@ export class ProcessContactComponent implements OnInit {
         candidateSkills: [],
         isReferred: this.candidateForm.controls['isReferred'].value,
         community: new Community(this.candidateForm.controls['community'].value),
-        profile: new CandidateProfile(this.candidateForm.controls['profile'].value)
+        profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
+        cv: null,
+        knownFrom: null,
+        referredBy: null
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      this.facade.candidateService.add<Candidate>(newCandidate)
+      this.facade.candidateService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;

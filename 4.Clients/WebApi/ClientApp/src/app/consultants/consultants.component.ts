@@ -58,7 +58,7 @@ export class ConsultantsComponent implements OnInit {
   }
 
   getConsultants(){
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.filteredConsultants = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
@@ -126,7 +126,7 @@ export class ConsultantsComponent implements OnInit {
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
               }
-              this.facade.consultantService.add<Consultant>(newConsultant)
+              this.facade.consultantService.add(newConsultant)
             .subscribe(res => {
               this.getConsultants();
               this.app.hideLoading();
@@ -196,7 +196,7 @@ export class ConsultantsComponent implements OnInit {
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
               }
-              this.facade.consultantService.update<Consultant>(editedConsultant.id, editedConsultant)
+              this.facade.consultantService.update(editedConsultant.id, editedConsultant)
             .subscribe(res => {
               this.getConsultants();
               this.app.hideLoading();
@@ -224,7 +224,7 @@ export class ConsultantsComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.consultantService.delete<Consultant>(consultantID)
+      nzOnOk: () => this.facade.consultantService.delete(consultantID)
         .subscribe(res => {
           this.getConsultants();
           this.facade.toastrService.success('Interviewer was deleted !');

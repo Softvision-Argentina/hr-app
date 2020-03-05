@@ -22,7 +22,7 @@ export class StageDetailComponent implements OnInit {
   }
 
   getStageByID(id) {
-    this.api.stageService.getByID<Stage>(id)
+    this.api.stageService.getByID(id)
             .subscribe(res => {
               this.stage = res;
               this.processId = this.stage.processId;
