@@ -1,6 +1,7 @@
 <body [ng2-loading]="showSpinner" [config]="loadingConfig">
   <app-nav-menu></app-nav-menu>
-  <div class="container" >
+  <app-side-menu></app-side-menu>
+  <div class="container-fluid" >
     <router-outlet></router-outlet>
   </div>
 </body>

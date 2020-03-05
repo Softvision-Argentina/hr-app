@@ -1,0 +1,52 @@
+<div class="side-menu" *ngIf="isAuthenticated()">
+  <div id="logo">
+    <img width="103px" height="40px" src="../../assets/images/recru-logo.png" />
+  </div>
+  
+  <div [routerLink]="['/dashboard']" [routerLinkActive]="['active']" class="container-item">
+      <div class="gradient-border"></div>
+      <div class="item">
+          <i nz-icon nzType="dashboard" nzTheme="outline"></i>
+          <p>Dashboard</p>
+      </div>
+  </div>
+  <div [routerLink]="['/']" [routerLinkActiveOptions]="{exact:true}" [routerLinkActive]="['active']" class="container-item">
+      <div class="gradient-border"></div>
+      <div class="item">
+        <i nz-icon nzType="file-search" nzTheme="outline"></i>
+        <p>Processes</p>
+      </div>
+
+  </div>
+  <div [routerLink]="['/people']" [routerLinkActive]="['active']" class="container-item">
+      <div class="gradient-border"></div>
+      <div class="item">
+        <i nz-icon nzType="usergroup-add" nzTheme="outline"></i>
+        <p>People</p>
+      </div>
+
+  </div>
+  <div [routerLink]="['/tasks']" [routerLinkActive]="['active']" class="container-item">
+      <div class="gradient-border"></div>
+      <div class="item">
+        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+        <p>Tasks</p>
+      </div>
+  </div>
+  <div [routerLink]="['/daysOff']" [routerLinkActive]="['active']" class="container-item">
+      <div class="gradient-border"></div>
+      <div class="item">
+        <i nz-icon nzType="calendar" nzTheme="outline"></i>
+        <p>Days off</p>
+      </div>
+
+  </div>
+  <div [routerLink]="['/settings']" [routerLinkActive]="['active']" class="container-item" >
+      <div class="gradient-border"></div>
+      <div class="item">
+        <i nz-icon nzType="setting" nzTheme="outline"></i>
+        <p>Settings</p>
+      </div>
+
+  </div>
+</div>

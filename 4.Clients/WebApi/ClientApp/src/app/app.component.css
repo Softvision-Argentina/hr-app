@@ -5,10 +5,12 @@
   }
 }
 
-.container {
-  margin-top: 75px;
+.container-fluid {
+  
+  margin-left: 125px;
 }
 
 .backdrop[_ngcontent-c7] {
   z-index: 0 !important;
 }
+
