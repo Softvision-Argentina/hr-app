@@ -138,6 +138,9 @@ import { ReferralsContactComponent } from './referrals/referrals-contact/referra
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { OfferHistory } from './stages/offer-history/offer-history.component';
+import { OfferService } from './services/offer.service';
+
 
 registerLocaleData(en);
 
@@ -219,7 +222,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       HasRoleDirective,
       ReportDeclineReasonsComponent,
       ReportTimetofill1Component,
-      SideMenuComponent
+      SideMenuComponent,
+      OfferHistory
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -332,6 +336,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CompanyCalendarService,
     PostulantsService,
     DeclineReasonService,
+    OfferService,
     // MatDatepickerModule,
     // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }

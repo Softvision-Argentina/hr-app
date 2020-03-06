@@ -1,6 +1,7 @@
+<app-nav-menu></app-nav-menu>
 <br />
 <div>
-    <div nz-row>
+    <div class="padding" nz-row>
         <div nz-col nzSpan="2" style="padding-left: 1%;">
             <button nz-button nzType="primary" nzShape="round" (click)="showAddModal(taskModal)">
         <i nz-icon type="plus" theme="outline"></i></button>
@@ -44,7 +45,7 @@
     </div>
 </div>
 <br />
-<div style="background: #ECECEC;padding:30px;">
+<div class="cards">
     <div *ngFor="let toDo of toDoListDisplay | filter: searchTitle | sort">
         <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1" [nzNotFoundImage]="'../../assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
     </div>

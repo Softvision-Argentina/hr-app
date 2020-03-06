@@ -507,13 +507,42 @@ namespace ApiServer.Migrations
                     b.ToTable("HrStages");
                 });
 
-            modelBuilder.Entity("Domain.Model.OfferStage", b =>
+            modelBuilder.Entity("Domain.Model.Offer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("AgreedSalary");
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<DateTime?>("OfferDate");
+
+                    b.Property<int>("ProcessId");
+
+                    b.Property<string>("RejectionReason");
+
+                    b.Property<float>("Salary");
+
+                    b.Property<int>("Status");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Offer");
+                });
+
+            modelBuilder.Entity("Domain.Model.OfferStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("BackgroundCheckDone");
 
@@ -536,8 +565,6 @@ namespace ApiServer.Migrations
                     b.Property<string>("LastModifiedBy");
 
                     b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<DateTime>("OfferDate");
 
                     b.Property<bool>("PreocupationalDone");
 

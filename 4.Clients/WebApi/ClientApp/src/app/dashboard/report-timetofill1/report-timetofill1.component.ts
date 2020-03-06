@@ -5,6 +5,8 @@ import { AppComponent } from 'src/app/app.component';
 import { Label } from 'ng2-charts';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { FacadeService } from 'src/app/services/facade.service';
+import { Offer } from 'src/entities/offer';
 
 @Component({
   selector: 'app-report-timetofill1',
@@ -16,16 +18,19 @@ export class ReportTimetofill1Component implements OnInit {
   // Average: Interview date - Offer Accepted
   @Input() _processes;
 
-  constructor(private app: AppComponent) { }
+  constructor(private app: AppComponent, private facade: FacadeService) { }
 
   processes: Process[] = [];  
   month: Date = new Date();
   hasProjections: boolean = false;
+  offers: Offer[] = [];
+  auxDate : Date = new Date();
 
   isChartComplete: boolean = false;
 
   ngOnInit() {
     this.app.showLoading();    
+    this.getOffers();
     this.getProjectionReport();
     this.app.hideLoading();    
   }
@@ -38,6 +43,15 @@ export class ReportTimetofill1Component implements OnInit {
         this.getProjectionReport();
       });
     }
+  }
+
+  getOffers(){
+    this.facade.offerService.get()
+      .subscribe(res => {
+        this.offers = res;
+      }, err => {
+        console.log(err);
+      });
   }
 
   complete() {
@@ -102,8 +116,8 @@ export class ReportTimetofill1Component implements OnInit {
     let validArray : Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() +1  == date.getMonth() + 1 && proc.status == ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() == date.getFullYear());
     if (validArray.length > 0) {
       validArray.forEach(va => {                          
-        averageDays+= Math.ceil((Math.abs(new Date(va.offerStage.offerDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));       
-        days.push(Math.ceil((Math.abs(new Date(va.offerStage.offerDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
+        averageDays+= Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));
+        days.push(Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
         dayChartLabels.push(new Date(va.hrStage.date).toDateString());         
       });      
       days.push(Number((averageDays/days.length).toFixed(2)));
@@ -115,6 +129,12 @@ export class ReportTimetofill1Component implements OnInit {
       this.hasProjections = true;      
     }
     else this.hasProjections = false;
+  }
+
+  getLastOffer(id: number) : Date{
+    let lastOfferDate: Date;
+    lastOfferDate = (this.offers.filter(x=>x.id == id)).pop().offerDate;
+    return lastOfferDate;
   }
 
   nextMonth() {

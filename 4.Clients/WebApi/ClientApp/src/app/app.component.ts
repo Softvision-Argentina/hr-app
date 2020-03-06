@@ -52,15 +52,12 @@ export class AppComponent implements OnInit {
   }
 
   renderBgImage() {
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild,
-     'background-image', 'url(\'./../assets/images/welcomeAbstract.jpg\')');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', '100% 100%');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-position', 'top center');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-repeat', 'no-repeat');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', 'cover');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'width', '100%');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'height', '100%');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'margin-top', '-8%');
   }
 
   removeBgImage() {
@@ -74,5 +71,8 @@ export class AppComponent implements OnInit {
 
   hideLoading() {
     this.showSpinner = false;
+  }
+  isAuthenticated() {
+    return localStorage.getItem('currentUser') !== null ? true : false;
   }
 }

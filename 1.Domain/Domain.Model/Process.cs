@@ -27,17 +27,15 @@ namespace Domain.Model
 
         public int? ConsultantDelegateId { get; set; }
         public Consultant ConsultantDelegate { get; set; }
-  
+
         public float ActualSalary { get { return HrStage.ActualSalary; } }
-        public float WantedSalary { get { return HrStage.WantedSalary; } }
-        public float AgreedSalary { get { return OfferStage.AgreedSalary; } }
+        public float WantedSalary { get { return HrStage.WantedSalary; } }        
         public EnglishLevel EnglishLevel { get { return HrStage.EnglishLevel; } }
         public Seniority Seniority { get {
                 return (OfferStage.Status != StageStatus.NA ? OfferStage.Seniority : TechnicalStage.Seniority != 0 ? TechnicalStage.Seniority : TechnicalStage.AlternativeSeniority);
             }
         }
-
-        public DateTime OfferDate { get { return OfferStage.OfferDate; } }
+        
         public DateTime HireDate { get { return OfferStage.HireDate; } }
 
         //public ICollection<Stage> Stages { get; set; }

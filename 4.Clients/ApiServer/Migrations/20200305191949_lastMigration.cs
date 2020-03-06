@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class firstmigration : Migration
+    public partial class lastMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -129,6 +129,28 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Offer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    OfferDate = table.Column<DateTime>(nullable: true),
+                    Salary = table.Column<float>(nullable: false),
+                    RejectionReason = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    ProcessId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Office",
                 columns: table => new
                 {
@@ -155,13 +177,13 @@ namespace ApiServer.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Version = table.Column<long>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     EmailAddress = table.Column<string>(nullable: true),
                     LinkedInProfile = table.Column<string>(nullable: true),
-                    Cv = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    Cv = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -398,6 +420,38 @@ namespace ApiServer.Migrations
                         name: "FK_Skills_SkillTypes_TypeId",
                         column: x => x.TypeId,
                         principalTable: "SkillTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Preferences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CasualtiesDashboard = table.Column<bool>(nullable: false),
+                    CompletedDashboard = table.Column<bool>(nullable: false),
+                    ProcessesDashboard = table.Column<bool>(nullable: false),
+                    ProgressDashboard = table.Column<bool>(nullable: false),
+                    ProjectionDashboard = table.Column<bool>(nullable: false),
+                    SkillsDashboard = table.Column<bool>(nullable: false),
+                    TimeToFill1Dashboard = table.Column<bool>(nullable: false),
+                    TimeToFIll2Dashboard = table.Column<bool>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Preferences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Preferences_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -763,10 +817,8 @@ namespace ApiServer.Migrations
                     ConsultantOwnerId = table.Column<int>(nullable: true),
                     ConsultantDelegateId = table.Column<int>(nullable: true),
                     RejectionReason = table.Column<string>(nullable: true),
-                    OfferDate = table.Column<DateTime>(nullable: false),
                     HireDate = table.Column<DateTime>(nullable: false),
                     Seniority = table.Column<int>(nullable: false),
-                    AgreedSalary = table.Column<float>(nullable: false),
                     BackgroundCheckDone = table.Column<bool>(nullable: false),
                     BackgroundCheckDoneDate = table.Column<DateTime>(nullable: true),
                     PreocupationalDone = table.Column<bool>(nullable: false),
@@ -1014,6 +1066,12 @@ namespace ApiServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Preferences_UserId",
+                table: "Preferences",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Processes_CandidateId",
                 table: "Processes",
                 column: "CandidateId");
@@ -1130,10 +1188,16 @@ namespace ApiServer.Migrations
                 name: "HrStages");
 
             migrationBuilder.DropTable(
+                name: "Offer");
+
+            migrationBuilder.DropTable(
                 name: "OfferStages");
 
             migrationBuilder.DropTable(
                 name: "Postulants");
+
+            migrationBuilder.DropTable(
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "Reservation");
@@ -1148,13 +1212,13 @@ namespace ApiServer.Migrations
                 name: "TechnicalStages");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Skills");
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Room");
