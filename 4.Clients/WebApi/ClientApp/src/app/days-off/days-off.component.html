@@ -5,11 +5,12 @@
 </div>
 <ng-template #checkedTemplate>HR</ng-template>
 <ng-template #unCheckedTemplate>OTHER</ng-template> -->
+<app-nav-menu></app-nav-menu>
 <br/> <br/>
 
 
 
-<div nz-row>
+<div class="padding" nz-row>
     <div nz-col nzSpan="12">
         <button nz-button nzType="primary" (click)="showAddModal(DaysOffModal)" nzShape="round">
           <i nz-icon type="plus" theme="outline"></i>
@@ -19,7 +20,7 @@
 
 </div>
 <br/>
-<div nz-row>
+<div class="grid-padding" nz-row>
     <div nz-col nzSpan="24">
         <nz-table #daysOffTable [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
             <thead>

@@ -72,6 +72,7 @@ namespace Domain.Services.Repositories.EF
             var consultant15 = new Consultant { Name = "Matias", LastName = "Totaro", PhoneNumber = "(+54)12359742", EmailAddress = "matias.totaro@softvision.com" };
             var consultant19 = new Consultant { Name = "Teo", LastName = "Benavides", PhoneNumber = "(+54)12359742", EmailAddress = "teo.benavides@softvision.com" };
             var consultant20 = new Consultant { Name = "Tomas", LastName = "Guagnini", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.guagnini@softvision.com" };
+            var consultant23 = new Consultant { Name = "Nicolas", LastName = "Roldan", PhoneNumber = "(+54)49794582", EmailAddress = "nicolas.roldan@softvision.com" };
 
             context.Consultants.Add(consultant1);
             context.Consultants.Add(consultant2);
@@ -90,6 +91,7 @@ namespace Domain.Services.Repositories.EF
             context.Consultants.Add(consultant15);
             context.Consultants.Add(consultant19);
             context.Consultants.Add(consultant20);
+            context.Consultants.Add(consultant23);
             context.SaveChanges();
             #endregion
 
@@ -619,6 +621,7 @@ namespace Domain.Services.Repositories.EF
             var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
 
@@ -642,6 +645,7 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user18);
             context.Users.Add(user19);
             context.Users.Add(user20);
+            context.Users.Add(user23);
             context.Users.Add(user21);
             context.Users.Add(user22);
             
@@ -700,7 +704,9 @@ namespace Domain.Services.Repositories.EF
             var preference19 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user20 };
             var preference20 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
             var preference21 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user22 };
-            
+            var preference22 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user23 };
+
+
             context.Preferences.Add(preference1);
             context.Preferences.Add(preference2);
             context.Preferences.Add(preference3);
@@ -722,6 +728,7 @@ namespace Domain.Services.Repositories.EF
             context.Preferences.Add(preference19);
             context.Preferences.Add(preference20);
             context.Preferences.Add(preference21);
+            context.Preferences.Add(preference22);
 
             context.SaveChanges();
             #endregion
