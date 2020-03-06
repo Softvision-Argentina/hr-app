@@ -137,7 +137,7 @@ import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
-import { HistoryOfferPopupComponent } from './stages/history-offer-popup/history-offer-popup.component';
+import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferService } from './services/offer.service';
 
 registerLocaleData(en);
@@ -163,7 +163,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ProcessesComponent,
       ProcessDetailComponent,
       StageDetailComponent,
-      HistoryOfferPopupComponent,
       StageEditComponent,
       ReportsComponent,
       LoginComponent,
@@ -220,7 +219,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       DeclineReasonComponent,
       HasRoleDirective,
       ReportDeclineReasonsComponent,            
-      HistoryOfferPopupComponent
+      OfferHistory
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

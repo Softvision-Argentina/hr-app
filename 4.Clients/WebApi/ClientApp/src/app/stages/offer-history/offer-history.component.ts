@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, ViewChild, OnDestroy } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Offer } from 'src/entities/offer';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -7,11 +7,11 @@ import { Globals } from 'src/app/app-globals/globals';
 
 
 @Component({
-  selector: 'history-offer-popup',
-  templateUrl: './history-offer-popup.component.html',
-  styleUrls: ['./history-offer-popup.component.css']
+  selector: 'offer-history',
+  templateUrl: './offer-history.component.html',
+  styleUrls: ['./offer-history.component.css']
 })
-export class HistoryOfferPopupComponent implements OnInit {
+export class OfferHistory implements OnInit {
   @Input() 
   private _processId : number;
   public get processId():  number {
@@ -23,28 +23,20 @@ export class HistoryOfferPopupComponent implements OnInit {
 
   editForm: FormGroup;
   offerStatusList: any[];
-  ofertas : Offer[] = [];  
-  inputForm : FormGroup;
+  offers : Offer[] = [];
 
-  listOfDisplayData : Offer[] = [];
-  sortValue = null;
-  sortName = null;
-    
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {    
     this.offerStatusList = globals.offerStatusList;    
   }
 
   ngOnInit() {
-    this.getOffers();   
-    this.listOfDisplayData = [...this.ofertas]
-    this.inputForm = new FormGroup({});       
+    this.getOffers();
   }
 
   getOffers(){
-    this.facade.offerService.get<Offer>()
+    this.facade.offerService.get()
       .subscribe(res => {
-        this.ofertas = res.filter(x=> x.processId == this.processId);    
-        this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+        this.offers = res.filter(x=> x.processId == this.processId);            
       }, err => {
         console.log(err);
       });
@@ -56,16 +48,10 @@ export class HistoryOfferPopupComponent implements OnInit {
         nzContent: modalContent,
         nzClosable: false,
         nzWrapClassName: 'vertical-center-modal',
-        nzFooter: [
-          {
-            label: 'Back to stages',
-            shape: 'primary',
-            onClick: () =>  
-            {
-              if(this.validateReasons) modal.destroy();                   
-            }                           
-          }],
-        nzWidth : 1000                
+        nzWidth: 1000,
+        nzFooter: null,
+        nzMaskClosable: false,
+        nzKeyboard: false    
     })
   }
 
@@ -102,9 +88,9 @@ export class HistoryOfferPopupComponent implements OnInit {
               toAdd.rejectionReason = '';
               toAdd.status = OfferStatusEnum.Pending;
               toAdd.processId = this.processId;
-              this.facade.offerService.add<Offer>(toAdd)
+              this.facade.offerService.add(toAdd)
                 .subscribe(res => {
-                  this.getOffers();        
+                  this.getOffers();
                   this.facade.toastrService.success("Offer was successfuly created !");                                           
                   modal.destroy();
                 }, err => {        
@@ -124,15 +110,16 @@ export class HistoryOfferPopupComponent implements OnInit {
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
-      nzCancelText: 'No',                        
+      nzCancelText: 'No',
+      nzWidth: '50%',
       nzOnOk: () => {
-        let editedOffer : Offer = this.ofertas.filter(offer => offer.id == id)[0];                             
+        let editedOffer : Offer = this.offers.filter(offer => offer.id == id)[0];                             
         if (status == 'Declined'){
           editedOffer.status = OfferStatusEnum.Declined;      
         }else{
           editedOffer.status = OfferStatusEnum.Accepted;      
         }    
-        this.facade.offerService.update<Offer>(id, editedOffer)
+        this.facade.offerService.update(id, editedOffer)
         .subscribe(res => {
           this.getOffers();                
           this.facade.toastrService.success('Offer was successfully edited !');                
@@ -145,9 +132,9 @@ export class HistoryOfferPopupComponent implements OnInit {
   }
 
   editRejectionReason(id: number, reason :string){
-    let editedOffer : Offer = this.ofertas.filter(offer => offer.id == id)[0];                             
+    let editedOffer : Offer = this.offers.filter(offer => offer.id == id)[0];                             
     editedOffer.rejectionReason = reason;
-    this.facade.offerService.update<Offer>(id, editedOffer)
+    this.facade.offerService.update(id, editedOffer)
     .subscribe(res => {
       this.getOffers();                
       this.facade.toastrService.success('Offer was successfully edited !');                
@@ -167,8 +154,9 @@ export class HistoryOfferPopupComponent implements OnInit {
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
-      nzCancelText: 'No',                        
-      nzOnOk: () => this.facade.offerService.delete<Offer>(id)
+      nzCancelText: 'No',  
+      nzWidth: '50%',                      
+      nzOnOk: () => this.facade.offerService.delete(id)
       .subscribe(res => {
         this.getOffers();
         this.facade.toastrService.success('Offer was deleted !');
@@ -187,10 +175,10 @@ export class HistoryOfferPopupComponent implements OnInit {
   }
 
   offerConcluded(): boolean{
-    if (this.ofertas.length == 0){
+    if (this.offers.length == 0){
       return false;
     }else{
-      return !(this.ofertas[this.ofertas.length-1].status == OfferStatusEnum.Declined);
+      return !(this.offers[this.offers.length-1].status == OfferStatusEnum.Declined);
     }    
   }
 
@@ -203,7 +191,11 @@ export class HistoryOfferPopupComponent implements OnInit {
     }
   }
 
-  validateReasons() : boolean{    
-    return (this.ofertas.filter(x=> x.rejectionReason == '' && x.status == OfferStatusEnum.Declined)).length == 0
+  validateReasons(){  
+    if (this.offers.length == 0){
+      this.facade.modalService.openModals[1].destroy();
+    }else if((this.offers.filter(x=> x.rejectionReason == '' && x.status == OfferStatusEnum.Declined)).length == 0){
+      this.facade.modalService.openModals[1].destroy();
+    }        
   }
 }

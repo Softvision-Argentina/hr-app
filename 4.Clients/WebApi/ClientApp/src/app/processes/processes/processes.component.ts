@@ -607,7 +607,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
-    console.log(this.emptyProcess);    
   }
 
   showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
@@ -796,8 +795,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,
-      agreedSalary: 0,
+      wantedSalary: 0,      
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: null,
@@ -901,8 +899,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonId: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,
-      agreedSalary: 0,
+      wantedSalary: 0,      
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: {
@@ -950,8 +947,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         consultantOwnerId: candidate.recruiter.id,
         consultantDelegateId: null,
         processId: 0,        
-        seniority: SeniorityEnum.NA,
-        offerDate: new Date(),
+        seniority: SeniorityEnum.NA,        
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),

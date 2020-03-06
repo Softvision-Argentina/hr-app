@@ -566,8 +566,6 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("LastModifiedDate");
 
-                    b.Property<DateTime>("OfferDate");
-
                     b.Property<bool>("PreocupationalDone");
 
                     b.Property<DateTime?>("PreocupationalDoneDate");

@@ -11,8 +11,7 @@ export class OfferStage {
     consultantOwnerId?: number;
     consultantDelegateId?: number;
     processId: number;
-    rejectionReason?: string;
-    offerDate: Date;
+    rejectionReason?: string;    
     hireDate: Date;
     seniority: SeniorityEnum;    
     backgroundCheckDone: boolean;

@@ -77,30 +77,6 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate">Offer Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="offerDate"></nz-date-picker>
-                    <nz-form-explain *ngIf="offerForm.get('offerDate').dirty && offerForm.get('offerDate').errors">
-                        Please input a offer date
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="agreedSalary">Agreed Salary</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="number" nz-input formControlName="agreedSalary" id="agreedSalary" placeholder="Please input the agreed salary" pattern="[0-9]+([\.,][0-9]+)?">
-                    <nz-form-explain *ngIf="offerForm.get('agreedSalary').dirty && offerForm.get('agreedSalary').errors">
-                        Please input the salary
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="hireDate">Hire Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="hireDate"></nz-date-picker>
@@ -180,9 +156,8 @@
             </nz-form-item>
         </div>
     </div>
-
 </form>
 
 <ng-template #historyOfferModal>
-    <history-offer-popup [_processId]=offerStage.processId></history-offer-popup> 
+    <offer-history [_processId]=offerStage.processId (backdrop)="static" keyboard="false"></offer-history> 
 </ng-template>

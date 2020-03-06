@@ -2,12 +2,12 @@
   <div nz-col nzSpan="24">
     <button nz-button nzType='primary' (click)="addOffer(editModal)" [disabled]="offerConcluded()">Add offer</button>
   </div>
-  <span class="text-danger" *ngIf="offerConcluded()">
-    You can't add an offer if the last one is pending or accepted
-  </span>  
+  <nz-form-explain class="text-danger" *ngIf="offerConcluded()">
+    Can't add an offer if the last one is pending or accepted
+  </nz-form-explain>  
 </div>
 <br>
-<nz-table nzBordered nzShowSizeChanger [nzData]="listOfDisplayData">  
+<nz-table nzBordered [nzData]="offers" [nzPageSize]="10">  
   <thead>
       <tr>
           <th>Date</th>
@@ -18,7 +18,7 @@
       </tr>
   </thead>
   <tbody>    
-    <tr *ngFor ="let offer of ofertas;let i = index">
+    <tr *ngFor ="let offer of offers;let i = index">
       <td scope="row"> 
         {{ offer.offerDate | date: 'dd/MM/yyyy' }}
       </td>
@@ -30,8 +30,7 @@
         {{ getStatusName(offer.status) }}
       </td>
       <td scope="row">              
-          <input 
-          required
+          <input
           [ngModel]="offer.rejectionReason"           
           #reasonInput="ngModel"
           (focusout)="editRejectionReason(offer.id, reasonInput.value)" 
@@ -58,6 +57,9 @@
     </tr>    
   </tbody>
 </nz-table>
+<br>
+<button nz-button nzType='primary' (click)="validateReasons()">Back to stages</button>
+
 
 <ng-template #editModal>
   <form nz-form [formGroup]="editForm" [nzLayout]="'horizontal'">

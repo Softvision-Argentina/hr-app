@@ -1,21 +1,18 @@
 import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Consultant } from 'src/entities/consultant';
 import { FacadeService } from 'src/app/services/facade.service';
-import { Process } from 'src/entities/process';
 import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
 import { ProcessService } from '../../services/process.service';
-import { HistoryOfferPopupComponent } from '../history-offer-popup/history-offer-popup.component';
-import { Offer } from 'src/entities/offer';
+import { OfferHistory } from '../offer-history/offer-history.component';
 
 @Component({
   selector: 'offer-stage',
   templateUrl: './offer-stage.component.html',
   styleUrls: ['./offer-stage.component.css'],
-  providers: [HistoryOfferPopupComponent]
+  providers: [OfferHistory]
 })
 export class OfferStageComponent implements OnInit {
 
@@ -35,9 +32,7 @@ export class OfferStageComponent implements OnInit {
     consultantOwnerId: 0,
     consultantDelegateId: [null],
     feedback: '',
-    seniority: [0, [Validators.required]],
-    offerDate: new Date(),
-    agreedSalary: 0,
+    seniority: [0, [Validators.required]],        
     hireDate: [new Date(), [Validators.required]],
     backgroundCheckDone: false,
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
@@ -52,17 +47,13 @@ export class OfferStageComponent implements OnInit {
   backDateEnabled: boolean;
   preocupationalCheckEnabled: boolean = false;
   preocupationalDateEnabled: boolean;
-  temporalOffers : Offer[] = [];
 
   @Input() offerStage: OfferStage;
-  @ViewChild(HistoryOfferPopupComponent) historyOffer: HistoryOfferPopupComponent ;
+  @ViewChild(OfferHistory) historyOffer: OfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
 
-  //selectedSeniorities: any[2];
-
-  constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService, private historyOfferModal: HistoryOfferPopupComponent) {    
-    this.statusList = globals.stageStatusList;    
-    //this.seniorityList = globals.seniorityList;
+  constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService, private historyOfferModal: OfferHistory) {    
+    this.statusList = globals.stageStatusList;
   }
 
   showOfferHistoryModal(modalContent: TemplateRef<{}>){    
@@ -75,8 +66,7 @@ export class OfferStageComponent implements OnInit {
       this.offerForm.controls['seniority'].setValue(this.seniorityList[0].id);
     });
     this.changeFormStatus(false);
-    if (this.offerStage) { this.fillForm(this.offerStage); }        
-    console.log(this.offerStage);
+    if (this.offerStage) { this.fillForm(this.offerStage); }
   }
 
   updateSeniority(seniorityId) {
@@ -91,9 +81,7 @@ export class OfferStageComponent implements OnInit {
     for (const i in this.offerForm.controls) {
       if (this.offerForm.controls[i] != this.offerForm.controls['status'] &&
       this.offerForm.controls[i] != this.offerForm.controls.backgroundCheckDoneDate &&
-      this.offerForm.controls[i] != this.offerForm.controls.preocupationalDoneDate &&
-      this.offerForm.controls[i] != this.offerForm.controls['agreedSalary'] &&
-      this.offerForm.controls[i] != this.offerForm.controls['offerDate']){
+      this.offerForm.controls[i] != this.offerForm.controls.preocupationalDoneDate){
         if (enable) { this.offerForm.controls[i].enable(); }
         else { 
           this.offerForm.controls[i].disable();

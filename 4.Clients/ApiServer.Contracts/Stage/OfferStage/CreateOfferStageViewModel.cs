@@ -21,8 +21,7 @@ namespace ApiServer.Contracts.Stage
 
         public int? ConsultantDelegateId { get; set; }
         public string RejectionReason { get; set; }
-
-        public DateTime OfferDate { get; set; }
+        
         public DateTime HireDate { get; set; }
         public Seniority Seniority { get; set; }        
         public bool BackgroundCheckDone { get; set; }
