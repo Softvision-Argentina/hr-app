@@ -138,6 +138,7 @@ import { ReferralsContactComponent } from './referrals/referrals-contact/referra
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
 
+
 registerLocaleData(en);
 
 const antDesignIcons = AllIcons as {

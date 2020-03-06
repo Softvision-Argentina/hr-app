@@ -115,12 +115,12 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="preferredOffice">
+                    <nz-select formControlName="preferredOffice" [(ngModel)]="selectedValue">
                         <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="candidateForm.get('preferredOffice').dirty && candidateForm.get('preferredOffice').errors">
-                        Please input the preferred office</nz-form-explain>
+                        Please input the preferred office</nz-form-explain>                  
                 </nz-form-control>
             </nz-form-item>
         </div>
