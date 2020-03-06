@@ -156,13 +156,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.setRejectionReasonValidators();
 
     this.app.hideLoading();
+
   }
 
   ngAfterViewChecked(){
     if(this.slickModal && this.openFromEdit){
       this.slickModal.slickGoTo(this.stepIndex);
       this.openFromEdit = false;
-    }
+    } 
   }
 
   isUserRole(roles: string[]): boolean {
@@ -262,7 +263,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         }
       }, err => {
         console.log(err);
-      });
+      })
+    
   }
   getProcessesByConsultant() {
     this.facade.processService.get<Process>()
@@ -469,11 +471,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.searchRecruiterValue=this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
+    console.log(this.emptyProcess)
   }
 
   searchAllProcess(){
     this.getProcesses();
     this.isOwnedProcesses = false;
+    console.log(this.emptyProcess)
   }
 
   showOwnProcessesFirst(): void {

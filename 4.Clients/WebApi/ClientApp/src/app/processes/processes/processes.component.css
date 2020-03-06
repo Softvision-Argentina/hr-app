@@ -1,3 +1,7 @@
+.proximaNova {
+    font-family: "ProximaNova";
+}
+
 .search-box {
     padding: 8px;
 }
@@ -29,3 +33,87 @@
 nz-step {
     cursor: pointer;
 }
+
+.buttonStyle {
+  width: 215px;
+  height: 40px;
+  background-image: linear-gradient(to top, #f4633a, #c800a1);
+  
+}
+
+.buttonFont {
+  font-size: 20px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.67px;
+  color: #ffffff;
+}
+
+.nameStyle {
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #c800a1;
+}
+
+.headerFont {
+  font-family: ProximaNova-Extrabold;
+  font-size: 44px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -0.88px;
+  color: #222222;
+}
+
+.process {
+  background: transparent;
+  border: none;
+  display: inline-block;
+  font-size: 13px;
+  outline: none;
+  position: relative;
+  transition: 0.3s;
+  padding: 10px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  color: #c4c4c4;
+}
+.process:before {
+  content: '';
+  border-bottom: 1px solid #c800a1;
+  padding: 0 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 0;
+  transition: 0.3s;
+  color: black;
+}
+
+ .process:hover:before {
+    width: 100%;
+    padding: 0;
+    color: black;
+  }
+
+.process:active {
+  color: black;
+  transition: none
+}
+
+.filterButton {
+    font-size: 30px;
+}   
+

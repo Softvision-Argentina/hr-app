@@ -1,9 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\2.Infrastructure",
+    "\\2.Infrastructure\\Domain.Services.Repositories.EF",
     "\\4.Clients",
-    "\\4.Clients\\ApiServer"
+    "\\4.Clients\\WebApi",
+    "\\4.Clients\\WebApi\\ClientApp",
+    "\\4.Clients\\WebApi\\ClientApp\\src",
+    "\\4.Clients\\WebApi\\ClientApp\\src\\app",
+    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes",
+    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes",
+    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes\\processes-table"
   ],
-  "SelectedNode": "\\4.Clients\\ApiServer\\Security",
+  "SelectedNode": "\\2.Infrastructure\\Domain.Services.Repositories.EF\\SeedMigrator.cs",
   "PreviewInSolutionExplorer": false
 }
