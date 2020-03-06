@@ -3,7 +3,6 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-const apiUrl = "http://localhost:61059/api/Configs";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -22,7 +21,7 @@ export class ConfigService {
   }
 
   getSkillTypes(): Observable<any[]> {
-    return this.http.get<any[]>(apiUrl + '/SkillTypes')
+    return this.http.get<any[]>(this.baseUrl + '/SkillTypes')
       .pipe(
         tap(skills => {}),
         catchError(this.handleError('getSkillTypes', []))
@@ -30,7 +29,7 @@ export class ConfigService {
   }
 
   getStatusTypes(): Observable<any[]> {
-    return this.http.get<any[]>(apiUrl + '/StageStatusTypes')
+    return this.http.get<any[]>(this.baseUrl + '/StageStatusTypes')
       .pipe(
         tap(statuses => {}),
         catchError(this.handleError('getStatusTypes', []))
