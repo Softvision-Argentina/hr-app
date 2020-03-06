@@ -1,0 +1,41 @@
+import { Injectable } from '@angular/core';
+import { BaseService } from './base.service';
+import { Router } from '@angular/router';
+import { AppConfig } from '../app-config/app.config';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NotificationService extends BaseService<Notification> {
+
+constructor(router: Router, config: AppConfig, http: HttpClient) {
+  super(router, config, http);
+  this.apiUrl += 'Notifications';
+}
+
+public getNotifications(): Observable<any>{
+
+  return this.http.get(this.apiUrl, {
+    headers: this.headersWithAuth
+  })
+    .pipe(
+      tap(data => {}),
+      catchError(this.handleErrors)
+    );
+}
+
+public readNotifications(id: number): Observable<any>{
+
+  return this.http.get(this.apiUrl + '/' + id, {
+    headers: this.headersWithAuth
+  })
+    .pipe(
+      tap(data => {}),
+      catchError(this.handleErrors)
+    );
+}
+
+}

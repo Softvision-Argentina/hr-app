@@ -30,6 +30,8 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
+import { NotificationService } from 'src/app/services/notificationsService';
+import { Notification } from 'src/entities/notification';
 
 @Component({
   selector: 'app-referrals',
@@ -121,10 +123,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   isOwnedProcesses: boolean = false;
 
+  notis: Notification[] = [];
+  notisCount: number;
+  id: number;
+
   forms: FormGroup[] = [];
+  visible: boolean;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent,) {
+    private globals: Globals, private _appComponent: AppComponent, private notification: NotificationService) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -158,6 +165,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.setRejectionReasonValidators();
 
     this.app.hideLoading();
+    this.getNotifications();
+    this.readNotification(this.id);
   }
 
   ngAfterViewChecked(){
@@ -199,6 +208,28 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       }, err => {
         console.log(err);
       });
+  }
+
+  getNotifications() {
+    this.facade.NotificationSevice.getNotifications()
+      .subscribe(res => {
+       this.notis = res;
+       this.notisCount = res.length;
+      }, err => {
+        console.log(err);
+      });
+  }
+
+  readNotification(id: number) {
+    this.facade.NotificationSevice.readNotifications(id)
+      .subscribe( err => {
+        console.log(err);
+        this.visible = false;
+      });
+  }
+
+  change(value: boolean): void {
+    console.log(value);
   }
 
   getConsultants() {

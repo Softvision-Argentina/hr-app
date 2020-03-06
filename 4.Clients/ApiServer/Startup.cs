@@ -1,19 +1,24 @@
 ﻿using ApiServer.Security;
 using ApiServer.Security.AuthenticationTest;
+using Core;
 using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
+using Domain.Model;
 using Domain.Services.ExternalServices.Config;
 using Domain.Services.Impl.Services;
 using Domain.Services.Interfaces.Services;
+using Domain.Services.Repositories.EF;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Persistance.EF;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -90,6 +95,8 @@ namespace ApiServer
                 });
                 #endregion
             }
+
+            services.AddSignalR();
 
             services.AddAuthorization(cfg =>
             {
@@ -182,6 +189,12 @@ namespace ApiServer
             }
 
             app.UseAuthentication();
+
+            //app.UseSignalR(route =>
+            //{
+            //    route.MapHub<NotificationsHub>("notification");
+            //});
+
             app.UseMvc();
         }
     }

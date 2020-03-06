@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class firstmigration : Migration
+    public partial class Firstmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -155,13 +155,13 @@ namespace ApiServer.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Version = table.Column<long>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     EmailAddress = table.Column<string>(nullable: true),
                     LinkedInProfile = table.Column<string>(nullable: true),
-                    Cv = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    Cv = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -403,6 +403,60 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: true),
+                    ApplicationUserId = table.Column<int>(nullable: false),
+                    IsRead = table.Column<bool>(nullable: false),
+                    ReferredBy = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Preferences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CasualtiesDashboard = table.Column<bool>(nullable: false),
+                    CompletedDashboard = table.Column<bool>(nullable: false),
+                    ProcessesDashboard = table.Column<bool>(nullable: false),
+                    ProgressDashboard = table.Column<bool>(nullable: false),
+                    ProjectionDashboard = table.Column<bool>(nullable: false),
+                    SkillsDashboard = table.Column<bool>(nullable: false),
+                    TimeToFill1Dashboard = table.Column<bool>(nullable: false),
+                    TimeToFIll2Dashboard = table.Column<bool>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Preferences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Preferences_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskItems",
                 columns: table => new
                 {
@@ -490,7 +544,8 @@ namespace ApiServer.Migrations
                     ContactDay = table.Column<DateTime>(nullable: false),
                     Cv = table.Column<string>(nullable: true),
                     KnownFrom = table.Column<string>(nullable: true),
-                    ReferredBy = table.Column<string>(nullable: true)
+                    ReferredBy = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -517,6 +572,12 @@ namespace ApiServer.Migrations
                         name: "FK_Candidates_Consultants_RecruiterId",
                         column: x => x.RecruiterId,
                         principalTable: "Consultants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Candidates_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -931,6 +992,11 @@ namespace ApiServer.Migrations
                 column: "RecruiterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Candidates_UserId",
+                table: "Candidates",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CandidateSkills_SkillId",
                 table: "CandidateSkills",
                 column: "SkillId");
@@ -998,6 +1064,11 @@ namespace ApiServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ApplicationUserId",
+                table: "Notifications",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OfferStages_ConsultantDelegateId",
                 table: "OfferStages",
                 column: "ConsultantDelegateId");
@@ -1011,6 +1082,12 @@ namespace ApiServer.Migrations
                 name: "IX_OfferStages_ProcessId",
                 table: "OfferStages",
                 column: "ProcessId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Preferences_UserId",
+                table: "Preferences",
+                column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1130,10 +1207,16 @@ namespace ApiServer.Migrations
                 name: "HrStages");
 
             migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
                 name: "OfferStages");
 
             migrationBuilder.DropTable(
                 name: "Postulants");
+
+            migrationBuilder.DropTable(
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "Reservation");
@@ -1146,9 +1229,6 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "TechnicalStages");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Skills");
@@ -1188,6 +1268,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Consultants");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Profiles");

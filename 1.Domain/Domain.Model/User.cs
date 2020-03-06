@@ -1,9 +1,10 @@
 ﻿using Core;
 using Domain.Model.Enum;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Model
 {
-    public class User : Entity<int>
+    public class User : Entity<int> 
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

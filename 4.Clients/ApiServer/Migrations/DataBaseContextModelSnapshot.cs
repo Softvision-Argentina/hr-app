@@ -15,7 +15,7 @@ namespace ApiServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -69,6 +69,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Status");
 
+                    b.Property<int?>("UserId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
@@ -80,6 +82,8 @@ namespace ApiServer.Migrations
                     b.HasIndex("ProfileId");
 
                     b.HasIndex("RecruiterId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Candidates");
                 });
@@ -505,6 +509,27 @@ namespace ApiServer.Migrations
                         .IsUnique();
 
                     b.ToTable("HrStages");
+                });
+
+            modelBuilder.Entity("Domain.Model.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicationUserId");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<string>("ReferredBy");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Model.OfferStage", b =>
@@ -1115,6 +1140,10 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Consultant", "Recruiter")
                         .WithMany("Candidates")
                         .HasForeignKey("RecruiterId");
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Model.CandidateSkill", b =>
@@ -1198,6 +1227,14 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("HrStage")
                         .HasForeignKey("Domain.Model.HrStage", "ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.Notification", b =>
+                {
+                    b.HasOne("Domain.Model.User", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -25,6 +25,7 @@ import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
 import { DeclineReasonService } from "./decline-reason.service";
 import { PreferenceService } from "./preference.service";
+import { NotificationService } from "./notificationsService";
 
 @Injectable()
 export class FacadeService {
@@ -92,6 +93,14 @@ export class FacadeService {
       this._candidateService = this.injector.get(CandidateService);
     }
     return this._candidateService;
+  }
+
+  private _notificationsService: NotificationService;
+  public get NotificationSevice(): NotificationService {
+    if (!this._notificationsService) {
+      this._notificationsService = this.injector.get(NotificationService);
+    }
+    return this._notificationsService;
   }
 
   private _postulantService: PostulantsService;
