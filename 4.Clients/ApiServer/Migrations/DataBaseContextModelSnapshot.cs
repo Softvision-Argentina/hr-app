@@ -290,6 +290,29 @@ namespace ApiServer.Migrations
                     b.ToTable("Cv");
                 });
 
+            modelBuilder.Entity("Domain.Model.Dashboard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dashboards");
+                });
+
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
                 {
                     b.Property<int>("Id")
@@ -659,8 +682,7 @@ namespace ApiServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Preferences");
                 });
@@ -1100,6 +1122,19 @@ namespace ApiServer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Model.UserDashboard", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("DashboardId");
+
+                    b.HasKey("UserId", "DashboardId");
+
+                    b.HasIndex("DashboardId");
+
+                    b.ToTable("UserDashboards");
+                });
+
             modelBuilder.Entity("Domain.Model.Candidate", b =>
                 {
                     b.HasOne("Domain.Model.Community", "Community")
@@ -1222,8 +1257,8 @@ namespace ApiServer.Migrations
             modelBuilder.Entity("Domain.Model.Preference", b =>
                 {
                     b.HasOne("Domain.Model.User", "User")
-                        .WithOne("Preference")
-                        .HasForeignKey("Domain.Model.Preference", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -1327,6 +1362,19 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("TechnicalStage")
                         .HasForeignKey("Domain.Model.TechnicalStage", "ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.UserDashboard", b =>
+                {
+                    b.HasOne("Domain.Model.Dashboard", "Dashboard")
+                        .WithMany("UserDashboards")
+                        .HasForeignKey("DashboardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany("UserDashboards")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -25,13 +25,13 @@ namespace Domain.Services.Repositories.EF
             return Query().Include(c => c.User);
         }
 
-        public override Preference Update(Preference entity)
+        /*public override Preference Update(Preference entity)
         {
             var previousItem = _dbContext.Preferences.Where(t => t.Id == entity.Id);
             _dbContext.Preferences.RemoveRange(previousItem);
            
             return base.Update(entity);
         }
-        
+        */
     }
 }

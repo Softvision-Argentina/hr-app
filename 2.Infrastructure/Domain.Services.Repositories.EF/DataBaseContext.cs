@@ -56,11 +56,13 @@ namespace Domain.Services.Repositories.EF
         public DbSet<CompanyCalendar> CompanyCalendar { get; set; }
         public DbSet<DeclineReason> DeclineReasons { get; set; }
 
-        public DbSet<Preference> Preferences { get; set; }
+        public DbSet<Dashboard> Dashboards { get; set; }
 
         public DbSet<Cv> Cv { get; set; }
 
+        public DbSet<UserDashboard> UserDashboards { get; set; }
 
+        public DbSet<Preference> Preferences { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {
@@ -100,6 +102,19 @@ namespace Domain.Services.Repositories.EF
                 .HasMany(t => t.TaskItems)
                 .WithOne(ti => ti.Task)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserDashboard>().HasKey(ud => new { ud.UserId, ud.DashboardId });
+
+            modelBuilder.Entity<UserDashboard>()
+                .HasOne<User>(ud => ud.User)
+                .WithMany(u => u.UserDashboards)
+                .HasForeignKey(ud => ud.UserId);
+
+
+            modelBuilder.Entity<UserDashboard>()
+                .HasOne<Dashboard>(ud => ud.Dashboard)
+                .WithMany(d => d.UserDashboards)
+                .HasForeignKey(ud => ud.DashboardId);
         }
     }
 }

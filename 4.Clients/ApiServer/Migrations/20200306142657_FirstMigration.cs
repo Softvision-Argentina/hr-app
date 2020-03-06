@@ -51,6 +51,24 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Dashboards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dashboards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeclineReasons",
                 columns: table => new
                 {
@@ -429,6 +447,30 @@ namespace ApiServer.Migrations
                     table.PrimaryKey("PK_Preferences", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Preferences_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserDashboards",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    DashboardId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDashboards", x => new { x.UserId, x.DashboardId });
+                    table.ForeignKey(
+                        name: "FK_UserDashboards_Dashboards_DashboardId",
+                        column: x => x.DashboardId,
+                        principalTable: "Dashboards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserDashboards_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -1049,8 +1091,7 @@ namespace ApiServer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Preferences_UserId",
                 table: "Preferences",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Processes_CandidateId",
@@ -1137,6 +1178,11 @@ namespace ApiServer.Migrations
                 table: "TechnicalStages",
                 column: "ProcessId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDashboards_DashboardId",
+                table: "UserDashboards",
+                column: "DashboardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1190,13 +1236,13 @@ namespace ApiServer.Migrations
                 name: "TechnicalStages");
 
             migrationBuilder.DropTable(
+                name: "UserDashboards");
+
+            migrationBuilder.DropTable(
                 name: "Skills");
 
             migrationBuilder.DropTable(
                 name: "Employees");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Room");
@@ -1206,6 +1252,12 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tasks");
+
+            migrationBuilder.DropTable(
+                name: "Dashboards");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "SkillTypes");

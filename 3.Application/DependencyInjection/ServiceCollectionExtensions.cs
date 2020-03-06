@@ -125,7 +125,7 @@ namespace DependencyInjection
             services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
             services.AddTransient<IPreferenceService, PreferenceService>();
-
+            services.AddTransient<IDashboardService, DashboardService>();
 
         }
 
@@ -180,6 +180,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<Role>, RoleRepository>();
             services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
             services.AddScoped<IRepository<Preference>, PreferenceRepository>();
+            services.AddScoped<IRepository<Dashboard>, DashboardRepository>();
 
 
             services.AddScoped<IStageItemRepository, StageItemRepository>();
