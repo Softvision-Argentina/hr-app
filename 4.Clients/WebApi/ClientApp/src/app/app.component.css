@@ -5,8 +5,7 @@
   }
 }
 
-.container-fluid {
-}
+
 
 .backdrop[_ngcontent-c7] {
   z-index: 0 !important;
@@ -18,4 +17,5 @@
 
 .authenticated{
   margin-left: 125px;
+  margin-top: 75px;
 }

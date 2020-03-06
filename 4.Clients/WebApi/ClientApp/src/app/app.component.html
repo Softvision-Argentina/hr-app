@@ -1,6 +1,7 @@
 <body [ng2-loading]="showSpinner" [config]="loadingConfig">
+  <app-nav-menu *ngIf="isAuthenticated()"></app-nav-menu>
   <app-side-menu></app-side-menu>
-  <div class="container-fluid padding" [ngClass]="" >
+  <div class="container-fluid padding" [ngClass]="{'authenticated': isAuthenticated()}" >
     <router-outlet></router-outlet>
   </div>
 </body>
