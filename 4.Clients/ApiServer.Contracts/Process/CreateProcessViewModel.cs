@@ -31,14 +31,11 @@ namespace ApiServer.Contracts.Process
 
         public float? ActualSalary { get; set; }
 
-        public float? WantedSalary { get; set; }
-
-        public float? AgreedSalary { get; set; }
+        public float? WantedSalary { get; set; }        
 
         public EnglishLevel EnglishLevel { get; set; }
 
-        public Domain.Model.Enum.Seniority Seniority { get; set; }
-        public DateTime OfferDate { get; set; }
+        public Domain.Model.Enum.Seniority Seniority { get; set; }        
         public DateTime HireDate { get; set; }
 
         //public List<CreateStageViewModel> Stages { get; set; }

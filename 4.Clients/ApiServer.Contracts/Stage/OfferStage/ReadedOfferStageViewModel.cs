@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ApiServer.Contracts.Consultant;
+using Domain.Model;
 using Domain.Model.Enum;
 
 namespace ApiServer.Contracts.Stage
@@ -23,14 +24,12 @@ namespace ApiServer.Contracts.Stage
 
         public int? ConsultantDelegateId { get; set; }
         public ReadedConsultantViewModel ConsultantDelegate { get; set; }
-        public string RejectionReason { get; set; }
-        public DateTime OfferDate { get; set; }
+        public string RejectionReason { get; set; }        
         public DateTime HireDate { get; set; }
-        public Seniority Seniority { get; set; }
-        public float AgreedSalary { get; set; }
+        public Seniority Seniority { get; set; }        
         public bool BackgroundCheckDone { get; set; }
         public DateTime? BackgroundCheckDoneDate { get; set; }
         public bool PreocupationalDone { get; set; }
-        public DateTime? PreocupationalDoneDate { get; set; }
+        public DateTime? PreocupationalDoneDate { get; set; }        
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Domain.Services.Contracts.Consultant;
 using Domain.Model.Enum;
+using Domain.Model;
 
 namespace Domain.Services.Contracts.Stage
 {
@@ -24,11 +25,9 @@ namespace Domain.Services.Contracts.Stage
 
         public int? ConsultantDelegateId { get; set; }
         public ReadedConsultantContract ConsultantDelegate { get; set; }
-        public string RejectionReason { get; set; }
-        public DateTime OfferDate { get; set; }
+        public string RejectionReason { get; set; }        
         public DateTime HireDate { get; set; }
-        public Seniority Seniority { get; set; }
-        public float AgreedSalary { get; set; }
+        public Seniority Seniority { get; set; }        
         public bool BackgroundCheckDone { get; set; }
         public DateTime? BackgroundCheckDoneDate { get; set; }
         public bool PreocupationalDone { get; set; }
