@@ -11,8 +11,6 @@ export class SideMenuComponent implements OnInit {
 
   ngOnInit() {
   }
-  isAuthenticated() {
-    return localStorage.getItem('currentUser') !== null ? true : false;
-  }
+
 
 }
