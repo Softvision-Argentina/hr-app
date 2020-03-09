@@ -4,6 +4,7 @@
   height: 75px;
   justify-content: space-between;
   align-items: center;
+  background-color: #ffffff;
 }
 .main-nav__input {
   width: 100%;
@@ -26,9 +27,33 @@ input:focus{
 }
 
 .main-nav .avatar{
-  align-self: center;
-  padding-right:  90px;
+  align-self: flex-start;
   flex-shrink: 0;
+  
+}
+.main-nav .avatar:hover{
+  cursor: pointer;
+}
+
+.avatar .user-info{
+  padding-right: 90px;
+  margin-top: 15px;
+}
+
+nz-list-item{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  
+}
+nz-list-item:hover{
+  cursor: pointer;
+}
+nz-list-item i{
+  
+  margin-top: 12px;
+  font-size: 30px;
+  
 }
 
 
