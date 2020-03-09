@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, TemplateRef, OnInit } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
@@ -12,17 +12,21 @@ import { FacadeService } from '../services/facade.service';
   styleUrls: ['./nav-menu.component.css'],
   providers: [GoogleSigninComponent]
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit {
 
   constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
     private facade: FacadeService) { }
 
   isExpanded = false;
   currentUser: User;
+  showUserSettings = false;
 
   logoStyle = {
     'width': '10%',
     'height': '10%'
+  }
+  ngOnInit(){
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   collapse() {
@@ -65,6 +69,15 @@ export class NavMenuComponent {
       nzFooter: null,
       nzWidth: '30%'
     });
+
   }
- 
+
+  onSearchChange( search: string) {
+    console.log('Search');
+  }
+
+  changeUserSettings() {
+    this.showUserSettings = !this.showUserSettings;
+  }
+
 }
