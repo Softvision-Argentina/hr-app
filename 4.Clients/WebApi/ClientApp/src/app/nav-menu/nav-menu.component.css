@@ -38,6 +38,8 @@ input:focus{
 .avatar .user-info{
   padding-right: 90px;
   margin-top: 15px;
+  font-size: 20px;
+  font-family: "ProximaNova-Semibold";
 }
 
 nz-list-item{
