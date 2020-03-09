@@ -78,7 +78,6 @@ export class NavMenuComponent implements OnInit {
 
   changeUserSettings() {
     this.showUserSettings = !this.showUserSettings;
-    console.log(this.currentUser);
   }
 
 }

@@ -8,8 +8,7 @@
         <div class="avatar" (click)="changeUserSettings()">
             <div class="user-info">
                 {{currentUser.Name}}
-                <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
-
+                <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.ImgURL}}"></nz-avatar>
             </div>
             <div *ngIf="showUserSettings">
                 <nz-card nzTitle="{{currentUser.Name}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
@@ -18,11 +17,11 @@
                         <nz-list-item>
                             {{currentUser.Email}}
                         </nz-list-item>
-                        <nz-list-item >
+                        <nz-list-item (click)="showPreferencesModal(preferencesModal)" >
                             Manage Preferences
                             <i nz-icon nzType="setting" nzTheme="outline"></i>
                         </nz-list-item>
-                        <nz-list-item>
+                        <nz-list-item (click)="logout()">
                             Logout
                             <i nz-icon nzType="logout" nzTheme="outline"></i>
                         </nz-list-item>
