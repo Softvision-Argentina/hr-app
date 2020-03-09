@@ -137,6 +137,7 @@ import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferService } from './services/offer.service';
 
@@ -219,7 +220,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportTimetofill1Component,
       DeclineReasonComponent,
       HasRoleDirective,
-      ReportDeclineReasonsComponent,            
+      ReportDeclineReasonsComponent,
+      ReportTimetofill1Component,
+      SideMenuComponent,
       OfferHistory
    ],
    imports: [
