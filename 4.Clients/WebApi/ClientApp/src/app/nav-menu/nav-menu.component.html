@@ -1,12 +1,16 @@
 <header>
     <nav class="main-nav">
-        <input>
-        <div>
-            <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
+        <div class="main-nav__input">
+            <i nz-icon nzType="search" nzTheme="outline" style="font-size: 30px;"></i>
+            <input placeholder="Search..." (input)="OnSearchChange($event.target.value)">
+        </div>
+        <div class="avatar" (click)="showPreferencesModal(preferencesModal)">
             Mariana
+            <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
         </div>
     </nav>
 </header>
+
 <!--
 
 

@@ -65,6 +65,10 @@ export class NavMenuComponent {
       nzFooter: null,
       nzWidth: '30%'
     });
+
   }
- 
+
+  onSearchChange( search: string) {
+    console.log('Search');
+  }
 }
