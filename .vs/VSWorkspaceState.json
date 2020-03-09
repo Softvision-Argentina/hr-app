@@ -1,13 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\4.Clients\\WebApi",
-    "\\4.Clients\\WebApi\\ClientApp",
-    "\\4.Clients\\WebApi\\ClientApp\\src",
-    "\\4.Clients\\WebApi\\ClientApp\\src\\app",
-    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes",
-    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes",
-    "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes\\processes-table"
+    ""
   ],
   "SelectedNode": "\\Seed.sln",
   "PreviewInSolutionExplorer": false

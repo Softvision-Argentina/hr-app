@@ -17,14 +17,16 @@ export class ProcessTableComponent implements OnInit {
 
   profileId;
 
-  //@Output() candidateId = new EventEmitter();
+  @Output() candidateId = new EventEmitter();
 
   ngOnInit() {
-    
+
+    // console.log(this.profiles)
+
   }
 
-  //emitCandidateId(val){
+  // emitCandidateId(val){
   //  this.candidateId.emit(val)
-  //} 
-  
+  // } 
+
 }
