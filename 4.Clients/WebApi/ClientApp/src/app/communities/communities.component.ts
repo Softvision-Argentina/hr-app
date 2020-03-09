@@ -71,7 +71,7 @@ export class CommunitiesComponent implements OnInit {
   }
 
   getCandidateProfiles(){
-    this.facade.candidateProfileService.get<CandidateProfile>()
+    this.facade.candidateProfileService.get()
     .subscribe(res => {
       this.candidateprofiles = res;
     }, err => {
@@ -130,7 +130,7 @@ export class CommunitiesComponent implements OnInit {
                 profileId: this.validateForm.controls['profileId'].value.toString(),
                 profile: null
               }
-              this.facade.communityService.add<Community>(newCommunity)
+              this.facade.communityService.add(newCommunity)
                 .subscribe(res => {          
                   
                   //this.settings.getCommunities();        
@@ -193,7 +193,7 @@ export class CommunitiesComponent implements OnInit {
                 profileId: this.validateForm.controls['profileId'].value.toString(),
                 profile: null 
               }
-              this.facade.communityService.update<Community>(id, editedCommunity)
+              this.facade.communityService.update(id, editedCommunity)
                 .subscribe(res => {
                   this.settings.getCommunities();
                   this.facade.toastrService.success('Community was successfully edited !');
@@ -218,7 +218,7 @@ export class CommunitiesComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.communityService.delete<Community>(communityID)
+      nzOnOk: () => this.facade.communityService.delete(communityID)
         .subscribe(res => {
           this.settings.getCommunities();
           this.facade.toastrService.success('Community was deleted !');

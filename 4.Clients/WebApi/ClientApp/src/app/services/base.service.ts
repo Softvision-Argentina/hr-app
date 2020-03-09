@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { ErrorResponse } from '../../entities/ErrorResponse';
 
 @Injectable()
-export class BaseService {
+export class BaseService<T> {
   public headers: HttpHeaders;
   public headersWithAuth: HttpHeaders;
   public token: string;
@@ -25,7 +25,7 @@ export class BaseService {
     this.apiUrl = this.config.getConfig('apiUrl');
   }
 
-  public get<T>(urlAdd?:string): Observable<T[]> {    
+  public get(urlAdd?:string): Observable<T[]> {    
     const url = urlAdd == undefined ? this.apiUrl : `${this.apiUrl}/${urlAdd}`;
     return this.http.get<T[]>(url, 
       {headers: this.headersWithAuth, observe: "body"})
@@ -35,7 +35,7 @@ export class BaseService {
       );
   }
 
-  public getByID<T>(id: number): Observable<T> {
+  public getByID(id: number): Observable<T> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<T>(url, {
       headers: this.headersWithAuth
@@ -45,7 +45,7 @@ export class BaseService {
       );
   }
 
-  public add<T>(entity: T): Observable<T> {
+  public add(entity: T): Observable<T> {
     return this.http.post<T>(this.apiUrl, entity, {
       headers: this.headersWithAuth
     })
@@ -54,7 +54,7 @@ export class BaseService {
       );
   }
 
-  public update<T>(id, entity: T): Observable<any> {
+  public update(id, entity: T): Observable<any> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.put(url, entity, {
       headers: this.headersWithAuth
@@ -64,7 +64,7 @@ export class BaseService {
     );
   }
 
-  public delete<T>(id): Observable<T> {
+  public delete(id): Observable<T> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<T>(url, {
       headers: this.headersWithAuth

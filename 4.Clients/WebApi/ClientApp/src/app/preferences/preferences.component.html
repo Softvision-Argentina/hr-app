@@ -1,0 +1,26 @@
+<nz-list>    
+       <nz-list-item class="list-container">
+         <span class="ant-typography"> Processes Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.processesDashboard" (ngModelChange)="updatePreferences()"></nz-switch>      
+       </nz-list-item>     
+       <nz-list-item>
+          <span class="ant-typography"> Top 3 Known Skills Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.skillsDashboard" (ngModelChange)="updatePreferences()"></nz-switch>       
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Progress Processes Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.progressDashboard" (ngModelChange)="updatePreferences()"></nz-switch>        
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Completed Processes Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.completedDashboard" (ngModelChange)="updatePreferences()"></nz-switch>       
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Casualties and actual hires comparation Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.casualtiesDashboard" (ngModelChange)="updatePreferences()"></nz-switch>        
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Hire Projection Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.projectionDashboard" (ngModelChange)="updatePreferences()"></nz-switch>        
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Average: Interview date - Offer Accepted Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.timeToFill1Dashboard" (ngModelChange)="updatePreferences()"></nz-switch>         
+        </nz-list-item>
+        <nz-list-item>
+          <span class="ant-typography"> Average: Interview date - Hire Date Dashboard</span> <nz-switch class="ant-list-item" [(ngModel)]="preference.timeToFIll2Dashboard" (ngModelChange)="updatePreferences()"></nz-switch>         
+        </nz-list-item>
+</nz-list>

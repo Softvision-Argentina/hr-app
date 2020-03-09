@@ -1,9 +1,6 @@
 {
   "ExpandedNodes": [
     "",
-    "\\2.Infrastructure",
-    "\\2.Infrastructure\\Domain.Services.Repositories.EF",
-    "\\4.Clients",
     "\\4.Clients\\WebApi",
     "\\4.Clients\\WebApi\\ClientApp",
     "\\4.Clients\\WebApi\\ClientApp\\src",
@@ -12,6 +9,6 @@
     "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes",
     "\\4.Clients\\WebApi\\ClientApp\\src\\app\\processes\\processes\\processes-table"
   ],
-  "SelectedNode": "\\2.Infrastructure\\Domain.Services.Repositories.EF\\SeedMigrator.cs",
+  "SelectedNode": "\\Seed.sln",
   "PreviewInSolutionExplorer": false
 }

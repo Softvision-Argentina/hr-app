@@ -110,6 +110,7 @@ import { RoleService } from './services/role.service';
 import { RoleComponent } from './role/role.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { CompanyCalendarService } from './services/company-calendar.service';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientJsonpModule } from '@angular/common/http';
@@ -131,10 +132,15 @@ import { ReportTimetofill2Component } from './dashboard/report-timetofill2/repor
 import { ReportTimetofill1Component } from './dashboard/report-timetofill1/report-timetofill1.component';
 import { DeclineReasonComponent } from './decline-reasons/decline-reasons.component';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
-
+import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
+import { OfferHistory } from './stages/offer-history/offer-history.component';
+import { OfferService } from './services/offer.service';
 
 
 registerLocaleData(en);
@@ -212,8 +218,14 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LocationsComponent,
       ProfilesComponent,
       PostulantsComponent,
-      DeclineReasonComponent,      
-      ReportTimetofill1Component
+      PreferencesComponent,
+      ReportTimetofill1Component,
+      DeclineReasonComponent,
+      HasRoleDirective,
+      ReportDeclineReasonsComponent,
+      ReportTimetofill1Component,
+      SideMenuComponent,
+      OfferHistory
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -221,6 +233,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CommonModule,
     HttpClientModule,
     FormsModule,
+    FileUploadModule,
     ReactiveFormsModule,
     HttpModule,
     MatInputModule,
@@ -325,6 +338,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CompanyCalendarService,
     PostulantsService,
     DeclineReasonService,
+    OfferService,
     // MatDatepickerModule,
     // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }

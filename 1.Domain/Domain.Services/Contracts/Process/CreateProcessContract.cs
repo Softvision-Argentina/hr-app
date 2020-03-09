@@ -28,14 +28,11 @@ namespace Domain.Services.Contracts.Process
 
         public float? ActualSalary { get; set; }
 
-        public float? WantedSalary { get; set; }
-
-        public float? AgreedSalary { get; set; }
+        public float? WantedSalary { get; set; }        
         
         public string EnglishLevel { get; set; }
 
-        public Seniority Seniority { get; set; }
-        public DateTime OfferDate { get; set; }
+        public Seniority Seniority { get; set; }        
         public DateTime HireDate { get; set; }
 
         //public List<CreateStageContract> Stages { get; set; }

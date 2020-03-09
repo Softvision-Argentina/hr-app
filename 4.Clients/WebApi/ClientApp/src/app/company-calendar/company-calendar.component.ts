@@ -62,7 +62,7 @@ export class CompanyCalendarComponent implements OnInit {
   }
 
   getCompanyCalendar(){
-    this.facade.companyCalendarService.get<CompanyCalendar>()
+    this.facade.companyCalendarService.get()
       .subscribe(res => {
         this.listOfCompanyCalendar = res.sort( (a,b) => {
           let d1 = new Date(a.date);
@@ -128,7 +128,7 @@ export class CompanyCalendarComponent implements OnInit {
                 date: this.validateForm.controls['date'].value.toISOString(),
                 comments : this.validateForm.controls['comments'].value.toString()
               }
-              this.facade.companyCalendarService.add<CompanyCalendar>(newCompanyCalendar)
+              this.facade.companyCalendarService.add(newCompanyCalendar)
                 .subscribe(res => {
                   this.getCompanyCalendar();
                   this.controlArray = [];
@@ -193,7 +193,7 @@ export class CompanyCalendarComponent implements OnInit {
                 date: newDate,
                 comments : this.validateForm.controls['comments'].value.toString()
               }
-              this.facade.companyCalendarService.update<CompanyCalendar>(id, editedCompanyCalendar)
+              this.facade.companyCalendarService.update(id, editedCompanyCalendar)
                 .subscribe(res => {
                   this.getCompanyCalendar();
                   this.facade.toastrService.success('festivity/reminder day was successfully edited !');
@@ -223,7 +223,7 @@ export class CompanyCalendarComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.companyCalendarService.delete<CompanyCalendar>(CompanyCalendarID)
+      nzOnOk: () => this.facade.companyCalendarService.delete(CompanyCalendarID)
         .subscribe(res => {
           this.getCompanyCalendar();
           this.facade.toastrService.success('festivity/reminder day was deleted !');

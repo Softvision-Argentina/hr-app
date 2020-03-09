@@ -31,7 +31,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
   }
 
   getEmployeeCasualties() {
-    this.facade.employeeCasulatyService.get<EmployeeCasualty>()
+    this.facade.employeeCasulatyService.get()
       .subscribe(res => {
         this.employeecasualties = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         this.listOfDisplayData = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
@@ -83,7 +83,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
                 month: month,
                 year: year
               }
-              this.facade.employeeCasulatyService.add<EmployeeCasualty>(newCasualty)
+              this.facade.employeeCasulatyService.add(newCasualty)
                 .subscribe(res => {
                   this.getEmployeeCasualties();
                   this.app.hideLoading();
@@ -136,7 +136,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
                 month: month,
                 year: year
               }
-              this.facade.employeeCasulatyService.update<EmployeeCasualty>(editedCasualty.id, editedCasualty)
+              this.facade.employeeCasulatyService.update(editedCasualty.id, editedCasualty)
                 .subscribe(res => {
                   this.getEmployeeCasualties();
                   this.app.hideLoading();
@@ -164,7 +164,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.employeeCasulatyService.delete<EmployeeCasualty>(employeeCasualtyId)
+      nzOnOk: () => this.facade.employeeCasulatyService.delete(employeeCasualtyId)
         .subscribe(res => {
           this.getEmployeeCasualties();
           this.facade.toastrService.success('Casualty was deleted !');

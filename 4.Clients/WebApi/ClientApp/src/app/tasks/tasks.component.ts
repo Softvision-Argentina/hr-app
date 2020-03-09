@@ -52,7 +52,7 @@ export class TasksComponent implements OnInit {
   }
 
   getConsultants() {
-    this.facade.consultantService.get<Consultant>()
+    this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
         this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.Email.toLowerCase())[0];
@@ -64,7 +64,7 @@ export class TasksComponent implements OnInit {
   getTasks() {
     if (this.app.isUserRole(["HRManagement", "Admin"])) {
       console.log()
-      this.facade.taskService.get<Task>()
+      this.facade.taskService.get()
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
@@ -119,7 +119,7 @@ export class TasksComponent implements OnInit {
         let index: number = this.toDoList.indexOf(updateTask);
         let displayIndex: number = this.toDoListDisplay.indexOf(updateTask);
 
-        this.facade.taskService.delete<Task>(id)
+        this.facade.taskService.delete(id)
           .subscribe(res => {
             if (index !== -1 && displayIndex !== -1) {
               this.toDoList.splice(index, 1);
@@ -149,7 +149,7 @@ export class TasksComponent implements OnInit {
     let itemIndex = task.taskItems.indexOf(item);
     taskItem.checked = !taskItem.checked;
 
-    this.facade.taskService.update<Task>(task.id, task)
+    this.facade.taskService.update(task.id, task)
       .subscribe(res => {
         this.toDoList[index].taskItems[itemIndex] = taskItem;
         this.toDoList[index].isNew = false;
@@ -182,7 +182,7 @@ export class TasksComponent implements OnInit {
       updateTask.taskItems.push(newItem);
       if (updateTask.isApprove) updateTask.isApprove = false;
 
-      this.facade.taskService.update<Task>(updateTask.id, updateTask)
+      this.facade.taskService.update(updateTask.id, updateTask)
         .subscribe(res => {
           this.toDoList[this.toDoList.indexOf(updateTask)] = updateTask;
           this.toDoList[this.toDoList.indexOf(updateTask)].isNew = false;
@@ -211,7 +211,7 @@ export class TasksComponent implements OnInit {
 
     updateTask.taskItems.splice(itemIndex, 1);
 
-    this.facade.taskService.update<Task>(updateTask.id, updateTask)
+    this.facade.taskService.update(updateTask.id, updateTask)
       .subscribe(res => {
         this.toDoList[taskIndex].isNew = false;
 
@@ -309,7 +309,7 @@ export class TasksComponent implements OnInit {
                   i++;
                 });
               }
-              this.facade.taskService.add<Task>(newTask)
+              this.facade.taskService.add(newTask)
                 .subscribe(res => {
                   console.log(res);
                   newTask.id = res.id;

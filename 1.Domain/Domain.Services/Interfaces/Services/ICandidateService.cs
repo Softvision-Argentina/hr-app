@@ -1,4 +1,5 @@
-﻿using Domain.Services.Contracts.Candidate;
+﻿using Domain.Model;
+using Domain.Services.Contracts.Candidate;
 using Domain.Services.Contracts.Seed;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace Domain.Services.Interfaces.Services
         void Delete(int id);
         IEnumerable<ReadedCandidateContract> List();
         IEnumerable<ReadedCandidateAppContract> ListApp();
+        IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filter);
+        Candidate GetCandidate(int id);
     }
 }

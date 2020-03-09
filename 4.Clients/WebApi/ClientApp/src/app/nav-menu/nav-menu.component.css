@@ -1,3 +1,4 @@
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -40,7 +41,8 @@ html {
 nav {
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
-  width: 100%; /* Full width */
+  width: calc(100% - 140px); /* Full width */
+  margin-left: 140px;
   z-index: 3;
 }
 
@@ -68,3 +70,8 @@ span.buttonText {
 #loginBtn:hover {
   cursor: pointer;
 }
+
+.ant-card-actions li span{
+  display: grid;
+}
+

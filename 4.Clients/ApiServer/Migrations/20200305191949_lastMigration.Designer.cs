@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200217162602_firstMigration")]
-    partial class firstMigration
+    [Migration("20200305191949_lastMigration")]
+    partial class lastMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -263,6 +263,35 @@ namespace ApiServer.Migrations
                     b.ToTable("Consultants");
                 });
 
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CandidateId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("PublicId");
+
+                    b.Property<string>("Url");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Cv");
+                });
+
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
                 {
                     b.Property<int>("Id")
@@ -480,13 +509,42 @@ namespace ApiServer.Migrations
                     b.ToTable("HrStages");
                 });
 
-            modelBuilder.Entity("Domain.Model.OfferStage", b =>
+            modelBuilder.Entity("Domain.Model.Offer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("AgreedSalary");
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<DateTime?>("OfferDate");
+
+                    b.Property<int>("ProcessId");
+
+                    b.Property<string>("RejectionReason");
+
+                    b.Property<float>("Salary");
+
+                    b.Property<int>("Status");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Offer");
+                });
+
+            modelBuilder.Entity("Domain.Model.OfferStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("BackgroundCheckDone");
 
@@ -509,8 +567,6 @@ namespace ApiServer.Migrations
                     b.Property<string>("LastModifiedBy");
 
                     b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<DateTime>("OfferDate");
 
                     b.Property<bool>("PreocupationalDone");
 
@@ -592,6 +648,48 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Postulants");
+                });
+
+            modelBuilder.Entity("Domain.Model.Preference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CasualtiesDashboard");
+
+                    b.Property<bool>("CompletedDashboard");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<bool>("ProcessesDashboard");
+
+                    b.Property<bool>("ProgressDashboard");
+
+                    b.Property<bool>("ProjectionDashboard");
+
+                    b.Property<bool>("SkillsDashboard");
+
+                    b.Property<bool>("TimeToFIll2Dashboard");
+
+                    b.Property<bool>("TimeToFill1Dashboard");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Preferences");
                 });
 
             modelBuilder.Entity("Domain.Model.Process", b =>
@@ -1085,6 +1183,14 @@ namespace ApiServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Domain.Model.Cv", b =>
+                {
+                    b.HasOne("Domain.Model.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
                 {
                     b.HasOne("Domain.Model.Employee", "Employee")
@@ -1137,6 +1243,14 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("OfferStage")
                         .HasForeignKey("Domain.Model.OfferStage", "ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.Preference", b =>
+                {
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithOne("Preference")
+                        .HasForeignKey("Domain.Model.Preference", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -274,7 +274,7 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   getSkills() {
-    this.facade.skillService.get<Skill>()
+    this.facade.skillService.get()
       .subscribe(res => {
         this.skills = res;
       }, err => {

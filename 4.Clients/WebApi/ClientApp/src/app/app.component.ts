@@ -14,7 +14,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
 export class AppComponent implements OnInit {
   title = 'app';
 
-  showSpinner: boolean = true;
+  showSpinner = true;
 
   loadingConfig: INg2LoadingSpinnerConfig = {
     animationType: ANIMATION_TYPES.scalingBars,
@@ -25,7 +25,8 @@ export class AppComponent implements OnInit {
     spinnerSize: 'xl'
   };
 
-  constructor(private renderer: Renderer2, private google: GoogleSigninComponent, private facade: FacadeService, private config: AppConfig) {
+  constructor(private renderer: Renderer2, private google: GoogleSigninComponent,
+     private facade: FacadeService, private config: AppConfig) {
     setTimeout(() => {
       this.showSpinner = false;
     }, 1500);
@@ -38,29 +39,25 @@ export class AppComponent implements OnInit {
   changeBg() {
     if (this.google.isUserAuthenticated()) {
       this.removeBgImage();
-    }
-    else {
+    } else {
       this.renderBgImage();
     }
   }
 
   isUserRole(roles: string[]): boolean {
-    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser.Role == "") this.facade.userService.getRoles();
-    if (roles[0] == "ALL") roles = this.config.getConfig('roles');
-    if (roles.indexOf(currentUser.Role) !== -1) return true;
-    else return false;
+    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser.Role === '') { this.facade.userService.getRoles(); }
+    if (roles[0] === 'ALL') { roles = this.config.getConfig('roles'); }
+    if (roles.indexOf(currentUser.Role) !== -1) { return true; } else { return false; }
   }
 
   renderBgImage() {
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-image', "url('./../assets/images/welcomeAbstract.jpg')");
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', '100% 100%');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-position', 'top center');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-repeat', 'no-repeat');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', 'cover');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'width', '100%');
     this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'height', '100%');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'margin-top', '-8%');
   }
 
   removeBgImage() {
@@ -74,5 +71,8 @@ export class AppComponent implements OnInit {
 
   hideLoading() {
     this.showSpinner = false;
+  }
+  isAuthenticated() {
+    return localStorage.getItem('currentUser') !== null ? true : false;
   }
 }
