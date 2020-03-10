@@ -30,8 +30,14 @@ nz-step {
     cursor: pointer;
 }
 .padding{
-    padding: 90px 300px;
+    padding: 60px 213px 20px 213px;
+
 }
+
+.padding-info{
+    padding: 0px 213px 0px 213px;
+}
+
 
 .alert-info {
     text-align: center;
