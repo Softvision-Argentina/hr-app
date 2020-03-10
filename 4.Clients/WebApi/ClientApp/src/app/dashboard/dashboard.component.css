@@ -14,3 +14,12 @@
   span {
     font-size: large;
   }
+
+  .padding {
+    background: #ECECEC;
+    padding: 35px 0px 1px 40px;
+    margin-top: 77px;
+    width: 65%;
+    margin-left: auto;
+    margin-right: auto;
+  }

@@ -28,13 +28,11 @@ namespace ApiServer.Contracts.Process
         public int? ConsultantDelegateId { get; set; }
 
         public float? ActualSalary { get; set; }
-        public float? WantedSalary { get; set; }
-        public float? AgreedSalary { get; set; }
+        public float? WantedSalary { get; set; }        
 
         public EnglishLevel EnglishLevel { get; set; }
 
-        public Seniority Seniority { get; set; }
-        public DateTime OfferDate { get; set; }
+        public Seniority Seniority { get; set; }        
         public DateTime HireDate { get; set; }
 
         //public List<UpdateStageViewModel> Stages { get; set; }

@@ -1,0 +1,93 @@
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <button nz-button nzType='primary' (click)="addOffer(editModal)" [disabled]="offerConcluded()">Add offer</button>
+  </div>
+  <nz-form-explain class="text-danger" *ngIf="offerConcluded()">
+    Can't add an offer if the last one is pending or accepted
+  </nz-form-explain>  
+</div>
+<br>
+<nz-table nzBordered [nzData]="offers" [nzPageSize]="10">  
+  <thead>
+      <tr>
+          <th>Date</th>
+          <th>Offer</th>
+          <th>Status</th>
+          <th>Rejection reason</th>
+          <th>Actions</th>
+      </tr>
+  </thead>
+  <tbody>    
+    <tr *ngFor ="let offer of offers;let i = index">
+      <td scope="row"> 
+        {{ offer.offerDate | date: 'dd/MM/yyyy' }}
+      </td>
+      <td scope="row"> 
+        ${{ offer.salary }}
+      </td>
+      <td scope="row"> 
+        <nz-badge [nzStatus]="getStatusColor(offer.status)" style="margin-right: 3%; margin-top: -2%;"></nz-badge>
+        {{ getStatusName(offer.status) }}
+      </td>
+      <td scope="row">              
+          <input
+          [ngModel]="offer.rejectionReason"           
+          #reasonInput="ngModel"
+          (focusout)="editRejectionReason(offer.id, reasonInput.value)" 
+          type="text" 
+          nz-input          
+          [disabled]="offer.status != 0" 
+          [readonly]="offer.status != 0" 
+          value= "{{ offer.rejectionReason }}"            
+          pattern="[0-9]+([\.,][0-9]+)?"        
+          >     
+          <div>
+            <span class="text-danger" *ngIf= "reasonInput.value == '' && !reasonInput.disabled">
+              Please input the rejection reason
+            </span>
+          </div>
+      </td>
+      <td [style.text-align]="center">              
+        <i *ngIf="offer.status == 2" nzTitle="Decline" (click)="editStatus('Declined', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
+          <nz-divider *ngIf="offer.status == 2" nzType="vertical"></nz-divider>
+        <i *ngIf="offer.status == 2" nzTitle="Accept" (click)="editStatus('Accepted', offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
+          <nz-divider *ngIf="offer.status == 2" nzType="vertical"></nz-divider>        
+        <i nzTitle="Delete" (click)="showDeleteConfirm(offer.id)" style="cursor: pointer;" nz-tooltip nz-icon type="delete" theme="outline"></i>        
+      </td>
+    </tr>    
+  </tbody>
+</nz-table>
+<br>
+<button nz-button nzType='primary' (click)="validateReasons()">Back to stages</button>
+
+
+<ng-template #editModal>
+  <form nz-form [formGroup]="editForm" [nzLayout]="'horizontal'">
+      <div nz-row>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="offerDate">Offer Date</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                  <nz-date-picker style="width: 100%;" formControlName="offerDate"></nz-date-picker>
+                  <nz-form-explain *ngIf="editForm.get('offerDate').dirty && editForm.get('offerDate').errors">
+                      Please input a offer date
+                  </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+      </div>
+      <div nz-row>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="salaryOffer">Salary offer</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="number" nz-input formControlName="salaryOffer" id="salaryOffer" placeholder="Please input the salary offer" pattern="[0-9]+([\.,][0-9]+)?">
+                    <nz-form-explain *ngIf="editForm.get('salaryOffer').dirty && editForm.get('salaryOffer').errors">
+                        Please input the salary offer
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+          </div>
+      </div>
+  </form>
+</ng-template>

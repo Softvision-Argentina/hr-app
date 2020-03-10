@@ -29,6 +29,9 @@
 nz-step {
     cursor: pointer;
 }
+.padding{
+    padding: 90px 300px;
+}
 
 .alert-info {
     text-align: center;

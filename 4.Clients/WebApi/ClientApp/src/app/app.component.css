@@ -12,3 +12,7 @@
 .backdrop[_ngcontent-c7] {
   z-index: 0 !important;
 }
+.padding {
+  padding: 0px 0px;
+  height: 100%;
+}

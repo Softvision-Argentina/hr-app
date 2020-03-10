@@ -30,6 +30,7 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
+import { Offer } from 'src/entities/offer';
 
 @Component({
   selector: 'app-processes',
@@ -794,8 +795,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,
-      agreedSalary: 0,
+      wantedSalary: 0,      
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: null,
@@ -899,8 +899,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonId: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,
-      agreedSalary: 0,
+      wantedSalary: 0,      
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: {
@@ -947,17 +946,15 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         feedback: '',
         consultantOwnerId: candidate.recruiter.id,
         consultantDelegateId: null,
-        processId: 0,
-        agreedSalary: 0,
-        seniority: SeniorityEnum.NA,
-        offerDate: new Date(),
+        processId: 0,        
+        seniority: SeniorityEnum.NA,        
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date()
+        preocupationalDoneDate: new Date()        
       },
-    };
+    };    
   }
 
   isDeclined(process: Process) : Boolean {
