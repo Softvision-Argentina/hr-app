@@ -236,8 +236,29 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReferred">Is Referred
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <label nz-checkbox formControlName="isReferred"></label>
+                        <label nz-checkbox  formControlName="isReferred"></label>
                         <!--in the future we could use something like (ngModelChange)="referredBy($event)" to show an input for the referring employee.-->
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row *ngIf="isReferred()">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" > Referred By: </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                        <input type="text"  nz-input formControlName="referredBy" id="referredBy" required>
+                        <nz-form-explain *ngIf="validateForm.get('referredBy').dirty && validateForm.get('referredBy').invalid">
+                           <ng-container> if referredBy is selected, this input is required  </ng-container>
+                        </nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="knownFrom">Known For</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <input type="text" nz-input formControlName="knownFrom" id="knownFrom">
                     </nz-form-control>
                 </nz-form-item>
             </div>

@@ -162,7 +162,9 @@ export class CandidatesComponent implements OnInit {
       preferredOffice: [null],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
-      isReferred: [null]
+      isReferred: [null],
+      referredBy: [null],
+      knownFrom: [null]
     });
   }
 
@@ -205,6 +207,7 @@ export class CandidatesComponent implements OnInit {
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     // Edit Consultant Modal
+    
     this.resetForm();
     this.getSkills();
     if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }
@@ -234,12 +237,19 @@ export class CandidatesComponent implements OnInit {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
+            // tslint:disable-next-line: forin
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid) &&
-                (this.validateForm.controls[i] !== this.validateForm.controls['phoneNumberPrefix'])) { isCompleted = false; }
+              // tslint:disable-next-line: max-line-length
+              if ((!this.validateForm.controls[i].valid) && (this.validateForm.controls[i] !== this.validateForm.controls['phoneNumberPrefix'])) {
+                if (this.validateForm.controls['isReferred'].value === true && this.validateForm.controls['referredBy'].invalid) {
+                  isCompleted = false;
+                }
+
+              }
             }
+
             if (isCompleted) {
               const candidateSkills: CandidateSkill[] = [];
               this.controlEditArray.forEach(skillEdit => {
@@ -264,6 +274,13 @@ export class CandidatesComponent implements OnInit {
                 };
                 candidateSkills.push(skill);
               });
+              const referredBy = this.validateForm.controls['isReferred'].value === false ? null : this.validateForm.controls['referredBy'].value;
+              let knownFrom;
+              if (this.validateForm.controls['isReferred'].value === false || this.validateForm.controls['knownFrom'].value === '') {
+                knownFrom = null;
+              } else{
+                knownFrom = this.validateForm.controls['knownFrom'].value;
+              }
               editedCandidate = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
@@ -285,9 +302,9 @@ export class CandidatesComponent implements OnInit {
                 community: new Community(this.validateForm.controls['community'].value),
                 isReferred: this.validateForm.controls['isReferred'].value,
                 // contactDay: this.validateForm.controls['contactDay'].value
-                cv: this.validateForm.controls['isReferred'].value,
-                knownFrom: this.validateForm.controls['knownFrom'].value,
-                referredBy: this.validateForm.controls['referredBy'].value
+                cv: null,
+                knownFrom: knownFrom,
+                referredBy: referredBy
               }
               if (this.validateForm.controls['phoneNumber'].value) {
                 editedCandidate.phoneNumber += this.validateForm.controls['phoneNumber'].value.toString();
@@ -414,6 +431,9 @@ export class CandidatesComponent implements OnInit {
 
   fillCandidateForm(candidate: Candidate) {
     // let statusIndex = this.statusList.filter(status => status.name.toLowerCase() === candidate.status.toLowerCase())[0].id;
+    const candidateReferredBy = candidate.referredBy !== null ? candidate.referredBy : '';
+    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom  : '';
+
     this.validateForm.controls['dni'].setValue(candidate.dni);
     this.validateForm.controls['name'].setValue(candidate.name);
     this.validateForm.controls['lastName'].setValue(candidate.lastName);
@@ -429,6 +449,9 @@ export class CandidatesComponent implements OnInit {
     this.validateForm.controls['community'].setValue(candidate.community.id);
     this.validateForm.controls['profile'].setValue(candidate.profile.id);
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
+    this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
+    this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
+
 
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
@@ -464,5 +487,18 @@ export class CandidatesComponent implements OnInit {
   getStatus(status: number): string {
     return this.statusList.filter(st => st.id === status)[0].name;
   }
+  isReferred() {
+    if (this.validateForm.controls['isReferred'].value === null || this.validateForm.controls['isReferred'].value === false) {
+      return false;
+    }
+    return true;
+  }
+
+
+
+
+
+
+
 
 }
