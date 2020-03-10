@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Persistance;
+using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
