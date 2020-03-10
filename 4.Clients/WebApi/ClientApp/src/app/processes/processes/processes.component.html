@@ -120,7 +120,7 @@
                         <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
                         {{ getCurrentStage(process.currentStage) }}
                     </td>
-                    <td scope="row"><a *ngIf="process.candidate.recruiter" style="color: #1890ff;" (click)="showConsultantDetailsModal(process.consultantOwner.id, consultantDetailModal)">{{ process.candidate.recruiter.name }}
+                    <td scope="row"><a *ngIf="process.candidate.recruiter" style="color: #1890ff;" (click)="showConsultantDetailsModal(process.candidate.recruiter.id, consultantDetailModal)">{{ process.candidate.recruiter.name }}
                             {{ process.candidate.recruiter.lastName }}</a></td>
 
                     <td [style.text-align]="center">
