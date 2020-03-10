@@ -6,20 +6,20 @@ import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
-const apiUrl = "http://localhost:61059/api/Auth";
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http: HttpClient;
-  constructor(http: HttpClient) {
+  apiUrl: string;
+  constructor(http: HttpClient, private config: AppConfig) {
     this.http = http;
+    this.apiUrl = this.config.getConfig('apiUrl');
   }
 
   public authenticate(userName: string, password: string): Observable<any> {
     let user = {UserName : userName , Password : password};
-    return this.http.post(apiUrl + '/login', user)
+    return this.http.post(this.apiUrl + 'Auth/login', user)
       .pipe(
         tap(data => {}),
         catchError(this.handleError('authenticate', []))
@@ -28,7 +28,7 @@ export class AuthService {
 
   public externalLogin(token: string): Observable<any> { 
     let body = {token : token};
-    return this.http.post(apiUrl + '/loginExternal', body)
+    return this.http.post(this.apiUrl + 'Auth/loginExternal', body)
       .pipe(
         tap(data => {}),
         catchError(this.handleError('externalLogin', []))

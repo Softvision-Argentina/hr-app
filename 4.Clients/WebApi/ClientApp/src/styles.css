@@ -1,6 +1,10 @@
 @import '~ngx-toastr/toastr.css';
 /* You can add global styles to this file, and also import other style files */
 
+#toast-container > div {
+  opacity:1;
+}
+
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
