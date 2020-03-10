@@ -24,5 +24,18 @@ namespace Domain.Services.Repositories.EF
         {
             return Query().Include(d => d.UserDashboards).ThenInclude(u => u.User);
         }
+
+        public override Dashboard Update(Dashboard entity)
+        {
+            var previousDashboards = _dbContext.UserDashboards.Where(ud => ud.DashboardId == entity.Id);
+            _dbContext.UserDashboards.RemoveRange(previousDashboards);
+
+            foreach (var item in entity.UserDashboards)
+            {
+                _dbContext.UserDashboards.Add(item);
+            }
+
+            return base.Update(entity);
+        }
     }
 }

@@ -51,7 +51,8 @@ export class GoogleSigninComponent implements AfterViewInit {
           ImgURL: profile.getImageUrl(),
           Email: profile.getEmail(),
           Role: '',
-          Token: googleUser.getAuthResponse().id_token
+          Token: googleUser.getAuthResponse().id_token,
+          userDashboards: []
         }
         
         // console.log(currentUser);
@@ -79,7 +80,8 @@ export class GoogleSigninComponent implements AfterViewInit {
           ImgURL: gUser.ImgURL,
           Email: res.user.username,
           Role: res.user.role,
-          Token: res.token
+          Token: res.token,
+          userDashboards: []
         }
 
         localStorage.setItem('currentUser', JSON.stringify(currentUser));

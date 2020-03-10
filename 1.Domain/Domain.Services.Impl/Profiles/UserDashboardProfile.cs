@@ -13,10 +13,9 @@ namespace Domain.Services.Impl.Profiles
         public UserDashboardProfile()
         {
             CreateMap<UserDashboard, ReadedUserDashboardContract>();
-            CreateMap<CreatedUserDashboardContract, UserDashboard>();
+            CreateMap<CreateUserDashboardContract, UserDashboard>();
             CreateMap<UserDashboard, CreatedUserDashboardContract>();
             CreateMap<UpdateUserDashboardContract, UserDashboard>();
-            //CreateMap<ReadedUserDashboardContract, ReadedUserDashboardViewModel>();
         }
     }
 }

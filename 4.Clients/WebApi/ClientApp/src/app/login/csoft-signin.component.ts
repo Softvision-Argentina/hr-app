@@ -47,7 +47,8 @@ export class CSoftComponent {
             ImgURL: "",
             Email: res.user.username,
             Role: res.user.role,
-            Token: res.token
+            Token: res.token,
+            userDashboards: []
           }
 
           localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));

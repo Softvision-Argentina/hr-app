@@ -82,8 +82,7 @@ namespace Domain.Services.Impl.Services
 
             if (dashboard == null)
             {
-                //throw new DeleteRoomNotFoundException(Id);
-                throw new Exception("The room doesnt exist");
+                throw new Exception("The dashboard doesn't exist");
             }
             _log.LogInformation($"Deleting Dashboard {Id}");
             _DashboardRepository.Delete(dashboard);

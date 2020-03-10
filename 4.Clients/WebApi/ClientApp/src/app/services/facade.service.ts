@@ -25,6 +25,7 @@ import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
 import { DeclineReasonService } from "./decline-reason.service";
 import { PreferenceService } from "./preference.service";
+import { DashboardService } from "./dashboard.service";
 
 @Injectable()
 export class FacadeService {
@@ -245,6 +246,14 @@ export class FacadeService {
       this._preferenceService = this.injector.get(PreferenceService);
     }
     return this._preferenceService;
+  }
+
+  private _dashboardService: DashboardService;
+  public get dashboardService(): DashboardService {
+    if (!this._dashboardService) {
+      this._dashboardService = this.injector.get(DashboardService);
+    }
+    return this._dashboardService;
   }
 
   constructor(private injector: Injector) {

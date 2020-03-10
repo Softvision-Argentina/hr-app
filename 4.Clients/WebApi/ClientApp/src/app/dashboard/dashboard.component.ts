@@ -13,6 +13,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import { Preference } from 'src/entities/preference';
 import { e } from '@angular/core/src/render3';
 import { User } from 'src/entities/user';
+import { Dashboard } from 'src/entities/dashboard';
 
 @Component({
   selector: 'app-dashboard',
@@ -78,6 +79,10 @@ export class DashboardComponent implements OnInit {
 
   preference: Preference = new Preference();
 
+  statusDashboards : boolean[] = new Array();
+
+  dashboards: Dashboard[] = new Array();
+
   constructor(private facade: FacadeService, private app: AppComponent) {
   }
 
@@ -90,6 +95,8 @@ export class DashboardComponent implements OnInit {
     this.app.hideLoading();
     this.getPreferences();
     this.facade.preferenceService.preference.subscribe(res => this.preference = res);
+    this.getDashboards();
+    this.facade.dashboardService.status.subscribe(res => this.statusDashboards = res);
   }
 
   // ngAfterViewChecked(): void {
@@ -109,6 +116,20 @@ export class DashboardComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  getDashboards() {
+    this.facade.dashboardService.get().subscribe(
+      res => {
+        res.forEach(dash => {
+          this.dashboards.push(dash);
+        })
+        //this.fillStatus();
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   getProcesses() {

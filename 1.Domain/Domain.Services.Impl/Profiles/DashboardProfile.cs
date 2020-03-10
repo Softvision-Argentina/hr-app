@@ -16,7 +16,6 @@ namespace Domain.Services.Impl.Profiles
             CreateMap<CreateDashboardContract, Dashboard>();
             CreateMap<Dashboard, CreatedDashboardContract>();
             CreateMap<UpdateDashboardContract, Dashboard>();
-            CreateMap<UpdateDashboardViewModel, UpdateDashboardContract>();
         }
     }
 }

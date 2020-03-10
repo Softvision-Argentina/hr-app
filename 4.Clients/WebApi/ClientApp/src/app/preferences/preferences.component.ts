@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Preference } from 'src/entities/preference';
 import { FacadeService } from '../services/facade.service';
 import { User } from 'src/entities/user';
+import { Dashboard } from 'src/entities/dashboard';
+import { UserDashboard } from 'src/entities/userDashboard';
 
 @Component({
   selector: 'app-preferences',
@@ -9,37 +11,62 @@ import { User } from 'src/entities/user';
   styleUrls: ['./preferences.component.css']
 })
 export class PreferencesComponent implements OnInit {
-  preference: Preference = new Preference();
+  dashboards: Dashboard[] = [];
+  currentUser: User = new User();
+  dashboardStatus: boolean[] = new Array()
 
-  constructor(private facade: FacadeService) {}
-
-  ngOnInit() {
-    this.getPreferences();   
+  constructor(private facade: FacadeService) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));    
   }
 
-  updatePreferences() {
-    this.facade.preferenceService
-      .update(this.preference.id, this.preference)
-      .subscribe(res => {
-        this.getPreferences();
-      },
+  ngOnInit() {
+    this.getDashboards();
+  }
+
+  updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {   
+    if(addOrDelete) {
+      var userToAdd: UserDashboard = new UserDashboard();
+      userToAdd.userId = this.currentUser.ID;
+      dashboard.userDashboards.push(userToAdd);
+    }
+    else {
+      var indexUserToDelete: number;
+      indexUserToDelete = dashboard.userDashboards.findIndex(x => x.userId === this.currentUser.ID);
+      dashboard.userDashboards.splice(indexUserToDelete);
+    }
+
+    this.facade.dashboardService
+      .update(dashboard.id, dashboard)
+      .subscribe(
         error => {
           console.log(error);
         }
       );
-      this.facade.preferenceService.changePreference(this.preference);
   }
 
-  getPreferences() {
-    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-
-    this.facade.preferenceService.get().subscribe(
+  getDashboards() {
+    this.facade.dashboardService.get().subscribe(
       res => {
-        this.preference = res.filter(x => x.userId === currentUser.ID)[0];
+        res.forEach(dash => {
+          this.dashboards.push(dash);
+        })
+        this.fillStatus();
       },
       error => {
         console.log(error);
       }
     );
   }
+
+  fillStatus() {
+    for(let counter = 0; counter < this.dashboards.length; counter++){
+      if( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.ID)){
+        this.dashboardStatus.push(true);
+      }
+      else{
+        this.dashboardStatus.push(false);
+      }
+    }
+  }
+
 }

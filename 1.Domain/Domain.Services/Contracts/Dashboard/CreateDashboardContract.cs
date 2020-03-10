@@ -10,6 +10,6 @@ namespace Domain.Services.Contracts.Dashboard
     {
         public string Name { get; set; }
         
-        public IList<CreateUserDashboardContract> UserDashboards { get; set; }
+        public ICollection<CreateUserDashboardContract> UserDashboards { get; set; }
     }
 }
