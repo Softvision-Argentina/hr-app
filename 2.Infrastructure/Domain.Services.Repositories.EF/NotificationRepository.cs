@@ -1,11 +1,8 @@
 ﻿using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Repositories.EF
 {
@@ -14,15 +11,10 @@ namespace Domain.Services.Repositories.EF
         private readonly DataBaseContext _context;
         private readonly IRepository<Candidate> _cand;
 
-        //private IHubContext<SignalServer> _hubContext;
-
-        public NotificationRepository(DataBaseContext context,IRepository<Candidate> cand
-                                        //IHubContext<SignalServer> hubContext
-            )
+        public NotificationRepository(DataBaseContext context,IRepository<Candidate> cand)
         {
             _context = context;
             _cand = cand;
-            //_hubContext = hubContext;
         }
 
         public void Create(Notification notification, int candId)
@@ -38,8 +30,6 @@ namespace Domain.Services.Repositories.EF
                 _context.Notifications.Add(notification);
                 _context.SaveChanges();
             }
-
-            //_hubContext.Clients.All.InvokeAsync("displayNotification", "");
         }
 
         private List<Candidate> GetReferralsList(int candId)

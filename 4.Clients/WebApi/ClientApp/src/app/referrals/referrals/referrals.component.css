@@ -33,3 +33,22 @@ nz-step {
 .alert-info {
     text-align: center;
 }
+
+.number {
+    position: relative;
+    right: -1032px;
+    top: -35px;
+    background-color:red;
+    line-height:20px;
+    width:20px;
+    height:20px;
+    border-radius:10px;
+    color: white;
+    text-align: -webkit-center;
+}
+
+.noti{
+    font-weight: 400;
+}
+
+

@@ -5,13 +5,14 @@ import { AppConfig } from '../app-config/app.config';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Globals } from '../app-globals/globals';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService extends BaseService<Notification> {
 
-constructor(router: Router, config: AppConfig, http: HttpClient) {
+constructor(router: Router, config: AppConfig, http: HttpClient, globals: Globals) {
   super(router, config, http);
   this.apiUrl += 'Notifications';
 }
@@ -27,15 +28,18 @@ public getNotifications(): Observable<any>{
     );
 }
 
-public readNotifications(id: number): Observable<any>{
+public readNotifications(id: number): Observable<any> {
 
-  return this.http.get(this.apiUrl + '/' + id, {
+  const notiurl = `${this.apiUrl}/${id.toString()}`;
+  
+  let noticall = this.http.put(notiurl, {
     headers: this.headersWithAuth
-  })
-    .pipe(
-      tap(data => {}),
-      catchError(this.handleErrors)
-    );
+  }).pipe(
+    tap(_ => {}),
+    catchError(this.handleErrors)
+  );
+
+  return noticall;
 }
 
 }

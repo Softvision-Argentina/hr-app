@@ -5,11 +5,8 @@ using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
 using Domain.Model;
+using Domain.Services;
 using Domain.Services.ExternalServices.Config;
-using Domain.Services.Impl.Services;
-using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +20,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ApiServer
 {
@@ -96,8 +94,6 @@ namespace ApiServer
                 #endregion
             }
 
-            services.AddSignalR();
-
             services.AddAuthorization(cfg =>
             {
                 cfg.AddPolicy(SecurityClaims.CAN_LIST_DUMMY, p =>
@@ -107,8 +103,17 @@ namespace ApiServer
                     p.RequireClaim(SecurityClaims.CAN_LIST_CANDIDATE, "true"));
             });
 
+            //services.AddCors(options => {
+            //    options.AddPolicy("AllowAny", x =>
+            //    {
+            //        x.AllowAnyHeader();
+            //        x.AllowAnyMethod();
+            //        x.AllowAnyOrigin();
+            //    });
+            //});
+
             services.AddCors();
-           
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -166,11 +171,13 @@ namespace ApiServer
                 }
             });
 
+            //app.UseCors("AllowAny");
             app.UseCors((option) =>
                 option.WithOrigins(Configuration["corsWhiteList"].Split(','))
-                .AllowAnyMethod()
                 .AllowAnyHeader()
+                .AllowAnyMethod()
                 .AllowCredentials()
+                .SetIsOriginAllowed((host) => true)
             );
 
             app.UseHttpsRedirection();
@@ -189,11 +196,6 @@ namespace ApiServer
             }
 
             app.UseAuthentication();
-
-            //app.UseSignalR(route =>
-            //{
-            //    route.MapHub<NotificationsHub>("notification");
-            //});
 
             app.UseMvc();
         }

@@ -1,15 +1,5 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Interfaces.Repositories;
-using Domain.Services.Repositories.EF;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Domain.Services.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace ApiServer.Controllers
 {
     [Route("api/Notifications")]
@@ -32,12 +22,12 @@ namespace ApiServer.Controllers
             return Ok(notification);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult ReadNotification(int notificationId)
+        [HttpPut("{id}")]
+        public IActionResult ReadNotification(int id)
         {
             var userName = GetUserName();
 
-            _notificationRepository.ReadNotification(notificationId, userName);
+            _notificationRepository.ReadNotification(id, userName);
             return Ok();
         }
 

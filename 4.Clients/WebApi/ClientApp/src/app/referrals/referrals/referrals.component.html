@@ -6,17 +6,21 @@
   </div>
   <div>
     <button
+    class="noti"
     nz-button
     nzType="primary"
     nz-popover
     nzPopoverTitle="Title"
     [(nzVisible)]="visible"
     (nzVisibleChange)="change($event)"
-    nzPopoverTrigger="click"
+    nzTrigger="click"
     [nzContent]="contentTemplate"
-  >
-    Notifications
+    nzPlacement="bottom"
+    nzShape="round"
+  >Notifications 
+    <!-- <div class="number" *ngIf="notisCount != null && notisCount != 0">{{notisCount}}</div> -->
   </button>
+  <div class="number" *ngIf="notisCount != null && notisCount != 0">{{notisCount}}</div>
   <ng-template #contentTemplate>
     <div *ngFor="let n of notis">
       <a (click)="readNotification(n.id)">{{n.text}}</a>
@@ -25,23 +29,6 @@
   </div>
 </div>
 <br />
-
-<!-- <div>
-  <button
-        nz-button
-        nz-popover
-        nzPopoverTitle="Title"
-        [nzContent]="contentTemplate"
-        nzPopoverPlacement="bottom"
-      >
-        Bottom
-      </button>
-      <ng-template #contentTemplate>
-        <div *ngFor="let n of notis">
-          <p>{{n.text}}</p>
-        </div>
-      </ng-template>
-</div> -->
 
 <div nz-row>
   <div class="alert alert-info">

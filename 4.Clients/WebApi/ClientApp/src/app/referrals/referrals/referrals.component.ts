@@ -19,19 +19,15 @@ import { SeniorityEnum } from '../../../entities/enums/seniority.enum';
 import { Globals } from '../../app-globals/globals';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
-import { HrStage } from 'src/entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.enum';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-import { NotificationService } from 'src/app/services/notificationsService';
-import { Notification } from 'src/entities/notification';
 
 @Component({
   selector: 'app-referrals',
@@ -131,7 +127,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   visible: boolean;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent, private notification: NotificationService) {
+    private globals: Globals, private _appComponent: AppComponent) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -166,7 +162,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
     this.app.hideLoading();
     this.getNotifications();
-    this.readNotification(this.id);
   }
 
   ngAfterViewChecked(){
@@ -225,11 +220,20 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       .subscribe( err => {
         console.log(err);
         this.visible = false;
+        this.notisCount = this.notisCount - 1;
       });
   }
 
   change(value: boolean): void {
     console.log(value);
+  }
+
+  clickMe(): void {
+    this.visible = false;
+  }
+
+  changeNumber(value: boolean): void {
+    this.visible = false;
   }
 
   getConsultants() {
