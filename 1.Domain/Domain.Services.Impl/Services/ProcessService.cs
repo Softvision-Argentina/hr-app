@@ -28,6 +28,7 @@ namespace Domain.Services.Impl.Services
         private readonly ITechnicalStageRepository _technicalStageRepository;
         private readonly IClientStageRepository _clientStageRepository;
         private readonly IOfferStageRepository _offerStageRepository;
+        private readonly INotificationRepository _notificationRepository;
 
         public ProcessService(IMapper mapper,
             IRepository<Consultant> consultantRepository,
@@ -42,7 +43,8 @@ namespace Domain.Services.Impl.Services
             ITechnicalStageRepository technicalStageRepository,
             IClientStageRepository clientStageRepository,
             IOfferStageRepository offerStageRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            INotificationRepository notificationRepository)
         {
             _consultantRepository = consultantRepository;
             _candidateRepository = candidateRepository;
@@ -58,6 +60,7 @@ namespace Domain.Services.Impl.Services
             _clientStageRepository = clientStageRepository;
             _offerStageRepository = offerStageRepository;
             _unitOfWork = unitOfWork;
+            _notificationRepository = notificationRepository;
         }
 
         public ReadedProcessContract Read(int id)
@@ -123,6 +126,18 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
 
             var createdProcessContract = _mapper.Map<CreatedProcessContract>(createdProcess);
+
+            var status = process.Status;
+
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.InProgress)
+            {
+                var notification = new Notification
+                {
+                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
+                };
+
+                _notificationRepository.Create(notification, process.Candidate.Id);
+            }
 
             return createdProcessContract;
         }
@@ -205,6 +220,18 @@ namespace Domain.Services.Impl.Services
 
             var updatedProcess = _processRepository.Update(process);
 
+            var status = process.Status;
+
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired)
+            {
+                var notification = new Notification
+                {
+                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
+                };
+
+                _notificationRepository.Create(notification, process.Candidate.Id);
+            }
+
             _unitOfWork.Complete();
         }
 
@@ -230,6 +257,18 @@ namespace Domain.Services.Impl.Services
             //var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
             process.Candidate.Status = SetCandidateStatus(process.Status);
             //_candidateRepository.Update(candidate);
+
+            var status = process.Status;
+
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected)
+            {
+                var notification = new Notification
+                {
+                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
+                };
+
+                _notificationRepository.Create(notification, process.Candidate.Id);
+            }
 
             _unitOfWork.Complete();
         }

@@ -65,6 +65,7 @@ namespace Domain.Services.Repositories.EF
         public DbSet<UserDashboard> UserDashboards { get; set; }
 
         public DbSet<Preference> Preferences { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {

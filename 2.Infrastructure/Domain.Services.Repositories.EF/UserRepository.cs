@@ -36,5 +36,12 @@ namespace Domain.Services.Repositories.EF
 
             return user;
         }
+
+        public int GetUserId(string user)
+        {
+            var userName = _dbContext.Users.Find(user);
+            var id = userName.Id;
+            return id;
+        }
     }
 }

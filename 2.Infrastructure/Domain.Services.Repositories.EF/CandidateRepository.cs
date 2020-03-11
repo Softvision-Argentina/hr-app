@@ -2,6 +2,7 @@
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.Services.Repositories.EF
@@ -42,5 +43,9 @@ namespace Domain.Services.Repositories.EF
             return base.Update(entity);
         }
 
+        public List<Candidate> GetReferralsList(string user)
+        {
+            return _dbContext.Candidates.Where(w => w.ReferredBy == user).ToList();
+        }
     }
 }

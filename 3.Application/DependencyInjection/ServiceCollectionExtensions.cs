@@ -194,6 +194,7 @@ namespace DependencyInjection
             services.AddScoped<IClientStageRepository, ClientStageRepository>();
             services.AddScoped<IOfferStageRepository, OfferStageRepository>();
             services.AddScoped<ICvRepository, CvRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             services.AddScoped<IRepository<Community>, CommunityRepository>();
             services.AddScoped<IRepository<CandidateProfile>, CandidateProfileRepository>();

@@ -166,17 +166,6 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cv" [hidden]="!visible"> CV
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <input nz-input formControlName="cv" id="cv" placeholder="Please input his/her cv">
-                    <nz-form-explain *ngIf="candidateForm.get('cv').dirty">
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" [hidden]="!visible">Referred By
                 </nz-form-label>
                 <nz-form-control [nzSm]="14">

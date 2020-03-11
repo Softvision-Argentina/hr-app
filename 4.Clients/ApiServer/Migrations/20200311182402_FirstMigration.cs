@@ -443,6 +443,28 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: true),
+                    ApplicationUserId = table.Column<int>(nullable: false),
+                    IsRead = table.Column<bool>(nullable: false),
+                    ReferredBy = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Preferences",
                 columns: table => new
                 {
@@ -587,7 +609,8 @@ namespace ApiServer.Migrations
                     ContactDay = table.Column<DateTime>(nullable: false),
                     Cv = table.Column<string>(nullable: true),
                     KnownFrom = table.Column<string>(nullable: true),
-                    ReferredBy = table.Column<string>(nullable: true)
+                    ReferredBy = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -614,6 +637,12 @@ namespace ApiServer.Migrations
                         name: "FK_Candidates_Consultants_RecruiterId",
                         column: x => x.RecruiterId,
                         principalTable: "Consultants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Candidates_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1026,6 +1055,11 @@ namespace ApiServer.Migrations
                 column: "RecruiterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Candidates_UserId",
+                table: "Candidates",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CandidateSkills_SkillId",
                 table: "CandidateSkills",
                 column: "SkillId");
@@ -1091,6 +1125,11 @@ namespace ApiServer.Migrations
                 table: "HrStages",
                 column: "ProcessId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ApplicationUserId",
+                table: "Notifications",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OfferStages_ConsultantDelegateId",
@@ -1235,6 +1274,9 @@ namespace ApiServer.Migrations
                 name: "HrStages");
 
             migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
                 name: "Offer");
 
             migrationBuilder.DropTable(
@@ -1280,9 +1322,6 @@ namespace ApiServer.Migrations
                 name: "Dashboards");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "SkillTypes");
 
             migrationBuilder.DropTable(
@@ -1305,6 +1344,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Consultants");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Profiles");

@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using ApiServer.Contracts.Stage;
 using Domain.Services.Contracts.Process;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Domain.Model;
+using Domain.Services.Interfaces.Repositories;
+using Domain.Model.Enum;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,6 +28,7 @@ namespace ApiServer.Controllers
     {
         private readonly IProcessService _processService;
         private readonly IMapper _mapper;
+        private INotificationRepository _notificationRepository;
 
         public ProcessController(IProcessService processService,
             ILog<ProcessController> logger, IMapper mapper)
@@ -66,7 +72,6 @@ namespace ApiServer.Controllers
             {
                 var contract = _mapper.Map<CreateProcessContract>(createProcessViewModel);
                 var returnContract = _processService.Create(contract);
-
                 return Created("Get", _mapper.Map<CreatedProcessViewModel>(returnContract));
             });
         }
