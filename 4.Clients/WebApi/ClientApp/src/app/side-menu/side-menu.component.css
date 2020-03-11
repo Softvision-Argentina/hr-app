@@ -15,8 +15,9 @@
 #logo{
   flex-shrink: 1;
   padding: 0;
-  height: 216px;
+  height: 8%;
   margin-left: 18px;
+  min-height: 50px;
   
 }
 .side-menu .container-item{
@@ -75,9 +76,23 @@
 
 @media(max-height: 600px){
   .side-menu{
-    padding: 18px 18px 10px 0px;
+    padding: 8px 18px 10px 0px;
   }
+  .side-menu .container-item{
+    height: 100px;
+  }
+  .container-item .item{
+    margin-top: 0px;
+  } 
   .item i{
-    font-size: 30px;
+    font-size: 25px;
+    margin-bottom: 4px;
   }
+  .item p{
+    margin-bottom: 0;
+  }
+  .gradient-border{
+    height: 62px;
+  }
+
 }
