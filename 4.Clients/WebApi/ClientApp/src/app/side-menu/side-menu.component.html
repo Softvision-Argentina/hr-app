@@ -41,12 +41,25 @@
       </div>
 
   </div>
-  <div [routerLink]="['/settings']" [routerLinkActive]="['active']" class="container-item" >
+  <div [routerLink]="['/referrals']" [routerLinkActive]="['active']" class="container-item" >
       <div class="gradient-border"></div>
       <div class="item">
-        <i nz-icon nzType="setting" nzTheme="outline"></i>
-        <p>Settings</p>
+        <i nz-icon nzType="solution" nzTheme="outline"></i>
+        <p>Referrals</p>
       </div>
-
   </div>
+  <div [routerLink]="['/reports']" [routerLinkActive]="['active']" class="container-item" >
+    <div class="gradient-border"></div>
+    <div class="item">
+      <i nz-icon nzType="line-chart" nzTheme="outline"></i>
+      <p>Reports</p>
+    </div>
+</div>
+<div [routerLink]="['/settings']" [routerLinkActive]="['active']" class="container-item" >
+  <div class="gradient-border"></div>
+  <div class="item">
+    <i nz-icon nzType="setting" nzTheme="outline"></i>
+    <p>Settings</p>
+  </div>
+</div>
 </div>
