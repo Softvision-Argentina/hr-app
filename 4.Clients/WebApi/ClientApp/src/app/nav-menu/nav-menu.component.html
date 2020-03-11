@@ -1,113 +1,42 @@
-<header>
-    <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
-        <img src="../../assets/images/CSV-Logo-Black.png" [ngStyle]="logoStyle">
-        <div class="container" style="margin-bottom: -0.7%;">
-            <a class="navbar-brand" [routerLink]='["/"]' style="font-size: 2.25rem">Interview</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
-                <ul nz-menu #navMenu [nzMode]="'horizontal'" class="navbar-nav flex-grow">
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['ALL'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/"]'><i nz-icon nzType="solution"
-                style="vertical-align: middle" nzTheme="outline"></i>Processes</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['ALL'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/referrals"]'><i nz-icon nzType="solution"
-                style="vertical-align: middle" nzTheme="outline"></i>Referrals</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/tasks"]'><i nz-icon nzType="book"
-                style="vertical-align: middle" nzTheme="outline"></i>Tasks</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/dashboard"]'><i nz-icon type="dashboard"
-                style="vertical-align: middle" theme="outline"></i>Dashboard</a>
-                    </li>
 
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/people"]'><i nz-icon type="team"
-              style="vertical-align: middle" theme="outline"></i>People</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/daysOff"]'><i nz-icon type="calendar"
-              style="vertical-align: middle" theme="outline"></i>Days off</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/reports"]'><i nz-icon nzType="line-chart"
-                style="vertical-align: middle" nzTheme="outline"></i>Reports</a>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                        <a class="nav-link text-dark" [routerLink]='["/settings"]'><i nz-icon type="setting"
-                style="vertical-align: middle" theme="outline"></i>Settings</a>
-                    </li>
-                    <li *ngIf="!isUserAuthenticated()">
-                        <button (click)="openLogin(loginModal)" id="loginBtn" #loginBtn><i nz-icon nzType="login"
-              style="vertical-align: middle; margin-right: 2%;" nzTheme="outline"></i><strong>&nbsp; Login</strong> </button>
-                    </li>
-                    <li *ngIf="isUserAuthenticated()">
-                        <div>
-                            <button nz-button nz-popover style="height: 100%;" nzPlacement="bottomRight" nzTrigger="click" [nzContent]="contentTemplate">
-                <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
-              </button>
-                        </div>
-                    </li>
-                </ul>
+<header>
+    <nav class="main-nav">
+        <div class="main-nav__input">
+            <i nz-icon nzType="search" nzTheme="outline" style="font-size: 30px;"></i>
+            <input placeholder="Search...">
+        </div>
+        <div class="avatar" (click)="changeUserSettings()">
+            <div class="user-info">
+                {{currentUser.Name}}
+                <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.ImgURL}}"></nz-avatar>
             </div>
+            <div *ngIf="showUserSettings">
+                <nz-card nzTitle="{{currentUser.Name}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
+
+                    <nz-list>
+                        <nz-list-item>
+                            {{currentUser.Email}}
+                        </nz-list-item>
+                        <nz-list-item (click)="showPreferencesModal(preferencesModal)" >
+                            Manage Preferences
+                            <i nz-icon nzType="setting" nzTheme="outline"></i>
+                        </nz-list-item>
+                        <nz-list-item (click)="logout()">
+                            Logout
+                            <i nz-icon nzType="logout" nzTheme="outline"></i>
+                        </nz-list-item>
+                    </nz-list>
+                </nz-card>
+            </div>
+
         </div>
     </nav>
 </header>
 
-<ng-template #contentTemplate>
-    <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
-        <nz-card-meta nzTitle="{{currentUser.Name}}" nzDescription="{{currentUser.Email}}">
-        </nz-card-meta>
-        <br />
-        <ul class="ant-card-actions">
-            <li [style.width.%]="100" nzTitle="Manage Preferences">
-                <span (click)="showPreferencesModal(preferencesModal)" style="cursor: pointer;"><i nz-icon nzType="tool"
-            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Manage Preferences</span>
-            </li>
-            <li [style.width.%]="100" nzTitle="Logout">
-                <span (click)="logout()" style="cursor: pointer;"><i nz-icon nzType="logout"
-            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout</span>
-            </li>            
-        </ul>
-    </nz-card>
-</ng-template>
-
-<ng-template #coverTemplate>
-    <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
-</ng-template>
-
-<ng-template #loginModal>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <csoft-login></csoft-login>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <nz-divider nzText="OR"></nz-divider>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <br />
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <google-signin></google-signin>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
+<ng-template #closeModal>
+    <i nz-icon nzType="close" nzTheme="outline"></i>
 </ng-template>
 
 <ng-template #preferencesModal>
-   <app-preferences></app-preferences>
+    <app-preferences></app-preferences>
 </ng-template>
-
-
-

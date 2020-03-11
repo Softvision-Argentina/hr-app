@@ -139,6 +139,7 @@ import { ReferralsCardComponent } from './referrals/referrals-card/referrals-car
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
 import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferService } from './services/offer.service';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 
 
 registerLocaleData(en);
@@ -220,7 +221,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       DeclineReasonComponent,
       HasRoleDirective,
       ReportDeclineReasonsComponent,            
-      OfferHistory
+      OfferHistory,
+      SideMenuComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -16,10 +16,14 @@
   margin-right: 8px;
 }
 .padding{
+  /*
   padding: 80px 300px 0px 300px;
+  */
 }
 .dropdown-padding {
+  /*
   padding: 0px 300px;
+  */
 }
 
 .dynamic-delete-button {

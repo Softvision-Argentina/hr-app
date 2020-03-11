@@ -72,4 +72,7 @@ export class AppComponent implements OnInit {
   hideLoading() {
     this.showSpinner = false;
   }
+  isAuthenticated() {
+    return localStorage.getItem('currentUser') !== null ? true : false;
+  }
 }
