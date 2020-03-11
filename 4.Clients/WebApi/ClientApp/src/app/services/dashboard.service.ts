@@ -10,16 +10,16 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardService extends BaseService<Dashboard> {
-statusSource = new Subject<boolean[]>();
-status = this.statusSource.asObservable();
+dashboardSource = new Subject<Dashboard[]>();
+dashboards = this.dashboardSource.asObservable();
 
 constructor(router: Router, config: AppConfig, http: HttpClient) { 
   super(router, config, http);
     this.apiUrl += 'Dashboard';
 }
 
-changePreference(stat:boolean[]){
-  this.statusSource.next(stat);
+changePreference (dashboards: Dashboard[]) {
+  this.dashboardSource.next(dashboards);
 }
 
 }

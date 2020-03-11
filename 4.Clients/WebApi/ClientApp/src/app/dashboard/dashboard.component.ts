@@ -10,7 +10,6 @@ import { AppComponent } from '../app.component';
 import { HireProjection } from 'src/entities/hireProjection';
 import { EmployeeCasualty } from 'src/entities/employeeCasualty';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
-import { Preference } from 'src/entities/preference';
 import { e } from '@angular/core/src/render3';
 import { User } from 'src/entities/user';
 import { Dashboard } from 'src/entities/dashboard';
@@ -27,28 +26,28 @@ export class DashboardComponent implements OnInit {
   skillList: Skill[] = [];
   candidatesSkills: CandidateSkill[] = [];
   employeeCasualty: EmployeeCasualty[] = [];
-  pieChartLoading: boolean = true;
-  topSkillsLoading: boolean = true;
-  carousellLoading: boolean = true;
-  completedProcessLoading: boolean = true;
-  showPieChart: boolean = false;
+  pieChartLoading = true;
+  topSkillsLoading = true;
+  carousellLoading = true;
+  completedProcessLoading = true;
+  showPieChart = false;
   hireProjections: HireProjection[] = [];
   month: Date = new Date();
-  hasProjections: boolean = false;
+  hasProjections = false;
 
   //Porcesses Chart
-  processCompleted: number = 0;
-  processInProgress: number = 0;
-  processPercentage: number = 0;
-  processNotStarted: number = 0;
-  processSuccessPercentage: number = 0;
+  processCompleted = 0;
+  processInProgress = 0;
+  processPercentage = 0;
+  processNotStarted = 0;
+  processSuccessPercentage = 0;
   public pieChartLabels: Label[] = ['IN PROGRESS', 'NOT STARTED'];
   public pieChartData: SingleDataSet = [0, 0, 0];
   public pieChartType: ChartType = 'pie';
   public pieChartPlugins = [pluginDataLabels];
   public pieChartColors: Array<any> = [
     {
-      backgroundColor: ["#81FB15", "#F6FB15", "#6FC8CE"]
+      backgroundColor: ['#81FB15', '#F6FB15', '#6FC8CE']
     }
   ];
   public pieChartOptions: ChartOptions = {
@@ -64,11 +63,11 @@ export class DashboardComponent implements OnInit {
   };
 
   //Completed Processes Chart
-  processFinishedSuccess: number = 0;
-  stadisticFinished: number = 0;
-  stadisticFailed: number = 0;
+  processFinishedSuccess = 0;
+  stadisticFinished = 0;
+  stadisticFailed = 0;
 
-  isChartComplete: boolean = false;
+  isChartComplete = false;
 
   //Ranking Chart
   skillRankedList: any[] = [
@@ -77,11 +76,9 @@ export class DashboardComponent implements OnInit {
     { id: 0, name: '', points: 0 }
   ];
 
-  preference: Preference = new Preference();
-
-  statusDashboards : boolean[] = new Array();
-
   dashboards: Dashboard[] = new Array();
+
+  isLoaded = false;
 
   constructor(private facade: FacadeService, private app: AppComponent) {
   }
@@ -92,11 +89,9 @@ export class DashboardComponent implements OnInit {
     this.getProcesses();
     this.getHireProjection();
     this.getEmployeeCasualties();
-    this.app.hideLoading();
-    this.getPreferences();
-    this.facade.preferenceService.preference.subscribe(res => this.preference = res);
     this.getDashboards();
-    this.facade.dashboardService.status.subscribe(res => this.statusDashboards = res);
+    this.facade.dashboardService.dashboards.subscribe(res => this.dashboards = res);
+    this.app.hideLoading();
   }
 
   // ngAfterViewChecked(): void {
@@ -108,28 +103,25 @@ export class DashboardComponent implements OnInit {
   //   }
   // }
 
-  getPreferences(){
-    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-
-    this.facade.preferenceService.get().subscribe(res => {
-      this.preference = res.filter( x => x.userId === currentUser.ID)[0];
-    }, error => {
-      console.log(error);
-    });
-  }
-
   getDashboards() {
     this.facade.dashboardService.get().subscribe(
       res => {
         res.forEach(dash => {
           this.dashboards.push(dash);
-        })
-        //this.fillStatus();
+        });
+        this.isLoaded = true;
       },
       error => {
         console.log(error);
       }
     );
+  }
+
+  userHasItActivated(dashId: number) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let dashboard: Dashboard;
+    dashboard = this.dashboards.find( x => x.id === dashId);
+    return dashboard.userDashboards.some( x => x.userId === currentUser.ID);
   }
 
   getProcesses() {
@@ -164,8 +156,8 @@ export class DashboardComponent implements OnInit {
   }
 
   checkIndex(i: number): boolean {
-    if (i < 3) return true;
-    else return false;
+    if (i < 3) { return true; }
+    else { return false; }
   }
 
   public hireChartOptions: ChartOptions = {

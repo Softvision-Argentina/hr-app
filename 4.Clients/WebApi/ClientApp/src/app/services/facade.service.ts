@@ -24,7 +24,6 @@ import { RoleService } from "./role.service";
 import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
 import { DeclineReasonService } from "./decline-reason.service";
-import { PreferenceService } from "./preference.service";
 import { DashboardService } from "./dashboard.service";
 import { OfferService } from "./offer.service";
 
@@ -247,14 +246,6 @@ export class FacadeService {
       this._declineReasonService = this.injector.get(DeclineReasonService);
     }
     return this._declineReasonService;
-  }
-
-  private _preferenceService: PreferenceService;
-  public get preferenceService(): PreferenceService {
-    if (!this._preferenceService) {
-      this._preferenceService = this.injector.get(PreferenceService);
-    }
-    return this._preferenceService;
   }
 
   private _dashboardService: DashboardService;

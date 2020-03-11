@@ -1,43 +1,43 @@
 <app-nav-menu></app-nav-menu>
-<div class="padding">
+<div class="padding" *ngIf="isLoaded">
   <div nz-row [nzGutter]="8">
-    <div *ngIf="preference.processesDashboard">
+    <div *ngIf="userHasItActivated(1)">
       <app-report-processes [_detailedProcesses]="processes"></app-report-processes>
     </div>
-    <div *ngIf="preference.skillsDashboard" nz-col [nzSpan]="12">
+    <div *ngIf="userHasItActivated(2)" nz-col [nzSpan]="12">
       <app-report-skills  [_processes]="processes"> </app-report-skills>
     </div>
   </div>
   <br />
   <div nz-row [nzGutter]="8">
-    <div *ngIf="preference.progressDashboard">
+    <div *ngIf="userHasItActivated(3)">
       <app-report-progress-processes [_detailedProcesses]="processes"></app-report-progress-processes>
     </div>      
-    <div *ngIf="preference.completedDashboard" nz-col [nzSpan]="12">
+    <div *ngIf="userHasItActivated(4)" nz-col [nzSpan]="12">
       <app-report-completed-processes  [_processes]="processes"></app-report-completed-processes>
     </div>
   </div>
 <br/>
   <div nz-row [nzGutter]="8">
-    <div *ngIf="preference.projectionDashboard" nz-col [nzSpan]="12">
+    <div *ngIf="userHasItActivated(6)" nz-col [nzSpan]="12">
       <app-report-hire-projection [_processes]="processes" [_hireProjections]="hireProjections"> </app-report-hire-projection>
     </div>
-    <div *ngIf="preference.casualtiesDashboard" nz-col [nzSpan]="12">
+    <div *ngIf="userHasItActivated(5)" nz-col [nzSpan]="12">
       <app-report-hire-casualties [_processes]="processes" [_employeeCasualty]="employeeCasualty"> </app-report-hire-casualties>
     </div>
   </div>
 <br />
   <div nz-row [nzGutter]="8">
-    <div *ngIf="preference.timeToFill1Dashboard" nz-col [nzSpan]="12">  
+    <div *ngIf="userHasItActivated(7)" nz-col [nzSpan]="12">  
       <app-report-timetofill1 [_processes]="processes"></app-report-timetofill1>    
     </div>
-    <div *ngIf="preference.timeToFIll2Dashboard" nz-col [nzSpan]="12">      
+    <div *ngIf="userHasItActivated(8)" nz-col [nzSpan]="12">      
       <app-report-timetofill2 [_processes]="processes"></app-report-timetofill2>
     </div>
   </div>
 <br/>  
   <div nz-row [nzGutter]="8">
-    <div *ngIf="preference.declineReasonsDashboard" nz-col [nzSpan]="12">
+    <div *ngIf="userHasItActivated(9)" nz-col [nzSpan]="12">
       <app-report-decline-reasons [_processes]="processes"></app-report-decline-reasons>
     </div>
     <div nz-col [nzSpan]="12">      

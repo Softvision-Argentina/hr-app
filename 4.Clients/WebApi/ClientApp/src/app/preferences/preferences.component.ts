@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Preference } from 'src/entities/preference';
 import { FacadeService } from '../services/facade.service';
 import { User } from 'src/entities/user';
 import { Dashboard } from 'src/entities/dashboard';
 import { UserDashboard } from 'src/entities/userDashboard';
+import { variable } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-preferences',
@@ -24,24 +24,30 @@ export class PreferencesComponent implements OnInit {
   }
 
   updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {   
+    let variable: Dashboard = new Dashboard();
     if(addOrDelete) {
       var userToAdd: UserDashboard = new UserDashboard();
       userToAdd.userId = this.currentUser.ID;
+      userToAdd.dashboardId = dashboard.id;     
+      dashboard.userDashboards = dashboard.userDashboards.filter(x => x.userId === this.currentUser.ID);
       dashboard.userDashboards.push(userToAdd);
     }
     else {
       var indexUserToDelete: number;
       indexUserToDelete = dashboard.userDashboards.findIndex(x => x.userId === this.currentUser.ID);
-      dashboard.userDashboards.splice(indexUserToDelete);
+      dashboard.userDashboards.splice(indexUserToDelete, 1);
     }
 
     this.facade.dashboardService
       .update(dashboard.id, dashboard)
       .subscribe(
+        res => {
+        },
         error => {
           console.log(error);
         }
       );
+      this.facade.dashboardService.changePreference(this.dashboards);
   }
 
   getDashboards() {
@@ -49,7 +55,7 @@ export class PreferencesComponent implements OnInit {
       res => {
         res.forEach(dash => {
           this.dashboards.push(dash);
-        })
+        });
         this.fillStatus();
       },
       error => {
@@ -59,11 +65,10 @@ export class PreferencesComponent implements OnInit {
   }
 
   fillStatus() {
-    for(let counter = 0; counter < this.dashboards.length; counter++){
-      if( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.ID)){
+    for (let counter = 0; counter < this.dashboards.length; counter++){
+      if ( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.ID)) {
         this.dashboardStatus.push(true);
-      }
-      else{
+      } else {
         this.dashboardStatus.push(false);
       }
     }
