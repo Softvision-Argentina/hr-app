@@ -20,7 +20,7 @@
     nzShape="round"
   >Notifications 
   </button>
-  <div class="number" *ngIf="notisCount != null && notisCount != 0">{{notisCount}}</div>
+  <div class="number" *ngIf="notisCount != null && notisCount != 0 && notisCount > 0">{{notisCount}}</div>
   <ng-template #contentTemplate>
     <div *ngFor="let n of notis">
       <a (click)="readNotification(n.id)">{{n.text}}</a>

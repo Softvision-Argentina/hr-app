@@ -6,9 +6,12 @@ using Domain.Services.Contracts.Process;
 using Domain.Services.Contracts.Stage;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
+using Domain.Services.Repositories.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 
 namespace Domain.Services.Impl.Services
 {
@@ -29,6 +32,8 @@ namespace Domain.Services.Impl.Services
         private readonly IClientStageRepository _clientStageRepository;
         private readonly IOfferStageRepository _offerStageRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly DataBaseContext _data;
 
         public ProcessService(IMapper mapper,
             IRepository<Consultant> consultantRepository,
@@ -44,7 +49,9 @@ namespace Domain.Services.Impl.Services
             IClientStageRepository clientStageRepository,
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
-            INotificationRepository notificationRepository)
+            INotificationRepository notificationRepository,
+            IEmailSender emailSender,
+            DataBaseContext data)
         {
             _consultantRepository = consultantRepository;
             _candidateRepository = candidateRepository;
@@ -61,6 +68,8 @@ namespace Domain.Services.Impl.Services
             _offerStageRepository = offerStageRepository;
             _unitOfWork = unitOfWork;
             _notificationRepository = notificationRepository;
+            _emailSender = emailSender;
+            _data = data;
         }
 
         public ReadedProcessContract Read(int id)
@@ -137,9 +146,27 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                var email = GetUserMail(process.Candidate.ReferredBy);
+
+                using (SmtpClient Client = new SmtpClient("smtp.gmail.com", 25))
+                {
+                    Client.EnableSsl = true;
+                    Client.Credentials = new NetworkCredential("recruhrapp@gmail.com", "softvision627");
+                    MailMessage message = new MailMessage("recruhrapp@gmail.com", $"{email}", "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                    Client.Send(message);
+                }
             }
 
             return createdProcessContract;
+        }
+
+        private string GetUserMail(string referredBy)
+        {
+            var referred = referredBy.Split(" ");
+            var userName = _data.Users.FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
+            var mail = userName.Username;
+            return mail;
         }
 
         private void AddCandidateProfileToCandidate(Candidate candidate, int profileID)
@@ -222,7 +249,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired)
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
+                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall)
             {
                 var notification = new Notification
                 {
@@ -230,6 +258,17 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                var email = GetUserMail(process.Candidate.ReferredBy);
+
+                using (SmtpClient Client = new SmtpClient("smtp.gmail.com", 25))
+                {
+                    Client.EnableSsl = true;
+                    Client.Credentials = new NetworkCredential("recruhrapp@gmail.com", "softvision627");
+                    MailMessage message = new MailMessage("recruhrapp@gmail.com", $"{email}", "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                    Client.Send(message);
+                }
+
             }
 
             _unitOfWork.Complete();
@@ -260,7 +299,7 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected)
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected || process.Status == ProcessStatus.Declined)
             {
                 var notification = new Notification
                 {
@@ -268,6 +307,17 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                var email = GetUserMail(process.Candidate.ReferredBy);
+
+                using (SmtpClient Client = new SmtpClient("smtp.gmail.com", 25))
+                {
+                    Client.EnableSsl = true;
+                    Client.Credentials = new NetworkCredential("recruhrapp@gmail.com", "softvision627");
+                    MailMessage message = new MailMessage("recruhrapp@gmail.com", $"{email}", "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                    Client.Send(message);
+                }
+
             }
 
             _unitOfWork.Complete();
