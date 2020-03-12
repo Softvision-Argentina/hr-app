@@ -18,4 +18,5 @@
 .authenticated{
   margin-left: 140px;
   width: calc(100% - 140px);
+  padding-top: 75px;
 }

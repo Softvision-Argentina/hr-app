@@ -68,7 +68,3 @@ button > i {
   width: 45%;
 }
 
-/* overrides ng zorro default 100% height */
-.margin-top-fix{
-  margin-top: 75px !important;
-}

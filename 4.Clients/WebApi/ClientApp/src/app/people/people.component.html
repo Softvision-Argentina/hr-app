@@ -1,6 +1,6 @@
 
 <br /><br />
-<nz-tabset class="margin-top-fix">
+<nz-tabset>
     <nz-tab nzTitle="Candidates" *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])">
         <app-candidates></app-candidates> 
     </nz-tab>
