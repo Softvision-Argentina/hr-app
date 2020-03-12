@@ -17,6 +17,86 @@
   }
 
   .cards {
-    background: #ECECEC;
-    padding: 30px;
+    background-color: #fafafa;
+    padding: 30px 200px;
+    font-family: "ProximaNova-Regular";
+
+  }
+  .tasks-container {
+    font-family: "ProximaNova-Regular";
+    background-color: #fafafa;
+
+  }
+
+  .card-style {
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+    border: solid 1px #f2f2f2;
+    background-color: #ffffff;
+  }
+  .newTask {
+    width: 215px;
+    height: 40px;
+    background-image: linear-gradient(to right, #f4633a, #c800a1); 
+    font-size: 20px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.67px;
+    color: #ffffff;
+    border: none;
+
+  }
+  .studio {
+    font-family: ProximaNova-Extrabold;
+    font-size: 44px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.02;
+    letter-spacing: -0.88px;
+    color: #222222;
+    padding-left: 0.5%;
+    margin-bottom: 20px;
+  }
+  .navOptions {
+    margin-bottom: 40px;
+  }
+  .button {
+    padding-left: 0.5%;
+
+  }
+  .showing {
+    width: 81px;
+    height: 30px;
+    font-family: ProximaNova;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #000000;
+  }
+  .options {
+
+      font-family: ProximaNova;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.29;
+      letter-spacing: normal;
+      color: #1a051d;
+    
+  }
+  .orderBy {
+    font-family: ProximaNova;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #d0c9d6;
   }
