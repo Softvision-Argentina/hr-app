@@ -1,10 +1,12 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from '../services/facade.service';
+
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-nav-menu',
@@ -16,17 +18,19 @@ export class NavMenuComponent implements OnInit {
 
   constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
     private facade: FacadeService) { }
-
+  
   isExpanded = false;
   currentUser: User;
   showUserSettings = false;
-
+  
+  
   logoStyle = {
     'width': '10%',
     'height': '10%'
   }
-  ngOnInit(){
+  ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
   }
 
   collapse() {
@@ -73,8 +77,9 @@ export class NavMenuComponent implements OnInit {
   }
 
   onSearchChange( search: string) {
-    console.log('Search');
+    this.facade.searchbarService.search(this.router.url, search);
   }
+
 
   changeUserSettings() {
     this.showUserSettings = !this.showUserSettings;
