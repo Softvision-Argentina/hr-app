@@ -696,49 +696,6 @@ namespace ApiServer.Migrations
                     b.ToTable("Postulants");
                 });
 
-            modelBuilder.Entity("Domain.Model.Preference", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CasualtiesDashboard");
-
-                    b.Property<bool>("CompletedDashboard");
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("DeclineReasonsDashboard");
-
-                    b.Property<string>("LastModifiedBy");
-
-                    b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<bool>("ProcessesDashboard");
-
-                    b.Property<bool>("ProgressDashboard");
-
-                    b.Property<bool>("ProjectionDashboard");
-
-                    b.Property<bool>("SkillsDashboard");
-
-                    b.Property<bool>("TimeToFIll2Dashboard");
-
-                    b.Property<bool>("TimeToFill1Dashboard");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<long>("Version");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Preferences");
-                });
-
             modelBuilder.Entity("Domain.Model.Process", b =>
                 {
                     b.Property<int>("Id")
@@ -1315,14 +1272,6 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("OfferStage")
                         .HasForeignKey("Domain.Model.OfferStage", "ProcessId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Domain.Model.Preference", b =>
-                {
-                    b.HasOne("Domain.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

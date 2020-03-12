@@ -28,11 +28,12 @@ namespace Domain.Services.Repositories.EF
         public override Dashboard Update(Dashboard entity)
         {
             var previousDashboards = _dbContext.UserDashboards.Where(ud => ud.DashboardId == entity.Id);
-                                
-            //_dbContext.UserDashboards.RemoveRange(previousDashboards);
+
+            _dbContext.UserDashboards.RemoveRange(previousDashboards);
 
             foreach (var item in entity.UserDashboards)
             {
+                item.User = null;
                 _dbContext.UserDashboards.Add(item);
             }
 

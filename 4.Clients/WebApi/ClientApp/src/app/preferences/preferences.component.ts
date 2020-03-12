@@ -24,12 +24,10 @@ export class PreferencesComponent implements OnInit {
   }
 
   updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {   
-    let variable: Dashboard = new Dashboard();
     if(addOrDelete) {
       var userToAdd: UserDashboard = new UserDashboard();
       userToAdd.userId = this.currentUser.ID;
-      userToAdd.dashboardId = dashboard.id;     
-      dashboard.userDashboards = dashboard.userDashboards.filter(x => x.userId === this.currentUser.ID);
+      userToAdd.dashboardId = dashboard.id;    
       dashboard.userDashboards.push(userToAdd);
     }
     else {
@@ -42,12 +40,14 @@ export class PreferencesComponent implements OnInit {
       .update(dashboard.id, dashboard)
       .subscribe(
         res => {
+          this.facade.dashboardService.changePreference(this.dashboards);
+          this.facade.toastrService.success('Preferences were successfully edited !');
         },
         error => {
-          console.log(error);
+          this.facade.toastrService.error('The service is not available now. Try again later.');
         }
       );
-      this.facade.dashboardService.changePreference(this.dashboards);
+      
   }
 
   getDashboards() {
