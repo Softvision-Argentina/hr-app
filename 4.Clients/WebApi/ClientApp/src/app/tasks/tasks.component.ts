@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Consultant } from '../../entities/consultant';
@@ -9,14 +9,15 @@ import { AppConfig } from '../app-config/app.config';
 import { dateValidator } from '../directives/date.validator';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
-
+import { SearchbarService } from '../services/searchbar.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'tasks',
   templateUrl: 'tasks.component.html',
   styleUrls: ['tasks.component.css'],
   providers: [AppComponent]
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
 
   showCloseIcon: boolean = false;
   searchTitle: string = "";
@@ -25,7 +26,7 @@ export class TasksComponent implements OnInit {
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   loading: boolean = true;
   toDoList: Task[] = [];
-
+  searchSub: Subscription;
   orderBy: string = "Order by";
 
   toDoListDisplay: any = [...this.toDoList];
@@ -45,9 +46,12 @@ export class TasksComponent implements OnInit {
     this.resetForm();
     this.loading = false;
     this.app.hideLoading();
+     this.searchSub = this.search.searchChanged.subscribe(data => {
+      this.searchTitle = data;
+    });
   }
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private config: AppConfig, private app: AppComponent) {
+  constructor( private search: SearchbarService,private facade: FacadeService, private fb: FormBuilder, private config: AppConfig, private app: AppComponent) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -442,7 +446,7 @@ export class TasksComponent implements OnInit {
     else return false;
   }
 
-  filterTasks(){
+  filterTasks() {
     if(!this.showAllTasks){
       this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
     }
@@ -450,5 +454,9 @@ export class TasksComponent implements OnInit {
       this.toDoListDisplay = this.toDoList;
     }
 
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }
