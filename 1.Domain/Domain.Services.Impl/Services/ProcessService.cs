@@ -89,7 +89,9 @@ namespace Domain.Services.Impl.Services
 
             var candidateResult = candidateQuery.ToList();
 
-            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
+            var orderCandidateResult = candidateResult.OrderByDescending(x => x.StartDate);
+
+            return _mapper.Map<List<ReadedProcessContract>>(orderCandidateResult);
         }
 
         public IEnumerable<ReadedProcessContract> GetActiveByCandidateId(int candidateId)
