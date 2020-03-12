@@ -17,5 +17,5 @@
 
 .authenticated{
   margin-left: 140px;
-  margin-top: 75px;
+  width: calc(100% - 140px);
 }
