@@ -62,7 +62,7 @@ namespace Domain.Services.Repositories.EF
 
         public DbSet<Cv> Cv { get; set; }
 
-
+        public DbSet<Notification> Notifications { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {

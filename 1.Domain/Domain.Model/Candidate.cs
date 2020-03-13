@@ -27,5 +27,6 @@ namespace Domain.Model
         public string Cv { get; set; }
         public string KnownFrom { get; set; }
         public string ReferredBy { get; set; }
+        public User User { get; set; }
     }
 }
