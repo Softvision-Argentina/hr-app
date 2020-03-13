@@ -4,15 +4,14 @@ using Domain.Services.Contracts.Consultant;
 using Domain.Services.Impl.Validators.Candidate;
 using FluentValidation.TestHelper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Domain.Services.Tests.ValidatorTester.Candidate
 {
     public class UpdateCandidateContractValidatorTester
     {
-        private UpdateCandidateContractValidator validator;
+        private readonly UpdateCandidateContractValidator validator;
+
         public UpdateCandidateContractValidatorTester()
         {
             validator = new UpdateCandidateContractValidator();
@@ -59,6 +58,5 @@ namespace Domain.Services.Tests.ValidatorTester.Candidate
         {
             validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Profile, (ReadedCandidateProfileContract) null);
         }
-
     }
 }
