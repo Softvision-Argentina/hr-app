@@ -1,12 +1,10 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from '../services/facade.service';
-
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-nav-menu',
@@ -16,52 +14,22 @@ import { Subject } from 'rxjs';
 })
 export class NavMenuComponent implements OnInit {
 
-  constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
-    private facade: FacadeService) { }
-  
+  constructor(
+    private jwtHelper: JwtHelper,
+    private _appComponent: AppComponent,
+    private router: Router,
+    private google: GoogleSigninComponent,
+    private facade: FacadeService
+  ) { }
   isExpanded = false;
   currentUser: User;
   showUserSettings = false;
-  
-  
-  logoStyle = {
-    'width': '10%',
-    'height': '10%'
-  }
+
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-  }
-
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  isUserAuthenticated() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    return this.google.isUserAuthenticated();
-  }
-  
-
-  isUserRole(roles: string[]): boolean {
-    return this._appComponent.isUserRole(roles);
-  }
-
-  openLogin(modalContent: TemplateRef<{}>){
-    const modal = this.facade.modalService.create({
-      nzTitle: null,
-      nzContent: modalContent,
-      nzClosable: false,
-      nzFooter: null
-    });
   }
 
   logout() {
-    //localStorage.clear();
     this.google.logout();
   }
 
@@ -73,16 +41,13 @@ export class NavMenuComponent implements OnInit {
       nzFooter: null,
       nzWidth: '30%'
     });
-
   }
 
   onSearchChange( search: string) {
     this.facade.searchbarService.search(this.router.url, search);
   }
 
-
   changeUserSettings() {
     this.showUserSettings = !this.showUserSettings;
   }
-
 }

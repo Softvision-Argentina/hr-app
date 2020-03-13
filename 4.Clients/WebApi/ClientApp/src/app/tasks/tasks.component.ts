@@ -51,7 +51,13 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor( private search: SearchbarService,private facade: FacadeService, private fb: FormBuilder, private config: AppConfig, private app: AppComponent) {
+  constructor(
+    private search: SearchbarService,
+    private facade: FacadeService,
+    private fb: FormBuilder,
+    private config: AppConfig,
+    private app: AppComponent
+  ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
 
