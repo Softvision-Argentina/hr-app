@@ -15,8 +15,9 @@ import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Globals } from 'src/app/app-globals/globals';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Process } from 'src/entities/process';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-process-contact',
@@ -40,7 +41,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
 
-  
+
   @Input()
   private _visible: boolean;
   public get visibles(): boolean {
@@ -130,9 +131,14 @@ export class ProcessContactComponent implements OnInit {
   editingCandidateId: number = 0;
   // candidateForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
-    private modalService: NzModalService, private process: ProcessesComponent) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  constructor(
+    private fb: FormBuilder,
+    private facade: FacadeService,
+    private app: AppComponent,
+    private detailsModal: CandidateDetailsComponent,
+    private modalService: NzModalService,
+    private process: ProcessesComponent) {
+      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
@@ -144,7 +150,6 @@ export class ProcessContactComponent implements OnInit {
     this.processStartModal = this._processModal;
     this.getConsultants();
     this.getCandidates();
-
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
 
@@ -159,15 +164,11 @@ export class ProcessContactComponent implements OnInit {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
-  
 
   getCandidates() {
-    this.facade.candidateService.get()
-      .subscribe(res => {
-        this.candidates = res;
-      }, err => {
-        console.log(err);
-      })
+    return this.facade.candidateService.get().pipe(
+      tap( res => this.candidates = res)
+    );
   }
 
   getConsultants() {
@@ -417,8 +418,12 @@ export class ProcessContactComponent implements OnInit {
           this.isNewCandidate = false;
           this.visible = false;
           this.app.hideLoading();
-          this.getCandidates();
-          this.startNewProcess(res.id);
+          this.getCandidates()
+          .subscribe(data => {
+            this.startNewProcess(res.id);
+          }, err => {
+            console.log(err);
+          });
         }, err => {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
@@ -453,7 +458,6 @@ export class ProcessContactComponent implements OnInit {
           this.modalService.closeAll();
           let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
           this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
-          //this.candidateAdd.fillCandidateForm(processCandidate);        
         }
       })
   }
