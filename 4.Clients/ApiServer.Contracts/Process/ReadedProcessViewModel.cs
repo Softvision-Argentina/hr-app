@@ -13,6 +13,7 @@ namespace ApiServer.Contracts.Process
     {
         public int Id { get; set; }
 
+        public DateTime CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }

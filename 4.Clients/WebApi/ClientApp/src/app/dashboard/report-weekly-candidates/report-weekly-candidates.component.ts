@@ -84,9 +84,10 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
       }
       this.processesByCandidate[process.candidate.recruiter.id].push(process)
     }
-    //this.processes.forEach(process => this.processesByCandidate[process.candidate.recruiter.id].push(process));
-    //if (this.hireProjections.filter(hp => hp.month == date.getMonth() + 1 && hp.year == date.getFullYear()).length > 0) {
-    this.processesByCandidate.forEach(pbc => pbc = pbc.filter(p => getISOWeek(p.createdDate) === getISOWeek(this.date)));
+    for (let key in this.processesByCandidate) {
+      this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
+    }
+    //this.processesByCandidate.forEach(pbc => pbc = pbc.filter(p => getISOWeek(p.createdDate) === getISOWeek(this.date)));
     this.hasCandidates = this.processesByCandidate.some(pbc => pbc.length > 0);
     if (this.hasCandidates) {
       this.chartData = [];
