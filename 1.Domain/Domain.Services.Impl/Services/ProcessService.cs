@@ -87,11 +87,9 @@ namespace Domain.Services.Impl.Services
             var candidateQuery = _processRepository
                 .QueryEager();
 
-            var candidateResult = candidateQuery.ToList();
+            var candidateResult = candidateQuery.ToList().OrderByDescending(x => x.StartDate);
 
-            var orderCandidateResult = candidateResult.OrderByDescending(x => x.StartDate);
-
-            return _mapper.Map<List<ReadedProcessContract>>(orderCandidateResult);
+            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
         }
 
         public IEnumerable<ReadedProcessContract> GetActiveByCandidateId(int candidateId)
