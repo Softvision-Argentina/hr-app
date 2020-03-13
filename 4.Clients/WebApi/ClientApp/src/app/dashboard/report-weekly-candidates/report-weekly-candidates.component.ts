@@ -1,18 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
-//import { HireProjection } from 'src/entities/hireProjection';
 import { Process } from 'src/entities/process';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
 import { AppComponent } from 'src/app/app.component';
-import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import * as getISOWeek from 'date-fns/get_iso_week';
 import * as addWeeks from 'date-fns/add_weeks';
-//import { registerLocaleData } from '@angular/common';
-//import esAR from '@angular/common/locales/es-AR';
-//registerLocaleData(esAR);
 
 @Component({
   selector: 'app-report-weekly-candidates',
@@ -24,14 +19,10 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
   @Input() _processes;
   @Input() _hireProjections;
 
-  //Ranking Chart
-
   constructor(private facade: FacadeService, private app: AppComponent) { }
 
   processes: Process[] = [];
   processesByCandidate : Process[][] = [];
-  //hireProjections: HireProjection[] = [];
-  month: Date = new Date();
   date: Date = new Date();
   hasCandidates: boolean = false;
 
@@ -56,7 +47,6 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
 
   complete() {
     this.processes = this._processes;
-    //this.hireProjections = this._hireProjections;
   }
 
   public chartOptions: ChartOptions = {
@@ -87,7 +77,6 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
     for (let key in this.processesByCandidate) {
       this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
     }
-    //this.processesByCandidate.forEach(pbc => pbc = pbc.filter(p => getISOWeek(p.createdDate) === getISOWeek(this.date)));
     this.hasCandidates = this.processesByCandidate.some(pbc => pbc.length > 0);
     if (this.hasCandidates) {
       this.chartData = [];
