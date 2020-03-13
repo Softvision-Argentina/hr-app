@@ -1,15 +1,14 @@
 ﻿using Domain.Services.Impl.Validators.Community;
 using FluentValidation.TestHelper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Domain.Services.Tests.ValidatorTester.Community
 {
     public class UpdateCommunityContractValidatorTester
     {
-        private UpdateCommunityContractValidator _validator;
+        private readonly UpdateCommunityContractValidator _validator;
+
         public UpdateCommunityContractValidatorTester()
         {
             _validator = new UpdateCommunityContractValidator();
@@ -38,8 +37,5 @@ namespace Domain.Services.Tests.ValidatorTester.Community
         {
             _validator.ShouldHaveValidationErrorFor(CommunityContract => CommunityContract.Description, String.Empty);
         }
-
-
-
     }
 }
