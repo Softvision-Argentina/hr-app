@@ -11,6 +11,7 @@ import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { SearchbarService } from '../services/searchbar.service';
 import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'tasks',
   templateUrl: 'tasks.component.html',
