@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.Task;
+﻿using Domain.Services.Contracts.Task;
 using Domain.Services.Impl.Validators.Task;
 using FluentValidation;
 using FluentValidation.TestHelper;
@@ -11,7 +8,7 @@ namespace Domain.Services.Tests.Impl.Validators.Task
 {
     public class CreateTaskContractValidatorTest
     {
-        private CreateTaskContractValidator validator;
+        private readonly CreateTaskContractValidator validator;
 
         public CreateTaskContractValidatorTest()
         {
