@@ -7,7 +7,7 @@ namespace Domain.Services.Contracts.Cv
 {
     public class CvContractAdd
     {
-        public string Url { get; set; }
+        public string UrlId { get; set; }
 
         public int CandidateId { get; set; }
 

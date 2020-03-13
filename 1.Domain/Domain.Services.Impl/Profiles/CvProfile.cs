@@ -11,7 +11,6 @@ namespace Domain.Services.Impl.Profiles
     {
         public CvProfile()
         {
-            CreateMap<Cv, CvContractReturn>();
             CreateMap<CvContractAdd, Cv>();
         }
     }

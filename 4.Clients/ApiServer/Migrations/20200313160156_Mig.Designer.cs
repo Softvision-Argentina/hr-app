@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20200310182839_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20200313160156_Mig")]
+    partial class Mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -285,7 +285,7 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("PublicId");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("UrlId");
 
                     b.Property<long>("Version");
 

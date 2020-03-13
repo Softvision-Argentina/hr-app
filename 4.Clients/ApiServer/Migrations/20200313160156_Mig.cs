@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class Mig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -670,7 +670,7 @@ namespace ApiServer.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    Url = table.Column<string>(nullable: true),
+                    UrlId = table.Column<string>(nullable: true),
                     CandidateId = table.Column<int>(nullable: false),
                     PublicId = table.Column<string>(nullable: true)
                 },

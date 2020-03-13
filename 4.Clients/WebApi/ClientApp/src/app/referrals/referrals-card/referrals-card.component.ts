@@ -3,6 +3,7 @@ import { Candidate } from 'src/entities/candidate';
 import { Cv } from 'src/entities/cv';
 import { FileUploader } from 'ng2-file-upload';
 import { CandidateService } from 'src/app/services/candidate.service';
+import { BaseService } from 'src/app/services/base.service';
 
 @Component({
   selector: 'app-referrals-card',
@@ -16,15 +17,23 @@ export class ReferralsCardComponent implements OnInit {
   uploader: FileUploader;
   response: string;
 
-  constructor() { }
+  constructor(private b: BaseService<Cv>) { }
 
   ngOnInit() {
     this.initializeUploader();
   }
 
+  // uploadFile() {
+  //   this.uploadService.http.post(this.apiUrl + this.cv + this.cand.id, {headers: this.headersWithAuth
+  //   })
+  //     .pipe(
+  //       catchError(this.handleErrors)
+  //     );
+  // }
+
   initializeUploader() {
     this.uploader = new FileUploader({
-      url: 'http://localhost:61059/api/Cv/'+ this.cand.id,
+      url: this.b.apiUrl + 'Cv/' + this.cand.id,
       authToken: 'Bearer ' + localStorage.getItem('token'),
       isHTML5: true,
       removeAfterUpload: true,
@@ -43,7 +52,8 @@ export class ReferralsCardComponent implements OnInit {
         const res: Cv = JSON.parse(response);
         const cv = {
           id: res.id,
-          url: res.url
+          url: res.url,
+          file: res.file
         };
       }
     };

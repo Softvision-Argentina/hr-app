@@ -9,4 +9,5 @@ import { CandidateProfile } from "./Candidate-Profile";
 export class Cv {
   id: number;
   url: string;
+  file: string;
 }
