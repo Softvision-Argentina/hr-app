@@ -92,6 +92,7 @@ import { ReportProgressProcessesComponent } from './dashboard/report-progress-pr
 import { ReportSkillsComponent } from './dashboard/report-skills/report-skills.component';
 import { ReportHireProjectionComponent } from './dashboard/report-hire-projection/report-hire-projection.component';
 import { ReportHireCasualtiesComponent } from './dashboard/report-hire-casualties/report-hire-casualties.component';
+import { ReportWeeklyCandidatesComponent } from './dashboard/report-weekly-candidates/report-weekly-candidates.component';
 import { ProcessContactComponent } from './processes/process-contact/process-contact.component';
 import { EmployeeService } from './services/employee.service';
 import { EmployeesComponent } from './employees/employees.component';
@@ -198,6 +199,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportSkillsComponent,
       ReportHireProjectionComponent,
       ReportHireCasualtiesComponent,
+      ReportWeeklyCandidatesComponent,
       ReportTimetofill2Component,
       ProcessContactComponent,
       DaysOffComponent,

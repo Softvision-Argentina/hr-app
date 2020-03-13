@@ -801,7 +801,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       hrStage: null,
       technicalStage: null,
       clientStage: null,
-      offerStage: null
+      offerStage: null,
+      createdDate: new Date()
     };
 
     process.hrStage = this.hrStage.getFormData(process.id);
@@ -902,6 +903,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       wantedSalary: 0,      
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
+      createdDate: new Date(),
       hrStage: {
         id: 0,
         date: new Date(),

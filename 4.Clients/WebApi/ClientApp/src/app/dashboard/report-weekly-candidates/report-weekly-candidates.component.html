@@ -1,0 +1,31 @@
+<div >
+  <nz-card nzTitle="Weekly Candidates" [nzHoverable]="true">
+    <div style="display: block">
+      <div nz-row>
+        <div nz-col nzSpan="24" style="text-align: center;">
+            <nz-button-group [nzSize]="'default'">
+                <button nz-button nzType="default" (click)="previousWeek()"><i nz-icon type="left"></i></button>
+                <nz-week-picker [(ngModel)]="date" (ngModelChange)="getWeek()" nzPlaceHolder="Select week"></nz-week-picker>
+                <button nz-button nzType="default" (click)="nextWeek()"><i nz-icon type="right"></i></button>
+              </nz-button-group>                
+        </div>
+      </div>
+      <br />
+      <div nz-row>
+          <div nz-col nzSpan="24" *ngIf="hasCandidates">
+              <canvas baseChart
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [plugins]="chartPlugins"
+              [legend]="chartLegend"
+              [chartType]="chartType">
+            </canvas>
+          </div>
+          <div nz-col nzSpan="24" *ngIf="!hasCandidates" style="text-align: center;">
+              <span><strong>THERE ARE NO CANDIDATES FOR THE SELECTED WEEK</strong></span>
+          </div>
+        </div>          
+    </div>
+  </nz-card>
+</div>
