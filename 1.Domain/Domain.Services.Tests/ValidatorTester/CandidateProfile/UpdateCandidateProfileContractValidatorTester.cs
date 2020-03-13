@@ -1,15 +1,14 @@
 ﻿using Domain.Services.Impl.Validators.CandidateProfile;
 using FluentValidation.TestHelper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Domain.Services.Tests.ValidatorTester.CandidateProfile
 {
     public class UpdateCandidateProfileContractValidatorTester
     {
-        private UpdateCandidateProfileContractValidator _validator;
+        private readonly UpdateCandidateProfileContractValidator _validator;
+
         public UpdateCandidateProfileContractValidatorTester()
         {
             _validator = new UpdateCandidateProfileContractValidator();
@@ -44,6 +43,5 @@ namespace Domain.Services.Tests.ValidatorTester.CandidateProfile
         {
             _validator.ShouldHaveValidationErrorFor(UpdateCandidateProfileContract => UpdateCandidateProfileContract.Description, String.Empty);
         }
-
     }
 }
