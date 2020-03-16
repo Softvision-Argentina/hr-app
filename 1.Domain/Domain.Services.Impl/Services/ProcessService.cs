@@ -3,10 +3,8 @@ using Core.Persistance;
 using Domain.Model;
 using Domain.Model.Enum;
 using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.Stage;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -87,7 +85,7 @@ namespace Domain.Services.Impl.Services
             var candidateQuery = _processRepository
                 .QueryEager();
 
-            var candidateResult = candidateQuery.ToList();
+            var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
 
             return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
         }
@@ -103,24 +101,13 @@ namespace Domain.Services.Impl.Services
         public CreatedProcessContract Create(CreateProcessContract createProcessContract)
         {
             var process = _mapper.Map<Process>(createProcessContract);
-            //var candidate = _mapper.Map<Candidate>(createProcessContract.Candidate);
 
-            //process.Candidate = candidate;
-
-            //var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
-            //candidate = process.Candidate;
             this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+
             _candidateRepository.Update(process.Candidate);
 
-            //var updatedCandidate = _candidateRepository.Update(candidate);
-
-            //process.Candidate = updatedCandidate;
-            //process.CandidateId = updatedCandidate.Id;
-
-            //this.AddRecruiterToCandidate(process.Candidate, createProcessContract.Candidate.Recruiter.Id);
-            //this.AddCommunityToCandidate(process.Candidate, createProcessContract.Candidate.Community);
-            //this.AddCandidateProfileToCandidate(process.Candidate, createProcessContract.Candidate.Profile);
             process.CurrentStage = SetProcessCurrentStage(process);
+
             var createdProcess = _processRepository.Create(process);
 
             _unitOfWork.Complete();
@@ -190,7 +177,6 @@ namespace Domain.Services.Impl.Services
             candidate.EnglishLevel = process.HrStage.EnglishLevel;
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
-            //_candidateRepository.Update(candidate);
 
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);
@@ -212,11 +198,6 @@ namespace Domain.Services.Impl.Services
                     process.DeclineReason = _declineReasonRepository.Get(process.DeclineReason.Id);
                 }
             }
-
-            //this.AddRecruiterToCandidate(process.Candidate, updateProcessContract.Candidate.Recruiter.Id);
-            //this.AddCommunityToCandidate(process.Candidate, updateProcessContract.Candidate.Community);
-            //this.AddCandidateProfileToCandidate(process.Candidate, updateProcessContract.Candidate.Profile);
-            //this.AddOfficeToCandidate(process.Candidate, updateProcessContract.Candidate.PreferredOfficeId);
 
             var updatedProcess = _processRepository.Update(process);
 
@@ -241,9 +222,7 @@ namespace Domain.Services.Impl.Services
 
             var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == processID);
 
-            //var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
             process.Candidate.Status = SetCandidateStatus(process.Status);
-            //_candidateRepository.Update(candidate);
 
             _unitOfWork.Complete();
         }
@@ -254,9 +233,7 @@ namespace Domain.Services.Impl.Services
 
             var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
 
-            //var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
             process.Candidate.Status = SetCandidateStatus(process.Status);
-            //_candidateRepository.Update(candidate);
 
             var status = process.Status;
 
