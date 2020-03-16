@@ -54,7 +54,7 @@ export class CSoftComponent {
           this.facade.userService.getRoles();
           //console.log(this.authenticatedUser);
           this.facade.modalService.closeAll();
-          this.router.navigate(['/']);
+         this.navigateByRole(this.authenticatedUser.Role);
         }
       }, err => {
         this.zone.run(() => { this.router.navigate(['/unauthorized']);});
@@ -75,5 +75,14 @@ export class CSoftComponent {
       localStorage.clear();
       return false;
     }
+  }
+  navigateByRole(role : string){
+
+      if(role === 'Common'){
+        this.router.navigate(['/referrals']);  
+     }
+     else{
+      this.router.navigate(['/']) 
+     }
   }
 }

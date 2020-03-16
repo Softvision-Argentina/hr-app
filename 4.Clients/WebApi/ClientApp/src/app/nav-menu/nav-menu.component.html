@@ -8,7 +8,7 @@
       </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
                 <ul nz-menu #navMenu [nzMode]="'horizontal'" class="navbar-nav flex-grow">
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['ALL'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/"]'><i nz-icon nzType="solution"
                 style="vertical-align: middle" nzTheme="outline"></i>Processes</a>
                     </li>
