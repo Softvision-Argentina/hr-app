@@ -5,7 +5,7 @@
         <div nz-col nzSpan="24" style="text-align: center;">
             <nz-button-group [nzSize]="'default'">
                 <button nz-button nzType="default" (click)="previousWeek()"><i nz-icon type="left"></i></button>
-                <nz-week-picker [(ngModel)]="date" (ngModelChange)="getWeek()" nzPlaceHolder="Select week"></nz-week-picker>
+                <nz-week-picker [(ngModel)]="date" (ngModelChange)="getWeek()" nzPlaceHolder="Select week" nzAllowClear="false"></nz-week-picker>
                 <button nz-button nzType="default" (click)="nextWeek()"><i nz-icon type="right"></i></button>
               </nz-button-group>                
         </div>

@@ -23,13 +23,28 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
 
   processes: Process[] = [];
   processesByCandidate : Process[][] = [];
-  date: Date = new Date();
+  date: Date;
   hasCandidates: boolean = false;
-
   isChartComplete: boolean = false;
+  public chartLabels: Label[] = ['Hires'];
+  public chartType: ChartType = 'bar';
+  public chartLegend = true;
+  public chartPlugins = [pluginDataLabels];
+  public chartData: ChartDataSets[] = [];
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
 
   ngOnInit() {
     this.app.showLoading();
+    this.date = new Date();
     this.getWeek();
     this.app.hideLoading();
   }
@@ -49,48 +64,42 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
     this.processes = this._processes;
   }
 
-  public chartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
-  public chartLabels: Label[] = ['Hires'];
-  public chartType: ChartType = 'bar';
-  public chartLegend = true;
-  public chartPlugins = [pluginDataLabels];
-
-  public chartData: ChartDataSets[] = [];
-
   getWeek() {
-    this.processesByCandidate = [];
-    for (let process of this.processes) {
-      if (this.processesByCandidate[process.candidate.recruiter.id] === undefined) {
-        this.processesByCandidate[process.candidate.recruiter.id] = [];
+    if (this.date) {
+      this.processesByCandidate = [];
+
+      for (let process of this.processes) {
+        if (this.processesByCandidate[process.candidate.recruiter.id] === undefined) {
+          this.processesByCandidate[process.candidate.recruiter.id] = [];
+        }
+
+        this.processesByCandidate[process.candidate.recruiter.id].push(process)
       }
-      this.processesByCandidate[process.candidate.recruiter.id].push(process)
-    }
-    for (let key in this.processesByCandidate) {
-      this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
-    }
-    this.hasCandidates = this.processesByCandidate.some(pbc => pbc.length > 0);
-    if (this.hasCandidates) {
-      this.chartData = [];
-      this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.recruiter.name + " " + p[0].candidate.recruiter.lastName}))
+
+      for (let key in this.processesByCandidate) {
+        this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
+      }
+
+      this.hasCandidates = this.processesByCandidate.some(pbc => pbc.length > 0);
+
+      if (this.hasCandidates) {
+        this.chartData = [];
+        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.recruiter.name + " " + p[0].candidate.recruiter.lastName}))
+      }
     }
   }
 
   nextWeek() {
-    this.date = addWeeks(this.date, 1);
-    this.getWeek();
+    if (this.date) {
+      this.date = addWeeks(this.date, 1);
+      this.getWeek();
+    }
   }
 
   previousWeek() {
-    this.date = addWeeks(this.date, -1);
-    this.getWeek();
+    if (this.date) {
+      this.date = addWeeks(this.date, -1);
+      this.getWeek();
+    }
   }
 }
