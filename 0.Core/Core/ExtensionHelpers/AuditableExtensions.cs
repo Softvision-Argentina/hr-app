@@ -6,7 +6,7 @@ namespace Core.ExtensionHelpers
     {
         public static void AuditCreate(this IAuditable auditable, string userName)
         {
-            if (String.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(userName))
                 throw new InvalidAuditableUsernameException();
 
             auditable.CreatedBy = userName;
