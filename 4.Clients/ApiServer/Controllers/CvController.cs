@@ -86,12 +86,26 @@ namespace ApiServer.Controllers
             var clientId = "976816609478-on2g8r4gaqrrb6bj8g1dfbp04ilbl0fk.apps.googleusercontent.com";
             var clientSecret = "4JIOit7VKABsl7DxloQlO1fE";
 
-            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
-            {
-                ClientId = clientId,
-                ClientSecret = clientSecret
-            }, scopes,
-            Environment.UserName, CancellationToken.None, new FileDataStore("MyAppsToken")).Result;
+            //var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
+            //{
+            //    ClientId = clientId,
+            //    ClientSecret = clientSecret
+            //}, scopes,
+            //Environment.UserName, CancellationToken.None, new FileDataStore("MyAppsToken")).Result;
+
+            UserCredential credential =
+            GoogleWebAuthorizationBroker
+                          .AuthorizeAsync(new ClientSecrets
+                          {
+                              ClientId = clientId,
+                              ClientSecret = clientSecret
+                          }
+                                          , scopes
+                                          , Environment.UserName
+                                          , CancellationToken.None
+                                          , new FileDataStore("Daimto.GoogleDrive.Auth.Store")
+                                          ).Result;
+
 
             DriveService service = new DriveService(new BaseClientService.Initializer()
             {
