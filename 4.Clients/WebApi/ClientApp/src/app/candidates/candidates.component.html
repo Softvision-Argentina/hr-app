@@ -1,9 +1,3 @@
-<!-- <div nz-row>
-  <div nz-col nzSpan="24">
-    <button nz-button nzType="primary" (click)="showAddModal(candidateModal)" nzShape="round">
-      <i nz-icon type="plus" theme="outline"></i>Add new candidate</button>
-  </div>
-</div> -->
 <div nz-row>
     <div nz-col nzSpan="24">
         <nz-table #candidateTable [nzData]="listOfDisplayData" [nzPageSize]="10">
@@ -175,7 +169,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
@@ -229,7 +222,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
@@ -237,19 +229,18 @@
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <label nz-checkbox  formControlName="isReferred"></label>
-                        <!--in the future we could use something like (ngModelChange)="referredBy($event)" to show an input for the referring employee.-->
                     </nz-form-control>
                 </nz-form-item>
             </div>
         </div>
-        <div nz-row *ngIf="isReferred()">
+        <div nz-row *ngIf="validateForm.controls['isReferred'].value">
             <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" > Referred By: </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" >
                         <input type="text"  nz-input formControlName="referredBy" id="referredBy" required>
                         <nz-form-explain *ngIf="validateForm.get('referredBy').dirty && validateForm.get('referredBy').invalid">
-                           <ng-container> if referredBy is selected, this input is required  </ng-container>
+                           <ng-container>If 'Is Referred' is selected, this input is required.</ng-container>
                         </nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
@@ -263,7 +254,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-item>
