@@ -13,9 +13,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
 })
 export class AppComponent implements OnInit {
   title = 'app';
-
   showSpinner = true;
-
   loadingConfig: INg2LoadingSpinnerConfig = {
     animationType: ANIMATION_TYPES.scalingBars,
     backdropColor: 'rgba(0, 0, 0, 0.7)',

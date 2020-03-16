@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
   })
 export class SearchbarService {
     searchChanged = new Subject<string>();
-    
     search( route: string, value: string) {
         switch (route) {
             case '/tasks':

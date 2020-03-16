@@ -1,4 +1,5 @@
-<br /><br />
+<br />
+<br />
 <div  nz-row>
     <div nz-col nzSpan="1">
         <button nz-button nzType="primary" (click)="showContactCandidatesModal(searchContactedCandidate)" nzShape="circle">
@@ -155,7 +156,6 @@
     </div>
 </nz-modal>
 
-
 <ng-template #candidateDetailModal>
     <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
 </ng-template>
@@ -163,7 +163,6 @@
 <ng-template #consultantDetailModal>
     <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
 </ng-template>
-
 
 <ng-template #rejectProcessModal>
     <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">

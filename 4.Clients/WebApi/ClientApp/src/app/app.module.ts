@@ -270,13 +270,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         { path: 'declining-reasons', component: DeclineReasonComponent },
 
       ] },
-
       { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
-
       { path: 'login', component: LoginComponent },
-
       { path: 'tasks', component: TasksComponent, canActivate: [HRGuard] },
-
       { path: 'reservation', component: ReservationsComponent, canActivate: [HRGuard] },
       { path: 'employees', component: EmployeesComponent },
       { path: 'postulants', component: PostulantsComponent },

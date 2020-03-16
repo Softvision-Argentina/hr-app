@@ -1,4 +1,5 @@
-<br /><br />
+<br />
+<br />
 <nz-collapse>
   <nz-collapse-panel [nzHeader]="'Candidate Filter'" *appHasRole = "['Admin']">
     <form nz-form [nzLayout]="'inline'" [style.width.%]="90" [style.padding-left.%]="10"
@@ -10,9 +11,6 @@
             nzPlaceHolder="Select a community">
             <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" [nzValue]="c">{{c.name}}</nz-option>
           </nz-select>
-          <!--    <nz-form-explain
-            *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
-            Please select a skill!</nz-form-explain> -->
         </nz-form-control>
       </nz-form-item>
       <nz-form-item [style.width.%]="35">
@@ -22,9 +20,6 @@
             nzPlaceHolder="Select a preferred office" >
             <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o">{{ o.name }}</nz-option>
           </nz-select>
-          <!--    <nz-form-explain
-            *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
-            Please select a skill!</nz-form-explain> -->
         </nz-form-control>
       </nz-form-item>
       <div *ngFor="let control of listOfControl; let i = index">
@@ -35,9 +30,6 @@
               nzPlaceHolder="Select a skill">
               <nz-option *ngFor="let skill of skills" nzLabel="{{skill.name}}" nzValue="{{skill.id}}"></nz-option>
             </nz-select>
-            <!--    <nz-form-explain
-                *ngIf="validateSkillsForm.get('skillSelector').dirty && validateSkillsForm.get('skillSelector').errors">
-                Please select a skill!</nz-form-explain> -->
           </nz-form-control>
         </nz-form-item>
         <nz-form-item [style.width.%]="35">
@@ -67,9 +59,8 @@
         </nz-form-control>
       </nz-form-item>
     </form>
-
-
-    <br /><br />
+    <br />
+    <br />
     <div nz-row>
       <div nz-col nzSpan="13">
         <nz-table #skillsTable [nzData]="listOfDisplayData" [nzPageSize]="5">
