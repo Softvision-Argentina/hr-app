@@ -5,7 +5,6 @@ import { Process } from 'src/entities/process';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
 import { AppComponent } from 'src/app/app.component';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import * as getISOWeek from 'date-fns/get_iso_week';
 import * as addWeeks from 'date-fns/add_weeks';
 
