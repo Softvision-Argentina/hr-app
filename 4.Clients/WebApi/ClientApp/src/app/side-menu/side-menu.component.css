@@ -19,6 +19,7 @@
   margin-left: 18px;
   min-height: 50px;
 }
+
 .side-menu .container-item{
   display: flex;
   justify-content: flex-start;
@@ -68,23 +69,28 @@
   background-image: linear-gradient(#F4633A, #C800A1);
 }
 
-@media(max-height: 600px){
+@media(max-height: 800px){
   .side-menu{
     padding: 8px 18px 10px 0px;
   }
+
   .side-menu .container-item{
     height: 100px;
   }
+
   .container-item .item{
     margin-top: 0px;
-  } 
+  }
+
   .item i{
     font-size: 25px;
     margin-bottom: 4px;
   }
+
   .item p{
     margin-bottom: 0;
   }
+  
   .gradient-border{
     height: 62px;
   }
