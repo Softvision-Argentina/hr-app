@@ -14,7 +14,7 @@ import { Office } from '../../entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
-import { validateCandidateForm } from './utils';
+import { validateCandidateForm } from './ValidateCandidateForm';
 
 @Component({
   selector: 'app-candidates',
