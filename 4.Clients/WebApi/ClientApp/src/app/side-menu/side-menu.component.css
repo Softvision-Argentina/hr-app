@@ -1,15 +1,15 @@
 .side-menu{
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100vh;
-    width: 140px;
-    padding: 24px 18px 0px 0px;
-    z-index: 1;
-    background-color: white;
-    top: 0;
-    left:0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 140px;
+  padding: 24px 18px 0px 0px;
+  z-index: 1;
+  background-color: white;
+  top: 0;
+  left:0;
 }
 
 #logo{
@@ -39,19 +39,19 @@
 }
 
 .container-item .item{
-    display: inline-block;
-    text-align: center;
-    font-size: 12px;
-    letter-spacing: -0.5px;
-    margin-top: 8px;
-    font-weight: bold;
-    margin-left: auto;
-    margin-right: auto;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+  margin-top: 8px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .item i{
-    margin-bottom: 10px;
-    font-size: 36px;  
+  margin-bottom: 10px;
+  font-size: 36px;  
 }
 
 .gradient-border{
