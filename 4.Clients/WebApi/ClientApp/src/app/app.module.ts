@@ -247,11 +247,11 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     ToastrModule.forRoot(),
     Ng2LoadingSpinnerModule.forRoot({}),
     RouterModule.forRoot([
-      { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [AdminGuard] },
+      { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [HRGuard] },
 
-      { path: 'processes', component: ProcessesComponent, canActivate: [AdminGuard] },
-      { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [AdminGuard] },
-      { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [AdminGuard] },
+      { path: 'processes', component: ProcessesComponent, canActivate: [HRGuard] },
+      { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [HRGuard] },
+      { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [HRGuard] },
 
       { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
 

@@ -21,7 +21,7 @@ export class HRGuard implements CanActivate {
 
     if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.Token)) {
       if (this.roles.indexOf(this.currentUser.Role) != -1
-        && (this.currentUser.Role == "Admin" || this.currentUser.Role == "HRManagement" || this.currentUser.Role == "HRUser")) return true;
+        && (this.currentUser.Role == "Admin" || this.currentUser.Role == "HRManagement" || this.currentUser.Role == "HRUser" || this.currentUser.Role == "Interviewer" )) return true;
       else {
         this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
         return false;
