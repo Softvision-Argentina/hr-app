@@ -22,15 +22,7 @@ export class ReferralsCardComponent implements OnInit {
   ngOnInit() {
     this.initializeUploader();
   }
-
-  // uploadFile() {
-  //   this.uploadService.http.post(this.apiUrl + this.cv + this.cand.id, {headers: this.headersWithAuth
-  //   })
-  //     .pipe(
-  //       catchError(this.handleErrors)
-  //     );
-  // }
-
+  
   initializeUploader() {
     this.uploader = new FileUploader({
       url: this.b.apiUrl + 'Cv/' + this.cand.id,

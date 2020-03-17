@@ -15,7 +15,7 @@ using Domain.Model;
 
 namespace ApiServer.Controllers
 {
-    [Route("api/[controller]/{candId}")]
+    [Route("api/[controller]/{candidateId}")]
     [ApiController]
     public class CvController : ControllerBase
     {
@@ -33,9 +33,9 @@ namespace ApiServer.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddCv(int candId, [FromForm] CvContractAdd cvContract)
+        public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
-            var candidate = _candidateService.GetCandidate(candId);
+            var candidate = _candidateService.GetCandidate(candidateId);
             var file = cvContract.File;
 
             var auth = _cv.Authorize();
@@ -46,7 +46,8 @@ namespace ApiServer.Controllers
             candidate.Cv = cvContract.UrlId;
 
             var cv = _mapper.Map<Cv>(cvContract);
-            var cand = _mapper.Map<Candidate>(candidate);
+             _mapper.Map<Candidate>(candidate);
+
             _repo.SaveAll(cv);
 
             return Ok("FileUploaded");

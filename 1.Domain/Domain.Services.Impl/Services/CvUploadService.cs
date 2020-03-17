@@ -25,18 +25,12 @@ namespace Domain.Services.Impl.Services
                 file.CopyTo(ms);
                 var fileBytes = ms.ToArray();
                 MemoryStream stream = new MemoryStream(fileBytes);
-                try
-                {
-                    FilesResource.CreateMediaUpload request = driveService.Files.Create(body, stream, GetMimeType(file.ContentType));
-                    request.SupportsTeamDrives = true;
-                    request.Upload();
 
-                    return request.ResponseBody;
-                }
-                catch (Exception e)
-                {
-                    return null;
-                }
+                FilesResource.CreateMediaUpload request = driveService.Files.Create(body, stream, GetMimeType(file.ContentType));
+                request.SupportsTeamDrives = true;
+                request.Upload();
+
+                return request.ResponseBody;
             }
             else
             {
