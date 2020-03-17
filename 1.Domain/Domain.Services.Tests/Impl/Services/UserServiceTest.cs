@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Services;
-using Domain.Services.Repositories.EF;
 using Moq;
 using Xunit;
 

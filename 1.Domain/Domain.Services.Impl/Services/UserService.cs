@@ -1,15 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.User;
-using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
