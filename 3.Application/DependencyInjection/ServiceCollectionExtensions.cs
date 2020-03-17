@@ -129,6 +129,7 @@ namespace DependencyInjection
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
             services.AddTransient<IPreferenceService, PreferenceService>();
             services.AddTransient<IOfferService, OfferService>();
+            services.AddTransient<ICvUploadService, CvUploadService>();
 
         }
 
