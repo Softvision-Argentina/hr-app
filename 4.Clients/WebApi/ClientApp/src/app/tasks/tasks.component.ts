@@ -55,7 +55,7 @@ export class TasksComponent implements OnInit {
     this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
-        this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.Email.toLowerCase())[0];
+        this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.email.toLowerCase())[0];
       }, err => {
         console.log(err);
       });
@@ -73,7 +73,7 @@ export class TasksComponent implements OnInit {
         });
     }
     else{
-      this.facade.taskService.getByConsultant(this.user.Email)
+      this.facade.taskService.getByConsultant(this.user.email)
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;

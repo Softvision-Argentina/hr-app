@@ -24,7 +24,7 @@ import { RoleService } from "./role.service";
 import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
 import { DeclineReasonService } from "./decline-reason.service";
-import { PreferenceService } from "./preference.service";
+import { DashboardService } from "./dashboard.service";
 import { OfferService } from "./offer.service";
 import { NotificationService } from "./notificationsService";
 
@@ -257,12 +257,12 @@ export class FacadeService {
     return this._declineReasonService;
   }
 
-  private _preferenceService: PreferenceService;
-  public get preferenceService(): PreferenceService {
-    if (!this._preferenceService) {
-      this._preferenceService = this.injector.get(PreferenceService);
+  private _dashboardService: DashboardService;
+  public get dashboardService(): DashboardService {
+    if (!this._dashboardService) {
+      this._dashboardService = this.injector.get(DashboardService);
     }
-    return this._preferenceService;
+    return this._dashboardService;
   }
 
   constructor(private injector: Injector) {

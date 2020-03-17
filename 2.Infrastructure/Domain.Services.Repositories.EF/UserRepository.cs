@@ -24,7 +24,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<User> QueryEager()
         {
-            return Query();
+            return Query().Include(u => u.UserDashboards).ThenInclude(d => d.Dashboard);
         }
 
         public User Login(string username, string password)

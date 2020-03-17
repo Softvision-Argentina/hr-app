@@ -27,9 +27,9 @@ export class UserService extends BaseService<User> {
 
   getRoles() {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser.Role == "") {
-      this.getRoleByUserName(currentUser.Email).subscribe(res => {
-        currentUser.Role = res['role'];
+    if (currentUser.role == "") {
+      this.getRoleByUserName(currentUser.email).subscribe(res => {
+        currentUser.role = res['role'];
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         location.reload();
       }, err => {
