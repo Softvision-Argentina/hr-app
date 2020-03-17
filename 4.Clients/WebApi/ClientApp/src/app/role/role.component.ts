@@ -1,12 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { AppComponent } from '../app.component';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { SettingsComponent } from '../settings/settings.component';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { Role } from 'src/entities/role';
 import { Employee } from 'src/entities/employee';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-role',
@@ -28,7 +25,6 @@ export class RoleComponent implements OnInit {
       isActive: [null, [Validators.required]]
     });
   }
-
 
   getRoles() {
     this.facade.RoleService.get()
