@@ -48,7 +48,7 @@
                     <li *ngIf="isUserAuthenticated()">
                         <div>
                             <button nz-button nz-popover style="height: 100%;" nzPlacement="bottomRight" nzTrigger="click" [nzContent]="contentTemplate">
-                <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
+                <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
               </button>
                         </div>
                     </li>
@@ -60,7 +60,7 @@
 
 <ng-template #contentTemplate>
     <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
-        <nz-card-meta nzTitle="{{currentUser.Name}}" nzDescription="{{currentUser.Email}}">
+        <nz-card-meta nzTitle="{{currentUser.name}}" nzDescription="{{currentUser.email}}">
         </nz-card-meta>
         <br />
         <ul class="ant-card-actions">
@@ -77,7 +77,7 @@
 </ng-template>
 
 <ng-template #coverTemplate>
-    <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
+    <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
 </ng-template>
 
 <ng-template #loginModal>
