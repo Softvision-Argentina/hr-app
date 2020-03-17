@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApiServer.Contracts.UserDashboard;
+﻿using ApiServer.Contracts.UserDashboard;
 using Domain.Services.Contracts.UserDashboard;
 using AutoMapper;
 

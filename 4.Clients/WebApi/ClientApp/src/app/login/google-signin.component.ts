@@ -54,11 +54,6 @@ export class GoogleSigninComponent implements AfterViewInit {
           Token: googleUser.getAuthResponse().id_token,
           userDashboards: []
         }
-        
-        // console.log(currentUser);
-        // localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        // that.facade.userService.getRoles();
-
         that.externalLogin(currentUser);
 
       }, function (error) {
@@ -113,15 +108,8 @@ export class GoogleSigninComponent implements AfterViewInit {
   }
 
   logout(){
-     //////////////////////////////////////// Uncomment block for live deployment //////////////////////////////
-
-    // var auth2 = gapi.auth2.getAuthInstance();
-    // auth2.signOut().then(function () {
       localStorage.clear();
       this.router.navigate(['/login']);
-    // });
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 
   eraseCookie(domain: string) { 

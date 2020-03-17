@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.Dashboard;
+﻿using Domain.Services.Contracts.Dashboard;
 using Domain.Services.Contracts.User;
 
 namespace Domain.Services.Contracts.UserDashboard

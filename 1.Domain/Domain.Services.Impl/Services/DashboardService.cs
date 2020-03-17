@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using Core;
 using Core.Persistance;
@@ -14,28 +13,28 @@ namespace Domain.Services.Impl.Services
     public class DashboardService : IDashboardService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<Dashboard> _DashboardRepository;  
+        private readonly IRepository<Dashboard> _dashboardRepository;  
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<DashboardService> _log;
 
         public DashboardService(
             IMapper mapper,
-            IRepository<Dashboard> DashboardRepository,           
+            IRepository<Dashboard> dashboardRepository,           
             IUnitOfWork unitOfWork,
             ILog<DashboardService> log
             )
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _DashboardRepository = DashboardRepository;
+            _dashboardRepository = dashboardRepository;
             _log = log;
         }
 
         public CreatedDashboardContract Create(CreateDashboardContract contract)
         {
-            var Dashboard = _mapper.Map<Dashboard>(contract);
+            var dashboard = _mapper.Map<Dashboard>(contract);
 
-            var createdDashboard = _DashboardRepository.Create(Dashboard);
+            var createdDashboard = _dashboardRepository.Create(dashboard);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
@@ -44,48 +43,46 @@ namespace Domain.Services.Impl.Services
 
         public void Update(UpdateDashboardContract contract)
         {
-            //_log.LogInformation($"Validating contract {contract.Id}");
-
             _log.LogInformation($"Mapping contract {contract.Id}");
-            var Dashboard = _mapper.Map<Dashboard>(contract);
+            var dashboard = _mapper.Map<Dashboard>(contract);
 
-            var updatedDashboard = _DashboardRepository.Update(Dashboard);
+            var updatedDashboard = _dashboardRepository.Update(dashboard);
             _log.LogInformation($"Complete for {contract.Id}");
             _unitOfWork.Complete();
         }
 
-        public ReadedDashboardContract Read(int Id)
+        public ReadedDashboardContract Read(int id)
         {
-            var DashboardQuery = _DashboardRepository
+            var dashboardQuery = _dashboardRepository
                 .QueryEager()
-                .Where(_ => _.Id == Id);
+                .Where(_ => _.Id == id);
 
-            var DashboardResult = DashboardQuery.SingleOrDefault();
+            var dashboardResult = dashboardQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedDashboardContract>(DashboardResult);
+            return _mapper.Map<ReadedDashboardContract>(dashboardResult);
         }
 
         public IEnumerable<ReadedDashboardContract> List()
         {
-            var DashboardQuery = _DashboardRepository
+            var dashboardQuery = _dashboardRepository
                 .QueryEager();
 
-            var DashboardResult = DashboardQuery.ToList();
+            var dashboardResult = dashboardQuery.ToList();
 
-            return _mapper.Map<List<ReadedDashboardContract>>(DashboardResult);
+            return _mapper.Map<List<ReadedDashboardContract>>(dashboardResult);
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            _log.LogInformation($"Searching Dashboard {Id}");
-            Dashboard dashboard = _DashboardRepository.Query().Where(_ => _.Id == Id).FirstOrDefault();
+            _log.LogInformation($"Searching Dashboard {id}");
+            Dashboard dashboard = _dashboardRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (dashboard == null)
             {
                 throw new Exception("The dashboard doesn't exist");
             }
-            _log.LogInformation($"Deleting Dashboard {Id}");
-            _DashboardRepository.Delete(dashboard);
+            _log.LogInformation($"Deleting Dashboard {id}");
+            _dashboardRepository.Delete(dashboard);
 
             _unitOfWork.Complete();
         }

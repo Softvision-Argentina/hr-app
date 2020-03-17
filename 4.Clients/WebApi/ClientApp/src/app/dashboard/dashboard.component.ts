@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { FacadeService } from '../services/facade.service';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
@@ -10,8 +10,6 @@ import { AppComponent } from '../app.component';
 import { HireProjection } from 'src/entities/hireProjection';
 import { EmployeeCasualty } from 'src/entities/employeeCasualty';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
-import { e } from '@angular/core/src/render3';
-import { User } from 'src/entities/user';
 import { Dashboard } from 'src/entities/dashboard';
 
 @Component({
@@ -94,15 +92,6 @@ export class DashboardComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  // ngAfterViewChecked(): void {
-  //   if (!this.isChartComplete) {
-  //     setTimeout(() => {
-  //       // this.getProgressPercentage();
-  //       // this.getHireProjectionReport();
-  //     });
-  //   }
-  // }
-
   getDashboards() {
     this.facade.dashboardService.get().subscribe(
       res => {
@@ -156,8 +145,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkIndex(i: number): boolean {
-    if (i < 3) { return true; }
-    else { return false; }
+    return i < 3;
   }
 
   public hireChartOptions: ChartOptions = {

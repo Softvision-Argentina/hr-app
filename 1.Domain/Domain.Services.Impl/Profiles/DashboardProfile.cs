@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.Dashboard;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Model;
 using Domain.Services.Contracts.Dashboard;
 

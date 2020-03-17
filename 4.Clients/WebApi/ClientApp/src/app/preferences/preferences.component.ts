@@ -3,8 +3,6 @@ import { FacadeService } from '../services/facade.service';
 import { User } from 'src/entities/user';
 import { Dashboard } from 'src/entities/dashboard';
 import { UserDashboard } from 'src/entities/userDashboard';
-import { variable } from '@angular/compiler/src/output/output_ast';
-
 @Component({
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',

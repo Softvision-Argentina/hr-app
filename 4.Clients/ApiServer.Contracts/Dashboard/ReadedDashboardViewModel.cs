@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.UserDashboard;
 
 namespace ApiServer.Contracts.Dashboard
@@ -10,6 +8,5 @@ namespace ApiServer.Contracts.Dashboard
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<ReadedUserDashboardViewModel> UserDashboards { get; set; }
-
     }
 }

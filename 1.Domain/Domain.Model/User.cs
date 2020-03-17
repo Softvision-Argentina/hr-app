@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core;
 using Domain.Model.Enum;
-using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Model
 {
@@ -14,6 +13,5 @@ namespace Domain.Model
         public Roles Role { get; set; }
         public string Password { get; set; }
         public IList<UserDashboard> UserDashboards { get; set; }
-
     }
 }

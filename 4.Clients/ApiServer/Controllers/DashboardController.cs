@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Dashboard;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Dashboard;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -16,14 +12,14 @@ namespace ApiServer.Controllers
     [ApiController]
     public class DashboardController : BaseController<DashboardController>
     {
-        IDashboardService _DashboardService;
-        private IMapper _mapper;
+        private readonly IDashboardService _dashboardService;
+        private readonly IMapper _mapper;
 
-        public DashboardController(IDashboardService DashboardService,
+        public DashboardController(IDashboardService dashboardService,
                                    ILog<DashboardController> logger,
                                    IMapper mapper) : base(logger)
         {
-            _DashboardService = DashboardService;
+            _dashboardService = dashboardService;
             _mapper = mapper;
         }
 
@@ -32,25 +28,25 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var Dashboards = _DashboardService.List();
+                var dashboards = _dashboardService.List();
 
-                return Accepted(_mapper.Map<List<ReadedDashboardViewModel>>(Dashboards));
+                return Accepted(_mapper.Map<List<ReadedDashboardViewModel>>(dashboards));
             });
         }
 
         [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var Dashboard = _DashboardService.Read(Id);
+                var dashboard = _dashboardService.Read(id);
 
-                if (Dashboard == null)
+                if (dashboard == null)
                 {
-                    return NotFound(Id);
+                    return NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedDashboardViewModel>(Dashboard));
+                return Accepted(_mapper.Map<ReadedDashboardViewModel>(dashboard));
             });
         }
 
@@ -62,7 +58,7 @@ namespace ApiServer.Controllers
             return ApiAction(() =>
             {
                 var contract = _mapper.Map<CreateDashboardContract>(vm);
-                var returnContract = _DashboardService.Create(contract);
+                var returnContract = _dashboardService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedDashboardViewModel>(returnContract));
             });
@@ -71,25 +67,25 @@ namespace ApiServer.Controllers
         // PUT api/dashboard/5
         // Mutation
         [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody]UpdateDashboardViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateDashboardViewModel vm)
         {
             return ApiAction(() =>
             {
                 var contract = _mapper.Map<UpdateDashboardContract>(vm);
-                contract.Id = Id;
-                _DashboardService.Update(contract);
+                contract.Id = id;
+                _dashboardService.Update(contract);
 
-                return Accepted(new { Id });
+                return Accepted(new { id });
             });
         }
 
         // DELETE api/dashboard/5
         [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _DashboardService.Delete(Id);
+                _dashboardService.Delete(id);
                 return Accepted();
             });
         }
