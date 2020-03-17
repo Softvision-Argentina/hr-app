@@ -46,8 +46,6 @@ namespace ApiServer.Tests.Controllers
         public void Should_GetRoleByUserNameNotFoundObjectResult_When_DataIsInvalid()
         {
             string username = "testUserName";
-            //mockService.Setup(_ => _.GetUserRole(It.IsAny<string>())).Returns(new ReadedUserRoleContract());
-            //mockMapper.Setup(_ => _.Map<List<ReadedTaskViewModel>>(It.IsAny<ReadedTaskContract>())).Returns(new List<ReadedTaskViewModel>());
 
             var result = controller.GetRoleByUserName(username);
 
