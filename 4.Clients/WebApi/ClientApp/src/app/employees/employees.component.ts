@@ -277,7 +277,7 @@ export class EmployeesComponent implements OnInit {
     this.showReviewerNotFoundMessage = false;
     this.employeeForm.controls['phoneNumberPrefix'].setValue('+54');
     this.employeeForm.controls['status'].setValue(1);
-    let recruiterId = this.consultants.filter(c => c.emailAddress == this.currentUser.Email)[0].id;
+    let recruiterId = this.consultants.filter(c => c.emailAddress == this.currentUser.email)[0].id;
     this.employeeForm.controls['recruiterId'].setValue(recruiterId);
     if (this.activeRoles.length > 0)
       this.employeeForm.controls['roleId'].setValue(this.activeRoles[0].id);

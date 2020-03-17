@@ -24,13 +24,13 @@ export class PreferencesComponent implements OnInit {
   updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {   
     if(addOrDelete) {
       var userToAdd: UserDashboard = new UserDashboard();
-      userToAdd.userId = this.currentUser.ID;
+      userToAdd.userId = this.currentUser.id;
       userToAdd.dashboardId = dashboard.id;    
       dashboard.userDashboards.push(userToAdd);
     }
     else {
       var indexUserToDelete: number;
-      indexUserToDelete = dashboard.userDashboards.findIndex(x => x.userId === this.currentUser.ID);
+      indexUserToDelete = dashboard.userDashboards.findIndex(x => x.userId === this.currentUser.id);
       dashboard.userDashboards.splice(indexUserToDelete, 1);
     }
 
@@ -64,7 +64,7 @@ export class PreferencesComponent implements OnInit {
 
   fillStatus() {
     for (let counter = 0; counter < this.dashboards.length; counter++){
-      if ( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.ID)) {
+      if ( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.id)) {
         this.dashboardStatus.push(true);
       } else {
         this.dashboardStatus.push(false);

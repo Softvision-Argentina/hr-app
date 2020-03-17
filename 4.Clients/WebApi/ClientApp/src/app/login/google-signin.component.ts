@@ -46,11 +46,11 @@ export class GoogleSigninComponent implements AfterViewInit {
         let profile = googleUser.getBasicProfile();
 
         let currentUser: User = {
-          ID: profile.getId(),
-          Name: profile.getName(),
-          ImgURL: profile.getImageUrl(),
-          Email: profile.getEmail(),
-          Role: '',
+          id: profile.getId(),
+          name: profile.getName(),
+          imgURL: profile.getImageUrl(),
+          email: profile.getEmail(),
+          role: '',
           Token: googleUser.getAuthResponse().id_token,
           userDashboards: []
         }
@@ -70,11 +70,11 @@ export class GoogleSigninComponent implements AfterViewInit {
       if (res != null)
       {
         let currentUser: User = {
-          ID: res.user.id,
-          Name: res.user.firstName + " " + res.user.lastName,
-          ImgURL: gUser.ImgURL,
-          Email: res.user.username,
-          Role: res.user.role,
+          id: res.user.id,
+          name: res.user.firstName + " " + res.user.lastName,
+          imgURL: gUser.imgURL,
+          email: res.user.username,
+          role: res.user.role,
           Token: res.token,
           userDashboards: []
         }

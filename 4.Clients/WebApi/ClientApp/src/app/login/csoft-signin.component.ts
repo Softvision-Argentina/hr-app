@@ -42,11 +42,11 @@ export class CSoftComponent {
         if (res != null)
         {
           this.authenticatedUser = {
-            ID: res.user.id,
-            Name: res.user.firstName + " " + res.user.lastName,
-            ImgURL: "",
-            Email: res.user.username,
-            Role: res.user.role,
+            id: res.user.id,
+            name: res.user.firstName + " " + res.user.lastName,
+            imgURL: "",
+            email: res.user.username,
+            role: res.user.role,
             Token: res.token,
             userDashboards: []
           }

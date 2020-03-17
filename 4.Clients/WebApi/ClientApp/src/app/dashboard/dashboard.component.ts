@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let dashboard: Dashboard;
     dashboard = this.dashboards.find( x => x.id === dashId);
-    return dashboard.userDashboards.some( x => x.userId === currentUser.ID);
+    return dashboard.userDashboards.some( x => x.userId === currentUser.id);
   }
 
   getProcesses() {
