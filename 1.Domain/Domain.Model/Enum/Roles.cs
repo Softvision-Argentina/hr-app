@@ -10,6 +10,9 @@ namespace Domain.Model.Enum
         HRManagement,
         HRUser,
         Interviewer,
-        TechnicalInterviewer
+        TechnicalInterviewer,
+        Common,
+        Recruiter,
+        CommunityManager
     }
 }

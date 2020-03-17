@@ -12,35 +12,34 @@ import { Router } from '@angular/router';
 })
 export class CSoftComponent {
 
-    loginForm: FormGroup;
-    authenticatedUser:User;
-    submitForm(): void {
-      for (const i in this.loginForm.controls) {
-        this.loginForm.controls[i].markAsDirty();
-        this.loginForm.controls[i].updateValueAndValidity();
-      }
-
-      if (this.loginForm.valid) {
-        this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
-      }
-      
-    }
-  
-    constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) {}
-  
-    ngOnInit(): void {
-      this.loginForm = this.fb.group({
-        userName: [null, [Validators.required]],
-        password: [null, [Validators.required]]
-      });
+  loginForm: FormGroup;
+  authenticatedUser: User;
+  submitForm(): void {
+    for (const i in this.loginForm.controls) {
+      this.loginForm.controls[i].markAsDirty();
+      this.loginForm.controls[i].updateValueAndValidity();
     }
 
-    authenticateUser(userName: string, password: string) {      
-      this.facade.authService.authenticate(userName, password)
+    if (this.loginForm.valid) {
+      this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);
+    }
+
+  }
+
+  constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) { }
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      password: [null, [Validators.required]]
+    });
+  }
+
+  authenticateUser(userName: string, password: string) {
+    this.facade.authService.authenticate(userName, password)
       .subscribe(res => {
-        
-        if (res != null)
-        {
+
+        if (res != null) {
           this.authenticatedUser = {
             ID: res.user.id,
             Name: res.user.firstName + " " + res.user.lastName,
@@ -54,21 +53,21 @@ export class CSoftComponent {
           this.facade.userService.getRoles();
           //console.log(this.authenticatedUser);
           this.facade.modalService.closeAll();
-         this.navigateByRole(this.authenticatedUser.Role);
+          this.navigateByRole(this.authenticatedUser.Role);
         }
       }, err => {
-        this.zone.run(() => { this.router.navigate(['/unauthorized']);});
+        this.zone.run(() => { this.router.navigate(['/unauthorized']); });
         this.facade.toastrService.error('Invalid username or password.');
       });
-    }
+  }
 
-    ngAfterViewInit() {    
+  ngAfterViewInit() {
     this.isUserAuthenticated();
   }
 
-  isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+  isUserAuthenticated(): boolean {
+    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
       return true;
     }
     else {
@@ -76,13 +75,13 @@ export class CSoftComponent {
       return false;
     }
   }
-  navigateByRole(role : string){
+  navigateByRole(role: string) {
 
-      if(role === 'Common'){
-        this.router.navigate(['/referrals']);  
-     }
-     else{
-      this.router.navigate(['/']) 
-     }
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    }
+    else {
+      this.router.navigate(['/'])
+    }
   }
 }

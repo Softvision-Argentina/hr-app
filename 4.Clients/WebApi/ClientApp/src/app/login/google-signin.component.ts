@@ -16,8 +16,8 @@ export class GoogleSigninComponent implements AfterViewInit {
   @ViewChild("googleBtn")
   public googleBtn: ElementRef;
 
-  private clientId:string = this.appConfig.getConfig("clientId");
-  
+  private clientId: string = this.appConfig.getConfig("clientId");
+
   private scope = this.appConfig.getConfig("scopes").join(' ');
 
   public auth2: any;
@@ -53,7 +53,7 @@ export class GoogleSigninComponent implements AfterViewInit {
           Role: '',
           Token: googleUser.getAuthResponse().id_token
         }
-        
+
         // console.log(currentUser);
         // localStorage.setItem('currentUser', JSON.stringify(currentUser));
         // that.facade.userService.getRoles();
@@ -61,37 +61,36 @@ export class GoogleSigninComponent implements AfterViewInit {
         that.externalLogin(currentUser);
 
       }, function (error) {
-        that.zone.run(() => { that.router.navigate(['/unauthorized']);});
+        that.zone.run(() => { that.router.navigate(['/unauthorized']); });
         this.facade.toastrService.error('An error has ocurred, please try again with another account.');
         that.eraseCookie('accounts.google.com');
       });
   }
 
-  externalLogin(gUser: User) {      
+  externalLogin(gUser: User) {
     this.facade.authService.externalLogin(gUser.Token)
-    .subscribe(res => {
-      
-      if (res != null)
-      {
-        let currentUser: User = {
-          ID: res.user.id,
-          Name: res.user.firstName + " " + res.user.lastName,
-          ImgURL: gUser.ImgURL,
-          Email: res.user.username,
-          Role: res.user.role,
-          Token: res.token
-        }
+      .subscribe(res => {
 
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        this.facade.userService.getRoles();
-        this.facade.modalService.closeAll();
-        this.zone.run(() => { this.router.navigate(['/']);});
-      }
-    }, err => {
-      this.zone.run(() => { this.router.navigate(['/unauthorized']);});
-      this.eraseCookie('accounts.google.com');
-      console.log(err);
-    });
+        if (res != null) {
+          let currentUser: User = {
+            ID: res.user.id,
+            Name: res.user.firstName + " " + res.user.lastName,
+            ImgURL: gUser.ImgURL,
+            Email: res.user.username,
+            Role: res.user.role,
+            Token: res.token
+          }
+
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          this.facade.userService.getRoles();
+          this.facade.modalService.closeAll();
+          this.zone.run(() => { this.navigateByRole(currentUser.Role) });
+        }
+      }, err => {
+        this.zone.run(() => { this.router.navigate(['/unauthorized']); });
+        this.eraseCookie('accounts.google.com');
+        console.log(err);
+      });
   }
 
   ngAfterViewInit() {
@@ -99,9 +98,9 @@ export class GoogleSigninComponent implements AfterViewInit {
     this.isUserAuthenticated();
   }
 
-  isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+  isUserAuthenticated(): boolean {
+    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
       return true;
     }
     else {
@@ -110,20 +109,28 @@ export class GoogleSigninComponent implements AfterViewInit {
     }
   }
 
-  logout(){
-     //////////////////////////////////////// Uncomment block for live deployment //////////////////////////////
+  logout() {
+    //////////////////////////////////////// Uncomment block for live deployment //////////////////////////////
 
     // var auth2 = gapi.auth2.getAuthInstance();
     // auth2.signOut().then(function () {
-      localStorage.clear();
-      this.router.navigate(['/login']);
+    localStorage.clear();
+    this.router.navigate(['/login']);
     // });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 
-  eraseCookie(domain: string) { 
-    document.cookie = domain+'=; Max-Age=-99999999;';
+  navigateByRole(role: string) {
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    }
+    else {
+      this.router.navigate(['/'])
+    }
+  }
+  eraseCookie(domain: string) {
+    document.cookie = domain + '=; Max-Age=-99999999;';
   }
 
 }
