@@ -12,7 +12,6 @@ import { ProcessesComponent } from 'src/app/processes/processes/processes.compon
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
-import { Globals } from 'src/app/app-globals/globals';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
@@ -40,8 +39,6 @@ export class ProcessContactComponent implements OnInit {
     this.recruiters = value;
   }
 
-
-
   @Input()
   private _visible: boolean;
   public get visibles(): boolean {
@@ -50,7 +47,6 @@ export class ProcessContactComponent implements OnInit {
   public set visibles(value: boolean) {
     this.visible = value;
   }
-
 
   @Input()
   private _communities: Community[];
@@ -129,7 +125,6 @@ export class ProcessContactComponent implements OnInit {
   emptyConsultant: Consultant;
 
   editingCandidateId: number = 0;
-  // candidateForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -149,7 +144,7 @@ export class ProcessContactComponent implements OnInit {
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getConsultants();
-    this.getCandidates();
+    this.getCandidates().subscribe();
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
 
@@ -160,14 +155,17 @@ export class ProcessContactComponent implements OnInit {
     });
   }
 
-  profileChanges(profileId){
+  profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
 
   getCandidates() {
     return this.facade.candidateService.get().pipe(
-      tap( res => this.candidates = res)
+      tap( res => {
+        this.candidates = res;
+        console.log(res);
+      })
     );
   }
 
@@ -294,12 +292,6 @@ export class ProcessContactComponent implements OnInit {
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
-
-    // for (const i in this.candidateForm.controls) {
-    //   this.candidateForm.controls[i].markAsDirty();
-    //   this.candidateForm.controls[i].updateValueAndValidity();
-    //   if (!this.candidateForm.controls[i].valid) isCompleted = false;
-    // }
     if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
@@ -395,7 +387,6 @@ export class ProcessContactComponent implements OnInit {
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         recruiter: new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        //linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
         additionalInformation: '',
@@ -416,10 +407,9 @@ export class ProcessContactComponent implements OnInit {
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;
-          this.visible = false;
           this.app.hideLoading();
           this.getCandidates()
-          .subscribe(data => {
+          .subscribe(() => {
             this.startNewProcess(res.id);
           }, err => {
             console.log(err);
@@ -428,13 +418,12 @@ export class ProcessContactComponent implements OnInit {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
           this.app.hideLoading;
-        })
+        });
     }
 
   }
 
   startNewProcess(candidateId: number) {
-
     this.facade.processService.getActiveProcessByCandidate(candidateId)
       .subscribe((res: Process[]) => {
         if (res.length > 0) {
@@ -449,9 +438,6 @@ export class ProcessContactComponent implements OnInit {
               let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
               this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
             }
-            //  ,
-            // nzOnCancel: () => this.modalService.closeAll()
-
           });
         }
         else {
@@ -459,6 +445,6 @@ export class ProcessContactComponent implements OnInit {
           let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
           this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
         }
-      })
+      });
   }
 }
