@@ -114,16 +114,12 @@ export class ProcessContactComponent implements OnInit {
   isNewCandidate: boolean = false;
   isEditCandidate: boolean = false;
   candidates: Candidate[] = [];
-
   searchValue = '';
   listOfSearchProcesses = [];
-
   filteredCandidate: Candidate[] = [];
   listOfDisplayData = [...this.filteredCandidate];
-
   emptyCandidate: Candidate;
   emptyConsultant: Consultant;
-
   editingCandidateId: number = 0;
 
   constructor(
@@ -147,7 +143,6 @@ export class ProcessContactComponent implements OnInit {
     this.getCandidates().subscribe();
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-
     this.facade.consultantService.GetByEmail(this.currentUser.Email)
       .subscribe(res => {
         this.currentConsultant = res.body;
@@ -356,7 +351,6 @@ export class ProcessContactComponent implements OnInit {
       knownFrom: editedCandidate.knownFrom,
       referredBy: editedCandidate.referredBy
     }
-
     this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
         this.getCandidates();
@@ -420,7 +414,6 @@ export class ProcessContactComponent implements OnInit {
           this.app.hideLoading;
         });
     }
-
   }
 
   startNewProcess(candidateId: number) {
