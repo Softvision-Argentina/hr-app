@@ -8,15 +8,13 @@ import { Skill } from 'src/entities/skill';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { AppComponent } from '../app.component';
 import { Consultant } from 'src/entities/consultant';
-import { NzStatisticNumberComponent } from 'ng-zorro-antd/statistic/nz-statistic-number.component';
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { Office } from '../../entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
-
-
+import { validateCandidateForm } from './validateCandidateForm';
 
 @Component({
   selector: 'app-candidates',
@@ -25,22 +23,17 @@ import { replaceAccent } from 'src/app/helpers/string-helpers';
   providers: [CandidateDetailsComponent, AppComponent]
 })
 
-
-
 export class CandidatesComponent implements OnInit {
 
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
-
   filteredCandidates: Candidate[] = [];
   isLoadingResults = false;
   searchValue = '';
   listOfSearchCandidates = [];
   listOfDisplayData = [...this.filteredCandidates];
-
   sortName = 'name';
   sortValue = 'ascend';
-
   recruiters: Consultant[] = [];
   profiles: CandidateProfile[] = [];
   communities: Community[] = [];
@@ -57,12 +50,9 @@ export class CandidatesComponent implements OnInit {
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   isEdit = false;
   editingCandidateId = 0;
-
   isDniLoading = false;
   isDniValid = false;
-
   currentConsultant: User;
-
   searchValueStatus = '';
   statusList: any[];
   englishLevelList: any[];
@@ -72,7 +62,7 @@ export class CandidatesComponent implements OnInit {
       this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
       this.statusList = globals.candidateStatusList;
       this.englishLevelList = globals.englishLevelList;
-     }
+  }
 
   ngOnInit() {
     this.app.showLoading();
@@ -85,7 +75,6 @@ export class CandidatesComponent implements OnInit {
     this.getSkills();
     this.resetForm();
     this.app.hideLoading();
-
   }
 
   getCandidates() {
@@ -126,7 +115,6 @@ export class CandidatesComponent implements OnInit {
     });
   }
 
-
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
@@ -162,7 +150,9 @@ export class CandidatesComponent implements OnInit {
       preferredOffice: [null],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
-      isReferred: [null]
+      isReferred: [null],
+      referredBy: [null],
+      knownFrom: [null]
     });
   }
 
@@ -214,7 +204,6 @@ export class CandidatesComponent implements OnInit {
     this.controlEditArray = [];
     let editedCandidate: Candidate = this.filteredCandidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit Candidate',
       nzContent: modalContent,
@@ -233,14 +222,7 @@ export class CandidatesComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted = true;
-            for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid) &&
-                (this.validateForm.controls[i] !== this.validateForm.controls['phoneNumberPrefix'])) { isCompleted = false; }
-            }
-            if (isCompleted) {
+            if (validateCandidateForm(this.validateForm)) {
               const candidateSkills: CandidateSkill[] = [];
               this.controlEditArray.forEach(skillEdit => {
                 const skill: CandidateSkill = {
@@ -264,6 +246,13 @@ export class CandidatesComponent implements OnInit {
                 };
                 candidateSkills.push(skill);
               });
+              const referredBy = this.validateForm.controls['isReferred'].value === false ? null : this.validateForm.controls['referredBy'].value;
+              let knownFrom;
+              if (this.validateForm.controls['isReferred'].value === false || this.validateForm.controls['knownFrom'].value === '') {
+                knownFrom = null;
+              } else {
+                knownFrom = this.validateForm.controls['knownFrom'].value;
+              }
               editedCandidate = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
@@ -284,11 +273,10 @@ export class CandidatesComponent implements OnInit {
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),
                 isReferred: this.validateForm.controls['isReferred'].value,
-                // contactDay: this.validateForm.controls['contactDay'].value
-                cv: this.validateForm.controls['isReferred'].value,
-                knownFrom: this.validateForm.controls['knownFrom'].value,
-                referredBy: this.validateForm.controls['referredBy'].value
-              }
+                cv: null,
+                knownFrom: knownFrom,
+                referredBy: referredBy
+              };
               if (this.validateForm.controls['phoneNumber'].value) {
                 editedCandidate.phoneNumber += this.validateForm.controls['phoneNumber'].value.toString();
               }
@@ -340,12 +328,10 @@ export class CandidatesComponent implements OnInit {
       e.preventDefault();
     }
     const id = (this.controlArray.length > 0) ? this.controlArray[this.controlArray.length - 1].id + 1 : 0;
-
     const control = {
       id,
       controlInstance: [`skill${id}`, `slidder${id}`, `comment${id}`]
     };
-
     if (id > 0) {
       const skills = this.skills;
       const newSetOfSkills: Skill[] = [];
@@ -355,9 +341,7 @@ export class CandidatesComponent implements OnInit {
       });
       this.skills = newSetOfSkills;
     }
-
     if (this.editingCandidateId > 0) { this.removeCandidateSkills(); }
-
     const index = this.controlArray.push(control);
     this.validateForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.validateForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
@@ -413,7 +397,8 @@ export class CandidatesComponent implements OnInit {
   }
 
   fillCandidateForm(candidate: Candidate) {
-    // let statusIndex = this.statusList.filter(status => status.name.toLowerCase() === candidate.status.toLowerCase())[0].id;
+    const candidateReferredBy = candidate.referredBy !== null ? candidate.referredBy : '';
+    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom  : '';
     this.validateForm.controls['dni'].setValue(candidate.dni);
     this.validateForm.controls['name'].setValue(candidate.name);
     this.validateForm.controls['lastName'].setValue(candidate.lastName);
@@ -429,16 +414,15 @@ export class CandidatesComponent implements OnInit {
     this.validateForm.controls['community'].setValue(candidate.community.id);
     this.validateForm.controls['profile'].setValue(candidate.profile.id);
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
-
+    this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
+    this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = (this.controlEditArray.length > 0) ? this.controlEditArray[this.controlEditArray.length - 1].id + 1 : 0;
-
         const control = {
           id: skill.skillId,
           controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
         };
-
         const index = this.controlEditArray.push(control);
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[0], new FormControl(skill.skill.name));
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[1], new FormControl(skill.rate));
@@ -464,5 +448,4 @@ export class CandidatesComponent implements OnInit {
   getStatus(status: number): string {
     return this.statusList.filter(st => st.id === status)[0].name;
   }
-
 }
