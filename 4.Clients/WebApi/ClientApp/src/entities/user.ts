@@ -6,6 +6,6 @@ export class User {
     imgURL: string;
     email: string;
     role: string;
-    Token: string;
+    token: string;
     userDashboards: UserDashboard[]
 }

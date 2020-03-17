@@ -51,7 +51,7 @@ export class GoogleSigninComponent implements AfterViewInit {
           imgURL: profile.getImageUrl(),
           email: profile.getEmail(),
           role: '',
-          Token: googleUser.getAuthResponse().id_token,
+          token: googleUser.getAuthResponse().id_token,
           userDashboards: []
         }
         that.externalLogin(currentUser);
@@ -64,7 +64,7 @@ export class GoogleSigninComponent implements AfterViewInit {
   }
 
   externalLogin(gUser: User) {      
-    this.facade.authService.externalLogin(gUser.Token)
+    this.facade.authService.externalLogin(gUser.token)
     .subscribe(res => {
       
       if (res != null)
@@ -75,7 +75,7 @@ export class GoogleSigninComponent implements AfterViewInit {
           imgURL: gUser.imgURL,
           email: res.user.username,
           role: res.user.role,
-          Token: res.token,
+          token: res.token,
           userDashboards: []
         }
 
@@ -98,7 +98,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   isUserAuthenticated(): boolean{
   let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {

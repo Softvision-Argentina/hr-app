@@ -47,7 +47,7 @@ export class CSoftComponent {
             imgURL: "",
             email: res.user.username,
             role: res.user.role,
-            Token: res.token,
+            token: res.token,
             userDashboards: []
           }
 
@@ -69,7 +69,7 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean{
   let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {
