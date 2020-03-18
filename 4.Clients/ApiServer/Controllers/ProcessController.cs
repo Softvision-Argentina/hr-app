@@ -12,6 +12,7 @@ using Domain.Model;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Model.Enum;
 using System;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,7 +22,7 @@ namespace ApiServer.Controllers
     /// Controller that manages processes
     /// Contains action method for approve or disapprove
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProcessController : BaseController<ProcessController>
@@ -60,6 +61,20 @@ namespace ApiServer.Controllers
                 var process = _processService.Read(id);
 
                 return Accepted(_mapper.Map<ReadedProcessViewModel>(process));
+            });
+        }
+        
+        [HttpGet("com/{community}")]
+        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
+        public IActionResult GetProcessesByCommunity(string community)
+        {
+            return ApiAction(() =>
+            {
+                //var process =  _processService.List().ToList().Where(pro => pro.Candidate.Community.Name.Equals(community));
+                var process = _processService.GetProcessesByCommunity(community);
+
+                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(process));
+                //return Accepted(process);
             });
         }
 

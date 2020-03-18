@@ -13,5 +13,6 @@ namespace Domain.Model
         public Roles Role { get; set; }
         public string Password { get; set; }
         public Preference Preference { get; set; }
+        public Community Community { get; set; }
     }
 }
