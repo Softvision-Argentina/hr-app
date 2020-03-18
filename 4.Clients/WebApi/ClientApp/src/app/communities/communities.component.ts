@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input,SimpleChanges } from '@angular/core';
 import { Community } from 'src/entities/community';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { AppComponent } from '../app.component';
-import { Consultant } from 'src/entities/consultant';
-import { NzStatisticNumberComponent } from 'ng-zorro-antd/statistic/nz-statistic-number.component';
 import { User } from 'src/entities/user';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { SettingsComponent } from '../settings/settings.component';
@@ -59,7 +57,6 @@ export class CommunitiesComponent implements OnInit {
     this.getCandidateProfiles();
   }
 
-  
   getCProfileNameByID(id: number) {
     let CProfile = this.candidateprofiles.find(c => c.id === id);
     return CProfile != undefined ? CProfile.name : '';
@@ -79,17 +76,15 @@ export class CommunitiesComponent implements OnInit {
     });
   }
 
-  resetForm() { //crea el validateform(cuerpo de un Communitiesform)
+  resetForm() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]], //name: new FormControl(value, validator or array of validators)
+      name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]],
-      profileId: [null, [Validators.required, trimValidator]] //NO OLVIDAR ESTO
+      profileId: [null, [Validators.required, trimValidator]]
     });
   }
 
-  
-  showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Community Modal
+  showAddModal(modalContent: TemplateRef<{}>): void {    
     this.isEdit = false;
     this.controlArray = [];
     this.controlEditArray = [];
@@ -97,21 +92,20 @@ export class CommunitiesComponent implements OnInit {
 
     if(this.candidateprofiles.length > 0)
     this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);    
-    
   
     const modal = this.facade.modalService.create({
-      nzTitle: 'Add New Community', //Boton de agregar
+      nzTitle: 'Add New Community',
       nzContent: modalContent,
       nzClosable: true,
       nzWidth: '90%',
       nzFooter: [
         {
-          label: 'Cancel', //boton de cancelar
+          label: 'Cancel',
           shape: 'default',
           onClick: () => modal.destroy()
         },
         {
-          label: 'Save', //boton de guardar cambios
+          label: 'Save',
           type: 'primary',
           loading: false,
           onClick: () => {
@@ -131,13 +125,10 @@ export class CommunitiesComponent implements OnInit {
                 profile: null
               }
               this.facade.communityService.add(newCommunity)
-                .subscribe(res => {          
-                  
-                  //this.settings.getCommunities();        
+                .subscribe(res => {                                            
                   this.settings.refresh();
                   this.controlArray = [];
-                  this.facade.toastrService.success('Community was successfully created !');
-                  
+                  this.facade.toastrService.success('Community was successfully created !');                  
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
@@ -151,8 +142,7 @@ export class CommunitiesComponent implements OnInit {
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Consultant Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
     this.resetForm();
     this.editingCommunityId = id; 
     this.isEdit = true;
@@ -235,5 +225,4 @@ export class CommunitiesComponent implements OnInit {
     if(this.candidateprofiles.length > 0)
     this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);    
   }
-
 }
