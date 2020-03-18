@@ -283,7 +283,7 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("PublicId");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("UrlId");
 
                     b.Property<long>("Version");
 
