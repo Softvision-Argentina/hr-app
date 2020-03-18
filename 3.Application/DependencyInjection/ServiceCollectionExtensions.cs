@@ -5,7 +5,6 @@ using DependencyInjection.Config;
 using Domain.Model;
 using Domain.Model.Seed;
 using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.Stage;
 using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.ExternalServices;
 using Domain.Services.Impl.Services;
@@ -129,7 +128,8 @@ namespace DependencyInjection
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
             services.AddTransient<IPreferenceService, PreferenceService>();
             services.AddTransient<IOfferService, OfferService>();
-            services.AddTransient<ICvUploadService, CvUploadService>();
+            services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
+            services.AddTransient<ICvService, CvService>();
 
         }
 

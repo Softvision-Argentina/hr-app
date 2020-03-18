@@ -1,8 +1,6 @@
 ﻿using Google.Apis.Drive.v3;
 using System;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Util.Store;
-using System.Threading;
 using Google.Apis.Services;
 using Microsoft.AspNetCore.Http;
 using System.IO;
@@ -12,14 +10,15 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Domain.Services.Impl.Services
 {
-    public class CvUploadService : ICvUploadService
+    public class GoogleDriveUploadService : IGoogleDriveUploadService
     {
+        //TODO: Encapsulate and divide driveservice in other interface, and File in its proper interface
         public Google.Apis.Drive.v3.Data.File Upload(DriveService driveService, IFormFile file)
         {
             if (file.Length > 0)
             {
                 Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-                body.Name = System.IO.Path.GetFileName(file.FileName);
+                body.Name = Path.GetFileName(file.FileName);
                 body.MimeType = GetMimeType(file.ContentType);
                 var ms = new MemoryStream();
                 file.CopyTo(ms);
@@ -32,10 +31,8 @@ namespace Domain.Services.Impl.Services
 
                 return request.ResponseBody;
             }
-            else
-            {
-                return null;
-            }
+            
+            return null;
         }
 
         public DriveService Authorize()
@@ -65,11 +62,14 @@ namespace Domain.Services.Impl.Services
 
         private static string GetMimeType(string fileName)
         {
-            string mimeType = "application/unknown";
-            string ext = Path.GetExtension(fileName).ToLower();
-            RegistryKey regKey = Registry.ClassesRoot.OpenSubKey(ext);
+            var mimeType = "application/unknown";
+            var ext = Path.GetExtension(fileName).ToLower();
+            var regKey = Registry.ClassesRoot.OpenSubKey(ext);
+
             if (regKey != null && regKey.GetValue("Content Type") != null) mimeType = regKey.GetValue("Content Type").ToString();
-            System.Diagnostics.Debug.WriteLine(mimeType); return mimeType;
+            System.Diagnostics.Debug.WriteLine(mimeType); 
+
+            return mimeType;
         }
 
         private string GetDirectory()

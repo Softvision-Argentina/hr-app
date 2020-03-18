@@ -3,14 +3,6 @@ using Domain.Services.Contracts.Cv;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Services.Interfaces.Services;
 using Domain.Services.Interfaces.Repositories;
-using System;
-using Google.Apis.Drive.v3;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Util.Store;
-using System.Threading;
-using Google.Apis.Services;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using Domain.Model;
 
 namespace ApiServer.Controllers
@@ -19,17 +11,16 @@ namespace ApiServer.Controllers
     [ApiController]
     public class CvController : ControllerBase
     {
-        private readonly ICvRepository _repo;
-        private readonly IMapper _mapper;
+        private readonly ICvService _cvService;
         ICandidateService _candidateService;
-        ICvUploadService _cv;
+        IGoogleDriveUploadService _cvUploadService;
 
-        public CvController(ICvRepository repo, ICandidateService candidateService, IMapper mapper, ICvUploadService cv)
+        public CvController(ICvRepository repo, ICandidateService candidateService, IMapper mapper, IGoogleDriveUploadService cvUploadService,
+            ICvService cvService)
         {
-            _repo = repo;
-            _mapper = mapper;
+            _cvService = cvService;
             _candidateService = candidateService;
-            _cv = cv;
+            _cvUploadService = cvUploadService;
         }
 
         [HttpPost]
@@ -38,17 +29,10 @@ namespace ApiServer.Controllers
             var candidate = _candidateService.GetCandidate(candidateId);
             var file = cvContract.File;
 
-            var auth = _cv.Authorize();
-            var fileUploaded = _cv.Upload(auth, file);
+            var auth = _cvUploadService.Authorize();
+            var fileUploaded = _cvUploadService.Upload(auth, file);
 
-            cvContract.UrlId = fileUploaded.Id;
-            cvContract.CandidateId = candidate.Id;
-            candidate.Cv = cvContract.UrlId;
-
-            var cv = _mapper.Map<Cv>(cvContract);
-             _mapper.Map<Candidate>(candidate);
-
-            _repo.SaveAll(cv);
+             _cvService.StoreCvAndCandidateCvId(candidate, cvContract, fileUploaded);
 
             return Ok("FileUploaded");
         }

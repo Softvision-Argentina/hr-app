@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Candidate } from 'src/entities/candidate';
 import { Cv } from 'src/entities/cv';
 import { FileUploader } from 'ng2-file-upload';
-import { CandidateService } from 'src/app/services/candidate.service';
 import { BaseService } from 'src/app/services/base.service';
 
 @Component({
