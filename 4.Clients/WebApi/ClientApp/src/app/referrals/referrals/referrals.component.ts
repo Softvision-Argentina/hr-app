@@ -144,7 +144,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.Email)
+    this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
     });
@@ -199,7 +199,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.Name);
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.name);
       }, err => {
         console.log(err);
       });

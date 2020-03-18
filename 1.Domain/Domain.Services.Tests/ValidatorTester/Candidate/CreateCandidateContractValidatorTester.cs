@@ -5,15 +5,13 @@ using Domain.Services.Contracts.Consultant;
 using Domain.Services.Impl.Validators.Candidate;
 using FluentValidation.TestHelper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Domain.Services.Tests.ValidatorTester.Candidate
 {
     public class CreateCandidateContractValidatorTester
     {
-        private CreateCandidateContractValidator validator;
+        private readonly CreateCandidateContractValidator validator;
 
         public CreateCandidateContractValidatorTester()
         {

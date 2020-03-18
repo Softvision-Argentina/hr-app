@@ -42,12 +42,13 @@ export class CSoftComponent {
         if (res != null)
         {
           this.authenticatedUser = {
-            ID: res.user.id,
-            Name: res.user.firstName + " " + res.user.lastName,
-            ImgURL: "",
-            Email: res.user.username,
-            Role: res.user.role,
-            Token: res.token
+            id: res.user.id,
+            name: res.user.firstName + " " + res.user.lastName,
+            imgURL: "",
+            email: res.user.username,
+            role: res.user.role,
+            token: res.token,
+            userDashboards: []
           }
 
           localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
@@ -68,7 +69,7 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean{
   let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {
