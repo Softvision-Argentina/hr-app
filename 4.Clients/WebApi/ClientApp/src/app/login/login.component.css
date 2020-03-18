@@ -10,6 +10,7 @@
     height: 100%;
     background-attachment: fixed;
 }
+
 .welcome {
     margin: 50px 0 0px 60px;
 
@@ -28,43 +29,91 @@
     font-size: 24px;
     margin-top: 40px;
 }
+
 .loginForm {
   background-color: #e4dfdf54;
   height: 100%;
 
 }
+
 .loginForm div div {
   padding-bottom: 40px;
 }
+
 .loginForm div h2 {
   font-size: 40px;;
 }
+
 .logo {
   width: 88%;
 }
+
 .recru-container {
   width: 23%;
 }
+
 .recru {
   font-size: 75px;
   margin-bottom: 0px;
   font-weight: bold;
   color: white;
 }
+
 .recru-logo {
   width: 100%;
 }
 
-@media screen and (max-width: 1380px) and (min-width: 1024px){
-  .recru-container {
-    width: 27%;
+.login-background-image {
+  background-image: url('./../../assets/images/pattern-waves.png'); 
+  padding-bottom: 19%; 
+}
+
+@media screen and (max-width: 1920px) and (min-width: 1801px){
+  .login-background-image {
+    padding-bottom: 12%; 
   }
-  .logo {
-    width: 100%;
+
+  .title {
+    font-size: 120px;
   }
 }
 
+@media screen and (max-width: 1800px) and (min-width: 1381px){
+  .login-background-image {
+    padding-bottom: 6%; 
+  }
 
+  .title {
+    font-size: 90px;
+  }
+}
+
+@media screen and (max-width: 1380px) and (min-width: 1290px){
+  .recru-container {
+    width: 27%;
+  }
+
+  .logo {
+    width: 100%;
+  }
+
+  .login-background-image {
+    padding-bottom: 11%; 
+  }
+
+  .title {
+    font-size: 80px;
+  }
+}
+@media screen and (max-width: 1289px) and (min-width: 1024px){
+  .login-background-image {
+    padding-bottom: 8%; 
+  }
+
+  .title {
+    font-size: 80px;
+  }
+}
 
  @media screen and (max-width: 1200px) and (min-width: 1024px){
   .title {

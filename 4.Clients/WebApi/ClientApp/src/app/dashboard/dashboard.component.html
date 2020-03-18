@@ -1,5 +1,4 @@
-<app-nav-menu></app-nav-menu>
-<div class="padding" *ngIf="isLoaded">
+<div *ngIf="isLoaded">
   <div nz-row [nzGutter]="8">
     <div *ngIf="userHasItActivated(1)">
       <app-report-processes [_detailedProcesses]="processes"></app-report-processes>
