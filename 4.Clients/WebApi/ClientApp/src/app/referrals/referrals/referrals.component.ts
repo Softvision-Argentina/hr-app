@@ -820,6 +820,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     process = {
       id: !this.isEdit ? 0 : this.emptyProcess.id,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
       currentStage: ProcessCurrentStageEnum.NA,
@@ -923,6 +924,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.emptyProcess = {
       id: 0,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: ProcessStatusEnum.NA,
       currentStage: ProcessCurrentStageEnum.NA,
