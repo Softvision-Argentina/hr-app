@@ -48,7 +48,19 @@ input:focus{
   font-family: "ProximaNova-Semibold";
 }
 
+nz-list-item{
+  display: flex;
+  justify-content: space-between;
+  padding-left:  10px;
+  padding-right: 10px
+}
+
+nz-list-item:first-child{
+  justify-content: center;
+}
+
 @media(max-width:1000px){
+
   .avatar .user-info{
     padding-right: 50px;
   }
