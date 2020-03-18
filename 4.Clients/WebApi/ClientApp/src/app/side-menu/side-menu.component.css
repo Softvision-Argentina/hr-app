@@ -1,15 +1,15 @@
 .side-menu{
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100vh;
-    width: 140px;
-    padding: 24px 18px 0px 0px;
-    z-index: 1;
-    background-color: white;
-    top: 0;
-    left:0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 140px;
+  padding: 24px 18px 0px 0px;
+  z-index: 1;
+  background-color: white;
+  top: 0;
+  left:0;
 }
 
 #logo{
@@ -18,8 +18,8 @@
   height: 8%;
   margin-left: 18px;
   min-height: 50px;
-  
 }
+
 .side-menu .container-item{
   display: flex;
   justify-content: flex-start;
@@ -28,7 +28,6 @@
   align-items: center;
   flex-shrink: 1;
   font-family: "ProximaNova-Regular";
-
 }
 
 .container-item:focus{
@@ -39,26 +38,21 @@
   cursor: pointer;
 }
 
-
-
 .container-item .item{
-    display: inline-block;
-    text-align: center;
-    font-size: 12px;
-    letter-spacing: -0.5px;
-    margin-top: 8px;
-    font-weight: bold;
-    margin-left: auto;
-    margin-right: auto;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+  margin-top: 8px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .item i{
-    margin-bottom: 10px;
-    font-size: 36px;
-    
+  margin-bottom: 10px;
+  font-size: 36px;  
 }
-
-
 
 .gradient-border{
   width: 8px;
@@ -70,29 +64,34 @@
   color: #c800a1;
   font-family: "ProximaNova-Bold"!important;
 }
+
 .active .gradient-border{
   background-image: linear-gradient(#F4633A, #C800A1);
 }
 
-@media(max-height: 600px){
+@media(max-height: 800px){
   .side-menu{
     padding: 8px 18px 10px 0px;
   }
+
   .side-menu .container-item{
     height: 100px;
   }
+
   .container-item .item{
     margin-top: 0px;
-  } 
+  }
+
   .item i{
     font-size: 25px;
     margin-bottom: 4px;
   }
+
   .item p{
     margin-bottom: 0;
   }
+  
   .gradient-border{
     height: 62px;
   }
-
 }

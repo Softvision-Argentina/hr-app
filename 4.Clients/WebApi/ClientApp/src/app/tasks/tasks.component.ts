@@ -29,13 +29,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   toDoList: Task[] = [];
   searchSub: Subscription;
   orderBy: string = "Order by";
-
   toDoListDisplay: any = [...this.toDoList];
-
   dummyTask: Task;
-
   showAllTasks: boolean = true;
-
   currentConsultant: Consultant;
   user: User;
 
@@ -52,7 +48,13 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor( private search: SearchbarService,private facade: FacadeService, private fb: FormBuilder, private config: AppConfig, private app: AppComponent) {
+  constructor(
+    private search: SearchbarService,
+    private facade: FacadeService,
+    private fb: FormBuilder,
+    private config: AppConfig,
+    private app: AppComponent
+  ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -107,9 +109,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     }, err => {
       this.app.hideLoading();
       this.facade.toastrService.error('An error has ocurred. Please try again later');
-    })
-
-
+    });
   }
 
   deleteTask(id: number) {
@@ -146,14 +146,12 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(id: number, item: TaskItem) {
-
     let isEmpty: boolean = true;
     let task = this.toDoList.find(this.findTaskIndex, id);
     let index = this.toDoList.indexOf(task);
     let taskItem = task.taskItems.filter(it => it.id == item.id)[0];
     let itemIndex = task.taskItems.indexOf(item);
     taskItem.checked = !taskItem.checked;
-
     this.facade.taskService.update(task.id, task)
       .subscribe(res => {
         this.toDoList[index].taskItems[itemIndex] = taskItem;
@@ -183,10 +181,8 @@ export class TasksComponent implements OnInit, OnDestroy {
         taskId: id,
         task: this.dummyTask
       }
-
       updateTask.taskItems.push(newItem);
       if (updateTask.isApprove) updateTask.isApprove = false;
-
       this.facade.taskService.update(updateTask.id, updateTask)
         .subscribe(res => {
           this.toDoList[this.toDoList.indexOf(updateTask)] = updateTask;
@@ -215,17 +211,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     let itemIndex: number = updateTask.taskItems.indexOf(item);
 
     updateTask.taskItems.splice(itemIndex, 1);
-
     this.facade.taskService.update(updateTask.id, updateTask)
       .subscribe(res => {
         this.toDoList[taskIndex].isNew = false;
 
         this.toDoList[taskIndex] = updateTask;
-
         //If all items are checked, task is apprvoed
         if (this.toDoList[taskIndex].taskItems.every(it => it.checked))
           this.toDoList[taskIndex].isApprove = true;
-
       }, err => {
         if (err.message != undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error("The service is not available now. Try again later.");

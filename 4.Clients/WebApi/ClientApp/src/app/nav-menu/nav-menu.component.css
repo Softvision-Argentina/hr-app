@@ -5,21 +5,18 @@
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
-  
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: calc(100% - 140px); /* Full width */
   margin-left: 140px;
   z-index: 3;
-
 }
+
 .main-nav__input {
   width: 100%;
   border:none;
   height: 75px;
   padding-left: 39px;
-  
-  
 }
 
 .main-nav__input input{
@@ -38,8 +35,8 @@ input:focus{
 .main-nav .avatar{
   align-self: flex-start;
   flex-shrink: 0;
-  
 }
+
 .main-nav .avatar:hover{
   cursor: pointer;
 }
@@ -51,7 +48,19 @@ input:focus{
   font-family: "ProximaNova-Semibold";
 }
 
+nz-list-item{
+  display: flex;
+  justify-content: space-between;
+  padding-left:  10px;
+  padding-right: 10px
+}
+
+nz-list-item:first-child{
+  justify-content: center;
+}
+
 @media(max-width:1000px){
+
   .avatar .user-info{
     padding-right: 50px;
   }

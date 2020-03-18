@@ -265,6 +265,7 @@ export class FacadeService {
     }
     return this._preferenceService;
   }
+  
   private _searchbarService: SearchbarService;
   public get searchbarService(): SearchbarService {
     if (!this._searchbarService) {
