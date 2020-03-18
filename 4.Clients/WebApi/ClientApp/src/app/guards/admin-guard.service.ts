@@ -19,8 +19,8 @@ export class AdminGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.Token)) {
-      if (this.roles.indexOf(this.currentUser.Role) != -1 && this.currentUser.Role == "Admin") return true;
+    if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
+      if (this.roles.indexOf(this.currentUser.role) != -1 && this.currentUser.role == "Admin") return true;
       else {
         this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
         return false;

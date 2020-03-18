@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiServer.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class First : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,6 +48,24 @@ namespace ApiServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Consultants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dashboards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Version = table.Column<long>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dashboards", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -447,31 +465,23 @@ namespace ApiServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Preferences",
+                name: "UserDashboards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Version = table.Column<long>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CasualtiesDashboard = table.Column<bool>(nullable: false),
-                    CompletedDashboard = table.Column<bool>(nullable: false),
-                    ProcessesDashboard = table.Column<bool>(nullable: false),
-                    ProgressDashboard = table.Column<bool>(nullable: false),
-                    ProjectionDashboard = table.Column<bool>(nullable: false),
-                    SkillsDashboard = table.Column<bool>(nullable: false),
-                    TimeToFill1Dashboard = table.Column<bool>(nullable: false),
-                    TimeToFIll2Dashboard = table.Column<bool>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    DashboardId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Preferences", x => x.Id);
+                    table.PrimaryKey("PK_UserDashboards", x => new { x.UserId, x.DashboardId });
                     table.ForeignKey(
-                        name: "FK_Preferences_Users_UserId",
+                        name: "FK_UserDashboards_Dashboards_DashboardId",
+                        column: x => x.DashboardId,
+                        principalTable: "Dashboards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserDashboards_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -670,7 +680,7 @@ namespace ApiServer.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    Url = table.Column<string>(nullable: true),
+                    UrlId = table.Column<string>(nullable: true),
                     CandidateId = table.Column<int>(nullable: false),
                     PublicId = table.Column<string>(nullable: true)
                 },
@@ -1105,12 +1115,6 @@ namespace ApiServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Preferences_UserId",
-                table: "Preferences",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Processes_CandidateId",
                 table: "Processes",
                 column: "CandidateId");
@@ -1195,6 +1199,11 @@ namespace ApiServer.Migrations
                 table: "TechnicalStages",
                 column: "ProcessId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDashboards_DashboardId",
+                table: "UserDashboards",
+                column: "DashboardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1239,9 +1248,6 @@ namespace ApiServer.Migrations
                 name: "Postulants");
 
             migrationBuilder.DropTable(
-                name: "Preferences");
-
-            migrationBuilder.DropTable(
                 name: "Reservation");
 
             migrationBuilder.DropTable(
@@ -1252,6 +1258,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "TechnicalStages");
+
+            migrationBuilder.DropTable(
+                name: "UserDashboards");
 
             migrationBuilder.DropTable(
                 name: "Skills");
@@ -1267,6 +1276,9 @@ namespace ApiServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tasks");
+
+            migrationBuilder.DropTable(
+                name: "Dashboards");
 
             migrationBuilder.DropTable(
                 name: "SkillTypes");
