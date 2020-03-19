@@ -17,25 +17,25 @@ namespace Domain.Services.Tests.ValidatorTester.CandidateProfile
         [Fact(DisplayName = "Verify that throws error when Name string is null")]
         public void Should_Have_Error_When_Name_Is_Null()
         {
-            _validator.ShouldHaveValidationErrorFor(CandidateProfileContract => CandidateProfileContract.Name, (string)null);
+            _validator.ShouldHaveValidationErrorFor(candidateProfileContract => candidateProfileContract.Name, (string)null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Name string is empty")]
         public void Should_Have_Error_When_Name_Is_Blank()
         {
-            _validator.ShouldHaveValidationErrorFor(CandidateProfileContract => CandidateProfileContract.Name, String.Empty);
+            _validator.ShouldHaveValidationErrorFor(candidateProfileContract => candidateProfileContract.Name, String.Empty, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Description string is null")]
         public void Should_Have_Error_When_Description_Is_Null()
         {
-            _validator.ShouldHaveValidationErrorFor(CandidateProfileContract => CandidateProfileContract.Description, (string)null);
+            _validator.ShouldHaveValidationErrorFor(candidateProfileContract => candidateProfileContract.Description, (string)null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Description string is empty")]
         public void Should_Have_Error_When_Description_Is_Blank()
         {
-            _validator.ShouldHaveValidationErrorFor(CandidateProfileContract => CandidateProfileContract.Description, String.Empty);
+            _validator.ShouldHaveValidationErrorFor(candidateProfileContract => candidateProfileContract.Description, String.Empty, "Create");
         }
     }
 }
