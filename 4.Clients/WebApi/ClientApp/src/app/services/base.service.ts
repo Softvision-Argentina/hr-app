@@ -15,7 +15,7 @@ export class BaseService<T> {
 
   constructor(private router: Router, private config: AppConfig, public http: HttpClient) {    
     let user = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = user != null ? user.Token : null;
+    this.token = user != null ? user.token : null;
     this.headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     this.headersWithAuth = new HttpHeaders({
       "Authorization": "Bearer " + this.token,

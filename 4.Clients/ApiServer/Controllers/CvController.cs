@@ -3,71 +3,36 @@ using Domain.Services.Contracts.Cv;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Services.Interfaces.Services;
 using Domain.Services.Interfaces.Repositories;
+using Domain.Model;
 
 namespace ApiServer.Controllers
 {
-    [Route("api/[controller]/{candId}")]
+    [Route("api/[controller]/{candidateId}")]
     [ApiController]
     public class CvController : ControllerBase
     {
-        private readonly ICvRepository _repo;
-        private readonly IMapper _mapper;
+        private readonly ICvService _cvService;
         ICandidateService _candidateService;
+        IGoogleDriveUploadService _cvUploadService;
 
-        public CvController(ICvRepository repo, ICandidateService candidateService, IMapper mapper)
+        public CvController(ICvRepository repo, ICandidateService candidateService, IMapper mapper, IGoogleDriveUploadService cvUploadService,
+            ICvService cvService)
         {
-            _repo = repo;
-            _mapper = mapper;
+            _cvService = cvService;
             _candidateService = candidateService;
-        }
-
-        [HttpGet("id", Name = "GetCv")]
-        public IActionResult Getphoto(int id)
-        {
-            var cv = _repo.GetCv(id);
-
-            var cvReturn = _mapper.Map<CvContractReturn>(cv);
-
-            return Ok(cvReturn);
+            _cvUploadService = cvUploadService;
         }
 
         [HttpPost]
-        public IActionResult AddPhoto(int candId, [FromForm] CvContractAdd cvContract)
+        public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
-            //var candidate = _candidateService.Read(candId);
+            var candidate = _candidateService.GetCandidate(candidateId);
+            var file = cvContract.File;
 
-            //var candidate = _candidateService.GetCandidate(candId);
+            var auth = _cvUploadService.Authorize();
+            var fileUploaded = _cvUploadService.Upload(auth, file);
 
-            //var file = cvContract.File;
-
-            //var uploadResult = new ImageUploadResult();
-
-            //if (file.Length > 0)
-            //{
-            //    using (var stream = file.OpenReadStream())
-            //    {
-            //        var uploadParams = new ImageUploadParams()
-            //        {
-            //            File = new FileDescription(file.Name, stream)
-            //        };
-
-            //        uploadResult = _cloudinary.Upload(uploadParams);
-            //    }
-            //}
-
-            //cvContract.Url = uploadResult.Uri.ToString();
-            //cvContract.PublicId = uploadResult.PublicId;
-            //cvContract.CandidateId = candidate.Id;
-            //candidate.Cv = cvContract.Url;
-
-            //var cv = _mapper.Map<Cv>(cvContract);
-            //var cand = _mapper.Map<Candidate>(candidate);
-
-            //if(_repo.SaveAll(cv))
-            //{
-            //    var cvReturn = _mapper.Map<CvContractReturn>(cv);
-            //    return CreatedAtRoute("GetCv", new { candId, id = cv.Id }, cvReturn);
-            //}
+             _cvService.StoreCvAndCandidateCvId(candidate, cvContract, fileUploaded);
 
             return Ok("FileUploaded");
         }
