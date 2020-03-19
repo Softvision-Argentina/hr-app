@@ -10,8 +10,11 @@ namespace Domain.Services.Impl.Validators.CandidateProfile
     {
         public CreateCandidateProfileContractValidator()
         {
-            RuleFor(_ => _.Name).NotEmpty();
-            RuleFor(_ => _.Description).NotEmpty();
+            RuleSet(ValidatorConstants.RULESET_CREATE, () =>
+            {
+                RuleFor(_ => _.Name).NotEmpty();
+                RuleFor(_ => _.Description).NotEmpty();
+            });
         }
     }
 }
