@@ -41,7 +41,9 @@ export class CSoftComponent {
   authenticateUser(userName: string, password: string) {      
     this.facade.authService.authenticate(userName, password)
     .subscribe(res => {
-      try{          
+      if(!res.user){
+        this.invalidUser();
+      }else{              
         this.authenticatedUser = {            
           id: res.user.id,
           name: res.user.firstName + " " + res.user.lastName,
@@ -55,9 +57,7 @@ export class CSoftComponent {
         this.facade.userService.getRoles();          
         this.facade.modalService.closeAll();
         this.router.navigate(['/']);
-      }catch{
-        this.invalidUser();
-      }             
+      }       
     }, err => {
       this.invalidUser();
     });
