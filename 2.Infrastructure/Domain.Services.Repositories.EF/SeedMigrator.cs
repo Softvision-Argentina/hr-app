@@ -692,6 +692,7 @@ namespace Domain.Services.Repositories.EF
             var dashboard7 = new Dashboard { Name = "Average: Interview date - Offer Accepted Dashboard" };
             var dashboard8 = new Dashboard { Name = "Average: Interview date - Hire Date Dashboard" };
             var dashboard9 = new Dashboard { Name = "Decline Reasons Dashboard" };
+            var dashboard10 = new Dashboard { Name = "Weekly Candidates Dashboard" };
 
             context.Dashboards.Add(dashboard1);
             context.Dashboards.Add(dashboard2);
@@ -702,6 +703,7 @@ namespace Domain.Services.Repositories.EF
             context.Dashboards.Add(dashboard7);
             context.Dashboards.Add(dashboard8);
             context.Dashboards.Add(dashboard9);
+            context.Dashboards.Add(dashboard10);
 
             context.SaveChanges();
             #endregion

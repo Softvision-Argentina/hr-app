@@ -6,14 +6,14 @@
         </div>
         <div class="avatar" (click)="changeUserSettings()">
             <div class="user-info">
-                {{currentUser.Name}}
-                <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.ImgURL}}"></nz-avatar>
+                {{currentUser.name}}
+                <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.imgURL}}"></nz-avatar>
             </div>
             <div *ngIf="showUserSettings">
-                <nz-card nzTitle="{{currentUser.Name}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
+                <nz-card nzTitle="{{currentUser.name}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
                     <nz-list>
                         <nz-list-item>
-                            {{currentUser.Email}}
+                            {{currentUser.email}}
                         </nz-list-item>
                         <nz-list-item (click)="showPreferencesModal(preferencesModal)" >
                             Manage Preferences
