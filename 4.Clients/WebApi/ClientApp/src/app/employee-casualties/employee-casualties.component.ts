@@ -186,5 +186,4 @@ export class EmployeeCasualtiesComponent implements OnInit {
     var month: number = casualty.month;
     return this.monthList[month - 1];
   }
-
 }

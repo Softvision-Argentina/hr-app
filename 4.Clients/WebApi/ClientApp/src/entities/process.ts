@@ -27,6 +27,7 @@ export class Process {
     technicalStage: TechnicalStage;
     clientStage: ClientStage;
     offerStage: OfferStage;
+    createdDate: Date;
     startDate?: Date;
     endDate?: Date;
     candidateId?: number;

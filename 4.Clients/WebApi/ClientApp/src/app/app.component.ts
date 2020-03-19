@@ -13,9 +13,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
 })
 export class AppComponent implements OnInit {
   title = 'app';
-
   showSpinner = true;
-
   loadingConfig: INg2LoadingSpinnerConfig = {
     animationType: ANIMATION_TYPES.scalingBars,
     backdropColor: 'rgba(0, 0, 0, 0.7)',
@@ -46,9 +44,9 @@ export class AppComponent implements OnInit {
 
   isUserRole(roles: string[]): boolean {
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser.Role === '') { this.facade.userService.getRoles(); }
+    if (currentUser.role === '') { this.facade.userService.getRoles(); }
     if (roles[0] === 'ALL') { roles = this.config.getConfig('roles'); }
-    if (roles.indexOf(currentUser.Role) !== -1) { return true; } else { return false; }
+    if (roles.indexOf(currentUser.role) !== -1) { return true; } else { return false; }
   }
 
   renderBgImage() {
@@ -71,5 +69,9 @@ export class AppComponent implements OnInit {
 
   hideLoading() {
     this.showSpinner = false;
+  }
+  
+  isAuthenticated() {
+    return localStorage.getItem('currentUser') !== null;
   }
 }

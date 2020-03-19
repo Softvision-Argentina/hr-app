@@ -20,16 +20,13 @@ export class SkillTypeComponent implements OnInit {
   searchValue = '';
   listOfSearchSkillTypes = [];
   listOfDisplayData = [...this.filteredSkillTypes];
-
   sortName = null;
   sortValue = null;
-
-  //Modals
+  
   validateForm: FormGroup;
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
   isAddOkLoading: boolean = false;
-
   emptySkillType: SkillType;
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
@@ -78,7 +75,6 @@ export class SkillTypeComponent implements OnInit {
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Consultant Modal
     this.validateForm.reset();
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Skill type',
@@ -129,7 +125,6 @@ export class SkillTypeComponent implements OnInit {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void{
-    //Edit Skill type Modal
     this.validateForm.reset();
     let editedSkillType: SkillType = this.filteredSkillTypes.filter(skillType => skillType.id == id)[0];
     this.validateForm.controls['name'].setValue(editedSkillType.name);
@@ -203,5 +198,4 @@ export class SkillTypeComponent implements OnInit {
     this.isAddVisible = false;
     this.emptySkillType = { id: 0, name: '', description: '' };
   }
-
 }

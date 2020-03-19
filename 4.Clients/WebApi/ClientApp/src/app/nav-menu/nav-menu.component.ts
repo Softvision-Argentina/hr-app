@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, TemplateRef, OnInit } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
@@ -12,48 +12,24 @@ import { FacadeService } from '../services/facade.service';
   styleUrls: ['./nav-menu.component.css'],
   providers: [GoogleSigninComponent]
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit {
 
-  constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
-    private facade: FacadeService) { }
-
+  constructor(
+    private jwtHelper: JwtHelper,
+    private _appComponent: AppComponent,
+    private router: Router,
+    private google: GoogleSigninComponent,
+    private facade: FacadeService
+  ) { }
   isExpanded = false;
   currentUser: User;
+  showUserSettings = false;
 
-  logoStyle = {
-    'width': '10%',
-    'height': '10%'
-  }
-
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  isUserAuthenticated() {
+  ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    return this.google.isUserAuthenticated();
-  }
-  
-
-  isUserRole(roles: string[]): boolean {
-    return this._appComponent.isUserRole(roles);
-  }
-
-  openLogin(modalContent: TemplateRef<{}>){
-    const modal = this.facade.modalService.create({
-      nzTitle: null,
-      nzContent: modalContent,
-      nzClosable: false,
-      nzFooter: null
-    });
   }
 
   logout() {
-    //localStorage.clear();
     this.google.logout();
   }
 
@@ -66,5 +42,12 @@ export class NavMenuComponent {
       nzWidth: '30%'
     });
   }
- 
+
+  onSearchChange( search: string) {
+    this.facade.searchbarService.search(this.router.url, search);
+  }
+
+  changeUserSettings() {
+    this.showUserSettings = !this.showUserSettings;
+  }
 }

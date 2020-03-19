@@ -283,7 +283,7 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("PublicId");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("UrlId");
 
                     b.Property<long>("Version");
 
@@ -292,6 +292,29 @@ namespace ApiServer.Migrations
                     b.HasIndex("CandidateId");
 
                     b.ToTable("Cv");
+                });
+
+            modelBuilder.Entity("Domain.Model.Dashboard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dashboards");
                 });
 
             modelBuilder.Entity("Domain.Model.DaysOff", b =>
@@ -671,48 +694,6 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Postulants");
-                });
-
-            modelBuilder.Entity("Domain.Model.Preference", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CasualtiesDashboard");
-
-                    b.Property<bool>("CompletedDashboard");
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("LastModifiedBy");
-
-                    b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<bool>("ProcessesDashboard");
-
-                    b.Property<bool>("ProgressDashboard");
-
-                    b.Property<bool>("ProjectionDashboard");
-
-                    b.Property<bool>("SkillsDashboard");
-
-                    b.Property<bool>("TimeToFIll2Dashboard");
-
-                    b.Property<bool>("TimeToFill1Dashboard");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<long>("Version");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Preferences");
                 });
 
             modelBuilder.Entity("Domain.Model.Process", b =>
@@ -1150,6 +1131,19 @@ namespace ApiServer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Model.UserDashboard", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("DashboardId");
+
+                    b.HasKey("UserId", "DashboardId");
+
+                    b.HasIndex("DashboardId");
+
+                    b.ToTable("UserDashboards");
+                });
+
             modelBuilder.Entity("Domain.Model.Candidate", b =>
                 {
                     b.HasOne("Domain.Model.Community", "Community")
@@ -1281,14 +1275,6 @@ namespace ApiServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Domain.Model.Preference", b =>
-                {
-                    b.HasOne("Domain.Model.User", "User")
-                        .WithOne("Preference")
-                        .HasForeignKey("Domain.Model.Preference", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Domain.Model.Process", b =>
                 {
                     b.HasOne("Domain.Model.Candidate", "Candidate")
@@ -1389,6 +1375,19 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("TechnicalStage")
                         .HasForeignKey("Domain.Model.TechnicalStage", "ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.UserDashboard", b =>
+                {
+                    b.HasOne("Domain.Model.Dashboard", "Dashboard")
+                        .WithMany("UserDashboards")
+                        .HasForeignKey("DashboardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany("UserDashboards")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

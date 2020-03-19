@@ -5,7 +5,6 @@ using DependencyInjection.Config;
 using Domain.Model;
 using Domain.Model.Seed;
 using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.Stage;
 using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.ExternalServices;
 using Domain.Services.Impl.Services;
@@ -127,8 +126,10 @@ namespace DependencyInjection
             services.AddTransient<ICompanyCalendarService, CompanyCalendarService>();
             services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
-            services.AddTransient<IPreferenceService, PreferenceService>();
+            services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IOfferService, OfferService>();
+            services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
+            services.AddTransient<ICvService, CvService>();
 
         }
 
@@ -182,7 +183,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<CompanyCalendar>, CompanyCalendarRepository>();
             services.AddScoped<IRepository<Role>, RoleRepository>();
             services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
-            services.AddScoped<IRepository<Preference>, PreferenceRepository>();
+            services.AddScoped<IRepository<Dashboard>, DashboardRepository>();
             services.AddScoped<IRepository<Offer>, OfferRepository>();
 
             services.AddScoped<IStageItemRepository, StageItemRepository>();

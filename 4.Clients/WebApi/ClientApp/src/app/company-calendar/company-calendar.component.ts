@@ -1,13 +1,11 @@
-import { Component, OnInit, TemplateRef, ViewChild, Input, HostListener } from '@angular/core';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { CompanyCalendar} from 'src/entities/Company-Calendar';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { User } from 'src/entities/user';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
-import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 
 @Component({
   selector: 'app-company-calendar',
@@ -15,26 +13,21 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
   styleUrls: ['./company-calendar.component.css']
 })
 export class CompanyCalendarComponent implements OnInit {
-
-
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   listOfCompanyCalendar: CompanyCalendar[] = [];
   today = new Date();
   showCalendarSelected : boolean = false;
-  
 
   constructor(private facade: FacadeService, 
               private fb: FormBuilder,
               private app: AppComponent,
               private settings: SettingsComponent) { }
 
-  ngOnInit() {
-    // this.app.removeBgImage();
+  ngOnInit() {    
     this.getCompanyCalendar();
     this.resetForm();
-
     this.validateForm = this.fb.group({
       type: [null, [Validators.required]],
       date: [new Date(), [Validators.required]],
@@ -51,7 +44,6 @@ export class CompanyCalendarComponent implements OnInit {
     const modal = document.getElementById('myModalCalendar');
     modal.style.display = 'none';
   }
-
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -73,7 +65,6 @@ export class CompanyCalendarComponent implements OnInit {
         console.log(err);
       });
   }
-
 
   resetForm() {
     this.validateForm = this.fb.group({
@@ -150,8 +141,7 @@ export class CompanyCalendarComponent implements OnInit {
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    // Edit Consultant Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
     this.resetForm();
     this.controlArray = [];
     this.controlEditArray = [];    
@@ -213,8 +203,6 @@ export class CompanyCalendarComponent implements OnInit {
         }],
     });
   }
-  
-
 
   showDeleteConfirm(CompanyCalendarID: number): void {
     this.facade.modalService.confirm({

@@ -20,16 +20,13 @@ export class DeclineReasonComponent implements OnInit {
   searchValue = '';
   listOfSearchDeclineReasons = [];
   listOfDisplayData = [...this.filteredDeclineReasons];
-
   sortName = null;
   sortValue = null;
-
-  //Modals
+  
   validateForm: FormGroup;
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
   isAddOkLoading: boolean = false;
-
   emptyDeclineReason: DeclineReason;
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
@@ -77,8 +74,7 @@ export class DeclineReasonComponent implements OnInit {
     this.search();
   }
 
-  showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Consultant Modal
+  showAddModal(modalContent: TemplateRef<{}>): void {    
     this.validateForm.reset();
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Decline reason',
@@ -128,8 +124,7 @@ export class DeclineReasonComponent implements OnInit {
     this.isDetailsVisible = true;
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void{
-    //Edit Skill type Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void{    
     this.validateForm.reset();
     let editedDeclineReason: DeclineReason = this.filteredDeclineReasons.filter(declineReason => declineReason.id == id)[0];
     this.validateForm.controls['name'].setValue(editedDeclineReason.name);
@@ -152,7 +147,6 @@ export class DeclineReasonComponent implements OnInit {
               this.validateForm.controls[i].updateValueAndValidity();
               if ((!this.validateForm.controls[i].valid)) isCompleted = false;
             }
-
             if(isCompleted){
               editedDeclineReason = {
                 id: editedDeclineReason.id,
@@ -203,5 +197,4 @@ export class DeclineReasonComponent implements OnInit {
     this.isAddVisible = false;
     this.emptyDeclineReason = { id: 0, name: '', description: '' };
   }
-
 }
