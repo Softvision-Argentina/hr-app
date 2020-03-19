@@ -72,7 +72,7 @@ namespace Domain.Services.IntegrationTests.Services.Core
                 switch (typeCode)
                 {
                     case TypeCode.String:
-                        prop.SetValue(obj, GetValidString(obj.GetType().ToString(), prop.Name));
+                        prop.SetValue(obj, GetValidString();
                         break;
                     case TypeCode.Int32:
                         prop.SetValue(obj, GetValidNumber());
@@ -105,7 +105,7 @@ namespace Domain.Services.IntegrationTests.Services.Core
             {
                 return rnd.Next(1, 100);
             }
-            public static string GetValidString(string type, string propertyName)
+            public static string GetValidString()
             {
                 return $"{Guid.NewGuid()}";
             }
