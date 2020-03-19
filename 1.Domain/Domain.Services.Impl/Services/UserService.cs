@@ -1,15 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.User;
-using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -19,21 +15,18 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<UserService> _log;
-        private readonly DataBaseContext _dbcontext;
 
         public UserService(IMapper mapper, IRepository<User> userRepository,
-                           IUnitOfWork unitOfWork, ILog<UserService> log, DataBaseContext dbContext)
+                           IUnitOfWork unitOfWork, ILog<UserService> log)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _log = log;
-            _dbcontext = dbContext;
         }
 
         public ReadedUserContract Authenticate(string username, string password)
         {
-            #region V1
             var user = Login(username, password);
 
             if (user != null)
@@ -44,10 +37,6 @@ namespace Domain.Services.Impl.Services
             {
                 return null;
             }
-            #endregion
-
-            #region V2
-            #endregion
         }
 
         public ReadedUserContract Authenticate(string username)
@@ -88,7 +77,7 @@ namespace Domain.Services.Impl.Services
 
         private User Login(string username, string password)
         {
-            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
+            var user = _userRepository.Query().FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
 
             if (user == null)
                 return null;
@@ -98,7 +87,7 @@ namespace Domain.Services.Impl.Services
 
         private User ExternalLogin(string username)
         {
-            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
+            var user = _userRepository.Query().FirstOrDefault(x => x.Username == username);
 
             if (user == null)
                 return null;
