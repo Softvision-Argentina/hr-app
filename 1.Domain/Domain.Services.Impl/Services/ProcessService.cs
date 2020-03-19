@@ -5,8 +5,11 @@ using Domain.Model.Enum;
 using Domain.Services.Contracts.Process;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 
 namespace Domain.Services.Impl.Services
 {
@@ -27,6 +30,8 @@ namespace Domain.Services.Impl.Services
         private readonly IClientStageRepository _clientStageRepository;
         private readonly IOfferStageRepository _offerStageRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IRepository<User> _userRepository;
+        private readonly IConfiguration _config;
 
         public ProcessService(IMapper mapper,
             IRepository<Consultant> consultantRepository,
@@ -42,7 +47,9 @@ namespace Domain.Services.Impl.Services
             IClientStageRepository clientStageRepository,
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
-            INotificationRepository notificationRepository)
+            INotificationRepository notificationRepository,
+            IRepository<User> userRepository,
+            IConfiguration config)
         {
             _consultantRepository = consultantRepository;
             _candidateRepository = candidateRepository;
@@ -59,6 +66,8 @@ namespace Domain.Services.Impl.Services
             _offerStageRepository = offerStageRepository;
             _unitOfWork = unitOfWork;
             _notificationRepository = notificationRepository;
+            _userRepository = userRepository;
+            _config = config;
         }
 
         public ReadedProcessContract Read(int id)
@@ -124,9 +133,33 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                SendEmailNotification(process, status);
             }
 
             return createdProcessContract;
+        }
+
+        private void SendEmailNotification(Process process, ProcessStatus status)
+        {
+            var email = GetUserMail(process.Candidate.ReferredBy);
+
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
+                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                client.Send(message);
+            }
+        }
+
+        private string GetUserMail(string referredBy)
+        {
+            var referred = referredBy.Split(" ");
+            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
+            var mail = userName.Username;
+
+            return mail;
         }
 
         private void AddCandidateProfileToCandidate(Candidate candidate, int profileID)
@@ -203,7 +236,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired)
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
+                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall)
             {
                 var notification = new Notification
                 {
@@ -211,6 +245,9 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                SendEmailNotification(process, status);
+
             }
 
             _unitOfWork.Complete();
@@ -237,7 +274,7 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected)
+            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected || process.Status == ProcessStatus.Declined)
             {
                 var notification = new Notification
                 {
@@ -245,6 +282,9 @@ namespace Domain.Services.Impl.Services
                 };
 
                 _notificationRepository.Create(notification, process.Candidate.Id);
+
+                SendEmailNotification(process, status);
+
             }
 
             _unitOfWork.Complete();
