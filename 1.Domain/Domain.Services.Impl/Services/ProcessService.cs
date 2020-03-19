@@ -5,8 +5,7 @@ using Domain.Model.Enum;
 using Domain.Services.Contracts.Process;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
-using System;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,6 +31,7 @@ namespace Domain.Services.Impl.Services
         private readonly IOfferStageRepository _offerStageRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly IRepository<User> _userRepository;
+        private readonly IConfiguration _config;
 
         public ProcessService(IMapper mapper,
             IRepository<Consultant> consultantRepository,
@@ -48,7 +48,8 @@ namespace Domain.Services.Impl.Services
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
-            IRepository<User> userRepository)
+            IRepository<User> userRepository,
+            IConfiguration config)
         {
             _consultantRepository = consultantRepository;
             _candidateRepository = candidateRepository;
@@ -66,6 +67,7 @@ namespace Domain.Services.Impl.Services
             _unitOfWork = unitOfWork;
             _notificationRepository = notificationRepository;
             _userRepository = userRepository;
+            _config = config;
         }
 
         public ReadedProcessContract Read(int id)
@@ -142,11 +144,11 @@ namespace Domain.Services.Impl.Services
         {
             var email = GetUserMail(process.Candidate.ReferredBy);
 
-            using (var client = new SmtpClient("smtp.gmail.com", 25))
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), 25))
             {
                 client.EnableSsl = true;
-                client.Credentials = new NetworkCredential("recruhrapp@gmail.com", "softvision627");
-                var message = new MailMessage("recruhrapp@gmail.com", $"{email}", "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
+                var message = new MailMessage("recruhrapp@gmail.com", email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
                 client.Send(message);
             }
         }
