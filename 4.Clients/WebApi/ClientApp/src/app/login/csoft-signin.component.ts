@@ -12,59 +12,55 @@ import { Router } from '@angular/router';
 })
 export class CSoftComponent {
 
-    loginForm: FormGroup;
-    authenticatedUser:User;
-    submitForm(): void {
-      for (const i in this.loginForm.controls) {
-        this.loginForm.controls[i].markAsDirty();
-        this.loginForm.controls[i].updateValueAndValidity();
-      }
+  loginForm: FormGroup;
+  authenticatedUser:User;
 
-      if (this.loginForm.valid) {
-        this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
-      }
-      
-    }
-  
-    constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) {}
-  
-    ngOnInit(): void {
-      this.loginForm = this.fb.group({
-        userName: [null, [Validators.required]],
-        password: [null, [Validators.required]]
-      });
-    }
+  constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) {}
 
-    authenticateUser(userName: string, password: string) {      
-      this.facade.authService.authenticate(userName, password)
-      .subscribe(res => {
-        
-        if (res != null)
-        {
-          this.authenticatedUser = {
-            id: res.user.id,
-            name: res.user.firstName + " " + res.user.lastName,
-            imgURL: "",
-            email: res.user.username,
-            role: res.user.role,
-            token: res.token,
-            userDashboards: []
-          }
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      password: [null, [Validators.required]]
+    });
+  }
 
-          localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
-          this.facade.userService.getRoles();
-          //console.log(this.authenticatedUser);
-          this.facade.modalService.closeAll();
-          this.router.navigate(['/']);
-        }
-      }, err => {
-        this.zone.run(() => { this.router.navigate(['/unauthorized']);});
-        this.facade.toastrService.error('Invalid username or password.');
-      });
-    }
-
-    ngAfterViewInit() {    
+  ngAfterViewInit() {    
     this.isUserAuthenticated();
+  }
+
+  submitForm(): void {
+    for (const i in this.loginForm.controls) {
+      this.loginForm.controls[i].markAsDirty();
+      this.loginForm.controls[i].updateValueAndValidity();
+    }
+    if (this.loginForm.valid) {
+      this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
+    }      
+  }
+
+  authenticateUser(userName: string, password: string) {      
+    this.facade.authService.authenticate(userName, password)
+    .subscribe(res => {
+      try{          
+        this.authenticatedUser = {            
+          id: res.user.id,
+          name: res.user.firstName + " " + res.user.lastName,
+          imgURL: "",
+          email: res.user.username,
+          role: res.user.role,
+          token: res.token,
+          userDashboards: []
+        }
+        localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
+        this.facade.userService.getRoles();          
+        this.facade.modalService.closeAll();
+        this.router.navigate(['/']);
+      }catch{
+        this.invalidUser();
+      }             
+    }, err => {
+      this.invalidUser();
+    });
   }
 
   isUserAuthenticated(): boolean{
@@ -76,5 +72,10 @@ export class CSoftComponent {
       localStorage.clear();
       return false;
     }
+  }
+
+  invalidUser(){
+    this.zone.run(() => { this.router.navigate(['/unauthorized']);});
+    this.facade.toastrService.error('Invalid username or password.');
   }
 }
