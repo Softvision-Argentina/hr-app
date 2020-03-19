@@ -5,21 +5,21 @@ namespace ApiServer.Tests.Candidates.Builder
 {
     public class LoginViewModelBuilder
     {
-        private string Username { get; set; }
-        private string Password { get; set; }
+        readonly string _username;
+        readonly string _password;
 
         public LoginViewModelBuilder()
         {
-            Username = $"{Guid.NewGuid()}";
-            Password = $"{Username}#password";
+            _username = $"{Guid.NewGuid()}";
+            _password = $"{_username}#password";
         }
 
         public LoginViewModel GetInvalidData()
         {
             return new LoginViewModel()
             {
-                UserName = this.Username,
-                Password = this.Password
+                UserName = this._username,
+                Password = this._password
             };
         }
 

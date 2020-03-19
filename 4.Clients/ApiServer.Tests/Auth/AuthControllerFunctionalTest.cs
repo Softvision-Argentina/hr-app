@@ -23,12 +23,12 @@ namespace ApiServer.Tests.Seed
             var model = new LoginViewModelBuilder().GetValidData();
 
             //Act
-            HttpResultData httpResultData = await HttpCall(HttpVerb.POST, model, ControllerName, "login");
+            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
 
             //Assert
-            Assert.Equal(HttpStatusCode.OK, httpResultData.response.StatusCode);
-            Assert.NotNull(httpResultData.response);
-            Assert.NotEmpty(httpResultData.responseString);
+            Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
+            Assert.NotNull(httpResultData.Response);
+            Assert.NotEmpty(httpResultData.ResponseString);
         }
 
         [Fact(DisplayName = "Verify api/login [Post] is returning unauthorized when data is invalid")]
@@ -39,11 +39,11 @@ namespace ApiServer.Tests.Seed
             var model = new LoginViewModelBuilder().GetInvalidData();
 
             //Act
-            HttpResultData httpResultData = await HttpCall(HttpVerb.POST, model, ControllerName, "login");
+            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
 
             //Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.response.StatusCode);
-            Assert.NotNull(httpResultData.response);
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
+            Assert.NotNull(httpResultData.Response);
         }
 
         [Fact(DisplayName = "Verify api/login [Post] is returning bad request when data in null")]
@@ -54,11 +54,11 @@ namespace ApiServer.Tests.Seed
             LoginViewModel model = null;
 
             //Act
-            HttpResultData httpResultData = await HttpCall(HttpVerb.POST, model, ControllerName, "login");
+            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
 
             //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResultData.response.StatusCode);
-            Assert.NotNull(httpResultData.response);
+            Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
+            Assert.NotNull(httpResultData.Response);
         }
 
         [Fact(DisplayName = "Verify api/ping [Get] is returning ok")]
@@ -69,11 +69,11 @@ namespace ApiServer.Tests.Seed
             LoginViewModel model = null;
 
             //Act
-            HttpResultData httpResultData = await HttpCall(HttpVerb.GET, model, ControllerName, "ping");
+            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.GET, model, ControllerName, "ping");
 
             //Assert
-            Assert.Equal(HttpStatusCode.OK, httpResultData.response.StatusCode);
-            Assert.NotNull(httpResultData.response);
+            Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
+            Assert.NotNull(httpResultData.Response);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Core
 
     public class HttpResultData
     {
-        public HttpResponseMessage response { get; set; }
-        public string responseString { get; set; }
+        public HttpResponseMessage Response { get; set; }
+        public string ResponseString { get; set; }
     }
 }
