@@ -143,7 +143,7 @@ export class ProcessContactComponent implements OnInit {
     this.getCandidates().subscribe(() => {}, err => this.handleError);
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-    this.facade.consultantService.GetByEmail(this.currentUser.Email)
+    this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
         this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null
