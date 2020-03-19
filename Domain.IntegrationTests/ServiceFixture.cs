@@ -1,5 +1,4 @@
 using ApiServer;
-using Domain.Services.Repositories.EF;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -8,15 +7,17 @@ using System;
 using System.IO;
 using System.Net.Http;
 using Xunit;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Domain.Services.IntegrationTests
+namespace Domain.IntegrationTests
 {
     public class ServiceFixture : IDisposable
     {
         private static readonly object Sync = new object();
         private static bool _configured;
         private static string _env = "IntegrationTest";
+        public TestServer Server { get; internal set; }
+        public HttpClient Client { get; internal set; }
+        public IServiceProvider Services { get; internal set; }
 
         public ServiceFixture()
         {
@@ -36,17 +37,11 @@ namespace Domain.Services.IntegrationTests
                         .UseStartup<Startup>());
 
                     Services = Server.Host.Services;
-
                     Client = Server.CreateClient();
-
                     _configured = true;
                 }
             }
         }
-
-        public TestServer Server { get; internal set; }
-        public HttpClient Client { get; internal set; }
-        public IServiceProvider Services { get; internal set; }
 
         public void Dispose()
         {

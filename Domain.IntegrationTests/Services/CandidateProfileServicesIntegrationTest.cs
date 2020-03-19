@@ -1,15 +1,14 @@
 ﻿using Core.Persistance;
+using Domain.IntegrationTests.Services.Core;
 using Domain.Model;
 using Domain.Model.Exceptions.CandidateProfile;
 using Domain.Services.Contracts.CandidateProfile;
-using Domain.Services.IntegrationTests.Services.Core;
 using Domain.Services.Interfaces.Services;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
 
-namespace Domain.Services.IntegrationTests.Services
+namespace Domain.IntegrationTests.Services
 {
     public class CandidateProfileServicesIntegrationTest : BaseServiceIntegrationTest
     {

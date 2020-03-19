@@ -1,10 +1,7 @@
-﻿using Domain.Services.Contracts.CandidateProfile;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Reflection;
-using System.Text;
 
-namespace Domain.Services.IntegrationTests.Services.Core
+namespace Domain.IntegrationTests.Services.Core
 {
     public static class DataFactory
     {
@@ -72,7 +69,7 @@ namespace Domain.Services.IntegrationTests.Services.Core
                 switch (typeCode)
                 {
                     case TypeCode.String:
-                        prop.SetValue(obj, GetValidString();
+                        prop.SetValue(obj, GetValidString());
                         break;
                     case TypeCode.Int32:
                         prop.SetValue(obj, GetValidNumber());

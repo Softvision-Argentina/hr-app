@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using Core;
 using Microsoft.AspNetCore.TestHost;
 
-namespace Domain.Services.IntegrationTests.Services
+namespace Domain.IntegrationTests.Services
 {
     [Collection("Service collection")]
     public class BaseServiceIntegrationTest
