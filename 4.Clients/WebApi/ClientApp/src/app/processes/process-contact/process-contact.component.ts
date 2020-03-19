@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, TemplateRef } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
@@ -140,13 +140,13 @@ export class ProcessContactComponent implements OnInit {
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getConsultants();
-    this.getCandidates().subscribe();
+    this.getCandidates().subscribe(() => {}, err => this.handleError);
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
     this.facade.consultantService.GetByEmail(this.currentUser.Email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-        this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null   
+        this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null
     });
   }
 
@@ -159,7 +159,6 @@ export class ProcessContactComponent implements OnInit {
     return this.facade.candidateService.get().pipe(
       tap( res => {
         this.candidates = res;
-        console.log(res);
       })
     );
   }
@@ -169,7 +168,7 @@ export class ProcessContactComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.handleError(err);
       });
   }
 
@@ -228,14 +227,12 @@ export class ProcessContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.handleError(err);
         })
     });
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    console.log(this.filteredCandidate);
     this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
@@ -318,16 +315,14 @@ export class ProcessContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
-        })
+          this.handleError(err);
+        });
     }
     this.isEditCandidate = false;
     this.visible = false;
   }
 
   Recontact(idCandidate: number) {
-    console.log(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.Email.toLowerCase())[0].id);
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
@@ -350,15 +345,14 @@ export class ProcessContactComponent implements OnInit {
       cv: editedCandidate.cv,
       knownFrom: editedCandidate.knownFrom,
       referredBy: editedCandidate.referredBy
-    }
+    };
     this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
-      })
+        this.handleError(err);
+      });
   }
 
   createNewCandidate() {
@@ -406,11 +400,10 @@ export class ProcessContactComponent implements OnInit {
           .subscribe(() => {
             this.startNewProcess(res.id);
           }, err => {
-            console.log(err);
+            this.handleError(err);
           });
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.handleError(err);
           this.app.hideLoading;
         });
     }
@@ -439,5 +432,13 @@ export class ProcessContactComponent implements OnInit {
           this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
         }
       });
+  }
+
+  private handleError(error: any){
+    if (!!error.message) {
+      this.facade.toastrService.error(error.message);
+    } else {
+      this.facade.toastrService.error('the service is not available now. Try again later.');
+    }
   }
 }
