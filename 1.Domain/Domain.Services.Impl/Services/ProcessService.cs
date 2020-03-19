@@ -144,11 +144,11 @@ namespace Domain.Services.Impl.Services
         {
             var email = GetUserMail(process.Candidate.ReferredBy);
 
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), 25))
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
                 client.EnableSsl = true;
                 client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage("recruhrapp@gmail.com", email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
                 client.Send(message);
             }
         }
