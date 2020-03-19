@@ -24,9 +24,14 @@ export class NavMenuComponent implements OnInit {
   isExpanded = false;
   currentUser: User;
   showUserSettings = false;
+  url: string;
+  search = '';
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.router.events.subscribe(data => {
+      this.search = '';
+    });
   }
 
   logout() {

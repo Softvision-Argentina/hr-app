@@ -1,21 +1,19 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { Consultant } from 'src/entities/consultant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { FacadeService } from 'src/app/services/facade.service';
 import { ConsultantDetailsComponent } from './details/consultant-details.component';
 import { AppComponent } from '../app.component';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
-
-
-
+import { replaceAccent } from 'src/app/helpers/string-helpers';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-consultants',
   templateUrl: './consultants.component.html',
   styleUrls: ['./consultants.component.css'],
   providers: [ConsultantDetailsComponent, AppComponent]
 })
-export class ConsultantsComponent implements OnInit {
+export class ConsultantsComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
@@ -24,7 +22,8 @@ export class ConsultantsComponent implements OnInit {
   searchValue = '';
   listOfSearchConsultants = [];
   listOfDisplayData = [...this.filteredConsultants];
-
+  searchSub: Subscription;
+  searchConsultant = '';
   sortName = 'name';
   sortValue = 'ascend';
 
@@ -33,7 +32,6 @@ export class ConsultantsComponent implements OnInit {
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
   isAddOkLoading: boolean = false;
-
   emptyConsultant: Consultant;
 
 
@@ -44,6 +42,7 @@ export class ConsultantsComponent implements OnInit {
     this.app.showLoading();
     this.app.removeBgImage();
     this.getConsultants();
+    this.getSearchInfo();
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
@@ -57,7 +56,7 @@ export class ConsultantsComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  getConsultants(){
+  getConsultants() {
     this.facade.consultantService.get()
       .subscribe(res => {
         this.filteredConsultants = res;
@@ -65,6 +64,12 @@ export class ConsultantsComponent implements OnInit {
       }, err => {
         console.log(err);
       });
+  }
+
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+      this.searchConsultant  = data;
+    });
   }
 
   reset(): void {
@@ -137,8 +142,8 @@ export class ConsultantsComponent implements OnInit {
               modal.nzFooter[1].loading = false;
               if(err.message != undefined) this.facade.toastrService.error(err.message);
               else this.facade.toastrService.error("The service is not available now. Try again later.");
-            })
-            } 
+            });
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
@@ -150,7 +155,6 @@ export class ConsultantsComponent implements OnInit {
     this.emptyConsultant = this.filteredConsultants.filter(consultant => consultant.id == consultantID)[0];
     this.detailsModal.showModal(modalContent, this.emptyConsultant.name + " " + this.emptyConsultant.lastName);
   }
-
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void{
     //Edit Consultant Modal
@@ -207,7 +211,7 @@ export class ConsultantsComponent implements OnInit {
               modal.nzFooter[1].loading = false;
               if(err.message != undefined) this.facade.toastrService.error(err.message);
               else this.facade.toastrService.error("The service is not available now. Try again later.");
-            })
+            });
             } 
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
@@ -248,4 +252,7 @@ export class ConsultantsComponent implements OnInit {
     };
   }
 
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
+  }
 }
