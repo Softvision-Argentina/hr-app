@@ -40,13 +40,15 @@ export class CSoftComponent {
       .subscribe(res => {
 
         if (res != null) {
+          
           this.authenticatedUser = {
             ID: res.user.id,
             Name: res.user.firstName + " " + res.user.lastName,
             ImgURL: "",
             Email: res.user.username,
             Role: res.user.role,
-            Token: res.token
+            Token: res.token,
+            Community: res.user.community
           }
 
           localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));

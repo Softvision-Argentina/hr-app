@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.Community;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Domain.Services.Contracts.User
         public string Username { get; set; }
         public string Token { get; set; }
         public Roles Role { get; set; }
+        public CreateCommunityContract Community { get; set; }
         public string Password { get; set; }
     }
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppConfig } from './../app-config/app.config';
 import { FacadeService } from '../services/facade.service';
 import { JwtHelper } from 'angular2-jwt';
+import { Community } from 'src/entities/community';
 declare const gapi: any;
 
 @Component({
@@ -51,7 +52,8 @@ export class GoogleSigninComponent implements AfterViewInit {
           ImgURL: profile.getImageUrl(),
           Email: profile.getEmail(),
           Role: '',
-          Token: googleUser.getAuthResponse().id_token
+          Token: googleUser.getAuthResponse().id_token,
+          Community: ''
         }
 
         // console.log(currentUser);
@@ -59,6 +61,7 @@ export class GoogleSigninComponent implements AfterViewInit {
         // that.facade.userService.getRoles();
 
         that.externalLogin(currentUser);
+        
 
       }, function (error) {
         that.zone.run(() => { that.router.navigate(['/unauthorized']); });
@@ -70,7 +73,6 @@ export class GoogleSigninComponent implements AfterViewInit {
   externalLogin(gUser: User) {
     this.facade.authService.externalLogin(gUser.Token)
       .subscribe(res => {
-
         if (res != null) {
           let currentUser: User = {
             ID: res.user.id,
@@ -78,7 +80,8 @@ export class GoogleSigninComponent implements AfterViewInit {
             ImgURL: gUser.ImgURL,
             Email: res.user.username,
             Role: res.user.role,
-            Token: res.token
+            Token: res.token,
+            Community: res.user.community
           }
 
           localStorage.setItem('currentUser', JSON.stringify(currentUser));

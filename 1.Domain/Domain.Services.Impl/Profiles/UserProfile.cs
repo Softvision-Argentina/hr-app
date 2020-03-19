@@ -11,7 +11,8 @@ namespace Domain.Services.Impl.Profiles
     {
         public UserProfile()
         {
-            CreateMap<User, ReadedUserContract>();
+            CreateMap<User, ReadedUserContract>()
+                .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community));
             CreateMap<CreateUserContract, User>();
             CreateMap<User, CreatedUserContract>();
             CreateMap<UpdateUserContract, User>();

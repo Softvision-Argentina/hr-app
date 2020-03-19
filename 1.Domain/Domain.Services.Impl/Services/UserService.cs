@@ -6,6 +6,7 @@ using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
 using Domain.Services.Repositories.EF;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +89,10 @@ namespace Domain.Services.Impl.Services
 
         private User Login(string username, string password)
         {
-            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
+            //var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
+            var user = _userRepository.Query()
+                .Include(r => r.Community)
+                .FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
 
             if (user == null)
                 return null;
@@ -98,7 +102,9 @@ namespace Domain.Services.Impl.Services
 
         private User ExternalLogin(string username)
         {
-            var user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
+            var user = _userRepository.Query()
+                .Include(r => r.Community)
+                .FirstOrDefault(x => x.Username == username );
 
             if (user == null)
                 return null;
