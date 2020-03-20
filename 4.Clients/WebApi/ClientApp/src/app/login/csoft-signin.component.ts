@@ -71,7 +71,7 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean{
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if(currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }else{
       localStorage.clear();
