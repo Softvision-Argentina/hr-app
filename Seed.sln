@@ -44,7 +44,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBProject", "DBProject\DBPr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.Contracts", "4.Clients\ApiServer.Contracts\ApiServer.Contracts.csproj", "{40BA86FF-5507-4F32-9606-99D4340A4991}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Tests", "1.Domain\Domain.Services.Tests\Domain.Services.Tests.csproj", "{303DF880-8C0A-496E-86EC-AA6556B14363}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Impl.UnitTests", "1.Domain\Domain.UnitTests\Domain.Services.Impl.UnitTests.csproj", "{303DF880-8C0A-496E-86EC-AA6556B14363}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.Tests", "4.Clients\ApiServer.Tests\ApiServer.Tests.csproj", "{8F6CC0B7-E05C-47CF-A7DA-353F12FB823F}"
 EndProject
