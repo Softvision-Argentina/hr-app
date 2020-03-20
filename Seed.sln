@@ -60,7 +60,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrApp", "5.Mobile\HrApp\HrA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.UnitTests", "0.Core\Core.UnitTests\Core.UnitTests.csproj", "{C97674B0-493C-490D-AD07-8DF071663626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.IntegrationTests", "Domain.IntegrationTests\Domain.IntegrationTests.csproj", "{07432911-FBD7-4C42-94AC-C784A576EF4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Services.Impl.IntegrationTests", "1.Domain\Domain.IntegrationTests\Domain.Services.Impl.IntegrationTests.csproj", "{07432911-FBD7-4C42-94AC-C784A576EF4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
