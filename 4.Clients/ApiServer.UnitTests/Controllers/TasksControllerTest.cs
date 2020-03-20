@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ApiServer.Contracts.Task;
 using ApiServer.Controllers;
+using ApiServer.Tests;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Task;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace ApiServer.Tests.Controllers
+namespace ApiServer.UnitTests.Controllers
 {
     public class TasksControllerTest
     {

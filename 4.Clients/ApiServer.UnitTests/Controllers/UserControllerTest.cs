@@ -1,5 +1,6 @@
 ﻿using ApiServer.Contracts.User;
 using ApiServer.Controllers;
+using ApiServer.Tests;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.User;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace ApiServer.Tests.Controllers
+namespace ApiServer.UnitTests.Controllers
 {
     public class UserControllerTest
     {
