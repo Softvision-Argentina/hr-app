@@ -1,9 +1,9 @@
-using Core.ExtensionHelpers;
 using Domain.Model;
 using System;
 using Xunit;
+using Core.ExtensionHelpers;
 
-namespace Core.Test
+namespace Core.UnitTests
 {
     public class AuditableExtensionsTester
     {

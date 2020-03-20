@@ -58,7 +58,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.iOS", "5.Mobile\HrApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrApp", "5.Mobile\HrApp\HrApp\HrApp.csproj", "{A417CACA-DD79-4BB0-BA9E-5F4AF0189B9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Test", "Core.Test\Core.Test.csproj", "{C97674B0-493C-490D-AD07-8DF071663626}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.UnitTests", "0.Core\Core.UnitTests\Core.UnitTests.csproj", "{C97674B0-493C-490D-AD07-8DF071663626}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.IntegrationTests", "Domain.IntegrationTests\Domain.IntegrationTests.csproj", "{07432911-FBD7-4C42-94AC-C784A576EF4D}"
 EndProject
