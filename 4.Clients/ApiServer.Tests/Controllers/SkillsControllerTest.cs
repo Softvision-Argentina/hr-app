@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Skills;
 using ApiServer.Controllers;
 using AutoMapper;
@@ -72,7 +70,7 @@ namespace ApiServer.Tests.Controllers
         [Fact(DisplayName = "Verify that post with CreatedSkillViewModel  returns CreatedResult when data is valid")]
         public void Should_PostCreatedSkillViewModel_When_DataIsValid()
         {
-            var task = new CreateSkillViewModel ();
+            var task = new CreateSkillViewModel();
             mockService.Setup(_ => _.Create(It.IsAny<CreateSkillContract>())).Returns(new CreatedSkillContract());
 
             var result = controller.Post(task);
@@ -81,7 +79,7 @@ namespace ApiServer.Tests.Controllers
             Assert.IsType<CreatedResult>(result);
             Assert.Equal("Get", (result as CreatedResult).Location);
             mockService.Verify(_ => _.Create(It.IsAny<CreateSkillContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreateSkillContract>(It.IsAny<CreateSkillViewModel >()), Times.Once);
+            mockMapper.Verify(_ => _.Map<CreateSkillContract>(It.IsAny<CreateSkillViewModel>()), Times.Once);
             mockMapper.Verify(_ => _.Map<CreatedSkillViewModel>(It.IsAny<CreatedSkillContract>()), Times.Once);
         }
 
