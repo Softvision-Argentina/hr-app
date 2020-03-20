@@ -15,13 +15,19 @@ export class CSoftComponent {
   loginForm: FormGroup;
   authenticatedUser:User;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) {}
+  constructor(
+    private fb: FormBuilder, 
+    private facade: FacadeService, 
+    private jwtHelper: JwtHelper, 
+    private router: Router, 
+    public zone: NgZone
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]]
-    });
+    });    
   }
 
   ngAfterViewInit() {    
@@ -64,11 +70,10 @@ export class CSoftComponent {
   }
 
   isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
     if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
-    }
-    else {
+    }else{
       localStorage.clear();
       return false;
     }
@@ -77,5 +82,9 @@ export class CSoftComponent {
   invalidUser(){
     this.zone.run(() => { this.router.navigate(['/unauthorized']);});
     this.facade.toastrService.error('Invalid username or password.');
+  }
+
+  checkDirtyandErrors(controlName: string): boolean{
+    return this.loginForm.get(controlName).dirty && this.loginForm.get(controlName).errors != null
   }
 }
