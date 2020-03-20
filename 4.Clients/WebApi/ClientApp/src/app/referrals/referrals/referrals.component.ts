@@ -221,6 +221,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         console.log(err);
         this.visible = false;
         this.notisCount = this.notisCount - 1;
+        this.getNotifications();
       });
   }
 
