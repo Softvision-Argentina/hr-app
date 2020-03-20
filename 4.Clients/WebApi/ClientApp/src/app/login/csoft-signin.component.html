@@ -1,29 +1,30 @@
 <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitForm()">
-        <nz-form-item>
-          <nz-form-control>
-            <nz-input-group>
-              <input type="text" nz-input formControlName="userName" placeholder="Username" />
-            </nz-input-group>
-            <nz-form-explain *ngIf="loginForm.get('userName')?.dirty && loginForm.get('userName')?.errors"
-              >Please input your username!</nz-form-explain
-            >
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-control>
-            <nz-input-group [nzSuffix]="prefixLock">
-              <input type="password" nz-input formControlName="password" placeholder="Password" />
-            </nz-input-group>
-            <nz-form-explain *ngIf="loginForm.get('password')?.dirty && loginForm.get('password')?.errors"
-              >Please input your Password!</nz-form-explain
-            >
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item class="login-button">
-          <nz-form-control>
-            <button nz-button class="login-form-button" [nzType]="'primary'">LOG IN</button>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
-      <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
-      <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group>
+        <input type="text" nz-input formControlName="userName" placeholder="Username" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="checkDirtyandErrors('userName')"
+        >Please input your username!</nz-form-explain
+      >
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group [nzSuffix]="prefixLock">
+        <input type="password" nz-input formControlName="password" placeholder="Password" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="checkDirtyandErrors('password')"
+        >Please input your Password!</nz-form-explain
+      >
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="login-button">
+    <nz-form-control>
+      <button nz-button class="login-form-button" nzType="primary">LOG IN</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+<ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
