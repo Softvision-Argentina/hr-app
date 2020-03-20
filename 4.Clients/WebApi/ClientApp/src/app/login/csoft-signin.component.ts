@@ -85,6 +85,7 @@ export class CSoftComponent {
   }
 
   checkDirtyandErrors(controlName: string): boolean{
-    return this.loginForm.get(controlName).dirty && this.loginForm.get(controlName).errors != null
+    let control = this.loginForm.get(controlName);
+    return control ? control.dirty && control.errors != null : false;
   }
 }
