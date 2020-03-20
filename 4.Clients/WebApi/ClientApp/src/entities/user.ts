@@ -1,3 +1,5 @@
+import { Community } from "./community";
+
 export class User {
     ID: number;
     Name: string;
@@ -5,5 +7,5 @@ export class User {
     Email: string;
     Role: string;
     Token: string;
-    Community: string;
+    Community: Community;
 }

@@ -10,6 +10,7 @@ import { Candidate } from 'src/entities/candidate';
 import { mergeMap } from 'rxjs-compat/operator/mergeMap';
 import { BehaviorSubject } from 'rxjs';
 import { Globals } from '../app-globals/globals';
+import { User } from 'src/entities/user';
 
 @Injectable()
 export class ProcessService extends BaseService<Process> {
@@ -33,19 +34,31 @@ export class ProcessService extends BaseService<Process> {
 
   public getActiveProcessByCandidate(candidateId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${candidateId}`,
-      {headers: this.headersWithAuth, observe: "body"})
+      { headers: this.headersWithAuth, observe: "body" })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
 
+  public getProcessByUserRole(currentUser: User): Observable<any> {
+    if (currentUser.Role === "CommunityManager") {
+      return this.http.get(`${this.apiUrl}/com/${currentUser.Community.name}`,
+        { headers: this.headersWithAuth, observe: "body" })
+        .pipe(
+          tap(data => { }),
+          catchError(this.handleErrors)
+        );
+    } else {
+      return this.get();
+    }
+  }
   public approve(processID: number): Observable<any> {
     return this.http.post(this.apiUrl + '/Approve', processID, {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
@@ -59,26 +72,26 @@ export class ProcessService extends BaseService<Process> {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(entities => {}),
+        tap(entities => { }),
         catchError(this.handleErrors)
       );
   }
 
-  public updateProcessCandidate(processID: number, process: Process, candidateID: number, candidate: Candidate): Observable<any>{
+  public updateProcessCandidate(processID: number, process: Process, candidateID: number, candidate: Candidate): Observable<any> {
     const processUrl = `${this.apiUrl}/${processID.toString()}`;
-    const candidateUrl =  `${this.candidatesUrl}/${candidateID.toString()}`;
-    
+    const candidateUrl = `${this.candidatesUrl}/${candidateID.toString()}`;
+
     let processCall = this.http.put(processUrl, process, {
       headers: this.headersWithAuth
     }).pipe(
-      tap(_ => {}),
+      tap(_ => { }),
       catchError(this.handleErrors)
     );
 
     let candidateCall = this.http.put(candidateUrl, candidate, {
       headers: this.headersWithAuth
     }).pipe(
-      tap(_ => {}),
+      tap(_ => { }),
       catchError(this.handleErrors)
     );
 

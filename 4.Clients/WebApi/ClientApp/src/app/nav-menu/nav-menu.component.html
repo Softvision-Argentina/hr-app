@@ -29,7 +29,7 @@
                         <a class="nav-link text-dark" [routerLink]='["/people"]'><i nz-icon type="team"
               style="vertical-align: middle" theme="outline"></i>People</a>
                     </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/daysOff"]'><i nz-icon type="calendar"
               style="vertical-align: middle" theme="outline"></i>Days off</a>
                     </li>

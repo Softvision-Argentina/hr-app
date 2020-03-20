@@ -253,7 +253,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProcesses() {
-    this.facade.processService.get()
+    this.facade.processService.getProcessByUserRole(this.currentUser)
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;

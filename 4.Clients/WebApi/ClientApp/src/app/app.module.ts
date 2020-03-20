@@ -281,7 +281,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
       ] },
 
-      { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
+      { path: 'daysOff', component: DaysOffComponent, canActivate: [AdminGuard] },
 
       { path: 'login', component: LoginComponent },
 

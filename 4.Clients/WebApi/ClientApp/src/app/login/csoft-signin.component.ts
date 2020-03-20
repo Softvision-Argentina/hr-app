@@ -53,7 +53,7 @@ export class CSoftComponent {
 
           localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
           this.facade.userService.getRoles();
-          //console.log(this.authenticatedUser);
+          console.log(this.authenticatedUser);
           this.facade.modalService.closeAll();
           this.navigateByRole(this.authenticatedUser.Role);
         }

@@ -53,7 +53,7 @@ export class GoogleSigninComponent implements AfterViewInit {
           Email: profile.getEmail(),
           Role: '',
           Token: googleUser.getAuthResponse().id_token,
-          Community: ''
+          Community: null 
         }
 
         // console.log(currentUser);
