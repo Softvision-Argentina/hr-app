@@ -15,6 +15,7 @@ import { FacadeService } from '../services/facade.service';
 export class NavMenuComponent {
 
   constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
+    
     private facade: FacadeService) { }
 
   isExpanded = false;

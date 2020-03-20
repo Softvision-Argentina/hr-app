@@ -8,7 +8,7 @@
       </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
                 <ul nz-menu #navMenu [nzMode]="'horizontal'" class="navbar-nav flex-grow">
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin','Interviewer'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin','Interviewer','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/"]'><i nz-icon nzType="solution"
                 style="vertical-align: middle" nzTheme="outline"></i>Processes</a>
                     </li>
@@ -16,24 +16,24 @@
                         <a class="nav-link text-dark" [routerLink]='["/referrals"]'><i nz-icon nzType="solution"
                 style="vertical-align: middle" nzTheme="outline"></i>Referrals</a>
                     </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/tasks"]'><i nz-icon nzType="book"
                 style="vertical-align: middle" nzTheme="outline"></i>Tasks</a>
                     </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/dashboard"]'><i nz-icon type="dashboard"
                 style="vertical-align: middle" theme="outline"></i>Dashboard</a>
                     </li>
 
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/people"]'><i nz-icon type="team"
               style="vertical-align: middle" theme="outline"></i>People</a>
                     </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/daysOff"]'><i nz-icon type="calendar"
               style="vertical-align: middle" theme="outline"></i>Days off</a>
                     </li>
-                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                    <li *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement','Recruiter'])" nz-menu-item class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                         <a class="nav-link text-dark" [routerLink]='["/reports"]'><i nz-icon nzType="line-chart"
                 style="vertical-align: middle" nzTheme="outline"></i>Reports</a>
                     </li>

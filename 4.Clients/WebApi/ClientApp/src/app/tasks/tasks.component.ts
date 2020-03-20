@@ -62,7 +62,7 @@ export class TasksComponent implements OnInit {
   }
 
   getTasks() {
-    if (this.app.isUserRole(["HRManagement", "Admin"])) {
+    if (this.app.isUserRole(["HRManagement", "Admin", "Recruiter"])) {
       console.log()
       this.facade.taskService.get()
         .subscribe(res => {

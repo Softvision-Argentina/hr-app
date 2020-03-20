@@ -268,7 +268,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
       { path: 'reports', component: ReportsComponent, canActivate: [ManagementGuard] },
 
-      { path: 'settings', component: SettingsComponent, canActivate: [ManagementGuard], children:[
+      { path: 'settings', component: SettingsComponent, canActivate: [AdminGuard], children:[
         {path: 'festivities', component: CompanyCalendarComponent},
         {path: 'hire-projected', component: HireProjectedComponent},
         {path: 'employee-casualties', component: EmployeeCasualtiesComponent},
@@ -281,7 +281,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
       ] },
 
-      { path: 'daysOff', component: DaysOffComponent, canActivate: [AdminGuard] },
+      { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
 
       { path: 'login', component: LoginComponent },
 

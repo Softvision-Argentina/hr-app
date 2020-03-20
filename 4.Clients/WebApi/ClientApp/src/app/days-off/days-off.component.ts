@@ -52,7 +52,7 @@ export class DaysOffComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.isHr = this.currentUser.Role === 'Admin';
+    this.isHr = this.currentUser.Role === 'Admin' || this.currentUser.Role === 'Recruiter';
     this.employeeService.GetByEmail(this.currentUser.Email)
       .subscribe(res => {
         this.employee = res.body;

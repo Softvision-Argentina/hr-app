@@ -1,11 +1,11 @@
 <app-nav-menu></app-nav-menu>
 <br /><br />
 <nz-tabset class="padding">
-    <nz-tab nzTitle="Candidates" *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser'])">
+    <nz-tab nzTitle="Candidates" *ngIf="isUserAuthenticated()  && isUserRole(['Admin', 'HRManagement', 'HRUser','Recruiter'])">
         <app-candidates></app-candidates> 
     </nz-tab>
 
-    <nz-tab nzTitle="Interviewers" *ngIf="isUserAuthenticated()  && isUserRole(['HRManagement', 'Admin'])">
+    <nz-tab nzTitle="Interviewers" *ngIf="isUserAuthenticated()  && isUserRole(['HRManagement', 'Admin','Recruiter'])">
         <app-consultants></app-consultants>
     </nz-tab>
 </nz-tabset>
