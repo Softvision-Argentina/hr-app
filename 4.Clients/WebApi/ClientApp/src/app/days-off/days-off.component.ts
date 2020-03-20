@@ -23,23 +23,23 @@ export class DaysOffComponent implements OnInit, OnDestroy {
 
   validateForm: FormGroup;
   listOfDaysOff: DaysOff[] = [];
-  employee;
-  searchValue = '';
-  searchValueType = '';
-  searchValueStatus = '';
-  listOfSearch = [];
-  listOfDisplayData = [...this.listOfDaysOff];
-  sortDni = null;
-  sortValue = null;
-  sortName = null;
+  employee:any;
+  searchValue:string = '';
+  searchValueType:string = '';
+  searchValueStatus:string = '';
+  listOfSearch: any[] = [];
+  listOfDisplayData: DaysOff[] = [...this.listOfDaysOff];
+  sortDni:any = null;
+  sortValue:string = null;
+  sortName:any = null;
   reasons: any[];
   showCalendarSelected: boolean = false;
-  isHr: boolean;
-  today = new Date();
-  currentUser: User;
-  statusList: any[];
-  searchSub: Subscription;
-  searchDni = '';
+  isHr: boolean = null;
+  today: Date = new Date();
+  currentUser: User = null;
+  statusList: any[] = [];
+  searchSub: Subscription = null;
+  searchDni:string = '';
 
   constructor(private facade: FacadeService,
     private fb: FormBuilder,

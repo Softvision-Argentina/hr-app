@@ -129,6 +129,10 @@
     margin-bottom: 40px;
   }
 
+  nz-dropdown{
+    margin-left: 10%;
+  }
+
   .button {
     padding-left: 0.5%;
 

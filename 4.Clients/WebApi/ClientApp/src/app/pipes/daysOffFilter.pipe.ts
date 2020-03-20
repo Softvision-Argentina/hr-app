@@ -13,7 +13,6 @@ export class DaysOffFilter implements PipeTransform {
                 }
             })
             : items;
-        console.log(result);
         if(result.length === 0) return [-1];
         else return result;
     }

@@ -9,7 +9,6 @@ export class PersonFilter implements PipeTransform {
         if (!isNaN(value)) {
             result = items.filter(item => {
                 if (!!item.dni || item.dni === 0) {
-                    const itemFinde = item.dni.toString().toUpperCase().indexOf(value.toString().toUpperCase()) !== -1;
                     return item.dni.toString().toUpperCase().indexOf(value.toString().toUpperCase()) !== -1;
                 } else {
                     return item;
