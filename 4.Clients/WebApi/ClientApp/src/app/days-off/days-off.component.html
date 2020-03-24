@@ -59,12 +59,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let daysOff of daysOffTable.data | daysOffFilter:searchDni:'dni'">
-                    <td colspan="6" *ngIf="!daysOff.id"><nz-empty></nz-empty></td>
-                    <td *ngIf="daysOff.id">{{ daysOff.employee?.dni | number:'8.0-0' }}</td>
-                    <td *ngIf="daysOff.id">{{ getType(daysOff) }}</td>
-                    <td *ngIf="daysOff.id">{{ daysOff.date | date: 'dd/MM/yyyy' }}</td>
-                    <td *ngIf="daysOff.id">{{ daysOff.endDate | date: 'dd/MM/yyyy' }}</td>
-                    <td *ngIf="daysOff.id">{{ getStatus(daysOff) }}</td>
+                    <td>{{ daysOff.employee?.dni | number:'8.0-0' }}</td>
+                    <td>{{ getType(daysOff) }}</td>
+                    <td>{{ daysOff.date | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ daysOff.endDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ getStatus(daysOff) }}</td>
                     <td [style.text-align]="center" *ngIf="daysOff.id">
                         <i (click)="showEditModal(DaysOffModal, daysOff.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

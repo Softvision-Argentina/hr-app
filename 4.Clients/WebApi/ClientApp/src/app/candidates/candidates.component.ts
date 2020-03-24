@@ -29,34 +29,35 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   filteredCandidates: Candidate[] = [];
-  isLoadingResults = false;
-  searchValue = '';
-  listOfSearchCandidates = [];
-  listOfDisplayData = [...this.filteredCandidates];
-  sortName = 'name';
-  sortValue = 'ascend';
+  isLoadingResults: boolean = false;
+  searchValue: string = '';
+  listOfSearchCandidates: any[] = [];
+  listOfDisplayData: Candidate[] = [...this.filteredCandidates];
+  sortName: string = 'name';
+  sortValue: string = 'ascend';
   recruiters: Consultant[] = [];
   profiles: CandidateProfile[] = [];
   communities: Community[] = [];
   _offices: Office[] = [];
-  searchCandidate = '';
+  searchDni: string = '';
+  searchName: string = '';
   searchSub: Subscription;
 
   // Modals
   skills: Skill[] = [];
   private completeSkillList: Skill[] = [];
   validateForm: FormGroup;
-  isAddVisible = false;
-  isAddOkLoading = false;
+  isAddVisible: boolean = false;
+  isAddOkLoading: boolean = false;
   emptyCandidate: Candidate;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit = false;
-  editingCandidateId = 0;
-  isDniLoading = false;
-  isDniValid = false;
+  isEdit: boolean = false;
+  editingCandidateId: number = 0;
+  isDniLoading: boolean = false;
+  isDniValid: boolean = false;
   currentConsultant: User;
-  searchValueStatus = '';
+  searchValueStatus: string = '';
   statusList: any[];
   englishLevelList: any[];
 
@@ -138,7 +139,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
-      this.searchCandidate  = data;
+      if (isNaN(Number(data))) {
+        this.searchName = data;
+        this.searchDni = '';
+      } else {
+        this.searchDni = data;
+        this.searchName = '';
+      }
     });
   }
 

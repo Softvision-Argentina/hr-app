@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class SearchbarService {
     searchChanged = new Subject<string>();
     search( route: string, value: string) {
-        if (!!route && !!value) {
+        if (!!route) {
             this.searchChanged.next(value);
         }
     }

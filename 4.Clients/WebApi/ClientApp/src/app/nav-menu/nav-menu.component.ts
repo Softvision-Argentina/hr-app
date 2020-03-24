@@ -24,7 +24,7 @@ export class NavMenuComponent implements OnInit {
   isExpanded: boolean = false;
   currentUser: User = null;
   showUserSettings: boolean = false;
-  url: string = ''
+  url: string = '';
   search: string = '';
 
   ngOnInit() {

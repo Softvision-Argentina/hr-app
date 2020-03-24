@@ -21,9 +21,9 @@ export class DaysOffComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
-  validateForm: FormGroup;
+  validateForm: FormGroup = null;
   listOfDaysOff: DaysOff[] = [];
-  employee:any;
+  employee:any = null;
   searchValue:string = '';
   searchValueType:string = '';
   searchValueStatus:string = '';
@@ -32,7 +32,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   sortDni:any = null;
   sortValue:string = null;
   sortName:any = null;
-  reasons: any[];
+  reasons: any[] = null;
   showCalendarSelected: boolean = false;
   isHr: boolean = null;
   today: Date = new Date();
@@ -109,7 +109,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  };
+  }
 
   disabledDateTime = (): object => {
     return {
@@ -117,7 +117,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  };
+  }
   
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
@@ -246,7 +246,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                   }, err => {
                     if (err.message !== undefined) { this.facade.toastrService.error(err.message); }
                     else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                  })
+                  });
               }
             }
           }

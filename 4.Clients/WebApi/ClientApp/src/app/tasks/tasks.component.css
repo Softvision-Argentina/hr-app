@@ -1,265 +1,305 @@
-  nz-button-group {
-    margin-bottom: 8px;
-    margin-right: 8px;
-  }
-
-  .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all 0.3s;
-  }
-
-  .dynamic-delete-button:hover {
-    color: #777;
-  }
-
-  .cards {
-    background-color: #fafafa;
-    padding: 30px 200px;
-    font-family: "ProximaNova-Regular";
-
-  }
-  .tasks-container {
-    font-family: "ProximaNova-Regular";
-    background-color: #fafafa;
-
-  }
-
-  .card-style {
-    border-radius: 5px;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
-    border: solid 1px #f2f2f2;
-    background-color: #ffffff;
-     
-  }
-
-  .card-title {
-    font-size: 20px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.5;
-    letter-spacing: normal;
-  }
-
-  .card-subtitle {
-    font-size: 14px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 2.14;
-    letter-spacing: normal;
-  }
-
-  .card-item {
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.7;
-    letter-spacing: normal;
-  }
-
-  .add-item {
-    font-size: 16px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.88;
-    letter-spacing: normal;
-
-  }
-
-  .plus {
-    position: relative;
-    top: -3px;
-    padding-right: 5px;
-    font-size: 11px;
-  }
-
-  .input {
-    font-size: 16px;
-    font-size: 16px;
-    padding: 15px 0px 15px 15px;
-  }
-
-  .input-button {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    box-shadow: 0 7px 64px 0 rgba(0, 0, 0, 0.07);
-    border: solid 1px #5c068c;
-    background-color: #5c068c;
-  }
-
-  ::ng-deep .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #ff8f1c !important;
-    border-color: #ff8f1c !important;
+nz-button-group {
+  margin-bottom: 8px;
+  margin-right: 8px;
 }
 
-  .newTask {
-    width: 99%;
-    height: 40px;
-    background-image: linear-gradient(to right, #f4633a, #c800a1); 
-    font-size: 20px;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: -0.67px;
-    color: #ffffff;
-    border: none;
-  }
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all 0.3s;
+}
 
-  .studio {
-    font-family: ProximaNova-Extrabold;
-    font-size: 44px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.02;
-    letter-spacing: -0.88px;
-    color: #222222;
-    padding-left: 0.5%;
-    margin-bottom: 20px;
-  }
+.dynamic-delete-button:hover {
+  color: #777;
+}
 
-  .navOptions {
-    margin-bottom: 40px;
-  }
+.cards {
+  background-color: #fafafa;
+  padding: 30px 200px;
+  font-family: "ProximaNova-Regular";
 
-  nz-dropdown{
-    margin-left: 10%;
-  }
+}
+.tasks-container {
+  font-family: "ProximaNova-Regular";
+  background-color: #fafafa;
 
-  .button {
-    padding-left: 0.5%;
+}
 
-  }
+.card-style {
+  border-radius: 5px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  border: solid 1px #f2f2f2;
+  background-color: #ffffff;
+    
+}
 
-  .showing {
-    width: 81px;
-    height: 30px;
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.14;
+  letter-spacing: normal;
+}
+
+.card-item {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.7;
+  letter-spacing: normal;
+}
+
+.add-item {
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.88;
+  letter-spacing: normal;
+
+}
+
+.plus {
+  position: relative;
+  top: -3px;
+  padding-right: 5px;
+  font-size: 11px;
+}
+
+.input {
+  font-size: 16px;
+  font-size: 16px;
+  padding: 15px 0px 15px 15px;
+}
+
+.input-button {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 7px 64px 0 rgba(0, 0, 0, 0.07);
+  border: solid 1px #5c068c;
+  background-color: #5c068c;
+}
+
+::ng-deep .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #ff8f1c !important;
+  border-color: #ff8f1c !important;
+}
+
+.newTask {
+  width: 99%;
+  height: 40px;
+  background-image: linear-gradient(to right, #f4633a, #c800a1); 
+  font-size: 20px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.67px;
+  color: #ffffff;
+  border: none;
+}
+
+.studio {
+  font-family: ProximaNova-Extrabold;
+  font-size: 44px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -0.88px;
+  color: #222222;
+  padding-left: 0.5%;
+  margin-bottom: 20px;
+}
+
+.navOptions {
+  margin-bottom: 40px;
+}
+
+nz-dropdown{
+  margin-left: 10%;
+}
+
+.button {
+  padding-left: 0.5%;
+
+}
+
+.showing {
+  width: 81px;
+  height: 30px;
+  font-family: ProximaNova;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.options {
+
     font-family: ProximaNova;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
-    line-height: 1.5;
+    line-height: 1.29;
     letter-spacing: normal;
-    color: #000000;
+    color: #1a051d;
+  
+}
+
+.orderBy {
+  font-family: ProximaNova;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #d0c9d6;
+}
+
+.task-boxes {
+  width: 23%;
+  margin: 0px 8px;
+}
+
+@media screen and (max-width: 1830px) and (min-width: 1671px){
+  .orderBy {
+    font-size: 13px;
   }
 
   .options {
-
-      font-family: ProximaNova;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.29;
-      letter-spacing: normal;
-      color: #1a051d;
-    
+    font-size: 13px;
+  }
+}
+@media screen and (max-width: 1670px) and (min-width: 1631px){
+  .orderBy {
+    font-size: 12px;
   }
 
+  .options {
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 1630px) and (min-width: 1370px){
   .orderBy {
-    font-family: ProximaNova;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.25;
-    letter-spacing: normal;
-    color: #d0c9d6;
+    font-size: 13px;
+  }
+
+  .options {
+    font-size: 13px;
+    padding: 0px 7px;
+  }
+
+  .div-dropdown {
+    margin-right: 1%;
   }
 
   .task-boxes {
-    width: 23%;
-    margin: 0px 8px;
+    width: 31%;
+  }
+}
+@media screen and (max-width: 1369px) and (min-width: 1283px){
+  .orderBy {
+    font-size: 13px;
+    padding: 0px 7px;
   }
 
-  @media screen and (max-width: 1830px) and (min-width: 1671px){
-    .orderBy {
-      font-size: 13px;
-    }
-
-    .options {
-      font-size: 13px;
-    }
-  }
-  @media screen and (max-width: 1670px) and (min-width: 1631px){
-    .orderBy {
-      font-size: 12px;
-    }
-
-    .options {
-      font-size: 12px;
-    }
-  }
-  @media screen and (max-width: 1630px) and (min-width: 1370px){
-    .orderBy {
-      font-size: 13px;
-    }
-
-    .options {
-      font-size: 13px;
-      padding: 0px 7px;
-    }
-
-    .div-dropdown {
-      margin-right: 1%;
-    }
-
-    .task-boxes {
-      width: 31%;
-    }
-  }
-  @media screen and (max-width: 1369px) and (min-width: 1283px){
-    .orderBy {
-      font-size: 13px;
-      padding: 0px 7px;
-    }
-
-    .options {
-      font-size: 10px;
-      padding: 0px 7px;
-    }
-
-    .showing {
-      font-size: 13px;
-    }
-
-    .div-dropdown {
-      margin-right: 1%;
-    }
-
-    .task-boxes {
-      width: 35%;
-    }
+  .options {
+    font-size: 10px;
+    padding: 0px 7px;
   }
 
-  @media screen and (max-width: 1281px) and (min-width: 1200px){
-    .orderBy {
-      font-size: 13px;
-      padding: 0px 7px;
-    }
-
-    .options {
-      font-size: 10px;
-      padding: 0px 7px;
-    }
-
-    .showing {
-      font-size: 13px;
-    }
-    
-    .div-dropdown {
-      margin-right: 2%;
-    }
-
-    .task-boxes {
-      width: 45%;
-    }
+  .showing {
+    font-size: 13px;
   }
+
+  .div-dropdown {
+    margin-right: 1%;
+  }
+
+  .task-boxes {
+    width: 35%;
+  }
+}
+
+@media screen and (max-width: 1281px) and (min-width: 1200px){
+  .orderBy {
+    font-size: 13px;
+    padding: 0px 7px;
+  }
+
+  .options {
+    font-size: 10px;
+    padding: 0px 7px;
+  }
+
+  .showing {
+    font-size: 13px;
+  }
+  
+  .div-dropdown {
+    margin-right: 2%;
+  }
+
+  .task-boxes {
+    width: 45%;
+  }
+}
+
+.font-size-large{
+  font-size: x-large;
+}
+
+.icon-float{
+  display: none;
+  float: right;
+}
+
+.span-decoration{
+  text-decoration:line-through;
+  color: grey;
+}
+
+.display-flex{
+  display: flex;
+}
+
+.display-flex nz-select{
+  width: 100%;
+  margin-right:1%;
+}
+
+.dates-template{
+  margin-left: 15%;
+}
+
+.danger{
+  color: red;
+}
+
+.success{
+  color: green;
+}
+
+.primary{
+  color: blue;
+}
+

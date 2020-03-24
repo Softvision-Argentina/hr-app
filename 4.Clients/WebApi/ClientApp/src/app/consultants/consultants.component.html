@@ -26,11 +26,10 @@
                 </tr>
             </thead>
             <tbody> 
-                <tr *ngFor="let consultant of consultantTable.data | personFilter:searchConsultant">
-                    <td colspan="6" *ngIf="!consultant.id"><nz-empty></nz-empty></td>
-                    <td *ngIf="consultant.id">{{ consultant.name }} {{ consultant.lastName }}</td>
-                    <td *ngIf="consultant.id">{{ consultant.phoneNumber }}</td>
-                    <td *ngIf="consultant.id">{{ consultant.emailAddress }}</td>
+                <tr *ngFor="let consultant of consultantTable.data | filter:searchConsultant:'name'">
+                    <td>{{ consultant.name }} {{ consultant.lastName }}</td>
+                    <td>{{ consultant.phoneNumber }}</td>
+                    <td>{{ consultant.emailAddress }}</td>
                     <td *ngIf="consultant.id" [style.text-align]="center">
                         <i (click)="showDetailsModal(consultant.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

@@ -1,19 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+import { filterTransform } from './filterTransform';
 @Pipe({
     name: 'daysOffFilter',
     pure: false
 })
 export class DaysOffFilter implements PipeTransform {
     transform(items: any[], value, propName): any {
-        let result = value 
-            ? items.filter(item =>{
-                if (item.employee[propName]) {
-                    return item.employee[propName].toString().toUpperCase().indexOf(value.toString().toUpperCase()) !== -1
-                }
-            })
-            : items;
-        if(result.length === 0) return [-1];
-        else return result;
+        return filterTransform( items, value, propName, 'employee');
     }
 }

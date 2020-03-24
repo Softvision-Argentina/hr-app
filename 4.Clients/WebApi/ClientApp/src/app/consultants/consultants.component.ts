@@ -68,7 +68,11 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
 
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
-      this.searchConsultant  = data;
+      if (isNaN(Number(data))) {
+        this.searchConsultant = data;
+      } else {
+        this.searchConsultant = '';
+      }
     });
   }
 
