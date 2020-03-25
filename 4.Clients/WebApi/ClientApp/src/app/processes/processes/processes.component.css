@@ -3,7 +3,7 @@
   margin-right: auto; 
   margin-left:  auto; 
   max-width: 85%; 
-  padding-right: 230px; 
+  padding-right: 110px; 
   padding-left:  10px; 
 }
 
@@ -131,15 +131,16 @@ nz-step {
 
 
 
-@media screen and (max-width: 1565px) and (min-width: 1280px) {
+@media screen and (max-width: 1620px) and (min-width: 1280px) {
  .container {
   max-width: 95%;
  }
 }
 
-@media screen and (max-width: 1399px) and (min-width: 1280px) {
+@media screen and (max-width: 1460px) and (min-width: 1280px) {
   .container {
-   padding-right: 190px;
+    max-width: 99%;
+    padding-right: 100px;
   }
  }
 
