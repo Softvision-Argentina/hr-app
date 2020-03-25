@@ -140,8 +140,7 @@ export class SkillsComponent implements OnInit {
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
+              this.facade.errorHandlerService.showErrorMessage(err);
             })
             } 
             else modal.nzFooter[1].loading = false;
@@ -204,8 +203,7 @@ export class SkillsComponent implements OnInit {
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
+              this.facade.errorHandlerService.showErrorMessage(err);
             })
             } 
             else modal.nzFooter[1].loading = false;
@@ -228,8 +226,7 @@ export class SkillsComponent implements OnInit {
           this.getSkills();
           this.facade.toastrService.success('Skill was deleted !');
         }, err => {
-          if(err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

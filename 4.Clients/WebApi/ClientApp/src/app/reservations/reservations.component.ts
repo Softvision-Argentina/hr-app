@@ -176,8 +176,7 @@ export class ReservationsComponent implements OnInit {
           this.getCurrentDayReservations();
           this.facade.toastrService.success('Reservation deleted !');
         }, err => {
-          if (err.message != undefined) { this.facade.toastrService.error(err.message); }
-          else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -271,8 +270,7 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully created!');
               modal.destroy();
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
+              this.facade.errorHandlerService.showErrorMessage(err);
             })
         }
       }
@@ -307,8 +305,7 @@ export class ReservationsComponent implements OnInit {
               await this.getReservations();
               this.reservateDay(modal);
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
+              this.facade.errorHandlerService.showErrorMessage(err);
             })
         }
         else {
@@ -319,8 +316,7 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully updated!');
               modal.destroy();
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
+              this.facade.errorHandlerService.showErrorMessage(err);
             })
         }
       }

@@ -27,7 +27,8 @@ import { DeclineReasonService } from "./decline-reason.service";
 import { DashboardService } from "./dashboard.service";
 import { OfferService } from "./offer.service";
 import { NotificationService } from "./notificationsService";
-import { SearchbarService } from './searchbar.service';
+import { SearchbarService } from './searchbar.service'
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable()
 export class FacadeService {
@@ -265,13 +266,21 @@ export class FacadeService {
     }
     return this._dashboardService;
   }
-  
+
   private _searchbarService: SearchbarService;
   public get searchbarService(): SearchbarService {
     if (!this._searchbarService) {
       this._searchbarService = this.injector.get(SearchbarService);
     }
     return this._searchbarService;
+  }
+
+  private _errorHandlerService: ErrorHandlerService;
+  public get errorHandlerService(): ErrorHandlerService {
+    if (!this._errorHandlerService) {
+      this._errorHandlerService = this.injector.get(ErrorHandlerService);
+    }
+    return this._errorHandlerService;
   }
 
   constructor(private injector: Injector) {

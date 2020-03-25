@@ -52,8 +52,7 @@ export class RoleComponent implements OnInit {
             this.getRoles();
             this.facade.toastrService.success('Role was deleted !');
           }, err => {
-            if (err.message != undefined) this.facade.toastrService.error(err.message);
-            else this.facade.toastrService.error("The service is not available now. Try again later.");
+            this.facade.errorHandlerService.showErrorMessage(err);
           })
         }
       }
@@ -106,8 +105,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully created !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
+                this.facade.errorHandlerService.showErrorMessage(err);
               })
             }
             else modal.nzFooter[1].loading = false;
@@ -153,8 +151,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully edited !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
+                this.facade.errorHandlerService.showErrorMessage(err);
               })
             }
             else modal.nzFooter[1].loading = false;

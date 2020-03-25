@@ -108,8 +108,7 @@ export class RoomComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-                  { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -164,8 +163,7 @@ export class RoomComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-                   { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -186,7 +184,7 @@ export class RoomComponent implements OnInit {
           this.settings.getRooms();
           this.facade.toastrService.success('Room was deleted !');
         }, err => {
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

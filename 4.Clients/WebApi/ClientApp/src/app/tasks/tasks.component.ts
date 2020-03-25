@@ -130,8 +130,7 @@ export class TasksComponent implements OnInit, OnDestroy {
               this.toDoList.splice(index, 1);
             }
           }, err => {
-            if (err.message != undefined) this.facade.toastrService.error(err.message);
-            else this.facade.toastrService.error("The service is not available now. Try again later.");
+            this.facade.errorHandlerService.showErrorMessage(err);
           });
       }
     });
@@ -164,8 +163,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         else this.toDoList[index].isApprove = false;
       }, err => {
         taskItem.checked = !taskItem.checked;
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -220,8 +218,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         if (this.toDoList[taskIndex].taskItems.every(it => it.checked))
           this.toDoList[taskIndex].isApprove = true;
       }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
+        this.facade.errorHandlerService.showErrorMessage(err);
         updateTask.taskItems.splice(itemIndex, 0, item);
       });
   }
@@ -317,8 +314,7 @@ export class TasksComponent implements OnInit, OnDestroy {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else modal.nzFooter[1].loading = false;
