@@ -1,16 +1,16 @@
 ﻿using Core;
 using Core.Persistance;
-using Domain.Services.Impl.IntegrationTests.Dummy;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.Validators.Seed;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Services.Impl.IntegrationTests.Dummy.Builders.Dummy;
 using Core.Testing;
+using Domain.Services.Impl.UnitTests.Dummy;
+using Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy;
 
-namespace Domain.Services.Impl.IntegrationTests.Seed
+namespace Domain.Services.Impl.UnitTests.Seed
 {
     public class BaseDummyTest : BaseDomainTest
     {

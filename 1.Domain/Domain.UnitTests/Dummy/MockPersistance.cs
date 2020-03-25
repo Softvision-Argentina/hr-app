@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Domain.Services.Impl.IntegrationTests.Dummy
+namespace Domain.Services.Impl.UnitTests.Dummy
 {
     public class MockPersistance<T> where T : IEntity
     {

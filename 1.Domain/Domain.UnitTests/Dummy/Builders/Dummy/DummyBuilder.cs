@@ -1,45 +1,48 @@
-﻿using Domain.Services.Contracts.Seed;
-using System;
+﻿using System;
 
-namespace Domain.Services.Impl.IntegrationTests.Dummy.Builders.Dummy
+namespace Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy
 {
-    internal class DummyContractBuilder : IBuilder<CreateDummyContract>
+    using Dummy = Model.Seed.Dummy;
+
+    internal class DummyBuilder : IBuilder<Dummy>
     {
+        private Guid id;
         private string name;
         private string description;
         private string testValue;
 
-        public DummyContractBuilder()
+        public DummyBuilder()
         {
-            var id = Guid.NewGuid();
+            id = Guid.NewGuid();
             name = $"Test {id}";
             description = $"this is a dymmy for {name}";
             testValue = "Test value";
         }
 
-        public CreateDummyContract Build()
+        public Dummy Build()
         {
-            return new CreateDummyContract()
+            return new Dummy()
             {
+                Id = id,
                 Name = name,
                 Description = description,
                 TestValue = testValue
             };
         }
 
-        internal DummyContractBuilder WithName(string name)
+        internal DummyBuilder WithName(string name)
         {
             this.name = name;
             return this;
         }
 
-        internal DummyContractBuilder WithDescription(string description)
+        internal DummyBuilder WithDescription(string description)
         {
             this.description = description;
             return this;
         }
 
-        internal DummyContractBuilder WithTestValue(string testValue)
+        internal DummyBuilder WithTestValue(string testValue)
         {
             this.testValue = testValue;
             return this;

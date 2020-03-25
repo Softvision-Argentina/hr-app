@@ -2,9 +2,8 @@
 using System.Net.Http;
 using Xunit;
 using Microsoft.AspNetCore.TestHost;
-using Domain.Services.Impl.IntegrationTests.Dummy;
 
-namespace Domain.Services.Impl.IntegrationTests.Services
+namespace Domain.Services.Impl.IntegrationTests.Core
 {
     [Collection("Service collection")]
     public class BaseServiceIntegrationTest

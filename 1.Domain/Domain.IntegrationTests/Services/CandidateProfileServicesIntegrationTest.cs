@@ -6,8 +6,8 @@ using Domain.Services.Interfaces.Services;
 using System;
 using System.Linq;
 using Xunit;
-using Domain.Services.Impl.IntegrationTests.Dummy;
 using Core;
+using Domain.Services.Impl.IntegrationTests.Core;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
 {
