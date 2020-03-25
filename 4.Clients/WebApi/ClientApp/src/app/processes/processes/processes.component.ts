@@ -524,7 +524,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
       this.openFromEdit = true;
-      if (this.currentUser.Role === "Admin" || this.currentUser.Role === "Recruiter") {
+      if (this.currentUser.role === "Admin" || this.currentUser.role === "Recruiter") {
         this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
       } else {
         this.stepIndex = 0;

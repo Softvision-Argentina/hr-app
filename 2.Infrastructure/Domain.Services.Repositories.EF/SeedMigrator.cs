@@ -635,7 +635,6 @@ namespace Domain.Services.Repositories.EF
 
 
 
-            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user24 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             
