@@ -1,9 +1,8 @@
-import { of } from 'rxjs';
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Component, OnInit, TemplateRef, ViewChild, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input,SimpleChanges } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import { Office } from 'src/entities/office';
 import { Room } from 'src/entities/room';
@@ -13,9 +12,7 @@ import { Room } from 'src/entities/room';
   templateUrl: './office.component.html',
   styleUrls: ['./office.component.css']
 })
-export class OfficeComponent implements OnInit {
-
-  
+export class OfficeComponent implements OnInit {  
   @Input()
   private _detailedRoom: Room[];
   public get detailedRoom(): Room[]{
@@ -43,8 +40,7 @@ export class OfficeComponent implements OnInit {
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
 
   ngOnInit() {
-    this.app.removeBgImage();
-    // this.getOffices();
+    this.app.removeBgImage();    
     this.getRooms();
 
     this.officeForm = this.fb.group({
@@ -98,7 +94,7 @@ export class OfficeComponent implements OnInit {
 
   resetForm(){
     this.officeForm =  this.fb.group({
-      name: [null, [Validators.required, trimValidator]], //name: new FormControl(value, validator or array of validators)
+      name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]]    
     });
   }
@@ -212,7 +208,6 @@ export class OfficeComponent implements OnInit {
     this.isDetailsVisible = true;
   }
 
-  
   getColor(candidateroom: Room[], room: Room): string {
     let colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     let index: number = candidateroom.indexOf(room);

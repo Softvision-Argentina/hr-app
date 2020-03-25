@@ -20,18 +20,16 @@ export class AuthService {
   public authenticate(userName: string, password: string): Observable<any> {
     let user = {UserName : userName , Password : password};
     return this.http.post(this.apiUrl + 'Auth/login', user)
-      .pipe(
-        tap(data => {}),
-        catchError(this.handleError('authenticate', []))
+      .pipe(      
+        catchError(this.handleError('authenticate', {}))
       );
   }
 
   public externalLogin(token: string): Observable<any> { 
     let body = {token : token};
     return this.http.post(this.apiUrl + 'Auth/loginExternal', body)
-      .pipe(
-        tap(data => {}),
-        catchError(this.handleError('externalLogin', []))
+      .pipe(        
+        catchError(this.handleError('externalLogin', {}))
       );
   }
 

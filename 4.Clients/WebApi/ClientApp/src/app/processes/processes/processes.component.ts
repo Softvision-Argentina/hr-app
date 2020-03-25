@@ -42,7 +42,7 @@ import { Offer } from 'src/entities/offer';
 export class ProcessesComponent implements OnInit, AfterViewChecked {
   slideConfig = {
     slidesToShow: 1,
-    adaptiveHeight: true, //la papa
+    adaptiveHeight: true,
     arrows: true,
     infinite: false,
     draggable: false
@@ -144,22 +144,17 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-
-    this.facade.consultantService.GetByEmail(this.currentUser.Email)
+    this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-      });
-
+    });
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
-
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName: [null, [Validators.required]]
     });
-
-    this.setRejectionReasonValidators();
 
     this.app.hideLoading();
 
@@ -175,29 +170,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   isUserRole(roles: string[]): boolean {
     return this._appComponent.isUserRole(roles);
-  }
-
-  setRejectionReasonValidators() {
-    // const rejectionReason = this.processForm.get('rejectionReason');
-
-    // this.processForm.get('status').valueChanges
-    //   .subscribe(status => {
-    //     console.log('setRejectionReasonValidators');
-    //     console.log('status: ');
-    //     console.log(status);
-    //     if (status === '0') {//Rejected 
-    //       rejectionReason.setValidators([Validators.required]);
-    //     }
-    //     else {
-    //       rejectionReason.setValidators(null);
-    //     }
-
-    //     rejectionReason.updateValueAndValidity();
-    //   });
-  }
-
-  test(val) {
-    console.log(val)
   }
 
   getCandidates() {
@@ -284,7 +256,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         let result = []
         for (let i = 0; i < res.length; i++) {
           let sessionConsultant = res[i].candidate.recruiter.name + ' ' + res[i].candidate.recruiter.lastName;
-          if (sessionConsultant === this.currentUser.Name) {
+          if (sessionConsultant === this.currentUser.name) {
             result.push(res[i]);
           }
         }
@@ -318,10 +290,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showApproveProcessConfirm(processID: number): void {
-    let procesToApprove: Process = this.filteredProcesses.find(p => p.id == processID);
-    // let processText = procesToApprove.candidate ? procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName) : procesToApprove.profile;
+    let procesToApprove: Process = this.filteredProcesses.find(p => p.id == processID);  
     let processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
-
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all stages associated with the process',
       nzContent: '',
@@ -427,11 +397,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-              let declineReason: DeclineReason = {
-                id: this.declineProcessForm.controls['declineReasonName'].value,
-                name: "",
-                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-              }
+              let declineReason : DeclineReason = { 
+                  id: this.declineProcessForm.controls['declineReasonName'].value,
+                  name: "",
+                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""                  
+                }
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -507,7 +477,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.Name
+    this.searchRecruiterValue = this.currentUser.name
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -566,8 +536,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
-
-
     if (this.profileSearch == 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
@@ -581,8 +549,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
-
-
     if (this.communitySearch == 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
@@ -636,26 +602,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.app.hideLoading();
   }
 
-  // NOT BEING USED
-  setCandidateNewStatus(processStatusId: string, candidateId: number): Candidate {
-    let processStatus: string = this.statusList[processStatusId].name;
-    let candidate: Candidate = this.candidatesFullList.filter(x => x.id === candidateId)[0];
-    if (processStatus !== 'NotStarted' && processStatus !== 'Wait') {
-      switch (processStatus) {
-        case 'Rejected':
-          candidate.status = CandidateStatusEnum.Rejected;
-          break;
-        case 'Finish':
-          candidate.status = CandidateStatusEnum.Hired;
-          break;
-        case 'Process':
-          candidate.status = CandidateStatusEnum.InProgress;
-          break;
-      }
-    }
-    return candidate;
-  }
-
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
 
@@ -669,9 +615,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showDeleteConfirm(processID: number): void {
     let procesDelete: Process = this.filteredProcesses.find(p => p.id == processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
-    // let processText = procesDelete.candidate ? procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName) : procesDelete.profile;
-
+    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);    
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -723,15 +667,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   wishedStage(choosenStage: number, elementName: string) {
-    //this.processCarousel.goTo(choosenStage);
     this.stepIndex = choosenStage;
-    // if (choosenStage !== 0) {
-    //   var height = document.getElementById('hrStage').style.height;
-    //   document.getElementById('idProcessCarousel').style.height = height;
-    // }
     this.checkSlideIndex(elementName);
   }
-
 
   closeModal() {
     this.facade.modalService.openModals[0].destroy();
@@ -765,7 +703,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.times++;
     this.lastComponent = this.currentComponent;
   }
-
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
     if (this.validateForms()) {
@@ -854,7 +791,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       hrStage: null,
       technicalStage: null,
       clientStage: null,
-      offerStage: null
+      offerStage: null,
+      createdDate: new Date()
     };
 
     process.hrStage = this.hrStage.getFormData(process.id);
@@ -889,8 +827,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     return processStatus;
   }
 
-
-
   getStatusColor(status: number): string {
     let statusName = this.statusList.filter(s => s.id == status)[0].name;
     switch (statusName) {
@@ -919,7 +855,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           }
         }]
     });
-
   }
 
   refreshTable() {
@@ -955,6 +890,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
+      createdDate: new Date(),
       hrStage: {
         id: 0,
         date: new Date(),
@@ -967,7 +903,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         wantedSalary: 0,
         englishLevel: EnglishLevelEnum.None,
         rejectionReasonsHr: null
-
       },
       technicalStage: {
         id: 0,

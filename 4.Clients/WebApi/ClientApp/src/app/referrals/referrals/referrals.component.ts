@@ -19,12 +19,10 @@ import { SeniorityEnum } from '../../../entities/enums/seniority.enum';
 import { Globals } from '../../app-globals/globals';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
-import { HrStage } from 'src/entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.enum';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
@@ -121,10 +119,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   isOwnedProcesses: boolean = false;
 
+  notis: Notification[] = [];
+  notisCount: number;
+  id: number;
+
   forms: FormGroup[] = [];
+  visible: boolean;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent,) {
+    private globals: Globals, private _appComponent: AppComponent) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -141,7 +144,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.Email)
+    this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
     });
@@ -158,6 +161,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.setRejectionReasonValidators();
 
     this.app.hideLoading();
+    this.getNotifications();
   }
 
   ngAfterViewChecked(){
@@ -195,10 +199,42 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.Name);
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.name);
       }, err => {
         console.log(err);
       });
+  }
+
+  getNotifications() {
+    this.facade.NotificationSevice.getNotifications()
+      .subscribe(res => {
+       this.notis = res;
+       this.notisCount = res.length;
+      }, err => {
+        console.log(err);
+      });
+  }
+
+  readNotification(id: number) {
+    this.facade.NotificationSevice.readNotifications(id)
+      .subscribe( err => {
+        console.log(err);
+        this.visible = false;
+        this.notisCount = this.notisCount - 1;
+        this.getNotifications();
+      });
+  }
+
+  change(value: boolean): void {
+    console.log(value);
+  }
+
+  clickMe(): void {
+    this.visible = false;
+  }
+
+  changeNumber(value: boolean): void {
+    this.visible = false;
   }
 
   getConsultants() {
@@ -785,6 +821,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     process = {
       id: !this.isEdit ? 0 : this.emptyProcess.id,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
       currentStage: ProcessCurrentStageEnum.NA,
@@ -888,6 +925,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.emptyProcess = {
       id: 0,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: ProcessStatusEnum.NA,
       currentStage: ProcessCurrentStageEnum.NA,

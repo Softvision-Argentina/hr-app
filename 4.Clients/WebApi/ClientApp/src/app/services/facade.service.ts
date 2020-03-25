@@ -24,8 +24,10 @@ import { RoleService } from "./role.service";
 import { CompanyCalendarService } from "./company-calendar.service";
 import { PostulantsService } from "./postulants.service";
 import { DeclineReasonService } from "./decline-reason.service";
-import { PreferenceService } from "./preference.service";
+import { DashboardService } from "./dashboard.service";
 import { OfferService } from "./offer.service";
+import { NotificationService } from "./notificationsService";
+import { SearchbarService } from './searchbar.service';
 
 @Injectable()
 export class FacadeService {
@@ -101,6 +103,14 @@ export class FacadeService {
       this._candidateService = this.injector.get(CandidateService);
     }
     return this._candidateService;
+  }
+
+  private _notificationsService: NotificationService;
+  public get NotificationSevice(): NotificationService {
+    if (!this._notificationsService) {
+      this._notificationsService = this.injector.get(NotificationService);
+    }
+    return this._notificationsService;
   }
 
   private _postulantService: PostulantsService;
@@ -217,7 +227,7 @@ export class FacadeService {
   private _messageService: NzMessageService;
   public get messageService(): NzMessageService {
     if (!this._messageService) {
-      this._messageService = this.injector.get(NzMessageService)
+      this._messageService = this.injector.get(NzMessageService);
     }
     return this._messageService;
   }
@@ -248,12 +258,20 @@ export class FacadeService {
     return this._declineReasonService;
   }
 
-  private _preferenceService: PreferenceService;
-  public get preferenceService(): PreferenceService {
-    if (!this._preferenceService) {
-      this._preferenceService = this.injector.get(PreferenceService);
+  private _dashboardService: DashboardService;
+  public get dashboardService(): DashboardService {
+    if (!this._dashboardService) {
+      this._dashboardService = this.injector.get(DashboardService);
     }
-    return this._preferenceService;
+    return this._dashboardService;
+  }
+  
+  private _searchbarService: SearchbarService;
+  public get searchbarService(): SearchbarService {
+    if (!this._searchbarService) {
+      this._searchbarService = this.injector.get(SearchbarService);
+    }
+    return this._searchbarService;
   }
 
   constructor(private injector: Injector) {

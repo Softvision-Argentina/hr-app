@@ -12,68 +12,80 @@ import { Router } from '@angular/router';
 })
 export class CSoftComponent {
 
-    loginForm: FormGroup;
-    authenticatedUser:User;
-    submitForm(): void {
-      for (const i in this.loginForm.controls) {
-        this.loginForm.controls[i].markAsDirty();
-        this.loginForm.controls[i].updateValueAndValidity();
-      }
+  loginForm: FormGroup;
+  authenticatedUser:User;
 
-      if (this.loginForm.valid) {
-        this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
-      }
-      
-    }
-  
-    constructor(private fb: FormBuilder, private facade: FacadeService, private jwtHelper: JwtHelper, private router: Router, public zone: NgZone) {}
-  
-    ngOnInit(): void {
-      this.loginForm = this.fb.group({
-        userName: [null, [Validators.required]],
-        password: [null, [Validators.required]]
-      });
-    }
+  constructor(
+    private fb: FormBuilder, 
+    private facade: FacadeService, 
+    private jwtHelper: JwtHelper, 
+    private router: Router, 
+    public zone: NgZone
+  ) {}
 
-    authenticateUser(userName: string, password: string) {      
-      this.facade.authService.authenticate(userName, password)
-      .subscribe(res => {
-        
-        if (res != null)
-        {
-          this.authenticatedUser = {
-            ID: res.user.id,
-            Name: res.user.firstName + " " + res.user.lastName,
-            ImgURL: "",
-            Email: res.user.username,
-            Role: res.user.role,
-            Token: res.token
-          }
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      password: [null, [Validators.required]]
+    });    
+  }
 
-          localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
-          this.facade.userService.getRoles();
-          //console.log(this.authenticatedUser);
-          this.facade.modalService.closeAll();
-          this.router.navigate(['/']);
-        }
-      }, err => {
-        this.zone.run(() => { this.router.navigate(['/unauthorized']);});
-        this.facade.toastrService.error('Invalid username or password.');
-      });
-    }
-
-    ngAfterViewInit() {    
+  ngAfterViewInit() {    
     this.isUserAuthenticated();
   }
 
-  isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
-      return true;
+  submitForm(): void {
+    for (const i in this.loginForm.controls) {
+      this.loginForm.controls[i].markAsDirty();
+      this.loginForm.controls[i].updateValueAndValidity();
     }
-    else {
+    if (this.loginForm.valid) {
+      this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
+    }      
+  }
+
+  authenticateUser(userName: string, password: string) {      
+    this.facade.authService.authenticate(userName, password)
+    .subscribe(res => {
+      if(!res.user){
+        this.invalidUser();
+      }else{              
+        this.authenticatedUser = {            
+          id: res.user.id,
+          name: res.user.firstName + " " + res.user.lastName,
+          imgURL: "",
+          email: res.user.username,
+          role: res.user.role,
+          token: res.token,
+          userDashboards: []
+        }
+        localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
+        this.facade.userService.getRoles();          
+        this.facade.modalService.closeAll();
+        this.router.navigate(['/']);
+      }       
+    }, err => {
+      this.invalidUser();
+    });
+  }
+
+  isUserAuthenticated(): boolean{
+    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if(currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+      return true;
+    }else{
       localStorage.clear();
       return false;
     }
+  }
+
+  invalidUser(){
+    this.zone.run(() => { this.router.navigate(['/unauthorized']);});
+    this.facade.toastrService.error('Invalid username or password.');
+  }
+
+  checkDirtyandErrors(controlName: string): boolean{
+    let control = this.loginForm.get(controlName);
+    return control ? control.dirty && control.errors !== null : false;
   }
 }

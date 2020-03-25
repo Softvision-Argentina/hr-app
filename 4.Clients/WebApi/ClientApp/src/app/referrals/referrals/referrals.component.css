@@ -29,10 +29,33 @@
 nz-step {
     cursor: pointer;
 }
-.padding{
-    padding: 90px 300px;
+
+
+.padding-info{
+    padding: 0px 213px 0px 213px;
 }
+
 
 .alert-info {
     text-align: center;
+    right: 55px;
 }
+
+.number {
+    position: absolute;
+    /* right: 1px;
+    top: -10px;  */
+    background-color:red;
+    line-height:20px;
+    width:20px;
+    height:20px;
+    border-radius:10px;
+    color: white;
+    text-align: -webkit-center;
+}
+
+.noti{
+    font-weight: 400;
+}
+
+

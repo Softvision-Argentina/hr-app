@@ -14,50 +14,22 @@ import { FacadeService } from '../services/facade.service';
 })
 export class NavMenuComponent implements OnInit {
 
-  constructor(private jwtHelper: JwtHelper, private _appComponent: AppComponent, private router: Router, private google: GoogleSigninComponent,
-    private facade: FacadeService) { }
-
+  constructor(
+    private jwtHelper: JwtHelper,
+    private _appComponent: AppComponent,
+    private router: Router,
+    private google: GoogleSigninComponent,
+    private facade: FacadeService
+  ) { }
   isExpanded = false;
   currentUser: User;
   showUserSettings = false;
 
-  logoStyle = {
-    'width': '10%',
-    'height': '10%'
-  }
-  ngOnInit(){
+  ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  }
-
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  isUserAuthenticated() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    return this.google.isUserAuthenticated();
-  }
-  
-
-  isUserRole(roles: string[]): boolean {
-    return this._appComponent.isUserRole(roles);
-  }
-
-  openLogin(modalContent: TemplateRef<{}>){
-    const modal = this.facade.modalService.create({
-      nzTitle: null,
-      nzContent: modalContent,
-      nzClosable: false,
-      nzFooter: null
-    });
   }
 
   logout() {
-    //localStorage.clear();
     this.google.logout();
   }
 
@@ -69,15 +41,13 @@ export class NavMenuComponent implements OnInit {
       nzFooter: null,
       nzWidth: '30%'
     });
-
   }
 
   onSearchChange( search: string) {
-    console.log('Search');
+    this.facade.searchbarService.search(this.router.url, search);
   }
 
   changeUserSettings() {
     this.showUserSettings = !this.showUserSettings;
   }
-
 }

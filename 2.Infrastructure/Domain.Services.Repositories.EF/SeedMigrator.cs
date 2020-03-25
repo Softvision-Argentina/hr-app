@@ -77,6 +77,7 @@ namespace Domain.Services.Repositories.EF
             var consultant23 = new Consultant { Name = "Nicolas", LastName = "Roldan", PhoneNumber = "(+54)49794582", EmailAddress = "nicolas.roldan@softvision.com" };
             var consultant24 = new Consultant { Name = "Gustavo", LastName = "Petruzzi", PhoneNumber = "(+54)12359742", EmailAddress = "gustavo.petruzzi@softvision.com" };
             var consultant25 = new Consultant { Name = "Marcelo", LastName = "Martin", PhoneNumber = "(+54)12359742", EmailAddress = "marcelo.martin@softvision.com" };
+             var consultant26 = new Consultant { Name = "Rodrigo", LastName = "Ramirez", PhoneNumber = "(+54)12359742", EmailAddress = "rodrigo.ramirez@softvision.com" };
 
             context.Consultants.Add(consultant1);
             context.Consultants.Add(consultant2);
@@ -634,8 +635,8 @@ namespace Domain.Services.Repositories.EF
             var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user24 = new User { FirstName = "Gustavo", LastName = "Petruzzi", Username = "gustavo.petruzzi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user25 = new User { FirstName = "Marcelo", LastName = "Martin", Username = "marcelo.martin@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-
-
+            var user26 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            
             context.Users.Add(user2);
             context.Users.Add(user3);
             context.Users.Add(user4);
@@ -660,6 +661,7 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user23);
             context.Users.Add(user24);
             context.Users.Add(user25);
+            context.Users.Add(user26);
             
             context.SaveChanges();
             #endregion
@@ -694,52 +696,28 @@ namespace Domain.Services.Repositories.EF
             context.SaveChanges();
             #endregion
 
-            #region Preference
-            var preference1 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user2 };
-            var preference2 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user3 };
-            var preference3 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user4 };
-            var preference4 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user5 };
-            var preference5 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user6 };
-            var preference6 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user7 };
-            var preference7 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user8 };
-            var preference8 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user9 };
-            var preference9 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user10 };
-            var preference10 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user11 };
-            var preference11 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user12 };
-            var preference12 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user13 };
-            var preference13 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user14 };
-            var preference14 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user15 };
-            var preference15 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user16 };
-            var preference16 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user17 };
-            var preference17 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user18 };
-            var preference18 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user19 };
-            var preference19 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user20 };
-            var preference20 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user21 };
-            var preference21 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user22 };
-            var preference22 = new Preference { CasualtiesDashboard = true, ProcessesDashboard = true, CompletedDashboard = true, ProjectionDashboard = true, TimeToFill1Dashboard = true, TimeToFIll2Dashboard = true, SkillsDashboard = true, ProgressDashboard = true, User = user23 };
+            #region Dashboards
+            var dashboard1 = new Dashboard { Name = "Processes Dashboard" };
+            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" }; 
+            var dashboard3 = new Dashboard { Name = "Progress Processes Dashboard" };
+            var dashboard4 = new Dashboard { Name = "Completed Processes Dashboard" };
+            var dashboard5 = new Dashboard { Name = "Casualties and actual hires comparation Dashboard" };
+            var dashboard6 = new Dashboard { Name = "Hire Projection Dashboard" };
+            var dashboard7 = new Dashboard { Name = "Average: Interview date - Offer Accepted Dashboard" };
+            var dashboard8 = new Dashboard { Name = "Average: Interview date - Hire Date Dashboard" };
+            var dashboard9 = new Dashboard { Name = "Decline Reasons Dashboard" };
+            var dashboard10 = new Dashboard { Name = "Weekly Candidates Dashboard" };
 
-            context.Preferences.Add(preference1);
-            context.Preferences.Add(preference2);
-            context.Preferences.Add(preference3);
-            context.Preferences.Add(preference4);
-            context.Preferences.Add(preference5);
-            context.Preferences.Add(preference6);
-            context.Preferences.Add(preference7);
-            context.Preferences.Add(preference8);
-            context.Preferences.Add(preference9);
-            context.Preferences.Add(preference10);
-            context.Preferences.Add(preference11);
-            context.Preferences.Add(preference12);
-            context.Preferences.Add(preference13);
-            context.Preferences.Add(preference14);
-            context.Preferences.Add(preference15);
-            context.Preferences.Add(preference16);
-            context.Preferences.Add(preference17);
-            context.Preferences.Add(preference18);
-            context.Preferences.Add(preference19);
-            context.Preferences.Add(preference20);
-            context.Preferences.Add(preference21);
-            context.Preferences.Add(preference22);
+            context.Dashboards.Add(dashboard1);
+            context.Dashboards.Add(dashboard2);
+            context.Dashboards.Add(dashboard3);
+            context.Dashboards.Add(dashboard4);
+            context.Dashboards.Add(dashboard5);
+            context.Dashboards.Add(dashboard6);
+            context.Dashboards.Add(dashboard7);
+            context.Dashboards.Add(dashboard8);
+            context.Dashboards.Add(dashboard9);
+            context.Dashboards.Add(dashboard10);
 
             context.SaveChanges();
             #endregion

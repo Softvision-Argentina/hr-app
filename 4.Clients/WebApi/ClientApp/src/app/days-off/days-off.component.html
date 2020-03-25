@@ -1,23 +1,12 @@
-<!-- <div nz-col nzSpan="3" style="float: left">
-    <span *ngIf="canAssign()">Showing: </span>
-    <nz-switch *ngIf="canAssign()" [(ngModel)]="isHr" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate" (click)="filterTasks()">
-    </nz-switch>
-</div>
-<ng-template #checkedTemplate>HR</ng-template>
-<ng-template #unCheckedTemplate>OTHER</ng-template> -->
-
-<br/> <br/>
-
-
-
-<div class="padding" nz-row>
+<br/>
+<br/>
+<div nz-row>
     <div nz-col nzSpan="12">
         <button nz-button nzType="primary" (click)="showAddModal(DaysOffModal)" nzShape="round">
           <i nz-icon type="plus" theme="outline"></i>
           Add new day/s off
         </button>
     </div>
-
 </div>
 <br/>
 <div class="grid-padding" nz-row>
@@ -136,7 +125,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="date">Date</nz-form-label>
@@ -177,7 +165,6 @@
                 </div>
             </div>
         </div>
-
         <div nz-row *ngIf="isHr">
             <div nz-col nzSpan="24">
                 <nz-form-item>

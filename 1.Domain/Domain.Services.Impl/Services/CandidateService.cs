@@ -76,6 +76,8 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
+            var date = DateTime.Now;
+            createdCandidate.CreatedDate = date;
             return _mapper.Map<CreatedCandidateContract>(createdCandidate);
         }
 

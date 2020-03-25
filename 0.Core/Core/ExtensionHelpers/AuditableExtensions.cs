@@ -6,6 +6,9 @@ namespace Core.ExtensionHelpers
     {
         public static void AuditCreate(this IAuditable auditable, string userName)
         {
+            if (string.IsNullOrWhiteSpace(userName))
+                throw new InvalidAuditableUsernameException();
+
             auditable.CreatedBy = userName;
             auditable.CreatedDate = DateTime.Now;
 
@@ -15,6 +18,9 @@ namespace Core.ExtensionHelpers
 
         public static void AuditModify(this IAuditable auditable, string userName)
         {
+            if (string.IsNullOrWhiteSpace(userName))
+                throw new InvalidAuditableUsernameException();
+
             auditable.LastModifiedBy = userName;
             auditable.LastModifiedDate = DateTime.Now;
         }
