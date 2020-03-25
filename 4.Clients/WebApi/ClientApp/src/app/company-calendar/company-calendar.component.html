@@ -7,19 +7,7 @@
         <button nz-button nzShape="circle" nzType="dashed" nzType="info" (click)="showCalendarModal()">
             <i nz-icon type="calendar"></i>
         </button>
-        <!-- <div *ngIf="showCalendarSelected">
-            <label nz-radio-button (click)="hideCalendar()" style="border-color:rgb(179, 22, 179); border-width: 4px ; border-radius: 6px ; font-weight: bold">
-                <span>Hide Calendar</span>
-            </label>
-            <app-notice-calendar></app-notice-calendar>
-        </div>
-        <div *ngIf="!showCalendarSelected">
-            <label nz-radio-button [(ngModel)]="showCalendarSelected" style="border-color:rgb(179, 22, 179); border-width: 4px ; border-radius: 6px ; font-weight: bold">
-                <span>Show Calendar</span>
-            </label>
-        </div> -->
     </div>
-
 </div>
 
 <br />
@@ -42,15 +30,13 @@
                     <td [style.text-align]="center">
                         <i (click)="showEditModal(CompanyCalendarModal, CompanyCalendar.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showDeleteConfirm(CompanyCalendar.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
+                        <i (click)="showDeleteConfirm(CompanyCalendar.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
                     </td>
                 </tr>
             </tbody>
         </nz-table>
     </div>
 </div>
-
-
 
 <ng-template #CompanyCalendarModal>
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
@@ -72,7 +58,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-item>
@@ -87,7 +72,6 @@
                 </nz-form-item>
             </div>
         </div>
-
         <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-item>
@@ -112,7 +96,6 @@
     </form>
 </ng-template>
 
-<!-- The Modal -->
 <div id="myModalCalendar" class="modal">
     <div class="modal-content">
         <span class="close" (click)="closeCalendarModal()">&times;</span>

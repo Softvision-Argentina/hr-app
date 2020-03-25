@@ -1,7 +1,6 @@
-<app-nav-menu></app-nav-menu>
 <br />
 <br />
-<div class="padding" nz-row>
+<div  nz-row>
   <div nz-col nzSpan="20">
     <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)" nzShape="round">New Referral</button>
   </div>
@@ -18,9 +17,9 @@
     [nzContent]="contentTemplate"
     nzPlacement="bottom"
     nzShape="round"
-  >Notifications 
+  >Notifications
+  <div class="number" *ngIf="notisCount > 0">{{notisCount}}</div>
   </button>
-  <div class="number" *ngIf="notisCount != null && notisCount != 0">{{notisCount}}</div>
   <ng-template #contentTemplate>
     <div *ngFor="let n of notis">
       <a (click)="readNotification(n.id)">{{n.text}}</a>

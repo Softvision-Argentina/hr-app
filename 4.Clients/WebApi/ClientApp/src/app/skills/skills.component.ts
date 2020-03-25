@@ -1,5 +1,5 @@
 import { trimValidator } from './../directives/trim.validator';
-import { Component, OnInit, ViewChild, TemplateRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import { Skill } from 'src/entities/skill';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SkillType } from 'src/entities/skillType';
@@ -16,23 +16,19 @@ export class SkillsComponent implements OnInit {
   @ViewChild('dropdown') nameDropdown;
 
   listOfTagOptions = [];
-
   skillTypes: SkillType[] = [];
   filteredSkills: Skill[] = [];
   isLoadingResults = false;
   searchValue = '';
   listOfSearchSkills = [];
   listOfDisplayData = [...this.filteredSkills];
-
   sortName = null;
   sortValue = null;
 
-  //Modals
   skillForm: FormGroup;
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
   isAddOkLoading: boolean = false;
-
   emptySkill: Skill;
   skillTypeForDetail:string;
 
@@ -161,10 +157,8 @@ export class SkillsComponent implements OnInit {
     this.isDetailsVisible = true;
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void{
-    //Edit Skill Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void{    
     this.skillForm.reset();
-
     let editedSkill: Skill = this.filteredSkills.filter(skill => skill.id == id)[0];
     this.skillForm.controls['name'].setValue(editedSkill.name);
     this.skillForm.controls['description'].setValue(editedSkill.description);
@@ -252,5 +246,3 @@ export class SkillsComponent implements OnInit {
     };
   }
 }
-
-

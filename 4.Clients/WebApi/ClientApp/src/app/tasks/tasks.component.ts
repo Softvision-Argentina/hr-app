@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Consultant } from '../../entities/consultant';
@@ -9,6 +9,8 @@ import { AppConfig } from '../app-config/app.config';
 import { dateValidator } from '../directives/date.validator';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
+import { SearchbarService } from '../services/searchbar.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tasks',
@@ -16,7 +18,7 @@ import { User } from 'src/entities/user';
   styleUrls: ['tasks.component.css'],
   providers: [AppComponent]
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
 
   showCloseIcon: boolean = false;
   searchTitle: string = "";
@@ -25,15 +27,11 @@ export class TasksComponent implements OnInit {
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   loading: boolean = true;
   toDoList: Task[] = [];
-
+  searchSub: Subscription;
   orderBy: string = "Order by";
-
   toDoListDisplay: any = [...this.toDoList];
-
   dummyTask: Task;
-
   showAllTasks: boolean = true;
-
   currentConsultant: Consultant;
   user: User;
 
@@ -45,9 +43,18 @@ export class TasksComponent implements OnInit {
     this.resetForm();
     this.loading = false;
     this.app.hideLoading();
+     this.searchSub = this.search.searchChanged.subscribe(data => {
+      this.searchTitle = data;
+    });
   }
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private config: AppConfig, private app: AppComponent) {
+  constructor(
+    private search: SearchbarService,
+    private facade: FacadeService,
+    private fb: FormBuilder,
+    private config: AppConfig,
+    private app: AppComponent
+  ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -55,7 +62,7 @@ export class TasksComponent implements OnInit {
     this.facade.consultantService.get()
       .subscribe(res => {
         this.consultants = res;
-        this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.Email.toLowerCase())[0];
+        this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.email.toLowerCase())[0];
       }, err => {
         console.log(err);
       });
@@ -73,7 +80,7 @@ export class TasksComponent implements OnInit {
         });
     }
     else{
-      this.facade.taskService.getByConsultant(this.user.Email)
+      this.facade.taskService.getByConsultant(this.user.email)
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
@@ -102,9 +109,7 @@ export class TasksComponent implements OnInit {
     }, err => {
       this.app.hideLoading();
       this.facade.toastrService.error('An error has ocurred. Please try again later');
-    })
-
-
+    });
   }
 
   deleteTask(id: number) {
@@ -141,14 +146,12 @@ export class TasksComponent implements OnInit {
   }
 
   changeStatus(id: number, item: TaskItem) {
-
     let isEmpty: boolean = true;
     let task = this.toDoList.find(this.findTaskIndex, id);
     let index = this.toDoList.indexOf(task);
     let taskItem = task.taskItems.filter(it => it.id == item.id)[0];
     let itemIndex = task.taskItems.indexOf(item);
     taskItem.checked = !taskItem.checked;
-
     this.facade.taskService.update(task.id, task)
       .subscribe(res => {
         this.toDoList[index].taskItems[itemIndex] = taskItem;
@@ -178,10 +181,8 @@ export class TasksComponent implements OnInit {
         taskId: id,
         task: this.dummyTask
       }
-
       updateTask.taskItems.push(newItem);
       if (updateTask.isApprove) updateTask.isApprove = false;
-
       this.facade.taskService.update(updateTask.id, updateTask)
         .subscribe(res => {
           this.toDoList[this.toDoList.indexOf(updateTask)] = updateTask;
@@ -210,17 +211,14 @@ export class TasksComponent implements OnInit {
     let itemIndex: number = updateTask.taskItems.indexOf(item);
 
     updateTask.taskItems.splice(itemIndex, 1);
-
     this.facade.taskService.update(updateTask.id, updateTask)
       .subscribe(res => {
         this.toDoList[taskIndex].isNew = false;
 
         this.toDoList[taskIndex] = updateTask;
-
         //If all items are checked, task is apprvoed
         if (this.toDoList[taskIndex].taskItems.every(it => it.checked))
           this.toDoList[taskIndex].isApprove = true;
-
       }, err => {
         if (err.message != undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error("The service is not available now. Try again later.");
@@ -442,7 +440,7 @@ export class TasksComponent implements OnInit {
     else return false;
   }
 
-  filterTasks(){
+  filterTasks() {
     if(!this.showAllTasks){
       this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
     }
@@ -450,5 +448,9 @@ export class TasksComponent implements OnInit {
       this.toDoListDisplay = this.toDoList;
     }
 
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }

@@ -1,9 +1,9 @@
-import { Component, OnInit, TemplateRef, ViewChild, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { CandidateProfile} from 'src/entities/Candidate-Profile';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Community } from 'src/entities/community';
 import { SettingsComponent } from '../settings/settings.component';
@@ -48,8 +48,7 @@ export class CandidatesProfileComponent implements OnInit {a
   CommunitysForDetail:string[];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
-  //constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }  
 
   ngOnInit() {
     this.app.removeBgImage();  
@@ -68,7 +67,6 @@ export class CandidatesProfileComponent implements OnInit {a
     this.getCommunity();
   }
 
-
   getCommunity(){
     this.facade.communityService.get()
       .subscribe(res => {
@@ -85,31 +83,30 @@ export class CandidatesProfileComponent implements OnInit {a
 
   resetForm() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]], //name: new FormControl(value, validator or array of validators)
+      name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]]    
     });
   }
 
-  showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New CandidatesProfile Modal
+  showAddModal(modalContent: TemplateRef<{}>): void {    
     this.isEdit = false;
     this.controlArray = [];
     this.controlEditArray = [];
     this.resetForm();
   
     const modal = this.facade.modalService.create({
-      nzTitle: 'Add New Candidate Profile', //Boton de agregar
+      nzTitle: 'Add New Candidate Profile',
       nzContent: modalContent,
       nzClosable: true,
       nzWidth: '90%',
       nzFooter: [
         {
-          label: 'Cancel', //boton de cancelar
+          label: 'Cancel',
           shape: 'default',
           onClick: () => modal.destroy()
         },
         {
-          label: 'Save', //boton de guardar cambios
+          label: 'Save',
           type: 'primary',
           loading: false,
           onClick: () => {
@@ -145,8 +142,7 @@ export class CandidatesProfileComponent implements OnInit {a
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Consultant Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
     this.resetForm();
     this.editingCandidateProfileId = id; 
     this.isEdit = true;
@@ -248,8 +244,4 @@ export class CandidatesProfileComponent implements OnInit {a
     if (index > colors.length) index = parseInt((index / colors.length).toString().split(',')[0]);
     return colors[index];
   }
-
-  // callMe(){
-  //   this.ngOnInit();
-  // }
 }

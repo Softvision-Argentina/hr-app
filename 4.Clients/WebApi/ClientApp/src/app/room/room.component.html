@@ -23,13 +23,10 @@
                     <td>{{ room.description | truncate:75 }}</td>
                     <td>{{ getOfficeNameByID(room.officeId) }}</td>
                     <td [style.text-align]="center">
-                        <!-- <nz-divider nzType="vertical"></nz-divider>
-              <i (click)="showDetailsModal(room.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline"
-                nzTitle="Details" nz-tooltip></i> -->
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(roomModal, room.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showDeleteConfirm(room.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
+                        <i (click)="showDeleteConfirm(room.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
                     </td>
                 </tr>
             </tbody>
@@ -86,26 +83,9 @@
                             <nz-option *ngFor="let office of offices" [nzLabel]="office.name" [nzValue]="office.id">
                             </nz-option>
                         </nz-select>
-                        <!-- <nz-form-explain *ngIf="validateForm.get('profileId').dirty && validateForm.get('profileId').errors">Please
-                input the candidate profile</nz-form-explain> -->
                     </nz-form-control>
                 </nz-form-item>
             </div>
         </div>
     </form>
 </ng-template>
-
-<!-- <nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Office Details"
-    [nzFooter]="null" (nzOnCancel)="isDetailsVisible = false">
-    <nz-list nzBordered nzSize="large" *ngIf="officeDetails">
-      <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{officeDetails.name}}</nz-list-item>
-      <nz-list-item><strong style="margin-right: 1%;">Descripción: </strong> {{officeDetails.description}}
-      </nz-list-item>
-      <nz-list-item *ngIf="officeDetails.roomItems"><strong style="margin-right: 1%;">Room Items: </strong>
-        <div>
-          <nz-tag nz-popover nzContent="{{room.description}} " style="margin: 1%;"
-            *ngFor="let room of officeDetails.roomItems">{{ room.name }}</nz-tag>
-        </div>
-      </nz-list-item>
-    </nz-list>
-  </nz-modal> -->

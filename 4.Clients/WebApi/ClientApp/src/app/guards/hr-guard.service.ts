@@ -19,9 +19,9 @@ export class HRGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.Token)) {
-      if (this.roles.indexOf(this.currentUser.Role) != -1
-        && (this.currentUser.Role == "Admin" || this.currentUser.Role == "HRManagement" || this.currentUser.Role == "HRUser" || this.currentUser.Role == "Interviewer" || this.currentUser.Role == "CommunityManager" || this.currentUser.Role == "Recruiter" )) return true;
+    if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
+      if (this.roles.indexOf(this.currentUser.role) != -1
+        && (this.currentUser.role == "Admin" || this.currentUser.role == "HRManagement" || this.currentUser.role == "HRUser") || this.currentUser.role == "Interviewer" || this.currentUser.role == "CommunityManager" || this.currentUser.role == "Recruiter" ) return true;
       else {
         this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
         return false;

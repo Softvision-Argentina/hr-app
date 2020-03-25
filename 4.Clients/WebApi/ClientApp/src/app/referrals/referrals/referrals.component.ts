@@ -144,7 +144,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.Email)
+    this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
     });
@@ -199,7 +199,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.Name);
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.name);
       }, err => {
         console.log(err);
       });
@@ -221,6 +221,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         console.log(err);
         this.visible = false;
         this.notisCount = this.notisCount - 1;
+        this.getNotifications();
       });
   }
 
@@ -820,6 +821,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     process = {
       id: !this.isEdit ? 0 : this.emptyProcess.id,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
       currentStage: ProcessCurrentStageEnum.NA,
@@ -923,6 +925,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.emptyProcess = {
       id: 0,
       startDate: new Date(),
+      createdDate: new Date(),
       endDate: null,
       status: ProcessStatusEnum.NA,
       currentStage: ProcessCurrentStageEnum.NA,

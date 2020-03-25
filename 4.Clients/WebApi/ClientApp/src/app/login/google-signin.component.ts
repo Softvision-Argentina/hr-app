@@ -47,21 +47,17 @@ export class GoogleSigninComponent implements AfterViewInit {
         let profile = googleUser.getBasicProfile();
 
         let currentUser: User = {
-          ID: profile.getId(),
-          Name: profile.getName(),
-          ImgURL: profile.getImageUrl(),
-          Email: profile.getEmail(),
-          Role: '',
-          Token: googleUser.getAuthResponse().id_token,
-          Community: null 
+          id: profile.getId(),
+          name: profile.getName(),
+          imgURL: profile.getImageUrl(),
+          email: profile.getEmail(),
+          role: '',
+          token: googleUser.getAuthResponse().id_token,
+          community: null,
+          userDashboards: []
         }
-
-        // console.log(currentUser);
-        // localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        // that.facade.userService.getRoles();
-
         that.externalLogin(currentUser);
-        
+
 
       }, function (error) {
         that.zone.run(() => { that.router.navigate(['/unauthorized']); });
@@ -71,23 +67,25 @@ export class GoogleSigninComponent implements AfterViewInit {
   }
 
   externalLogin(gUser: User) {
-    this.facade.authService.externalLogin(gUser.Token)
+    this.facade.authService.externalLogin(gUser.token)
       .subscribe(res => {
+
         if (res != null) {
           let currentUser: User = {
-            ID: res.user.id,
-            Name: res.user.firstName + " " + res.user.lastName,
-            ImgURL: gUser.ImgURL,
-            Email: res.user.username,
-            Role: res.user.role,
-            Token: res.token,
-            Community: res.user.community
+            id: res.user.id,
+            name: res.user.firstName + " " + res.user.lastName,
+            imgURL: gUser.imgURL,
+            email: res.user.username,
+            role: res.user.role,
+            token: res.token,
+            community: res.user.community,
+            userDashboards: []
           }
 
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           this.facade.userService.getRoles();
           this.facade.modalService.closeAll();
-          this.zone.run(() => { this.navigateByRole(currentUser.Role) });
+          this.zone.run(() => { this.navigateByRole(currentUser.role) });
         }
       }, err => {
         this.zone.run(() => { this.router.navigate(['/unauthorized']); });
@@ -103,7 +101,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.Token)) {
+    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {
@@ -113,15 +111,8 @@ export class GoogleSigninComponent implements AfterViewInit {
   }
 
   logout() {
-    //////////////////////////////////////// Uncomment block for live deployment //////////////////////////////
-
-    // var auth2 = gapi.auth2.getAuthInstance();
-    // auth2.signOut().then(function () {
     localStorage.clear();
     this.router.navigate(['/login']);
-    // });
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 
   navigateByRole(role: string) {

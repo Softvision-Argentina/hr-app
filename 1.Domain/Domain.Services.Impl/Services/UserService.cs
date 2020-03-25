@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.User;
-using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
 using Domain.Services.Repositories.EF;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +21,18 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<UserService> _log;
-        private readonly DataBaseContext _dbcontext;
 
         public UserService(IMapper mapper, IRepository<User> userRepository,
-                           IUnitOfWork unitOfWork, ILog<UserService> log, DataBaseContext dbContext)
+                           IUnitOfWork unitOfWork, ILog<UserService> log)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _log = log;
-            _dbcontext = dbContext;
         }
 
         public ReadedUserContract Authenticate(string username, string password)
         {
-            #region V1
             var user = Login(username, password);
 
             if (user != null)
@@ -45,10 +43,6 @@ namespace Domain.Services.Impl.Services
             {
                 return null;
             }
-            #endregion
-
-            #region V2
-            #endregion
         }
 
         public ReadedUserContract Authenticate(string username)

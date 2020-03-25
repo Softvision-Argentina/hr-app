@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
-import { AppComponent } from '../app.component';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import { trimValidator } from '../directives/trim.validator';
 import { Office } from 'src/entities/office';
@@ -35,32 +34,19 @@ export class RoomComponent implements OnInit {
   rooms: Room[] = [];
   offices: Office[] = [];
   roomForm: FormGroup;
-  controlArray: Array<{ id: number, controlInstance: string[] }> = [];
-  controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   isEdit = false;
   editingRoomId: number = 0;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private settings: SettingsComponent) { }
 
-  ngOnInit() {
-    // this.getRooms();
+  ngOnInit() {    
     this.getOffices();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     changes._detailedOffice;
-    this.getOffices();
-    // this.getRooms();
+    this.getOffices();    
   }
-
-  // getRooms() {
-  //   this.facade.RoomService.get()
-  //   .subscribe(res => {
-  //     this.rooms = res;
-  //     }, err => {
-  //     console.log(err);
-  //   });
-  // }
 
   getOfficeNameByID(id: number) {
     const COffice = this.offices.find(c => c.id === id);
@@ -77,30 +63,24 @@ export class RoomComponent implements OnInit {
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
-    // Add New Room Modal
     this.isEdit = false;
-    this.controlArray = [];
-    this.controlEditArray = [];
     this.resetForm();
-
     if (this.offices.length > 0) {
     this.roomForm.controls['profileId'].setValue(this.offices[0].id);
     }
-
-
     const modal = this.facade.modalService.create({
-      nzTitle: 'Add New Room', // Boton de agregar
+      nzTitle: 'Add New Room',
       nzContent: modalContent,
       nzClosable: true,
       nzWidth: '90%',
       nzFooter: [
         {
-          label: 'Cancel', // boton de cancelar
+          label: 'Cancel',
           shape: 'default',
           onClick: () => modal.destroy()
         },
         {
-          label: 'Save', // boton de guardar cambios
+          label: 'Save',
           type: 'primary',
           loading: false,
           onClick: () => {
@@ -122,8 +102,7 @@ export class RoomComponent implements OnInit {
               };
               this.facade.RoomService.add(newRoom)
                 .subscribe(res => {          
-                  this.settings.getRooms();
-                  this.controlArray = [];
+                  this.settings.getRooms();                  
                   this.facade.toastrService.success('Room was successfully created !');
 
                   modal.destroy();
@@ -138,13 +117,10 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    // Edit Consultant Modal
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
     this.resetForm();
     this.editingRoomId = id;
-    this.isEdit = true;
-    this.controlArray = [];
-    this.controlEditArray = [];
+    this.isEdit = true;    
     let editedRoom: Room = this._detailedRoom.filter(Room => Room.id === id)[0];
 
     this.fillRoomForm(editedRoom);
@@ -223,12 +199,11 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  resetForm() { // crea el roomForm(cuerpo de un Communitiesform)
+  resetForm() {
     this.roomForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]], // name: new FormControl(value, validator or array of validators)
+      name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]],
-      profileId: [null, [Validators.required, trimValidator]] // NO OLVIDAR ESTO
+      profileId: [null, [Validators.required, trimValidator]]
     });
   }
-
 }

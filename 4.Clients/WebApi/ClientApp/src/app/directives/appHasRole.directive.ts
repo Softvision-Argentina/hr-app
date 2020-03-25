@@ -16,7 +16,7 @@ export class HasRoleDirective implements OnInit {
     }
 
     ngOnInit() {
-        if (this.appHasRole.indexOf(this.currentUser.Role) !== -1) {
+        if (this.appHasRole.indexOf(this.currentUser.role) !== -1) {
             this.viewContainerRef.createEmbeddedView(this.templateRef);
         }
     }

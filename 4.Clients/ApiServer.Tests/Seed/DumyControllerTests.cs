@@ -40,7 +40,7 @@ namespace ApiServer.Tests.Seed
         {
             //Arrange
             var createVm = new CreateDummyViewModelBuilder().Build();
-            var model = await Create<CreateDummyViewModel, CreatedDummyViewModel>(createVm);
+            var model = await CreateAsync<CreateDummyViewModel, CreatedDummyViewModel>(createVm);
 
             //Act
             var response = await Client.GetAsync($"/api/{ControllerName}/{model.Id}");

@@ -14,9 +14,7 @@ export class HireProjectedComponent implements OnInit {
   projectionForm: FormGroup;
   hireProjections: HireProjection[] = [];
   listOfDisplayData = [...this.hireProjections];
-
   monthList: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-
   yearList: number[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent) { }
@@ -26,7 +24,6 @@ export class HireProjectedComponent implements OnInit {
       value: [0, [Validators.required]],
       month: [null, [Validators.required]]
     });
-
     this.getHireProjections();
   }
 

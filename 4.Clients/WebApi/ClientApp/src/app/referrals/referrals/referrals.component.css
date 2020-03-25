@@ -29,10 +29,7 @@
 nz-step {
     cursor: pointer;
 }
-.padding{
-    padding: 60px 213px 20px 213px;
 
-}
 
 .padding-info{
     padding: 0px 213px 0px 213px;
@@ -41,12 +38,13 @@ nz-step {
 
 .alert-info {
     text-align: center;
+    right: 55px;
 }
 
 .number {
-    position: relative;
-    right: -1032px;
-    top: -35px;
+    position: absolute;
+    /* right: 1px;
+    top: -10px;  */
     background-color:red;
     line-height:20px;
     width:20px;

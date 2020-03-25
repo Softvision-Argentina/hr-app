@@ -1,61 +1,53 @@
-<app-nav-menu></app-nav-menu>
-<br />
-<div>
-    <div class="padding" nz-row>
-        <div nz-col nzSpan="2" style="padding-left: 1%;">
-            <button nz-button nzType="primary" nzShape="round" (click)="showAddModal(taskModal)">
-        <i nz-icon type="plus" theme="outline"></i></button>
-        </div>
-        <div nz-col nzSpan="11" style="padding-right: 2%;">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Task filter" [(ngModel)]="searchTitle" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-                <i nz-icon type="search"></i>
-            </ng-template>
-        </div>
-        <div nz-col nzSpan="3">
-            <span *ngIf="canAssign()">Showing: </span>
-            <nz-switch *ngIf="canAssign()" [(ngModel)]="showAllTasks" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate" (click)="filterTasks()">
-            </nz-switch>
-        </div>
-        <div nz-col nzSpan="3">
-            <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 10%;">
-                <button nz-button nz-dropdown>{{orderBy}}</button>
-                <ul nz-menu>
-                    <li nz-menu-item>
-                        <a (click)="orderTasksBy('urgent')">Urgent</a>
-                    </li>
-                    <li nz-menu-item>
-                        <a (click)="orderTasksBy('new')">Newest</a>
-                    </li>
-                    <li nz-menu-item>
-                        <a (click)="orderTasksBy('old')">Oldest</a>
-                    </li>
-                </ul>
-            </nz-dropdown>
-        </div>
-        <div nz-col nzSpan="5">
-            <nz-button-group>
-                <button nz-button nzType="default" (click)="showToDoList('ALL')">ALL</button>
-                <button nz-button nzType="default" (click)="showToDoList('OPEN')">OPEN</button>
-                <button nz-button nzType="default" (click)="showToDoList('CLOSED')">CLOSED</button>
-            </nz-button-group>
-        </div>
-    </div>
-</div>
 <br />
 <div class="cards">
+    <div class="tasks-container">
+        <div nz-row>
+            <div class="studio" nz-col>B.A Studio Tasks</div>
+            </div>
+        <div nz-row class="navOptions">
+            <div class="button" nz-col nzSpan="4" >
+                <button class="newTask" (click)="showAddModal(taskModal)">NEW TASK</button>
+            </div>
+            <div nz-col nzSpan="3" nzOffset="10">
+                <span class="showing" *ngIf="canAssign()">Showing: </span>
+                <nz-switch  *ngIf="canAssign()" [(ngModel)]="showAllTasks"  (click)="filterTasks()">
+                </nz-switch>
+            </div>
+            <div class="div-dropdown" nz-col nzSpan="2">
+                <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 10%;">
+                    <button class="orderBy" nz-button nz-dropdown>{{orderBy}}</button>
+                    <ul nz-menu>
+                        <li nz-menu-item>
+                            <a (click)="orderTasksBy('urgent')">Urgent</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a (click)="orderTasksBy('new')">Newest</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a (click)="orderTasksBy('old')">Oldest</a>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+            </div>
+            <div nz-col nzSpan="4">
+                <nz-button-group>
+                    <button class="options" nz-button nzType="default" (click)="showToDoList('ALL')">All</button>
+                    <button class="options" nz-button nzType="default" (click)="showToDoList('OPEN')">Open</button>
+                    <button class="options" nz-button nzType="default" (click)="showToDoList('CLOSED')">Closed</button>
+                </nz-button-group>
+            </div>
+        </div>
+    </div>
     <div *ngFor="let toDo of toDoListDisplay | filter: searchTitle | sort">
         <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1" [nzNotFoundImage]="'../../assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
     </div>
-    <div *ngIf="toDoListDisplay && toDoListDisplay.length != 0" nz-row nzType="flex" nzAlign="top" [nzGutter]="8">
-        <div nz-col [nzSpan]="8" *ngFor="let toDo of toDoListDisplay | filter : searchTitle">
-            <nz-card [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate" [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fefefe' : '#ccff90'    }">
+    <div *ngIf="toDoListDisplay && toDoListDisplay.length != 0" nz-row nzType="flex" nzAlign="top" [nzGutter]="16">
+        <div class="task-boxes" *ngFor="let toDo of toDoListDisplay | filter : searchTitle">
+            <nz-card class="card-style" [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate" [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
 
                 <ng-template #titleTemplate>
-                    <span style="font-size: larger;" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span> <br />
-                    <span style="font-size: small;" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.consultant.name}} {{toDo.consultant.lastName}}</span>
+                    <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span> <br />
+                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.consultant.name}} {{toDo.consultant.lastName}}</span>
                     <span style="font-size: small;" *ngIf="canAssign() && isCurrentUser(toDo)">Owner: You</span>
                 </ng-template>
 
@@ -84,7 +76,7 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="loading">
                     <div *ngFor="let item of toDo.taskItems">
                         <label id="{{item.id}}" (mouseenter)="mouseHovering($event)" (mouseleave)="mouseLeft($event)" nz-checkbox *ngIf="!item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked">
-              <span id="span_{{item.id}}">{{item.text}}<i id="icon_{{item.id}}" style="display: none;float: right;"
+              <span class="card-item" id="span_{{item.id}}">{{item.text}}<i id="icon_{{item.id}}" style="display: none;float: right;"
                   nz-icon nzType="close" nzTheme="outline" (click)="removeItem(toDo.id, item)"></i></span>
             </label>
                     </div>
@@ -95,14 +87,14 @@
             </label>
                     </div>
                     <nz-divider nzDashed [nzText]="text">
-                        <ng-template #text><i nz-icon type="plus"></i> Add Item</ng-template>
+                        <ng-template #text><i class="add-item plus" nz-icon type="plus"></i><span class="add-item">Add Item</span> </ng-template>
                     </nz-divider>
                     <div>
                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                            <input id="newItem_{{toDo.id}}" type="text" nz-input placeholder="Input a new item" />
+                            <input class="input" id="newItem_{{toDo.id}}" type="text" nz-input placeholder="Input a new item" />
                         </nz-input-group>
                         <ng-template #suffixIconButton>
-                            <button nz-button nzType="primary" (click)="addItem(toDo.id)" nzSearch><i nz-icon
+                            <button class="input-button" nz-button nzType="primary" (click)="addItem(toDo.id)" nzSearch><i nz-icon
                   type="plus"></i></button>
                         </ng-template>
                     </div>
@@ -228,5 +220,3 @@
     <span style="color: #4a90fe"> There is no data to show. </span>
 </ng-template>
 
-<ng-template #checkedTemplate>ALL</ng-template>
-<ng-template #unCheckedTemplate>MINE</ng-template>

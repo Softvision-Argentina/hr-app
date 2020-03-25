@@ -1,11 +1,14 @@
 import { Community } from "./community";
+import { UserDashboard } from "./userDashboard";
 
 export class User {
-    ID: number;
-    Name: string;
-    ImgURL: string;
-    Email: string;
-    Role: string;
-    Token: string;
-    Community: Community;
+    id: number;
+    name: string;
+    imgURL: string;
+    email: string;
+    role: string;
+    token: string;
+    community: Community;
+    userDashboards: UserDashboard[]
+
 }

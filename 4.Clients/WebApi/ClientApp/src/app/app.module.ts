@@ -33,9 +33,7 @@ import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
 import { ConsultantsComponent } from './consultants/consultants.component';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { LoginComponent } from './login/login.component';
-
 import { MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatButtonModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2LoadingSpinnerModule } from 'ng2-loading-spinner'
@@ -43,10 +41,8 @@ import { CommonGuard } from './guards/common-guard.service';
 import { ManagementGuard } from './guards/management-guard.service';
 import { AdminGuard } from './guards/admin-guard.service';
 import { JwtHelper } from 'angular2-jwt';
-
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { ChartsModule } from 'ng2-charts';
-
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { SkillTypeComponent } from './skill-type/skill-type.component';
@@ -57,7 +53,6 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized/unauthorized.
 import { ProcessStepsComponent } from './processes/process-steps/process-steps.component';
 import { CandidateDetailsComponent } from './candidates/details/candidate-details.component';
 import { ConsultantDetailsComponent } from './consultants/details/consultant-details.component';
-
 import { TasksComponent } from './tasks/tasks.component';
 import { FilterPipe } from './pipes/titleFilter.pipe';
 import { SortPipe } from './pipes/taskSort.pipe';
@@ -65,7 +60,6 @@ import { TaskService } from './services/task.service';
 import { UserService } from './services/user.service';
 import { SettingsComponent } from './settings/settings.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
-
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HRGuard } from './guards/hr-guard.service';
 import { CandidateAddComponent } from './candidates/add/candidate-add.component';
@@ -79,19 +73,18 @@ import { PeopleComponent } from './people/people.component';
 import { HireProjectedComponent } from './hire-projected/hire-projected.component';
 import { HireProjectionService } from './services/hireProjection.service';
 import { EmployeeCasualtyService } from './services/employee-casualty.service';
-
 import { CandidatesProfileComponent } from './candidates-profile/candidates-profile.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { CommunityService } from './services/community.service';
 import { CandidateProfileService } from './services/candidate-profile.service';
 import { EmployeeCasualtiesComponent } from './employee-casualties/employee-casualties.component';
-
 import { ReportProcessesComponent } from './dashboard/report-processes/report-processes.component';
 import { ReportCompletedProcessesComponent } from './dashboard/report-completed-processes/report-completed-processes.component';
 import { ReportProgressProcessesComponent } from './dashboard/report-progress-processes/report-progress-processes.component';
 import { ReportSkillsComponent } from './dashboard/report-skills/report-skills.component';
 import { ReportHireProjectionComponent } from './dashboard/report-hire-projection/report-hire-projection.component';
 import { ReportHireCasualtiesComponent } from './dashboard/report-hire-casualties/report-hire-casualties.component';
+import { ReportWeeklyCandidatesComponent } from './dashboard/report-weekly-candidates/report-weekly-candidates.component';
 import { ProcessContactComponent } from './processes/process-contact/process-contact.component';
 import { EmployeeService } from './services/employee.service';
 import { EmployeesComponent } from './employees/employees.component';
@@ -99,7 +92,6 @@ import { EmployeeDetailsComponent } from './employees/details/employee-details.c
 import { DaysOffComponent } from './days-off/days-off.component';
 import { DaysOffService } from './services/days-off.service';
 import { ReservationsComponent } from './reservations/reservations.component';
-// import { ReservationsService } from './services/reservations.service';
 import { RoomService } from './services/room.service';
 import { ReservationService } from './services/reservation.service';
 import { OfficeComponent } from './office/office.component';
@@ -110,13 +102,12 @@ import { RoleComponent } from './role/role.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { CompanyCalendarService } from './services/company-calendar.service';
 import { FileUploadModule } from 'ng2-file-upload';
-
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientJsonpModule } from '@angular/common/http';
 import { NZ_ICONS } from 'ng-zorro-antd';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
-
+import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { NzCalendarComponent } from './nz-calendar/NzCalendar';
 import { NzPopoverModule } from 'ng-zorro-antd';
 import { NoticeCalendarComponent } from './notice-calendar/notice-calendar.component';
@@ -137,8 +128,8 @@ import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { ReferralsCardComponent } from './referrals/referrals-card/referrals-card.component';
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
-import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferService } from './services/offer.service';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 
 
 registerLocaleData(en);
@@ -198,6 +189,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportSkillsComponent,
       ReportHireProjectionComponent,
       ReportHireCasualtiesComponent,
+      ReportWeeklyCandidatesComponent,
       ReportTimetofill2Component,
       ProcessContactComponent,
       DaysOffComponent,
@@ -219,12 +211,21 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ReportTimetofill1Component,
       DeclineReasonComponent,
       HasRoleDirective,
-      ReportDeclineReasonsComponent,            
+      ReportDeclineReasonsComponent,
+      SideMenuComponent,
       OfferHistory
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    BrowserModule, FormsModule, HttpClientModule, HttpClientJsonpModule, ReactiveFormsModule, NgZorroAntdModule, BrowserAnimationsModule, ScrollingModule, DragDropModule,
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
+    ReactiveFormsModule,
+    NgZorroAntdModule,
+    BrowserAnimationsModule,
+    ScrollingModule,
+    DragDropModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
@@ -248,51 +249,35 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     Ng2LoadingSpinnerModule.forRoot({}),
     RouterModule.forRoot([
       { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [HRGuard] },
-
       { path: 'processes', component: ProcessesComponent, canActivate: [HRGuard] },
       { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [HRGuard] },
       { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [HRGuard] },
-
       { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
-
       { path: 'stage-details/:id', component: StageDetailComponent, canActivate: [CommonGuard] },
       { path: 'stage-edit/:id', component: StageEditComponent, canActivate: [CommonGuard] },
-
       { path: 'candidates-profile', component: CandidatesProfileComponent, canActivate: [HRGuard] },
-
       { path: 'communities', component: CommunitiesComponent, canActivate: [HRGuard] },
-
       { path: 'people', component: PeopleComponent, canActivate: [HRGuard] },
-
       { path: 'dashboard', component: DashboardComponent, canActivate: [HRGuard] },
-
       { path: 'reports', component: ReportsComponent, canActivate: [ManagementGuard] },
-
-      { path: 'settings', component: SettingsComponent, canActivate: [AdminGuard], children:[
-        {path: 'festivities', component: CompanyCalendarComponent},
-        {path: 'hire-projected', component: HireProjectedComponent},
-        {path: 'employee-casualties', component: EmployeeCasualtiesComponent},
-        {path: 'skills-list', component: SkillsComponent},
-        {path: 'skills-types', component: SkillTypeComponent},
-        {path: 'profiles/:tab', component: ProfilesComponent},
-        {path: 'locations/:tab', component: LocationsComponent},
-        {path: 'roles', component: RoleComponent},
-        {path: 'declining-reasons', component: DeclineReasonComponent},
+      { path: 'settings', component: SettingsComponent, canActivate: [ManagementGuard], children: [
+        { path: 'festivities', component: CompanyCalendarComponent },
+        { path: 'hire-projected', component: HireProjectedComponent },
+        { path: 'employee-casualties', component: EmployeeCasualtiesComponent },
+        { path: 'skills-list', component: SkillsComponent },
+        { path: 'skills-types', component: SkillTypeComponent },
+        { path: 'profiles/:tab', component: ProfilesComponent },
+        { path: 'locations/:tab', component: LocationsComponent },
+        { path: 'roles', component: RoleComponent },
+        { path: 'declining-reasons', component: DeclineReasonComponent },
 
       ] },
-
       { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
-
       { path: 'login', component: LoginComponent },
-
       { path: 'tasks', component: TasksComponent, canActivate: [HRGuard] },
-
       { path: 'reservation', component: ReservationsComponent, canActivate: [HRGuard] },
-
       { path: 'employees', component: EmployeesComponent },
-
-      {path: 'postulants', component: PostulantsComponent},
-
+      { path: 'postulants', component: PostulantsComponent },
       { path: 'unauthorized', component: UnauthorizedComponent },
       { path: '404', component: NotFoundComponent },
       { path: '**', component: NotFoundComponent }
@@ -300,7 +285,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
   ],
   providers: [
     Globals,
-    { provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }, 
+    { provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons },
     FacadeService,
     AppConfig,
     { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.load(), deps: [AppConfig], multi: true },
@@ -334,8 +319,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     PostulantsService,
     DeclineReasonService,
     OfferService,
-    // MatDatepickerModule,
-    // MatNativeDateModule,
     { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent]

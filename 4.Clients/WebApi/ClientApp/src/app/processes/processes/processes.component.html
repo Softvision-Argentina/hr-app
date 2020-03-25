@@ -1,6 +1,6 @@
-<app-nav-menu></app-nav-menu>
-<br /><br />
-<div class="padding" nz-row>
+<br />
+<br />
+<div  nz-row>
     <div nz-col nzSpan="1">
         <button nz-button nzType="primary" (click)="showContactCandidatesModal(searchContactedCandidate)" nzShape="circle">
             <i nz-icon type="search" theme="outline"></i></button>
@@ -20,7 +20,6 @@
             <thead>
                 <tr>
                     <th nzCustomFilter>Candidate
-
                         <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                             <div class="search-box">
@@ -30,7 +29,6 @@
                             </div>
                         </nz-dropdown>
                     </th>
-
                     <th>Profile
                         <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 30px;">
                             <button nz-button nz-dropdown>{{profileSearchName}}</button>
@@ -102,14 +100,12 @@
                 <tr *ngFor="let process of processTable.data">
                     <td scope="row">
                         <a *ngIf="process.candidate" style="color: #1890ff;" (click)="showCandidateDetailsModal(process.candidate.id, candidateDetailModal)">
-                            {{ process.candidate.name }} {{ process.candidate.lastName }}</a>
-
+                        {{ process.candidate.name }} {{ process.candidate.lastName }}</a>
                     </td>
                     <td scope="row">
                         {{ process.candidate.profile.name }}
                     </td>
-                    <td scope="row">
-                        <!-- {{ getCommunity(process.candidate.community) }} -->
+                    <td scope="row">                        
                         {{ process.candidate.community.name }}
                     </td>
                     <td scope="row">
@@ -120,17 +116,15 @@
                         <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
                         {{ getCurrentStage(process.currentStage) }}
                     </td>
-                    <td scope="row"><a *ngIf="process.candidate.recruiter" style="color: #1890ff;" (click)="showConsultantDetailsModal(process.consultantOwner.id, consultantDetailModal)">{{ process.candidate.recruiter.name }}
-                            {{ process.candidate.recruiter.lastName }}</a></td>
-
-                    <td [style.text-align]="center">
-                        <!-- <i nzTitle="Details" [routerLink]="['/process-details/', process.id]" style="cursor: pointer;" nz-tooltip nz-icon type="info-circle" theme="outline"></i>
-                        <nz-divider nzType="vertical"></nz-divider> -->
+                    <td scope="row">
+                        <a *ngIf="process.candidate.recruiter" style="color: #1890ff;" (click)="showConsultantDetailsModal(process.candidate.recruiter.id, consultantDetailModal)">
+                        {{ process.candidate.recruiter.name }}
+                        {{ process.candidate.recruiter.lastName }}</a>
+                    </td>
+                    <td [style.text-align]="center">                        
                         <i nzTitle="Edit" (click)="showProcessStart(processStart, startModalButtons, process.id)" style="cursor: pointer;" nz-tooltip nz-icon type="edit" theme="outline"></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i nzTitle="Delete" (click)="showDeleteConfirm(process.id)" style="cursor: pointer;" nz-tooltip nz-icon type="delete" theme="outline"></i>
-                        <!-- <nz-divider nzType="vertical"></nz-divider>
-                        <i nzTitle="Graphic view of stages" style="cursor: pointer;" nz-tooltip (click)="showStepsModal(process)" nz-icon nzType="ordered-list" nzTheme="outline"></i> -->
                         <nz-divider nzType="vertical" *ngIf="process && (process.status != 2 && process.status != 3  )">
                         </nz-divider>
                         <i nzTitle="Approve Process" style="cursor: pointer;" nz-tooltip *ngIf="process && (process.status != 2 && process.status != 3  )" nz-icon nzType="check-circle" nzTheme="outline" (click)="showApproveProcessConfirm(process.id)"></i>
@@ -156,7 +150,6 @@
     </div>
 </nz-modal>
 
-
 <ng-template #candidateDetailModal>
     <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
 </ng-template>
@@ -164,7 +157,6 @@
 <ng-template #consultantDetailModal>
     <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
 </ng-template>
-
 
 <ng-template #rejectProcessModal>
     <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">

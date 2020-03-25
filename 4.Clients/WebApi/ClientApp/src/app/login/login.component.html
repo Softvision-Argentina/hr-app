@@ -1,6 +1,6 @@
 <ng-template #contentTemplate>
     <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
-        <nz-card-meta nzTitle="{{currentUser.Name}}" nzDescription="{{currentUser.Email}}">
+        <nz-card-meta nzTitle="{{currentUser.name}}" nzDescription="{{currentUser.email}}">
         </nz-card-meta>
         <br />
         <ul class="ant-card-actions">
@@ -13,7 +13,7 @@
 </ng-template>
 
 <ng-template #coverTemplate>
-    <img alt="userImg" class="loggedUser" src="{{currentUser.ImgURL}}" />
+    <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
 </ng-template>
 
 <ng-template #loginModal>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div style="background-image: url('./../../assets/images/pattern-waves.png'); padding-bottom: 4%" nz-row>
+                <div class="login-background-image" nz-row>
                     <div style="margin-top: 10%" nz-row>
                         <div nz-col nzSpan="18">
                             <div nz-row class="title">EMPOWERING</div>

@@ -1,74 +1,71 @@
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: keep-all;
-}
-
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-#logout {
-  color: #1890ff;  
-}
-
-#logout:hover {
-  color: #40a9ff;
-}
-
-.ant-card.ant-card-body{
-  padding: 0% !important;
-}
-
-.loggedUser {
-  border-radius: 50%; display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  margin-top: 5%;
-}
-
-nav {
+.main-nav{
+  display: flex;
+  flex-direction: row;
+  height: 75px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
-  width: 100%; /* Full width */
+  width: calc(100% - 140px); /* Full width */
+  margin-left: 140px;
   z-index: 3;
 }
 
-span.buttonText {
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 15%;
-  padding-right: 30%;
-  font-size: 14px;
-  font-weight: bold;
-  
-  font-family: 'Roboto', sans-serif;
+.main-nav__input {
+  width: 100%;
+  border:none;
+  height: 75px;
+  padding-left: 39px;
 }
 
-#loginBtn {
-  display: inline-block;
-  background: white;
-  color: #444;
-  width: 100%;
-  border-radius: 5px;
-  border: thin solid #888;
-  box-shadow: 1px 1px 1px grey;
-  white-space: nowrap;
+.main-nav__input input{
+  border:none;
+  height: 75px;
+  width: calc( 100% - 60px);
+  padding-left: 16px;
+  font-size: 16px;
+  line-height: 20px;
 }
-#loginBtn:hover {
+
+input:focus{
+  outline: none;
+}
+
+.main-nav .avatar{
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+
+.main-nav .avatar:hover{
   cursor: pointer;
 }
 
-.ant-card-actions li span{
-  display: grid;
+.avatar .user-info{
+  padding-right: 90px;
+  margin-top: 15px;
+  font-size: 20px;
+  font-family: "ProximaNova-Semibold";
+}
+
+nz-list-item{
+  display: flex;
+  justify-content: space-between;
+  padding-left:  10px;
+  padding-right: 10px
+}
+
+nz-list-item:first-child{
+  justify-content: center;
+}
+
+@media(max-width:1000px){
+
+  .avatar .user-info{
+    padding-right: 50px;
+  }
+
+  .avatar .user-info{
+    font-size: 18px;
+  }
 }
