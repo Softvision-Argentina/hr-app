@@ -628,11 +628,11 @@ namespace Domain.Services.Repositories.EF
             var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community2};
 
             // Users for testing Roles 
-            var user99 = new User { FirstName = "root", LastName = "root", Username = "root@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user90 = new User { FirstName = "communitymanager", LastName = "communitymanager", Username = "communitymanager@softvision.com", Role = Roles.CommunityManager, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community1};
-            var user91 = new User { FirstName = "recruiter", LastName = "recruiter", Username = "recruiter@softvision.com", Role = Roles.Recruiter, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user92 = new User { FirstName = "common", LastName = "common", Username = "common@softvision.com", Role = Roles.Common, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user93 = new User { FirstName = "interviewer", LastName = "interviewer", Username = "interviewer@softvision.com", Role = Roles.Interviewer, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            //var user99 = new User { FirstName = "root", LastName = "root", Username = "root@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            //var user90 = new User { FirstName = "communitymanager", LastName = "communitymanager", Username = "communitymanager@softvision.com", Role = Roles.CommunityManager, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community1};
+            //var user91 = new User { FirstName = "recruiter", LastName = "recruiter", Username = "recruiter@softvision.com", Role = Roles.Recruiter, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            //var user92 = new User { FirstName = "common", LastName = "common", Username = "common@softvision.com", Role = Roles.Common, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            //var user93 = new User { FirstName = "interviewer", LastName = "interviewer", Username = "interviewer@softvision.com", Role = Roles.Interviewer, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
 
 
 
