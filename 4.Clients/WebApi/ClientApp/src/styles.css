@@ -1,6 +1,7 @@
 @import '~ngx-toastr/toastr.css';
 /* You can add global styles to this file, and also import other style files */
 
+
 @import url("assets/fonts/proximaNova.css");
 #toast-container > div {
   opacity:1;
@@ -68,3 +69,4 @@ button > i {
 .ant-col-12 {
   width: 45%;
 }
+

@@ -48,6 +48,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     draggable: false
   };
 
+
   @ViewChild('slickModal') slickModal: SlickComponent;
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
@@ -70,7 +71,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   currentUser: User;
-  
+
   sortName = null;
   sortValue = null;
 
@@ -123,7 +124,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   forms: FormGroup[] = [];
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent,) {
+    private globals: Globals, private _appComponent: AppComponent, ) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -133,17 +134,21 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.app.showLoading();
     this.app.removeBgImage();
-    this.getProcesses();
+
+    this.getMyProcesses()
+
+
     this.getCandidates();
     this.getConsultants();
     this.getOffices();
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
+
     this.facade.consultantService.GetByEmail(this.currentUser.Email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-    });
+      });
 
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
@@ -151,7 +156,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
-      declineReasonName : [null, [Validators.required]]
+      declineReasonName: [null, [Validators.required]]
     });
 
     this.setRejectionReasonValidators();
@@ -160,11 +165,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   }
 
-  ngAfterViewChecked(){
-    if(this.slickModal && this.openFromEdit){
+
+  ngAfterViewChecked() {
+    if (this.slickModal && this.openFromEdit) {
       this.slickModal.slickGoTo(this.stepIndex);
       this.openFromEdit = false;
-    } 
+    }
   }
 
   isUserRole(roles: string[]): boolean {
@@ -188,6 +194,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
     //     rejectionReason.updateValueAndValidity();
     //   });
+  }
+
+  test(val) {
+    console.log(val)
   }
 
   getCandidates() {
@@ -219,7 +229,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getCommunity(community: number): string {
-    return this.communities.find(x =>x.id === community).name;
+    return this.communities.find(x => x.id === community).name;
   }
 
   getCommunities() {
@@ -250,7 +260,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProfile(profile: number): string {
-    return this.profiles.filter(x =>x.id === profile)[0].name;
+    return this.profiles.filter(x => x.id === profile)[0].name;
   }
 
   getProcesses() {
@@ -265,8 +275,34 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       }, err => {
         console.log(err);
       })
-    
+
   }
+
+  getMyProcesses() {
+    this.facade.processService.get()
+      .subscribe(res => {
+        let result = []
+        for (let i = 0; i < res.length; i++) {
+          let sessionConsultant = res[i].candidate.recruiter.name + ' ' + res[i].candidate.recruiter.lastName;
+          if (sessionConsultant === this.currentUser.Name) {
+            result.push(res[i]);
+          }
+        }
+        this.filteredProcesses = result;
+        this.listOfDisplayData = result;
+        let newProc: Process = result[result.length - 1];
+
+        if (newProc && newProc.candidate) {
+          this.candidatesFullList.push(newProc.candidate);
+        }
+      }, err => {
+        console.log(err);
+      })
+
+  }
+
+
+
   getProcessesByConsultant() {
     this.facade.processService.get()
       .subscribe(res => {
@@ -279,14 +315,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       }, err => {
         console.log(err);
       });
-  }
-
-  getStatus(status: number): string {
-    return this.statusList.find(st => st.id === status).name;
-  }
-
-  getCurrentStage(cr: number): string {
-    return this.currentStageList.find(st => st.id === cr).name;
   }
 
   showApproveProcessConfirm(processID: number): void {
@@ -348,9 +376,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
             }
             if (isCompleted) {
-    
+
               let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-    
+
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
@@ -364,9 +392,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 })
             }
             this.app.hideLoading();
-          }          
+          }
         }
-      ]      
+      ]
     });
   }
 
@@ -399,11 +427,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-              let declineReason : DeclineReason = { 
-                  id: this.declineProcessForm.controls['declineReasonName'].value,
-                  name: "",
-                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-                }
+              let declineReason: DeclineReason = {
+                id: this.declineProcessForm.controls['declineReasonName'].value,
+                name: "",
+                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
+              }
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -416,7 +444,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 })
             }
             this.app.hideLoading();
-          }          
+          }
         }
       ]
     });
@@ -443,6 +471,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.searchCurrentStage();
   }
 
+  triggerSearch(val) {
+    this.searchValue = val;
+    this.search()
+  }
+
   search(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + " " + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
@@ -455,30 +488,33 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.nameDropdown.nzVisible = false;
   }
 
+  triggerSearchRecruiter(val) {
+    console.log('val: ' + val)
+    this.searchRecruiterValue = val;
+    console.log('trigger: ' + this.searchRecruiterValue)
+    this.searchRecruiter();
+  }
+
   searchRecruiter(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
         (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // const data = this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
-    this.nameDropdown.nzVisible = false;
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue=this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
+    this.searchRecruiterValue = this.currentUser.Name
     this.searchRecruiter();
     this.isOwnedProcesses = true;
-    console.log(this.emptyProcess)
   }
 
-  searchAllProcess(){
+  searchAllProcess() {
     this.getProcesses();
     this.isOwnedProcesses = false;
-    console.log(this.emptyProcess)
   }
 
   showOwnProcessesFirst(): void {
@@ -494,6 +530,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.nameDropdown.nzVisible = false;
   }
 
+  triggerSearchStatus(id) {
+
+    this.searchValueStatus = id;
+    console.log("test:" + this.searchValueStatus)
+    this.searchStatus()
+  }
+
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
@@ -501,8 +544,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    console.log(this.listOfDisplayData)
+    console.log(this.statusList)
     this.searchValueStatus = '';
-    this.statusDropdown.nzVisible = false;
+  }
+
+  triggerSearchCurrentStage(id) {
+    this.searchValueCurrentStage = id;
+    this.searchCurrentStage()
   }
 
   searchCurrentStage(): void {
@@ -510,10 +559,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
         (item.currentStage === this.searchValueCurrentStage)
     };
-    const data =  this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
+    const data = this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
-    this.currentStageDropdown.nzVisible = false;
   }
 
   searchProfile(searchedProfile: number) {
@@ -521,7 +569,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
 
     if (this.profileSearch == 0) {
-    this.listOfDisplayData = this.filteredProcesses;
+      this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
     }
     else {
@@ -536,7 +584,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
 
     if (this.communitySearch == 0) {
-    this.listOfDisplayData = this.filteredProcesses;
+      this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
     }
     else {
@@ -610,6 +658,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
+
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
@@ -687,7 +736,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   closeModal() {
     this.facade.modalService.openModals[0].destroy();
     this.isEdit = false;
-    this.stepIndex = 0;    
+    this.stepIndex = 0;
   }
 
   getForms() {
@@ -725,7 +774,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       let newProcess: Process;
 
       newCandidate = this.candidateAdd.getFormData();
-      newCandidate.candidateSkills=this.technicalStage.getFormDataSkills();
+      newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       newProcess.consultantOwnerId = newCandidate.recruiter.id;
       newProcess.candidate = newCandidate;
@@ -777,7 +826,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           }, err => {
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
-          }); 
+          });
       }
     }
   }
@@ -799,7 +848,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,      
+      wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: null,
@@ -817,7 +866,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     process.seniority = this.selectedSeniority ? this.selectedSeniority :
       (process.technicalStage.seniority ? process.technicalStage.seniority :
         process.technicalStage.alternativeSeniority ? process.technicalStage.alternativeSeniority :
-        (process.offerStage.seniority));
+          (process.offerStage.seniority));
     process.englishLevel = process.englishLevel;
 
     return process;
@@ -903,7 +952,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonId: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,      
+      wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: {
@@ -932,7 +981,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         alternativeSeniority: SeniorityEnum.NA,
         client: ''
       },
-    clientStage: {
+      clientStage: {
         id: 0,
         date: new Date(),
         status: StageStatusEnum.NA,
@@ -950,24 +999,24 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         feedback: '',
         consultantOwnerId: candidate.recruiter.id,
         consultantDelegateId: null,
-        processId: 0,        
-        seniority: SeniorityEnum.NA,        
+        processId: 0,
+        seniority: SeniorityEnum.NA,
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date()        
+        preocupationalDoneDate: new Date()
       },
-    };    
+    };
   }
 
-  isDeclined(process: Process) : Boolean {
+  isDeclined(process: Process): Boolean {
     if (process.hrStage.status === StageStatusEnum.Declined ||
-        process.technicalStage.status === StageStatusEnum.Declined ||
-        process.clientStage.status === StageStatusEnum.Declined ||
-        process.offerStage.status === StageStatusEnum.Declined) {
-          return true;
-        }
+      process.technicalStage.status === StageStatusEnum.Declined ||
+      process.clientStage.status === StageStatusEnum.Declined ||
+      process.offerStage.status === StageStatusEnum.Declined) {
+      return true;
+    }
     return false;
   }
 
@@ -979,5 +1028,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
+  }
+
+  findProfileByName(name) {
+    let counter = 0;
+    for (let i = 0; i < this.profiles.length; i++) {
+      name.toLowerCase() === this.profiles[i].name.toLowerCase() ? this.searchProfile(this.profiles[i].id) : counter++
+    }
+    counter === this.profiles.length ? this.searchProfile(0) : null
   }
 }

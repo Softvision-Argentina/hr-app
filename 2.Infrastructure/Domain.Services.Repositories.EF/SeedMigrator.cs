@@ -99,7 +99,7 @@ namespace Domain.Services.Repositories.EF
             context.Consultants.Add(consultant22);
             context.Consultants.Add(consultant23);
             context.Consultants.Add(consultant24);
-            context.Consultants.Add(consultant24);
+            context.Consultants.Add(consultant25);
             context.SaveChanges();
             #endregion
 
