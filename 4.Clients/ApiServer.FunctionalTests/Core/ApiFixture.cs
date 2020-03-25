@@ -7,7 +7,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore;
 using Xunit;
 
-namespace ApiServer.Tests
+namespace ApiServer.FunctionalTests.Core
 {
     public class ApiFixture : IDisposable
     {

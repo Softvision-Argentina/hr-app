@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Domain.Services.Impl.IntegrationTests.Services.Core
+namespace Core
 {
     public static class DataFactory
     {
@@ -9,16 +9,16 @@ namespace Domain.Services.Impl.IntegrationTests.Services.Core
 
         /// <summary>
         /// Attempts to create a valid instance of a given class T. In case it cannot resolve a 
-        /// dummy data for a given property, it set it to the default value of object (null)
+        /// dummy data for a given property, it set it to a clean instance of the object
         /// </summary>
         /// <typeparam name="T">The type of the class to be instantiated</typeparam>
         /// <returns>Instance of the supplied class, filled with dummy data</returns>
         public static T  CreateInstance<T>() 
         {
+            var obj = Activator.CreateInstance(typeof(T));
+            
             try
             {
-                var obj = Activator.CreateInstance(typeof(T));
-
                 foreach (PropertyInfo prop in obj.GetType().GetProperties())
                 {
                     TypeCode typeCode = Type.GetTypeCode(prop.PropertyType);
@@ -30,7 +30,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services.Core
 
             catch (Exception)
             {
-                return default(T);
+                return (T) obj;
             }
         }
 

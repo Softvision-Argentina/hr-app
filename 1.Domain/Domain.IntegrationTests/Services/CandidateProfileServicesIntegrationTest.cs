@@ -1,5 +1,4 @@
 ﻿using Core.Persistance;
-using Domain.Services.Impl.IntegrationTests.Services.Core;
 using Domain.Model;
 using Domain.Model.Exceptions.CandidateProfile;
 using Domain.Services.Contracts.CandidateProfile;
@@ -7,6 +6,8 @@ using Domain.Services.Interfaces.Services;
 using System;
 using System.Linq;
 using Xunit;
+using Domain.Services.Impl.IntegrationTests.Dummy;
+using Core;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
 {

@@ -1,7 +1,7 @@
 ﻿using Domain.Services.Contracts.Seed;
 using System;
 
-namespace Domain.Services.Impl.UnitTests.Builders.Dummy
+namespace Domain.Services.Impl.IntegrationTests.Dummy.Builders.Dummy
 {
     using Dummy = Model.Seed.Dummy;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Core;
 
-namespace ApiServer.Tests.Seed
+namespace ApiServer.FunctionalTests.Core
 {
     [Collection("Api collection")]
     public class BaseApiTest

@@ -8,7 +8,7 @@ using System.IO;
 using System.Net.Http;
 using Xunit;
 
-namespace Domain.Services.Impl.IntegrationTests
+namespace Domain.Services.Impl.IntegrationTests.Dummy
 {
     public class ServiceFixture : IDisposable
     {

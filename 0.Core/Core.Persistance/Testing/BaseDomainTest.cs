@@ -2,7 +2,7 @@
 using Moq;
 using Xunit;
 
-namespace Domain.Services.Tests
+namespace Core.Testing
 {
     [Collection("Service Test Collection")]
     public class BaseDomainTest

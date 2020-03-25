@@ -3,7 +3,7 @@ using FluentValidation.TestHelper;
 using System;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.ValidatorTester.CandidateProfile
+namespace Domain.Services.Impl.UnitTests.Validators.CandidateProfile
 {
     public class CreateCandidateProfileContractValidatorTester
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.Services.Impl.UnitTests.Builders
+﻿namespace Domain.Services.Impl.IntegrationTests.Dummy.Builders
 {
     public interface IBuilder<T> where T : class
     {

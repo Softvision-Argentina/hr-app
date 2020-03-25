@@ -1,7 +1,7 @@
 ﻿using ApiServer.Contracts.Seed;
 using System;
 
-namespace ApiServer.Tests.Seed.Builder
+namespace ApiServer.FunctionalTests.Dummy.Seed.Builder
 {
     public class CreateDummyViewModelBuilder
     {

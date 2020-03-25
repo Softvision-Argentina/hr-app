@@ -1,23 +1,23 @@
 ﻿using Core;
 using Core.Persistance;
-using Domain.Model.Seed;
+using Domain.Services.Impl.IntegrationTests.Dummy;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.Validators.Seed;
-using Domain.Services.Impl.UnitTests.Builders.Dummy;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Services.Tests;
+using Domain.Services.Impl.IntegrationTests.Dummy.Builders.Dummy;
+using Core.Testing;
 
-namespace Domain.Services.Impl.UnitTests.DummyTests
+namespace Domain.Services.Impl.IntegrationTests.Seed
 {
     public class BaseDummyTest : BaseDomainTest
     {
         protected DummyService Service;
-        protected Mock<IRepository<Dummy>> MockDummyRepository;
-        protected MockPersistance<Dummy> MockPersistance;
-        protected IList<Dummy> InMemoryDummies => MockPersistance.CreatedAndPersisted;
+        protected Mock<IRepository<Model.Seed.Dummy>> MockDummyRepository;
+        protected MockPersistance<Model.Seed.Dummy> MockPersistance;
+        protected IList<Model.Seed.Dummy> InMemoryDummies => MockPersistance.CreatedAndPersisted;
 
         public BaseDummyTest(AutomapperFixture automapperFixture)
         {
@@ -49,13 +49,13 @@ namespace Domain.Services.Impl.UnitTests.DummyTests
         protected void AssertPersistanceIsCalledForCreateDummy()
         {
             MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
-            MockDummyRepository.Verify(_ => _.Create(It.IsAny<Dummy>()), Times.Once);
+            MockDummyRepository.Verify(_ => _.Create(It.IsAny<Model.Seed.Dummy>()), Times.Once);
             MockPersistance.AssertPersited();
         }
 
         private void SetupMockPersitance()
         {
-            MockPersistance = new MockPersistance<Dummy>();
+            MockPersistance = new MockPersistance<Model.Seed.Dummy>();
 
             MockUnitOfWork.Setup(_ => _.Complete())
                 .Callback(() =>
@@ -70,9 +70,9 @@ namespace Domain.Services.Impl.UnitTests.DummyTests
                 .Returns(MockPersistance.PersistanceCount);
 
             MockDummyRepository
-                .Setup(_ => _.Create(It.IsAny<Dummy>()))
-                .Callback<Dummy>(t => MockPersistance.Create(t))
-                .Returns<Dummy>(t => { t.Id = Guid.NewGuid(); return t; });
+                .Setup(_ => _.Create(It.IsAny<Model.Seed.Dummy>()))
+                .Callback<Model.Seed.Dummy>(t => MockPersistance.Create(t))
+                .Returns<Model.Seed.Dummy>(t => { t.Id = Guid.NewGuid(); return t; });
 
             MockDummyRepository
                 .Setup(_ => _.QueryEager())
@@ -92,7 +92,7 @@ namespace Domain.Services.Impl.UnitTests.DummyTests
         #region RepositoryMock
         private void SetupMockDummyRepository()
         {
-            MockDummyRepository = new Mock<IRepository<Dummy>>(MockBehavior.Strict);
+            MockDummyRepository = new Mock<IRepository<Model.Seed.Dummy>>(MockBehavior.Strict);
         }
         #endregion RepositoryMock
     }

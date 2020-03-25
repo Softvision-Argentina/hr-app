@@ -1,11 +1,12 @@
 ﻿using ApiServer.Contracts.Login;
-using ApiServer.Tests.Candidates.Builder;
+using ApiServer.FunctionalTests.Controller.Builder;
+using ApiServer.FunctionalTests.Core;
 using Core;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ApiServer.Tests.Seed
+namespace ApiServer.FunctionalTests.Controller
 {
     [Collection("Api collection")]
     public class AuthControllerFunctionalTest : BaseApiTest

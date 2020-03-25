@@ -1,10 +1,10 @@
-﻿using Domain.Services.Impl.UnitTests.Builders.Dummy;
-using Domain.Services.Tests;
+﻿using Domain.Services.Impl.IntegrationTests.Dummy;
+using Domain.Services.Impl.IntegrationTests.Dummy.Builders.Dummy;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.DummyTests
+namespace Domain.Services.Impl.IntegrationTests.Seed
 {
     public class DummyServiceTests : BaseDummyTest
     {

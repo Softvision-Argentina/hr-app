@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiServer.Tests.Candidates.Builder
+namespace ApiServer.FunctionalTests.Dummy.Candidates.Builder
 {
     public class CreateCandidateViewModelBuilder
     {

@@ -1,7 +1,7 @@
 ﻿using ApiServer.Contracts.Login;
 using System;
 
-namespace ApiServer.Tests.Candidates.Builder
+namespace ApiServer.FunctionalTests.Controller.Builder
 {
     public class LoginViewModelBuilder
     {

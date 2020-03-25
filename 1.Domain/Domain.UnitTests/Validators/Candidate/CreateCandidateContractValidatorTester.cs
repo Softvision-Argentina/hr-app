@@ -7,7 +7,7 @@ using FluentValidation.TestHelper;
 using System;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.ValidatorTester.Candidate
+namespace Domain.Services.Impl.UnitTests.Validators.Candidate
 {
     public class CreateCandidateContractValidatorTester
     {

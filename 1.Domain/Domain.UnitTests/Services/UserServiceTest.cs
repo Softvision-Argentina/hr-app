@@ -3,10 +3,10 @@ using System.Linq;
 using AutoMapper;
 using Core;
 using Core.Persistance;
+using Core.Testing;
 using Domain.Model;
 using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Services;
-using Domain.Services.Tests;
 using Moq;
 using Xunit;
 

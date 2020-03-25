@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Xunit;
 using Microsoft.AspNetCore.TestHost;
+using Domain.Services.Impl.IntegrationTests.Dummy;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
 {

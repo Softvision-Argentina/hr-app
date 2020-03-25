@@ -1,5 +1,6 @@
 ﻿using ApiServer.Contracts.Seed;
-using ApiServer.Tests.Seed.Builder;
+using ApiServer.FunctionalTests.Core;
+using ApiServer.FunctionalTests.Dummy.Seed.Builder;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ApiServer.Tests.Seed
+namespace ApiServer.FunctionalTests.Dummy.Seed
 {
     [Collection("Api collection")]
     public class DumyControllerTests : BaseApiTest

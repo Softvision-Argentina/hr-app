@@ -1,8 +1,8 @@
 ﻿using ApiServer.Contracts.User;
 using ApiServer.Controllers;
-using ApiServer.Tests;
 using AutoMapper;
 using Core;
+using Core.ExtensionHelpers;
 using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;

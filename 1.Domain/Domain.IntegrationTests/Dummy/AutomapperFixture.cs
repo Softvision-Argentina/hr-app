@@ -2,7 +2,7 @@
 using System;
 using Xunit;
 
-namespace Domain.Services.Tests
+namespace Domain.Services.Impl.IntegrationTests.Dummy
 {
     public class AutomapperFixture : IDisposable
     {
