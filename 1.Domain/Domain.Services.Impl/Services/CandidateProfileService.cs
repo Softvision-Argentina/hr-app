@@ -8,11 +8,9 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.CandidateProfile;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 
 namespace Domain.Services.Impl.Services
 {
@@ -85,7 +83,6 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Mapping contract {contract.Name}");
             var CandidateProfile = _mapper.Map<CandidateProfile>(contract);
 
-
             var updatedCandidateProfile = _CandidateProfileRepository.Update(CandidateProfile);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
@@ -145,7 +142,7 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                CandidateProfile CandidateProfile = _CandidateProfileRepository.Query().Where(_ => _.Name == name && _.Id != Id).FirstOrDefault();
+                CandidateProfile CandidateProfile = _CandidateProfileRepository.Query().AsNoTracking().Where(_ => _.Name == name && _.Id != Id).FirstOrDefault();
                 if (CandidateProfile != null) throw new InvalidCandidateProfileException("The Profile already exists .");
             }
             catch (ValidationException ex)
