@@ -12,6 +12,7 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         protected HttpClient Client { get; }
         protected TestServer Server { get; }
         protected IServiceProvider Services { get;  }
+        protected DataBaseContext Context { get;  }
 
         protected DataBaseContext Context { get;  }
 
