@@ -95,8 +95,7 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedCandidateProfileContract> List()
         {
             var CandidateProfileQuery = _CandidateProfileRepository
-                .QueryEager(); 
-                //.Query();
+                .QueryEager();                 
                 
             var CandidateProfileResult = CandidateProfileQuery.ToList();
 
@@ -106,8 +105,7 @@ namespace Domain.Services.Impl.Services
         public ReadedCandidateProfileContract Read(int Id)
         {
             var CandidateProfileQuery = _CandidateProfileRepository
-                .QueryEager()
-                // .Query()
+                .QueryEager()                
                 .Where(_ => _.Id == Id);
 
             var CandidateProfileResult = CandidateProfileQuery.SingleOrDefault();
