@@ -21,6 +21,7 @@ namespace ApiServer.FunctionalTests.Core
         {
             Client = apiFixture.Client;
             Context = apiFixture.Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
+            Context.Database.EnsureCreated();
         }
 
         protected static void AssertSuccess(HttpResponseMessage response, string responseString)
