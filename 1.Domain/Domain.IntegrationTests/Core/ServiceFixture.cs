@@ -27,9 +27,7 @@ namespace Domain.Services.Impl.IntegrationTests.Core
                 {
                     var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{_env}.json", optional: false, reloadOnChange: true)
-                        .AddEnvironmentVariables();
+                        .AddJsonFile($"appsettings.{_env}.json", optional: false, reloadOnChange: true);
 
                     Server = new TestServer(WebHost.CreateDefaultBuilder()
                         .UseEnvironment(_env)
