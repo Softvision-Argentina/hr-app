@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Core;
+using Domain.Services.Repositories.EF;
 
 namespace ApiServer.Tests.Seed
 {
@@ -14,10 +15,12 @@ namespace ApiServer.Tests.Seed
         protected HttpClient Client { get; }
 
         protected string ControllerName { get; set; }
+        protected DataBaseContext Context {get;}
 
         public BaseApiTest(ApiFixture apiFixture)
         {
             Client = apiFixture.Client;
+            Context = apiFixture.Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
         }
 
         protected static void AssertSuccess(HttpResponseMessage response, string responseString)
