@@ -26,11 +26,11 @@ export class SkillsComponent implements OnInit {
   sortValue = null;
 
   skillForm: FormGroup;
-  isDetailsVisible: boolean = false;
-  isAddVisible: boolean = false;
-  isAddOkLoading: boolean = false;
+  isDetailsVisible = false;
+  isAddVisible = false;
+  isAddOkLoading = false;
   emptySkill: Skill;
-  skillTypeForDetail:string;
+  skillTypeForDetail: string;
 
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent) { }
 
@@ -49,11 +49,11 @@ export class SkillsComponent implements OnInit {
   }
 
   getSkillTypeNameByID(id: number) {
-      let skillType = this.skillTypes.find(s => s.id === id);
-      return skillType != undefined ? skillType.name : '';
+      const skillType = this.skillTypes.find(s => s.id === id);
+      return skillType ? skillType.name : '';
   }
 
-  getSkillTypes(){
+  getSkillTypes() {
     this.facade.skillTypeService.get()
       .subscribe(res => {
         this.skillTypes = res;
@@ -62,7 +62,7 @@ export class SkillsComponent implements OnInit {
       });
   }
 
-  getSkills(){
+  getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
         this.filteredSkills = res;
@@ -82,7 +82,13 @@ export class SkillsComponent implements OnInit {
         (item.name.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1);
     };
     const data = this.filteredSkills.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => {
+      if (this.sortValue === 'ascend') {
+        return a[this.sortName] > b[this.sortName] ? 1 : -1;
+      } else {
+        return b[this.sortName] > a[this.sortName] ? 1 : -1;
+      }
+    });
     this.nameDropdown.nzVisible = false;
   }
 
@@ -93,11 +99,12 @@ export class SkillsComponent implements OnInit {
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Skill Modal
+    // Add New Skill Modal
     this.skillForm.reset();
     this.getSkillTypes();
-    if(this.skillTypes.length > 0)
+    if (this.skillTypes.length > 0) {
       this.skillForm.controls['type'].setValue(this.skillTypes[0].id);
+    }
 
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Skill',
@@ -117,49 +124,58 @@ export class SkillsComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.skillForm.controls) {
-              this.skillForm.controls[i].markAsDirty();
-              this.skillForm.controls[i].updateValueAndValidity();
-              if ((!this.skillForm.controls[i].valid)) isCompleted = false;
+              if (this.skillForm.controls.hasOwnProperty(i)) {
+                this.skillForm.controls[i].markAsDirty();
+                this.skillForm.controls[i].updateValueAndValidity();
+                if (!this.skillForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
-            if(isCompleted){
-              let newSkill: Skill = {
+            if (isCompleted) {
+              const newSkill: Skill = {
                 id: 0,
                 name: this.skillForm.controls['name'].value.toString(),
                 description: this.skillForm.controls['description'].value.toString(),
                 type: this.skillForm.controls['type'].value.toString(),
                 candidateSkills: []
-              }
+              };
+
               this.facade.skillService.add(newSkill)
-            .subscribe(res => {
-              this.getSkills();
-              this.app.hideLoading();
-              this.facade.toastrService.success('Skill was successfully created !');
-              modal.destroy();
-            }, err => {
-              this.app.hideLoading();
+                .subscribe(() => {
+                  this.getSkills();
+                  this.app.hideLoading();
+                  this.facade.toastrService.success('Skill was successfully created !');
+                  modal.destroy();
+                }, err => {
+                  this.app.hideLoading();
+                  modal.nzFooter[1].loading = false;
+                  if (err.message) {
+                    this.facade.toastrService.error(err.message);
+                  } else {
+                    this.facade.toastrService.error('The service is not available now. Try again later.');
+                  }
+                });
+            } else {
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
-            })
-            } 
-            else modal.nzFooter[1].loading = false;
-            this.app.hideLoading();
+              this.app.hideLoading();
+            }
           }
         }],
     });
   }
 
   showDetailsModal(skillID: number): void {
-    this.emptySkill = this.filteredSkills.find(skill => skill.id == skillID);
+    this.emptySkill = this.filteredSkills.find(skill => skill.id === skillID);
     this.skillTypeForDetail = this.getSkillTypeNameByID(this.emptySkill.type);
     this.isDetailsVisible = true;
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void{    
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.skillForm.reset();
-    let editedSkill: Skill = this.filteredSkills.filter(skill => skill.id == id)[0];
+    let editedSkill: Skill = this.filteredSkills.filter(skill => skill.id === id)[0];
     this.skillForm.controls['name'].setValue(editedSkill.name);
     this.skillForm.controls['description'].setValue(editedSkill.description);
     this.skillForm.controls['type'].setValue(editedSkill.type);
@@ -181,34 +197,45 @@ export class SkillsComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.skillForm.controls) {
-              this.skillForm.controls[i].markAsDirty();
-              this.skillForm.controls[i].updateValueAndValidity();
-              if ((!this.skillForm.controls[i].valid)) isCompleted = false;
+              if (this.skillForm.controls.hasOwnProperty(i)) {
+                this.skillForm.controls[i].markAsDirty();
+                this.skillForm.controls[i].updateValueAndValidity();
+                if (!this.skillForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
-            if(isCompleted){
+            if (isCompleted) {
+
               editedSkill = {
                 id: editedSkill.id,
                 name: this.skillForm.controls['name'].value.toString(),
                 description: this.skillForm.controls['description'].value.toString(),
                 type: this.skillForm.controls['type'].value.toString(),
                 candidateSkills: []
-              }
+              };
+
               this.facade.skillService.update(id, editedSkill)
-            .subscribe(res => {
-              this.getSkills();
-              this.app.hideLoading();
-              this.facade.toastrService.success('Skill was successfully created !');
-              modal.destroy();
-            }, err => {
-              this.app.hideLoading();
+                .subscribe(() => {
+                  this.getSkills();
+                  this.app.hideLoading();
+                  this.facade.toastrService.success('Skill was successfully created !');
+                  modal.destroy();
+                }, err => {
+                  this.app.hideLoading();
+                  modal.nzFooter[1].loading = false;
+                  if (err.message) {
+                    this.facade.toastrService.error(err.message);
+                  } else {
+                    this.facade.toastrService.error('The service is not available now. Try again later.');
+                  }
+                });
+            } else {
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
-            })
-            } 
-            else modal.nzFooter[1].loading = false;
+            }
+
             this.app.hideLoading();
           }
         }],
@@ -216,7 +243,7 @@ export class SkillsComponent implements OnInit {
   }
 
   showDeleteConfirm(skillID: number): void {
-    let skillDelete: Skill = this.filteredSkills.find(skill => skill.id == skillID);
+    const skillDelete: Skill = this.filteredSkills.find(skill => skill.id === skillID);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + skillDelete.name + ' ?',
       nzContent: '',
@@ -224,12 +251,15 @@ export class SkillsComponent implements OnInit {
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => this.facade.skillService.delete(skillID)
-        .subscribe(res => {
+        .subscribe(() => {
           this.getSkills();
           this.facade.toastrService.success('Skill was deleted !');
         }, err => {
-          if(err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          if (err.message) {
+            this.facade.toastrService.error(err.message);
+          } else {
+            this.facade.toastrService.error('The service is not available now. Try again later.');
+          }
         })
     });
   }

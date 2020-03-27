@@ -8,19 +8,19 @@
 <br />
 <div nz-row>
     <div nz-col nzSpan="23">
-        <nz-table #CandidateProfileTable [nzData]="_detailedCandidateProfile" [nzPageSize]="10">
+        <nz-table #CandidateProfileTable [nzData]="detailedCandidateProfile" [nzPageSize]="10">
             <thead>
                 <tr>
-                    <th [style.text-align]="center">Name</th>
-                    <th [style.text-align]="center">Description</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Name</th>
+                    <th [style.text-align]="'center'">Description</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let CandidateProfile of CandidateProfileTable.data">
                     <td>{{ CandidateProfile.name }}</td>
                     <td>{{ CandidateProfile.description | truncate:75 }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showDetailsModal(CandidateProfile.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

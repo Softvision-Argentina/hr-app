@@ -12,9 +12,14 @@ import { CSoftComponent } from '../login/csoft-signin.component';
 })
 export class LoginComponent implements OnInit {
 
-  returnUrl: string = '';
+  returnUrl = '';
 
-  constructor(private google: GoogleSigninComponent, private csSoft: CSoftComponent, private route: ActivatedRoute, private router: Router, private app: AppComponent) {
+  constructor(
+    private google: GoogleSigninComponent,
+    private csSoft: CSoftComponent,
+    private route: ActivatedRoute,
+    private router: Router, private app: AppComponent
+  ) {
 
   }
 
@@ -22,7 +27,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     if (this.google.isUserAuthenticated() || this.csSoft.isUserAuthenticated()) {
-      console.log('User authenticated...');
       this.router.navigateByUrl(this.returnUrl);
     }
     else {

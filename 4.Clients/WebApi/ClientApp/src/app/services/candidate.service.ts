@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from 'src/entities/candidate';
 

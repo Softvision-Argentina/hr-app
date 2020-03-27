@@ -8,11 +8,11 @@
                           <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                       </nz-dropdown>
                   </th>
-                  <th [style.text-align]="center">E-mail</th>
-                  <th [style.text-align]="center">LinkedIn</th>
-                  <th [style.text-align]="center">CV</th>
-                  <th [style.text-align]="center">Created Date</th>
-                  <th [style.text-align]="center">Action</th>
+                  <th [style.text-align]="'center'">E-mail</th>
+                  <th [style.text-align]="'center'">LinkedIn</th>
+                  <th [style.text-align]="'center'">CV</th>
+                  <th [style.text-align]="'center'">Created Date</th>
+                  <th [style.text-align]="'center'">Action</th>
               </tr>
           </thead>
           <tbody>
@@ -22,7 +22,7 @@
                   <td>{{ postulant.linkedInProfile }}</td>
                   <td>{{ postulant.cv }}</td>
                   <td>{{ postulant.createdDate| date: 'dd-MM-yyyy'}}</td>
-                  <td [style.text-align]="center">
+                  <td [style.text-align]="'center'">
                       <i style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                       <nz-divider nzType="vertical"></nz-divider>
                       <i  style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
