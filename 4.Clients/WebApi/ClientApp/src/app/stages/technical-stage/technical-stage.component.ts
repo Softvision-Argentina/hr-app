@@ -112,26 +112,30 @@ export class TechnicalStageComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.technicalForm.controls) {
-      if (this.technicalForm.controls[i] != this.technicalForm.controls['status']) {
-        if (enable) { this.technicalForm.controls[i].enable(); this.disable=false;}
-        else { this.technicalForm.controls[i].disable(); this.disable=true; }
+      if (this.technicalForm.controls[i] !== this.technicalForm.controls['status']) {
+        if (enable) {
+          this.technicalForm.controls[i].enable();
+          this.disable = false;
+        } else {
+          this.technicalForm.controls[i].disable();
+          this.disable = true;
+        }
       }
     }
   }
 
   statusChanged() {
-    if (this.technicalForm.controls['status'].value == 1) {
+    if (this.technicalForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.technicalForm.markAsTouched();
-    }
-    else {
+    } else {
       this.changeFormStatus(false);
     }
   }
 
   getFormData(processId: number): TechnicalStage {
-    let stage: TechnicalStage = new TechnicalStage();
-    let form = this.technicalForm;
+    const stage: TechnicalStage = new TechnicalStage();
+    const form = this.technicalForm;
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
@@ -148,22 +152,21 @@ export class TechnicalStageComponent implements OnInit {
     return stage;
   }
 
-  getFormDataSkills(): CandidateSkill[]
-  {
-    let candidateSkills: CandidateSkill[] = [];
+  getFormDataSkills(): CandidateSkill[] {
+    const candidateSkills: CandidateSkill[] = [];
     this.controlArray.forEach(skillControl => {
-      let skill: CandidateSkill = {
+      const skill: CandidateSkill = {
         candidateId: 0,
         candidate: null,
         skillId: this.technicalForm.controls[skillControl.controlInstance[0]].value,
         skill: null,
         rate: this.technicalForm.controls[skillControl.controlInstance[1]].value,
         comment: this.technicalForm.controls[skillControl.controlInstance[2]].value
-      }
+      };
       candidateSkills.push(skill);
     });
 
-    return candidateSkills
+    return candidateSkills;
   }
 
   getControlValue(control: any): any {
@@ -172,22 +175,48 @@ export class TechnicalStageComponent implements OnInit {
 
   fillForm(technicalStage: TechnicalStage, candidate: Candidate) {
     const status: number = this.statusList.filter(s => s.id === technicalStage.status)[0].id;
-    if (status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
+
+    if (status === StageStatusEnum.InProgress) {
+      this.changeFormStatus(true);
+    }
+
     this.technicalForm.controls['status'].setValue(status);
-    if (technicalStage.id != null) { this.technicalForm.controls['id'].setValue(technicalStage.id); }
-    if (technicalStage.date != null) { this.technicalForm.controls['date'].setValue(technicalStage.date); }
-    if (technicalStage.consultantOwnerId != null) {
+
+    if (technicalStage.id) {
+      this.technicalForm.controls['id'].setValue(technicalStage.id);
+    }
+
+    if (technicalStage.date) {
+      this.technicalForm.controls['date'].setValue(technicalStage.date);
+    }
+
+    if (technicalStage.consultantOwnerId) {
       this.technicalForm.controls['consultantOwnerId'].setValue(technicalStage.consultantOwnerId);
     }
-    if (technicalStage.consultantDelegateId != null) {
+
+    if (technicalStage.consultantDelegateId) {
       this.technicalForm.controls['consultantDelegateId'].setValue(technicalStage.consultantDelegateId);
     }
-    if (technicalStage.feedback != null) { this.technicalForm.controls['feedback'].setValue(technicalStage.feedback); }
-    if (technicalStage.seniority != null) { this.technicalForm.controls['seniority'].setValue(technicalStage.seniority); }
-    if (technicalStage.alternativeSeniority != null) { this.technicalForm.controls['alternativeSeniority'].setValue(technicalStage.alternativeSeniority); }
-    if (technicalStage.client != null) { this.technicalForm.controls['client'].setValue(technicalStage.client); }
-    if (technicalStage.rejectionReason != null) { this.technicalForm.controls['rejectionReason'].setValue(technicalStage.rejectionReason); }
-    
+
+    if (technicalStage.feedback) {
+      this.technicalForm.controls['feedback'].setValue(technicalStage.feedback);
+    }
+
+    if (technicalStage.seniority) {
+      this.technicalForm.controls['seniority'].setValue(technicalStage.seniority);
+    }
+
+    if (technicalStage.alternativeSeniority) {
+      this.technicalForm.controls['alternativeSeniority'].setValue(technicalStage.alternativeSeniority);
+    }
+
+    if (technicalStage.client) {
+      this.technicalForm.controls['client'].setValue(technicalStage.client);
+    }
+
+    if (technicalStage.rejectionReason) {
+      this.technicalForm.controls['rejectionReason'].setValue(technicalStage.rejectionReason);
+    }
 
     if (technicalStage.seniority !== technicalStage.alternativeSeniority) {
       this.selectedSeniorities = [
@@ -241,7 +270,7 @@ export class TechnicalStageComponent implements OnInit {
     if (id > 0) {
       this.skills = this.skills.filter(
         s => !this.controlArray.some(
-          cai => s.id == this.technicalForm.controls[cai.controlInstance[0]].value));
+          cai => s.id === this.technicalForm.controls[cai.controlInstance[0]].value));
     }
 
     const index = this.controlArray.push(control);
@@ -252,7 +281,7 @@ export class TechnicalStageComponent implements OnInit {
 
   removeField(i: { id: number, controlInstance: string[] }, e: MouseEvent): void {
     e.preventDefault();
-    let skillList: Skill[] = [];
+    const skillList: Skill[] = [];
     this.completeSkillList.forEach(sk => skillList.push(sk));
 
     if (this.controlArray.length >= 1) {
@@ -266,7 +295,7 @@ export class TechnicalStageComponent implements OnInit {
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
       }
-      let j: number = 0;
+      let j = 0;
       const index = this.controlArray.indexOf(i);
       this.controlArray.splice(index, 1);
       for (j; j < 3; j++) { this.technicalForm.removeControl(i.controlInstance[j]); }

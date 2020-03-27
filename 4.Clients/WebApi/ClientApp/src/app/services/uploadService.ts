@@ -13,17 +13,18 @@ import { Candidate } from 'src/entities/candidate';
 })
 export class UploadService extends BaseService<Cv> {
   cand: Candidate;
-    
+
   constructor(router: Router, config: AppConfig, http: HttpClient, globals: Globals) {
     super(router, config, http);
-    this.apiUrl;
+    // TODO: What's the api url?
+    // this.apiUrl;
   }
 
   public uploadFile(data: any) {
     return this.http.post(this.apiUrl + '/Cv/' + this.cand.id, data, {headers: this.headersWithAuth
     })
       .pipe(
-        tap(data => {}),
+        tap(_ => {}),
         catchError(this.handleErrors)
       );
   }

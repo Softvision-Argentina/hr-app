@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Consultant } from 'src/entities/consultant';
-import { FacadeService } from 'src/app/services/facade.service';
 import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
@@ -16,14 +15,14 @@ import { OfferHistory } from '../offer-history/offer-history.component';
 })
 export class OfferStageComponent implements OnInit {
 
-    @Input()
-    private _consultants: Consultant[];
-    public get consultants(): Consultant[] {
-        return this._consultants;
-    }
-    public set consultants(value: Consultant[]) {
-        this._consultants = value;
-    }
+  @Input()
+  private _consultants: Consultant[];
+  public get consultants(): Consultant[] {
+      return this._consultants;
+  }
+  public set consultants(value: Consultant[]) {
+      this._consultants = value;
+  }
 
   offerForm: FormGroup = this.fb.group({
     id: [0],
@@ -32,32 +31,37 @@ export class OfferStageComponent implements OnInit {
     consultantOwnerId: 0,
     consultantDelegateId: [null],
     feedback: '',
-    seniority: [0, [Validators.required]],        
+    seniority: [0, [Validators.required]],
     hireDate: [new Date(), [Validators.required]],
     backgroundCheckDone: false,
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
     preocupationalDone: false,
     preocupationalDoneDate: [new Date(), [Validators.required]],
-    rejectionReason: [null, [Validators.required]],    
-    });
+    rejectionReason: [null, [Validators.required]],
+  });
 
   statusList: any[];
   seniorityList: any[];
-  backCheckEnabled: boolean = false;
+  backCheckEnabled = false;
   backDateEnabled: boolean;
-  preocupationalCheckEnabled: boolean = false;
+  preocupationalCheckEnabled = false;
   preocupationalDateEnabled: boolean;
 
   @Input() offerStage: OfferStage;
   @ViewChild(OfferHistory) historyOffer: OfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService, private historyOfferModal: OfferHistory) {    
+  constructor(
+    private fb: FormBuilder,
+    private globals: Globals,
+    private processService: ProcessService,
+    private historyOfferModal: OfferHistory) {
+
     this.statusList = globals.stageStatusList;
   }
 
-  showOfferHistoryModal(modalContent: TemplateRef<{}>){    
-    this.historyOfferModal.showModal(modalContent);    
+  showOfferHistoryModal(modalContent: TemplateRef<{}>) {
+    this.historyOfferModal.showModal(modalContent);
   }
 
   ngOnInit() {
@@ -79,15 +83,17 @@ export class OfferStageComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.offerForm.controls) {
-      if (this.offerForm.controls[i] != this.offerForm.controls['status'] &&
-      this.offerForm.controls[i] != this.offerForm.controls.backgroundCheckDoneDate &&
-      this.offerForm.controls[i] != this.offerForm.controls.preocupationalDoneDate){
-        if (enable) { this.offerForm.controls[i].enable(); }
-        else { 
+      if (this.offerForm.controls[i] !== this.offerForm.controls['status'] &&
+      this.offerForm.controls[i] !== this.offerForm.controls.backgroundCheckDoneDate &&
+      this.offerForm.controls[i] !== this.offerForm.controls.preocupationalDoneDate) {
+        if (enable) {
+          this.offerForm.controls[i].enable();
+        } else {
           this.offerForm.controls[i].disable();
         }
       }
-    }  
+    }
+
     this.backCheckEnabled = enable;
     this.preocupationalCheckEnabled = enable;
     this.enableBackDate();
@@ -95,7 +101,7 @@ export class OfferStageComponent implements OnInit {
   }
 
   statusChanged() {
-    if (this.offerForm.controls['status'].value == StageStatusEnum.InProgress) {
+    if (this.offerForm.controls['status'].value === StageStatusEnum.InProgress) {
        this.changeFormStatus(true);
        this.offerForm.markAsTouched();
     } else {
@@ -104,8 +110,8 @@ export class OfferStageComponent implements OnInit {
   }
 
   getFormData(processId: number): OfferStage {
-    let stage: OfferStage = new OfferStage();
-    let form = this.offerForm;
+    const stage: OfferStage = new OfferStage();
+    const form = this.offerForm;
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
@@ -115,7 +121,7 @@ export class OfferStageComponent implements OnInit {
     stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
     stage.processId = processId;
     stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
-    stage.seniority = this.getControlValue(form.controls.seniority);            
+    stage.seniority = this.getControlValue(form.controls.seniority);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
     stage.backgroundCheckDoneDate = stage.backgroundCheckDone ? this.getControlValue(form.controls.backgroundCheckDoneDate) : null;
@@ -129,37 +135,64 @@ export class OfferStageComponent implements OnInit {
     return (control === null ? null : control.value);
   }
 
-  fillForm(offerStage: OfferStage){    
+  fillForm(offerStage: OfferStage) {
     const status: number = this.statusList.filter(s => s.id === offerStage.status)[0].id;
-    if (status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
+
+    if (status === StageStatusEnum.InProgress) {
+      this.changeFormStatus(true);
+    }
+
     this.offerForm.controls['status'].setValue(status);
-    if (offerStage.id != null) { this.offerForm.controls['id'].setValue(offerStage.id); }
-    if (offerStage.date != null) { this.offerForm.controls['date'].setValue(offerStage.date); }
-    if (offerStage.consultantOwnerId != null) {
+
+    if (offerStage.id) {
+      this.offerForm.controls['id'].setValue(offerStage.id);
+    }
+
+    if (offerStage.date) {
+      this.offerForm.controls['date'].setValue(offerStage.date);
+    }
+
+    if (offerStage.consultantOwnerId) {
       this.offerForm.controls['consultantOwnerId'].setValue(offerStage.consultantOwnerId);
     }
-    if (offerStage.seniority != null) { this.offerForm.controls['seniority'].setValue(offerStage.seniority); }        
-    if (offerStage.hireDate != null) { this.offerForm.controls['hireDate'].setValue(offerStage.hireDate); }
-    if (offerStage.feedback != null) { this.offerForm.controls['feedback'].setValue(offerStage.feedback); }
-    if (offerStage.backgroundCheckDone != null) {
+
+    if (offerStage.seniority) {
+      this.offerForm.controls['seniority'].setValue(offerStage.seniority);
+    }
+
+    if (offerStage.hireDate) {
+      this.offerForm.controls['hireDate'].setValue(offerStage.hireDate);
+    }
+
+    if (offerStage.feedback) {
+      this.offerForm.controls['feedback'].setValue(offerStage.feedback);
+    }
+
+    if (offerStage.backgroundCheckDone) {
       this.offerForm.controls['backgroundCheckDone'].setValue(offerStage.backgroundCheckDone);
       this.backDateEnabled = offerStage.backgroundCheckDone;
       this.enableBackDate();
     }
-    if (offerStage.backgroundCheckDoneDate != null) {
+
+    if (offerStage.backgroundCheckDoneDate) {
       this.offerForm.controls['backgroundCheckDoneDate'].setValue(offerStage.backgroundCheckDoneDate);
     }
-    if (offerStage.preocupationalDone != null) {
+
+    if (offerStage.preocupationalDone) {
       this.offerForm.controls['preocupationalDone'].setValue(offerStage.preocupationalDone);
       this.preocupationalDateEnabled = offerStage.preocupationalDone;
       this.enablePreocupationalDate();
     }
-    if (offerStage.preocupationalDoneDate != null) {
+
+    if (offerStage.preocupationalDoneDate) {
       this.offerForm.controls['preocupationalDoneDate'].setValue(offerStage.preocupationalDoneDate);
     }
-    if (offerStage.rejectionReason != null) { this.offerForm.controls['rejectionReason'].setValue(offerStage.rejectionReason); }
+
+    if (offerStage.rejectionReason) {
+      this.offerForm.controls['rejectionReason'].setValue(offerStage.rejectionReason);
+    }
   }
-  
+
   toggleBackgroundCheck() {
     this.backDateEnabled = !this.backDateEnabled;
     this.enableBackDate();
