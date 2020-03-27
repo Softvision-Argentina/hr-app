@@ -1,4 +1,4 @@
-import { Component, Renderer2, OnInit } from '@angular/core';
+import { Component, Renderer2, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from './services/facade.service';
@@ -11,7 +11,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
   styleUrls: ['./app.component.css'],
   providers: [GoogleSigninComponent]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewChecked {
   title = 'app';
   showSpinner = true;
   loadingConfig: INg2LoadingSpinnerConfig = {
@@ -23,8 +23,12 @@ export class AppComponent implements OnInit {
     spinnerSize: 'xl'
   };
 
-  constructor(private renderer: Renderer2, private google: GoogleSigninComponent,
-     private facade: FacadeService, private config: AppConfig) {
+  constructor(
+    private renderer: Renderer2,
+    private google: GoogleSigninComponent,
+    private facade: FacadeService,
+    private config: AppConfig,
+    private changeDetector: ChangeDetectorRef) {
     setTimeout(() => {
       this.showSpinner = false;
     }, 1500);
@@ -32,6 +36,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeBg();
+  }
+
+  ngAfterViewChecked() {
+    this.changeDetector.detectChanges();
   }
 
   changeBg() {
