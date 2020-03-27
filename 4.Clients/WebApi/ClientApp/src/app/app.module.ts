@@ -33,18 +33,18 @@ import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
 import { ConsultantsComponent } from './consultants/consultants.component';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { LoginComponent } from './login/login.component';
-import { 
-  MatFormFieldModule, 
-  MatInputModule, 
-  MatAutocompleteModule, 
-  MatButtonModule, 
-  MatProgressSpinnerModule, 
-  MatDatepickerModule, 
+import {
+  MatFormFieldModule,
+  MatInputModule,
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatProgressSpinnerModule,
+  MatDatepickerModule,
   MatNativeDateModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { Ng2LoadingSpinnerModule } from 'ng2-loading-spinner'
+import { Ng2LoadingSpinnerModule } from 'ng2-loading-spinner';
 import { CommonGuard } from './guards/common-guard.service';
 import { ManagementGuard } from './guards/management-guard.service';
 import { AdminGuard } from './guards/admin-guard.service';
@@ -145,7 +145,7 @@ registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
 
 @NgModule({

@@ -383,7 +383,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                   id: this.declineProcessForm.controls['declineReasonName'].value,
                   name: '',
                   description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? 
-                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : "";
+                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
                 }
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
