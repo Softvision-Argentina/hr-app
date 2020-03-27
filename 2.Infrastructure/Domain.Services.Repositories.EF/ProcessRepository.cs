@@ -42,7 +42,7 @@ namespace Domain.Services.Repositories.EF
             {
                 entity.RejectionReason = null;
                 entity.Status = Model.Enum.ProcessStatus.InProgress;
-                entity.EndDate = DateTime.Now;
+                entity.EndDate = DateTime.UtcNow;
                 entity.Candidate.Status = Model.Enum.CandidateStatus.InProgress;
                 //foreach (var stage in entity.Stages)
                 //{

@@ -68,7 +68,7 @@ namespace HrApp.Views
 
             var chart5 = new RadialGaugeChart() { Entries = entries, LabelTextSize = 35 };
             var chart6 = new RadarChart() { Entries = entries, LabelTextSize = 35 };
-            
+
             this.chart4.Chart = chart4;
             this.chart5.Chart = chart5;
             this.chart6.Chart = chart6;
@@ -128,7 +128,7 @@ namespace HrApp.Views
         public void ProcessSucceededChartBuild()
         {
             var res = _container.GetProcesses();
-            var sp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Hired || r.Status == Domain.Model.Enum.ProcessStatus.OfferAccepted); 
+            var sp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Hired || r.Status == Domain.Model.Enum.ProcessStatus.OfferAccepted);
             var fp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Rejected || r.Status == Domain.Model.Enum.ProcessStatus.Declined);
 
             var chartEntries = new[]
@@ -158,10 +158,10 @@ namespace HrApp.Views
 
             for (int i = length; i >= 0; i--)
             {
-                var proc = res.Count(r => r.HireDate.Year == DateTime.Now.AddMonths(-i).Year && r.HireDate.Month == DateTime.Now.AddMonths(-i).Month);
+                var proc = res.Count(r => r.HireDate.Year == DateTime.UtcNow.AddMonths(-i).Year && r.HireDate.Month == DateTime.UtcNow.AddMonths(-i).Month);
                 var entry = new Microcharts.Entry(proc)
                 {
-                    Label = DateTime.Now.AddMonths(-i).ToString("MMMM", CultureInfo.CreateSpecificCulture("en")),
+                    Label = DateTime.UtcNow.AddMonths(-i).ToString("MMMM", CultureInfo.CreateSpecificCulture("en")),
                     ValueLabel = proc.ToString(),
                     Color = SKColor.Parse("#ff6666")
                 };
