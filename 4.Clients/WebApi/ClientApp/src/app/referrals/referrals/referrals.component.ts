@@ -135,7 +135,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.app.showLoading();
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
@@ -157,10 +156,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName : [null, [Validators.required]]
     });
-
-    this.setRejectionReasonValidators();
-
-    this.app.hideLoading();
     this.getNotifications();
   }
 
@@ -175,24 +170,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     return this._appComponent.isUserRole(roles);
   }
 
-  setRejectionReasonValidators() {
-    // const rejectionReason = this.processForm.get('rejectionReason');
 
-    // this.processForm.get('status').valueChanges
-    //   .subscribe(status => {
-    //     console.log('setRejectionReasonValidators');
-    //     console.log('status: ');
-    //     console.log(status);
-    //     if (status === '0') {//Rejected 
-    //       rejectionReason.setValidators([Validators.required]);
-    //     }
-    //     else {
-    //       rejectionReason.setValidators(null);
-    //     }
-
-    //     rejectionReason.updateValueAndValidity();
-    //   });
-  }
 
   getCandidates() {
     this.facade.candidateService.get()

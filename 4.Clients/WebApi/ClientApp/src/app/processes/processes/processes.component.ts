@@ -19,12 +19,10 @@ import { SeniorityEnum } from '../../../entities/enums/seniority.enum';
 import { Globals } from '../../app-globals/globals';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
-import { HrStage } from 'src/entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.enum';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
@@ -51,7 +49,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
-
   @ViewChild('processCarousel') processCarousel;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
@@ -69,7 +66,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   currentUser: User;
-  
   sortName = null;
   sortValue = null;
 
@@ -130,7 +126,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.app.showLoading();
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
@@ -149,12 +144,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName : [null, [Validators.required]]
-    });    
-    this.app.hideLoading();
+    });
   }
 
-  ngAfterViewChecked(){
-    if(this.slickModal && this.openFromEdit){
+  ngAfterViewChecked() {
+    if (this.slickModal && this.openFromEdit) {
       this.slickModal.slickGoTo(this.stepIndex);
       this.openFromEdit = false;
     }
@@ -326,9 +320,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-    
               const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-    
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
@@ -339,12 +331,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
-          }          
+          }
         }
-      ]      
+      ]
     });
   }
 
@@ -355,7 +347,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
+      // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
       nzZIndex: 5,
       nzFooter: [
         {
@@ -384,7 +376,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                   name: '',
                   description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? 
                       this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-                }
+              };
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -394,10 +386,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
-          }          
+          }
         }
       ]
     });
@@ -509,11 +501,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
-    if (this.communitySearch == 0) {
+    if (this.communitySearch === 0) {
     this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
-    }
-    else {
+    } else {
       this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
       this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id == searchedCommunity);
@@ -535,8 +526,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.openFromEdit = true;
       // TODO: Is this working?
       this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
+    } else {
+      this.emptyProcess = undefined;
     }
-    else this.emptyProcess = undefined;
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -575,7 +567,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showDeleteConfirm(processID: number): void {
     let procesDelete: Process = this.filteredProcesses.find(p => p.id == processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);    
+    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -634,7 +626,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   closeModal() {
     this.facade.modalService.openModals[0].destroy();
     this.isEdit = false;
-    this.stepIndex = 0;    
+    this.stepIndex = 0;
   }
 
   getForms() {
@@ -671,7 +663,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       let newProcess: Process;
 
       newCandidate = this.candidateAdd.getFormData();
-      newCandidate.candidateSkills=this.technicalStage.getFormDataSkills();
+      newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       newProcess.consultantOwnerId = newCandidate.recruiter.id;
       newProcess.candidate = newCandidate;
@@ -688,8 +680,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
           });
-      }
-      else {
+      } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
@@ -708,7 +699,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(res => {
+                .subscribe( () => {
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();
@@ -745,7 +736,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,      
+      wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: null,
@@ -847,7 +838,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonId: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,      
+      wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       createdDate: new Date(),
@@ -894,18 +885,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         feedback: '',
         consultantOwnerId: candidate.recruiter.id,
         consultantDelegateId: null,
-        processId: 0,        
-        seniority: SeniorityEnum.NA,        
+        processId: 0,
+        seniority: SeniorityEnum.NA,
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date()        
+        preocupationalDoneDate: new Date()
       },
-    };    
+    };
   }
 
-  isDeclined(process: Process) : Boolean {
+  isDeclined(process: Process): Boolean {
     if (process.hrStage.status === StageStatusEnum.Declined ||
         process.technicalStage.status === StageStatusEnum.Declined ||
         process.clientStage.status === StageStatusEnum.Declined ||
