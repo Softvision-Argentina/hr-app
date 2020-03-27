@@ -23,9 +23,9 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Phone</th>
-                    <th [style.text-align]="center">E-mail</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Phone</th>
+                    <th [style.text-align]="'center'">E-mail</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,7 +33,7 @@
                     <td>{{ employee.name }} {{employee.lastName}}</td>
                     <td>{{ employee.phoneNumber }}</td>
                     <td>{{ employee.emailAddress }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <i (click)="showDetailsModal(employee.id, detailModal)" style="cursor: pointer;" nz-icon
                             type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

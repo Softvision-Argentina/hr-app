@@ -33,7 +33,15 @@ import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
 import { ConsultantsComponent } from './consultants/consultants.component';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { LoginComponent } from './login/login.component';
-import { MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatButtonModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { 
+  MatFormFieldModule, 
+  MatInputModule, 
+  MatAutocompleteModule, 
+  MatButtonModule, 
+  MatProgressSpinnerModule, 
+  MatDatepickerModule, 
+  MatNativeDateModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng2LoadingSpinnerModule } from 'ng2-loading-spinner'
@@ -115,7 +123,7 @@ import { Globals } from './app-globals/globals';
 import { NumbersOnlyDirective } from './directives/numbersOnlyDirective';
 import { LocationsComponent } from './locations/locations.component';
 import { ProfilesComponent } from './profiles/profiles.component';
-import { SlickModule } from "ngx-slick";
+import { SlickModule } from 'ngx-slick';
 import { PostulantsComponent } from './postulants/postulants.component';
 import { PostulantsService } from './services/postulants.service';
 import { ReportTimetofill2Component } from './dashboard/report-timetofill2/report-timetofill2.component';

@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     if (this.google.isUserAuthenticated() || this.csSoft.isUserAuthenticated()) {
-      console.log('User authenticated...');
       this.router.navigateByUrl(this.returnUrl);
     }
     else {

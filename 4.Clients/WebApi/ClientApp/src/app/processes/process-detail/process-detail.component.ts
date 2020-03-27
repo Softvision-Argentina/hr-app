@@ -95,11 +95,6 @@ export class ProcessDetailComponent implements OnInit {
     this.facade.processService.getByID(id)
       .subscribe(res => {
         this.process = res;
-        //this.filteredStages = this.process.stages;
-        //this.listOfDisplayData = this.process.stages;
-        //console.log('Proceso:' + this.process);
-        //this.checkStatusOfProcess();
-        console.log(res);
       }, err => {
         console.log(err);
       })
@@ -159,10 +154,6 @@ export class ProcessDetailComponent implements OnInit {
               let newStage: Stage = {
                 id: 0,
                 date: new Date,
-                // title: chk['label'],
-                // startDate: null,
-                // endDate: null,
-                // description: that.getStageDescription(chk['value']),
                 feedback: this.stageForm.controls['feedback'].value.toString(),
                 status: this.stageForm.controls['status'].value.toString(),
                 consultantOwnerId: this.stageForm.controls['consultantOwnerId'].value.toString(),
@@ -188,76 +179,9 @@ export class ProcessDetailComponent implements OnInit {
     //Edit Skill Modal
     this.isEdit = true;
     this.stageForm.reset();
-
-    //let editedStage: Stage = this.process.stages.filter(p => p.id == id)[0];
-    // let statusIndex = this.states.indexOf(editedStage.status.toLowerCase());
-    // this.stageForm.controls['title'].setValue(editedStage.title);
-    // this.stageForm.controls['startDate'].setValue(editedStage.startDate);
-    // this.stageForm.controls['endDate'].setValue(editedStage.endDate);
-    // this.stageForm.controls['description'].setValue(editedStage.description);
-    // this.stageForm.controls['feedback'].setValue(editedStage.feedback);
-    // this.stageForm.controls['status'].setValue(editedStage.status);
-    // this.stageForm.controls['consultantOwnerId'].setValue(editedStage.consultantOwnerId);
-    // this.stageForm.controls['consultantDelegateId'].setValue(editedStage.consultantDelegateId);
-
-    // const modal = this.facade.modalService.create({
-    //   nzTitle: 'Edit Stage',
-    //   nzContent: modalContent,
-    //   nzClosable: true,
-    //   nzWrapClassName: 'vertical-center-modal',
-    //   nzWidth: '90%',
-    //   nzFooter: [
-    //     {
-    //       label: 'Cancel',
-    //       shape: 'default',
-    //       onClick: () => modal.destroy()
-    //     },
-    //     {
-    //       label: 'Save',
-    //       type: 'primary',
-    //       loading: false,
-    //       onClick: () => {
-    //         modal.nzFooter[1].loading = true;
-    //         let isCompleted: boolean = true;
-    //         for (const i in this.stageForm.controls) {
-    //           this.stageForm.controls[i].markAsDirty();
-    //           this.stageForm.controls[i].updateValueAndValidity();
-    //           if ((!this.stageForm.controls[i].valid) && i != 'startDate' && i != 'endDate') isCompleted = false;
-    //         }
-
-    //         if (isCompleted) {
-    //           editedStage = {
-    //             id: editedStage.id,
-    //             date: new Date,
-    //             // title: chk['label'],
-    //             // startDate: null,
-    //             // endDate: null,
-    //             // description: that.getStageDescription(chk['value']),
-    //             feedback: this.stageForm.controls['feedback'].value.toString(),
-    //             status: this.stageForm.controls['status'].value.toString(),
-    //             processId: this.processID,
-    //             consultantOwnerId: this.stageForm.controls['consultantOwnerId'].value.toString(),
-    //             consultantDelegateId: this.stageForm.controls['consultantDelegateId'].value.toString()
-    //           }
-    //           this.facade.stageService.update(id, editedStage)
-    //             .subscribe(res => {
-    //               this.getProcessByID(this.processID);
-    //               this.facade.toastrService.success('Stage successfully edited !');
-    //               modal.destroy();
-    //             }, err => {
-    //               modal.nzFooter[1].loading = false;
-    //               this.facade.toastrService.error(err.message);
-    //             })
-    //         }
-    //         else modal.nzFooter[1].loading = false;
-    //       }
-    //     }],
-    // });
   }
 
   showDeleteConfirm(stageID: number): void {
-    //let stageDelete: Stage = this.process.stages.find(p => p.id == stageID);
-    // let stageText = stageDelete.title;
     let stageText = '';
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the stage called ' + stageText + ' ?',
@@ -275,19 +199,6 @@ export class ProcessDetailComponent implements OnInit {
     });
   }
 
-  // showDetailsModal(stage: Stage): void {
-  //   this.emptyStage = this.process.stages.find(s => s.id == stage.id);
-
-  //   let ownerConsultant = this.consultants.find(c => c.id === stage.consultantOwnerId);
-  //   let delegateConsultant = this.consultants.find(c => c.id === stage.consultantDelegateId);
-
-  //   this.consultantOwner = ownerConsultant;
-  //   this.consultantDelegate = delegateConsultant;
-
-
-  //   this.isDetailsVisible = true;
-  // }
-
   handleCancel(): void {
     this.isDetailsVisible = false;
     this.isAddVisible = false;
@@ -295,10 +206,6 @@ export class ProcessDetailComponent implements OnInit {
       id: 0,
       processId: 0,
       date: new Date,
-      // title: chk['label'],
-      // startDate: null,
-      // endDate: null,
-      // description: that.getStageDescription(chk['value']),
       feedback: '',
       status: 0,
       consultantOwnerId: 0,
@@ -329,12 +236,12 @@ export class ProcessDetailComponent implements OnInit {
   }
 
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.candidates.filter(candidate => candidate.id == candidateID)[0];
-    this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.emptyCandidate = this.candidates.filter(candidate => candidate.id === candidateID)[0];
+    this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id == consultantID)[0];
-    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + " " + this.emptyConsultant.lastName);
+    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
+    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
   }
 }

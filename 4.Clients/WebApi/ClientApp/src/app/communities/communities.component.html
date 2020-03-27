@@ -8,13 +8,13 @@
 <br />
 <div nz-row>
     <div nz-col nzSpan="23">
-        <nz-table #communityTable [nzData]="_detailedCommunity" [nzPageSize]="10">
+        <nz-table #communityTable [nzData]="detailedCommunity" [nzPageSize]="10">
             <thead>
                 <tr>
-                    <th [style.text-align]="center">Name</th>
-                    <th [style.text-align]="center">Description</th>
-                    <th [style.text-align]="center">Profile</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Name</th>
+                    <th [style.text-align]="'center'">Description</th>
+                    <th [style.text-align]="'center'">Profile</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,7 +22,7 @@
                     <td>{{ community.name }}</td>
                     <td>{{ community.description }}</td>
                     <td>{{ getCProfileNameByID(community.profileId) }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(communityModal, community.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
@@ -82,7 +82,7 @@
                         <nz-select formControlName="profileId">
                             <nz-option *ngFor="let candidate of candidateprofiles" [nzLabel]="candidate.name" [nzValue]="candidate.id">
                             </nz-option>
-                        </nz-select>                        
+                        </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </div>

@@ -1,5 +1,5 @@
 export class Consultant {
-    constructor(public id: number, public name: string, public lastName: string){}
+    constructor(public id: number, public name: string, public lastName: string) {}
 
     emailAddress: string;
     phoneNumber: string;

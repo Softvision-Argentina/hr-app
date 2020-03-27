@@ -36,27 +36,9 @@ export class StageEditComponent implements OnInit {
 
     this.consultantForm = this.formBuilder.group({
       consultantName: null
-    })
+    });
 
     this.getStageByID(this.route.snapshot.params['id']);
-
-    // this.consultantForm
-    // .get('consultantName')
-    // .valueChanges
-    // .pipe(
-    //   debounceTime(300),
-    //   tap(() => this.isLoading = true),
-    //   switchMap(value => this.consultantService.search(value)
-    //   .pipe(
-
-    //     finalize(() => this.isLoading = false),
-    //     )
-    //   )
-    // )
-    // .subscribe(consultants => this.consultants = consultants.results);
-
-
-    // this.getAllConsultants();
   }
 
   displayFn(consultant: Consultant) {
@@ -66,27 +48,16 @@ export class StageEditComponent implements OnInit {
   getStageByID(id) {
     this.facade.stageService.getByID(id)
       .subscribe(data => {
-        console.log(data)
         this.stage = data;
-        // this.consultantOwner = data.consultantOwner;
-        // this.consultantDelegate = data.consultantDelegate;
-
         this.consultantOwner = this.consultants.find(c => c.id === data.consultantOwnerId);
         this.consultantDelegate = this.consultants.find(c => c.id === data.consultantDelegateId);
 
         this.stageForm.setValue({
           type: '',
           date: new Date,
-          // title: chk['label'],
-          // startDate: null,
-          // endDate: null,
-          // description: that.getStageDescription(chk['value']),
           status: data.status,
           stageItems: []
         });
-
-        //this.setItems();
-
       });
   }
 
@@ -101,16 +72,16 @@ export class StageEditComponent implements OnInit {
   }
 
   addNewItem() {
-    let control = <FormArray>this.stageForm.controls.stageItems;
+    const control = <FormArray>this.stageForm.controls.stageItems;
     control.push(
       this.formBuilder.group({
         itemId: [this.selected], itemDescription: [''], associatedContent: ['']
       })
-    )
+    );
   }
 
   deleteItem(index) {
-    let control = <FormArray>this.stageForm.controls.stageItems;
+    const control = <FormArray>this.stageForm.controls.stageItems;
     control.removeAt(index);
   }
 }

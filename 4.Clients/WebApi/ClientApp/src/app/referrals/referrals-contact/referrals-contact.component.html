@@ -86,7 +86,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="contactDay" [hidden]="!visible">Contact Day</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <nz-date-picker formControlName="contactDay" [nzSize]="size" nzPlaceHolder="Select a date">
+                    <nz-date-picker formControlName="contactDay" [nzSize]="'size'" nzPlaceHolder="Select a date">
                     </nz-date-picker>
                     <!-- <nz-form-explain *ngIf="candidateForm.get('contactDay').dirty && candidateForm.get('contactDay').errors && !exists(candidateForm.get('contactDay').errors)">Please input
                       the date</nz-form-explain> -->
@@ -185,10 +185,10 @@
     <nz-table #CandidateTable [nzData]="filteredCandidate" [nzPageSize]="10">
         <thead>
             <tr>
-                <th [style.text-align]="center">Name</th>
-                <th [style.text-align]="center">Last Name</th>
-                <th [style.text-align]="center">E-Mail</th>
-                <th [style.text-align]="center">Action</th>
+                <th [style.text-align]="'center'">Name</th>
+                <th [style.text-align]="'center'">Last Name</th>
+                <th [style.text-align]="'center'">E-Mail</th>
+                <th [style.text-align]="'center'">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -196,7 +196,7 @@
                 <td>{{ Candidate.name }}</td>
                 <td>{{ Candidate.lastName }}</td>
                 <td>{{ Candidate.emailAddress | truncate:75 }}</td>
-                <td [style.text-align]="center">
+                <td [style.text-align]="'center'">
                     <nz-divider nzType="vertical"></nz-divider>
                     <i (click)="showDetailsModal(Candidate.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                     <nz-divider nzType="vertical"></nz-divider>

@@ -30,7 +30,6 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-import { Offer } from 'src/entities/offer';
 
 @Component({
   selector: 'app-processes',

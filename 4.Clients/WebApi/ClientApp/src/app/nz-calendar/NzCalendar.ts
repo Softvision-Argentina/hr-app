@@ -61,24 +61,23 @@ export class NzCalendarComponent {
   selectedDate : Date;
   selectedDateString : string;
   currentDate : Date = new Date();
-  
+
   ngOnInit() {
     this.selectedDateString = this.currentDate.toISOString();
     this.selectedDateString = this.selectedDateString.substr(0, 11);
   }
 
   askForDate(dayOff : DaysOff) : boolean {
-    // let TotalDaysOff = this._listOfDaysOff.length;
-    // for (var i = 0; i <= TotalDaysOff; i++) {      
-      let rangeDays =  differenceInCalendarDays(dayOff.endDate, dayOff.date);
-      let indexDate = new Date(dayOff.date);
-       for (let j :number = 0; j <= rangeDays; j++) {      
-          indexDate.setDate(indexDate.getDate() + j); 
-          let indexDateString : String = indexDate.toISOString().substr(0, 11); console.log(indexDateString + "la del rango"); console.log(this.selectedDateString);
-          if(indexDateString == this.selectedDateString) return true;
-       }
-       return false;
-    // }
+    let rangeDays =  differenceInCalendarDays(dayOff.endDate, dayOff.date);
+    let indexDate = new Date(dayOff.date);
+      for (let j :number = 0; j <= rangeDays; j++) {
+        indexDate.setDate(indexDate.getDate() + j);
+        let indexDateString : String = indexDate.toISOString().substr(0, 11);
+        if (indexDateString === this.selectedDateString) {
+          return true;
+        }
+      }
+      return false;
   }
 
   onValueChange(value: Date): void {
