@@ -12,6 +12,7 @@ import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
 import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-days-off',
   templateUrl: './days-off.component.html',
