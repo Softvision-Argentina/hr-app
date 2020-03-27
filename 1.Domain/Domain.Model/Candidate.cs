@@ -17,7 +17,6 @@ namespace Domain.Model
         public string AdditionalInformation { get; set; }
         public EnglishLevel EnglishLevel { get; set; }
         public CandidateStatus Status { get; set; }
-        public Consultant Recruiter { get; set; }
         public Community Community { get; set; }
         public CandidateProfile Profile { get; set; }
         public bool IsReferred { get; set; }

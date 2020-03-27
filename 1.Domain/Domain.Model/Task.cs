@@ -15,8 +15,8 @@ namespace Domain.Model
         public DateTime CreationDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int ConsultantId { get; set; }
-        public Consultant Consultant { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public IList<TaskItem> TaskItems { get; set; }
     }
