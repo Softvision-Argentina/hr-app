@@ -326,15 +326,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-<<<<<<< HEAD
-
-              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-
-=======
     
               const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
     
->>>>>>> develop
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();

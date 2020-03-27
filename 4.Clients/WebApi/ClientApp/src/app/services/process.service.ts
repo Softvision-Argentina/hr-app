@@ -33,11 +33,7 @@ export class ProcessService extends BaseService<Process> {
 
   public getActiveProcessByCandidate(candidateId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${candidateId}`,
-<<<<<<< HEAD
-      { headers: this.headersWithAuth, observe: "body" })
-=======
       {headers: this.headersWithAuth, observe: 'body'})
->>>>>>> develop
       .pipe(
         tap(data => { }),
         catchError(this.handleErrors)
