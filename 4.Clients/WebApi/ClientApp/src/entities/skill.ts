@@ -1,8 +1,7 @@
-import { CandidateSkill } from "./candidateSkill";
-import { SkillType } from "./skillType";
+import { CandidateSkill } from './candidateSkill';
 
 export class Skill {
-    id:number;
+    id: number;
     name: string;
     description: string;
     type: number;

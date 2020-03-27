@@ -23,13 +23,13 @@ export class StageDetailComponent implements OnInit {
 
   getStageByID(id) {
     this.api.stageService.getByID(id)
-            .subscribe(res => {
-              this.stage = res;
-              this.processId = this.stage.processId;
-              console.log(res);
-              
-            }, err => {
-              console.log(err);
-            })
+        .subscribe(res => {
+          this.stage = res;
+          this.processId = this.stage.processId;
+        },
+        // TODO: change this log for a message or delete it
+        err => {
+          console.log(err);
+        });
   }
 }

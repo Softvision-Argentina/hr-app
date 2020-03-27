@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ProcessStatusEnum } from "../../entities/enums/process-status.enum";
-import { StageStatusEnum } from "../../entities/enums/stage-status.enum";
-import { SeniorityEnum } from "../../entities/enums/seniority.enum";
+import { ProcessStatusEnum } from '../../entities/enums/process-status.enum';
+import { StageStatusEnum } from '../../entities/enums/stage-status.enum';
+import { SeniorityEnum } from '../../entities/enums/seniority.enum';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
 import { DaysOffTypeEnum } from '../../entities/enums/daysoff-type.enum';
@@ -13,11 +13,11 @@ import { OfferStatusEnum } from 'src/entities/enums/offer-status.enum';
 @Injectable()
 export class Globals {
     seniorityList: any[] = [
-        { id: SeniorityEnum.NA, name: 'NA'}, { id: SeniorityEnum.Junior1, name: 'Junior 1'}, 
+        { id: SeniorityEnum.NA, name: 'NA'}, { id: SeniorityEnum.Junior1, name: 'Junior 1'},
         { id: SeniorityEnum.Junior2, name: 'Junior 2'}, { id: SeniorityEnum.Junior3, name: 'Junior 3'},
-        { id: SeniorityEnum.SemiSenior1, name: 'Semi-Senior 1'}, { id: SeniorityEnum.SemiSenior2, name: 'Semi-Senior 2'}, 
+        { id: SeniorityEnum.SemiSenior1, name: 'Semi-Senior 1'}, { id: SeniorityEnum.SemiSenior2, name: 'Semi-Senior 2'},
         { id: SeniorityEnum.SemiSenior3, name: 'Semi-Senior 3'},
-        { id: SeniorityEnum.Senior1, name: 'Senior 1'}, { id: SeniorityEnum.Senior2, name: 'Senior 2'}, 
+        { id: SeniorityEnum.Senior1, name: 'Senior 1'}, { id: SeniorityEnum.Senior2, name: 'Senior 2'},
         { id: SeniorityEnum.Senior3, name: 'Senior 3'}
       ];
 

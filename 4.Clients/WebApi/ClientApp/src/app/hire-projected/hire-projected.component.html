@@ -10,8 +10,8 @@
         <nz-table #projectionTable [nzData]="listOfDisplayData" [nzPageSize]="12" nzShowSizeChanger>
             <thead>
                 <tr>
-                    <th [style.text-align]="center">Value</th>
-                    <th [style.text-align]="center">Month</th>
+                    <th [style.text-align]="'center'">Value</th>
+                    <th [style.text-align]="'center'">Month</th>
                     <th nzCustomFilter>Year
                         <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 5%;">
                             <button nz-button nz-dropdown><i nz-icon nzType="caret-down" nzTheme="outline"></i></button>
@@ -23,7 +23,7 @@
                             </ul>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
                     <td>{{ projection.value }}</td>
                     <td>{{ getMonth(projection) }}</td>
                     <td>{{ projection.year }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <i (click)="showEditModal(projectionModal, projection.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showDeleteConfirm(projection.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
