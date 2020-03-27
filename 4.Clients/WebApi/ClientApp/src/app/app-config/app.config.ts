@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/observable';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 
@@ -43,7 +43,7 @@ export class AppConfig {
               }))
             .subscribe( (envResponse) => {
                 this.env = envResponse;
-                let request:any = null;
+                let request: any = null;
 
                 switch (envResponse.env) {
                     case 'production': {

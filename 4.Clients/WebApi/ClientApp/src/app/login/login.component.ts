@@ -12,9 +12,14 @@ import { CSoftComponent } from '../login/csoft-signin.component';
 })
 export class LoginComponent implements OnInit {
 
-  returnUrl: string = '';
+  returnUrl = '';
 
-  constructor(private google: GoogleSigninComponent, private csSoft: CSoftComponent, private route: ActivatedRoute, private router: Router, private app: AppComponent) {
+  constructor(
+    private google: GoogleSigninComponent,
+    private csSoft: CSoftComponent,
+    private route: ActivatedRoute,
+    private router: Router, private app: AppComponent
+  ) {
 
   }
 

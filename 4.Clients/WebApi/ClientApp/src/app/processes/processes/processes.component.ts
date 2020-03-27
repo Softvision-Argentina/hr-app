@@ -263,10 +263,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showApproveProcessConfirm(processID: number): void {
-    let procesToApprove: Process = this.filteredProcesses.find(p => p.id == processID);  
-    let processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
+    const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
+    const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
+    const title = 'Are you sure you want to approve the process for ' +
+      processText + '? This will approve all stages associated with the process';
+
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all stages associated with the process',
+      nzTitle: title,
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
@@ -312,15 +315,19 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           type: 'danger',
           onClick: () => {
             this.app.showLoading();
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.rejectProcessForm.controls) {
-              this.rejectProcessForm.controls[i].markAsDirty();
-              this.rejectProcessForm.controls[i].updateValueAndValidity();
-              if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+              if (this.rejectProcessForm.controls.hasOwnProperty(i)) {
+                this.rejectProcessForm.controls[i].markAsDirty();
+                this.rejectProcessForm.controls[i].updateValueAndValidity();
+                if (!this.rejectProcessForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
     
-              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+              const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
     
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
@@ -361,19 +368,22 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           type: 'primary',
           onClick: () => {
             this.app.showLoading();
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.declineProcessForm.controls) {
-              this.declineProcessForm.controls[i].markAsDirty();
-              this.declineProcessForm.controls[i].updateValueAndValidity();
-              if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
-                isCompleted = false;
+              if (this.declineProcessForm.controls.hasOwnProperty(i)) {
+                this.declineProcessForm.controls[i].markAsDirty();
+                this.declineProcessForm.controls[i].updateValueAndValidity();
+                if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
+                  isCompleted = false;
+                }
               }
             }
             if (isCompleted) {
-              let declineReason : DeclineReason = { 
+              let declineReason : DeclineReason = {
                   id: this.declineProcessForm.controls['declineReasonName'].value,
-                  name: "",
-                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""                  
+                  name: '',
+                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? 
+                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : "";
                 }
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
@@ -523,6 +533,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
       this.openFromEdit = true;
+      // TODO: Is this working?
       this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
     }
     else this.emptyProcess = undefined;

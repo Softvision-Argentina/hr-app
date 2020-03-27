@@ -111,12 +111,18 @@ export class ProcessDetailComponent implements OnInit {
 
   showAddModal(modalContent: TemplateRef<{}>): void {
 
-    if (this.process && this.process.status && (this.process.status === ProcessStatusEnum.Hired || this.process.status === ProcessStatusEnum.Declined || this.process.status === ProcessStatusEnum.Rejected)) {
-      this.facade.toastrService.error('You cannot add new stages to a finished process. You can re open the process by changing its status', 'Process finished');
-      return;
+    if (this.process && this.process.status) {
+      if (this.process.status === ProcessStatusEnum.Hired ||
+        this.process.status === ProcessStatusEnum.Declined ||
+        this.process.status === ProcessStatusEnum.Rejected) {
+          const message = 'You cannot add new stages to a finished process. You can re open the process by changing its status';
+          const title = 'Process finished';
+          this.facade.toastrService.error(message, title);
+        return;
+      }
     }
 
-    //Add New Skill Modal
+    // Add New Skill Modal
     this.isEdit = false;
     this.stageForm.reset();
 
@@ -144,14 +150,18 @@ export class ProcessDetailComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.stageForm.controls) {
-              this.stageForm.controls[i].markAsDirty();
-              this.stageForm.controls[i].updateValueAndValidity();
-              if ((!this.stageForm.controls[i].valid) && i != 'startDate' && i != 'endDate') isCompleted = false;
+              if (this.stageForm.controls.hasOwnProperty(i)) {
+                this.stageForm.controls[i].markAsDirty();
+                this.stageForm.controls[i].updateValueAndValidity();
+                if (!this.stageForm.controls[i].valid && i !== 'startDate' && i !== 'endDate') {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
-              let newStage: Stage = {
+              const newStage: Stage = {
                 id: 0,
                 date: new Date,
                 feedback: this.stageForm.controls['feedback'].value.toString(),
@@ -159,7 +169,8 @@ export class ProcessDetailComponent implements OnInit {
                 consultantOwnerId: this.stageForm.controls['consultantOwnerId'].value.toString(),
                 consultantDelegateId: this.stageForm.controls['consultantDelegateId'].value.toString(),
                 processId: this.processID
-              }
+              };
+
               this.facade.stageService.add(newStage)
                 .subscribe(res => {
                   this.getProcessByID(this.processID);
@@ -224,7 +235,13 @@ export class ProcessDetailComponent implements OnInit {
         (item.title.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1)
     };
     const data = this.filteredStages.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => {
+      if (this.sortValue === 'ascend') {
+        return a[this.sortName] > b[this.sortName] ? 1 : -1;
+      } else {
+        return b[this.sortName] > a[this.sortName] ? 1 : -1;
+      }
+    });
     this.searchValue = '';
     this.nameDropdown.nzVisible = false;
   }

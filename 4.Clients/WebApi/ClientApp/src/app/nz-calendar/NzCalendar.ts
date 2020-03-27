@@ -58,26 +58,27 @@ export class NzCalendarComponent {
   @Input() _listOfCompanyCalendar;
   @Input() _listOfDaysOff;
 
-  selectedDate : Date;
-  selectedDateString : string;
-  currentDate : Date = new Date();
+  selectedDate: Date;
+  selectedDateString: string;
+  currentDate: Date = new Date();
 
   ngOnInit() {
     this.selectedDateString = this.currentDate.toISOString();
     this.selectedDateString = this.selectedDateString.substr(0, 11);
   }
 
-  askForDate(dayOff : DaysOff) : boolean {
-    let rangeDays =  differenceInCalendarDays(dayOff.endDate, dayOff.date);
-    let indexDate = new Date(dayOff.date);
-      for (let j :number = 0; j <= rangeDays; j++) {
-        indexDate.setDate(indexDate.getDate() + j);
-        let indexDateString : String = indexDate.toISOString().substr(0, 11);
-        if (indexDateString === this.selectedDateString) {
-          return true;
-        }
+  askForDate(dayOff: DaysOff): boolean {
+    const rangeDays =  differenceInCalendarDays(dayOff.endDate, dayOff.date);
+    const indexDate = new Date(dayOff.date);
+
+    for (let j = 0; j <= rangeDays; j++) {
+      indexDate.setDate(indexDate.getDate() + j);
+      const indexDateString: String = indexDate.toISOString().substr(0, 11);
+      if (indexDateString === this.selectedDateString) {
+        return true;
       }
-      return false;
+    }
+    return false;
   }
 
   onValueChange(value: Date): void {

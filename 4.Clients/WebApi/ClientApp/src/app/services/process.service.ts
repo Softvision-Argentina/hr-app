@@ -16,6 +16,7 @@ export class ProcessService extends BaseService<Process> {
 
   private selectedSenioritysSource: BehaviorSubject<any[]>;
   selectedSeniorities: Observable<any[]>;
+  candidatesUrl = '';
 
   constructor(router: Router, config: AppConfig, http: HttpClient, globals: Globals) {
     super(router, config, http);
@@ -28,8 +29,6 @@ export class ProcessService extends BaseService<Process> {
   changeSeniority(seniority: any) {
     this.selectedSenioritysSource.next(seniority);
   }
-
-  candidatesUrl = '';
 
   public getActiveProcessByCandidate(candidateId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${candidateId}`,
@@ -64,7 +63,7 @@ export class ProcessService extends BaseService<Process> {
       );
   }
 
-  public updateProcessCandidate(processID: number, process: Process, candidateID: number, candidate: Candidate): Observable<any>{
+  public updateProcessCandidate(processID: number, process: Process, candidateID: number, candidate: Candidate): Observable<any> {
     const processUrl = `${this.apiUrl}/${processID.toString()}`;
     const candidateUrl =  `${this.candidatesUrl}/${candidateID.toString()}`;
 
