@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+<nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
   <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
   <nz-divider></nz-divider>
   <div *ngIf="emptyProcess" nz-row>

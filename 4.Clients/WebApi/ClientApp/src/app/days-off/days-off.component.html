@@ -24,7 +24,7 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center" nzCustomFilter>Type
+                    <th [style.text-align]="'center'" nzCustomFilter>Type
                         <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdownType>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdownType.nzVisible" nz-dropdown></i>
                             <div class="search-box">
@@ -38,9 +38,9 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Date</th>
-                    <th [style.text-align]="center">End Date</th>
-                    <th [style.text-align]="center" nzCustomFilter>Status
+                    <th [style.text-align]="'center'">Date</th>
+                    <th [style.text-align]="'center'">End Date</th>
+                    <th [style.text-align]="'center'" nzCustomFilter>Status
                         <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdownType>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdownType.nzVisible" nz-dropdown></i>
                             <div class="search-box">
@@ -54,7 +54,7 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Actions</th>
+                    <th [style.text-align]="'center'">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,8 +63,9 @@
                     <td>{{ getType(daysOff) }}</td>
                     <td>{{ daysOff.date | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ daysOff.endDate | date: 'dd/MM/yyyy' }}</td>
+
                     <td>{{ getStatus(daysOff) }}</td>
-                    <td [style.text-align]="center" *ngIf="daysOff.id">
+                    <td [style.text-align]="'center'" *ngIf="daysOff.id">
                         <i (click)="showEditModal(DaysOffModal, daysOff.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showDeleteConfirm(daysOff.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>

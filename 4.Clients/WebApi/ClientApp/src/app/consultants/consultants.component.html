@@ -20,9 +20,9 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Phone</th>
-                    <th [style.text-align]="center">E-mail</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Phone</th>
+                    <th [style.text-align]="'center'">E-mail</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody> 
@@ -30,7 +30,7 @@
                     <td>{{ consultant.name }} {{ consultant.lastName }}</td>
                     <td>{{ consultant.phoneNumber }}</td>
                     <td>{{ consultant.emailAddress }}</td>
-                    <td *ngIf="consultant.id" [style.text-align]="center">
+                    <td *ngIf="consultant.id" [style.text-align]="'center'">
                         <i (click)="showDetailsModal(consultant.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(consultantModal, consultant.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>

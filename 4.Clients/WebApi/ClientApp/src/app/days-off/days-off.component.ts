@@ -118,6 +118,10 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
+  canAssign(): boolean {
+    // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
+    // else return false;
+    return true;
   }
   
   showAddModal(modalContent: TemplateRef<{}>): void {
@@ -168,15 +172,14 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                           .subscribe(res => {
                             this.app.hideLoading()
                             this.getDaysOff();
-                            this.facade.toastrService.success("Day off was successfuly created !");
+                            this.facade.toastrService.success('Day off was successfuly created !');
                             modal.destroy();
                           }, err => {
                             this.app.hideLoading();
                             // modal.nzFooter[1].loading = false;
                             if (err.message != undefined) this.facade.toastrService.error(err.message);
-                            else this.facade.toastrService.error("The service is not available now. Try again later.");
-                          }
-                        );
+                            else this.facade.toastrService.error('The service is not available now. Try again later.');
+                          });
                       }
                     }
                   });
@@ -214,7 +217,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                 this.employee = res.body;
                 this.app.hideLoading();
                 if (!this.employee || this.employee == null) {
-                  this.facade.toastrService.error("There is no employee with that DNI.");
+                  this.facade.toastrService.error('There is no employee with that DNI.');
                 }
               })
             if (this.employee) {
@@ -269,7 +272,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           this.facade.toastrService.success('Day off was deleted !');
         }, err => {
           if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          else this.facade.toastrService.error('The service is not available now. Try again later.');
         })
     });
   }
@@ -302,6 +305,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         if (err.message != undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error("The service is not available now. Try again later.");
       });
+
   }
 
   fillForm(daysOff: DaysOff) {

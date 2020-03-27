@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <form [formGroup]="stageForm" (ngSubmit)="onFormSubmit(stageForm)">
+  <form [formGroup]="stageForm">
     <div class="form-group">
       <label for="stageTittle">Tittle</label>
       <input type="text" formControlName="tittle" class="form-control" id="stageTittle" aria-describedby="stageTittle"
@@ -44,29 +44,30 @@
     </div>
 
     <hr>
-   
+
     <label for="stageItems">Items</label>
     <br>
     <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm"
       (click)="addNewItem()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item</button>
     <div formArrayName="stageItems">
-      <div style="margin-top:5px; margin-bottom:5px;"
+      <!-- TODO: controls does not exist in stageItems it should be deleted or should be add controls as a property? -->
+      <!-- <div style="margin-top:5px; margin-bottom:5px;"
         *ngFor="let stageRow of stageForm.get('stageItems').controls; let i=index">
         <fieldset>
           <div [formGroupName]="i">
             <div class="form-inline">
               <div class="form-group">
 
-                <input type="number" class="form-control" id="itemId" name="type" 
+                <input type="number" class="form-control" id="itemId" name="type"
                 formControlName="itemId" style="margin-right:5px;" required>
-  
 
-                <input type="text" class="form-control" id="itemDescription" placeholder="Description" name="type" 
+
+                <input type="text" class="form-control" id="itemDescription" placeholder="Description" name="type"
                 formControlName="itemDescription" style="margin-right:5px;" required>
 
-                <input type="text" class="form-control" id="associatedContent" placeholder="Content" 
+                <input type="text" class="form-control" id="associatedContent" placeholder="Content"
                 name="type" formControlName="associatedContent" style="margin-right:5px;" required>
-                
+
                 <button style="margin-left:35px;" type="button" class="btn btn-danger" (click)="deleteItem(i)">Remove
                  Item</button>
 
@@ -74,13 +75,13 @@
             </div>
           </div>
         </fieldset>
-      </div>
+      </div> -->
     </div>
 
     <hr>
     <button type="submit" [disabled]="!stageForm.valid" class="btn btn-primary">Cargar</button>
   </form>
-  <hr> 
+  <hr>
 
 </div>
 
@@ -88,11 +89,11 @@
 
 <form class="example-form" [formGroup]='consultantForm'>
     <mat-form-field class="example-full-width">
-        <input matInput type="text" [matAutocomplete]="auto"  class="form-control" id="consultantName" placeholder="Choose a consultant" 
+        <input matInput type="text" [matAutocomplete]="auto"  class="form-control" id="consultantName" placeholder="Choose a consultant"
         name="type" formControlName="consultantName" style="margin-right:5px;">
     </mat-form-field>
     <span>Your choice is: {{consultantForm.get('consultantName').value | json}}</span>
-  
+
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
         <ng-container *ngIf="!isLoading">

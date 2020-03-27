@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { BaseService } from "./base.service";
-import { Router } from "@angular/router";
-import { AppConfig } from "../app-config/app.config";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { catchError, tap } from 'rxjs/operators';
-import { User } from "src/entities/user";
+import { Injectable } from '@angular/core';
+import { BaseService } from './base.service';
+import { Router } from '@angular/router';
+import { AppConfig } from '../app-config/app.config';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { catchError } from 'rxjs/operators';
+import { User } from 'src/entities/user';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -26,8 +26,8 @@ export class UserService extends BaseService<User> {
   }
 
   getRoles() {
-    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser.role == "") {
+    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser.role === '') {
       this.getRoleByUserName(currentUser.email).subscribe(res => {
         currentUser.role = res['role'];
         localStorage.setItem('currentUser', JSON.stringify(currentUser));

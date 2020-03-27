@@ -1,4 +1,4 @@
-import { Employee } from "./employee";
+import { Employee } from './employee';
 import { DaysOffTypeEnum } from './enums/daysoff-type.enum';
 import { DaysOffStatusEnum } from './enums/daysoff-status.enum';
 
