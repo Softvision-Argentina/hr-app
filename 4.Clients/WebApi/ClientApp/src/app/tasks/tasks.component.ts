@@ -20,8 +20,8 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class TasksComponent implements OnInit, OnDestroy {
 
-  showCloseIcon = false;
-  searchTitle = '';
+  showCloseIcon: boolean = false;
+  searchTitle: string = '';
   consultants: Consultant[] = [];
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];

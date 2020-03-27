@@ -1,43 +1,46 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { dniValidator } from '../directives/dni.validator';
 import { AppComponent } from '../app.component';
-import { EmployeeService } from 'src/app/services/employee.service'
+import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-days-off',
   templateUrl: './days-off.component.html',
   styleUrls: ['./days-off.component.css']
 })
-export class DaysOffComponent implements OnInit {
+export class DaysOffComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
-  validateForm: FormGroup;
+  validateForm: FormGroup = null;
   listOfDaysOff: DaysOff[] = [];
-  employee;
-  searchValue = '';
-  searchValueType = '';
-  searchValueStatus = '';
-  listOfSearch = [];
-  listOfDisplayData = [...this.listOfDaysOff];
-  sortDni = null;
-  sortValue = null;
-  sortName = null;
-  reasons: any[];
+  employee:any = null;
+  searchValue:string = '';
+  searchValueType:string = '';
+  searchValueStatus:string = '';
+  listOfSearch: any[] = [];
+  listOfDisplayData: DaysOff[] = [...this.listOfDaysOff];
+  sortDni:any = null;
+  sortValue:string = null;
+  sortName:any = null;
+  reasons: any[] = null;
   showCalendarSelected: boolean = false;
-  isHr: boolean;
-  today = new Date();
-  currentUser: User;
-  statusList: any[];
+  isHr: boolean = null;
+  today: Date = new Date();
+  currentUser: User = null;
+  statusList: any[] = [];
+  searchSub: Subscription = null;
+  searchDni:string = '';
 
   constructor(private facade: FacadeService,
     private fb: FormBuilder,
@@ -58,6 +61,7 @@ export class DaysOffComponent implements OnInit {
         this.getDaysOff();
         this.resetForm();
       });
+    this.getSearchInfo();
   }
 
   getDaysOff() {
@@ -76,6 +80,11 @@ export class DaysOffComponent implements OnInit {
           this.listOfDisplayData = res.body;
         });
     }
+  }
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+      this.searchDni = data;
+    });
   }
 
   hideCalendar() {
@@ -101,7 +110,7 @@ export class DaysOffComponent implements OnInit {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  };
+  }
 
   disabledDateTime = (): object => {
     return {
@@ -109,24 +118,12 @@ export class DaysOffComponent implements OnInit {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  };
-
   canAssign(): boolean {
     // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
     // else return false;
     return true;
   }
-
-  filterTasks() {
-    // if(!this.showAllTasks){
-    //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
-    // }
-    // else{
-    //   this.toDoListDisplay = this.toDoList;
-    // }
-
-  }
-
+  
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
@@ -182,13 +179,11 @@ export class DaysOffComponent implements OnInit {
                             // modal.nzFooter[1].loading = false;
                             if (err.message != undefined) this.facade.toastrService.error(err.message);
                             else this.facade.toastrService.error('The service is not available now. Try again later.');
-                          })
+                          });
                       }
-                      // else modal.nzFooter[1].loading = false;
-                      // this.app.hideLoading();
                     }
-                  })
-              };
+                  });
+              }
             }
           }
         }],
@@ -199,9 +194,7 @@ export class DaysOffComponent implements OnInit {
     //Edit Consultant Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
-
     this.fillForm(editedDayOff);
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit day off',
       nzContent: modalContent,
@@ -238,9 +231,7 @@ export class DaysOffComponent implements OnInit {
               let newDate; let newEndDate;
               newDate = editedDayOff.date == this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
               newEndDate = editedDayOff.endDate == this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
-
               let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
-
               if (isCompleted) {
                 editedDayOff = {
                   id: 0,
@@ -254,18 +245,13 @@ export class DaysOffComponent implements OnInit {
                 this.facade.daysOffService.update(id, editedDayOff)
                   .subscribe(res => {
                     this.getDaysOff();
-                    // this.app.hideLoading();
                     this.facade.toastrService.success('Day off was successfully edited !');
                     modal.destroy();
                   }, err => {
-                    // this.app.hideLoading();
-                    // modal.nzFooter[1].loading = false;
                     if (err.message !== undefined) { this.facade.toastrService.error(err.message); }
                     else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                  })
+                  });
               }
-              // else modal.nzFooter[1].loading = false;
-              // this.app.hideLoading();
             }
           }
         }]
@@ -314,14 +300,12 @@ export class DaysOffComponent implements OnInit {
     this.facade.daysOffService.update(daysOff.id, daysOff)
       .subscribe(res => {
         this.getDaysOff();
-        // this.app.hideLoading();
         this.facade.toastrService.success('Petition was succesfully accepted !');
       }, err => {
-        // this.app.hideLoading();
-        // modal.nzFooter[1].loading = false;
         if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error('The service is not available now. Try again later.');
-      })
+        else this.facade.toastrService.error("The service is not available now. Try again later.");
+      });
+
   }
 
   fillForm(daysOff: DaysOff) {
@@ -383,15 +367,25 @@ export class DaysOffComponent implements OnInit {
     this.searchStatus();
   }
 
-  getStatus(status: number): string {
-    return this.statusList.filter(st => st.id === status)[0].name;
+  getStatus(daysOff: any): string {
+    const statusFilter = this.statusList.filter(st => st.id === daysOff.status);
+    if (statusFilter.length !== 0) {
+      return statusFilter[0].name;
+    }
   }
 
-  getType(type: number): string {
-    return this.reasons.filter(st => st.id === type)[0].name;
+  getType(daysOff: any): string {
+    const typeFilter = this.reasons.filter(st => st.id === daysOff.type);
+    if (typeFilter.length !== 0) {
+      return typeFilter[0].name;
+    }
   }
 
   showAcceptButton(status: DaysOffStatusEnum) {
     return this.isHr && status === DaysOffStatusEnum.InReview;
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }
