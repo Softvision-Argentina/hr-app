@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../app-config/app.config';
-import { BaseService } from './base.service';
-import { Router } from '@angular/router';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +19,15 @@ export class AuthService {
   public authenticate(userName: string, password: string): Observable<any> {
     let user = {UserName : userName , Password : password};
     return this.http.post(this.apiUrl + 'Auth/login', user)
-      .pipe(      
+      .pipe(
         catchError(this.handleError('authenticate', {}))
       );
   }
 
-  public externalLogin(token: string): Observable<any> { 
+  public externalLogin(token: string): Observable<any> {
     let body = {token : token};
     return this.http.post(this.apiUrl + 'Auth/loginExternal', body)
-      .pipe(        
+      .pipe(
         catchError(this.handleError('externalLogin', {}))
       );
   }

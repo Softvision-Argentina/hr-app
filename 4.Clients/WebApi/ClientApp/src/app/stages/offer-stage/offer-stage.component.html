@@ -37,7 +37,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Responsible</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="consultantOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of _consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="offerForm.get('consultantOwnerId').dirty && offerForm.get('consultantOwnerId').errors">Please input the recruiter</nz-form-explain>
@@ -49,10 +49,10 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="consultantDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of _consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    
+
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -70,9 +70,9 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="6" nzOffset="6">            
-            <button nz-button [disabled]="offerForm.get('status').value != 1" nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>            
-        </div>        
+        <div nz-col nzSpan="6" nzOffset="6">
+            <button nz-button [disabled]="offerForm.get('status').value != 1" nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
+        </div>
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
@@ -159,5 +159,5 @@
 </form>
 
 <ng-template #historyOfferModal>
-    <offer-history [_processId]=offerStage.processId (backdrop)="static" keyboard="false"></offer-history> 
+    <offer-history [_processId]=offerStage.processId (backdrop)="static" keyboard="false"></offer-history>
 </ng-template>

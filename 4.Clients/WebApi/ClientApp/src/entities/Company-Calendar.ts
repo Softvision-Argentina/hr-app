@@ -1,6 +1,6 @@
 
 export class CompanyCalendar {
-    id:number;    
+    id: number;
     type: string;
     comments: string;
     date: Date;

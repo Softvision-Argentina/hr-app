@@ -1,5 +1,5 @@
-import { Candidate } from "./candidate";
-import { Skill } from "./skill";
+import { Candidate } from './candidate';
+import { Skill } from './skill';
 
 export class CandidateSkill {
     candidateId: number;

@@ -20,15 +20,15 @@
                           </div>
                       </nz-dropdown>
                   </th>
-                  <th [style.text-align]="center">Description</th>
-                  <th [style.text-align]="center">Action</th>
+                  <th [style.text-align]="'center'">Description</th>
+                  <th [style.text-align]="'center'">Action</th>
               </tr>
           </thead>
           <tbody>
               <tr *ngFor="let declineReason of declineReasonTable.data">
                   <td>{{ declineReason.name }}</td>
                   <td>{{ declineReason.description }}</td>
-                  <td [style.text-align]="center">
+                  <td [style.text-align]="'center'">
                       <i (click)="showDetailsModal(declineReason.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                       <nz-divider nzType="vertical"></nz-divider>
                       <i (click)="showEditModal(declineReasonModal, declineReason.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
@@ -78,3 +78,4 @@
       </nz-form-item>
   </form>
 </ng-template>
+
