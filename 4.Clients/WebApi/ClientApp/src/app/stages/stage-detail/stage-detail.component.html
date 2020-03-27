@@ -12,7 +12,8 @@
 <hr>
 
 <h5>Items</h5>
-<div class="table-responsive" *ngIf="stage && stage.stageItems && stage.stageItems.length > 0">
+<!-- TODO: stageItems does not exist in stage it should be deleted or should be add stages as a property? -->
+<!-- <div class="table-responsive" *ngIf="stage && stage.stageItems && stage.stageItems.length > 0">
 <table class="table table-hover table-sm table-striped">
   <thead class="thead-dark">
     <tr>
@@ -30,6 +31,6 @@
 </div>
 <p *ngIf="!stage || !stage.stageItems || stage.stageItems.length == 0">
   There are no stage items yet
-</p>
+</p> -->
 
 <a [routerLink]="['/process-details/', processId]">Process</a>

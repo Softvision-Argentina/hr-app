@@ -1,4 +1,4 @@
-export class ErrorResponse{ 
+export class ErrorResponse {
     additionalData: any;
     errorCode: number;
     message: string;

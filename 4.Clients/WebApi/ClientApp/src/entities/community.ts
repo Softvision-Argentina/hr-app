@@ -1,4 +1,4 @@
-import { CandidateProfile } from "./Candidate-Profile";
+import { CandidateProfile } from './Candidate-Profile';
 
 export class Community {
   constructor(id?: number) {

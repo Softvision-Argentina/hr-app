@@ -1,11 +1,7 @@
-import { Component, OnInit, TemplateRef, Input, ContentChild } from "@angular/core";
-import { FacadeService } from "src/app/services/facade.service";
-import { Candidate } from "src/entities/candidate";
-import { CandidateSkill } from "src/entities/candidateSkill";
-import { Consultant } from "src/entities/consultant";
+import { Component, OnInit, TemplateRef, Input, ContentChild } from '@angular/core';
+import { FacadeService } from 'src/app/services/facade.service';
+import { Candidate } from 'src/entities/candidate';
 import { Globals } from '../../app-globals/globals';
-import { Community } from "src/entities/community";
-import { CandidateProfile } from "src/entities/Candidate-Profile";
 
 
 @Component({
@@ -13,10 +9,10 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
     templateUrl: './candidate-details.component.html',
     styleUrls: ['./candidate-details.component.css']
   })
-  
-  
+
+
   export class CandidateDetailsComponent implements OnInit {
-    
+
     @Input()
     private _detailedCandidate: Candidate;
     public get detailedCandidate(): Candidate {
@@ -46,7 +42,7 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
     getRecruiterName(){
         this.facade.consultantService.get()
         .subscribe(res => {
-          this.recruiterName = res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].name + " " +
+          this.recruiterName = res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].name + ' ' +
                                     res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].lastName;
         }, err => {
           console.log(err);
@@ -72,7 +68,7 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
       }
 
     showModal(modalContent: TemplateRef <{}>, fullName: string){
-        fullName = fullName + "'s details";
+        fullName = fullName + '\'s details';
         this.facade.modalService.create({
             nzTitle: fullName,
             nzContent: modalContent,
@@ -81,17 +77,6 @@ import { CandidateProfile } from "src/entities/Candidate-Profile";
             nzFooter: null
         })
     }
-
-    // getColor(candidateSkills: CandidateSkill[], skill: CandidateSkill): string {
-    //     let colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
-    //     let index: number = candidateSkills.indexOf(skill);
-    //     if (index > colors.length) index = parseInt((index / colors.length).toString().split(',')[0]);
-    //     return colors[index];
-    //   }
-
-    // getEnglishLevel(): string {
-    //   return this.englishLevelList.filter(x => x.id === this._detailedCandidate.englishLevel)[0].name;
-    // }
 
     getCandidateStatus(): string {
       return this.statusList.filter(x => x.id === this._detailedCandidate.status)[0].name;
