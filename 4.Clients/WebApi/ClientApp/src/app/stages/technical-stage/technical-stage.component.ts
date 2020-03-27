@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/consultant';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
 import { Globals } from '../../app-globals/globals';
@@ -21,11 +21,11 @@ import { ProcessService } from '../../services/process.service';
 export class TechnicalStageComponent implements OnInit {
 
   @Input()
-  private _consultants: Consultant[];
-  public get consultants(): Consultant[] {
+  private _consultants: User[];
+  public get consultants(): User[] {
     return this._consultants;
   }
-  public set consultants(value: Consultant[]) {
+  public set consultants(value: User[]) {
     this._consultants = value;
   }
 

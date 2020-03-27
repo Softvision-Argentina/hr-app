@@ -2,8 +2,8 @@
 using Domain.Services.Contracts.Stage.StageItem;
 using System;
 using System.Collections.Generic;
-using Domain.Services.Contracts.Consultant;
 using Domain.Model.Enum;
+using Domain.Services.Contracts.User;
 
 namespace Domain.Services.Contracts.Stage
 {
@@ -19,11 +19,11 @@ namespace Domain.Services.Contracts.Stage
 
         public string Feedback { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
-        public ReadedConsultantContract ConsultantOwner { get; set; }
+        public int? UserOwnerId { get; set; }
+        public ReadedUserContract UserOwner { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
-        public ReadedConsultantContract ConsultantDelegate { get; set; }
+        public int? UserDelegateId { get; set; }
+        public ReadedUserContract UserDelegate { get; set; }
         public string RejectionReason { get; set; }
 
         public string Interviewer { get; set; }
