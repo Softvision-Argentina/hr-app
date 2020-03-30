@@ -1,4 +1,4 @@
-export class EmployeeCasualty{ 
+export class EmployeeCasualty {
     id: number;
     month: number;
     year: number;

@@ -1,4 +1,4 @@
-import { ValidatorFn, FormControl } from "@angular/forms";
+import { ValidatorFn, FormControl } from '@angular/forms';
 
 export const dniValidator: ValidatorFn = (control: FormControl) =>{
     if (control.value!=null) {

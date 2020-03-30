@@ -1,7 +1,5 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
-import { Stage } from './stage';
-import { Offer } from './offer';
 
 export class OfferStage {
     id: number;
@@ -11,11 +9,11 @@ export class OfferStage {
     consultantOwnerId?: number;
     consultantDelegateId?: number;
     processId: number;
-    rejectionReason?: string;    
+    rejectionReason?: string;
     hireDate: Date;
-    seniority: SeniorityEnum;    
+    seniority: SeniorityEnum;
     backgroundCheckDone: boolean;
     backgroundCheckDoneDate: Date;
     preocupationalDone: boolean;
-    preocupationalDoneDate: Date;    
+    preocupationalDoneDate: Date;
 }

@@ -60,7 +60,7 @@ export class OfficeComponent implements OnInit {
     this.facade.OfficeService.get().subscribe(res => {
       this.offices = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     })
   }
   
@@ -69,7 +69,7 @@ export class OfficeComponent implements OnInit {
     .subscribe(res => {
       this.rooms = res;
       }, err => {
-      console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 

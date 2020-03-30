@@ -1,35 +1,34 @@
-import { AppConfig } from "../app-config/app.config";
-import { Injectable, Injector } from "@angular/core";
-import { SkillTypeService } from "./skillType.service.";
-import { NzModalService, NzMessageService } from "ng-zorro-antd";
-import { SkillService } from "./skill.service";
-import { CandidateService } from "./candidate.service";
-import { ConsultantService } from "./consultant.service";
-import { ProcessService } from "./process.service";
-import { ToastrService } from "ngx-toastr";
-import { StageService } from "./stage.service";
-import { TaskService } from "./task.service";
+import { AppConfig } from '../app-config/app.config';
+import { Injectable, Injector } from '@angular/core';
+import { SkillTypeService } from './skillType.service.';
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { SkillService } from './skill.service';
+import { CandidateService } from './candidate.service';
+import { ConsultantService } from './consultant.service';
+import { ProcessService } from './process.service';
+import { ToastrService } from 'ngx-toastr';
+import { StageService } from './stage.service';
+import { TaskService } from './task.service';
 import { HireProjectionService } from './hireProjection.service';
 import { EmployeeCasualtyService } from './employee-casualty.service';
-import { UserService } from "./user.service";
+import { UserService } from './user.service';
 import { CommunityService } from './community.service';
 import { CandidateProfileService } from './candidate-profile.service';
 import { AuthService } from './auth.service';
-import { EmployeeService } from "./employee.service";
-import { DaysOffService } from "./days-off.service";
+import { EmployeeService } from './employee.service';
+import { DaysOffService } from './days-off.service';
 import { ReservationService } from './reservation.service';
 import { RoomService } from './room.service';
 import { OfficeService } from './office.service';
-import { RoleService } from "./role.service";
-import { CompanyCalendarService } from "./company-calendar.service";
-import { PostulantsService } from "./postulants.service";
-import { DeclineReasonService } from "./decline-reason.service";
-import { DashboardService } from "./dashboard.service";
-import { OfferService } from "./offer.service";
-import { NotificationService } from "./notificationsService";
-import { SearchbarService } from './searchbar.service'
+import { RoleService } from './role.service';
+import { CompanyCalendarService } from './company-calendar.service';
+import { PostulantsService } from './postulants.service';
+import { DeclineReasonService } from './decline-reason.service';
+import { DashboardService } from './dashboard.service';
+import { OfferService } from './offer.service';
+import { NotificationService } from './notificationsService';
+import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
-
 @Injectable()
 export class FacadeService {
 
@@ -43,24 +42,24 @@ export class FacadeService {
 
   private _communityService: CommunityService;
   public get communityService(): CommunityService {
-    if (!this._communityService) { 
-      this._communityService = this.injector.get(CommunityService); 
+    if (!this._communityService) {
+      this._communityService = this.injector.get(CommunityService);
     }
     return this._communityService;
   }
 
   private _daysOffService: DaysOffService;
   public get daysOffService(): DaysOffService {
-    if(!this._daysOffService){ 
-      this._daysOffService = this.injector.get(DaysOffService); 
+    if(!this._daysOffService){
+      this._daysOffService = this.injector.get(DaysOffService);
     }
     return this._daysOffService;
   }
 
   private _companyCalendarService: CompanyCalendarService;
   public get companyCalendarService(): CompanyCalendarService {
-    if(!this._companyCalendarService){ 
-      this._companyCalendarService = this.injector.get(CompanyCalendarService); 
+    if(!this._companyCalendarService){
+      this._companyCalendarService = this.injector.get(CompanyCalendarService);
     }
     return this._companyCalendarService;
   }
@@ -69,7 +68,7 @@ export class FacadeService {
   private _candidateProfileService: CandidateProfileService;
   public get candidateProfileService(): CandidateProfileService {
     if (!this._candidateProfileService) {
-      this._candidateProfileService = this.injector.get(CandidateProfileService); 
+      this._candidateProfileService = this.injector.get(CandidateProfileService);
     }
     return this._candidateProfileService;
   }

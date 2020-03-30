@@ -1,4 +1,4 @@
-import { UserDashboard } from "./userDashboard";
+import { UserDashboard } from './userDashboard';
 
 export class User {
     id: number;
@@ -7,5 +7,5 @@ export class User {
     email: string;
     role: string;
     token: string;
-    userDashboards: UserDashboard[]
+    userDashboards: UserDashboard[];
 }

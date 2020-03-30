@@ -1,8 +1,6 @@
-import { Component, OnInit, TemplateRef, Input, ContentChild } from "@angular/core";
-import { FacadeService } from "src/app/services/facade.service";
-import { Employee } from "src/entities/employee";
-import { Consultant } from "src/entities/consultant";
-import { AppComponent } from "src/app/app.component";
+import { Component, OnInit, TemplateRef, Input, ContentChild } from '@angular/core';
+import { FacadeService } from 'src/app/services/facade.service';
+import { Employee } from 'src/entities/employee';
 
 
 @Component({
@@ -34,7 +32,7 @@ export class EmployeeDetailsComponent implements OnInit {
   getRecruiterName() {
     this.facade.consultantService.get()
       .subscribe(res => {
-        this.recruiterName = res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].name + " "
+        this.recruiterName = res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].name + ' '
           + res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].lastName;
       }, err => {
         console.log(err);
@@ -42,7 +40,7 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   showModal(modalContent: TemplateRef<{}>, fullName: string) {
-    let title = fullName + "'s details";
+    let title = fullName + '\'s details';
     this.facade.modalService.create({
       nzTitle: title,
       nzContent: modalContent,

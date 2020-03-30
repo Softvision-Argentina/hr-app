@@ -167,7 +167,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.candidates = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       })
   }
 
@@ -176,7 +176,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 

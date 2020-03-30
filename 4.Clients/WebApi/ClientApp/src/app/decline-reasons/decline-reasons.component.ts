@@ -49,7 +49,7 @@ export class DeclineReasonComponent implements OnInit {
         this.filteredDeclineReasons = res;
         this.listOfDisplayData = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 

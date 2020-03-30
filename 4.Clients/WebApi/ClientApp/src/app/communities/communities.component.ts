@@ -72,7 +72,7 @@ export class CommunitiesComponent implements OnInit {
     .subscribe(res => {
       this.candidateprofiles = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 

@@ -62,7 +62,7 @@ export class CompanyCalendarComponent implements OnInit {
           return d1>d2 ? -1 : d1<d2 ? 1 : 0;
         }  );
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 

@@ -8,20 +8,20 @@
 <br />
 <div nz-row>
     <div nz-col nzSpan="23">
-        <nz-table #OfficeTable [nzData]="_detailedOffice" [nzPageSize]="10">
+        <nz-table #OfficeTable [nzData]="detailedOffice" [nzPageSize]="10">
 
             <thead>
                 <tr>
-                    <th [style.text-align]="center">Name</th>
-                    <th [style.text-align]="center">Description</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Name</th>
+                    <th [style.text-align]="'center'">Description</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let Office of OfficeTable.data">
                     <td>{{ Office.name }}</td>
                     <td>{{ Office.description | truncate:75 }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showDetailsModal(Office.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
@@ -95,3 +95,5 @@
         </nz-list-item>
     </nz-list>
 </nz-modal>
+
+
