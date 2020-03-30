@@ -21,7 +21,7 @@ namespace ApiServer.FunctionalTests.Core
         protected DataBaseContext Context { get; }
         public IConfiguration Configuration { get; }
         protected string ControllerName { get; set; }
-        protected DataBaseContext Context {get;}
+
 
         public BaseApiTest(ApiFixture apiFixture)
         {

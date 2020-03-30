@@ -3,7 +3,6 @@ using ApiServer.FunctionalTests.Controller.Builder;
 using ApiServer.FunctionalTests.Core;
 using Core;
 using Domain.Model;
-using Persistance.EF.Extensions;
 using Domain.Services.ExternalServices;
 using Domain.Services.ExternalServices.Config;
 using System.Net;
@@ -13,6 +12,7 @@ using System.Security.Claims;
 using System;
 using Newtonsoft.Json;
 using ApiServer.Contracts.User;
+using Persistance.EF.Extensions;
 
 namespace ApiServer.FunctionalTests.Controller
 {
@@ -50,6 +50,7 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenInvalidLoginData_ShouldReturnUnauthorized()
         {
             //Arrange
+            Context.SetupDatabaseForTesting();
             var model = new LoginViewModelBuilder().GetInvalidData();
 
             //Act
@@ -65,6 +66,7 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenNullLoginData_ShouldReturnBadRequest()
         {
             //Arrange
+            Context.SetupDatabaseForTesting();
             LoginViewModel model = null;
 
             //Act
@@ -76,18 +78,21 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Ok when valid token is provided")]
-        public async Task GivenLoginExternal_WhenClientSendValidToken_ShouldReturnOk()
+        public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendValidToken_ShouldReturnOk()
         {
-            //here should be the SqlHelper.SetupDatabaseForTesting helper method that wipes all data from database
+            //Arrange
+            Context.SetupDatabaseForTesting();
             string expectedUsername = "rodrigo.ramirez@softvision.com";
             string expectedRole = "Admin";
             TokenViewModel token = GetTestToken(TokenType.Valid);
-            Context.Users.Add(new Domain.Model.User { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
+            Context.Users.Add(new User { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
             Context.SaveChanges();
             
+            //Act
             HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, token, ControllerName, "loginExternal");
             SuccessAuthData successAuthData = JsonConvert.DeserializeObject<SuccessAuthData>(httpResultData.ResponseString);
 
+            //Assert
             Assert.Equal(expectedUsername, successAuthData.User.Username);
             Assert.Equal(expectedRole, successAuthData.User.Role);
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
@@ -96,15 +101,18 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Unauthorized when token expired")]
-        public async Task GivenLoginExternal_WhenClientSendExpiredToken_ShouldReturnUnauthorized()
+        public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendExpiredToken_ShouldReturnUnauthorized()
         {
-            //here should be the SqlHelper.SetupDatabaseForTesting helper method that wipes all data from database
+            //Arrange
+            Context.SetupDatabaseForTesting();
             TokenViewModel token = GetTestToken(TokenType.Invalid);
             Context.Users.Add(new Domain.Model.User { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
             Context.SaveChanges();
 
+            //Act
             HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, token, ControllerName, "loginExternal");
 
+            //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
@@ -114,6 +122,7 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenPing_ShouldReturnOk()
         {
             //Arrange
+            Context.SetupDatabaseForTesting();
             LoginViewModel model = null;
 
             //Act
