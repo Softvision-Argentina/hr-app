@@ -17,9 +17,6 @@ namespace ApiServer.FunctionalTests.Core
         protected string ControllerName { get; set; }
         protected DataBaseContext Context {get;}
 
-        protected DataBaseContext Context { get; }
-
-
         public BaseApiTest(ApiFixture apiFixture)
         {
             Client = apiFixture.Client;

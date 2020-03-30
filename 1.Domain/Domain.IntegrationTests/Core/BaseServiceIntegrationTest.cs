@@ -14,8 +14,6 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         protected IServiceProvider Services { get;  }
         protected DataBaseContext Context { get;  }
 
-        protected DataBaseContext Context { get;  }
-
         public BaseServiceIntegrationTest(ServiceFixture serviceFixture)
         {
             Client = serviceFixture.Client;

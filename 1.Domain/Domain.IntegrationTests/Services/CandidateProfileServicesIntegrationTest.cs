@@ -4,12 +4,9 @@ using Domain.Model.Exceptions.CandidateProfile;
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
-using Persistance.EF;
 using Persistance.EF.Extensions;
-using System;
 using System.Linq;
 using Xunit;
-using Core;
 using Domain.Services.Impl.IntegrationTests.Core;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
