@@ -49,7 +49,6 @@ export class HireStageComponent implements OnInit {
 
   ngOnInit() {
     this.changeFormStatus(false);
-    if(this._process) { this.fillForm(this._process); }
   }
 
   getFormControl(name: string): AbstractControl {
@@ -64,8 +63,8 @@ export class HireStageComponent implements OnInit {
     }
   }
 
-  statusChanged(){
-    if(this.hireForm.controls['status'].value === 1){
+  statusChanged() {
+    if (this.hireForm.controls['status'].value === 1) {
        this.changeFormStatus(true);
        this.hireForm.markAsTouched();
     } else {
@@ -77,19 +76,5 @@ export class HireStageComponent implements OnInit {
     // this method will return specific fields from the stage
 
     return process;
-  }
-
-  fillForm(process: Process){
-    // const status: number = this.statusList.filter(s => s.value === process.stages[4].status)[0].id;
-    // if(status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
-    // this.hireForm.controls['status'].setValue(status);
-    // if(process.stages[4].id != null) { this.hireForm.controls['id'].setValue(process.stages[4].id); }
-    // if(process.stages[4].date != null) { this.hireForm.controls['date'].setValue(process.stages[4].date); }
-    // if (process.stages[4].consultantOwnerId != null) {
-    //   this.hireForm.controls['consultantOwnerId'].setValue(process.stages[4].consultantOwnerId);
-    // }
-    // if(process.stages[4].consultantDelegateId != null) { 
-    //   this.hireForm.controls['consultantDelegateId'].setValue(process.stages[4].consultantDelegateId);
-    // }
   }
 }

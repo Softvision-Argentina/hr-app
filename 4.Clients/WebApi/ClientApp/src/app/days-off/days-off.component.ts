@@ -1,44 +1,46 @@
-import { Component, OnInit, TemplateRef, ɵConsole, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { dniValidator } from '../directives/dni.validator';
 import { AppComponent } from '../app.component';
-import { Employee } from 'src/entities/employee';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-days-off',
   templateUrl: './days-off.component.html',
   styleUrls: ['./days-off.component.css']
 })
-export class DaysOffComponent implements OnInit {
+export class DaysOffComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
-  validateForm: FormGroup;
+  validateForm: FormGroup = null;
   listOfDaysOff: DaysOff[] = [];
-  employee;
-  searchValue = '';
-  searchValueType = '';
-  searchValueStatus = '';
-  listOfSearch = [];
-  listOfDisplayData = [...this.listOfDaysOff];
-  sortDni = null;
-  sortValue = null;
-  sortName = null;
-  reasons: any[];
+  employee:any = null;
+  searchValue:string = '';
+  searchValueType:string = '';
+  searchValueStatus:string = '';
+  listOfSearch: any[] = [];
+  listOfDisplayData: DaysOff[] = [...this.listOfDaysOff];
+  sortDni:any = null;
+  sortValue:string = null;
+  sortName:any = null;
+  reasons: any[] = null;
   showCalendarSelected: boolean = false;
-  isHr: boolean;
-  today = new Date();
-  currentUser: User;
-  statusList: any[];
+  isHr: boolean = null;
+  today: Date = new Date();
+  currentUser: User = null;
+  statusList: any[] = [];
+  searchSub: Subscription = null;
+  searchDni:string = '';
 
   constructor(private facade: FacadeService,
     private fb: FormBuilder,
@@ -59,6 +61,7 @@ export class DaysOffComponent implements OnInit {
         this.getDaysOff();
         this.resetForm();
       });
+    this.getSearchInfo();
   }
 
   getDaysOff() {
@@ -77,6 +80,11 @@ export class DaysOffComponent implements OnInit {
           this.listOfDisplayData = res.body;
         });
     }
+  }
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+      this.searchDni = data;
+    });
   }
 
   hideCalendar() {
@@ -111,7 +119,6 @@ export class DaysOffComponent implements OnInit {
       nzDisabledSeconds: () => [55, 56]
     };
   }
-
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
@@ -179,9 +186,7 @@ export class DaysOffComponent implements OnInit {
     // Edit Consultant Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
-
     this.fillForm(editedDayOff);
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit day off',
       nzContent: modalContent,
@@ -218,9 +223,7 @@ export class DaysOffComponent implements OnInit {
               let newDate; let newEndDate;
               newDate = editedDayOff.date == this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
               newEndDate = editedDayOff.endDate == this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
-
               let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
-
               if (isCompleted) {
                 editedDayOff = {
                   id: 0,
@@ -352,15 +355,25 @@ export class DaysOffComponent implements OnInit {
     this.searchStatus();
   }
 
-  getStatus(status: number): string {
-    return this.statusList.filter(st => st.id === status)[0].name;
+  getStatus(daysOff: any): string {
+    const statusFilter = this.statusList.filter(st => st.id === daysOff.status);
+    if (statusFilter.length !== 0) {
+      return statusFilter[0].name;
+    }
   }
 
-  getType(type: number): string {
-    return this.reasons.filter(st => st.id === type)[0].name;
+  getType(daysOff: any): string {
+    const typeFilter = this.reasons.filter(st => st.id === daysOff.type);
+    if (typeFilter.length !== 0) {
+      return typeFilter[0].name;
+    }
   }
 
   showAcceptButton(status: DaysOffStatusEnum) {
     return this.isHr && status === DaysOffStatusEnum.InReview;
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }

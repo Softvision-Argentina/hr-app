@@ -1,4 +1,4 @@
-import { ValidatorFn, FormControl } from "@angular/forms";
+import { ValidatorFn, FormControl } from '@angular/forms';
 
 ///This directive does not allow a date from the past. Should be greater than Date now()
 export const dateValidator: ValidatorFn = (control: FormControl) => {

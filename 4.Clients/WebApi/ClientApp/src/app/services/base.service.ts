@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs/internal/observable/throwError';
+import { Observable } from 'rxjs/Observable';
 import { AppConfig } from '../app-config/app.config';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -76,22 +77,24 @@ export class BaseService<T> {
 
   public getErrorMessage(error): string {
     console.log(error);
-    let errorMessage = '';
-    if (!error && !error.error) {
+    let errorMessage = 'Ha ocurrido un error';
 
-      for (var msg in error.error) {
-        errorMessage = errorMessage.concat(msg);
+    // TODO is this okay? Should this be error && error.error?
+    if (!error && !error.error) {
+      for (const msg in error.error) {
+        if (error.error.hasOwnProperty(msg)) {
+          errorMessage = errorMessage.concat(msg);
+        }
       }
     }
-    else errorMessage = "Ha ocurrido un error";
 
     return errorMessage;
   }
 
   public handleErrors(error) {
 
-    //Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
-    if (error.error != null && error.error != undefined && error.status != 400) {
+    // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
+    if (error.error && error.status !== 400) {
       return throwError(error.error as ErrorResponse);
     }
 
