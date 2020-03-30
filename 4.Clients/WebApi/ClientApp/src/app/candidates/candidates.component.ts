@@ -89,7 +89,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
         : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -98,7 +98,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.recruiters = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -107,7 +107,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       this.profiles = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -116,7 +116,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       this.communities = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -125,7 +125,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.skills = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -134,7 +134,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this._offices = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
   getSearchInfo() {
@@ -305,8 +305,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message = undefined) { this.facade.toastrService.error(err.message); } else
-                  { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
@@ -333,8 +332,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-           { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

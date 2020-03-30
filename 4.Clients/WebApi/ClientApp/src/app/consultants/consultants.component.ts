@@ -56,13 +56,13 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     this.app.hideLoading();
   }
 
-  getConsultants() {
+  getConsultants(){
     this.facade.consultantService.get()
       .subscribe(res => {
         this.filteredConsultants = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -144,11 +144,12 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
+              this.facade.errorHandlerService.showErrorMessage(err);
             });
+            } else {
+                modal.nzFooter[1].loading = false;
             }
-            else modal.nzFooter[1].loading = false;
+
             this.app.hideLoading();
           }
         }],
@@ -213,9 +214,8 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
-            });
+              this.facade.errorHandlerService.showErrorMessage(err);
+            })
             } 
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
@@ -237,8 +237,7 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
           this.getConsultants();
           this.facade.toastrService.success('Interviewer was deleted !');
         }, err => {
-          if(err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
