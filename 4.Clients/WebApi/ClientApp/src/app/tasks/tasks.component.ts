@@ -64,7 +64,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.consultants = res;
         this.currentConsultant = res.filter(c => this.isSameTextInLowerCase(c.emailAddress, this.user.email))[0];
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -75,7 +75,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
       this.facade.taskService.getByConsultant(this.user.email)
@@ -83,7 +83,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
   }
@@ -200,7 +200,7 @@ export class TasksComponent implements OnInit, OnDestroy {
             this.facade.errorHandlerService.showErrorMessage(err);
           }
           else {
-            this.facade.errorHandlerService.showErrorMessage('An error has ocurred. Please try again later');
+            this.facade.errorHandlerService.showErrorMessage(null, 'An error has ocurred. Please try again later');
           }
           input.value = '';
           const itemIndex: number = updateTask.taskItems.indexOf(newItem);
@@ -347,10 +347,8 @@ export class TasksComponent implements OnInit, OnDestroy {
 
               this.facade.taskService.add(newTask)
                 .subscribe(res => {
-                  console.log(res);
                   newTask.id = res.id;
                   this.toDoList.push(newTask);
-                  console.log(newTask);
                   this.facade.toastrService.success('Task was successfully created !');
                   modal.destroy();
                 }, err => {
