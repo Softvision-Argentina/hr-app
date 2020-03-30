@@ -1,7 +1,4 @@
 ﻿using Domain.Model.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Domain.Services.Contracts.Community;
 
 namespace Domain.Services.Contracts.User

@@ -10,5 +10,4 @@ export class User {
     token: string;
     community: Community;
     userDashboards: UserDashboard[]
-
 }

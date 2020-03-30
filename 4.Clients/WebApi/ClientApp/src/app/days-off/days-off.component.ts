@@ -118,12 +118,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  canAssign(): boolean {
-    // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
-    // else return false;
-    return true;
   }
-  
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
