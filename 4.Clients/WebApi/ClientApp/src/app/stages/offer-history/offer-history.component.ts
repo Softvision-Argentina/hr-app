@@ -38,10 +38,9 @@ export class OfferHistory implements OnInit {
       .subscribe(res => {
         this.offers = res.filter(x=> x.processId == this.processId);            
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
-  
   showModal(modalContent: TemplateRef <{}>){    
     const modal = this.facade.modalService.create({
         nzTitle: "Offer history",

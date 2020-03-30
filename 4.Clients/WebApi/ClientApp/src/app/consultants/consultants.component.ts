@@ -28,7 +28,7 @@ export class ConsultantsComponent implements OnInit {
   sortName = 'name';
   sortValue = 'ascend';
 
-  //Modals
+  // Modals
   validateForm: FormGroup;
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
@@ -57,13 +57,13 @@ export class ConsultantsComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  getConsultants(){
+  getConsultants() {
     this.facade.consultantService.get()
       .subscribe(res => {
         this.filteredConsultants = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -89,7 +89,7 @@ export class ConsultantsComponent implements OnInit {
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Consultant Modal
+    // Add New Consultant Modal
     this.validateForm.reset();
     this.validateForm.controls['phoneNumberPrefix'].setValue('+54'); 
     const modal = this.facade.modalService.create({
@@ -110,7 +110,7 @@ export class ConsultantsComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
@@ -130,15 +130,17 @@ export class ConsultantsComponent implements OnInit {
             .subscribe(res => {
               this.getConsultants();
               this.app.hideLoading();
-              this.facade.toastrService.success("Interviewer successfully created !");
+              this.facade.toastrService.success('Interviewer successfully created !');
               modal.destroy();
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
-            })
-            } 
-            else modal.nzFooter[1].loading = false;
+            });
+            } else{
+                modal.nzFooter[1].loading = false;
+            }
+
             this.app.hideLoading();
           }
         }],
@@ -146,15 +148,15 @@ export class ConsultantsComponent implements OnInit {
   }
 
   showDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.filteredConsultants.filter(consultant => consultant.id == consultantID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyConsultant.name + " " + this.emptyConsultant.lastName);
+    this.emptyConsultant = this.filteredConsultants.filter(consultant => consultant.id === consultantID)[0];
+    this.detailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
   }
 
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void{
-    //Edit Consultant Modal
+    // Edit Consultant Modal
     this.validateForm.reset();
-    let editedConsultant: Consultant = this.filteredConsultants.filter(consultant => consultant.id == id)[0];
+    let editedConsultant: Consultant = this.filteredConsultants.filter(consultant => consultant.id === id)[0];
     this.validateForm.controls['name'].setValue(editedConsultant.name);
     this.validateForm.controls['lastName'].setValue(editedConsultant.lastName);
     this.validateForm.controls['email'].setValue(editedConsultant.emailAddress);
@@ -179,7 +181,7 @@ export class ConsultantsComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
@@ -199,15 +201,16 @@ export class ConsultantsComponent implements OnInit {
             .subscribe(res => {
               this.getConsultants();
               this.app.hideLoading();
-              this.facade.toastrService.success("Interviewer successfully edited.");
+              this.facade.toastrService.success('Interviewer successfully edited.');
               modal.destroy();
             }, err => {
               this.app.hideLoading();
               modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
-            })
-            } 
-            else modal.nzFooter[1].loading = false;
+            });
+            } else {
+                modal.nzFooter[1].loading = false;
+            }
             this.app.hideLoading();
           }
         }],
@@ -215,7 +218,7 @@ export class ConsultantsComponent implements OnInit {
   }
 
   showDeleteConfirm(consultantID: number): void {
-    let consultantDelete: Consultant = this.filteredConsultants.filter(consultant => consultant.id == consultantID)[0];
+    const consultantDelete: Consultant = this.filteredConsultants.filter(consultant => consultant.id === consultantID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete ' + consultantDelete.lastName + ', ' + consultantDelete.name + ' ?',
       nzContent: '',

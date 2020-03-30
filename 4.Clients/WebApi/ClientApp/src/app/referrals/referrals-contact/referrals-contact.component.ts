@@ -167,7 +167,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.candidates = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       })
   }
 
@@ -176,7 +176,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -241,7 +241,6 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    console.log(this.filteredCandidate);
     this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
@@ -338,7 +337,6 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   Recontact(idCandidate: number) {
-    console.log(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
     editedCandidate = {
       id: idCandidate,

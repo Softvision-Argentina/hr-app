@@ -64,19 +64,18 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.consultants = res;
         this.currentConsultant = res.filter(c => c.emailAddress.toLowerCase() == this.user.email.toLowerCase())[0];
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
   getTasks() {
     if (this.app.isUserRole(["HRManagement", "Admin"])) {
-      console.log()
       this.facade.taskService.get()
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
     else{
@@ -85,7 +84,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));;
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
   }
@@ -108,7 +107,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       this.app.hideLoading();
     }, err => {
       this.app.hideLoading();
-      this.facade.toastrService.error('An error has ocurred. Please try again later');
+      this.facade.errorHandlerService.showErrorMessage(null, 'An error has ocurred. Please try again later');
     });
   }
 
@@ -188,10 +187,10 @@ export class TasksComponent implements OnInit, OnDestroy {
           input.value = '';
         }, err => {
           if (err && err.errorCode == 900) {
-            this.facade.toastrService.error(err.message);
+            this.facade.errorHandlerService.showErrorMessage(err);
           }
           else {
-            this.facade.toastrService.error('An error has ocurred. Please try again later');
+            this.facade.errorHandlerService.showErrorMessage('An error has ocurred. Please try again later');
           }
           input.value = '';
           let itemIndex: number = updateTask.taskItems.indexOf(newItem);
@@ -267,11 +266,8 @@ export class TasksComponent implements OnInit, OnDestroy {
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
-              console.log(this.validateForm.controls[i].value);
-              console.log(this.validateForm.controls[i]);
               if (this.validateForm.controls[i].valid==false)
                 isCompleted = false;
-                console.log(isCompleted);
               if (i.includes('item'))
                 items.push(this.validateForm.controls[i].value);
             }
@@ -306,10 +302,8 @@ export class TasksComponent implements OnInit, OnDestroy {
               }
               this.facade.taskService.add(newTask)
                 .subscribe(res => {
-                  console.log(res);
                   newTask.id = res.id;
                   this.toDoList.push(newTask);
-                  console.log(newTask);
                   this.facade.toastrService.success('Task was successfully created !');
                   modal.destroy();
                 }, err => {

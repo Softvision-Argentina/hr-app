@@ -58,7 +58,7 @@ export class SkillsComponent implements OnInit {
       .subscribe(res => {
         this.skillTypes = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -68,7 +68,7 @@ export class SkillsComponent implements OnInit {
         this.filteredSkills = res;
         this.listOfDisplayData = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 

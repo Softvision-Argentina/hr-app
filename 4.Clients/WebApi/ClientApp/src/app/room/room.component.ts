@@ -58,7 +58,7 @@ export class RoomComponent implements OnInit {
     .subscribe(res => {
       this.offices = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 

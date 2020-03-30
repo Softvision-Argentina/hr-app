@@ -35,7 +35,9 @@ export class HireProjectedComponent implements OnInit {
         res.forEach(hp => {
           if (this.yearList.filter(yl => yl == hp.year).length == 0) this.yearList.push(hp.year);
         });
-      }, err => console.log(err));
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
   onMonthChange(result: Date) {

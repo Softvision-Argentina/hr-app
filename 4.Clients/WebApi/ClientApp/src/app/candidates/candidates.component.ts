@@ -84,7 +84,7 @@ export class CandidatesComponent implements OnInit {
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
         : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -93,7 +93,7 @@ export class CandidatesComponent implements OnInit {
       .subscribe(res => {
         this.recruiters = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -102,7 +102,7 @@ export class CandidatesComponent implements OnInit {
     .subscribe(res => {
       this.profiles = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -111,7 +111,7 @@ export class CandidatesComponent implements OnInit {
     .subscribe(res => {
       this.communities = res;
     }, err => {
-      console.log(err);
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -120,7 +120,7 @@ export class CandidatesComponent implements OnInit {
       .subscribe(res => {
         this.skills = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -129,7 +129,7 @@ export class CandidatesComponent implements OnInit {
       .subscribe(res => {
         this._offices = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
