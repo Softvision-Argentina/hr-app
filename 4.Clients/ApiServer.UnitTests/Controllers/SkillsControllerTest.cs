@@ -3,13 +3,14 @@ using ApiServer.Contracts.Skills;
 using ApiServer.Controllers;
 using AutoMapper;
 using Core;
+using Core.ExtensionHelpers;
 using Domain.Services.Contracts.Skill;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace ApiServer.Tests.Controllers
+namespace ApiServer.UnitTests.Controllers
 {
     public class SkillsControllerTest
     {
