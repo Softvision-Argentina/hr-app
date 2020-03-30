@@ -3,7 +3,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
-import { dniValidator } from '../directives/dni.validator';
+import { dniValidator } from "../directives/dni.validator";
 import { AppComponent } from '../app.component';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
@@ -71,7 +71,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           this.listOfDaysOff = res;
           this.listOfDisplayData = res;
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
       this.daysOffService.getByDNI(this.employee.dni)
@@ -110,7 +110,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  }
+  };
 
   disabledDateTime = (): object => {
     return {
@@ -118,13 +118,23 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  }
+  };
+
   canAssign(): boolean {
-    // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
+    // if (this.currentConsultant && this.app.isUserRole(["HRManagement", "Admin"])) return true;
     // else return false;
     return true;
   }
-  
+
+  filterTasks() {
+    // if(!this.showAllTasks){
+    //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
+    // }
+    // else{
+    //   this.toDoListDisplay = this.toDoList;
+    // }
+
+  }
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
@@ -173,18 +183,16 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                           .subscribe(res => {
                             this.app.hideLoading()
                             this.getDaysOff();
-                            this.facade.toastrService.success('Day off was successfuly created !');
+                            this.facade.toastrService.success("Day off was successfuly created !");
                             modal.destroy();
                           }, err => {
                             this.app.hideLoading();
-                            // modal.nzFooter[1].loading = false;
-                            if (err.message != undefined) this.facade.toastrService.error(err.message);
-                            else this.facade.toastrService.error('The service is not available now. Try again later.');
-                          });
+                            this.facade.errorHandlerService.showErrorMessage(err);
+                          })
                       }
                     }
-                  });
-              }
+                  })
+              };
             }
           }
         }],
@@ -218,7 +226,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                 this.employee = res.body;
                 this.app.hideLoading();
                 if (!this.employee || this.employee == null) {
-                  this.facade.toastrService.error('There is no employee with that DNI.');
+                  this.facade.toastrService.error("There is no employee with that DNI.");
                 }
               })
             if (this.employee) {
@@ -249,9 +257,8 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                     this.facade.toastrService.success('Day off was successfully edited !');
                     modal.destroy();
                   }, err => {
-                    if (err.message !== undefined) { this.facade.toastrService.error(err.message); }
-                    else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                  });
+                    this.facade.errorHandlerService.showErrorMessage(err);
+                  })
               }
             }
           }
@@ -272,8 +279,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           this.getDaysOff();
           this.facade.toastrService.success('Day off was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error('The service is not available now. Try again later.');
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -303,10 +309,8 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         this.getDaysOff();
         this.facade.toastrService.success('Petition was succesfully accepted !');
       }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
-      });
-
+        this.facade.errorHandlerService.showErrorMessage(err);
+      })
   }
 
   fillForm(daysOff: DaysOff) {

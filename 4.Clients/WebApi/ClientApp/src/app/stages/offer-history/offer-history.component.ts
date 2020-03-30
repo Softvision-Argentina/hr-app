@@ -38,9 +38,8 @@ export class OfferHistory implements OnInit {
       .subscribe(res => {
         this.offers = res.filter(x => x.processId === this.processId);
       },
-      // TODO: change this log for a message or delete it
       err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -103,11 +102,7 @@ export class OfferHistory implements OnInit {
                   this.facade.toastrService.success('Offer was successfuly created!');
                   modal.destroy();
                 }, err => {
-                  if (err.message) {
-                    this.facade.toastrService.error(err.message);
-                  } else {
-                    this.facade.toastrService.error('The service is not available now. Try again later.');
-                  }
+                  this.facade.errorHandlerService.showErrorMessage(err);
               });
             } else {
               modal.nzFooter[1].loading = false;
@@ -137,11 +132,7 @@ export class OfferHistory implements OnInit {
           this.getOffers();
           this.facade.toastrService.success('Offer was successfully edited !');
         }, err => {
-          if (err.message) {
-            this.facade.toastrService.error(err.message);
-          } else {
-            this.facade.toastrService.error('The service is not available now. Try again later.');
-          }
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
       }
     });
@@ -155,11 +146,7 @@ export class OfferHistory implements OnInit {
       this.getOffers();
       this.facade.toastrService.success('Offer was successfully edited!');
     }, err => {
-      if (err.message) {
-        this.facade.toastrService.error(err.message);
-      } else {
-        this.facade.toastrService.error('The service is not available now. Try again later.');
-      }
+      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -180,11 +167,7 @@ export class OfferHistory implements OnInit {
         this.getOffers();
         this.facade.toastrService.success('Offer was deleted!');
       }, err => {
-        if (err.message) {
-          this.facade.toastrService.error(err.message);
-        } else {
-          this.facade.toastrService.error('The service is not available now. Try again later.');
-        }
+        this.facade.errorHandlerService.showErrorMessage(err);
       })
     });
   }
