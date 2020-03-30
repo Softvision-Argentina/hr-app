@@ -73,7 +73,7 @@ export class ReservationsComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 
@@ -81,7 +81,12 @@ export class ReservationsComponent implements OnInit {
     await this.facade.ReservationService.get()
       .toPromise()
       .then(res => this.reservations = res.filter(r => r.room.officeId.toString() == this.selectedOffice))
-      .catch(err => this.facade.errorHandlerService.showErrorMessage(err));
+      .catch(err => console.log(err));
+    // .subscribe(res => {
+    //   this.reservations = res.filter(r => r.room.officeId.toString() == this.selectedOffice);
+    // }, err => {
+    //   console.log(err);
+    // });
   }
 
   getRooms() {
@@ -90,7 +95,7 @@ export class ReservationsComponent implements OnInit {
         this.room = res;
         this.filteredRoom = this.room.filter(c => c.officeId == this.reservationForm.controls['office'].value);
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 
@@ -99,7 +104,7 @@ export class ReservationsComponent implements OnInit {
       .subscribe(res => {
         this.offices = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 

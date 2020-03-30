@@ -38,9 +38,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
         res.forEach(hp => {
           if (this.yearList.filter(yl => yl == hp.year).length == 0) this.yearList.push(hp.year);
         });
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+      }, err => console.log(err));
   }
 
   onMonthChange(result: Date) {

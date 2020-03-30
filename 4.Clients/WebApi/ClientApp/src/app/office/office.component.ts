@@ -40,7 +40,7 @@ export class OfficeComponent implements OnInit {
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
 
   ngOnInit() {
-    this.app.removeBgImage();
+    this.app.removeBgImage();    
     this.getRooms();
 
     this.officeForm = this.fb.group({
@@ -60,7 +60,7 @@ export class OfficeComponent implements OnInit {
     this.facade.OfficeService.get().subscribe(res => {
       this.offices = res;
     }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
+      console.log(err);
     })
   }
   
@@ -69,8 +69,8 @@ export class OfficeComponent implements OnInit {
     .subscribe(res => {
       this.rooms = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+      console.log(err);
+    });
   }
 
   showDeleteConfirm(officeId: number) {

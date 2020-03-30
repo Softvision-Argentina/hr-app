@@ -98,7 +98,7 @@ export class EmployeesComponent implements OnInit {
           this.reviewersFullNameAndId.push(r);
         }
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 
@@ -107,8 +107,8 @@ export class EmployeesComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+        console.log(err);
+      })
   }
 
   getRoles() {
@@ -116,8 +116,8 @@ export class EmployeesComponent implements OnInit {
       .subscribe(res => {
         this.activeRoles = res.filter(role => role.isActive);
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+        console.log(err);
+      })
   }
 
   showDeleteConfirm(employeeID: number): void {

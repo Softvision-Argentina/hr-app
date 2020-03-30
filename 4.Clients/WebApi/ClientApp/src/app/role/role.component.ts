@@ -31,7 +31,7 @@ export class RoleComponent implements OnInit {
       .subscribe(res => {
         this.roles = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 
@@ -64,7 +64,7 @@ export class RoleComponent implements OnInit {
       .subscribe(res => {
         this.employeesWithDeleteRole = res.filter(e => e.role.id == role.id);
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 

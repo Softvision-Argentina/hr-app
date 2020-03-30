@@ -43,13 +43,13 @@ export class SkillTypeComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  getSkillTypes() {
+  getSkillTypes(){
     this.facade.skillTypeService.get()
       .subscribe(res => {
         this.filteredSkillTypes = res;
         this.listOfDisplayData = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 

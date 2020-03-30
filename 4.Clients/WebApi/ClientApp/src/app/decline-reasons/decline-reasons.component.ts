@@ -22,6 +22,7 @@ export class DeclineReasonComponent implements OnInit {
   listOfDisplayData = [...this.filteredDeclineReasons];
   sortName = null;
   sortValue = null;
+  
   validateForm: FormGroup;
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
@@ -43,12 +44,12 @@ export class DeclineReasonComponent implements OnInit {
   }
 
   getDeclineReasons(){
-    this.facade.declineReasonService.get('Named')
+    this.facade.declineReasonService.get("Named")
       .subscribe(res => {
         this.filteredDeclineReasons = res;
         this.listOfDisplayData = res;
       }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
+        console.log(err);
       });
   }
 
@@ -73,7 +74,7 @@ export class DeclineReasonComponent implements OnInit {
     this.search();
   }
 
-  showAddModal(modalContent: TemplateRef<{}>): void {
+  showAddModal(modalContent: TemplateRef<{}>): void {    
     this.validateForm.reset();
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Decline reason',
@@ -92,26 +93,25 @@ export class DeclineReasonComponent implements OnInit {
               this.validateForm.controls[i].updateValueAndValidity();
               if ((!this.validateForm.controls[i].valid)) isCompleted = false;
             }
-            if (isCompleted) {
-              const newDeclineReason: DeclineReason = {
+            if(isCompleted){
+              let newDeclineReason: DeclineReason = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
-              };
+              }
               this.facade.declineReasonService.add(newDeclineReason)
                       .subscribe(res => {
                         this.getDeclineReasons();
                         this.app.hideLoading();
-                        this.facade.toastrService.success('Decline Reason was successfuly created !');
+                        this.facade.toastrService.success("DeclineReason was successfuly created !");
                         modal.destroy();
                       }, err => {
                         this.app.hideLoading();
                         modal.nzFooter[1].loading = false;
                         this.facade.errorHandlerService.showErrorMessage(err);
-                      });
-            } else {
-              modal.nzFooter[1].loading = false;
-            }
+                      })
+            } 
+            else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
         }],
@@ -119,13 +119,13 @@ export class DeclineReasonComponent implements OnInit {
   }
 
   showDetailsModal(declineReasonID: number): void {
-    this.emptyDeclineReason = this.filteredDeclineReasons.filter(declineReason => declineReason.id === declineReasonID)[0];
+    this.emptyDeclineReason = this.filteredDeclineReasons.filter(declineReason => declineReason.id == declineReasonID)[0];
     this.isDetailsVisible = true;
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void{
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void{    
     this.validateForm.reset();
-    let editedDeclineReason: DeclineReason = this.filteredDeclineReasons.filter(declineReason => declineReason.id === id)[0];
+    let editedDeclineReason: DeclineReason = this.filteredDeclineReasons.filter(declineReason => declineReason.id == id)[0];
     this.validateForm.controls['name'].setValue(editedDeclineReason.name);
     this.validateForm.controls['description'].setValue(editedDeclineReason.description);
     const modal = this.facade.modalService.create({
@@ -140,32 +140,31 @@ export class DeclineReasonComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted = true;
+            let isCompleted: boolean = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
               this.validateForm.controls[i].updateValueAndValidity();
               if ((!this.validateForm.controls[i].valid)) isCompleted = false;
             }
-            if (isCompleted) {
+            if(isCompleted){
               editedDeclineReason = {
                 id: editedDeclineReason.id,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
-              };
+              }
               this.facade.declineReasonService.update(editedDeclineReason.id, editedDeclineReason)
-              .subscribe(res => {
-                this.getDeclineReasons();
-                this.app.hideLoading();
-                this.facade.toastrService.success('Decline reason was successfully edited!');
-                modal.destroy();
-              }, err => {
-                this.app.hideLoading();
-                modal.nzFooter[1].loading = false;
-                this.facade.errorHandlerService.showErrorMessage(err);
-              });
-            } else {
+            .subscribe(res => {
+              this.getDeclineReasons();
+              this.app.hideLoading();
+              this.facade.toastrService.success('Decline reason was successfully edited!');
+              modal.destroy();
+            }, err => {
+              this.app.hideLoading();
               modal.nzFooter[1].loading = false;
-            }
+              this.facade.errorHandlerService.showErrorMessage(err);
+            })
+            } 
+            else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
         }],
@@ -173,7 +172,7 @@ export class DeclineReasonComponent implements OnInit {
   }
 
   showDeleteConfirm(declineReasonID: number): void {
-    const declineReasonDelete: DeclineReason = this.filteredDeclineReasons.find(declineReason => declineReason.id === declineReasonID);
+    let declineReasonDelete: DeclineReason = this.filteredDeclineReasons.find(declineReason => declineReason.id == declineReasonID);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete ' + declineReasonDelete.name + '?',
       nzContent: 'This action will delete all skills associated with this type',
