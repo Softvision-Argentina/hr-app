@@ -19,7 +19,6 @@ namespace Domain.Services.Impl.Services
         private readonly IProcessRepository _processRepository;
         private readonly IProcessStageRepository _processStageRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Consultant> _consultantRepository;
         private readonly IRepository<Community> _communityRepository;
         private readonly IRepository<CandidateProfile> _candidateProfileRepository;
         private readonly IRepository<Candidate> _candidateRepository;
@@ -34,7 +33,7 @@ namespace Domain.Services.Impl.Services
         private readonly IConfiguration _config;
 
         public ProcessService(IMapper mapper,
-            IRepository<Consultant> consultantRepository,
+            IRepository<User> userRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<CandidateProfile> candidateProfileRepository,
             IRepository<Community> communityRepository,
@@ -48,10 +47,9 @@ namespace Domain.Services.Impl.Services
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
-            IRepository<User> userRepository,
             IConfiguration config)
         {
-            _consultantRepository = consultantRepository;
+            _userRepository = userRepository;
             _candidateRepository = candidateRepository;
             _candidateProfileRepository = candidateProfileRepository;
             _communityRepository = communityRepository;
@@ -175,7 +173,7 @@ namespace Domain.Services.Impl.Services
         {
             var profile = _candidateProfileRepository.Query().Where(_ => _.Id == profileID).FirstOrDefault();
             if (profile == null)
-                throw new Domain.Model.Exceptions.Consultant.ConsultantNotFoundException(profileID);
+                throw new Domain.Model.Exceptions.User.UserNotFoundException(profileID);
 
             candidate.Profile = profile;
         }
@@ -184,19 +182,19 @@ namespace Domain.Services.Impl.Services
         {
             var community = _communityRepository.Query().Where(_ => _.Id == communityID).FirstOrDefault();
             if (community == null)
-                throw new Domain.Model.Exceptions.Consultant.ConsultantNotFoundException(communityID);
+                throw new Domain.Model.Exceptions.User.UserNotFoundException(communityID);
 
             candidate.Community = community;
         }
 
-        private void AddRecruiterToCandidate(Candidate candidate, int recruiterID)
+        private void AddUserToCandidate(Candidate candidate, int userID)
         {
 
-            var recruiter = _consultantRepository.Query().Where(_ => _.Id == recruiterID).FirstOrDefault();
-            if (recruiter == null)
-                throw new Domain.Model.Exceptions.Consultant.ConsultantNotFoundException(recruiterID);
+            var user = _userRepository.Query().Where(_ => _.Id == userID).FirstOrDefault();
+            if (user == null)
+                throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
 
-            candidate.Recruiter = recruiter;
+            candidate.User = user;
         }
 
         private void AddOfficeToCandidate(Candidate candidate, int officeId)

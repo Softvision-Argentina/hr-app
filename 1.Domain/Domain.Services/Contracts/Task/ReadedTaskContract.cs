@@ -18,7 +18,7 @@ namespace Domain.Services.Contracts.Task
         public DateTime CreationDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int ConsultantId { get; set; }
+        public int UserId { get; set; }
         public ReadedUserContract User { get; set; }
 
         public ICollection<ReadedTaskItemContract> TaskItems { get; set; }

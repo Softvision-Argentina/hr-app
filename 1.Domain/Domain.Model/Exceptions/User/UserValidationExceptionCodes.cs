@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Model.Exceptions.Consultant
+namespace Domain.Model.Exceptions.User
 {
-    public enum ConsultantValidationExceptionCodes
+    public enum UserValidationExceptionCodes
     {
         CreateContractInvalid,
         UpdateContractInvalid

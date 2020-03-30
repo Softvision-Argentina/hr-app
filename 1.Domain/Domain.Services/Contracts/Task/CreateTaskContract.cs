@@ -1,5 +1,4 @@
-﻿using Domain.Services.Contracts.Consultant;
-using Domain.Services.Contracts.TaskItem;
+﻿using Domain.Services.Contracts.TaskItem;
 using System;
 using System.Collections.Generic;
 
@@ -15,8 +14,8 @@ namespace Domain.Services.Contracts.Task
         public DateTime CreationDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int ConsultantId { get; set; }
-        //public CreateConsultantContract Consultant { get; set; }
+        public int UserId { get; set; }
+        //public CreateUserContract User { get; set; }
 
         public ICollection<CreateTaskItemContract> TaskItems { get; set; }
     }

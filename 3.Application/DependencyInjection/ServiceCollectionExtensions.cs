@@ -9,7 +9,7 @@ using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.ExternalServices;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.Validators.Candidate;
-using Domain.Services.Impl.Validators.Consultant;
+using Domain.Services.Impl.Validators.User;
 using Domain.Services.Impl.Validators.HireProjection;
 using Domain.Services.Impl.Validators.Seed;
 using Domain.Services.Impl.Validators.Skill;
@@ -65,8 +65,8 @@ namespace DependencyInjection
             services.AddScoped<UpdateStageContractValidator, UpdateStageContractValidator>();
             services.AddScoped<CreatedStageItemContract, CreatedStageItemContract>();
             services.AddScoped<ReadedProcessContract, ReadedProcessContract>();;
-            services.AddScoped<CreateConsultantContractValidator, CreateConsultantContractValidator>();
-            services.AddScoped<UpdateConsultantContractValidator, UpdateConsultantContractValidator>();
+            services.AddScoped<CreateUserContractValidator, CreateUserContractValidator>();
+            services.AddScoped<UpdateUserContractValidator, UpdateUserContractValidator>();
             services.AddScoped<CreateSkillTypeContractValidator, CreateSkillTypeContractValidator>();
             services.AddScoped<UpdateSkillTypeContractValidator, UpdateSkillTypeContractValidator>();
             services.AddScoped<CreateDeclineReasonContractValidator, CreateDeclineReasonContractValidator>();
@@ -109,7 +109,6 @@ namespace DependencyInjection
             services.AddTransient<IPostulantService, PostulantService>();
             services.AddTransient<IProcessStageService, ProcessStageService>();
             services.AddTransient<IProcessService, ProcessService>();
-            services.AddTransient<IConsultantService, ConsultantService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISkillTypeService, SkillTypeService>();
             services.AddTransient<ITaskService, TaskService>();
@@ -168,7 +167,6 @@ namespace DependencyInjection
             services.AddScoped<IRepository<Skill>, SkillRepository>();
             services.AddScoped<IRepository<StageItem>, StageItemRepository>();
             services.AddScoped<IRepository<Process>, ProcessRepository>();
-            services.AddScoped<IRepository<Consultant>, ConsultantRepository>();
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IRepository<SkillType>, SkillTypeRepository>();
             services.AddScoped<IRepository<Task>, TaskRepository>();

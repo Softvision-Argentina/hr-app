@@ -19,7 +19,7 @@ namespace Domain.Services.Impl.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Reservation> _ReservationRepository;
-        private readonly IRepository<Consultant> _ConsultantRepository;
+        private readonly IRepository<User> _UserRepository;
         private readonly IRepository<Room> _RoomRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<ReservationService> _log;
@@ -29,7 +29,7 @@ namespace Domain.Services.Impl.Services
 
         public ReservationService(IMapper mapper,
             IRepository<Reservation> ReservationRepository,
-            IRepository<Consultant> ConsultantRepository,
+            IRepository<User> UserRepository,
             IRepository<Room> RoomRepository,
             IUnitOfWork unitOfWork,
             ILog<ReservationService> log,
@@ -44,7 +44,7 @@ namespace Domain.Services.Impl.Services
             _updateReservationContractValidator = updateReservationContractValidator;
             _createReservationContractValidator = createReservationContractValidator;
             _RoomRepository = RoomRepository;
-            _ConsultantRepository = ConsultantRepository;
+            _UserRepository = UserRepository;
             _googleCalendarService = googleCalendarService;
         }
 
@@ -61,7 +61,7 @@ namespace Domain.Services.Impl.Services
             ValidateSchedule(Reservation);
             CheckOverlap(Reservation);
 
-            Reservation.Recruiter = _ConsultantRepository.Query().Where(x => x.Id == contract.Recruiter).FirstOrDefault();
+            Reservation.User = _UserRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
             Reservation.Room = _RoomRepository.Query().Where(x => x.Id == Reservation.RoomId).FirstOrDefault();
 
             var createdReservation = _ReservationRepository.Create(Reservation);
@@ -106,7 +106,7 @@ namespace Domain.Services.Impl.Services
 
             ValidateSchedule(Reservation);
             CheckOverlap(Reservation);
-            Reservation.Recruiter = _ConsultantRepository.Query().Where(x => x.Id == contract.Recruiter).FirstOrDefault();
+            Reservation.User = _UserRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
 
 
             _ReservationRepository.Update(Reservation);

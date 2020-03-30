@@ -114,12 +114,12 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("GetByConsultant/{consultantEmail}")]
-        public IActionResult GetByConsultant(string consultantEmail)
+        [HttpGet("GetByUser/{UserEmail}")]
+        public IActionResult GetByUser(string UserEmail)
         {
             return ApiAction(() =>
             {
-                var tasks = _taskService.ListByConsultant(consultantEmail);
+                var tasks = _taskService.ListByUser(UserEmail);
                 return Accepted(_mapper.Map<List<ReadedTaskViewModel>>(tasks));
             });
         }

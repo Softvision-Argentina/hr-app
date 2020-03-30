@@ -9,7 +9,7 @@ namespace Domain.Services.Interfaces.Services
     {
         CreatedTaskContract Create(CreateTaskContract contract);
         ReadedTaskContract Read(int id);
-        IEnumerable<ReadedTaskContract> ListByConsultant(string consultantEmail);
+        IEnumerable<ReadedTaskContract> ListByUser(string UserEmail);
         void Update(UpdateTaskContract contract);
         void Approve(int id);
         void Delete(int id);

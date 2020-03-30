@@ -23,8 +23,8 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
                 .Include(x => x.OfferStage)
-                .Include(x => x.ConsultantOwner)
-                .Include(x => x.ConsultantDelegate)
+                .Include(x => x.UserOwner)
+                .Include(x => x.UserDelegate)
                 .Include(x => x.DeclineReason)
                 .Include(x => x.Candidate)
                 .ThenInclude(c => c.CandidateSkills)
@@ -90,8 +90,8 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
                 .Include(x => x.OfferStage)
-                .Include(x => x.ConsultantOwner)
-                .Include(x => x.ConsultantDelegate).FirstOrDefault();
+                .Include(x => x.UserOwner)
+                .Include(x => x.UserDelegate).FirstOrDefault();
         }
 
         public StageStatus RejectStage(StageStatus currentStatus)
