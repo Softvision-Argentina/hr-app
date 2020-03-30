@@ -30,12 +30,12 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         {
             //Arrange
             Context.SetupDatabaseForTesting();
-            int recordCountBeforeCreate = GetProfilesCount();
+            var recordCountBeforeCreate = GetProfilesCount();
             var validCreateCandidateProfileContract = DataFactory.CreateInstance<CreateCandidateProfileContract>();
 
             //Act
             CreatedCandidateProfileContract result = _candidateProfileService.Create(validCreateCandidateProfileContract);
-            int recordCountAfterCreate = GetProfilesCount();
+            var recordCountAfterCreate = GetProfilesCount();
 
             //Assert
             Assert.NotEqual(recordCountBeforeCreate, recordCountAfterCreate);
@@ -54,7 +54,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
                 .WithPropertyValue(propertyName, null);
 
             //Act
-            Exception ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
+            var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
 
             //Assert
             Assert.IsType<CreateContractInvalidException>(ex);
@@ -70,7 +70,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var invalidCreateCandidateProfileContract = DataFactory.CreateInstance<CreateCandidateProfileContract>()
                 .WithPropertyValue("Name", GetCandidateProfileFromDatabase().Name);
 
-            Exception ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
+            var ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
 
             Assert.IsType<InvalidCandidateProfileException>(ex);
             Assert.NotNull(ex);
@@ -83,10 +83,10 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             Context.SetupDatabaseForTesting();
             var candidateProfile = DataFactory.CreateInstance<CandidateProfile>();
             Context.SeedDatabaseWith(candidateProfile);
-            int candidateProfileCountBeforeDelete = GetProfilesCount(); 
+            var candidateProfileCountBeforeDelete = GetProfilesCount(); 
 
             _candidateProfileService.Delete(candidateProfile.Id);
-            int candidateProfileCountAfterDelete = GetProfilesCount();
+            var candidateProfileCountAfterDelete = GetProfilesCount();
 
             Assert.Equal(1, candidateProfileCountBeforeDelete);
             Assert.Equal(0, candidateProfileCountAfterDelete);
@@ -98,7 +98,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             Context.SetupDatabaseForTesting();
             var candidateProfile = DataFactory.CreateInstance<CandidateProfile>();
 
-            Exception ex = Assert.Throws<DeleteCandidateProfileNotFoundException>(() => _candidateProfileService.Delete(candidateProfile.Id));
+            var ex = Assert.Throws<DeleteCandidateProfileNotFoundException>(() => _candidateProfileService.Delete(candidateProfile.Id));
 
             Assert.IsType<DeleteCandidateProfileNotFoundException>(ex);
             Assert.NotNull(ex);
@@ -131,7 +131,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var candidateProfile = DataFactory.CreateInstance<UpdateCandidateProfileContract>()
                 .WithPropertyValue(property, default);
 
-            Exception ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Update(candidateProfile));
+            var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Update(candidateProfile));
 
             Assert.IsType<CreateContractInvalidException>(ex);
             Assert.NotNull(ex);
@@ -146,7 +146,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             Context.Entry(candidateProfile).State = EntityState.Detached;
             var updateCandidateProfile = new UpdateCandidateProfileContract { Id = 1, Name = candidateProfile.Name, Description = "Description" };
             
-            Exception ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Update(updateCandidateProfile));
+            var ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Update(updateCandidateProfile));
 
             Assert.Equal("The Profile already exists .", ex.Message);
             Assert.IsType<InvalidCandidateProfileException>(ex);

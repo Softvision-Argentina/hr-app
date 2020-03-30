@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Persistance.EF
+namespace Persistance.EF.Extensions
 {
     public static class DataFactory
     {

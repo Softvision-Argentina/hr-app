@@ -17,8 +17,7 @@ namespace Domain.Services.Impl.Services
     public class CandidateProfileService : ICandidateProfileService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<CandidateProfile> _CandidateProfileRepository;
-        private readonly IRepository<Model.Community> _communityItemRepository;
+        private readonly IRepository<CandidateProfile> _candidateProfileRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<CandidateProfileService> _log;
         private readonly UpdateCandidateProfileContractValidator _updateCandidateProfileContractValidator;
@@ -26,7 +25,7 @@ namespace Domain.Services.Impl.Services
 
         public CandidateProfileService(
             IMapper mapper,
-            IRepository<CandidateProfile> CandidateProfileRepository,
+            IRepository<CandidateProfile> candidateProfileRepository,
             IRepository<Model.Community> communityItemRepository,
             IUnitOfWork unitOfWork,
             ILog<CandidateProfileService> log,
@@ -36,8 +35,7 @@ namespace Domain.Services.Impl.Services
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _CandidateProfileRepository = CandidateProfileRepository;
-            _communityItemRepository = communityItemRepository;
+            _candidateProfileRepository = candidateProfileRepository;
             _log = log;
             _updateCandidateProfileContractValidator = updateCandidateProfileContractValidator;
             _createCandidateProfileContractValidator = createCandidateProfileContractValidator;
@@ -50,9 +48,9 @@ namespace Domain.Services.Impl.Services
             ValidateExistence(0, contract.Name);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
-            var CandidateProfile = _mapper.Map<CandidateProfile>(contract);
+            var candidateProfile = _mapper.Map<CandidateProfile>(contract);
 
-            var createdCandidateProfile = _CandidateProfileRepository.Create(CandidateProfile);
+            var createdCandidateProfile = _candidateProfileRepository.Create(candidateProfile);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
@@ -62,14 +60,14 @@ namespace Domain.Services.Impl.Services
         public void Delete(int Id)
         {
             _log.LogInformation($"Searching Candidate Profile {Id}");
-            CandidateProfile CandidateProfile = _CandidateProfileRepository.Query().Where(_ => _.Id == Id).FirstOrDefault();
+            var candidateProfile = _candidateProfileRepository.Query().FirstOrDefault(_ => _.Id == Id);
 
-            if (CandidateProfile == null)
+            if (candidateProfile == null)
             {
                 throw new DeleteCandidateProfileNotFoundException(Id);
             }
             _log.LogInformation($"Deleting Candidate Profile {Id}");
-            _CandidateProfileRepository.Delete(CandidateProfile);
+            _candidateProfileRepository.Delete(candidateProfile);
 
             _unitOfWork.Complete();
         }
@@ -81,9 +79,9 @@ namespace Domain.Services.Impl.Services
             ValidateExistence(contract.Id, contract.Name);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
-            var CandidateProfile = _mapper.Map<CandidateProfile>(contract);
+            var candidateProfile = _mapper.Map<CandidateProfile>(contract);
 
-            var updatedCandidateProfile = _CandidateProfileRepository.Update(CandidateProfile);
+            _candidateProfileRepository.Update(candidateProfile);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
         }
@@ -91,25 +89,25 @@ namespace Domain.Services.Impl.Services
 
         public IEnumerable<ReadedCandidateProfileContract> List()
         {
-            var CandidateProfileQuery = _CandidateProfileRepository
+            var candidateProfileQuery = _candidateProfileRepository
                 .QueryEager(); 
                 //.Query();
                 
-            var CandidateProfileResult = CandidateProfileQuery.ToList();
+            var candidateProfileResult = candidateProfileQuery.ToList();
 
-            return _mapper.Map<List<ReadedCandidateProfileContract>>(CandidateProfileResult);
+            return _mapper.Map<List<ReadedCandidateProfileContract>>(candidateProfileResult);
         }
 
         public ReadedCandidateProfileContract Read(int Id)
         {
-            var CandidateProfileQuery = _CandidateProfileRepository
+            var candidateProfileQuery = _candidateProfileRepository
                 .QueryEager()
                 // .Query()
                 .Where(_ => _.Id == Id);
 
-            var CandidateProfileResult = CandidateProfileQuery.SingleOrDefault();
+            var candidateProfileResult = candidateProfileQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedCandidateProfileContract>(CandidateProfileResult);
+            return _mapper.Map<ReadedCandidateProfileContract>(candidateProfileResult);
         }
 
         private void ValidateContract(CreateCandidateProfileContract contract)
@@ -142,8 +140,8 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                CandidateProfile CandidateProfile = _CandidateProfileRepository.Query().AsNoTracking().Where(_ => _.Name == name && _.Id != Id).FirstOrDefault();
-                if (CandidateProfile != null) throw new InvalidCandidateProfileException("The Profile already exists .");
+                var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name && _.Id != Id);
+                if (candidateProfile != null) throw new InvalidCandidateProfileException("The Profile already exists .");
             }
             catch (ValidationException ex)
             {

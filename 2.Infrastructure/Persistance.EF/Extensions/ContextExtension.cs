@@ -1,11 +1,9 @@
 ﻿using Core;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using ApiServer.Contracts;
 
 namespace Persistance.EF.Extensions
-{   
+{
     public static class ContextExtension
     {
         public static string DisableTablesConstraintCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL' ";
@@ -30,7 +28,7 @@ namespace Persistance.EF.Extensions
 
         public static void SeedDatabaseWith<T>(this DbContextBase arLabContext, IEnumerable<T> entities) where T : Entity<int>
         {
-            List<T> entityList = new List<T>();
+            var entityList = new List<T>();
 
             foreach (var entity in entities)
             {
@@ -53,7 +51,7 @@ namespace Persistance.EF.Extensions
 
         public static void SeedDatabaseWithDummy<T>(this DbContextBase arLabContext, int entityCount = 1) where T : Entity<int>
         {
-            List<T> entityList = new List<T>();
+            var entityList = new List<T>();
 
             for (int i = 0; i < entityCount; i++)
             {

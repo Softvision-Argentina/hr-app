@@ -5,9 +5,7 @@ using Core;
 using Domain.Model;
 using Persistance.EF.Extensions;
 using System.Net;
-using System.Linq;
 using Xunit;
-using Persistance.EF;
 
 namespace ApiServer.FunctionalTests.Controller
 {
