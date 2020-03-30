@@ -3,17 +3,17 @@ using System.Linq;
 using AutoMapper;
 using Core;
 using Core.Persistance;
-using Core.Testing;
 using Domain.Model;
 using Domain.Services.Contracts.SkillType;
 using Domain.Services.Impl.Services;
+using Domain.Services.Impl.UnitTests.Dummy;
 using Domain.Services.Impl.Validators.SkillType;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.Impl.Services
+namespace Domain.Services.Impl.UnitTests.Services
 {
     public class SkillTypeServiceTest : BaseDomainTest
     {

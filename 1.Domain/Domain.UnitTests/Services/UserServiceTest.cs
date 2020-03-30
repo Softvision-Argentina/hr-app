@@ -3,14 +3,14 @@ using System.Linq;
 using AutoMapper;
 using Core;
 using Core.Persistance;
-using Core.Testing;
 using Domain.Model;
 using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Services;
+using Domain.Services.Impl.UnitTests.Dummy;
 using Moq;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.Impl.Services
+namespace Domain.Services.Impl.UnitTests.Services
 {
     public class UserServiceTest : BaseDomainTest
     {

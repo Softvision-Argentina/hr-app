@@ -4,7 +4,7 @@ using FluentValidation;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Domain.Services.Impl.UnitTests.Impl.Validators.Task
+namespace Domain.Services.Impl.UnitTests.Validators.Task
 {
 
     public class UpdateTaskContractValidatorTest

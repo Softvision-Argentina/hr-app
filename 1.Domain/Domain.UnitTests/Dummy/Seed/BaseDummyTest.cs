@@ -6,7 +6,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Testing;
 using Domain.Services.Impl.UnitTests.Dummy;
 using Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy;
 
