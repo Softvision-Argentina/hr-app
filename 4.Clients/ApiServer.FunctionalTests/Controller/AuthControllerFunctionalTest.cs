@@ -2,8 +2,9 @@
 using ApiServer.FunctionalTests.Controller.Builder;
 using ApiServer.FunctionalTests.Core;
 using Core;
+using Domain.Model;
+using Persistance.EF.Extensions;
 using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiServer.FunctionalTests.Controller
@@ -18,11 +19,14 @@ namespace ApiServer.FunctionalTests.Controller
 
         [Fact(DisplayName = "Verify api/login [Post] is returning ok when data is valid")]
         [Trait("Category", "API-Tasks")]
-        public async Task GivenValidLoginData_ShouldReturnOk()
+        public async System.Threading.Tasks.Task GivenValidLoginData_ShouldReturnOk()
         {
             //Arrange
-            Context.Users.Add(new Domain.Model.User { Username = "nicolas.roldan@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
+            Context.SetupDatabaseForTesting();
+            var user = new User { Username = "nicolas.roldan@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            Context.Users.Add(user);
             Context.SaveChanges();
+
             var model = new LoginViewModelBuilder().GetValidData();
 
             //Act
@@ -36,7 +40,7 @@ namespace ApiServer.FunctionalTests.Controller
 
         [Fact(DisplayName = "Verify api/login [Post] is returning unauthorized when data is invalid")]
         [Trait("Category", "API-Tasks")]
-        public async Task GivenInvalidLoginData_ShouldReturnUnauthorized()
+        public async System.Threading.Tasks.Task GivenInvalidLoginData_ShouldReturnUnauthorized()
         {
             //Arrange
             var model = new LoginViewModelBuilder().GetInvalidData();
@@ -51,7 +55,7 @@ namespace ApiServer.FunctionalTests.Controller
 
         [Fact(DisplayName = "Verify api/login [Post] is returning bad request when data in null")]
         [Trait("Category", "API-Tasks")]
-        public async Task GivenNullLoginData_ShouldReturnBadRequest()
+        public async System.Threading.Tasks.Task GivenNullLoginData_ShouldReturnBadRequest()
         {
             //Arrange
             LoginViewModel model = null;
@@ -66,7 +70,7 @@ namespace ApiServer.FunctionalTests.Controller
 
         [Fact(DisplayName = "Verify api/ping [Get] is returning ok")]
         [Trait("Category", "API-Tasks")]
-        public async Task GivenPing_ShouldReturnOk()
+        public async System.Threading.Tasks.Task GivenPing_ShouldReturnOk()
         {
             //Arrange
             LoginViewModel model = null;

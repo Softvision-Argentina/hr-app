@@ -29,6 +29,7 @@ namespace ApiServer.FunctionalTests.Core
                         .UseEnvironment(_env)
                         .UseConfiguration(builder.Build())
                         .UseStartup<Startup>());
+
                     Client = Server.CreateClient();
                     _configured = true;
                 }
