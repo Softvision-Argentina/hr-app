@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Xunit;
 using Microsoft.AspNetCore.TestHost;
+using Domain.Services.Repositories.EF;
 
 namespace Domain.Services.Impl.IntegrationTests.Core
 {
@@ -12,11 +13,15 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         protected TestServer Server { get; }
         protected IServiceProvider Services { get;  }
 
+        protected DataBaseContext Context { get;  }
+
         public BaseServiceIntegrationTest(ServiceFixture serviceFixture)
         {
             Client = serviceFixture.Client;
             Server = serviceFixture.Server;
             Services = serviceFixture.Server.Host.Services;
+            Context = serviceFixture.Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
+            Context.Database.EnsureCreated();
         }
     }
 }
