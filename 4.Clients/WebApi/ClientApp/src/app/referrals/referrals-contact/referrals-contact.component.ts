@@ -41,7 +41,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
 
-  
+
   @Input()
   private _visible: boolean;
   public get visibles(): boolean {
@@ -152,15 +152,15 @@ export class ReferralsContactComponent implements OnInit {
     this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-        this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null   
-    });
+        this.currentConsultant !== null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null
+      });
   }
 
-  profileChanges(profileId){
+  profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
-  
+
 
   getCandidates() {
     this.facade.candidateService.get()
@@ -217,13 +217,13 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -235,7 +235,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          if (err.message !== undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
         })
     });
@@ -243,12 +243,12 @@ export class ReferralsContactComponent implements OnInit {
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     console.log(this.filteredCandidate);
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id === candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    let candidate = this.candidates.filter(s => { return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1 });
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
@@ -293,7 +293,7 @@ export class ReferralsContactComponent implements OnInit {
 
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
 
     // for (const i in this.candidateForm.controls) {
     //   this.candidateForm.controls[i].markAsDirty();
@@ -331,7 +331,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          if (err.message !== undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
         })
     }
@@ -341,7 +341,7 @@ export class ReferralsContactComponent implements OnInit {
 
   Recontact(idCandidate: number) {
     console.log(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -370,7 +370,7 @@ export class ReferralsContactComponent implements OnInit {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
+        if (err.message !== undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error("The service is not available now. Try again later.");
       })
   }
@@ -421,7 +421,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.modalService.closeAll();
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          if (err.message !== undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
           this.app.hideLoading;
         })

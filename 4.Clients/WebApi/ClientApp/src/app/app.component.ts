@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   };
 
   constructor(private renderer: Renderer2, private google: GoogleSigninComponent,
-     private facade: FacadeService, private config: AppConfig) {
+    private facade: FacadeService, private config: AppConfig) {
     setTimeout(() => {
       this.showSpinner = false;
     }, 1500);
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
   hideLoading() {
     this.showSpinner = false;
   }
-  
+
   isAuthenticated() {
     return localStorage.getItem('currentUser') !== null;
   }

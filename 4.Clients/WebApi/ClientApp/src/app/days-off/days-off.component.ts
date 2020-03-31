@@ -140,25 +140,25 @@ export class DaysOffComponent implements OnInit {
           onClick: () => {
             if (this.compareTwoDates()) {
               this.app.showLoading();
-              if (this.validateForm.controls.DNI.valid == false) {
+              if (this.validateForm.controls.DNI.valid === false) {
                 this.facade.toastrService.error('Please input a valid DNI.');
                 this.app.hideLoading();
               }
               else {
-                const dni: number = this.validateForm.controls.DNI.value == null || this.validateForm.controls.DNI.value === undefined ? 0
+                const dni: number = this.validateForm.controls.DNI.value === null || this.validateForm.controls.DNI.value === undefined ? 0
                   : this.validateForm.controls.DNI.value;
                 this.employeeService.GetByDNI(dni)
                   .subscribe(res => {
                     this.app.hideLoading();
                     this.employee = res.body;
-                    if (!this.employee || this.employee == null) {
+                    if (!this.employee || this.employee === null) {
                       this.facade.toastrService.error('There is no employee with that DNI.');
                     } else {
                       let isCompleted: boolean = true;
                       for (const i in this.validateForm.controls) {
                         this.validateForm.controls[i].markAsDirty();
                         this.validateForm.controls[i].updateValueAndValidity();
-                        if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                        if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
                       }
                       let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview
                       if (isCompleted) {
@@ -180,7 +180,7 @@ export class DaysOffComponent implements OnInit {
                           }, err => {
                             this.app.hideLoading();
                             // modal.nzFooter[1].loading = false;
-                            if (err.message != undefined) this.facade.toastrService.error(err.message);
+                            if (err.message !== undefined) this.facade.toastrService.error(err.message);
                             else this.facade.toastrService.error('The service is not available now. Try again later.');
                           })
                       }
@@ -223,7 +223,7 @@ export class DaysOffComponent implements OnInit {
               .subscribe(res => {
                 this.employee = res.body;
                 this.app.hideLoading();
-                if (!this.employee || this.employee == null) {
+                if (!this.employee || this.employee === null) {
                   this.facade.toastrService.error('There is no employee with that DNI.');
                 }
               })
@@ -232,12 +232,12 @@ export class DaysOffComponent implements OnInit {
               for (const i in this.validateForm.controls) {
                 this.validateForm.controls[i].markAsDirty();
                 this.validateForm.controls[i].updateValueAndValidity();
-                if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
               }
 
               let newDate; let newEndDate;
-              newDate = editedDayOff.date == this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
-              newEndDate = editedDayOff.endDate == this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
+              newDate = editedDayOff.date === this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
+              newEndDate = editedDayOff.endDate === this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
 
               let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
 
@@ -273,7 +273,7 @@ export class DaysOffComponent implements OnInit {
   }
 
   showDeleteConfirm(dayOffId: number): void {
-    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id == dayOffId);
+    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id === dayOffId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ?',
       nzContent: 'This action will delete the day off',
@@ -285,7 +285,7 @@ export class DaysOffComponent implements OnInit {
           this.getDaysOff();
           this.facade.toastrService.success('Day off was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          if (err.message !== undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error('The service is not available now. Try again later.');
         })
     });
@@ -319,7 +319,7 @@ export class DaysOffComponent implements OnInit {
       }, err => {
         // this.app.hideLoading();
         // modal.nzFooter[1].loading = false;
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
+        if (err.message !== undefined) this.facade.toastrService.error(err.message);
         else this.facade.toastrService.error('The service is not available now. Try again later.');
       })
   }

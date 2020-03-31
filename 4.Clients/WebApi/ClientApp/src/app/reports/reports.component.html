@@ -125,7 +125,7 @@
 </nz-collapse>
 <nz-collapse class="dropdown-padding">
   <nz-collapse-panel [nzHeader]="'Skills Report'" (click)="getSkillsPercentage()">
-    <div *ngIf="skills.length == 0 || candidates.length == 0">
+    <div *ngIf="skills.length === 0 || candidates.length === 0">
       <span style="margin-left: 25%;">
         <strong>THERE IS NO DATA TO SHOW</strong>
       </span>

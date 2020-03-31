@@ -33,13 +33,13 @@ export class HireProjectedComponent implements OnInit {
         this.hireProjections = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         this.listOfDisplayData = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         res.forEach(hp => {
-          if (this.yearList.filter(yl => yl == hp.year).length == 0) this.yearList.push(hp.year);
+          if (this.yearList.filter(yl => yl === hp.year).length === 0) this.yearList.push(hp.year);
         });
       }, err => console.log(err));
   }
 
   onMonthChange(result: Date) {
-    if (result != null) {
+    if (result !== null) {
       if (this.hireProjections.filter(h => h.month === result.getMonth() + 1 && h.year === result.getFullYear()).length > 0) {
         this.projectionForm.controls['month'].setErrors({ 'exists': true });
       }
@@ -47,7 +47,7 @@ export class HireProjectedComponent implements OnInit {
   }
 
   exists(errors: any) {
-    if (errors != null && errors['exists']) return true;
+    if (errors !== null && errors['exists']) return true;
     else return false;
   }
 
@@ -89,7 +89,7 @@ export class HireProjectedComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
+                  if (err.message !== undefined) this.facade.toastrService.error(err.message);
                   else this.facade.toastrService.error("The service is not available now. Try again later.");
                 })
             }
@@ -102,7 +102,7 @@ export class HireProjectedComponent implements OnInit {
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.projectionForm.reset();
-    let editedProjection: HireProjection = this.hireProjections.filter(projection => projection.id == id)[0];
+    let editedProjection: HireProjection = this.hireProjections.filter(projection => projection.id === id)[0];
     this.projectionForm.controls['value'].setValue(editedProjection.value);
     this.projectionForm.controls['month'].setValue(new Date(editedProjection.year + '-' + editedProjection.month));
     const modal = this.facade.modalService.create({
@@ -142,7 +142,7 @@ export class HireProjectedComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
+                  if (err.message !== undefined) this.facade.toastrService.error(err.message);
                   else this.facade.toastrService.error("The service is not available now. Try again later.");
                 })
             }
@@ -154,7 +154,7 @@ export class HireProjectedComponent implements OnInit {
   }
 
   showDeleteConfirm(hireProjectionId: number): void {
-    let hireProjectionDelete: HireProjection = this.hireProjections.find(hireProjection => hireProjection.id == hireProjectionId);
+    let hireProjectionDelete: HireProjection = this.hireProjections.find(hireProjection => hireProjection.id === hireProjectionId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ' + this.monthList[hireProjectionDelete.month - 1] + ' of ' + hireProjectionDelete.year + ' ?',
       nzContent: 'This action will delete the projection associated with this month',
@@ -166,16 +166,16 @@ export class HireProjectedComponent implements OnInit {
           this.getHireProjections();
           this.facade.toastrService.success('Projection was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
+          if (err.message !== undefined) this.facade.toastrService.error(err.message);
           else this.facade.toastrService.error("The service is not available now. Try again later.");
         })
     });
   }
 
   searchYear(year: number) {
-    if (year == 0) this.listOfDisplayData = this.hireProjections;
+    if (year === 0) this.listOfDisplayData = this.hireProjections;
     else {
-      this.listOfDisplayData = this.hireProjections.filter(hp => hp.year == year);
+      this.listOfDisplayData = this.hireProjections.filter(hp => hp.year === year);
     }
   }
 

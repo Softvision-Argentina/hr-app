@@ -15,7 +15,8 @@
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('status').dirty && offerForm.get('status').errors">Please select a status</nz-form-explain>
+                    <nz-form-explain *ngIf="offerForm.get('status').dirty && offerForm.get('status').errors">Please
+                        select a status</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -40,7 +41,9 @@
                         <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('consultantOwnerId').dirty && offerForm.get('consultantOwnerId').errors">Please input the recruiter</nz-form-explain>
+                    <nz-form-explain
+                        *ngIf="offerForm.get('consultantOwnerId').dirty && offerForm.get('consultantOwnerId').errors">
+                        Please input the recruiter</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -62,16 +65,20 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority">Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select #seniority formControlName="seniority" (ngModelChange)="updateSeniority(seniority.value)">
-                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
+                    <nz-select #seniority formControlName="seniority"
+                        (ngModelChange)="updateSeniority(seniority.value)">
+                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}"
+                            [nzValue]="seniority.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('seniority').dirty && offerForm.get('seniority').errors">Please select a seniority</nz-form-explain>
+                    <nz-form-explain *ngIf="offerForm.get('seniority').dirty && offerForm.get('seniority').errors">
+                        Please select a seniority</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="6" nzOffset="6">
-            <button nz-button [disabled]="offerForm.get('status').value != 1" nzType="primary" (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
+            <button nz-button [disabled]="offerForm.get('status').value !== 1" nzType="primary"
+                (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
         </div>
     </div>
     <div nz-row>
@@ -90,9 +97,11 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <textarea rows="1" id="feedback" nz-input formControlName="feedback"
+                        placeholder="Input any additional information if necessary" id="feedback"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d" *ngIf="offerForm.get('feedback').dirty && offerForm.get('feedback').errors">
+                <nz-form-explain style="color: #f5222d"
+                    *ngIf="offerForm.get('feedback').dirty && offerForm.get('feedback').errors">
                     <ng-container *ngIf="offerForm.get('feedback')?.hasError('trimBeginError')">
                         The input has leading whitespace!
                     </ng-container>
@@ -107,7 +116,9 @@
         <div nz-col nzSpan="8" nzOffset="4">
             <nz-form-item>
                 <nz-form-control [nzSm]="12" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!backCheckEnabled" (change)="toggleBackgroundCheck()" (click)="toggleBackgroundCheck()" formControlName="backgroundCheckDone" nzFor="backgroundCheckDone">Background Check</label>
+                    <label nz-checkbox [nzDisabled]="!backCheckEnabled" (change)="toggleBackgroundCheck()"
+                        (click)="toggleBackgroundCheck()" formControlName="backgroundCheckDone"
+                        nzFor="backgroundCheckDone">Background Check</label>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -116,7 +127,8 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate">Done Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="backgroundCheckDoneDate"></nz-date-picker>
-                    <nz-form-explain *ngIf="offerForm.get('backgroundCheckDoneDate').dirty && offerForm.get('backgroundCheckDoneDate').errors">
+                    <nz-form-explain
+                        *ngIf="offerForm.get('backgroundCheckDoneDate').dirty && offerForm.get('backgroundCheckDoneDate').errors">
                         Please input a date
                     </nz-form-explain>
                 </nz-form-control>
@@ -127,7 +139,9 @@
         <div nz-col nzSpan="8" nzOffset="4">
             <nz-form-item>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!preocupationalCheckEnabled" (click)="togglePreocupationalCheck()" (change)="togglePreocupationalCheck()" formControlName="preocupationalDone" nzFor="preocupationalDone">Pre-Ocupational Check</label>
+                    <label nz-checkbox [nzDisabled]="!preocupationalCheckEnabled" (click)="togglePreocupationalCheck()"
+                        (change)="togglePreocupationalCheck()" formControlName="preocupationalDone"
+                        nzFor="preocupationalDone">Pre-Ocupational Check</label>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -135,7 +149,8 @@
             <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate">Done Date</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
-                <nz-form-explain *ngIf="offerForm.get('preocupationalDoneDate').dirty && offerForm.get('preocupationalDoneDate').errors">
+                <nz-form-explain
+                    *ngIf="offerForm.get('preocupationalDoneDate').dirty && offerForm.get('preocupationalDoneDate').errors">
                     Please input a date
                 </nz-form-explain>
             </nz-form-control>
@@ -146,10 +161,13 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Input the rejection reason"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && offerForm.get('rejectionReason').dirty && offerForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="offerForm.get('rejectionReason')?.dirty && offerForm.get('rejectionReason')?.errors ">
+                <nz-form-explain style="color: #f5222d "
+                    *ngIf="showRejectionReason() && offerForm.get('rejectionReason').dirty && offerForm.get('rejectionReason').errors ">
+                    <ng-container
+                        *ngIf="offerForm.get('rejectionReason')?.dirty && offerForm.get('rejectionReason')?.errors ">
                         Please input rejection reason!
                     </ng-container>
                 </nz-form-explain>

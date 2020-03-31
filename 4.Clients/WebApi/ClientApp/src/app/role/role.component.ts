@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { Role } from 'src/entities/role';
 import { Employee } from 'src/entities/employee';
@@ -52,7 +52,7 @@ export class RoleComponent implements OnInit {
             this.getRoles();
             this.facade.toastrService.success('Role was deleted !');
           }, err => {
-            if (err.message != undefined) this.facade.toastrService.error(err.message);
+            if (err.message !== undefined) this.facade.toastrService.error(err.message);
             else this.facade.toastrService.error("The service is not available now. Try again later.");
           })
         }
@@ -63,7 +63,7 @@ export class RoleComponent implements OnInit {
   getEmployeesWithDeleteRole(role: Role) {
     this.facade.employeeService.get("GetAll")
       .subscribe(res => {
-        this.employeesWithDeleteRole = res.filter(e => e.role.id == role.id);
+        this.employeesWithDeleteRole = res.filter(e => e.role.id === role.id);
       }, err => {
         console.log(err);
       });
@@ -106,7 +106,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully created !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
+                if (err.message !== undefined) this.facade.toastrService.error(err.message);
                 else this.facade.toastrService.error("The service is not available now. Try again later.");
               })
             }
@@ -153,7 +153,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully edited !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
+                if (err.message !== undefined) this.facade.toastrService.error(err.message);
                 else this.facade.toastrService.error("The service is not available now. Try again later.");
               })
             }

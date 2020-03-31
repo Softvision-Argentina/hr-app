@@ -72,7 +72,7 @@
           <th class="tableHead">Actions</th>
         </tr>
       </thead>
-      
+
       <tbody>
         <tr *ngFor="let process of listOfDisplayData">
           <td scope="row">
@@ -107,14 +107,14 @@
             <nz-divider nzType="vertical"></nz-divider>
             <i nzTitle="Delete" (click)="emitDelete(process.id)" style="cursor: pointer;" nz-tooltip nz-icon
               type="delete" theme="outline"></i>
-            <nz-divider nzType="vertical" *ngIf="process && (process.status != 2 && process.status != 3  )">
+            <nz-divider nzType="vertical" *ngIf="process && (process.status !== 2 && process.status !== 3  )">
             </nz-divider>
             <i nzTitle="Approve Process" style="cursor: pointer;" nz-tooltip
-              *ngIf="process && (process.status != 2 && process.status != 3  )" nz-icon nzType="check-circle"
+              *ngIf="process && (process.status !== 2 && process.status !== 3  )" nz-icon nzType="check-circle"
               nzTheme="outline" (click)="emitApproval(process.id)"></i>
             <nz-divider nzType="vertical"></nz-divider>
             <i nzTitle="Reject process" nzPlacement="topLeft" nz-tooltip style="cursor: pointer;"
-              *ngIf="process && process.status != 4" nz-icon nzType="close" nzTheme="outline"
+              *ngIf="process && process.status !== 4" nz-icon nzType="close" nzTheme="outline"
               (click)="emitReject(process.id)"></i>
           </td>
         </tr>
