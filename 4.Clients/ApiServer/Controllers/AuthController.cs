@@ -59,7 +59,7 @@ namespace ApiServer.Controllers
             {
                 return Unauthorized();
             }
-        }        
+        }
 
         [HttpPost, Route("loginExternal")]
         public IActionResult LoginExternal([FromBody]TokenViewModel jwt)
@@ -89,10 +89,10 @@ namespace ApiServer.Controllers
                         GetToken(jwtSettings, _user, out userViewModel, out tokenString);
                         return Ok(new { Token = tokenString, User = userViewModel });
                     }
-                }                
-               
+                }
+
                 return Unauthorized();
-                
+
             }
             catch (Exception)
             {
@@ -112,7 +112,7 @@ namespace ApiServer.Controllers
                           new Claim(ClaimTypes.Name, _user.Id.ToString()),
                           new Claim(ClaimTypes.Role, _user.Role.ToString())
                 },
-                expires: DateTime.Now.AddMinutes(jwtSettings.MinutesToExpiration),
+                expires: DateTime.UtcNow.AddMinutes(jwtSettings.MinutesToExpiration),
                 signingCredentials: signinCredentials
             );
 

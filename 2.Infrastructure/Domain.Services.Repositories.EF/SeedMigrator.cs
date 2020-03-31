@@ -72,7 +72,12 @@ namespace Domain.Services.Repositories.EF
             var consultant15 = new Consultant { Name = "Matias", LastName = "Totaro", PhoneNumber = "(+54)12359742", EmailAddress = "matias.totaro@softvision.com" };
             var consultant19 = new Consultant { Name = "Teo", LastName = "Benavides", PhoneNumber = "(+54)12359742", EmailAddress = "teo.benavides@softvision.com" };
             var consultant20 = new Consultant { Name = "Tomas", LastName = "Guagnini", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.guagnini@softvision.com" };
+            var consultant21 = new Consultant { Name = "Ignacio", LastName = "Casciaro", PhoneNumber = "(+54)12359742", EmailAddress = "gustavo.petruzzi@softvision.com" };
+            var consultant22 = new Consultant { Name = "Tomas", LastName = "Reisenman", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.reisenman@softvision.com" };
             var consultant23 = new Consultant { Name = "Nicolas", LastName = "Roldan", PhoneNumber = "(+54)49794582", EmailAddress = "nicolas.roldan@softvision.com" };
+            var consultant24 = new Consultant { Name = "Gustavo", LastName = "Petruzzi", PhoneNumber = "(+54)12359742", EmailAddress = "gustavo.petruzzi@softvision.com" };
+            var consultant25 = new Consultant { Name = "Marcelo", LastName = "Martin", PhoneNumber = "(+54)12359742", EmailAddress = "marcelo.martin@softvision.com" };
+            var consultant26 = new Consultant { Name = "Rodrigo", LastName = "Ramirez", PhoneNumber = "(+54)12359742", EmailAddress = "rodrigo.ramirez@softvision.com" };
 
             context.Consultants.Add(consultant1);
             context.Consultants.Add(consultant2);
@@ -91,7 +96,11 @@ namespace Domain.Services.Repositories.EF
             context.Consultants.Add(consultant15);
             context.Consultants.Add(consultant19);
             context.Consultants.Add(consultant20);
+            context.Consultants.Add(consultant21);
+            context.Consultants.Add(consultant22);
             context.Consultants.Add(consultant23);
+            context.Consultants.Add(consultant24);
+            context.Consultants.Add(consultant25);
             context.SaveChanges();
             #endregion
 
@@ -115,17 +124,17 @@ namespace Domain.Services.Repositories.EF
 
 
             #region Candidates
-            var candidate1 = new Candidate { Profile=Profile1, Name = "Cristian", LastName = "Piqué", DNI = 34578644, PhoneNumber = "(+54)2355677581", EmailAddress = "cristian.pique@softvision.com", LinkedInProfile = "https://www.linkedin.com/in/me-cristianpique/", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant1, PreferredOffice = Office1, Community=Community1};
-            var candidate2 = new Candidate { Profile = Profile2, Community =Community2, Name = "Cristian", LastName = "Piqué", DNI = 1234567, PhoneNumber = "(+54)1122334455", EmailAddress = "gerardo.chechik@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.Hired, Recruiter = consultant2, PreferredOffice = Office2};
-            var candidate3 = new Candidate { Profile = Profile3, Community = Community3, Name = "Javier", LastName = "Páez", DNI = 12345678, PhoneNumber = "(+54)1122334455", EmailAddress = "javier.paez@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Recall, Recruiter = consultant3, PreferredOffice = Office1};
-            var candidate4 = new Candidate { Profile = Profile2, Community = Community4, Name = "Matías", LastName = "Luraghi", DNI = 1234578, PhoneNumber = "(+54)1122334455", EmailAddress = "matias.luraghi@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant4, PreferredOffice = Office1};
-            var candidate5 = new Candidate { Profile = Profile1, Community = Community1, Name = "Juan Pablo", LastName = "Maldonado", DNI = 1345678, PhoneNumber = "(+54)1122334455", EmailAddress = "juanpablo.maldonado@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.InProgress, Recruiter = consultant5, PreferredOffice = Office2};
-            var candidate6 = new Candidate { Profile = Profile3, Community = Community2, Name = "Matías", LastName = "Caniglia", DNI = 1234568, PhoneNumber = "(+1)1122334455", EmailAddress = "matias.caniglia@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant6, PreferredOffice = Office2};
-            var candidate7 = new Candidate { Profile = Profile2, Community = Community3, Name = "Gustavo", LastName = "Gilberto", DNI = 2345678, PhoneNumber = "(+54)1122334455", EmailAddress = "gustavo.gilberto@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant1, PreferredOffice = Office2};
-            var candidate8 = new Candidate { Profile = Profile1, Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant2, PreferredOffice = Office1};
-            var candidate9 = new Candidate { Profile = Profile2, Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, Recruiter = consultant3, PreferredOffice = Office1};
-            var candidate10 = new Candidate { Profile = Profile3, Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, Recruiter = consultant4, PreferredOffice = Office1};
-            var candidate11 = new Candidate { Profile = Profile1, Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, Recruiter = consultant5, PreferredOffice = Office1};
+            var candidate1 = new Candidate { Profile = Profile1, Name = "Cristian", LastName = "Piqué", DNI = 34578644, PhoneNumber = "(+54)2355677581", EmailAddress = "cristian.pique@softvision.com", LinkedInProfile = "https://www.linkedin.com/in/me-cristianpique/", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant1, PreferredOffice = Office1, Community = Community1 };
+            var candidate2 = new Candidate { Profile = Profile2, Community = Community2, Name = "Cristian", LastName = "Piqué", DNI = 1234567, PhoneNumber = "(+54)1122334455", EmailAddress = "gerardo.chechik@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.Hired, Recruiter = consultant2, PreferredOffice = Office2 };
+            var candidate3 = new Candidate { Profile = Profile3, Community = Community3, Name = "Javier", LastName = "Páez", DNI = 12345678, PhoneNumber = "(+54)1122334455", EmailAddress = "javier.paez@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Recall, Recruiter = consultant3, PreferredOffice = Office1 };
+            var candidate4 = new Candidate { Profile = Profile2, Community = Community4, Name = "Matías", LastName = "Luraghi", DNI = 1234578, PhoneNumber = "(+54)1122334455", EmailAddress = "matias.luraghi@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant4, PreferredOffice = Office1 };
+            var candidate5 = new Candidate { Profile = Profile1, Community = Community1, Name = "Juan Pablo", LastName = "Maldonado", DNI = 1345678, PhoneNumber = "(+54)1122334455", EmailAddress = "juanpablo.maldonado@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.InProgress, Recruiter = consultant5, PreferredOffice = Office2 };
+            var candidate6 = new Candidate { Profile = Profile3, Community = Community2, Name = "Matías", LastName = "Caniglia", DNI = 1234568, PhoneNumber = "(+1)1122334455", EmailAddress = "matias.caniglia@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant6, PreferredOffice = Office2 };
+            var candidate7 = new Candidate { Profile = Profile2, Community = Community3, Name = "Gustavo", LastName = "Gilberto", DNI = 2345678, PhoneNumber = "(+54)1122334455", EmailAddress = "gustavo.gilberto@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant1, PreferredOffice = Office2 };
+            var candidate8 = new Candidate { Profile = Profile1, Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant2, PreferredOffice = Office1 };
+            var candidate9 = new Candidate { Profile = Profile2, Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, Recruiter = consultant3, PreferredOffice = Office1 };
+            var candidate10 = new Candidate { Profile = Profile3, Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, Recruiter = consultant4, PreferredOffice = Office1 };
+            var candidate11 = new Candidate { Profile = Profile1, Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, Recruiter = consultant5, PreferredOffice = Office1 };
             context.Candidates.Add(candidate1);
             context.Candidates.Add(candidate2);
             context.Candidates.Add(candidate3);
@@ -141,10 +150,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Postulants
-            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
+            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
 
             context.Postulants.Add(postulant1);
             context.Postulants.Add(postulant2);
@@ -437,7 +446,7 @@ namespace Domain.Services.Repositories.EF
             {
                 CandidateId = 1,
                 ConsultantDelegateId = 1,
-                ConsultantOwnerId = 2,     
+                ConsultantOwnerId = 2,
                 StartDate = DateTime.Today.AddDays(-100),
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
@@ -502,7 +511,7 @@ namespace Domain.Services.Repositories.EF
                 TechnicalStage = new TechnicalStage { ProcessId = 5, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
                 ClientStage = new ClientStage { ProcessId = 5, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 5, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.Hired, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(35) }
-        };
+            };
 
             var process6 = new Process
             {
@@ -528,12 +537,12 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Tasks
-            var task1 = new Task { Title = "Búsqueda de DevOps", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), ConsultantId = 1, IsApprove = false };
-            var task2 = new Task { Title = "Contactar candidato José Pérez", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), ConsultantId = 2, IsApprove = false };
-            var task3 = new Task { Title = "Envío de mail con feriados", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), ConsultantId = 3, IsApprove = false, IsNew = true };
-            var task4 = new Task { Title = "Búsqueda de .Net", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), ConsultantId = 7, IsApprove = false, IsNew = false };
-            var task5 = new Task { Title = "Contactar candidato Juan", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), ConsultantId = 7, IsApprove = false, IsNew = false };
-            var task6 = new Task { Title = "Envío de mail con WHF", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), ConsultantId = 7, IsApprove = false, IsNew = true };
+            var task1 = new Task { Title = "Búsqueda de DevOps", CreatedDate = DateTime.UtcNow.AddDays(-7), EndDate = DateTime.UtcNow.AddDays(-1), ConsultantId = 1, IsApprove = false };
+            var task2 = new Task { Title = "Contactar candidato José Pérez", CreatedDate = DateTime.UtcNow.AddDays(-2), EndDate = DateTime.UtcNow.AddDays(1), ConsultantId = 2, IsApprove = false };
+            var task3 = new Task { Title = "Envío de mail con feriados", CreatedDate = DateTime.UtcNow, EndDate = DateTime.UtcNow.AddDays(11), ConsultantId = 3, IsApprove = false, IsNew = true };
+            var task4 = new Task { Title = "Búsqueda de .Net", CreatedDate = DateTime.UtcNow.AddDays(-7), EndDate = DateTime.UtcNow.AddDays(-1), ConsultantId = 7, IsApprove = false, IsNew = false };
+            var task5 = new Task { Title = "Contactar candidato Juan", CreatedDate = DateTime.UtcNow.AddDays(-2), EndDate = DateTime.UtcNow.AddDays(1), ConsultantId = 7, IsApprove = false, IsNew = false };
+            var task6 = new Task { Title = "Envío de mail con WHF", CreatedDate = DateTime.UtcNow, EndDate = DateTime.UtcNow.AddDays(11), ConsultantId = 7, IsApprove = false, IsNew = true };
             context.Tasks.Add(task1);
             context.Tasks.Add(task2);
             context.Tasks.Add(task3);
@@ -574,9 +583,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region HireProjection
-            var hProjection1 = new HireProjection { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 65};
-            var hProjection2 = new HireProjection { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 35 };
-            var hProjection3 = new HireProjection { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 85 };
+            var hProjection1 = new HireProjection { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 65 };
+            var hProjection2 = new HireProjection { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 35 };
+            var hProjection3 = new HireProjection { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 85 };
             context.HireProjection.Add(hProjection1);
             context.HireProjection.Add(hProjection2);
             context.HireProjection.Add(hProjection3);
@@ -584,9 +593,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region EmployeeCasualty
-            var eCasualty1 = new EmployeeCasualty { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 45 };
-            var eCasualty2 = new EmployeeCasualty { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 22 };
-            var eCasualty3 = new EmployeeCasualty { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 68 };
+            var eCasualty1 = new EmployeeCasualty { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 45 };
+            var eCasualty2 = new EmployeeCasualty { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 22 };
+            var eCasualty3 = new EmployeeCasualty { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 68 };
             context.EmployeeCasualty.Add(eCasualty1);
             context.EmployeeCasualty.Add(eCasualty2);
             context.EmployeeCasualty.Add(eCasualty3);
@@ -624,8 +633,10 @@ namespace Domain.Services.Repositories.EF
             var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user24 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            
+            var user24 = new User { FirstName = "Gustavo", LastName = "Petruzzi", Username = "gustavo.petruzzi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user25 = new User { FirstName = "Marcelo", LastName = "Martin", Username = "marcelo.martin@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user26 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+
             context.Users.Add(user2);
             context.Users.Add(user3);
             context.Users.Add(user4);
@@ -649,7 +660,9 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user22);
             context.Users.Add(user23);
             context.Users.Add(user24);
-            
+            context.Users.Add(user25);
+            context.Users.Add(user26);
+
             context.SaveChanges();
             #endregion
 
@@ -685,7 +698,7 @@ namespace Domain.Services.Repositories.EF
 
             #region Dashboards
             var dashboard1 = new Dashboard { Name = "Processes Dashboard" };
-            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" }; 
+            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" };
             var dashboard3 = new Dashboard { Name = "Progress Processes Dashboard" };
             var dashboard4 = new Dashboard { Name = "Completed Processes Dashboard" };
             var dashboard5 = new Dashboard { Name = "Casualties and actual hires comparation Dashboard" };
@@ -710,10 +723,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region DaysOff
-            var daysOff1 = new DaysOff {  Date = DateTime.Today.AddDays(-12), EndDate= DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff2 = new DaysOff {  Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
-            var daysOff3 = new DaysOff {  Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff4 = new DaysOff {  Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff1 = new DaysOff { Date = DateTime.Today.AddDays(-12), EndDate = DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff2 = new DaysOff { Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff3 = new DaysOff { Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff4 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
             var daysOff5 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             var daysOff6 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.PTO, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             context.DaysOff.Add(daysOff1);

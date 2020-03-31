@@ -1,3 +1,16 @@
+
+.container {
+  margin-right: auto; 
+  margin-left:  auto; 
+  max-width: 85%; 
+  padding-right: 110px; 
+  padding-left:  10px; 
+}
+
+.proximaNova {
+    font-family: "ProximaNova";
+}
+
 .search-box {
     padding: 8px;
 }
@@ -29,3 +42,107 @@
 nz-step {
     cursor: pointer;
 }
+
+.wrapper {
+  position: relative;
+}
+
+.buttonStyle {
+  width: 215px;
+  height: 40px;
+  background-image: linear-gradient(to top, #f4633a, #c800a1);
+  margin-left: 50px;
+  border: none;  
+  position: absolute;
+}
+
+.buttonDiv {
+  margin-left: 10px;
+
+}
+
+.buttonFont {
+  font-size: 20px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.67px;
+  color: #ffffff;
+}
+
+.nameStyle {
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #c800a1;
+}
+
+.headerDiv {
+  width: 28%;
+}
+
+.headerFont {
+  display: inline-block;
+  font-family: ProximaNova-Extrabold;
+  font-size: 44px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -0.88px;
+  color: #222222;
+}
+
+.filterButton {
+    font-size: 30px;
+}   
+
+.padding {
+    padding: 70px 300px 0 300px;
+}
+.grid-padding{
+    padding: 0 300px;
+}
+
+::ng-deep .ant-tabs-nav .ant-tabs-tab-active {
+  color: black;
+  font-weight: 900;
+}
+
+::ng-deep .ant-tabs-ink-bar {
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  height: 2px;
+  background-color: #c800a1;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+::ng-deep .ant-tabs-nav .ant-tabs-tab:hover {
+  color: #c800a1
+}
+
+
+
+@media screen and (max-width: 1620px) and (min-width: 1280px) {
+ .container {
+  max-width: 95%;
+ }
+}
+
+@media screen and (max-width: 1460px) and (min-width: 1280px) {
+  .container {
+    max-width: 99%;
+    padding-right: 100px;
+  }
+ }
+
+
+

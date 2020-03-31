@@ -28,6 +28,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LoaderComponent } from './loader/loader.component';
 import { ProcessesComponent } from './processes/processes/processes.component';
 import { ProcessDetailComponent } from './processes/process-detail/process-detail.component';
+import { ProcessTableComponent } from './processes/processes/processes-table/processes-table.component';
 import { StageDetailComponent } from './stages/stage-detail/stage-detail.component';
 import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
 import { ConsultantsComponent } from './consultants/consultants.component';
@@ -162,6 +163,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LoaderComponent,
       ProcessesComponent,
       ProcessDetailComponent,
+      ProcessTableComponent,
       StageDetailComponent,
       StageEditComponent,
       ReportsComponent,
