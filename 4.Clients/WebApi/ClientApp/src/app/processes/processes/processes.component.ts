@@ -77,18 +77,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   processForm: FormGroup;
   rejectProcessForm: FormGroup;
   declineProcessForm: FormGroup;
-  isDetailsVisible: boolean = false;
+  isDetailsVisible = false;
   emptyProcess: Process;
 
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
   consultants: Consultant[] = [];
 
-  profileSearch: number = 0;
-  profileSearchName: string = 'ALL';
+  profileSearch = 0;
+  profileSearchName = 'ALL';
 
-  communitySearch: number = 0;
-  communitySearchName: string = 'ALL';
+  communitySearch = 0;
+  communitySearchName = 'ALL';
 
   profileList: any[];
 
@@ -101,24 +101,24 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   currentConsultant: any;
 
-  isEdit: boolean = false;
-  openFromEdit: boolean = false;
+  isEdit = false;
+  openFromEdit = false;
 
   currentComponent: string;
   lastComponent: string;
-  times: number = 0;
+  times = 0;
 
   selectedSeniority: SeniorityEnum;
 
   offices: Office[] = [];
   communities: Community[] = [];
   profiles: CandidateProfile[] = [];
-  stepIndex: number = 0;
+  stepIndex = 0;
 
   declineReasons: DeclineReason[] = [];
-  isDeclineReasonOther: boolean = false;
+  isDeclineReasonOther = false;
 
-  isOwnedProcesses: boolean = false;
+  isOwnedProcesses = false;
 
   forms: FormGroup[] = [];
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
@@ -134,7 +134,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.app.showLoading();
     this.app.removeBgImage();
 
-    this.getMyProcesses()
+    this.getMyProcesses();
 
 
     this.getCandidates();
@@ -146,7 +146,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-    });
+      });
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
@@ -222,7 +222,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getDeclineReasons() {
-    this.facade.declineReasonService.get("Named")
+    this.facade.declineReasonService.get('Named')
       .subscribe(res => {
         this.declineReasons = res;
       }, err => {
@@ -239,36 +239,36 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
-        let newProc: Process = res[res.length - 1];
+        const newProc: Process = res[res.length - 1];
         if (newProc && newProc.candidate) {
           this.candidatesFullList.push(newProc.candidate);
         }
       }, err => {
         console.log(err);
-      })
+      });
 
   }
 
   getMyProcesses() {
     this.facade.processService.get()
       .subscribe(res => {
-        let result = []
+        const result = [];
         for (let i = 0; i < res.length; i++) {
-          let sessionConsultant = res[i].candidate.recruiter.name + ' ' + res[i].candidate.recruiter.lastName;
+          const sessionConsultant = res[i].candidate.recruiter.name + ' ' + res[i].candidate.recruiter.lastName;
           if (sessionConsultant === this.currentUser.name) {
             result.push(res[i]);
           }
         }
         this.filteredProcesses = result;
         this.listOfDisplayData = result;
-        let newProc: Process = result[result.length - 1];
+        const newProc: Process = result[result.length - 1];
 
         if (newProc && newProc.candidate) {
           this.candidatesFullList.push(newProc.candidate);
         }
       }, err => {
         console.log(err);
-      })
+      });
 
   }
 
@@ -279,7 +279,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
-        let newProc: Process = res[res.length - 1];
+        const newProc: Process = res[res.length - 1];
         if (newProc && newProc.candidate) {
           this.candidatesFullList.push(newProc.candidate);
         }
@@ -325,7 +325,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
     this.rejectProcessForm.reset();
-    let process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
+    const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
 
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
@@ -353,7 +353,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
             }
             if (isCompleted) {
 
-              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+              const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
 
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
@@ -365,7 +365,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -381,7 +381,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
+      // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
       nzZIndex: 5,
       nzFooter: [
         {
@@ -405,12 +405,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-              let declineReason : DeclineReason = {
-                  id: this.declineProcessForm.controls['declineReasonName'].value,
-                  name: '',
-                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? 
-                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-                }
+              const declineReason: DeclineReason = {
+                id: this.declineProcessForm.controls['declineReasonName'].value,
+                name: '',
+                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ?
+                  this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
+              };
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -420,7 +420,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -452,15 +452,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   triggerSearch(val) {
     this.searchValue = val;
-    this.search()
+    this.search();
   }
 
   search(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + " " + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.name.toString() + " " + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
+      // tslint:disable-next-line: max-line-length
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
+        // tslint:disable-next-line: max-line-length
+        (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -468,25 +471,28 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   triggerSearchRecruiter(val) {
-    console.log('val: ' + val)
+    console.log('val: ' + val);
     this.searchRecruiterValue = val;
-    console.log('trigger: ' + this.searchRecruiterValue)
+    console.log('trigger: ' + this.searchRecruiterValue);
     this.searchRecruiter();
   }
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      // tslint:disable-next-line: max-line-length
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
+        // tslint:disable-next-line: max-line-length
+        (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.name
+    this.searchRecruiterValue = this.currentUser.name;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -498,11 +504,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      // tslint:disable-next-line: max-line-length
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
+        // tslint:disable-next-line: max-line-length
+        (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -512,60 +521,60 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   triggerSearchStatus(id) {
 
     this.searchValueStatus = id;
-    console.log("test:" + this.searchValueStatus)
-    this.searchStatus()
+    console.log('test:' + this.searchValueStatus);
+    this.searchStatus();
   }
 
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
-        (item.status === this.searchValueStatus)
+        (item.status === this.searchValueStatus);
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    console.log(this.listOfDisplayData)
-    console.log(this.statusList)
+    console.log(this.listOfDisplayData);
+    console.log(this.statusList);
     this.searchValueStatus = '';
   }
 
   triggerSearchCurrentStage(id) {
     this.searchValueCurrentStage = id;
-    this.searchCurrentStage()
+    this.searchCurrentStage();
   }
 
   searchCurrentStage(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
-        (item.currentStage === this.searchValueCurrentStage)
+        (item.currentStage === this.searchValueCurrentStage);
     };
-    const data = this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
+    const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
   }
 
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
-    if (this.profileSearch == 0) {
+    if (this.profileSearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
-    }
-    else {
-      this.profileSearchName = (this.profiles.find(p => p.id == this.profileSearch)).name;
-      this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.profile.id == searchedProfile);
+    } else {
+      this.profileSearchName = (this.profiles.find(p => p.id === this.profileSearch)).name;
+      this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.profile.id === searchedProfile);
       this.communitySearchName = 'ALL';
     }
   }
 
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
-    if (this.communitySearch == 0) {
+    if (this.communitySearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
-    }
-    else {
-      this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
-      this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
-      this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id == searchedCommunity);
+    } else {
+      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
+      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
+      this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id === searchedCommunity);
       this.profileSearchName = 'ALL';
     }
   }
@@ -583,9 +592,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isEdit = true;
       this.openFromEdit = true;
       // TODO: Is this working?
-      this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
-    }
-    else this.emptyProcess = undefined;
+      // tslint:disable-next-line: max-line-length
+      this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
+    } else { this.emptyProcess = undefined; }
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -613,19 +622,19 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id === candidateID)[0];
 
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id == consultantID)[0];
+    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
     this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
   }
 
   showDeleteConfirm(processID: number): void {
-    let procesDelete: Process = this.filteredProcesses.find(p => p.id == processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);    
+    const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
+    const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -643,8 +652,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   onCheck(): number {
-    let i: number = 0;
-    let carouselSlide: number = -1;
+    let i = 0;
+    let carouselSlide = -1;
     this.forms.forEach(form => {
       form = this.checkForm(form);
       if (form.invalid) {
@@ -657,23 +666,24 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   checkForm(form: FormGroup): FormGroup {
     for (const i in form.controls) {
-      form.controls[i].markAsDirty();
-      form.controls[i].updateValueAndValidity();
+      if (form.controls[i]) {
+        form.controls[i].markAsDirty();
+        form.controls[i].updateValueAndValidity();
+      }
     }
     return form;
   }
 
   validateForms(): boolean {
     this.getForms();
-    let slide: number = this.onCheck();
+    const slide: number = this.onCheck();
     if (slide > -1) {
       this.processCarousel.goTo(slide);
-      let elementName: string = slide == 0 ? 'candidateButton' : slide == 1 ? 'hrButton' : slide == 2 ? 'technicalButton'
-        : slide == 3 ? 'clientButton' : slide == 4 ? 'offerButton' : slide == 5 ? 'hireButton' : 'none';
+      const elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
+        : slide === 3 ? 'clientButton' : slide === 4 ? 'offerButton' : slide === 5 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
-    }
-    else return true;
+    } else { return true; }
   }
 
   wishedStage(choosenStage: number, elementName: string) {
@@ -698,7 +708,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   checkSlideIndex(elementName: string) {
     this.currentComponent = elementName;
-    if (this.times == 0) {
+    if (this.times === 0) {
       this.lastComponent = this.currentComponent;
     }
     document.getElementById('candidateButton').style.borderWidth = '0px';
@@ -738,13 +748,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
           });
-      }
-      else {
+      } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
-              let declineReason = newProcess.declineReason;
+              const declineReason = newProcess.declineReason;
               this.openDeclineModal(newProcess, declineProcessModal).afterClose
                 .subscribe(sel => {
                   if (declineReason !== newProcess.declineReason) {
@@ -758,7 +767,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(res => {
+                .subscribe( () => {
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();
@@ -821,7 +830,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProcessStatus(stages: Stage[]): number {
-    let processStatus: number = 0;
+    let processStatus = 0;
     stages.forEach(stage => {
       if (stage.status === StageStatusEnum.InProgress) { processStatus = ProcessStatusEnum.InProgress; }
       if (stage.status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.InProgress; }
@@ -830,6 +839,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
+      // tslint:disable-next-line: max-line-length
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }
@@ -838,7 +848,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getStatusColor(status: number): string {
-    let statusName = this.statusList.filter(s => s.id == status)[0].name;
+    const statusName = this.statusList.filter(s => s.id === status)[0].name;
     switch (statusName) {
       case 'Hired': return 'success';
       case 'Rejected': return 'error';
@@ -978,8 +988,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   findProfileByName(name) {
     let counter = 0;
     for (let i = 0; i < this.profiles.length; i++) {
-      name.toLowerCase() === this.profiles[i].name.toLowerCase() ? this.searchProfile(this.profiles[i].id) : counter++
+      name.toLowerCase() === this.profiles[i].name.toLowerCase() ? this.searchProfile(this.profiles[i].id) : counter++;
     }
-    counter === this.profiles.length ? this.searchProfile(0) : null
+    // tslint:disable-next-line: no-unused-expression
+    counter === this.profiles.length ? this.searchProfile(0) : null;
   }
 }

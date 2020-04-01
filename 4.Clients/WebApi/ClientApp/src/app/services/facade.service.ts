@@ -50,7 +50,7 @@ export class FacadeService {
 
   private _daysOffService: DaysOffService;
   public get daysOffService(): DaysOffService {
-    if(!this._daysOffService){
+    if (!this._daysOffService) {
       this._daysOffService = this.injector.get(DaysOffService);
     }
     return this._daysOffService;
@@ -58,7 +58,7 @@ export class FacadeService {
 
   private _companyCalendarService: CompanyCalendarService;
   public get companyCalendarService(): CompanyCalendarService {
-    if(!this._companyCalendarService){
+    if (!this._companyCalendarService) {
       this._companyCalendarService = this.injector.get(CompanyCalendarService);
     }
     return this._companyCalendarService;
@@ -179,7 +179,7 @@ export class FacadeService {
   private _reservationService: ReservationService;
   public get ReservationService(): ReservationService {
     if (!this._reservationService) { // esta seteado?
-      this._reservationService = this.injector.get(ReservationService); //lo setea
+      this._reservationService = this.injector.get(ReservationService); // lo setea
     }
     return this._reservationService;
   }
@@ -187,7 +187,7 @@ export class FacadeService {
   private _roomService: RoomService;
   public get RoomService(): RoomService {
     if (!this._roomService) { // esta seteado?
-      this._roomService = this.injector.get(RoomService); //lo setea
+      this._roomService = this.injector.get(RoomService); // lo setea
     }
     return this._roomService;
   }
@@ -195,7 +195,7 @@ export class FacadeService {
   private _officeService: OfficeService;
   public get OfficeService(): OfficeService {
     if (!this._officeService) { // esta seteado?
-      this._officeService = this.injector.get(OfficeService); //lo setea
+      this._officeService = this.injector.get(OfficeService); // lo setea
     }
     return this._officeService;
   }
@@ -203,7 +203,7 @@ export class FacadeService {
   private _roleService: RoleService;
   public get RoleService(): RoleService {
     if (!this._roleService) { // esta seteado?
-      this._roleService = this.injector.get(RoleService); //lo setea
+      this._roleService = this.injector.get(RoleService); // lo setea
     }
     return this._roleService;
   }

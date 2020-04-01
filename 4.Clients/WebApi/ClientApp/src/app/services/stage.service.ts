@@ -5,7 +5,7 @@ import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { Stage } from 'src/entities/stage';
 
-//const apiUrl = "http://localhost:61059/api/ProcessStage";
+// const apiUrl = "http://localhost:61059/api/ProcessStage";
 
 @Injectable()
 export class StageService extends BaseService<Stage> {

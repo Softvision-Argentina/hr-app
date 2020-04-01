@@ -1,7 +1,7 @@
 import { FormGroup } from '@angular/forms';
 export function validateCandidateForm(form: FormGroup) {
     let isValid = true;
-    if(form.get('isReferred')) {
+    if (form.get('isReferred')) {
         if (form.controls['isReferred'].value === true && form.controls['referredBy'].invalid) {
             isValid = false;
         }
@@ -18,7 +18,7 @@ export function validateCandidateForm(form: FormGroup) {
         }
     } else {
         // tslint:disable-next-line: forin
-        for (const i in form.controls){
+        for (const i in form.controls) {
             form.controls[i].markAsDirty();
             form.controls[i].updateValueAndValidity();
             isValid = false;

@@ -10,7 +10,7 @@ import { DaysOff } from 'src/entities/days-off';
 
 @Injectable()
 export class DaysOffService extends BaseService<DaysOff> {
-  private baseUrl: string = 'http://localhost:61059/';  
+  private baseUrl = 'http://localhost:61059/';
   public headers: HttpHeaders;
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
@@ -19,9 +19,9 @@ export class DaysOffService extends BaseService<DaysOff> {
     this.headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   }
 
-  public getByDNI(dni: Number): Observable<any>{
+  public getByDNI(dni: Number): Observable<any> {
     return this.http.get(this.baseUrl
-      + 'api/DaysOff/getbydni?dni=' + dni, { headers: this.headers, observe: "response" })
+      + 'api/DaysOff/getbydni?dni=' + dni, { headers: this.headers, observe: 'response' })
       .pipe(
         tap(data => {}),
         catchError(this.handleErrors)

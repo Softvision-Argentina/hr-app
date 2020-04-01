@@ -12,13 +12,13 @@ import { Observable } from 'rxjs/Observable';
   providedIn: 'root'
 })
 export class EmployeeService extends BaseService<Employee> {
-  employees = [{ id: 1, name: "Kevin", lastName: "Zatel", email: "kevin.zatel@softvision.com" },
-  { id: 2, name: "Carlos", lastName: "Hemingway", email: "soycarlitos66@gmail.com" }];
-  
+  employees = [{ id: 1, name: 'Kevin', lastName: 'Zatel', email: 'kevin.zatel@softvision.com' },
+  { id: 2, name: 'Carlos', lastName: 'Hemingway', email: 'soycarlitos66@gmail.com' }];
+
   http: HttpClient;
   public headers: HttpHeaders;
-  //Cambiar la URL por una constante global.
-  private baseUrl: string = 'http://localhost:61059/';  
+  // Cambiar la URL por una constante global.
+  private baseUrl = 'http://localhost:61059/';
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
@@ -27,18 +27,18 @@ export class EmployeeService extends BaseService<Employee> {
     this.apiUrl += 'Employees';
   }
 
-  public Update(employee:Employee) {
-    return this.http.post(this.baseUrl 
-      + 'api/Employees/Update', employee, { headers: this.headers, observe: "response" })
+  public Update(employee: Employee) {
+    return this.http.post(this.baseUrl
+      + 'api/Employees/Update', employee, { headers: this.headers, observe: 'response' });
   }
 
-  public GetByDNI(dni : Number){
-    return this.http.get(this.baseUrl 
-      + 'api/Employees/getbydni?dni=' + dni, { headers: this.headers, observe: "response" })
-  }
-
-  public GetByEmail(email: string){
+  public GetByDNI(dni: Number) {
     return this.http.get(this.baseUrl
-      + 'api/Employees/GetByEmail?email=' + email, { headers: this.headers, observe: "response" })
+      + 'api/Employees/getbydni?dni=' + dni, { headers: this.headers, observe: 'response' });
+  }
+
+  public GetByEmail(email: string) {
+    return this.http.get(this.baseUrl
+      + 'api/Employees/GetByEmail?email=' + email, { headers: this.headers, observe: 'response' });
   }
 }

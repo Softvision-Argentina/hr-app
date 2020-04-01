@@ -6,8 +6,8 @@ import { catchError, tap } from 'rxjs/operators';
 
 
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
-}
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable()
 export class ConfigService {

@@ -3,7 +3,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
-import { Reservation } from 'src/entities/reservation'
+import { Reservation } from 'src/entities/reservation';
 import { Consultant } from 'src/entities/consultant';
 import { User } from 'src/entities/user';
 import { Room } from 'src/entities/room';
@@ -80,10 +80,10 @@ export class ReservationsComponent implements OnInit {
   async getReservations() {
     await this.facade.ReservationService.get()
       .toPromise()
-      .then(res => this.reservations = res.filter(r => r.room.officeId.toString() == this.selectedOffice))
+      .then(res => this.reservations = res.filter(r => r.room.officeId.toString() === this.selectedOffice))
       .catch(err => console.log(err));
     // .subscribe(res => {
-    //   this.reservations = res.filter(r => r.room.officeId.toString() == this.selectedOffice);
+    //   this.reservations = res.filter(r => r.room.officeId.toString() === this.selectedOffice);
     // }, err => {
     //   console.log(err);
     // });
@@ -93,7 +93,7 @@ export class ReservationsComponent implements OnInit {
     this.facade.RoomService.get()
       .subscribe(res => {
         this.room = res;
-        this.filteredRoom = this.room.filter(c => c.officeId == this.reservationForm.controls['office'].value);
+        this.filteredRoom = this.room.filter(c => c.officeId === this.reservationForm.controls['office'].value);
       }, err => {
         console.log(err);
       });
@@ -176,8 +176,8 @@ export class ReservationsComponent implements OnInit {
           this.getCurrentDayReservations();
           this.facade.toastrService.success('Reservation deleted !');
         }, err => {
-          if (err.message != undefined) { this.facade.toastrService.error(err.message); }
-          else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
@@ -197,8 +197,8 @@ export class ReservationsComponent implements OnInit {
     }
     return differenceInCalendarDays(date, this.today) < 0 ||
       date.getMonth() > this.endValue.getMonth() ||
-      (date.getMonth() == this.endValue.getMonth() && date.getDate() > this.endValue.getDate());
-  };
+      (date.getMonth() === this.endValue.getMonth() && date.getDate() > this.endValue.getDate());
+  }
 
   disabledEndDate = (date: Date): boolean => {
     if (!date || !this.startValue) {
@@ -206,14 +206,14 @@ export class ReservationsComponent implements OnInit {
     }
     return differenceInCalendarDays(date, this.today) < 0 ||
       date.getMonth() < this.startValue.getMonth() ||
-      (date.getMonth() == this.startValue.getMonth() && date.getDate() < this.startValue.getDate());
-  };
+      (date.getMonth() === this.startValue.getMonth() && date.getDate() < this.startValue.getDate());
+  }
 
   disabledDateTime = (): object => {
     return {
       nzDisabledHours: () => this.range(0, 24).splice(0, 8)
     };
-  };
+  }
 
   onStartChange(date: Date): void {
     this.startValue = date;
@@ -232,17 +232,17 @@ export class ReservationsComponent implements OnInit {
   }
 
   reservateDay(modal: NzModalRef) {
-    let until = new Date(this.reservationForm.controls['untilReservation'].value);
-    let since = new Date(this.reservationForm.controls['sinceReservation'].value);
-    let newSince = new Date(this.reservationForm.controls['sinceReservation'].value);
-    let newUntil = new Date(this.reservationForm.controls['untilReservation'].value);
-    let totalDays = differenceInCalendarDays(until, since);
-    let startHour = since.getHours();
-    let finishHour = until.getHours();
-    let isCompleted = this.validateForm();
+    const until = new Date(this.reservationForm.controls['untilReservation'].value);
+    const since = new Date(this.reservationForm.controls['sinceReservation'].value);
+    const newSince = new Date(this.reservationForm.controls['sinceReservation'].value);
+    const newUntil = new Date(this.reservationForm.controls['untilReservation'].value);
+    const totalDays = differenceInCalendarDays(until, since);
+    const startHour = since.getHours();
+    const finishHour = until.getHours();
+    const isCompleted = this.validateForm();
 
     if (isCompleted) {
-      for (var i = 0; i <= totalDays; i++) {
+      for (let i = 0; i <= totalDays; i++) {
         newSince.setDate(since.getDate() + i);
         newUntil.setDate(until.getDate() - (totalDays - i));
 
@@ -250,7 +250,7 @@ export class ReservationsComponent implements OnInit {
           newUntil.setHours(this.lastHour, 0, 0, 0);
         }
 
-        let newReservation: Reservation = {
+        const newReservation: Reservation = {
           id: 0,
           description: this.reservationForm.controls['description'].value.toString(),
           sinceReservation: newSince,
@@ -258,12 +258,11 @@ export class ReservationsComponent implements OnInit {
           recruiter: this.reservationForm.controls['recruiter'].value,
           roomId: this.reservationForm.controls['roomId'].value,
           room: null
-        }
-        let overlap = this.checkOverlap(0, newReservation);
+        };
+        const overlap = this.checkOverlap(0, newReservation);
         if (overlap) {
           this.facade.toastrService.error('There is already a reservation for this moment.');
-        }
-        else {
+        } else {
           this.facade.ReservationService.add(newReservation)
             .subscribe(async res => {
               await this.getReservations();
@@ -271,18 +270,18 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully created!');
               modal.destroy();
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
-            })
+              // tslint:disable-next-line: max-line-length
+              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+            });
         }
       }
     }
-  };
+  }
 
   editReservation(modal: NzModalRef, reservation: Reservation) {
-    let isCompleted = this.validateForm();
+    const isCompleted = this.validateForm();
     if (isCompleted) {
-      let editReservation: Reservation = {
+      const editReservation: Reservation = {
         id: 0,
         description: this.reservationForm.controls['description'].value,
         roomId: this.reservationForm.controls['roomId'].value,
@@ -290,28 +289,26 @@ export class ReservationsComponent implements OnInit {
         recruiter: this.reservationForm.controls['recruiter'].value,
         sinceReservation: this.reservationForm.controls['sinceReservation'].value,
         untilReservation: this.reservationForm.controls['untilReservation'].value
-      }
-      let overlap = this.checkOverlap(reservation.id, editReservation);
+      };
+      const overlap = this.checkOverlap(reservation.id, editReservation);
       if (overlap) {
         this.facade.toastrService.error('There is already a reservation for this moment.');
-      }
-      else {
-        let editReservationSince = new Date(Date.parse(editReservation.sinceReservation.toString())).getDate();
-        let editReservationUntil = new Date(Date.parse(editReservation.untilReservation.toString())).getDate();
-        let reservationSince = new Date(Date.parse(reservation.sinceReservation.toString())).getDate();
-        let reservationUntil = new Date(Date.parse(reservation.untilReservation.toString())).getDate();
-        if (editReservationSince != reservationSince ||
-          editReservationUntil != reservationUntil) {
+      } else {
+        const editReservationSince = new Date(Date.parse(editReservation.sinceReservation.toString())).getDate();
+        const editReservationUntil = new Date(Date.parse(editReservation.untilReservation.toString())).getDate();
+        const reservationSince = new Date(Date.parse(reservation.sinceReservation.toString())).getDate();
+        const reservationUntil = new Date(Date.parse(reservation.untilReservation.toString())).getDate();
+        if (editReservationSince !== reservationSince ||
+          editReservationUntil !== reservationUntil) {
           this.facade.ReservationService.delete(reservation.id)
             .subscribe(async res => {
               await this.getReservations();
               this.reservateDay(modal);
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
-            })
-        }
-        else {
+              // tslint:disable-next-line: max-line-length
+              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+            });
+        } else {
           this.facade.ReservationService.update(reservation.id, editReservation)
             .subscribe(async res => {
               await this.getReservations();
@@ -319,25 +316,25 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully updated!');
               modal.destroy();
             }, err => {
-              if (err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error('The service is not available now. Try again later.');
-            })
+              // tslint:disable-next-line: max-line-length
+              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+            });
         }
       }
     }
   }
 
   checkOverlap(reservationId: number, newReservation: Reservation): boolean {
-    let newReservationRoomId = newReservation.roomId;
-    let newReservationSince = Math.floor(Date.parse(newReservation.sinceReservation.toString()) / 60000);
-    let newReservationUntil = Math.floor(Date.parse(newReservation.untilReservation.toString()) / 60000);
+    const newReservationRoomId = newReservation.roomId;
+    const newReservationSince = Math.floor(Date.parse(newReservation.sinceReservation.toString()) / 60000);
+    const newReservationUntil = Math.floor(Date.parse(newReservation.untilReservation.toString()) / 60000);
 
-    let roomReservations = this.reservations.filter((reservation) => reservation.roomId == newReservationRoomId);
+    const roomReservations = this.reservations.filter((reservation) => reservation.roomId === newReservationRoomId);
 
-    for (let reservation of roomReservations) {
-      let currentReservationSince = Math.floor(Date.parse(reservation.sinceReservation.toString()) / 60000)
-      let currentReservationUntil = Math.floor(Date.parse(reservation.untilReservation.toString()) / 60000)
-      if (reservationId != reservation.id &&
+    for (const reservation of roomReservations) {
+      const currentReservationSince = Math.floor(Date.parse(reservation.sinceReservation.toString()) / 60000);
+      const currentReservationUntil = Math.floor(Date.parse(reservation.untilReservation.toString()) / 60000);
+      if (reservationId !== reservation.id &&
         (((newReservationSince >= currentReservationSince && newReservationSince < currentReservationUntil) ||
           (newReservationUntil > currentReservationSince && newReservationUntil <= currentReservationUntil)) ||
           ((currentReservationSince >= newReservationSince && currentReservationSince < newReservationUntil) ||
@@ -351,7 +348,7 @@ export class ReservationsComponent implements OnInit {
 
   getCurrentDayReservations(): void {
     this.currentDayReservations = this.reservations
-      .filter(r => r.sinceReservation.toString().substr(0, 10) == this.selectedDate.toISOString().substr(0, 10));
+      .filter(r => r.sinceReservation.toString().substr(0, 10) === this.selectedDate.toISOString().substr(0, 10));
   }
 
   onChangeOffice() {
@@ -360,13 +357,15 @@ export class ReservationsComponent implements OnInit {
   }
 
   validateForm() {
-    let isCompleted: boolean = true;
-    let sinceHours = new Date(this.reservationForm.controls['sinceReservation'].value).getHours();
-    let untilHours = new Date(this.reservationForm.controls['untilReservation'].value).getHours();
+    let isCompleted = true;
+    const sinceHours = new Date(this.reservationForm.controls['sinceReservation'].value).getHours();
+    const untilHours = new Date(this.reservationForm.controls['untilReservation'].value).getHours();
     for (const i in this.reservationForm.controls) {
-      this.reservationForm.controls[i].markAsDirty();
-      this.reservationForm.controls[i].updateValueAndValidity();
-      if (!this.reservationForm.controls[i].valid) isCompleted = false;
+      if (this.reservationForm.controls[i]) {
+        this.reservationForm.controls[i].markAsDirty();
+        this.reservationForm.controls[i].updateValueAndValidity();
+        if (!this.reservationForm.controls[i].valid) { isCompleted = false; }
+      }
     }
     if (sinceHours > untilHours) {
       this.facade.toastrService.error('The selected schedule is invalid');

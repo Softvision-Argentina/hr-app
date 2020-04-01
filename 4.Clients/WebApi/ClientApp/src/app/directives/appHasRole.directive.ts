@@ -12,7 +12,7 @@ export class HasRoleDirective implements OnInit {
         private viewContainerRef: ViewContainerRef,
         private templateRef: TemplateRef<any>,
     ) {
-        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
 
     ngOnInit() {

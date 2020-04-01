@@ -59,9 +59,9 @@ export class CandidatesComponent implements OnInit {
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
     private app: AppComponent, private globals: Globals) {
-      this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
-      this.statusList = globals.candidateStatusList;
-      this.englishLevelList = globals.englishLevelList;
+    this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
+    this.statusList = globals.candidateStatusList;
+    this.englishLevelList = globals.englishLevelList;
   }
 
   ngOnInit() {
@@ -82,7 +82,7 @@ export class CandidatesComponent implements OnInit {
       .subscribe(res => {
         this.filteredCandidates = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
-        : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+          : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
         console.log(err);
       });
@@ -99,20 +99,20 @@ export class CandidatesComponent implements OnInit {
 
   getProfiles() {
     this.facade.candidateProfileService.get()
-    .subscribe(res => {
-      this.profiles = res;
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.profiles = res;
+      }, err => {
+        console.log(err);
+      });
   }
 
   getCommunities() {
     this.facade.communityService.get()
-    .subscribe(res => {
-      this.communities = res;
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.communities = res;
+      }, err => {
+        console.log(err);
+      });
   }
 
   getSkills() {
@@ -167,11 +167,11 @@ export class CandidatesComponent implements OnInit {
       return (this.listOfSearchCandidates.length ?
         this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
         (replaceAccent(item.name.toString().toUpperCase() +
-        item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
+          item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
-     ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+      ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
 
@@ -182,7 +182,7 @@ export class CandidatesComponent implements OnInit {
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
-    ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+      ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.statusDropdown.nzVisible = false;
   }
@@ -261,10 +261,10 @@ export class CandidatesComponent implements OnInit {
                 emailAddress: this.validateForm.controls['email'].value ? this.validateForm.controls['email'].value.toString() : null,
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')',
                 linkedInProfile: this.validateForm.controls['linkedin'].value === null
-                ? null : this.validateForm.controls['linkedin'].value.toString(),
+                  ? null : this.validateForm.controls['linkedin'].value.toString(),
                 candidateSkills: candidateSkills,
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null
-                ? null : this.validateForm.controls['additionalInformation'].value.toString(),
+                  ? null : this.validateForm.controls['additionalInformation'].value.toString(),
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
@@ -289,8 +289,8 @@ export class CandidatesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message = undefined) { this.facade.toastrService.error(err.message); } else
-                  { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message = undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
                 });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
@@ -317,8 +317,8 @@ export class CandidatesComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-           { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
@@ -369,7 +369,7 @@ export class CandidatesComponent implements OnInit {
     this.completeSkillList.forEach(sk => skillList.push(sk));
     if (isEdit) {
       if (this.controlEditArray.length >= 1) {
-        if (this.validateForm.controls[i.controlInstance[0]].value != null) {
+        if (this.validateForm.controls[i.controlInstance[0]].value !== null) {
           this.skills.push(skillList.filter(skill => skill.name === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
@@ -380,7 +380,7 @@ export class CandidatesComponent implements OnInit {
       }
     } else {
       if (this.controlArray.length >= 1) {
-        if (this.validateForm.controls[i.controlInstance[0]].value != null) {
+        if (this.validateForm.controls[i.controlInstance[0]].value !== null) {
           this.skills.push(skillList.filter(skill => skill.id === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
@@ -398,7 +398,7 @@ export class CandidatesComponent implements OnInit {
 
   fillCandidateForm(candidate: Candidate) {
     const candidateReferredBy = candidate.referredBy !== null ? candidate.referredBy : '';
-    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom  : '';
+    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom : '';
     this.validateForm.controls['dni'].setValue(candidate.dni);
     this.validateForm.controls['name'].setValue(candidate.name);
     this.validateForm.controls['lastName'].setValue(candidate.lastName);

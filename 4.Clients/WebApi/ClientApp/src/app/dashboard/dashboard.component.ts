@@ -20,6 +20,26 @@ import { Dashboard } from 'src/entities/dashboard';
 })
 export class DashboardComponent implements OnInit {
 
+  public hireChartOptions: ChartOptions = {
+    responsive: true,
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public hireChartLabels: Label[] = ['Hires'];
+  public hireChartType: ChartType = 'bar';
+  public hireChartLegend = true;
+  public hireChartPlugins = [pluginDataLabels];
+
+  public hireChartData: ChartDataSets[] = [
+    { data: [0], label: 'Actual' },
+    { data: [0], label: 'Projected' }
+  ];
+
   processes: Process[] = [];
   skillList: Skill[] = [];
   candidatesSkills: CandidateSkill[] = [];
@@ -33,7 +53,7 @@ export class DashboardComponent implements OnInit {
   month: Date = new Date();
   hasProjections = false;
 
-  //Porcesses Chart
+  // Porcesses Chart
   processCompleted = 0;
   processInProgress = 0;
   processPercentage = 0;
@@ -60,14 +80,14 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  //Completed Processes Chart
+  // Completed Processes Chart
   processFinishedSuccess = 0;
   stadisticFinished = 0;
   stadisticFailed = 0;
 
   isChartComplete = false;
 
-  //Ranking Chart
+  // Ranking Chart
   skillRankedList: any[] = [
     { id: 0, name: '', points: 0 },
     { id: 0, name: '', points: 0 },
@@ -107,20 +127,22 @@ export class DashboardComponent implements OnInit {
   }
 
   userHasItActivated(dashId: number) {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let dashboard: Dashboard;
-    dashboard = this.dashboards.find( x => x.id === dashId);
-    return dashboard.userDashboards.some( x => x.userId === currentUser.id);
+    dashboard = this.dashboards.find(x => x.id === dashId);
+    return dashboard.userDashboards.some(x => x.userId === currentUser.id);
   }
 
   getProcesses() {
     this.facade.processService.get()
       .subscribe(res => {
         this.processes = res;
-        this.processCompleted = res.filter(process => process => process.status === ProcessStatusEnum.Declined ||
+        this.processCompleted = res.filter(process => process.status === ProcessStatusEnum.Declined ||
           process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
         this.processFinishedSuccess = res.filter(process => process.status === ProcessStatusEnum.Hired).length;
-        this.processInProgress = res.filter(process => process.status === ProcessStatusEnum.InProgress || process.status == ProcessStatusEnum.Recall || process.status == ProcessStatusEnum.OfferAccepted).length;
+        // tslint:disable-next-line: max-line-length
+        this.processInProgress = res.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
+        // tslint:disable-next-line: max-line-length
         this.processNotStarted = res.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
       }, err => {
         console.log(err);
@@ -147,24 +169,4 @@ export class DashboardComponent implements OnInit {
   checkIndex(i: number): boolean {
     return i < 3;
   }
-
-  public hireChartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
-  public hireChartLabels: Label[] = ['Hires'];
-  public hireChartType: ChartType = 'bar';
-  public hireChartLegend = true;
-  public hireChartPlugins = [pluginDataLabels];
-
-  public hireChartData: ChartDataSets[] = [
-    { data: [0], label: 'Actual' },
-    { data: [0], label: 'Projected' }
-  ];
 }

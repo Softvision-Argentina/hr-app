@@ -5,6 +5,7 @@ import { AppComponent } from '../app.component';
 import { CSoftComponent } from '../login/csoft-signin.component';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -28,8 +29,7 @@ export class LoginComponent implements OnInit {
 
     if (this.google.isUserAuthenticated() || this.csSoft.isUserAuthenticated()) {
       this.router.navigateByUrl(this.returnUrl);
-    }
-    else {
+    } else {
       this.app.renderBgImage();
     }
   }

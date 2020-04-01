@@ -1,8 +1,8 @@
-import { Component, OnInit, TemplateRef, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Community } from 'src/entities/community';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
@@ -13,37 +13,37 @@ import { SettingsComponent } from '../settings/settings.component';
   templateUrl: './communities.component.html',
   styleUrls: ['./communities.component.css'],
 })
-export class CommunitiesComponent implements OnInit {
+export class CommunitiesComponent implements OnInit, OnChanges {
 
   @Input()
   private _detailedCommunity: Community[];
-  public get detailedCommunity(): Community[]{
-      return this._detailedCommunity;
+  public get detailedCommunity(): Community[] {
+    return this._detailedCommunity;
   }
   public set detailedCommunity(value: Community[]) {
-      this._detailedCommunity = value;
+    this._detailedCommunity = value;
   }
 
   @Input()
   private _detailedCandidateProfile: CandidateProfile[];
   public get detailedCandidateProfile(): CandidateProfile[] {
-      return this._detailedCandidateProfile;
+    return this._detailedCandidateProfile;
   }
   public set detailedCandidateProfile(value: CandidateProfile[]) {
-      this._detailedCandidateProfile = value;
+    this._detailedCandidateProfile = value;
   }
 
   currentConsultant: User;
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit: boolean = false;
-  editingCommunityId: number = 0;
+  isEdit = false;
+  editingCommunityId = 0;
   candidateprofiles: CandidateProfile[] = [];
 
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) {
-      this.currentConsultant = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
@@ -51,29 +51,30 @@ export class CommunitiesComponent implements OnInit {
     this.resetForm();
     this.getCandidateProfiles();
   }
-  
-  ngOnChanges(changes: SimpleChanges){
+
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedCandidateProfile;
     this.getCandidateProfiles();
   }
 
   getCProfileNameByID(id: number) {
-    let CProfile = this.candidateprofiles.find(c => c.id === id);
-    return CProfile != undefined ? CProfile.name : '';
+    const CProfile = this.candidateprofiles.find(c => c.id === id);
+    return CProfile !== undefined ? CProfile.name : '';
   }
 
-  getProfileById(id:number){
-    let CProfile= this.candidateprofiles.find(c => c.id === id);
+  getProfileById(id: number) {
+    const CProfile = this.candidateprofiles.find(c => c.id === id);
     return CProfile;
   }
 
-  getCandidateProfiles(){
+  getCandidateProfiles() {
     this.facade.candidateProfileService.get()
-    .subscribe(res => {
-      this.candidateprofiles = res;
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.candidateprofiles = res;
+      }, err => {
+        console.log(err);
+      });
   }
 
   resetForm() {
@@ -84,15 +85,16 @@ export class CommunitiesComponent implements OnInit {
     });
   }
 
-  showAddModal(modalContent: TemplateRef<{}>): void {    
+  showAddModal(modalContent: TemplateRef<{}>): void {
     this.isEdit = false;
     this.controlArray = [];
     this.controlEditArray = [];
     this.resetForm();
 
-    if(this.candidateprofiles.length > 0)
-    this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);    
-  
+    if (this.candidateprofiles.length > 0) {
+      this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);
+    }
+
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Community',
       nzContent: modalContent,
@@ -109,47 +111,48 @@ export class CommunitiesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true; //el boton de guardar cambios cambia a true
-            let isCompleted: boolean = true;
+            modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if ((!this.validateForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let newCommunity: Community = {
-                id:0,
+              const newCommunity: Community = {
+                id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 profileId: this.validateForm.controls['profileId'].value.toString(),
                 profile: null
-              }
+              };
               this.facade.communityService.add(newCommunity)
-                .subscribe(res => {                                            
+                .subscribe(res => {
                   this.settings.refresh();
                   this.controlArray = [];
-                  this.facade.toastrService.success('Community was successfully created !');                  
+                  this.facade.toastrService.success('Community was successfully created !');
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.resetForm();
-    this.editingCommunityId = id; 
+    this.editingCommunityId = id;
     this.isEdit = true;
     this.controlArray = [];
     this.controlEditArray = [];
-    let editedCommunity: Community = this._detailedCommunity.filter(community => community.id == id)[0];
-    
+    let editedCommunity: Community = this._detailedCommunity.filter(community => community.id === id)[0];
+
     this.fillCommunityForm(editedCommunity);
 
     const modal = this.facade.modalService.create({
@@ -169,11 +172,13 @@ export class CommunitiesComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if (!this.validateForm.controls[i].valid) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if (!this.validateForm.controls[i].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
               editedCommunity = {
@@ -181,8 +186,8 @@ export class CommunitiesComponent implements OnInit {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 profileId: this.validateForm.controls['profileId'].value.toString(),
-                profile: null 
-              }
+                profile: null
+              };
               this.facade.communityService.update(id, editedCommunity)
                 .subscribe(res => {
                   this.settings.getCommunities();
@@ -190,18 +195,17 @@ export class CommunitiesComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
-  
+
   showDeleteConfirm(communityID: number): void {
-  let communityDelete: Community = this._detailedCommunity.filter(c => c.id == communityID)[0];
+    const communityDelete: Community = this._detailedCommunity.filter(c => c.id === communityID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + communityDelete.name + ' ?',
       nzContent: '',
@@ -213,16 +217,17 @@ export class CommunitiesComponent implements OnInit {
           this.settings.getCommunities();
           this.facade.toastrService.success('Community was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
-  
+
   fillCommunityForm(community: Community) {
     this.validateForm.controls['name'].setValue(community.name);
-    this.validateForm.controls['description'].setValue(community.description);  
-    if(this.candidateprofiles.length > 0)
-    this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);    
+    this.validateForm.controls['description'].setValue(community.description);
+    if (this.candidateprofiles.length > 0) {
+      this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { HireProjection } from 'src/entities/hireProjection';
@@ -15,43 +15,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
   templateUrl: './report-hire-casualties.component.html',
   styleUrls: ['./report-hire-casualties.component.css']
 })
-export class ReportHireCasualtiesComponent implements OnInit {
-
-  @Input() _processes;
-  @Input() _employeeCasualty;
-
-
-  constructor(private app: AppComponent) { }
-
-  processes: Process[] = [];
-  employeeCasualty: EmployeeCasualty[] = [];
-  hireProjections: HireProjection[] = [];
-  month: Date = new Date();
-  hasProjections: boolean = false;
-
-  isChartComplete: boolean = false;
-
-  ngOnInit() {
-    this.app.showLoading();
-    this.getHireProjectionReport();
-    this.app.hideLoading();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    changes._employeeCasualty;
-    changes._processes;
-    this.complete();
-    if (!this.isChartComplete) {
-      setTimeout(() => {
-        this.getHireProjectionReport();
-      });
-    }
-  }
-
-  complete() {
-    this.processes = this._processes;
-    this.employeeCasualty = this._employeeCasualty;
-  }
+export class ReportHireCasualtiesComponent implements OnInit, OnChanges {
 
   public hireChartOptions: ChartOptions = {
     responsive: true,
@@ -73,37 +37,75 @@ export class ReportHireCasualtiesComponent implements OnInit {
     { data: [0], label: 'Hires' }
   ];
 
+  @Input() _processes;
+  @Input() _employeeCasualty;
+
+
+  constructor(private app: AppComponent) { }
+
+  processes: Process[] = [];
+  employeeCasualty: EmployeeCasualty[] = [];
+  hireProjections: HireProjection[] = [];
+  month: Date = new Date();
+  hasProjections = false;
+
+  isChartComplete = false;
+
+  ngOnInit() {
+    this.app.showLoading();
+    this.getHireProjectionReport();
+    this.app.hideLoading();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
+    changes._employeeCasualty;
+    // tslint:disable-next-line: no-unused-expression
+    changes._processes;
+    this.complete();
+    if (!this.isChartComplete) {
+      setTimeout(() => {
+        this.getHireProjectionReport();
+      });
+    }
+  }
+
+  complete() {
+    this.processes = this._processes;
+    this.employeeCasualty = this._employeeCasualty;
+  }
+
   getHireProjectionReport() {
-    let date = new Date(this.month);
-    let actualHires: number = 0;
+    const date = new Date(this.month);
+    let actualHires = 0;
     let casualties: EmployeeCasualty;
-    if (this.employeeCasualty.filter(ec => ec.month == date.getMonth() + 1 && ec.year == date.getFullYear()).length > 0) {
-      casualties = this.employeeCasualty.filter(ec => ec.month == (date.getMonth() + 1) && ec.year == date.getFullYear())[0];
-      //------------------------------------------
+    if (this.employeeCasualty.filter(ec => ec.month === date.getMonth() + 1 && ec.year === date.getFullYear()).length > 0) {
+      casualties = this.employeeCasualty.filter(ec => ec.month === (date.getMonth() + 1) && ec.year === date.getFullYear())[0];
+
       this.processes.forEach(proc => {
-        if (proc.status == ProcessStatusEnum.Hired) {
-          if (new Date(proc.offerStage.date).getMonth() == date.getMonth() && new Date(proc.offerStage.date).getFullYear() == date.getFullYear()) actualHires++;
+        if (proc.status === ProcessStatusEnum.Hired) {
+          // tslint:disable-next-line: max-line-length
+          if (new Date(proc.offerStage.date).getMonth() === date.getMonth() && new Date(proc.offerStage.date).getFullYear() === date.getFullYear()) { actualHires++; }
         }
       });
-      //-----------------------------
+
       this.hireChartData = [
         { data: [casualties.value], label: 'Casualties' },
         { data: [actualHires], label: 'Actual Hires' }
       ];
       this.hasProjections = true;
-    }
-    else this.hasProjections = false;
+    } else { this.hasProjections = false; }
   }
 
   nextHireMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() + 1));
-    this.getHireProjectionReport()
+    this.getHireProjectionReport();
   }
 
   previousHireMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() - 1));
-    this.getHireProjectionReport()
+    this.getHireProjectionReport();
   }
 }

@@ -7,10 +7,12 @@ import { Globals } from 'src/app/app-globals/globals';
 
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'offer-history',
   templateUrl: './offer-history.component.html',
   styleUrls: ['./offer-history.component.css']
 })
+// tslint:disable-next-line: component-class-suffix
 export class OfferHistory implements OnInit {
   @Input()
   private _processId: number;
@@ -38,7 +40,7 @@ export class OfferHistory implements OnInit {
       .subscribe(res => {
         this.offers = res.filter(x => x.processId === this.processId);
       },
-      // TODO: change this log for a message or delete it
+      // TODO: change this log for a message or delete it
       err => {
         console.log(err);
       });

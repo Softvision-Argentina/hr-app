@@ -15,7 +15,7 @@ import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Globals } from 'src/app/app-globals/globals';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Process } from 'src/entities/process';
 import { ReferralsComponent } from '../referrals/referrals.component';
 
@@ -41,7 +41,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
 
-  
+
   @Input()
   private _visible: boolean;
   public get visibles(): boolean {
@@ -114,9 +114,9 @@ export class ReferralsContactComponent implements OnInit {
     knownFrom: [null],
     referredBy: [null]
   });
-  visible: boolean = false;
-  isNewCandidate: boolean = false;
-  isEditCandidate: boolean = false;
+  visible = false;
+  isNewCandidate = false;
+  isEditCandidate = false;
   candidates: Candidate[] = [];
 
   searchValue = '';
@@ -128,12 +128,12 @@ export class ReferralsContactComponent implements OnInit {
   emptyCandidate: Candidate;
   emptyConsultant: Consultant;
 
-  editingCandidateId: number = 0;
-  // candidateForm: FormGroup;
+  editingCandidateId = 0;
 
+  // tslint:disable-next-line: max-line-length
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService, private process: ReferralsComponent) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
@@ -152,15 +152,16 @@ export class ReferralsContactComponent implements OnInit {
     this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-        this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null   
-    });
+        // tslint:disable-next-line: no-unused-expression
+        this.currentConsultant !== null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null;
+      });
   }
 
-  profileChanges(profileId){
+  profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
-  
+
 
   getCandidates() {
     this.facade.candidateService.get()
@@ -168,7 +169,7 @@ export class ReferralsContactComponent implements OnInit {
         this.candidates = res;
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   getConsultants() {
@@ -207,6 +208,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
+    // tslint:disable-next-line: max-line-length
     this.candidateForm.controls['recruiter'].setValue(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
@@ -217,13 +219,13 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    const editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    const CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -235,39 +237,40 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     console.log(this.filteredCandidate);
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id === candidateID)[0];
+    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    // tslint:disable-next-line: max-line-length
+    const candidate = this.candidates.filter(s => (replaceAccent(s.name).toLowerCase() + ' ' + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1);
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
 
-  fillCandidateForm(Candidate: Candidate) {
-    this.candidateForm.controls['firstName'].setValue(Candidate.name);
-    this.candidateForm.controls['lastName'].setValue(Candidate.lastName);
-    this.candidateForm.controls['phoneNumberPrefix'].setValue(Candidate.phoneNumber.substring(1, Candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(Candidate.phoneNumber.split(')')[1]);
-    this.candidateForm.controls['email'].setValue(Candidate.emailAddress);
-    this.candidateForm.controls['recruiter'].setValue(Candidate.recruiter);
-    this.candidateForm.controls['id'].setValue(Candidate.id);
-    this.candidateForm.controls['contactDay'].setValue(new Date(Candidate.contactDay));
-    this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
-    this.candidateForm.controls['community'].setValue(Candidate.community.id);
-    this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
-    this.candidateForm.controls['referredBy'].setValue(Candidate.referredBy);
-    this.candidateForm.controls['cv'].setValue(Candidate.cv);
-    this.candidateForm.controls['knownFrom'].setValue(Candidate.knownFrom);
+  fillCandidateForm(candidate: Candidate) {
+    this.candidateForm.controls['firstName'].setValue(candidate.name);
+    this.candidateForm.controls['lastName'].setValue(candidate.lastName);
+    this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
+    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
+    this.candidateForm.controls['email'].setValue(candidate.emailAddress);
+    this.candidateForm.controls['recruiter'].setValue(candidate.recruiter);
+    this.candidateForm.controls['id'].setValue(candidate.id);
+    this.candidateForm.controls['contactDay'].setValue(new Date(candidate.contactDay));
+    this.candidateForm.controls['profile'].setValue(candidate.profile.id);
+    this.candidateForm.controls['community'].setValue(candidate.community.id);
+    this.candidateForm.controls['isReferred'].setValue(candidate.isReferred);
+    this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
+    this.candidateForm.controls['cv'].setValue(candidate.cv);
+    this.candidateForm.controls['knownFrom'].setValue(candidate.knownFrom);
   }
 
   resetForm() {
@@ -292,14 +295,9 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   saveEdit(idCandidate: number) {
-    let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    const isCompleted = true;
+    let editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === idCandidate)[0];
 
-    // for (const i in this.candidateForm.controls) {
-    //   this.candidateForm.controls[i].markAsDirty();
-    //   this.candidateForm.controls[i].updateValueAndValidity();
-    //   if (!this.candidateForm.controls[i].valid) isCompleted = false;
-    // }
     if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
@@ -322,7 +320,7 @@ export class ReferralsContactComponent implements OnInit {
         cv: editedCandidate.cv,
         knownFrom: editedCandidate.knownFrom,
         referredBy: editedCandidate.referredBy,
-      }
+      };
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
@@ -331,9 +329,9 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
-        })
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+        });
     }
     this.isEditCandidate = false;
     this.visible = false;
@@ -341,7 +339,7 @@ export class ReferralsContactComponent implements OnInit {
 
   Recontact(idCandidate: number) {
     console.log(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -363,30 +361,32 @@ export class ReferralsContactComponent implements OnInit {
       cv: editedCandidate.cv,
       knownFrom: editedCandidate.knownFrom,
       referredBy: editedCandidate.referredBy
-    }
+    };
 
     this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error("The service is not available now. Try again later.");
-      })
+        // tslint:disable-next-line: max-line-length
+        if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+      });
   }
 
   createNewCandidate() {
-    this.app.showLoading;
-    let isCompleted: boolean = true;
+    this.app.showLoading();
+    let isCompleted = true;
 
     for (const i in this.candidateForm.controls) {
-      this.candidateForm.controls[i].markAsDirty();
-      this.candidateForm.controls[i].updateValueAndValidity();
-      if (!this.candidateForm.controls[i].valid) isCompleted = false;
+      if (this.candidateForm.controls[i]) {
+        this.candidateForm.controls[i].markAsDirty();
+        this.candidateForm.controls[i].updateValueAndValidity();
+        if (!this.candidateForm.controls[i].valid) { isCompleted = false; }
+      }
     }
 
     if (isCompleted) {
-      let newCandidate: Candidate = {
+      const newCandidate: Candidate = {
         id: 0,
         name: this.candidateForm.controls['firstName'].value.toString(),
         lastName: this.candidateForm.controls['lastName'].value.toString(),
@@ -395,7 +395,6 @@ export class ReferralsContactComponent implements OnInit {
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         recruiter: new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        //linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
         additionalInformation: '',
@@ -408,7 +407,7 @@ export class ReferralsContactComponent implements OnInit {
         cv: null,
         knownFrom: null,
         referredBy: this.currentUser.name
-      }
+      };
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
@@ -421,10 +420,10 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.modalService.closeAll();
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
-          this.app.hideLoading;
-        })
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.app.hideLoading();
+        });
     }
   }
 }

@@ -17,7 +17,7 @@
     <nz-list-item><strong style="margin-right: 1%">Recruiter:</strong> {{ recruiterName }}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Role:</strong> {{detailedEmployee.role.name}}</nz-list-item>
     <nz-list-item *ngIf="detailedEmployee.isReviewer"><button nz-button>Reviewer</button></nz-list-item>
-    <nz-list-item *ngIf="(detailedEmployee.reviewer != null && detailedEmployee.reviewer.id != 1)"><strong
+    <nz-list-item *ngIf="(detailedEmployee.reviewer !== null && detailedEmployee.reviewer.id !== 1)"><strong
             style="margin-right: 1%">Reviewer:</strong>
         {{detailedEmployee.reviewer.name}} {{detailedEmployee.reviewer.lastName}}</nz-list-item>
     <nz-list-item *ngIf="detailedEmployee.additionalInformation"><strong style="margin-right: 1%">Additional

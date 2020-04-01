@@ -24,7 +24,7 @@ export class PostulantsComponent implements OnInit {
     this.getPostulants();
   }
 
-  getPostulants(){
+  getPostulants() {
     this.facade.postulantService.get().subscribe(res => {
       this.listOfDisplayData = res;
       console.log(res);

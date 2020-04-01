@@ -14,22 +14,22 @@ export class BaseService<T> {
   public token: string;
   public apiUrl: string;
 
-  constructor(private router: Router, private config: AppConfig, public http: HttpClient) {    
-    let user = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = user != null ? user.token : null;
+  constructor(private router: Router, private config: AppConfig, public http: HttpClient) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.token = user !== null ? user.token : null;
     this.headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     this.headersWithAuth = new HttpHeaders({
-      "Authorization": "Bearer " + this.token,
-      "Content-Type": "application/json"
+      'Authorization': 'Bearer ' + this.token,
+      'Content-Type': 'application/json'
     });
     this.http = http;
     this.apiUrl = this.config.getConfig('apiUrl');
   }
 
-  public get(urlAdd?:string): Observable<T[]> {    
-    const url = urlAdd == undefined ? this.apiUrl : `${this.apiUrl}/${urlAdd}`;
-    return this.http.get<T[]>(url, 
-      {headers: this.headersWithAuth, observe: "body"})
+  public get(urlAdd?: string): Observable<T[]> {
+    const url = urlAdd === undefined ? this.apiUrl : `${this.apiUrl}/${urlAdd}`;
+    return this.http.get<T[]>(url,
+      { headers: this.headersWithAuth, observe: 'body' })
       .pipe(
         tap(entities => { }),
         catchError(this.handleErrors)
@@ -96,25 +96,21 @@ export class BaseService<T> {
     // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
     if (error.error && error.status !== 400) {
       return throwError(error.error as ErrorResponse);
-    }
+    } else if (error.status === 400) {
+      const errMessage = this.getErrorMessage(error);
 
-    else if (error.status === 400) {
-      let errMessage = this.getErrorMessage(error);
-
-      let err: ErrorResponse = {
+      const err: ErrorResponse = {
         additionalData: {},
         errorCode: error.status,
         message: errMessage
-      }
+      };
       return throwError(err);
-    }
-
-    else {
-      let err: ErrorResponse = {
+    } else {
+      const err: ErrorResponse = {
         additionalData: {},
         errorCode: error.status,
         message: error.message
-      }
+      };
       return throwError(err);
     }
   }

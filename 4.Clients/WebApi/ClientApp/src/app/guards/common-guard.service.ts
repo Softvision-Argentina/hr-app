@@ -13,19 +13,18 @@ export class CommonGuard implements CanActivate {
   roles: string[];
 
   constructor(private jwtHelper: JwtHelper, private router: Router, private config: AppConfig) {
-    this.roles = config.getConfig("roles");
+    this.roles = config.getConfig('roles');
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
-      if (this.roles.indexOf(this.currentUser.role) != -1) return true;
-      else {
-        this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
+      if (this.roles.indexOf(this.currentUser.role) !== -1) { return true; } else {
+        this.router.navigate(['unauthorized'], { queryParams: { returnUrl: state.url } });
         return false;
       }
     }
-    this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
+    this.router.navigate(['login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 }

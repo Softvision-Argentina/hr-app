@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/observable';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class AppConfig {
@@ -10,7 +11,7 @@ export class AppConfig {
     private config: Object = null;
     private env:    Object = null;
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
 
     }
 
@@ -35,23 +36,23 @@ export class AppConfig {
      */
     public load() {
         return new Promise((resolve, reject) => {
-            this.http.get('../../assets/env.json').pipe(map( res => res.json() ),
+            this.http.get('../../assets/env.json').pipe(map( res => res ),
             catchError(<T>(error: any, result?: T) => {
                 console.log('Configuration file "env.json" could not be read');
                 resolve(true);
-                return Observable.throw(error.json().error || 'Server error');
+                return ErrorObservable.create(error || 'Server error');
               }))
             .subscribe( (envResponse) => {
                 this.env = envResponse;
                 let request: any = null;
 
-                switch (envResponse.env) {
+                switch (envResponse['env']) {
                     case 'production': {
-                        request = this.http.get('../../assets/config.' + envResponse.env + '.json');
+                        request = this.http.get('../../assets/config.' + envResponse['env'] + '.json');
                     } break;
 
                     case 'development': {
-                        request = this.http.get('../../assets/config.' + envResponse.env + '.json');
+                        request = this.http.get('../../assets/config.' + envResponse['env'] + '.json');
                     } break;
 
                     case 'default': {
@@ -62,11 +63,11 @@ export class AppConfig {
 
                 if (request) {
                     request
-                        .pipe(map( (res: Response) => res.json() ),
+                        .pipe(map( (res: Response) => res ),
                         catchError(<T>(error: any, result?: T) => {
-                            console.error('Error reading ' + envResponse.env + ' configuration file');
+                            console.error('Error reading ' + envResponse['env'] + ' configuration file');
                             resolve(error);
-                            return Observable.throw(error.json().error || 'Server error');
+                            return ErrorObservable.create(error || 'Server error');
                           }))
                         .subscribe((responseData) => {
                             this.config = responseData;

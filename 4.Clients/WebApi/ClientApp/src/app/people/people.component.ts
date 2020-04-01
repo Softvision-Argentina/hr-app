@@ -24,7 +24,7 @@ export class PeopleComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return this.google.isUserAuthenticated();
   }
-  
+
 
   isUserRole(roles: string[]): boolean {
     return this.app.isUserRole(roles);

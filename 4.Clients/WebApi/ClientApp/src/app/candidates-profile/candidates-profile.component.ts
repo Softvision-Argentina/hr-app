@@ -1,9 +1,9 @@
-import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { CandidateProfile} from 'src/entities/Candidate-Profile';
+import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Community } from 'src/entities/community';
 import { SettingsComponent } from '../settings/settings.component';
@@ -13,46 +13,46 @@ import { SettingsComponent } from '../settings/settings.component';
   templateUrl: './candidates-profile.component.html',
   styleUrls: ['./candidates-profile.component.css']
 })
-export class CandidatesProfileComponent implements OnInit {a
+export class CandidatesProfileComponent implements OnInit, OnChanges {
 
   @Input()
   private _detailedCandidateProfile: CandidateProfile[];
   public get detailedCandidateProfile(): CandidateProfile[] {
-      return this._detailedCandidateProfile;
+    return this._detailedCandidateProfile;
   }
   public set detailedCandidateProfile(value: CandidateProfile[]) {
-      this._detailedCandidateProfile = value;
+    this._detailedCandidateProfile = value;
   }
-  
+
   @Input()
   private _detailedCommunity: Community[];
-  public get detailedCommunity(): Community[]{
-      return this._detailedCommunity;
+  public get detailedCommunity(): Community[] {
+    return this._detailedCommunity;
   }
   public set detailedCommunity(value: Community[]) {
-      this._detailedCommunity = value;
+    this._detailedCommunity = value;
   }
 
   currentConsultant: User;
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit: boolean = false;
-  editingCandidateProfileId: number = 0;
+  isEdit = false;
+  editingCandidateProfileId = 0;
   communitys: Community[] = [];
 
-  isDetailsVisible: boolean = false;
-  isAddVisible: boolean = false;
+  isDetailsVisible = false;
+  isAddVisible = false;
   detailForm: FormGroup;
   emptyCandidateProfile: CandidateProfile;
-  CommunitysForDetail:string[];
+  CommunitysForDetail: string[];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }  
+  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
 
   ngOnInit() {
-    this.app.removeBgImage();  
-    this.getCommunity();    
+    this.app.removeBgImage();
+    this.getCommunity();
     this.resetForm();
 
     this.detailForm = this.fb.group({
@@ -62,12 +62,13 @@ export class CandidatesProfileComponent implements OnInit {a
     });
   }
 
-  ngOnChanges(changes: SimpleChanges){
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedCandidateProfile;
     this.getCommunity();
   }
 
-  getCommunity(){
+  getCommunity() {
     this.facade.communityService.get()
       .subscribe(res => {
         this.communitys = res;
@@ -77,23 +78,23 @@ export class CandidatesProfileComponent implements OnInit {a
   }
 
   getCommunityNameByID(id: number) {
-    let community = this.communitys.find(s => s.id === id);
-    return community != undefined ? community.name : '';
+    const community = this.communitys.find(s => s.id === id);
+    return community !== undefined ? community.name : '';
   }
 
   resetForm() {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]]    
+      description: [null, [Validators.required, trimValidator]]
     });
   }
 
-  showAddModal(modalContent: TemplateRef<{}>): void {    
+  showAddModal(modalContent: TemplateRef<{}>): void {
     this.isEdit = false;
     this.controlArray = [];
     this.controlEditArray = [];
     this.resetForm();
-  
+
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Candidate Profile',
       nzContent: modalContent,
@@ -110,20 +111,22 @@ export class CandidatesProfileComponent implements OnInit {a
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true; //el boton de guardar cambios cambia a true
-            let isCompleted: boolean = true;
+            modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if ((!this.validateForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let newCandidatesProfile: CandidateProfile = {
+              const newCandidatesProfile: CandidateProfile = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 communityItems: []
-              }              
+              };
               this.facade.candidateProfileService.add(newCandidatesProfile)
                 .subscribe(res => {
                   this.settings.getCandidatesProfile();
@@ -132,23 +135,22 @@ export class CandidatesProfileComponent implements OnInit {a
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.resetForm();
-    this.editingCandidateProfileId = id; 
+    this.editingCandidateProfileId = id;
     this.isEdit = true;
     this.controlArray = [];
-    this.controlEditArray = [];    
-    let editedCandidateProfile: CandidateProfile = this._detailedCandidateProfile.filter(CandidateProfile => CandidateProfile.id == id)[0];
+    this.controlEditArray = [];
+    let editedCandidateProfile: CandidateProfile = this._detailedCandidateProfile.filter(candidateProfile => candidateProfile.id === id)[0];
     this.fillCandidateProfileForm(editedCandidateProfile);
 
     const modal = this.facade.modalService.create({
@@ -168,11 +170,13 @@ export class CandidatesProfileComponent implements OnInit {a
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if (!this.validateForm.controls[i].valid) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if (!this.validateForm.controls[i].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
               editedCandidateProfile = {
@@ -180,31 +184,31 @@ export class CandidatesProfileComponent implements OnInit {a
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 communityItems: []
-              }
+              };
               this.facade.candidateProfileService.update(id, editedCandidateProfile)
-                .subscribe(res => {                  
+                .subscribe(res => {
                   this.settings.getCandidatesProfile();
                   this.facade.toastrService.success('Candidate was successfully edited !');
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
-  
-  showDetailsModal(CandidateProfileID: number): void {    
-    this.emptyCandidateProfile = this._detailedCandidateProfile.find(CandidateProfile => CandidateProfile.id == CandidateProfileID);
-    this.isDetailsVisible = true;
-   }
 
-  showDeleteConfirm(CandidateProfileID: number): void {    
-  let CandidateProfileDelete: CandidateProfile = this._detailedCandidateProfile.filter(c => c.id == CandidateProfileID)[0];
+  showDetailsModal(CandidateProfileID: number): void {
+    this.emptyCandidateProfile = this._detailedCandidateProfile.find(candidateProfile => candidateProfile.id === CandidateProfileID);
+    this.isDetailsVisible = true;
+  }
+
+  showDeleteConfirm(CandidateProfileID: number): void {
+    // tslint:disable-next-line: max-line-length
+    const CandidateProfileDelete: CandidateProfile = this._detailedCandidateProfile.filter(candidate => candidate.id === CandidateProfileID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateProfileDelete.name + ' ?',
       nzContent: '',
@@ -212,19 +216,19 @@ export class CandidatesProfileComponent implements OnInit {a
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => this.facade.candidateProfileService.delete(CandidateProfileID)
-        .subscribe(res => {          
+        .subscribe(res => {
           this.settings.getCandidatesProfile();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
-  
-  fillCandidateProfileForm(CandidateProfile: CandidateProfile) {
-    this.validateForm.controls['name'].setValue(CandidateProfile.name);
-    this.validateForm.controls['description'].setValue(CandidateProfile.description);    
+
+  fillCandidateProfileForm(candidateProfile: CandidateProfile) {
+    this.validateForm.controls['name'].setValue(candidateProfile.name);
+    this.validateForm.controls['description'].setValue(candidateProfile.description);
   }
 
   handleCancel(): void {
@@ -239,9 +243,9 @@ export class CandidatesProfileComponent implements OnInit {a
   }
 
   getColor(candidateCommunity: Community[], community: Community): string {
-    let colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+    const colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     let index: number = candidateCommunity.indexOf(community);
-    if (index > colors.length) index = parseInt((index / colors.length).toString().split(',')[0]);
+    if (index > colors.length) { index = parseInt((index / colors.length).toString().split(',')[0], 10); }
     return colors[index];
   }
 }

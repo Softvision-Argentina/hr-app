@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgModule, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, NgModule, SimpleChanges, OnChanges, AfterViewChecked } from '@angular/core';
 import { SingleDataSet, Label } from 'ng2-charts';
 import { ChartType, ChartOptions } from 'chart.js';
 import { Process } from 'src/entities/process';
@@ -14,7 +14,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ReportProcessesComponent implements OnInit {
+export class ReportProcessesComponent implements OnInit, OnChanges, AfterViewChecked {
 
   @Input()
   private _detailedProcesses: Process[];
@@ -25,14 +25,13 @@ export class ReportProcessesComponent implements OnInit {
     this._detailedProcesses = value;
   }
 
-  //Porcesses Chart
-  public processCompleted: number = 0;
-  public processInProgress: number = 0;
-  public processPercentage: number = 0;
-  public processNotStarted: number = 0;
-  public processSuccessPercentage: number = 0;
-  public completedProcessLoading: boolean = true;
-  public pieChartLoading: boolean = true;
+  public processCompleted = 0;
+  public processInProgress = 0;
+  public processPercentage = 0;
+  public processNotStarted = 0;
+  public processSuccessPercentage = 0;
+  public completedProcessLoading = true;
+  public pieChartLoading = true;
 
   public pieChartLabels: Label[] = ['IN PROGRESS', 'NOT STARTED'];
   public pieChartData: SingleDataSet = [0, 0, 0];
@@ -51,15 +50,15 @@ export class ReportProcessesComponent implements OnInit {
   };
   public pieChartColors: Array<any> = [
     {
-      backgroundColor: ["#81FB15", "#F6FB15", "#6FC8CE"]
+      backgroundColor: ['#81FB15', '#F6FB15', '#6FC8CE']
     }
   ];
 
   // Completed Processes Chart
-  processFinishedSuccess: number = 0;
-  stadisticFinished: number = 0;
-  stadisticFailed: number = 0;
-  isChartComplete: boolean = false;
+  processFinishedSuccess = 0;
+  stadisticFinished = 0;
+  stadisticFailed = 0;
+  isChartComplete = false;
 
   constructor(private app: AppComponent) { }
 
@@ -70,6 +69,7 @@ export class ReportProcessesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedProcesses;
     this.app.showLoading();
     this.complete(this._detailedProcesses);
@@ -87,41 +87,43 @@ export class ReportProcessesComponent implements OnInit {
   }
 
   complete(process: Process[]) {
-    this.processCompleted = process.filter(process => process.status === ProcessStatusEnum.Declined ||
-      process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
-    this.processFinishedSuccess = process.filter(process => process.status === ProcessStatusEnum.Hired).length;
-    this.processInProgress = process.filter(process => process.status === ProcessStatusEnum.InProgress || process.status == ProcessStatusEnum.Recall || process.status == ProcessStatusEnum.OfferAccepted).length;
-    this.processNotStarted = process.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
+    this.processCompleted = process.filter(p => p.status === ProcessStatusEnum.Declined ||
+      p.status === ProcessStatusEnum.Hired || p.status === ProcessStatusEnum.Rejected).length;
+    this.processFinishedSuccess = process.filter(p => p.status === ProcessStatusEnum.Hired).length;
+    // tslint:disable-next-line: max-line-length
+    this.processInProgress = process.filter(p => p.status === ProcessStatusEnum.InProgress || p.status === ProcessStatusEnum.Recall || p.status === ProcessStatusEnum.OfferAccepted).length;
+    // tslint:disable-next-line: max-line-length
+    this.processNotStarted = process.filter(p => p.status === ProcessStatusEnum.Declined || p.status === ProcessStatusEnum.Rejected).length;
   }
 
   getProgressPercentage() {
     this.app.showLoading();
-    let totalCandidates: number = this.processCompleted;
+    const totalCandidates: number = this.processCompleted;
     if (totalCandidates > 0) {
       this.stadisticFinished = (this.processFinishedSuccess * 100) / 2;
-      if (this.stadisticFinished === 100) this.stadisticFailed = 0;
-      else this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates;
-      if (this.stadisticFailed === 100) this.stadisticFinished = 0;
+      // tslint:disable-next-line: max-line-length
+      if (this.stadisticFinished === 100) { this.stadisticFailed = 0; } else { this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates; }
+      if (this.stadisticFailed === 100) { this.stadisticFinished = 0; }
       this.isChartComplete = true;
     }
 
-    let labels: string[] = [];
-    let percentages: number[] = [];
+    const labels: string[] = [];
+    const percentages: number[] = [];
     let colors: string[] = [];
 
     if (this.processInProgress > 0) {
       labels.push('IN PROGRESS');
-      colors.push("#81FB15");
+      colors.push('#81FB15');
       percentages.push(this.processInProgress);
     }
     if (this.processNotStarted > 0) {
       labels.push('NOT STARTED');
-      colors.push("#6FC8CE");
+      colors.push('#6FC8CE');
       percentages.push(this.processNotStarted);
     }
     this.pieChartLabels = labels;
     this.pieChartData = percentages;
-    if (colors.length == 0) colors = ["#81FB15", "#F6FB15", "#6FC8CE"];
+    if (colors.length === 0) { colors = ['#81FB15', '#F6FB15', '#6FC8CE']; }
     this.pieChartColors = [
       {
         backgroundColor: colors
@@ -133,9 +135,8 @@ export class ReportProcessesComponent implements OnInit {
   }
 
   isPieData(): boolean {
-    let totalProcces: number = this.processInProgress + this.processNotStarted;
-    if (totalProcces > 0) return true;
-    else return false;
+    const totalProcces: number = this.processInProgress + this.processNotStarted;
+    if (totalProcces > 0) { return true; } else { return false; }
   }
 
 }

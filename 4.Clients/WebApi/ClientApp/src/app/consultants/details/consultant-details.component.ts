@@ -3,6 +3,7 @@ import { Consultant } from 'src/entities/consultant';
 import { FacadeService } from 'src/app/services/facade.service';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'consultant-details',
   templateUrl: './consultant-details.component.html',
   styleUrls: ['./consultant-details.component.css']
@@ -23,8 +24,9 @@ export class ConsultantDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  showModal(modalContent: TemplateRef <{}>, fullName: string){
+  showModal(modalContent: TemplateRef <{}>, fullName: string) {
     this.facade.modalService.create({
+        // tslint:disable-next-line: quotemark
         nzTitle: fullName + "'s details",
         nzContent: modalContent,
         nzClosable: true,

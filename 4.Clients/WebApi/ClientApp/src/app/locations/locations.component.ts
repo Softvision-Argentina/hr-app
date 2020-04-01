@@ -18,15 +18,15 @@ export class LocationsComponent implements OnInit {
 
   emptyOffice: Office[] = [];
   listOfDisplayDataOffice = [...this.emptyOffice];
-  
+
   constructor(private route: ActivatedRoute, private facade: FacadeService, private app: AppComponent) { }
 
   ngOnInit() {
     this.getOffices();
     this.getRooms();
-    this.tab=this.route.snapshot.params['tab'];
-    this.route.params.subscribe((params: Params)=>{
-      this.tab=this.route.snapshot.params['tab'];
+    this.tab = this.route.snapshot.params['tab'];
+    this.route.params.subscribe((params: Params) => {
+      this.tab = this.route.snapshot.params['tab'];
     });
   }
 
@@ -38,7 +38,7 @@ export class LocationsComponent implements OnInit {
       }, err => {
       console.log(err);
     });
-  }  
+  }
 
   getOffices() {
     this.facade.OfficeService.get().subscribe(res => {
@@ -46,7 +46,7 @@ export class LocationsComponent implements OnInit {
       this.listOfDisplayDataOffice = res;
     }, err => {
       console.log(err);
-    })
+    });
   }
 
 }

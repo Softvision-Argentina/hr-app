@@ -5,6 +5,7 @@ import { Globals } from '../../app-globals/globals';
 
 
 @Component({
+    // tslint:disable-next-line: component-selector
     selector: 'candidate-details',
     templateUrl: './candidate-details.component.html',
     styleUrls: ['./candidate-details.component.css']
@@ -22,9 +23,9 @@ import { Globals } from '../../app-globals/globals';
         this._detailedCandidate = value;
     }
 
-    recruiterName: string = '';
-    profileName: string = '';
-    communityName: string = '';
+    recruiterName = '';
+    profileName = '';
+    communityName = '';
     englishLevelList: any[] = [];
     statusList: any[] = [];
 
@@ -33,13 +34,13 @@ import { Globals } from '../../app-globals/globals';
       this.statusList = globals.candidateStatusList;
      }
 
-    ngOnInit(){
+    ngOnInit() {
         this.getRecruiterName();
         this.getProfileName();
         this.getCommunityName();
     }
 
-    getRecruiterName(){
+    getRecruiterName() {
         this.facade.consultantService.get()
         .subscribe(res => {
           this.recruiterName = res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].name + ' ' +
@@ -49,7 +50,7 @@ import { Globals } from '../../app-globals/globals';
         });
       }
 
-      getCommunityName(){
+      getCommunityName() {
         this.facade.communityService.get()
         .subscribe(res => {
           this.communityName = res.filter(x => x.id === this._detailedCandidate.community.id)[0].name;
@@ -58,7 +59,7 @@ import { Globals } from '../../app-globals/globals';
         });
       }
 
-      getProfileName(){
+      getProfileName() {
         this.facade.candidateProfileService.get()
         .subscribe(res => {
           this.profileName = res.filter(x => x.id === this._detailedCandidate.profile.id)[0].name;
@@ -67,7 +68,7 @@ import { Globals } from '../../app-globals/globals';
         });
       }
 
-    showModal(modalContent: TemplateRef <{}>, fullName: string){
+    showModal(modalContent: TemplateRef <{}>, fullName: string) {
         fullName = fullName + '\'s details';
         this.facade.modalService.create({
             nzTitle: fullName,
@@ -75,7 +76,7 @@ import { Globals } from '../../app-globals/globals';
             nzClosable: true,
             nzWrapClassName: 'vertical-center-modal',
             nzFooter: null
-        })
+        });
     }
 
     getCandidateStatus(): string {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Process } from 'src/entities/process';
 import { AppComponent } from 'src/app/app.component';
@@ -11,38 +11,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
   templateUrl: './report-timetofill2.component.html',
   styleUrls: ['./report-timetofill2.component.css']
 })
-export class ReportTimetofill2Component implements OnInit {
-
-  // Average: Interview date - Hire Date
-  @Input() _processes;
-
-  constructor(private app: AppComponent) { }
-
-  processes: Process[] = [];  
-  month: Date = new Date();
-  hasProjections: boolean = false;
-
-  isChartComplete: boolean = false;
-  
-  ngOnInit() {
-    this.app.showLoading();
-    this.getProjectionReport();
-    this.app.hideLoading();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    changes._processes;    
-    this.complete();
-    if (!this.isChartComplete) {
-      setTimeout(() => {
-        this.getProjectionReport();
-      });
-    }
-  }
-
-  complete() {
-    this.processes = this._processes;    
-  }
+export class ReportTimetofill2Component implements OnInit, OnChanges {
 
   public chartColors: any[] = [
     {
@@ -55,9 +24,9 @@ export class ReportTimetofill2Component implements OnInit {
     },
   ];
 
-  public chartOptions: ChartOptions = {    
-    responsive: true,    
-    layout:{
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    layout: {
       padding: {
         left: 0,
         right: 20,
@@ -67,9 +36,9 @@ export class ReportTimetofill2Component implements OnInit {
     },
     scales: {
       yAxes: [{
-        id: 'y-axis-0',        
+        id: 'y-axis-0',
         ticks: {
-          beginAtZero: true        
+          beginAtZero: true
         }
       }],
       xAxes: [{
@@ -81,7 +50,7 @@ export class ReportTimetofill2Component implements OnInit {
     plugins: {
       datalabels: {
         anchor: 'end',
-        align: 'end',        
+        align: 'end',
       }
     }
   };
@@ -91,41 +60,75 @@ export class ReportTimetofill2Component implements OnInit {
   public chartPlugins = [pluginDataLabels];
 
   public chartData: ChartDataSets[] = [
-    { data: [], label: 'Dates' }    
+    { data: [], label: 'Dates' }
   ];
 
-  getProjectionReport() {
-    let averageDays : number = 0;
-    let date = new Date(this.month);    
-    let days : number[] = [];
-    let dayChartLabels: Label[] = []
-    let validArray : Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() +1  == date.getMonth() + 1 && proc.status == ProcessStatusEnum.Hired && new Date(proc.hrStage.date).getFullYear() == date.getFullYear());
-    if (validArray.length > 0) {
-      validArray.forEach(va => {                          
-        averageDays+= Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));       
-        days.push(Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
-        dayChartLabels.push(new Date(va.hrStage.date).toDateString());         
-      });      
-      days.push(Number((averageDays/days.length).toFixed(2)));
-      dayChartLabels.push("Average");      
-      this.chartData = [
-        { data: days, label: 'Days' }        
-      ]
-      this.chartLabels = dayChartLabels;
-      this.hasProjections = true;      
+  // Average: Interview date - Hire Date
+  @Input() _processes;
+
+  constructor(private app: AppComponent) { }
+
+  processes: Process[] = [];
+  month: Date = new Date();
+  hasProjections = false;
+
+  isChartComplete = false;
+
+  ngOnInit() {
+    this.app.showLoading();
+    this.getProjectionReport();
+    this.app.hideLoading();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
+    changes._processes;
+    this.complete();
+    if (!this.isChartComplete) {
+      setTimeout(() => {
+        this.getProjectionReport();
+      });
     }
-    else this.hasProjections = false;
+  }
+
+  complete() {
+    this.processes = this._processes;
+  }
+
+  getProjectionReport() {
+    let averageDays = 0;
+    const date = new Date(this.month);
+    const days: number[] = [];
+    const dayChartLabels: Label[] = [];
+    // tslint:disable-next-line: max-line-length
+    const validArray: Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1 && proc.status === ProcessStatusEnum.Hired && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
+    if (validArray.length > 0) {
+      validArray.forEach(va => {
+        // tslint:disable-next-line: max-line-length
+        averageDays += Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));
+        // tslint:disable-next-line: max-line-length
+        days.push(Math.ceil((Math.abs(new Date(va.offerStage.hireDate).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));
+        dayChartLabels.push(new Date(va.hrStage.date).toDateString());
+      });
+      days.push(Number((averageDays / days.length).toFixed(2)));
+      dayChartLabels.push('Average');
+      this.chartData = [
+        { data: days, label: 'Days' }
+      ];
+      this.chartLabels = dayChartLabels;
+      this.hasProjections = true;
+    } else { this.hasProjections = false; }
   }
 
   nextMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() + 1));
-    this.getProjectionReport()
+    this.getProjectionReport();
   }
 
   previousMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() - 1));
-    this.getProjectionReport()
+    this.getProjectionReport();
   }
 }

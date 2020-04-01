@@ -38,19 +38,19 @@ export class ProcessDetailComponent implements OnInit {
   consultants: Consultant[] = [];
   processID: number = this.route.snapshot.params['id'];
 
-  isEdit: boolean = false;
+  isEdit = false;
 
   searchValue = '';
   listOfSearchStages = [];
   sortName = null;
   sortValue = null;
 
-  isDetailsVisible: boolean = false;
-  isAddVisible: boolean = false;
+  isDetailsVisible = false;
+  isAddVisible = false;
 
   emptyStage: Stage = null;
 
-  filteredStages: Stage[] = []
+  filteredStages: Stage[] = [];
   listOfDisplayData = [...this.filteredStages];
 
   emptyCandidate: Candidate;
@@ -60,7 +60,7 @@ export class ProcessDetailComponent implements OnInit {
   consultantDelegate: Consultant;
 
   dropStage(event: CdkDragDrop<string[]>) {
-    console.log("Drop method in table");
+    console.log('Drop method in table');
     console.log(event);
     moveItemInArray(this.listOfDisplayData, event.previousIndex, event.currentIndex);
   }
@@ -88,7 +88,7 @@ export class ProcessDetailComponent implements OnInit {
         this.candidates = res;
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   getProcessByID(id) {
@@ -97,7 +97,7 @@ export class ProcessDetailComponent implements OnInit {
         this.process = res;
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   getConsultants() {
@@ -178,22 +178,21 @@ export class ProcessDetailComponent implements OnInit {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.toastrService.error(err.message);
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Skill Modal
+    // Edit Skill Modal
     this.isEdit = true;
     this.stageForm.reset();
   }
 
   showDeleteConfirm(stageID: number): void {
-    let stageText = '';
+    const stageText = '';
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the stage called ' + stageText + ' ?',
       nzContent: '',
@@ -203,7 +202,7 @@ export class ProcessDetailComponent implements OnInit {
       nzOnOk: () => this.facade.stageService.delete(stageID)
         .subscribe(res => {
           this.getProcessByID(this.processID);
-          this.facade.toastrService.success('Stage was deleted !')
+          this.facade.toastrService.success('Stage was deleted !');
         }, err => {
           this.facade.toastrService.error(err.message);
         })
@@ -232,7 +231,7 @@ export class ProcessDetailComponent implements OnInit {
   search(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchStages.length ? this.listOfSearchStages.some(p => item.title.indexOf(p) !== -1) : true) &&
-        (item.title.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1)
+        (item.title.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1);
     };
     const data = this.filteredStages.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => {

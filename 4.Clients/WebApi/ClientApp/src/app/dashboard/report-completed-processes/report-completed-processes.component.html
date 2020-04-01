@@ -1,27 +1,27 @@
-  <nz-card nzTitle="Completed Processes" [nzHoverable]="true">
-    <nz-skeleton [nzLoading]="completedProcessLoading" [nzActive]="true">
-      <div style="background: #ECECEC; padding: 30px;" *ngIf="stadisticFinished > 0 || stadisticFailed > 0">
-        <nz-row [nzGutter]="16">
-          <nz-col [nzSpan]="12">
-            <nz-card>
-              <nz-statistic [nzValue]="stadisticFinished | number: '1.0-2'" [nzTitle]="'Successful processes'"
-                [nzPrefix]="prefixTplOne" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#3F8600' }">
-              </nz-statistic>
-              <ng-template #prefixTplOne><i nz-icon type="arrow-up"></i></ng-template>
-            </nz-card>
-          </nz-col>
-          <nz-col [nzSpan]="12">
-            <nz-card [nzHoverable]="true">
-              <nz-statistic [nzValue]="stadisticFailed | number: '1.0-2'" [nzTitle]="'Failed processes'"
-                [nzPrefix]="prefixTplTwo" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#CF1322' }">
-              </nz-statistic>
-              <ng-template #prefixTplTwo><i nz-icon type="arrow-down"></i></ng-template>
-            </nz-card>
-          </nz-col>
-        </nz-row>
-      </div>
-      <div *ngIf="stadisticFinished == 0 && stadisticFailed == 0">
-        <span style="margin-left: 25%;"><strong>THERE IS NO DATA TO SHOW</strong></span>
-      </div>
-    </nz-skeleton>
-  </nz-card>
+<nz-card nzTitle="Completed Processes" [nzHoverable]="true">
+  <nz-skeleton [nzLoading]="completedProcessLoading" [nzActive]="true">
+    <div style="background: #ECECEC; padding: 30px;" *ngIf="stadisticFinished > 0 || stadisticFailed > 0">
+      <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="12">
+          <nz-card>
+            <nz-statistic [nzValue]="stadisticFinished | number: '1.0-2'" [nzTitle]="'Successful processes'"
+              [nzPrefix]="prefixTplOne" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#3F8600' }">
+            </nz-statistic>
+            <ng-template #prefixTplOne><i nz-icon type="arrow-up"></i></ng-template>
+          </nz-card>
+        </nz-col>
+        <nz-col [nzSpan]="12">
+          <nz-card [nzHoverable]="true">
+            <nz-statistic [nzValue]="stadisticFailed | number: '1.0-2'" [nzTitle]="'Failed processes'"
+              [nzPrefix]="prefixTplTwo" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#CF1322' }">
+            </nz-statistic>
+            <ng-template #prefixTplTwo><i nz-icon type="arrow-down"></i></ng-template>
+          </nz-card>
+        </nz-col>
+      </nz-row>
+    </div>
+    <div *ngIf="stadisticFinished === 0 && stadisticFailed === 0">
+      <span style="margin-left: 25%;"><strong>THERE IS NO DATA TO SHOW</strong></span>
+    </div>
+  </nz-skeleton>
+</nz-card>

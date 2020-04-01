@@ -10,7 +10,7 @@ import { BaseService } from 'src/app/services/base.service';
   styleUrls: ['./referrals-card.component.css']
 })
 export class ReferralsCardComponent implements OnInit {
-  @Input() 
+  @Input()
   cand: Candidate;
   cv: Cv;
   uploader: FileUploader;
@@ -21,7 +21,7 @@ export class ReferralsCardComponent implements OnInit {
   ngOnInit() {
     this.initializeUploader();
   }
-  
+
   initializeUploader() {
     this.uploader = new FileUploader({
       url: this.b.apiUrl + 'Cv/' + this.cand.id,
@@ -31,15 +31,15 @@ export class ReferralsCardComponent implements OnInit {
       autoUpload: false,
       maxFileSize: 10 * 1024 * 1024
     });
-    
+
     this.response = '';
-    
+
     this.uploader.response.subscribe( res => this.response = res );
-    
+
     this.uploader.onAfterAddingFile = (file) => {file.withCredentials = false; };
-    
+
     this.uploader.onSuccessItem = (item, response, status, headers) => {
-      if(response) {
+      if (response) {
         const res: Cv = JSON.parse(response);
         const cv = {
           id: res.id,

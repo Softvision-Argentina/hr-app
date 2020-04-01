@@ -15,17 +15,7 @@ export class CandidateService extends BaseService<Candidate> {
     this.apiUrl += 'Candidates';
   }
 
-  // public dniExists(dni: number): Observable<any>{
-  //   return this.http.get(this.apiUrl + '/exists/' + dni, {
-  //     headers: this.headersWithAuth
-  //   })
-  //     .pipe(
-  //       tap(data => {}),
-  //       catchError(this.handleErrors)
-  //     );
-  // }
-
-  public idExists(id: number): Observable<any>{
+  public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
     })
@@ -35,9 +25,9 @@ export class CandidateService extends BaseService<Candidate> {
       );
   }
 
-  public getCandidatesBySkills(candidatesFilters): Observable<any>{
+  public getCandidatesBySkills(candidatesFilters): Observable<any> {
 
-    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters ,{
+    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters , {
       headers: this.headersWithAuth
     })
       .pipe(

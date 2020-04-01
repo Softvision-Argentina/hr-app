@@ -1,8 +1,8 @@
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Component, OnInit, TemplateRef, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import { Office } from 'src/entities/office';
 import { Room } from 'src/entities/room';
@@ -12,35 +12,35 @@ import { Room } from 'src/entities/room';
   templateUrl: './office.component.html',
   styleUrls: ['./office.component.css']
 })
-export class OfficeComponent implements OnInit {  
+export class OfficeComponent implements OnInit, OnChanges {
   @Input()
   private _detailedRoom: Room[];
-  public get detailedRoom(): Room[]{
-      return this._detailedRoom;
+  public get detailedRoom(): Room[] {
+    return this._detailedRoom;
   }
   public set detailedRoom(value: Room[]) {
-      this._detailedRoom = value;
+    this._detailedRoom = value;
   }
 
   @Input()
   private _detailedOffice: Office[];
   public get detailedOffice(): Office[] {
-      return this._detailedOffice;
+    return this._detailedOffice;
   }
   public set detailedOffice(value: Office[]) {
-      this._detailedOffice = value;
+    this._detailedOffice = value;
   }
 
   officeForm: FormGroup;
   offices: Office[] = [];
   rooms: Room[] = [];
-  isDetailsVisible: boolean = false;
+  isDetailsVisible = false;
   officeDetails: Office;
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
 
   ngOnInit() {
-    this.app.removeBgImage();    
+    this.app.removeBgImage();
     this.getRooms();
 
     this.officeForm = this.fb.group({
@@ -48,9 +48,11 @@ export class OfficeComponent implements OnInit {
       description: [null, [Validators.required]],
     });
   }
-  
-  ngOnChanges(changes: SimpleChanges){
+
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedOffice;
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedRoom;
     this.getOffices();
     this.getRooms();
@@ -61,20 +63,20 @@ export class OfficeComponent implements OnInit {
       this.offices = res;
     }, err => {
       console.log(err);
-    })
-  }
-  
-  getRooms() {
-    this.facade.RoomService.get()
-    .subscribe(res => {
-      this.rooms = res;
-      }, err => {
-      console.log(err);
     });
   }
 
+  getRooms() {
+    this.facade.RoomService.get()
+      .subscribe(res => {
+        this.rooms = res;
+      }, err => {
+        console.log(err);
+      });
+  }
+
   showDeleteConfirm(officeId: number) {
-    let deleteOffice = this._detailedOffice.filter(office => office.id === officeId)[0];
+    const deleteOffice = this._detailedOffice.filter(office => office.id === officeId)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete ' + deleteOffice.name + ' office?',
       nzContent: '',
@@ -86,19 +88,19 @@ export class OfficeComponent implements OnInit {
           this.settings.getOffices();
           this.facade.toastrService.success('Office was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
-  resetForm(){
-    this.officeForm =  this.fb.group({
+  resetForm() {
+    this.officeForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]]    
+      description: [null, [Validators.required, trimValidator]]
     });
   }
-  
+
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
@@ -118,33 +120,34 @@ export class OfficeComponent implements OnInit {
         onClick: () => {
           this.app.showLoading();
           modal.nzFooter[1].loading = true;
-          let isCompleted: boolean = true;
+          let isCompleted = true;
           for (const i in this.officeForm.controls) {
-            this.officeForm.controls[i].markAsDirty();
-            this.officeForm.controls[i].updateValueAndValidity();
-            if ((!this.officeForm.controls[i].valid)) isCompleted = false;
+            if (this.officeForm.controls[i]) {
+              this.officeForm.controls[i].markAsDirty();
+              this.officeForm.controls[i].updateValueAndValidity();
+              if ((!this.officeForm.controls[i].valid)) { isCompleted = false; }
+            }
           }
           if (isCompleted) {
-            let addOffice: Office = {
+            const addOffice: Office = {
               id: 0,
-              name: this.officeForm.controls["name"].value,
-              description: this.officeForm.controls["description"].value,
+              name: this.officeForm.controls['name'].value,
+              description: this.officeForm.controls['description'].value,
               roomItems: null
-            }
+            };
             this.facade.OfficeService.add(addOffice)
               .subscribe(res => {
                 this.settings.getOffices();
                 this.app.hideLoading();
-                this.facade.toastrService.success("Office successfully created !");
+                this.facade.toastrService.success('Office successfully created !');
                 modal.destroy();
               }, err => {
                 this.app.hideLoading();
                 modal.nzFooter[1].loading = false;
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
-              })
-          }
-          else modal.nzFooter[1].loading = false;
+                // tslint:disable-next-line: max-line-length
+                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              });
+          } else { modal.nzFooter[1].loading = false; }
           this.app.hideLoading();
         }
       }
@@ -154,7 +157,7 @@ export class OfficeComponent implements OnInit {
 
   showEditModal(modalContent: TemplateRef<{}>, officeId: number) {
     this.resetForm();
-    let editOffice: Office = this._detailedOffice.filter(o => o.id === officeId)[0];
+    const editOffice: Office = this._detailedOffice.filter(o => o.id === officeId)[0];
     this.fillOfficeForm(editOffice);
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit Office',
@@ -173,11 +176,13 @@ export class OfficeComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
-            for (let control in this.officeForm.controls) {
-              this.officeForm.controls[control].markAsDirty();
-              this.officeForm.controls[control].updateValueAndValidity();
-              if (!this.officeForm.controls[control].valid) isCompleted = false;
+            let isCompleted = true;
+            for (const control in this.officeForm.controls) {
+              if (this.officeForm.controls[control]) {
+                this.officeForm.controls[control].markAsDirty();
+                this.officeForm.controls[control].updateValueAndValidity();
+                if (!this.officeForm.controls[control].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
               editOffice.name = this.officeForm.controls['name'].value;
@@ -188,11 +193,10 @@ export class OfficeComponent implements OnInit {
                 modal.destroy();
               }, err => {
                 modal.nzFooter[1].loading = false;
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
-              })
-            }
-            else modal.nzFooter[1].loading = false;
+                // tslint:disable-next-line: max-line-length
+                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }]
     });
@@ -209,9 +213,9 @@ export class OfficeComponent implements OnInit {
   }
 
   getColor(candidateroom: Room[], room: Room): string {
-    let colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+    const colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     let index: number = candidateroom.indexOf(room);
-    if (index > colors.length) index = parseInt((index / colors.length).toString().split(',')[0]);
+    if (index > colors.length) { index = parseInt((index / colors.length).toString().split(',')[0], 10); }
     return colors[index];
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-processes-table',
@@ -25,14 +25,14 @@ export class ProcessTableComponent implements OnInit {
   @Output() showDeleteConfirm = new EventEmitter();
   @Output() showApproveProcessConfirm = new EventEmitter();
   @Output() rejectProcess = new EventEmitter();
-  @Output() profileName = new EventEmitter()
-  @Output() searchValueCurrentStage = new EventEmitter()
-  @Output() status = new EventEmitter()
-  @Output() recruiterValue = new EventEmitter()
-  @Output() resetRecruiter = new EventEmitter()
-  @Output() candidateValue = new EventEmitter()
-  @Output() resetCandidate = new EventEmitter()
-  @Output() resetStatus = new EventEmitter()
+  @Output() profileName = new EventEmitter();
+  @Output() searchValueCurrentStage = new EventEmitter();
+  @Output() status = new EventEmitter();
+  @Output() recruiterValue = new EventEmitter();
+  @Output() resetRecruiter = new EventEmitter();
+  @Output() candidateValue = new EventEmitter();
+  @Output() resetCandidate = new EventEmitter();
+  @Output() resetStatus = new EventEmitter();
 
   profile = '';
   CurrentStageValue = '';
@@ -44,49 +44,49 @@ export class ProcessTableComponent implements OnInit {
   }
 
   emitCandidateId(id) {
-    this.candidateId.emit(id)
+    this.candidateId.emit(id);
   }
 
   emitRecruiterId(id) {
-    this.recruiterId.emit(id)
+    this.recruiterId.emit(id);
   }
 
   emitProfileId(id) {
-    this.searchProfile.emit(id)
+    this.searchProfile.emit(id);
   }
 
   emitCommunityId(id) {
-    this.searchCommunity.emit(id)
+    this.searchCommunity.emit(id);
   }
 
   emitStatusId(id) {
-    this.searchStatus.emit(id)
+    this.searchStatus.emit(id);
   }
 
   emitEdit(id) {
-    this.showProcessStart.emit(id)
+    this.showProcessStart.emit(id);
   }
 
   emitDelete(id) {
-    this.showDeleteConfirm.emit(id)
+    this.showDeleteConfirm.emit(id);
   }
 
   emitApproval(id) {
-    this.showApproveProcessConfirm.emit(id)
+    this.showApproveProcessConfirm.emit(id);
   }
 
   emitReject(id) {
-    this.rejectProcess.emit(id)
+    this.rejectProcess.emit(id);
   }
 
   emitProfileName(name) {
     this.profileName.emit(name);
-    this.profile = ''
+    this.profile = '';
   }
 
   emitStatus(id) {
-    console.log({ "status id": id, "status name": this.statusList[id].name })
-    this.status.emit(id)
+    console.log({ 'status id': id, 'status name': this.statusList[id].name });
+    this.status.emit(id);
   }
 
   emitCurrentStageValue(val) {
@@ -94,19 +94,19 @@ export class ProcessTableComponent implements OnInit {
   }
 
   emitRecruiterValue() {
-    this.recruiterValue.emit(this.searchRecruiterValue)
+    this.recruiterValue.emit(this.searchRecruiterValue);
   }
 
   emitResetRecruiter() {
-    this.resetRecruiter.emit()
+    this.resetRecruiter.emit();
   }
 
   emitCandidateValue() {
-    this.candidateValue.emit(this.searchValue)
+    this.candidateValue.emit(this.searchValue);
   }
 
   emitResetCandidate() {
-    this.resetCandidate.emit()
+    this.resetCandidate.emit();
   }
 
   getStatus(status: number): string {
@@ -118,7 +118,7 @@ export class ProcessTableComponent implements OnInit {
   }
 
   emitResetStatus() {
-    this.resetStatus.emit()
+    this.resetStatus.emit();
   }
 
 }

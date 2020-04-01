@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
@@ -11,7 +11,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 })
 
 
-export class ReportProgressProcessesComponent implements OnInit {
+export class ReportProgressProcessesComponent implements OnInit, OnChanges {
 
   @Input()
   private _detailedProcesses: Process[];
@@ -24,29 +24,29 @@ export class ReportProgressProcessesComponent implements OnInit {
 
   constructor() { }
 
-  processInProgress: number = 0;
-  processNotStarted: number = 0;
+  processInProgress = 0;
+  processNotStarted = 0;
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedProcesses;
     this.complete(this._detailedProcesses);
     this.haveProcesses();
   }
 
   complete(process: Process[]) {
-    this.processInProgress = process.filter(process => process.status === ProcessStatusEnum.InProgress ||
-      process.status === ProcessStatusEnum.OfferAccepted || process.status === ProcessStatusEnum.Recall).length;
-    this.processNotStarted = process.filter(process => process.status === ProcessStatusEnum.Declined ||
-      process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
+    this.processInProgress = process.filter(p => p.status === ProcessStatusEnum.InProgress ||
+      p.status === ProcessStatusEnum.OfferAccepted || p.status === ProcessStatusEnum.Recall).length;
+    this.processNotStarted = process.filter(p => p.status === ProcessStatusEnum.Declined ||
+      p.status === ProcessStatusEnum.Hired || p.status === ProcessStatusEnum.Rejected).length;
   }
 
 
   haveProcesses(): boolean {
-    let total = this.processInProgress + this.processNotStarted;
-    if (total > 0) return true;
-    else return false;
+    const total = this.processInProgress + this.processNotStarted;
+    if (total > 0) { return true; } else { return false; }
   }
 }

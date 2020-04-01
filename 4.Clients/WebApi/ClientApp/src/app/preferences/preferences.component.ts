@@ -11,25 +11,24 @@ import { UserDashboard } from 'src/entities/userDashboard';
 export class PreferencesComponent implements OnInit {
   dashboards: Dashboard[] = [];
   currentUser: User = new User();
-  dashboardStatus: boolean[] = new Array()
+  dashboardStatus: boolean[] = new Array();
 
   constructor(private facade: FacadeService) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));    
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
     this.getDashboards();
   }
 
-  updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {   
-    if(addOrDelete) {
-      var userToAdd: UserDashboard = new UserDashboard();
+  updatePreferences(dashboard: Dashboard, addOrDelete: boolean) {
+    if (addOrDelete) {
+      const userToAdd: UserDashboard = new UserDashboard();
       userToAdd.userId = this.currentUser.id;
-      userToAdd.dashboardId = dashboard.id;    
+      userToAdd.dashboardId = dashboard.id;
       dashboard.userDashboards.push(userToAdd);
-    }
-    else {
-      var indexUserToDelete: number;
+    } else {
+      let indexUserToDelete: number;
       indexUserToDelete = dashboard.userDashboards.findIndex(x => x.userId === this.currentUser.id);
       dashboard.userDashboards.splice(indexUserToDelete, 1);
     }
@@ -45,7 +44,7 @@ export class PreferencesComponent implements OnInit {
           this.facade.toastrService.error('The service is not available now. Try again later.');
         }
       );
-      
+
   }
 
   getDashboards() {
@@ -63,7 +62,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   fillStatus() {
-    for (let counter = 0; counter < this.dashboards.length; counter++){
+    for (let counter = 0; counter < this.dashboards.length; counter++) {
       if ( this.dashboards[counter].userDashboards.some( x => x.userId === this.currentUser.id)) {
         this.dashboardStatus.push(true);
       } else {

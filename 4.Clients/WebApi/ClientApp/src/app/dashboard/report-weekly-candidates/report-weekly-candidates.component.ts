@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { Process } from 'src/entities/process';
@@ -13,7 +13,7 @@ import * as addWeeks from 'date-fns/add_weeks';
   templateUrl: './report-weekly-candidates.component.html',
   styleUrls: ['./report-weekly-candidates.component.css']
 })
-export class ReportWeeklyCandidatesComponent implements OnInit {
+export class ReportWeeklyCandidatesComponent implements OnInit, OnChanges {
 
   @Input() _processes;
   @Input() _hireProjections;
@@ -21,10 +21,10 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
   constructor(private facade: FacadeService, private app: AppComponent) { }
 
   processes: Process[] = [];
-  processesByCandidate : Process[][] = [];
+  processesByCandidate: Process[][] = [];
   date: Date;
-  hasCandidates: boolean = false;
-  isChartComplete: boolean = false;
+  hasCandidates = false;
+  isChartComplete = false;
   public chartLabels: Label[] = ['Hires'];
   public chartType: ChartType = 'bar';
   public chartLegend = true;
@@ -49,7 +49,9 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._processes;
+    // tslint:disable-next-line: no-unused-expression
     changes._hireProjections;
     this.complete();
     if (!this.isChartComplete) {
@@ -67,23 +69,27 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
     if (this.date) {
       this.processesByCandidate = [];
 
-      for (let process of this.processes) {
+      for (const process of this.processes) {
         if (this.processesByCandidate[process.candidate.recruiter.id] === undefined) {
           this.processesByCandidate[process.candidate.recruiter.id] = [];
         }
 
-        this.processesByCandidate[process.candidate.recruiter.id].push(process)
+        this.processesByCandidate[process.candidate.recruiter.id].push(process);
       }
 
-      for (let key in this.processesByCandidate) {
-        this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
+      for (const key in this.processesByCandidate) {
+        if (this.processesByCandidate[key]) {
+          // tslint:disable-next-line: max-line-length
+          this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
+        }
       }
 
       this.hasCandidates = this.processesByCandidate.some(pbc => pbc.length > 0);
 
       if (this.hasCandidates) {
         this.chartData = [];
-        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.recruiter.name + " " + p[0].candidate.recruiter.lastName}))
+        // tslint:disable-next-line: max-line-length
+        this.processesByCandidate.forEach(p => this.chartData.push({ data: [p.length], label: p[0].candidate.recruiter.name + ' ' + p[0].candidate.recruiter.lastName }));
       }
     }
   }

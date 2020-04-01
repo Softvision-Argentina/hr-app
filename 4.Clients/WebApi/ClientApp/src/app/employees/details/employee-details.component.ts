@@ -4,6 +4,7 @@ import { Employee } from 'src/entities/employee';
 
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'employee-details',
   templateUrl: './employee-details.component.html',
   styleUrls: ['./employee-details.component.css'],
@@ -36,11 +37,11 @@ export class EmployeeDetailsComponent implements OnInit {
           + res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].lastName;
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   showModal(modalContent: TemplateRef<{}>, fullName: string) {
-    let title = fullName + '\'s details';
+    const title = fullName + '\'s details';
     this.facade.modalService.create({
       nzTitle: title,
       nzContent: modalContent,

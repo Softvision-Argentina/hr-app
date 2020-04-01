@@ -44,7 +44,7 @@ export class EmployeesComponent implements OnInit {
 
   constructor(private facade: FacadeService, private fb: FormBuilder,
     private app: AppComponent, private detailsModal: EmployeeDetailsComponent) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
@@ -52,7 +52,7 @@ export class EmployeesComponent implements OnInit {
     this.getConsultants();
     this.getRoles();
     this.editMode = false;
-    this.statusList = [{ id: 0, name: "Not Hired" }, { id: 1, name: "Hired" }];
+    this.statusList = [{ id: 0, name: 'Not Hired' }, { id: 1, name: 'Hired' }];
     this.showReviewerNotFoundMessage = false;
 
     this.employeeForm = this.fb.group({
@@ -79,20 +79,20 @@ export class EmployeesComponent implements OnInit {
   }
 
   getEmployees() {
-    this.facade.employeeService.get("GetAll")
+    this.facade.employeeService.get('GetAll')
       .subscribe(res => {
-        this.listOfDisplayData = res.filter(e => e.id != 1);
+        this.listOfDisplayData = res.filter(e => e.id !== 1);
         this.employees = res;
         this.reviewers = res.filter(e => e.isReviewer);
         this.filteredReviewersNames = this.reviewers.map(r => r.name + ' ' + r.lastName);
         this.reviewersFullNameAndId = [];
-        for (let reviewer of this.reviewers) {
-          let r: EmployeeAux = {
+        for (const reviewer of this.reviewers) {
+          const r: EmployeeAux = {
             id: reviewer.id,
             fullName: reviewer.name + ' ' + reviewer.lastName,
             reviewerId: null
-          }
-          if (reviewer.reviewer != null) {
+          };
+          if (reviewer.reviewer !== null) {
             r.reviewerId = reviewer.reviewer.id;
           }
           this.reviewersFullNameAndId.push(r);
@@ -108,7 +108,7 @@ export class EmployeesComponent implements OnInit {
         this.consultants = res;
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   getRoles() {
@@ -117,11 +117,11 @@ export class EmployeesComponent implements OnInit {
         this.activeRoles = res.filter(role => role.isActive);
       }, err => {
         console.log(err);
-      })
+      });
   }
 
   showDeleteConfirm(employeeID: number): void {
-    let employeeDelete: Employee = this.employees.filter(employee => employee.id == employeeID)[0];
+    const employeeDelete: Employee = this.employees.filter(employee => employee.id === employeeID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete ' + employeeDelete.lastName + ', ' + employeeDelete.name + ' ?',
       nzContent: '',
@@ -133,8 +133,8 @@ export class EmployeesComponent implements OnInit {
           this.getEmployees();
           this.facade.toastrService.success('Employee was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
@@ -164,12 +164,13 @@ export class EmployeesComponent implements OnInit {
             let isCompleted: boolean;
             isCompleted = this.validateEmployeeFields();
             if (isCompleted) {
-              let newEmployee: Employee = {
+              const newEmployee: Employee = {
                 id: 0,
                 dni: this.employeeForm.controls['dni'].value,
                 name: this.employeeForm.controls['name'].value,
                 lastName: this.employeeForm.controls['lastName'].value,
                 emailAddress: this.employeeForm.controls['emailAddress'].value,
+                // tslint:disable-next-line: max-line-length
                 phoneNumber: '(' + this.employeeForm.controls['phoneNumberPrefix'].value + ')' + this.employeeForm.controls['phoneNumber'].value,
                 linkedInProfile: this.employeeForm.controls['linkedInProfile'].value,
                 additionalInformation: this.employeeForm.controls['additionalInformation'].value,
@@ -177,27 +178,28 @@ export class EmployeesComponent implements OnInit {
                 recruiterId: this.employeeForm.controls['recruiterId'].value,
                 role: null,
                 roleId: this.employeeForm.controls['roleId'].value,
-                isReviewer: this.employeeForm.controls['isReviewer'].value == null ? false : this.employeeForm.controls['isReviewer'].value,
+                // tslint:disable-next-line: max-line-length
+                isReviewer: this.employeeForm.controls['isReviewer'].value === null ? false : this.employeeForm.controls['isReviewer'].value,
                 reviewer: null,
                 reviewerId: null
-              }
-              this.employeeForm.controls['reviewerName'].value == "" || this.employeeForm.controls['reviewerName'].value == null ?
+              };
+              this.employeeForm.controls['reviewerName'].value === '' || this.employeeForm.controls['reviewerName'].value === null ?
                 newEmployee.reviewerId = 1 :
-                this.reviewersFullNameAndId.find(r => r.fullName == this.employeeForm.controls['reviewerName'].value).id;
+                // tslint:disable-next-line: no-unused-expression
+                this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id;
               this.facade.employeeService.add(newEmployee)
                 .subscribe(res => {
                   this.getEmployees();
                   this.app.hideLoading();
-                  this.facade.toastrService.success("Employee successfully created!");
+                  this.facade.toastrService.success('Employee successfully created!');
                   modal.destroy();
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else {
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else {
               modal.nzFooter[1].loading = false;
               this.app.hideLoading();
             }
@@ -211,7 +213,7 @@ export class EmployeesComponent implements OnInit {
     this.editEmployee = editEmployee;
     this.fillEditEmployeeForm(editEmployee);
     const modal = this.facade.modalService.create({
-      nzTitle: "Edit " + editEmployee.name + ' ' + editEmployee.lastName,
+      nzTitle: 'Edit ' + editEmployee.name + ' ' + editEmployee.lastName,
       nzContent: modalContent,
       nzClosable: true,
       nzWidth: '90%',
@@ -234,13 +236,15 @@ export class EmployeesComponent implements OnInit {
               editEmployee.lastName = this.employeeForm.controls['lastName'].value;
               editEmployee.dni = this.employeeForm.controls['dni'].value;
               editEmployee.emailAddress = this.employeeForm.controls['emailAddress'].value;
+              // tslint:disable-next-line: max-line-length
               editEmployee.phoneNumber = '(' + this.employeeForm.controls['phoneNumberPrefix'].value + ')' + this.employeeForm.controls['phoneNumber'].value;
               editEmployee.linkedInProfile = this.employeeForm.controls['linkedInProfile'].value;
               editEmployee.status = this.employeeForm.controls['status'].value;
               editEmployee.roleId = this.employeeForm.controls['roleId'].value;
               editEmployee.recruiterId = this.employeeForm.controls['recruiterId'].value;
               editEmployee.isReviewer = this.employeeForm.controls['isReviewer'].value;
-              this.employeeForm.controls['reviewerName'].value == "" ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName == this.employeeForm.controls['reviewerName'].value).id
+              // tslint:disable-next-line: max-line-length
+              this.employeeForm.controls['reviewerName'].value === '' ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id;
               editEmployee.additionalInformation = this.employeeForm.controls['additionalInformation'].value;
 
               this.facade.employeeService.Update(editEmployee)
@@ -249,13 +253,12 @@ export class EmployeesComponent implements OnInit {
                   modal.destroy();
                   this.facade.toastrService.success('Employee succesfully updated.');
                 }, err => {
-                  if (err.error.message != undefined) this.facade.toastrService.error(err.error.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  // tslint:disable-next-line: max-line-length
+                  if (err.error.message !== undefined) { this.facade.toastrService.error(err.error.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
                   modal.nzFooter[1].loading = false;
                   this.app.hideLoading();
                 });
-            }
-            else modal.nzFooter[1].loading = false;
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }
@@ -267,8 +270,8 @@ export class EmployeesComponent implements OnInit {
   showDetailsModal(employeeId: number, modalContent: TemplateRef<{}>): void {
     this.facade.employeeService.get('GetById/' + employeeId)
       .subscribe(res => {
-        this.detailedEmployee = res
-        this.detailsModal.showModal(modalContent, this.detailedEmployee.name + " " + this.detailedEmployee.lastName);
+        this.detailedEmployee = res;
+        this.detailsModal.showModal(modalContent, this.detailedEmployee.name + ' ' + this.detailedEmployee.lastName);
       });
   }
 
@@ -277,10 +280,11 @@ export class EmployeesComponent implements OnInit {
     this.showReviewerNotFoundMessage = false;
     this.employeeForm.controls['phoneNumberPrefix'].setValue('+54');
     this.employeeForm.controls['status'].setValue(1);
-    let recruiterId = this.consultants.filter(c => c.emailAddress == this.currentUser.email)[0].id;
+    const recruiterId = this.consultants.filter(c => c.emailAddress === this.currentUser.email)[0].id;
     this.employeeForm.controls['recruiterId'].setValue(recruiterId);
-    if (this.activeRoles.length > 0)
+    if (this.activeRoles.length > 0) {
       this.employeeForm.controls['roleId'].setValue(this.activeRoles[0].id);
+    }
   }
 
   fillEditEmployeeForm(employee: Employee) {
@@ -299,21 +303,23 @@ export class EmployeesComponent implements OnInit {
     this.employeeForm.controls['roleId'].setValue(employee.role.id);
     this.employeeForm.controls['recruiterId'].setValue(employee.recruiterId);
     this.employeeForm.controls['isReviewer'].setValue(employee.isReviewer);
-    if (employee.reviewer.id == 1)
-      this.employeeForm.controls['reviewerName'].setValue("");
-    else
+    if (employee.reviewer.id === 1) {
+      this.employeeForm.controls['reviewerName'].setValue('');
+    } else {
       this.employeeForm.controls['reviewerName'].setValue(employee.reviewer.name + ' ' + employee.reviewer.lastName);
-    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id != employee.id && r.reviewerId != employee.id).map(r => r.fullName);
+    }
+    // tslint:disable-next-line: max-line-length
+    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== employee.id && r.reviewerId !== employee.id).map(r => r.fullName);
   }
 
   search(): void {
-    let sValue = this.searchValue;
+    const sValue = this.searchValue;
     function employeeFilter(employee: Employee) {
       return employee.name.toString().toUpperCase().indexOf(sValue.toUpperCase()) !== -1 ||
         employee.lastName.toString().toUpperCase().indexOf(sValue.toUpperCase()) !== -1;
     }
     const data = this.employees.filter(employeeFilter);
-    this.listOfDisplayData = data.filter(e => e.id != 1);
+    this.listOfDisplayData = data.filter(e => e.id !== 1);
     this.searchValue = '';
     this.nameDropdown.nzVisible = false;
   }
@@ -324,43 +330,46 @@ export class EmployeesComponent implements OnInit {
   }
 
   filterReviewers(event) {
-    let filteredReviewer = event.target.value;
-    this.filteredReviewersNames = this.reviewersFullNameAndId.filter(r => r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) != -1).map(r => r.fullName);
+    const filteredReviewer = event.target.value;
+    // tslint:disable-next-line: max-line-length
+    this.filteredReviewersNames = this.reviewersFullNameAndId.filter(r => r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
 
   filterEditReviewers(event) {
-    let filteredReviewer = event.target.value;
-    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id != this.editEmployee.id && r.reviewerId != this.editEmployee.id && r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) != -1).map(r => r.fullName);
+    const filteredReviewer = event.target.value;
+    // tslint:disable-next-line: max-line-length
+    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== this.editEmployee.id && r.reviewerId !== this.editEmployee.id && r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
 
   validateEmployeeFields(): boolean {
     let isCompleted = true;
     for (const i in this.employeeForm.controls) {
-      this.employeeForm.controls[i].markAsDirty();
-      this.employeeForm.controls[i].updateValueAndValidity();
-      if (!this.employeeForm.controls[i].valid) isCompleted = false;
+      if (this.employeeForm.controls[i]) {
+        this.employeeForm.controls[i].markAsDirty();
+        this.employeeForm.controls[i].updateValueAndValidity();
+        if (!this.employeeForm.controls[i].valid) { isCompleted = false; }
+      }
     }
-    if (this.employeeForm.controls['reviewerName'].value == "" || this.employeeForm.controls['reviewerName'].value == undefined) {
-      if (this.employeeForm.controls['isReviewer'].value == false || this.employeeForm.controls['isReviewer'].value == undefined) {
+    if (this.employeeForm.controls['reviewerName'].value === '' || this.employeeForm.controls['reviewerName'].value === undefined) {
+      if (this.employeeForm.controls['isReviewer'].value === false || this.employeeForm.controls['isReviewer'].value === undefined) {
         isCompleted = false;
         this.showInputReviewerMessage = true;
         this.showReviewerNotFoundMessage = false;
       }
-    }
-    else {
+    } else {
       let existReviewer;
-      if (this.editMode)
-        existReviewer = this.filteredEditReviewersNames.find(r => r == this.employeeForm.controls['reviewerName'].value)
-      else
-        existReviewer = this.filteredReviewersNames.find(r => r == this.employeeForm.controls['reviewerName'].value)
-      if (existReviewer == undefined) {
+      if (this.editMode) {
+        existReviewer = this.filteredEditReviewersNames.find(r => r === this.employeeForm.controls['reviewerName'].value);
+      } else {
+        existReviewer = this.filteredReviewersNames.find(r => r === this.employeeForm.controls['reviewerName'].value);
+      }
+      if (existReviewer === undefined) {
         isCompleted = false;
         this.showInputReviewerMessage = false;
         this.showReviewerNotFoundMessage = true;
-      }
-      else {
+      } else {
         isCompleted = true;
         this.showInputReviewerMessage = false;
         this.showReviewerNotFoundMessage = false;
@@ -370,24 +379,25 @@ export class EmployeesComponent implements OnInit {
   }
 
   onIsReviewerChange(event, modalContent: TemplateRef<{}>) {
-    let value: boolean = event.target.checked;
+    const value: boolean = event.target.checked;
     this.showInputReviewerMessage = false;
     this.showReviewerNotFoundMessage = false;
     if (!value) {
-      this.employeesWithSelectedReviewer = this.listOfDisplayData.filter(e => e.reviewer.id == this.editEmployee.id);
+      this.employeesWithSelectedReviewer = this.listOfDisplayData.filter(e => e.reviewer.id === this.editEmployee.id);
       if (this.employeesWithSelectedReviewer.length > 0) {
-        let availableReviewers = this.reviewers.filter(r => r.id != this.editEmployee.id);
-        if (availableReviewers.length > 0)
+        const availableReviewers = this.reviewers.filter(r => r.id !== this.editEmployee.id);
+        if (availableReviewers.length > 0) {
           this.showNewReviewerModal(modalContent);
-        else
+        } else {
           this.showNoReviewersAvailablesModal();
+        }
       }
     }
   }
 
   showNewReviewerModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzTitle: "New Reviewer",
+      nzTitle: 'New Reviewer',
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: [
@@ -404,14 +414,17 @@ export class EmployeesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.newReviewerForm.controls) {
-              this.newReviewerForm.controls[i].markAsDirty();
-              this.newReviewerForm.controls[i].updateValueAndValidity();
-              if ((!this.newReviewerForm.controls[i].valid)) isCompleted = false;
+              if (this.newReviewerForm.controls[i]) {
+                this.newReviewerForm.controls[i].markAsDirty();
+                this.newReviewerForm.controls[i].updateValueAndValidity();
+                if ((!this.newReviewerForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              for (let editEmployee of this.employeesWithSelectedReviewer) {
+              for (const editEmployee of this.employeesWithSelectedReviewer) {
+                // tslint:disable-next-line: max-line-length
                 editEmployee.isReviewer ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.newReviewerForm.controls['reviewerId'].value;
                 editEmployee.roleId = editEmployee.role.id;
                 this.facade.employeeService.Update(editEmployee)
@@ -419,8 +432,8 @@ export class EmployeesComponent implements OnInit {
                     modal.destroy();
                     this.facade.toastrService.success('Employee succesfully updated.');
                   }, err => {
-                    if (err.error.message != undefined) this.facade.toastrService.error(err.error.message);
-                    else this.facade.toastrService.error("The service is not available now. Try again later.");
+                    // tslint:disable-next-line: max-line-length
+                    if (err.error.message !== undefined) { this.facade.toastrService.error(err.error.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
                   });
               }
             }
@@ -432,8 +445,9 @@ export class EmployeesComponent implements OnInit {
 
   showNoReviewersAvailablesModal() {
     const modal = this.facade.modalService.create({
-      nzTitle: "New Reviewer",
-      nzContent: "There are no availables reviewers to reeplace " + this.editEmployee.name + " " + this.editEmployee.lastName + " as reviewer.",
+      nzTitle: 'New Reviewer',
+      // tslint:disable-next-line: max-line-length
+      nzContent: 'There are no availables reviewers to reeplace ' + this.editEmployee.name + ' ' + this.editEmployee.lastName + ' as reviewer.',
       nzClosable: true,
       nzFooter: [
         {

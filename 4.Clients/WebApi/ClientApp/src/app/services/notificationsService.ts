@@ -17,7 +17,7 @@ constructor(router: Router, config: AppConfig, http: HttpClient, globals: Global
   this.apiUrl += 'Notifications';
 }
 
-public getNotifications(): Observable<any>{
+public getNotifications(): Observable<any> {
 
   return this.http.get(this.apiUrl, {
     headers: this.headersWithAuth
@@ -31,8 +31,8 @@ public getNotifications(): Observable<any>{
 public readNotifications(id: number): Observable<any> {
 
   const notiurl = `${this.apiUrl}/${id.toString()}`;
-  
-  let noticall = this.http.put(notiurl, {
+
+  const noticall = this.http.put(notiurl, {
     headers: this.headersWithAuth
   }).pipe(
     tap(_ => {}),

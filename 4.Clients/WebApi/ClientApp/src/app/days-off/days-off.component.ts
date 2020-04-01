@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { dniValidator } from '../directives/dni.validator';
 import { AppComponent } from '../app.component';
-import { EmployeeService } from 'src/app/services/employee.service'
+import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
 import { User } from 'src/entities/user';
@@ -33,7 +33,7 @@ export class DaysOffComponent implements OnInit {
   sortValue = null;
   sortName = null;
   reasons: any[];
-  showCalendarSelected: boolean = false;
+  showCalendarSelected = false;
   isHr: boolean;
   today = new Date();
   currentUser: User;
@@ -101,7 +101,7 @@ export class DaysOffComponent implements OnInit {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  };
+  }
 
   disabledDateTime = (): object => {
     return {
@@ -109,7 +109,7 @@ export class DaysOffComponent implements OnInit {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  };
+  }
 
   canAssign(): boolean {
     // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
@@ -119,6 +119,7 @@ export class DaysOffComponent implements OnInit {
 
   filterTasks() {
     // if(!this.showAllTasks){
+    // tslint:disable-next-line: max-line-length
     //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
     // }
     // else{
@@ -140,29 +141,31 @@ export class DaysOffComponent implements OnInit {
           onClick: () => {
             if (this.compareTwoDates()) {
               this.app.showLoading();
-              if (this.validateForm.controls.DNI.valid == false) {
+              if (this.validateForm.controls.DNI.valid === false) {
                 this.facade.toastrService.error('Please input a valid DNI.');
                 this.app.hideLoading();
-              }
-              else {
-                const dni: number = this.validateForm.controls.DNI.value == null || this.validateForm.controls.DNI.value === undefined ? 0
+              } else {
+                const dni: number = this.validateForm.controls.DNI.value === null || this.validateForm.controls.DNI.value === undefined ? 0
                   : this.validateForm.controls.DNI.value;
                 this.employeeService.GetByDNI(dni)
                   .subscribe(res => {
                     this.app.hideLoading();
                     this.employee = res.body;
-                    if (!this.employee || this.employee == null) {
+                    if (!this.employee || this.employee === null) {
                       this.facade.toastrService.error('There is no employee with that DNI.');
                     } else {
-                      let isCompleted: boolean = true;
+                      let isCompleted = true;
                       for (const i in this.validateForm.controls) {
-                        this.validateForm.controls[i].markAsDirty();
-                        this.validateForm.controls[i].updateValueAndValidity();
-                        if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                        if (this.validateForm.controls[i]) {
+                          this.validateForm.controls[i].markAsDirty();
+                          this.validateForm.controls[i].updateValueAndValidity();
+                          // tslint:disable-next-line: max-line-length
+                          if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
+                        }
                       }
-                      let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview
+                      const newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
                       if (isCompleted) {
-                        let newDayOff: DaysOff = {
+                        const newDayOff: DaysOff = {
                           id: 0,
                           date: this.validateForm.controls['date'].value.toISOString(),
                           endDate: this.validateForm.controls['endDate'].value.toISOString(),
@@ -172,23 +175,23 @@ export class DaysOffComponent implements OnInit {
                           employee: this.employee
                         };
                         this.facade.daysOffService.add(newDayOff)
-                          .subscribe(res => {
-                            this.app.hideLoading()
+                          .subscribe(() => {
+                            this.app.hideLoading();
                             this.getDaysOff();
                             this.facade.toastrService.success('Day off was successfuly created !');
                             modal.destroy();
                           }, err => {
                             this.app.hideLoading();
                             // modal.nzFooter[1].loading = false;
-                            if (err.message != undefined) this.facade.toastrService.error(err.message);
-                            else this.facade.toastrService.error('The service is not available now. Try again later.');
-                          })
+                            // tslint:disable-next-line: max-line-length
+                            if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                          });
                       }
                       // else modal.nzFooter[1].loading = false;
                       // this.app.hideLoading();
                     }
-                  })
-              };
+                  });
+              }
             }
           }
         }],
@@ -196,7 +199,7 @@ export class DaysOffComponent implements OnInit {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Consultant Modal
+    // Edit Consultant Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
 
@@ -223,23 +226,28 @@ export class DaysOffComponent implements OnInit {
               .subscribe(res => {
                 this.employee = res.body;
                 this.app.hideLoading();
-                if (!this.employee || this.employee == null) {
+                if (!this.employee || this.employee === null) {
                   this.facade.toastrService.error('There is no employee with that DNI.');
                 }
-              })
+              });
             if (this.employee) {
-              let isCompleted: boolean = true;
+              let isCompleted = true;
               for (const i in this.validateForm.controls) {
-                this.validateForm.controls[i].markAsDirty();
-                this.validateForm.controls[i].updateValueAndValidity();
-                if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                if (this.validateForm.controls[i]) {
+                  this.validateForm.controls[i].markAsDirty();
+                  this.validateForm.controls[i].updateValueAndValidity();
+                  // tslint:disable-next-line: max-line-length
+                  if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
+                }
               }
 
               let newDate; let newEndDate;
-              newDate = editedDayOff.date == this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
-              newEndDate = editedDayOff.endDate == this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
+              // tslint:disable-next-line: max-line-length
+              newDate = editedDayOff.date === this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
+              // tslint:disable-next-line: max-line-length
+              newEndDate = editedDayOff.endDate === this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
 
-              let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
+              const newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
 
               if (isCompleted) {
                 editedDayOff = {
@@ -260,9 +268,9 @@ export class DaysOffComponent implements OnInit {
                   }, err => {
                     // this.app.hideLoading();
                     // modal.nzFooter[1].loading = false;
-                    if (err.message !== undefined) { this.facade.toastrService.error(err.message); }
-                    else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                  })
+                    // tslint:disable-next-line: max-line-length
+                    if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  });
               }
               // else modal.nzFooter[1].loading = false;
               // this.app.hideLoading();
@@ -273,7 +281,7 @@ export class DaysOffComponent implements OnInit {
   }
 
   showDeleteConfirm(dayOffId: number): void {
-    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id == dayOffId);
+    const dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id === dayOffId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ?',
       nzContent: 'This action will delete the day off',
@@ -285,14 +293,14 @@ export class DaysOffComponent implements OnInit {
           this.getDaysOff();
           this.facade.toastrService.success('Day off was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error('The service is not available now. Try again later.');
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
   resetForm() {
-    let dni = this.isHr ? null : this.employee.dni;
+    const dni = this.isHr ? null : this.employee.dni;
 
     this.validateForm = this.fb.group({
       DNI: [dni, [Validators.required, trimValidator, dniValidator]],
@@ -319,9 +327,9 @@ export class DaysOffComponent implements OnInit {
       }, err => {
         // this.app.hideLoading();
         // modal.nzFooter[1].loading = false;
-        if (err.message != undefined) this.facade.toastrService.error(err.message);
-        else this.facade.toastrService.error('The service is not available now. Try again later.');
-      })
+        // tslint:disable-next-line: max-line-length
+        if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+      });
   }
 
   fillForm(daysOff: DaysOff) {
@@ -345,6 +353,7 @@ export class DaysOffComponent implements OnInit {
         (item.employee.dni.toString().indexOf(this.searchValue.trim()) !== -1); // trimvalidator
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortDni] > b[this.sortDni] ? 1 : -1) : (b[this.sortDni] > a[this.sortDni] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
@@ -352,9 +361,10 @@ export class DaysOffComponent implements OnInit {
   searchType(): void {
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.type === p) : true) &&
-        (item.type === this.searchValueType)
+        (item.type === this.searchValueType);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueType = '';
     this.nameDropdown.nzVisible = false;
@@ -369,9 +379,10 @@ export class DaysOffComponent implements OnInit {
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.status === p) : true) &&
-        (item.status === this.searchValueStatus)
+        (item.status === this.searchValueStatus);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.nameDropdown.nzVisible = false;

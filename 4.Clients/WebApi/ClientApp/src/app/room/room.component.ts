@@ -1,6 +1,6 @@
-import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import { trimValidator } from '../directives/trim.validator';
 import { Office } from 'src/entities/office';
@@ -11,41 +11,42 @@ import { Room } from 'src/entities/room';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css']
 })
-export class RoomComponent implements OnInit {
+export class RoomComponent implements OnInit, OnChanges {
 
   @Input()
   private _detailedRoom: Room[];
   public get detailedRoom(): Room[] {
-      return this._detailedRoom;
+    return this._detailedRoom;
   }
   public set detailedRoom(value: Room[]) {
-      this._detailedRoom = value;
+    this._detailedRoom = value;
   }
 
   @Input()
   private _detailedOffice: Office[];
   public get detailedOffice(): Office[] {
-      return this._detailedOffice;
+    return this._detailedOffice;
   }
   public set detailedOffice(value: Office[]) {
-      this._detailedOffice = value;
+    this._detailedOffice = value;
   }
 
   rooms: Room[] = [];
   offices: Office[] = [];
   roomForm: FormGroup;
   isEdit = false;
-  editingRoomId: number = 0;
+  editingRoomId = 0;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private settings: SettingsComponent) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.getOffices();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
     changes._detailedOffice;
-    this.getOffices();    
+    this.getOffices();
   }
 
   getOfficeNameByID(id: number) {
@@ -55,18 +56,18 @@ export class RoomComponent implements OnInit {
 
   getOffices() {
     this.facade.OfficeService.get()
-    .subscribe(res => {
-      this.offices = res;
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.offices = res;
+      }, err => {
+        console.log(err);
+      });
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.isEdit = false;
     this.resetForm();
     if (this.offices.length > 0) {
-    this.roomForm.controls['profileId'].setValue(this.offices[0].id);
+      this.roomForm.controls['profileId'].setValue(this.offices[0].id);
     }
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Room',
@@ -87,12 +88,14 @@ export class RoomComponent implements OnInit {
             modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
-              this.roomForm.controls[i].markAsDirty();
-              this.roomForm.controls[i].updateValueAndValidity();
-              if ((!this.roomForm.controls[i].valid)) { isCompleted = false; }
+              if (this.roomForm.controls[i]) {
+                this.roomForm.controls[i].markAsDirty();
+                this.roomForm.controls[i].updateValueAndValidity();
+                if ((!this.roomForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let newRoom: Room = {
+              const newRoom: Room = {
                 id: 0,
                 name: this.roomForm.controls['name'].value.toString(),
                 description: this.roomForm.controls['description'].value.toString(),
@@ -101,15 +104,15 @@ export class RoomComponent implements OnInit {
                 reservationItems: null
               };
               this.facade.RoomService.add(newRoom)
-                .subscribe(res => {          
-                  this.settings.getRooms();                  
+                .subscribe(res => {
+                  this.settings.getRooms();
                   this.facade.toastrService.success('Room was successfully created !');
 
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-                  { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -117,11 +120,11 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.resetForm();
     this.editingRoomId = id;
-    this.isEdit = true;    
-    let editedRoom: Room = this._detailedRoom.filter(Room => Room.id === id)[0];
+    this.isEdit = true;
+    let editedRoom: Room = this._detailedRoom.filter(room => room.id === id)[0];
 
     this.fillRoomForm(editedRoom);
 
@@ -144,9 +147,11 @@ export class RoomComponent implements OnInit {
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
-              this.roomForm.controls[i].markAsDirty();
-              this.roomForm.controls[i].updateValueAndValidity();
-              if (!this.roomForm.controls[i].valid) { isCompleted = false; }
+              if (this.roomForm.controls[i]) {
+                this.roomForm.controls[i].markAsDirty();
+                this.roomForm.controls[i].updateValueAndValidity();
+                if (!this.roomForm.controls[i].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
               editedRoom = {
@@ -164,8 +169,8 @@ export class RoomComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else
-                   { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -174,7 +179,7 @@ export class RoomComponent implements OnInit {
   }
 
   showDeleteConfirm(RoomID: number): void {
-  const RoomDelete: Room = this._detailedRoom.filter(c => c.id === RoomID)[0];
+    const RoomDelete: Room = this._detailedRoom.filter(c => c.id === RoomID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + RoomDelete.name + ' ?',
       nzContent: '',
@@ -186,16 +191,17 @@ export class RoomComponent implements OnInit {
           this.settings.getRooms();
           this.facade.toastrService.success('Room was deleted !');
         }, err => {
+          // tslint:disable-next-line: max-line-length
           if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
-  fillRoomForm(Room: Room) {
-    this.roomForm.controls['name'].setValue(Room.name);
-    this.roomForm.controls['description'].setValue(Room.description);
+  fillRoomForm(room: Room) {
+    this.roomForm.controls['name'].setValue(room.name);
+    this.roomForm.controls['description'].setValue(room.description);
     if (this.offices.length > 0) {
-    this.roomForm.controls['profileId'].setValue(this.offices[0].id);
+      this.roomForm.controls['profileId'].setValue(this.offices[0].id);
     }
   }
 

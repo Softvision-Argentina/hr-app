@@ -10,7 +10,7 @@
 <nz-calendar [(ngModel)]="selectedDate" [(nzMode)]="calendarMode" (nzSelectChange)="getCurrentDayReservations()">
   <ul *nzDateCell="let date" class="events">
     <ng-container *ngFor="let reservation of reservations">
-      <li nz-popover *ngIf="reservation.sinceReservation.toString().substr(0, 10) == date.toISOString().substr(0, 10)"
+      <li nz-popover *ngIf="reservation.sinceReservation.toString().substr(0, 10) === date.toISOString().substr(0, 10)"
         nzTitle="{{reservation.description}}" nzContent="Room: {{reservation.room.name}} 
         From: {{reservation.sinceReservation.toString().substr(11, 5)}}
         To: {{reservation.untilReservation.toString().substr(11, 5)}}">

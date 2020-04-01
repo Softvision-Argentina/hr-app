@@ -67,10 +67,10 @@ export class Globals {
       { id: EnglishLevelEnum.HighIntermediate, name: 'High Intermediate'}, { id: EnglishLevelEnum.Advanced, name: 'Advanced'},
     ];
 
-    daysOffTypeList: any[] = [
-      { id: DaysOffTypeEnum.Holidays, name: 'Holidays' }, { id: DaysOffTypeEnum.PTO, name: 'PTO' },
-      { id: DaysOffTypeEnum.StudyDays, name: 'Study Days' }, { id: DaysOffTypeEnum.Training, name: 'Training' }
-    ]
+  daysOffTypeList: any[] = [
+    { id: DaysOffTypeEnum.Holidays, name: 'Holidays' }, { id: DaysOffTypeEnum.PTO, name: 'PTO' },
+    { id: DaysOffTypeEnum.StudyDays, name: 'Study Days' }, { id: DaysOffTypeEnum.Training, name: 'Training' }
+  ];
 
     daysOffStatusList: any[] = [
       { id: DaysOffStatusEnum.InReview, name: 'In Review' },

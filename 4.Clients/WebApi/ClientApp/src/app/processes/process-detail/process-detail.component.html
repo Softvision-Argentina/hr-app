@@ -1,4 +1,4 @@
-<br/>
+<br />
 <div class="row">
     <div nz-col nzSpan="18">
         <a [routerLink]="['/']">
@@ -7,7 +7,8 @@
     </div>
     <div nz-col nzSpan="6">
         <p *ngIf="process">Current status: &nbsp;
-            <button nzTitle="Current state of the process" nzPlacement="topLeft" nz-button nz-tooltip>{{process.status}}</button>
+            <button nzTitle="Current state of the process" nzPlacement="topLeft" nz-button
+                nz-tooltip>{{process.status}}</button>
         </p>
     </div>
 </div>
@@ -21,28 +22,35 @@
         <ul>
             <li><strong style="margin-right: 1%;">Title:</strong> {{ process.title }}</li>
             <li><strong style="margin-right: 1%;">Description:</strong> {{ process.description }}</li>
-            <li *ngIf="process.status == 'Rejected'"><strong style="margin-right: 1%;">Rejection reason:</strong> {{ process.rejectionReason }}</li>
+            <li *ngIf="process.status === 'Rejected'"><strong style="margin-right: 1%;">Rejection reason:</strong>
+                {{ process.rejectionReason }}</li>
             <li><strong style="margin-right: 1%;">Actual Salary:</strong> {{ process.actualSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Wanted Salary:</strong> {{ process.wantedSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Start Date:</strong> {{ process.startDate | date:'medium' }}</li>
-            <li *ngIf="process.endDate"><strong style="margin-right: 1%;">End Date:</strong> {{ process.endDate | date:'medium' }}</li>
-            <li *ngIf="process.consultantOwner"><strong style="margin-right: 1%;">Consultant: </strong><a style="color: #1890ff;" (click)="showConsultantDetailsModal(process.consultantOwner.id, consultantDetailModal)">{{ process.consultantOwner.name }} {{ process.consultantOwner.lastName }}</a></li>
-            <li *ngIf="process.candidate"><strong style="margin-right: 1%;">Candidate: </strong><a style="color: #1890ff;" (click)="showCandidateDetailsModal(process.candidate.id, candidateDetailModal)">{{ process.candidate.name }}
-          {{ process.candidate.lastName }}</a></li>
+            <li *ngIf="process.endDate"><strong style="margin-right: 1%;">End Date:</strong>
+                {{ process.endDate | date:'medium' }}</li>
+            <li *ngIf="process.consultantOwner"><strong style="margin-right: 1%;">Consultant: </strong><a
+                    style="color: #1890ff;"
+                    (click)="showConsultantDetailsModal(process.consultantOwner.id, consultantDetailModal)">{{ process.consultantOwner.name }}
+                    {{ process.consultantOwner.lastName }}</a></li>
+            <li *ngIf="process.candidate"><strong style="margin-right: 1%;">Candidate: </strong><a
+                    style="color: #1890ff;"
+                    (click)="showCandidateDetailsModal(process.candidate.id, candidateDetailModal)">{{ process.candidate.name }}
+                    {{ process.candidate.lastName }}</a></li>
         </ul>
     </div>
     <div nz-col nzSpan="12">
         <h5>Go to the graphic overview of the process</h5>
         <button nz-button nzType="primary" *ngIf="process" [routerLink]="['/process-steps/', process.id]">
-      Graphic overview
-    </button>
+            Graphic overview
+        </button>
     </div>
 </div>
 
 <nz-divider nzText="Process progress">Stages</nz-divider>
 
 <button [nzSize]="'small'" nz-button nzType="primary" (click)="showAddModal(stageModal)" nzShape="round">
-  <i nz-icon type="plus" theme="outline"></i>Add new stage</button>
+    <i nz-icon type="plus" theme="outline"></i>Add new stage</button>
 <br /><br />
 
 <!-- TODO: stages does not exist in proccess it should be deleted or should be add stages as a property? -->
@@ -85,7 +93,7 @@
     </nz-table>
 
 </div>
-<p *ngIf="!process || !process.stages || process.stages.length == 0">
+<p *ngIf="!process || !process.stages || process.stages.length === 0">
     There are no stages yet
 </p> -->
 
@@ -102,8 +110,10 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="title" id="title" placeholder="Please input the Name">
-                        <nz-form-explain *ngIf="stageForm.get('title').dirty && stageForm.get('title').errors">Please input the title</nz-form-explain>
+                        <input type="text" nz-input formControlName="title" id="title"
+                            placeholder="Please input the Name">
+                        <nz-form-explain *ngIf="stageForm.get('title').dirty && stageForm.get('title').errors">Please
+                            input the title</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -113,13 +123,16 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="isEdit">
                         <nz-select formControlName="status">
-                            <nz-option *ngFor="let status of statusList" nzValue="{{status.id}}" nzLabel="{{status.name}}"></nz-option>
+                            <nz-option *ngFor="let status of statusList" nzValue="{{status.id}}"
+                                nzLabel="{{status.name}}"></nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('status').dirty && stageForm.get('status').errors">Please input the status
+                        <nz-form-explain *ngIf="stageForm.get('status').dirty && stageForm.get('status').errors">Please
+                            input the status
                         </nz-form-explain>
                     </nz-form-control>
                     <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="!isEdit">
-                        <button nzTitle="Default State" nzPlacement="topLeft" nz-button nz-tooltip>{{statusList[3].name}}</button>
+                        <button nzTitle="Default State" nzPlacement="topLeft" nz-button
+                            nz-tooltip>{{statusList[3].name}}</button>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -133,10 +146,13 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="consultantOwnerId">
-                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}"
+                                [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('consultantOwnerId').dirty && stageForm.get('consultantOwnerId').errors">Please input the owner</nz-form-explain>
+                        <nz-form-explain
+                            *ngIf="stageForm.get('consultantOwnerId').dirty && stageForm.get('consultantOwnerId').errors">
+                            Please input the owner</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -145,10 +161,13 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="consultantDelegateId">
-                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}"
+                                [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('consultantDelegateId').dirty && stageForm.get('consultantDelegateId').errors">Please input the consultant</nz-form-explain>
+                        <nz-form-explain
+                            *ngIf="stageForm.get('consultantDelegateId').dirty && stageForm.get('consultantDelegateId').errors">
+                            Please input the consultant</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -186,7 +205,8 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
 
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <textarea rows="5" id="feedback" nz-input formControlName="feedback" placeholder="Input feedback for the stage">
+                        <textarea rows="5" id="feedback" nz-input formControlName="feedback"
+                            placeholder="Input feedback for the stage">
             </textarea>
                         <nz-form-explain *ngIf="stageForm.get('feedback').dirty && stageForm.get('feedback').errors">
                             Please input the feedback for the stage
@@ -199,8 +219,10 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="description" id="description" placeholder="Stage Description">
-                        <nz-form-explain *ngIf="stageForm.get('description').dirty && stageForm.get('description').errors">
+                        <input type="text" nz-input formControlName="description" id="description"
+                            placeholder="Stage Description">
+                        <nz-form-explain
+                            *ngIf="stageForm.get('description').dirty && stageForm.get('description').errors">
                             Please input the description
                         </nz-form-explain>
                     </nz-form-control>
@@ -212,21 +234,25 @@
     </form>
 </ng-template>
 
-<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Stage Details" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Stage Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
     <nz-list nzBordered nzSize="small" *ngIf="emptyStage">
         <nz-list-item><strong style="margin-right: 1%;">Nombre: </strong> {{emptyStage.title}}</nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyStage.description}}</nz-list-item>
-        <nz-list-item *ngIf="emptyStage.feedback"><strong style="margin-right: 1%;">Feedback: </strong> {{emptyStage.feedback | truncate:25}}</nz-list-item>
+        <nz-list-item *ngIf="emptyStage.feedback"><strong style="margin-right: 1%;">Feedback: </strong>
+            {{emptyStage.feedback | truncate:25}}</nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Start date: </strong> {{emptyStage.startDate | date:'medium'}}
         </nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">End date: </strong> {{emptyStage.endDate | date:'medium'}}
         </nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Status: </strong> {{emptyStage.status}}</nz-list-item>
         <nz-list-item *ngIf="emptyStage.consultantOwnerId">
-            <strong style="margin-right: 1%;">Owner consultant: </strong> {{consultantOwner.name }} {{ consultantOwner.lastName }}
+            <strong style="margin-right: 1%;">Owner consultant: </strong> {{consultantOwner.name }}
+            {{ consultantOwner.lastName }}
         </nz-list-item>
         <nz-list-item *ngIf="emptyStage.consultantDelegateId">
-            <strong style="margin-right: 1%;">Delegate consultant: </strong> {{consultantDelegate.name}} {{ consultantDelegate.lastName }}
+            <strong style="margin-right: 1%;">Delegate consultant: </strong> {{consultantDelegate.name}}
+            {{ consultantDelegate.lastName }}
         </nz-list-item>
     </nz-list>
 </nz-modal>

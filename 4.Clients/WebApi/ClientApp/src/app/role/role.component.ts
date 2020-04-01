@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { Role } from 'src/entities/role';
 import { Employee } from 'src/entities/employee';
@@ -45,25 +45,24 @@ export class RoleComponent implements OnInit {
       nzCancelText: 'No',
       nzOnOk: () => {
         if (this.employeesWithDeleteRole.length > 0) {
-          this.facade.toastrService.error("The are some employees with this associated role.");
-        }
-        else {
+          this.facade.toastrService.error('The are some employees with this associated role.');
+        } else {
           this.facade.RoleService.delete(role.id).subscribe(res => {
             this.getRoles();
             this.facade.toastrService.success('Role was deleted !');
           }, err => {
-            if (err.message != undefined) this.facade.toastrService.error(err.message);
-            else this.facade.toastrService.error("The service is not available now. Try again later.");
-          })
+            // tslint:disable-next-line: max-line-length
+            if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          });
         }
       }
     });
   }
 
   getEmployeesWithDeleteRole(role: Role) {
-    this.facade.employeeService.get("GetAll")
+    this.facade.employeeService.get('GetAll')
       .subscribe(res => {
-        this.employeesWithDeleteRole = res.filter(e => e.role.id == role.id);
+        this.employeesWithDeleteRole = res.filter(e => e.role.id === role.id);
       }, err => {
         console.log(err);
       });
@@ -71,7 +70,7 @@ export class RoleComponent implements OnInit {
 
   showAddModal(modalContent: TemplateRef<{}>) {
     this.roleForm.reset();
-    this.roleForm.controls["isActive"].setValue("true");
+    this.roleForm.controls['isActive'].setValue('true');
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Role',
       nzContent: modalContent,
@@ -89,28 +88,29 @@ export class RoleComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
-            for (let role in this.roleForm.controls) {
-              this.roleForm.controls[role].markAsDirty();
-              this.roleForm.controls[role].updateValueAndValidity();
-              if (!this.roleForm.controls[role].valid) isCompleted = false;
+            let isCompleted = true;
+            for (const role in this.roleForm.controls) {
+              if (this.roleForm.controls[role]) {
+                this.roleForm.controls[role].markAsDirty();
+                this.roleForm.controls[role].updateValueAndValidity();
+                if (!this.roleForm.controls[role].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let addRole: Role = {
+              const addRole: Role = {
                 id: 0,
-                name: this.roleForm.controls["name"].value,
-                isActive: this.roleForm.controls["isActive"].value,
-              }
+                name: this.roleForm.controls['name'].value,
+                isActive: this.roleForm.controls['isActive'].value,
+              };
               this.facade.RoleService.add(addRole).subscribe(res => {
                 this.getRoles();
                 this.facade.toastrService.success('Role was successfully created !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
-              })
-            }
-            else modal.nzFooter[1].loading = false;
+                // tslint:disable-next-line: max-line-length
+                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }
 
@@ -138,34 +138,35 @@ export class RoleComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.roleForm.controls) {
-              this.roleForm.controls[i].markAsDirty();
-              this.roleForm.controls[i].updateValueAndValidity();
-              if (!this.roleForm.controls[i].valid) isCompleted = false;
+              if (this.roleForm.controls[i]) {
+                this.roleForm.controls[i].markAsDirty();
+                this.roleForm.controls[i].updateValueAndValidity();
+                if (!this.roleForm.controls[i].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let editRole: Role = role;
-              editRole.name = this.roleForm.controls["name"].value;
-              editRole.isActive = this.roleForm.controls["isActive"].value;
+              const editRole: Role = role;
+              editRole.name = this.roleForm.controls['name'].value;
+              editRole.isActive = this.roleForm.controls['isActive'].value;
               this.facade.RoleService.update(role.id, editRole).subscribe(res => {
                 this.getRoles();
                 this.facade.toastrService.success('Role was successfully edited !');
                 modal.destroy();
               }, err => {
-                if (err.message != undefined) this.facade.toastrService.error(err.message);
-                else this.facade.toastrService.error("The service is not available now. Try again later.");
-              })
-            }
-            else modal.nzFooter[1].loading = false;
+                // tslint:disable-next-line: max-line-length
+                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }]
     });
   }
 
   fillRoleForm(role: Role) {
-    this.roleForm.controls["name"].setValue(role.name);
-    this.roleForm.controls["isActive"].setValue(role.isActive.toString());
+    this.roleForm.controls['name'].setValue(role.name);
+    this.roleForm.controls['isActive'].setValue(role.isActive.toString());
   }
 
 }

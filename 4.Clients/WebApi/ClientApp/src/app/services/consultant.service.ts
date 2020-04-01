@@ -13,8 +13,8 @@ export class ConsultantService extends BaseService<Consultant> {
     this.apiUrl += 'Consultant';
   }
 
-  public GetByEmail(email: string){
+  public GetByEmail(email: string) {
     return this.http.get(this.apiUrl
-      + '/GetByEmail?email=' + email, { headers: this.headers, observe: "response" })
+      + '/GetByEmail?email=' + email, { headers: this.headers, observe: 'response' });
   }
 }

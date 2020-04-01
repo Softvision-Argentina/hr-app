@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   public authenticate(userName: string, password: string): Observable<any> {
-    let user = {UserName : userName , Password : password};
+    const user = {UserName : userName , Password : password};
     return this.http.post(this.apiUrl + 'Auth/login', user)
       .pipe(
         catchError(this.handleError('authenticate', {}))
@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   public externalLogin(token: string): Observable<any> {
-    let body = {token : token};
+    const body = {token : token};
     return this.http.post(this.apiUrl + 'Auth/loginExternal', body)
       .pipe(
         catchError(this.handleError('externalLogin', {}))

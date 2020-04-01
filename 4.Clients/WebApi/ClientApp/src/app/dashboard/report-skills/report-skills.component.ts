@@ -10,17 +10,17 @@ import { Candidate } from 'src/entities/candidate';
   styleUrls: ['./report-skills.component.css']
 })
 export class ReportSkillsComponent implements OnInit {
- 
-  @Input() _processes ;
-  
-  //Ranking Chart
+
+  @Input() _processes;
+
+  // Ranking Chart
   skillRankedList: any[] = [
     { id: 0, name: '', points: 0 },
     { id: 0, name: '', points: 0 },
     { id: 0, name: '', points: 0 }
   ];
 
-  topSkillsLoading: boolean = true;
+  topSkillsLoading = true;
 
   skillList: Skill[] = [];
   candidatesSkills: CandidateSkill[] = [];
@@ -34,7 +34,7 @@ export class ReportSkillsComponent implements OnInit {
     this.getCandidatesSkills();
     this.getSkills();
   }
-  
+
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
@@ -53,14 +53,14 @@ export class ReportSkillsComponent implements OnInit {
 
   getKnownSkills(): boolean {
     try {
-      let skillRanking: any = [];
-      let cdSkills: CandidateSkill[] = this.candidatesSkills;
-      let skills: Skill[] = this.skillList;
+      const skillRanking: any = [];
+      const cdSkills: CandidateSkill[] = this.candidatesSkills;
+      const skills: Skill[] = this.skillList;
       if (cdSkills.length > 0 && cdSkills.length > 0) {
         skills.forEach(skill => {
-          let points: number = 0;
+          let points = 0;
           cdSkills.forEach(candSkill => {
-            if (candSkill.skill.id == skill.id) points = points + 1;
+            if (candSkill.skill.id === skill.id) { points = points + 1; }
           });
           skillRanking.push({
             id: skill.id,
@@ -74,10 +74,9 @@ export class ReportSkillsComponent implements OnInit {
         this.skillRankedList = skillRanking.splice(0, 3);
       }
       this.topSkillsLoading = false;
-      if ((this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id) == 0) return false; //por que
-      else return true;
-    }
-    catch{
+      // tslint:disable-next-line: max-line-length
+      if ((this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id) === 0) { return false; } else { return true; }
+    } catch {
       return false;
     }
   }

@@ -14,7 +14,8 @@ export class HireProjectedComponent implements OnInit {
   projectionForm: FormGroup;
   hireProjections: HireProjection[] = [];
   listOfDisplayData = [...this.hireProjections];
-  monthList: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+  // tslint:disable-next-line: max-line-length
+  monthList: string[] = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   yearList: number[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent) { }
@@ -33,13 +34,13 @@ export class HireProjectedComponent implements OnInit {
         this.hireProjections = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         this.listOfDisplayData = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         res.forEach(hp => {
-          if (this.yearList.filter(yl => yl == hp.year).length == 0) this.yearList.push(hp.year);
+          if (this.yearList.filter(yl => yl === hp.year).length === 0) { this.yearList.push(hp.year); }
         });
       }, err => console.log(err));
   }
 
   onMonthChange(result: Date) {
-    if (result != null) {
+    if (result !== null) {
       if (this.hireProjections.filter(h => h.month === result.getMonth() + 1 && h.year === result.getFullYear()).length > 0) {
         this.projectionForm.controls['month'].setErrors({ 'exists': true });
       }
@@ -47,8 +48,7 @@ export class HireProjectedComponent implements OnInit {
   }
 
   exists(errors: any) {
-    if (errors != null && errors['exists']) return true;
-    else return false;
+    if (errors !== null && errors['exists']) { return true; } else { return false; }
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
@@ -64,36 +64,37 @@ export class HireProjectedComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.projectionForm.controls) {
-              this.projectionForm.controls[i].markAsDirty();
-              this.projectionForm.controls[i].updateValueAndValidity();
-              if ((!this.projectionForm.controls[i].valid)) isCompleted = false;
+              if (this.projectionForm.controls[i]) {
+                this.projectionForm.controls[i].markAsDirty();
+                this.projectionForm.controls[i].updateValueAndValidity();
+                if ((!this.projectionForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let selectedDate = new Date(this.projectionForm.controls['month'].value);
-              let month: number = selectedDate.getMonth() + 1;
-              let year: number = selectedDate.getFullYear();
-              let newProjection: HireProjection = {
+              const selectedDate = new Date(this.projectionForm.controls['month'].value);
+              const month: number = selectedDate.getMonth() + 1;
+              const year: number = selectedDate.getFullYear();
+              const newProjection: HireProjection = {
                 id: 0,
                 value: this.projectionForm.controls['value'].value,
                 month: month,
                 year: year
-              }
+              };
               this.facade.hireProjectionService.add(newProjection)
                 .subscribe(res => {
                   this.getHireProjections();
                   this.app.hideLoading();
-                  this.facade.toastrService.success("Projection was successfuly created !");
+                  this.facade.toastrService.success('Projection was successfuly created !');
                   modal.destroy();
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -102,7 +103,7 @@ export class HireProjectedComponent implements OnInit {
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.projectionForm.reset();
-    let editedProjection: HireProjection = this.hireProjections.filter(projection => projection.id == id)[0];
+    let editedProjection: HireProjection = this.hireProjections.filter(projection => projection.id === id)[0];
     this.projectionForm.controls['value'].setValue(editedProjection.value);
     this.projectionForm.controls['month'].setValue(new Date(editedProjection.year + '-' + editedProjection.month));
     const modal = this.facade.modalService.create({
@@ -117,22 +118,24 @@ export class HireProjectedComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.projectionForm.controls) {
-              this.projectionForm.controls[i].markAsDirty();
-              this.projectionForm.controls[i].updateValueAndValidity();
-              if ((!this.projectionForm.controls[i].valid)) isCompleted = false;
+              if (this.projectionForm.controls[i]) {
+                this.projectionForm.controls[i].markAsDirty();
+                this.projectionForm.controls[i].updateValueAndValidity();
+                if ((!this.projectionForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let selectedDate = new Date(this.projectionForm.controls['month'].value);
-              let month: number = selectedDate.getMonth() + 1;
-              let year: number = selectedDate.getFullYear();
+              const selectedDate = new Date(this.projectionForm.controls['month'].value);
+              const month: number = selectedDate.getMonth() + 1;
+              const year: number = selectedDate.getFullYear();
               editedProjection = {
                 id: editedProjection.id,
                 value: this.projectionForm.controls['value'].value,
                 month: month,
                 year: year
-              }
+              };
               this.facade.hireProjectionService.update(editedProjection.id, editedProjection)
                 .subscribe(res => {
                   this.getHireProjections();
@@ -142,11 +145,10 @@ export class HireProjectedComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -154,7 +156,7 @@ export class HireProjectedComponent implements OnInit {
   }
 
   showDeleteConfirm(hireProjectionId: number): void {
-    let hireProjectionDelete: HireProjection = this.hireProjections.find(hireProjection => hireProjection.id == hireProjectionId);
+    const hireProjectionDelete: HireProjection = this.hireProjections.find(hireProjection => hireProjection.id === hireProjectionId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ' + this.monthList[hireProjectionDelete.month - 1] + ' of ' + hireProjectionDelete.year + ' ?',
       nzContent: 'This action will delete the projection associated with this month',
@@ -166,21 +168,20 @@ export class HireProjectedComponent implements OnInit {
           this.getHireProjections();
           this.facade.toastrService.success('Projection was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
   searchYear(year: number) {
-    if (year == 0) this.listOfDisplayData = this.hireProjections;
-    else {
-      this.listOfDisplayData = this.hireProjections.filter(hp => hp.year == year);
+    if (year === 0) { this.listOfDisplayData = this.hireProjections; } else {
+      this.listOfDisplayData = this.hireProjections.filter(hp => hp.year === year);
     }
   }
 
   getMonth(projection: HireProjection): string {
-    var month: number = projection.month;
+    const month: number = projection.month;
     return this.monthList[month - 1];
   }
 

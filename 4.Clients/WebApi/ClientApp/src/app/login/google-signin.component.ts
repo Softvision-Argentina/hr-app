@@ -7,27 +7,29 @@ import { JwtHelper } from 'angular2-jwt';
 declare const gapi: any;
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'google-signin',
   templateUrl: './google-signin.component.html',
   styleUrls: ['./google-signin.component.css']
 })
 export class GoogleSigninComponent implements AfterViewInit {
 
-  @ViewChild("googleBtn")
+  @ViewChild('googleBtn')
   public googleBtn: ElementRef;
 
-  private clientId:string = this.appConfig.getConfig("clientId");
-  
-  private scope = this.appConfig.getConfig("scopes").join(' ');
+  private clientId: string = this.appConfig.getConfig('clientId');
+
+  private scope = this.appConfig.getConfig('scopes').join(' ');
 
   public auth2: any;
 
+  // tslint:disable-next-line: max-line-length
   constructor(private jwtHelper: JwtHelper, private element: ElementRef, private router: Router, public zone: NgZone, private appConfig: AppConfig,
     private facade: FacadeService) {
   }
 
   public googleInit() {
-    let that = this;
+    const that = this;
     sessionStorage.clear();
     gapi.load('auth2', function () {
       that.auth2 = gapi.auth2.init({
@@ -39,13 +41,13 @@ export class GoogleSigninComponent implements AfterViewInit {
     });
   }
   public attachSignin(element) {
-    let that = this;
+    const that = this;
     this.auth2.attachClickHandler(element, {},
       function (googleUser) {
 
-        let profile = googleUser.getBasicProfile();
+        const profile = googleUser.getBasicProfile();
 
-        let currentUser: User = {
+        const currentUser: User = {
           id: profile.getId(),
           name: profile.getName(),
           imgURL: profile.getImageUrl(),
@@ -53,42 +55,41 @@ export class GoogleSigninComponent implements AfterViewInit {
           role: '',
           token: googleUser.getAuthResponse().id_token,
           userDashboards: []
-        }
+        };
         that.externalLogin(currentUser);
 
       }, function (error) {
-        that.zone.run(() => { that.router.navigate(['/unauthorized']);});
+        that.zone.run(() => { that.router.navigate(['/unauthorized']); });
         this.facade.toastrService.error('An error has ocurred, please try again with another account.');
         that.eraseCookie('accounts.google.com');
       });
   }
 
-  externalLogin(gUser: User) {      
+  externalLogin(gUser: User) {
     this.facade.authService.externalLogin(gUser.token)
-    .subscribe(res => {
-      
-      if (res != null)
-      {
-        let currentUser: User = {
-          id: res.user.id,
-          name: res.user.firstName + " " + res.user.lastName,
-          imgURL: gUser.imgURL,
-          email: res.user.username,
-          role: res.user.role,
-          token: res.token,
-          userDashboards: []
-        }
+      .subscribe(res => {
 
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        this.facade.userService.getRoles();
-        this.facade.modalService.closeAll();
-        this.zone.run(() => { this.router.navigate(['/']);});
-      }
-    }, err => {
-      this.zone.run(() => { this.router.navigate(['/unauthorized']);});
-      this.eraseCookie('accounts.google.com');
-      console.log(err);
-    });
+        if (res !== null) {
+          const currentUser: User = {
+            id: res.user.id,
+            name: res.user.firstName + ' ' + res.user.lastName,
+            imgURL: gUser.imgURL,
+            email: res.user.username,
+            role: res.user.role,
+            token: res.token,
+            userDashboards: []
+          };
+
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          this.facade.userService.getRoles();
+          this.facade.modalService.closeAll();
+          this.zone.run(() => { this.router.navigate(['/']); });
+        }
+      }, err => {
+        this.zone.run(() => { this.router.navigate(['/unauthorized']); });
+        this.eraseCookie('accounts.google.com');
+        console.log(err);
+      });
   }
 
   ngAfterViewInit() {
@@ -96,24 +97,23 @@ export class GoogleSigninComponent implements AfterViewInit {
     this.isUserAuthenticated();
   }
 
-  isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+  isUserAuthenticated(): boolean {
+    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
-    }
-    else {
+    } else {
       localStorage.clear();
       return false;
     }
   }
 
-  logout(){
-      localStorage.clear();
-      this.router.navigate(['/login']);
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 
-  eraseCookie(domain: string) { 
-    document.cookie = domain+'=; Max-Age=-99999999;';
+  eraseCookie(domain: string) {
+    document.cookie = domain + '=; Max-Age=-99999999;';
   }
 
 }

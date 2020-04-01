@@ -12,12 +12,12 @@ const PROCESS_STATUS = 'process';
   styleUrls: ['./process-steps.component.css']
 })
 export class ProcessStepsComponent implements OnInit {
-  
-  processID: number = 0;
+
+  processID = 0;
   process: Process = null;
-  processStatus: string = 'process';
-  states = ['error','finish','process','wait'];
-  currentStagePosition: number = 0;
+  processStatus = 'process';
+  states = ['error', 'finish', 'process', 'wait'];
+  currentStagePosition = 0;
 
   selectedView = 'vertical';
 
@@ -33,25 +33,24 @@ export class ProcessStepsComponent implements OnInit {
             .subscribe(res => {
               this.process = res;
               console.log(res);
-              //this.checkStatusOfProcess();
             }, err => {
               console.log(err);
-            })
+            });
   }
 
   getStatusColor(status: string) {
     console.log(status);
-    switch(status.toLowerCase()) {
-      case "finish":
+    switch (status.toLowerCase()) {
+      case 'finish':
         return 'green';
-      case "process":
-        return 'blue'
-      case "wait":
+      case 'process':
+        return 'blue';
+      case 'wait':
         return 'gray';
-      case "error":
+      case 'error':
         return 'red';
       default:
-        return 'blue';  
+        return 'blue';
     }
   }
 

@@ -10,7 +10,7 @@ import { CandidateDetailsComponent } from '../candidates/details/candidate-detai
 import { Process } from 'src/entities/process';
 import { AppComponent } from '../app.component';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Community } from 'src/entities/community';
 import { Office } from 'src/entities/office';
 
@@ -25,7 +25,30 @@ import { Office } from 'src/entities/office';
 
 export class ReportsComponent implements OnInit {
 
-  //Skill Chart Preferences
+    // Processes
+    public pieChartOptions: ChartOptions = {
+      responsive: true,
+      plugins: {
+        datalabels: {
+          formatter: (value, ctx) => {
+            const label = ctx.chart.data.labels[ctx.dataIndex];
+            return label;
+          },
+        },
+      }
+    };
+    public pieChartLabels: Label[] = ['REJECTED', 'IN PROCESS', 'FINISH', 'WAIT', 'NOT STARTED'];
+    public pieChartData: SingleDataSet = [0, 0, 0, 0, 0];
+    public pieChartType: ChartType = 'pie';
+    public pieChartLegend = true;
+    public pieChartPlugins = [pluginDataLabels];
+    public pieChartColors: Array<any> = [
+      {
+        backgroundColor: ['#E4363FDB', '#81FB15', '#36E4BDFC', '#F6FB15', '#6FC8CE']
+      }
+    ];
+
+  // Skill Chart Preferences
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
   public skillChartLabels: Label[] = [];
   public skillChartLegend = false;
@@ -66,7 +89,7 @@ export class ReportsComponent implements OnInit {
   ];
 
 
-  //CandidateFilter
+  // CandidateFilter
   @ViewChild('dropdown') nameDropdown;
   validateSkillsForm: FormGroup;
   listOfControl: Array<{ id: number; controlInstance: string[] }> = [];
@@ -83,29 +106,29 @@ export class ReportsComponent implements OnInit {
   searchValue = '';
   listOfSearchCandidates = [];
   listOfDisplayData = [...this.filteredCandidates];
-  defaultOffice : Office = {
+  defaultOffice: Office = {
     id: null,
     name: 'NA',
     description: '',
     roomItems: []
-  }
-  defaultCommunity : Community = {
+  };
+  defaultCommunity: Community = {
     id: null,
     name: 'NA',
     description: '',
     profileId: 0,
     profile: null
-  }
+  };
 
 
-  numberOfWait: number = 0;
-  numberOfError: number = 0;
-  numberOfFinish: number = 0;
-  numberOfInProcess: number = 0;
-  numberOfNotStarted: number = 0;
+  numberOfWait = 0;
+  numberOfError = 0;
+  numberOfFinish = 0;
+  numberOfInProcess = 0;
+  numberOfNotStarted = 0;
 
-  stadisticAbove: number = 0;
-  stadisticBelow: number = 0;
+  stadisticAbove = 0;
+  stadisticBelow = 0;
 
   sortName = null;
   sortValue = null;
@@ -126,7 +149,7 @@ export class ReportsComponent implements OnInit {
       community: [this.defaultCommunity],
       preferredOffice: [this.defaultOffice]
     });
-    this.addField()
+    this.addField();
     this.app.hideLoading();
   }
   addField(e?: MouseEvent): void {
@@ -155,8 +178,8 @@ export class ReportsComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id == candidateID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id === candidateID)[0];
+    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   getSkills() {
@@ -181,18 +204,18 @@ export class ReportsComponent implements OnInit {
 
   getCommunities() {
     this.facade.communityService.get()
-    .subscribe(res => {
-      this.communities.push(this.defaultCommunity)
-      this.communities.push(...res);
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.communities.push(this.defaultCommunity);
+        this.communities.push(...res);
+      }, err => {
+        console.log(err);
+      });
   }
 
   getOffices() {
     this.facade.OfficeService.get()
       .subscribe(res => {
-        this._offices.push(this.defaultOffice)
+        this._offices.push(this.defaultOffice);
         this._offices.push(...res);
       }, err => {
         console.log(err);
@@ -203,38 +226,38 @@ export class ReportsComponent implements OnInit {
     this.facade.processService.get()
       .subscribe(res => {
         this.processes = res;
-        let labels: string[] = [];
-        let percentages: number[] = [];
-        let colors: string[] = [];
+        const labels: string[] = [];
+        const percentages: number[] = [];
+        const colors: string[] = [];
 
         this.numberOfInProcess = this.processes.filter(p => p.status === ProcessStatusEnum.Declined).length;
         if (this.numberOfInProcess > 0) {
           labels.push('DECLINED');
-          colors.push("#81FB15");
+          colors.push('#81FB15');
           percentages.push(this.numberOfInProcess);
         }
         this.numberOfError = this.processes.filter(p => p.status === ProcessStatusEnum.Rejected).length;
         if (this.numberOfError > 0) {
           labels.push('REJECTED');
-          colors.push("#E4363FDB");
+          colors.push('#E4363FDB');
           percentages.push(this.numberOfError);
         }
         this.numberOfWait = this.processes.filter(p => p.status === ProcessStatusEnum.InProgress).length;
         if (this.numberOfWait > 0) {
           labels.push('IN PROGRESS');
-          colors.push("#F6FB15");
+          colors.push('#F6FB15');
           percentages.push(this.numberOfWait);
         }
         this.numberOfFinish = this.processes.filter(p => p.status === ProcessStatusEnum.Hired).length;
         if (this.numberOfFinish > 0) {
           labels.push('HIRED');
-          colors.push("#36E4BDFC");
+          colors.push('#36E4BDFC');
           percentages.push(this.numberOfFinish);
         }
         this.numberOfNotStarted = this.processes.filter(p => p.status === ProcessStatusEnum.Recall).length;
         if (this.numberOfNotStarted > 0) {
           labels.push('RECALL');
-          colors.push("#6FC8CE");
+          colors.push('#6FC8CE');
           percentages.push(this.numberOfNotStarted);
         }
 
@@ -254,66 +277,48 @@ export class ReportsComponent implements OnInit {
 
     this.app.showLoading();
     for (const i in this.validateSkillsForm.controls) {
-      this.validateSkillsForm.controls[i].markAsDirty();
-      this.validateSkillsForm.controls[i].updateValueAndValidity();
+      if (this.validateSkillsForm.controls[i]) {
+        this.validateSkillsForm.controls[i].markAsDirty();
+        this.validateSkillsForm.controls[i].updateValueAndValidity();
+      }
     }
 
-    /* this.filteredCandidates = [];
-    let selectedSkill: number = this.validateSkillsForm.get("skill0").value;
-    let selectedSkills: number[] = this.listOfControl.map(control => this.validateSkillsForm.get(control.controlInstance[1]).value);
-    
-    let rateRange: string[] = this.validateSkillsForm.get("rate0").value.toString().split(',');
-    let skilledCandidates: number = 0;
-    let totalCandidates: number = 0;
-    this.candidates.forEach(candidate => {
-      candidate.candidateSkills.forEach(cdSkill => {
-        if (cdSkill.skill.id.toString() === selectedSkill.toString()) {
-          totalCandidates = totalCandidates + 1;
-          if (cdSkill.rate >= 50) skilledCandidates = skilledCandidates + 1;
-          if ((cdSkill.rate >= parseInt(rateRange[0])) && (cdSkill.rate <= parseInt(rateRange[1]))) {
-            this.filteredCandidates.push(candidate);
-          }
-        }
-      })
-    }); */
-
-    //this.listOfDisplayData = this.filteredCandidates;
-
-    let selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
+    const selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
       this.listOfControl.map(control => {
         const result = {
-          skillId: parseInt(this.validateSkillsForm.get(control.controlInstance[0]).value),
+          skillId: parseInt(this.validateSkillsForm.get(control.controlInstance[0]).value, 10),
           minRate: this.validateSkillsForm.get(control.controlInstance[1]).value[0],
           maxRate: this.validateSkillsForm.get(control.controlInstance[1]).value[1]
-        }
+        };
 
         return result;
       });
 
-      const filteredCandidateRequest : { community : number
-        , preferredOffice : number
-        , selectedSkills:  Array<{ skillId: number; minRate: number; maxRate: number }> } = 
-        {
-          community : parseInt(this.validateSkillsForm.get('community').value.id),
-          preferredOffice : parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
-          selectedSkills : selectedSkills
-        }
+    const filteredCandidateRequest: {
+      community: number
+      , preferredOffice: number
+      , selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }>
+    } = {
+      community: parseInt(this.validateSkillsForm.get('community').value.id, 10),
+      preferredOffice: parseInt(this.validateSkillsForm.get('preferredOffice').value.id, 10),
+      selectedSkills: selectedSkills
+    };
 
-      
-     
+
+
     this.facade.candidateService.getCandidatesBySkills(filteredCandidateRequest)
       .subscribe(res => {
         this.listOfDisplayData = res;
-        let skilledCandidates: number = this.listOfDisplayData.filter(candidate => candidate.candidateSkills[0].rate >= 50).length;
-        let totalCandidates: number = this.listOfDisplayData.length;
+        const skilledCandidates: number = this.listOfDisplayData.filter(candidate => candidate.candidateSkills[0].rate >= 50).length;
+        const totalCandidates: number = this.listOfDisplayData.length;
 
-        //Cards de porcentajes
+        // Cards de porcentajes
         this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
-        if (this.stadisticAbove === 100) this.stadisticBelow = 0;
-        else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
-        if (this.stadisticBelow === 100) this.stadisticAbove = 0;
-        if (this.stadisticAbove.toString() == 'NaN') this.stadisticAbove = 0;
-        if (this.stadisticBelow.toString() == 'NaN') this.stadisticBelow = 0;
+        // tslint:disable-next-line: max-line-length
+        if (this.stadisticAbove === 100) { this.stadisticBelow = 0; } else { this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates; }
+        if (this.stadisticBelow === 100) { this.stadisticAbove = 0; }
+        if (this.stadisticAbove.toString() === 'NaN') { this.stadisticAbove = 0; }
+        if (this.stadisticBelow.toString() === 'NaN') { this.stadisticBelow = 0; }
         this.app.hideLoading();
       }, err => {
         console.log(err);
@@ -327,10 +332,13 @@ export class ReportsComponent implements OnInit {
 
   search(): void {
     const filterFunc = (item) => {
+      // tslint:disable-next-line: max-line-length
       return (this.listOfSearchCandidates.length ? this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
+        // tslint:disable-next-line: max-line-length
         (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
+    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
@@ -342,18 +350,17 @@ export class ReportsComponent implements OnInit {
   }
 
   isPieData(): boolean {
-    let total = this.numberOfInProcess + this.numberOfError + this.numberOfWait + this.numberOfFinish + this.numberOfNotStarted;
-    if (total > 0) return true;
-    else return false;
+    const total = this.numberOfInProcess + this.numberOfError + this.numberOfWait + this.numberOfFinish + this.numberOfNotStarted;
+    if (total > 0) { return true; } else { return false; }
   }
 
   getSkillsPercentage(): void {
     this.app.showLoading();
-    let skills: Skill[] = this.skills;
-    let candidates: Candidate[] = this.candidates;
-    let chartLabels: Label[] = [];
+    const skills: Skill[] = this.skills;
+    const candidates: Candidate[] = this.candidates;
+    const chartLabels: Label[] = [];
     let cantidad: number;
-    let skillRates: number[] = [];
+    const skillRates: number[] = [];
 
     skills.forEach(skill => {
       cantidad = 0;
@@ -373,30 +380,6 @@ export class ReportsComponent implements OnInit {
     this.skillChartLabels = chartLabels;
     this.app.hideLoading();
   }
-
-
-  //Processes
-  public pieChartOptions: ChartOptions = {
-    responsive: true,
-    plugins: {
-      datalabels: {
-        formatter: (value, ctx) => {
-          const label = ctx.chart.data.labels[ctx.dataIndex];
-          return label;
-        },
-      },
-    }
-  };
-  public pieChartLabels: Label[] = ['REJECTED', 'IN PROCESS', 'FINISH', 'WAIT', 'NOT STARTED'];
-  public pieChartData: SingleDataSet = [0, 0, 0, 0, 0];
-  public pieChartType: ChartType = 'pie';
-  public pieChartLegend = true;
-  public pieChartPlugins = [pluginDataLabels];
-  public pieChartColors: Array<any> = [
-    {
-      backgroundColor: ["#E4363FDB", "#81FB15", "#36E4BDFC", "#F6FB15", "#6FC8CE"]
-    }
-  ];
 
   // events
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {

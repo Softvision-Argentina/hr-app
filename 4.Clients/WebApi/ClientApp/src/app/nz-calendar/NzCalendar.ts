@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
 import { DaysOff } from 'src/entities/days-off';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'nz-basic-calendar',
   template: `
   <div nz-row>
@@ -19,11 +20,11 @@ import { DaysOff } from 'src/entities/days-off';
     </div>
     <div>
       <ul *ngFor="let item of _listOfCompanyCalendar">
-        <div *ngIf= "selectedDateString == item.date.substr(0, 11)">
-          <div *ngIf="item.type == 'Festivity'">
+        <div *ngIf= "selectedDateString === item.date.substr(0, 11)">
+          <div *ngIf="item.type === 'Festivity'">
            <li style="font-weigth: bold; font-size: 18px; color:rgb(179, 22, 179);">{{item.type}}: {{item.comments}}</li>
           </div>
-          <div *ngIf="item.type == 'Reminder'">
+          <div *ngIf="item.type === 'Reminder'">
            <li style="font-weigth: bold; font-size: 18px; color: grey;">{{item.type}}: {{item.comments}}</li>
           </div>
         </div>
@@ -32,19 +33,19 @@ import { DaysOff } from 'src/entities/days-off';
     <div>
     <ul *ngFor="let item2 of _listOfDaysOff">
       <div *ngIf= "askForDate(item2)">
-          <div *ngIf="item2.status == 'Holidays'">
+          <div *ngIf="item2.status === 'Holidays'">
           <li style="font-weigth: bold; font-size: 18px; color:darkolivegreen;">{{item2.type}}}</li>
           </div>
-          <div *ngIf="item2.type == 'PTO'">
+          <div *ngIf="item2.type === 'PTO'">
           <li style="font-weigth: bold; font-size: 18px; color: firebrick;">{{item2.type}}</li>
           </div>
-          <div *ngIf="item2.type == 'Study days'">
+          <div *ngIf="item2.type === 'Study days'">
           <li style="font-weigth: bold; font-size: 18px; color: mediumblue;">{{item2.type}}</li>
           </div>
-          <div *ngIf="item2.type == 'Training'">
+          <div *ngIf="item2.type === 'Training'">
           <li style="font-weigth: bold; font-size: 18px; color: maroon;">{{item2.type}}</li>
           </div>
-          <div *ngIf="item2.type != 'Holidays' && item2.type != 'PTO' && item2.type != 'Study days' && item2.type != 'Training'">
+          <div *ngIf="item2.type !== 'Holidays' && item2.type !== 'PTO' && item2.type !== 'Study days' && item2.type !== 'Training'">
           <li style="font-weigth: bold; font-size: 18px; color: black;">{{item2.type}}</li>
           </div>
       </div>
@@ -54,7 +55,7 @@ import { DaysOff } from 'src/entities/days-off';
   </div>
   `
 })
-export class NzCalendarComponent {
+export class NzCalendarComponent implements OnInit {
   @Input() _listOfCompanyCalendar;
   @Input() _listOfDaysOff;
 
@@ -68,7 +69,7 @@ export class NzCalendarComponent {
   }
 
   askForDate(dayOff: DaysOff): boolean {
-    const rangeDays =  differenceInCalendarDays(dayOff.endDate, dayOff.date);
+    const rangeDays = differenceInCalendarDays(dayOff.endDate, dayOff.date);
     const indexDate = new Date(dayOff.date);
 
     for (let j = 0; j <= rangeDays; j++) {
@@ -91,5 +92,5 @@ export class NzCalendarComponent {
     console.log(`Current mode: ${change.mode}`);
   }
 
-//check in
+  // check in
 }

@@ -14,7 +14,7 @@ export class ProfilesComponent implements OnInit {
   tab: string;
   emptyCandidateProfile: CandidateProfile[] = [];
   listOfDisplayData = [...this.emptyCandidateProfile];
-  
+
   emptyCommunity: Community[] = [];
   listOfDisplayDataCommunity = [...this.emptyCommunity];
 
@@ -23,9 +23,9 @@ export class ProfilesComponent implements OnInit {
   ngOnInit() {
     this.getCandidatesProfile();
     this.getCommunities();
-    this.tab=this.route.snapshot.params['tab'];
-    this.route.params.subscribe((params: Params)=>{
-      this.tab=this.route.snapshot.params['tab'];
+    this.tab = this.route.snapshot.params['tab'];
+    this.route.params.subscribe((params: Params) => {
+      this.tab = this.route.snapshot.params['tab'];
     });
   }
 
@@ -38,7 +38,7 @@ export class ProfilesComponent implements OnInit {
         console.log(err);
       });
   }
-  
+
   getCommunities() {
     this.facade.communityService.get()
       .subscribe(res => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { HireProjection } from 'src/entities/hireProjection';
@@ -14,43 +14,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
   templateUrl: './report-hire-projection.component.html',
   styleUrls: ['./report-hire-projection.component.css']
 })
-export class ReportHireProjectionComponent implements OnInit {
-
-  @Input() _processes;
-  @Input() _hireProjections;
-
-  //Ranking Chart
-
-  constructor(private facade: FacadeService, private app: AppComponent) { }
-
-  processes: Process[] = [];
-  hireProjections: HireProjection[] = [];
-  month: Date = new Date();
-  hasProjections: boolean = false;
-
-  isChartComplete: boolean = false;
-
-  ngOnInit() {
-    this.app.showLoading();
-    this.getHireProjectionReport();
-    this.app.hideLoading();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    changes._processes;
-    changes._hireProjections;
-    this.complete();
-    if (!this.isChartComplete) {
-      setTimeout(() => {
-        this.getHireProjectionReport();
-      });
-    }
-  }
-
-  complete() {
-    this.processes = this._processes;
-    this.hireProjections = this._hireProjections;
-  }
+export class ReportHireProjectionComponent implements OnInit, OnChanges {
 
   public hireChartOptions: ChartOptions = {
     responsive: true,
@@ -72,15 +36,54 @@ export class ReportHireProjectionComponent implements OnInit {
     { data: [0], label: 'Projected' }
   ];
 
+  @Input() _processes;
+  @Input() _hireProjections;
+
+  // Ranking Chart
+
+  constructor(private facade: FacadeService, private app: AppComponent) { }
+
+  processes: Process[] = [];
+  hireProjections: HireProjection[] = [];
+  month: Date = new Date();
+  hasProjections = false;
+
+  isChartComplete = false;
+
+  ngOnInit() {
+    this.app.showLoading();
+    this.getHireProjectionReport();
+    this.app.hideLoading();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable-next-line: no-unused-expression
+    changes._processes;
+    // tslint:disable-next-line: no-unused-expression
+    changes._hireProjections;
+    this.complete();
+    if (!this.isChartComplete) {
+      setTimeout(() => {
+        this.getHireProjectionReport();
+      });
+    }
+  }
+
+  complete() {
+    this.processes = this._processes;
+    this.hireProjections = this._hireProjections;
+  }
+
   getHireProjectionReport() {
-    let date = new Date(this.month);
+    const date = new Date(this.month);
     let projection: HireProjection;
-    let actualHires: number = 0;
-    if (this.hireProjections.filter(hp => hp.month == date.getMonth() + 1 && hp.year == date.getFullYear()).length > 0) {
-      projection = this.hireProjections.filter(hp => hp.month == (date.getMonth() + 1) && hp.year == date.getFullYear())[0];
+    let actualHires = 0;
+    if (this.hireProjections.filter(hp => hp.month === date.getMonth() + 1 && hp.year === date.getFullYear()).length > 0) {
+      projection = this.hireProjections.filter(hp => hp.month === (date.getMonth() + 1) && hp.year === date.getFullYear())[0];
       this.processes.forEach(proc => {
-        if (proc.status == ProcessStatusEnum.Hired) {
-          if (new Date(proc.offerStage.date).getMonth() == date.getMonth() && new Date(proc.offerStage.date).getFullYear() == date.getFullYear()) actualHires++;
+        if (proc.status === ProcessStatusEnum.Hired) {
+          // tslint:disable-next-line: max-line-length
+          if (new Date(proc.offerStage.date).getMonth() === date.getMonth() && new Date(proc.offerStage.date).getFullYear() === date.getFullYear()) { actualHires++; }
         }
       });
       this.hireChartData = [
@@ -88,20 +91,19 @@ export class ReportHireProjectionComponent implements OnInit {
         { data: [projection.value], label: 'Projected' }
       ];
       this.hasProjections = true;
-    }
-    else this.hasProjections = false;
+    } else { this.hasProjections = false; }
   }
 
 
   nextHireMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() + 1));
-    this.getHireProjectionReport()
+    this.getHireProjectionReport();
   }
 
   previousHireMonth() {
-    let oldMonth: Date = new Date(this.month);
+    const oldMonth: Date = new Date(this.month);
     this.month = new Date(oldMonth.setMonth(oldMonth.getMonth() - 1));
-    this.getHireProjectionReport()
+    this.getHireProjectionReport();
   }
 }

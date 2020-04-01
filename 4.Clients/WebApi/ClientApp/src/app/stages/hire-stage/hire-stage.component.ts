@@ -8,6 +8,7 @@ import { Globals } from 'src/app/app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'hire-stage',
   templateUrl: './hire-stage.component.html',
   styleUrls: ['./hire-stage.component.css']

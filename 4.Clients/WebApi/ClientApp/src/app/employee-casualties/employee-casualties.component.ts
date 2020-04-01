@@ -15,7 +15,8 @@ export class EmployeeCasualtiesComponent implements OnInit {
   employeecasualties: EmployeeCasualty[] = [];
   listOfDisplayData = [...this.employeecasualties];
 
-  monthList: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+  // tslint:disable-next-line: max-line-length
+  monthList: string[] = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
   yearList: number[] = [];
 
@@ -36,13 +37,13 @@ export class EmployeeCasualtiesComponent implements OnInit {
         this.employeecasualties = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         this.listOfDisplayData = res.sort((a, b) => a.month > b.month ? 1 : -1).sort((a, b) => a.year < b.year ? 1 : -1);
         res.forEach(hp => {
-          if (this.yearList.filter(yl => yl == hp.year).length == 0) this.yearList.push(hp.year);
+          if (this.yearList.filter(yl => yl === hp.year).length === 0) { this.yearList.push(hp.year); }
         });
       }, err => console.log(err));
   }
 
   onMonthChange(result: Date) {
-    if (result != null) {
+    if (result !== null) {
       if (this.employeecasualties.filter(h => h.month === result.getMonth() + 1 && h.year === result.getFullYear()).length > 0) {
         this.casualtyForm.controls['month'].setErrors({ 'exists': true });
       }
@@ -50,8 +51,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
   }
 
   exists(errors: any) {
-    if (errors != null && errors['exists']) return true;
-    else return false;
+    if (errors !== null && errors['exists']) { return true; } else { return false; }
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
@@ -67,36 +67,37 @@ export class EmployeeCasualtiesComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.casualtyForm.controls) {
-              this.casualtyForm.controls[i].markAsDirty();
-              this.casualtyForm.controls[i].updateValueAndValidity();
-              if ((!this.casualtyForm.controls[i].valid)) isCompleted = false;
+              if (this.casualtyForm.controls[i]) {
+                this.casualtyForm.controls[i].markAsDirty();
+                this.casualtyForm.controls[i].updateValueAndValidity();
+                if ((!this.casualtyForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let selectedDate = new Date(this.casualtyForm.controls['month'].value);
-              let month: number = selectedDate.getMonth() + 1;
-              let year: number = selectedDate.getFullYear();
-              let newCasualty: EmployeeCasualty = {
+              const selectedDate = new Date(this.casualtyForm.controls['month'].value);
+              const month: number = selectedDate.getMonth() + 1;
+              const year: number = selectedDate.getFullYear();
+              const newCasualty: EmployeeCasualty = {
                 id: 0,
                 value: this.casualtyForm.controls['value'].value,
                 month: month,
                 year: year
-              }
+              };
               this.facade.employeeCasulatyService.add(newCasualty)
                 .subscribe(res => {
                   this.getEmployeeCasualties();
                   this.app.hideLoading();
-                  this.facade.toastrService.success("Casualty was successfuly created !");
+                  this.facade.toastrService.success('Casualty was successfuly created !');
                   modal.destroy();
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -105,7 +106,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.casualtyForm.reset();
-    let editedCasualty: EmployeeCasualty = this.employeecasualties.filter(casualty => casualty.id == id)[0];
+    let editedCasualty: EmployeeCasualty = this.employeecasualties.filter(casualty => casualty.id === id)[0];
     this.casualtyForm.controls['value'].setValue(editedCasualty.value);
     this.casualtyForm.controls['month'].setValue(new Date(editedCasualty.year + '-' + editedCasualty.month));
     const modal = this.facade.modalService.create({
@@ -120,22 +121,24 @@ export class EmployeeCasualtiesComponent implements OnInit {
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.casualtyForm.controls) {
-              this.casualtyForm.controls[i].markAsDirty();
-              this.casualtyForm.controls[i].updateValueAndValidity();
-              if ((!this.casualtyForm.controls[i].valid)) isCompleted = false;
+              if (this.casualtyForm.controls[i]) {
+                this.casualtyForm.controls[i].markAsDirty();
+                this.casualtyForm.controls[i].updateValueAndValidity();
+                if ((!this.casualtyForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let selectedDate = new Date(this.casualtyForm.controls['month'].value);
-              let month: number = selectedDate.getMonth() + 1;
-              let year: number = selectedDate.getFullYear();
+              const selectedDate = new Date(this.casualtyForm.controls['month'].value);
+              const month: number = selectedDate.getMonth() + 1;
+              const year: number = selectedDate.getFullYear();
               editedCasualty = {
                 id: editedCasualty.id,
                 value: this.casualtyForm.controls['value'].value,
                 month: month,
                 year: year
-              }
+              };
               this.facade.employeeCasulatyService.update(editedCasualty.id, editedCasualty)
                 .subscribe(res => {
                   this.getEmployeeCasualties();
@@ -145,11 +148,10 @@ export class EmployeeCasualtiesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                  // tslint:disable-next-line: max-line-length
+                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -157,7 +159,8 @@ export class EmployeeCasualtiesComponent implements OnInit {
   }
 
   showDeleteConfirm(employeeCasualtyId: number): void {
-    let employeeCasualtyDelete: EmployeeCasualty = this.employeecasualties.find(employeeCasualty => employeeCasualty.id == employeeCasualtyId);
+    // tslint:disable-next-line: max-line-length
+    const employeeCasualtyDelete: EmployeeCasualty = this.employeecasualties.find(employeeCasualty => employeeCasualty.id === employeeCasualtyId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ' + this.monthList[employeeCasualtyDelete.month - 1] + ' of ' + employeeCasualtyDelete.year + ' ?',
       nzContent: 'This action will delete the casualty associated with this month',
@@ -169,21 +172,20 @@ export class EmployeeCasualtiesComponent implements OnInit {
           this.getEmployeeCasualties();
           this.facade.toastrService.success('Casualty was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          // tslint:disable-next-line: max-line-length
+          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
         })
     });
   }
 
   searchYear(year: number) {
-    if (year == 0) this.listOfDisplayData = this.employeecasualties;
-    else {
-      this.listOfDisplayData = this.employeecasualties.filter(hp => hp.year == year);
+    if (year === 0) { this.listOfDisplayData = this.employeecasualties; } else {
+      this.listOfDisplayData = this.employeecasualties.filter(hp => hp.year === year);
     }
   }
 
   getMonth(casualty: EmployeeCasualty): string {
-    var month: number = casualty.month;
+    const month: number = casualty.month;
     return this.monthList[month - 1];
   }
 }
