@@ -54,7 +54,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.isHr = this.currentUser.role === 'Admin';
+    this.isHr = this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter';
     this.employeeService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.employee = res.body;
