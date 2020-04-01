@@ -9,7 +9,6 @@ using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.ExternalServices;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.Validators.Candidate;
-using Domain.Services.Impl.Validators.User;
 using Domain.Services.Impl.Validators.HireProjection;
 using Domain.Services.Impl.Validators.Seed;
 using Domain.Services.Impl.Validators.Skill;
@@ -65,8 +64,6 @@ namespace DependencyInjection
             services.AddScoped<UpdateStageContractValidator, UpdateStageContractValidator>();
             services.AddScoped<CreatedStageItemContract, CreatedStageItemContract>();
             services.AddScoped<ReadedProcessContract, ReadedProcessContract>();;
-            services.AddScoped<CreateUserContractValidator, CreateUserContractValidator>();
-            services.AddScoped<UpdateUserContractValidator, UpdateUserContractValidator>();
             services.AddScoped<CreateSkillTypeContractValidator, CreateSkillTypeContractValidator>();
             services.AddScoped<UpdateSkillTypeContractValidator, UpdateSkillTypeContractValidator>();
             services.AddScoped<CreateDeclineReasonContractValidator, CreateDeclineReasonContractValidator>();

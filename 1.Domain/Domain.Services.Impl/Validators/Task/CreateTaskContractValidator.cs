@@ -12,7 +12,7 @@ namespace Domain.Services.Impl.Validators.Task
         {
             RuleFor(_ => _.Title).NotEmpty();
             RuleFor(_ => _.IsApprove).NotNull();
-            RuleFor(_ => _.ConsultantId).NotEmpty();
+            RuleFor(_ => _.UserId).NotEmpty();
         }
     }
 }

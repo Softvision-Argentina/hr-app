@@ -145,7 +145,7 @@ namespace Domain.Services.Impl.Services
         {
             var taskQuery = _taskRepository
                 .QueryEager()
-                .Where(_ => _.User.EmailAddress.ToLower() == UserEmail.ToLower())
+                .Where(_ => _.User.Username.ToLower() == UserEmail.ToLower())
                 .OrderBy(_ => _.Id)
                 .ThenBy(_ => _.CreationDate);
 
