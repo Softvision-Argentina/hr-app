@@ -70,7 +70,7 @@ export class GoogleSigninComponent implements AfterViewInit {
     this.facade.authService.externalLogin(gUser.token)
       .subscribe(res => {
 
-        if (res != null) {
+        if (res) {
           let currentUser: User = {
             id: res.user.id,
             name: res.user.firstName + " " + res.user.lastName,
@@ -90,7 +90,6 @@ export class GoogleSigninComponent implements AfterViewInit {
       }, err => {
         this.zone.run(() => { this.router.navigate(['/unauthorized']); });
         this.eraseCookie('accounts.google.com');
-        console.log(err);
       });
   }
 
@@ -101,7 +100,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {

@@ -34,13 +34,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let candidate of candidateTable.data">
+                <tr *ngFor="let candidate of candidateTable.data | filter:searchDni:'dni' | personFilter:searchName">
                     <td>{{ candidate.name }} {{ candidate.lastName }}</td>
                     <td>{{ candidate.dni }}</td>
                     <td>{{ candidate.emailAddress }}</td>
                     <td>{{ candidate.phoneNumber }}</td>
                     <td>{{ getStatus(candidate.status) }}</td>
-                    <td [style.text-align]="'center'">
+                    <td *ngIf="candidate.id" [style.text-align]="'center'">
                         <i (click)="showDetailsModal(candidate.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(candidateModal, candidate.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>

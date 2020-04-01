@@ -4,15 +4,9 @@ using Core;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using ApiServer.Contracts.Stage;
 using Domain.Services.Contracts.Process;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Domain.Model;
 using Domain.Services.Interfaces.Repositories;
-using Domain.Model.Enum;
-using System;
-using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +16,7 @@ namespace ApiServer.Controllers
     /// Controller that manages processes
     /// Contains action method for approve or disapprove
     /// </summary>
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProcessController : BaseController<ProcessController>
@@ -53,7 +47,6 @@ namespace ApiServer.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
@@ -65,16 +58,13 @@ namespace ApiServer.Controllers
         }
         
         [HttpGet("com/{community}")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult GetProcessesByCommunity(string community)
         {
             return ApiAction(() =>
             {
-                //var process =  _processService.List().ToList().Where(pro => pro.Candidate.Community.Name.Equals(community));
                 var process = _processService.GetProcessesByCommunity(community);
 
                 return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(process));
-                //return Accepted(process);
             });
         }
 
@@ -103,7 +93,6 @@ namespace ApiServer.Controllers
 
                 _processService.Update(contract);
 
-                //return Accepted(new { id });
                 var processes = _processService.List();
 
                 return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(processes));
@@ -148,7 +137,6 @@ namespace ApiServer.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{candidateId}")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult GetActiveProcessByCandidate(int candidateId)
         {
             return ApiAction(() =>

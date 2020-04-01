@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Model.Enum
+﻿namespace Domain.Model.Enum
 {
     public enum Roles
     {
