@@ -49,7 +49,7 @@ export class DeclineReasonComponent implements OnInit {
         this.filteredDeclineReasons = res;
         this.listOfDisplayData = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -105,17 +105,16 @@ export class DeclineReasonComponent implements OnInit {
                 description: this.validateForm.controls['description'].value.toString()
               };
               this.facade.declineReasonService.add(newDeclineReason)
-                .subscribe(res => {
-                  this.getDeclineReasons();
-                  this.app.hideLoading();
-                  this.facade.toastrService.success('DeclineReason was successfuly created !');
-                  modal.destroy();
-                }, err => {
-                  this.app.hideLoading();
-                  modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                });
+                      .subscribe(res => {
+                        this.getDeclineReasons();
+                        this.app.hideLoading();
+                        this.facade.toastrService.success('DeclineReason was successfuly created !');
+                        modal.destroy();
+                      }, err => {
+                        this.app.hideLoading();
+                        modal.nzFooter[1].loading = false;
+                        this.facade.errorHandlerService.showErrorMessage(err);
+                      });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
@@ -160,17 +159,16 @@ export class DeclineReasonComponent implements OnInit {
                 description: this.validateForm.controls['description'].value.toString()
               };
               this.facade.declineReasonService.update(editedDeclineReason.id, editedDeclineReason)
-                .subscribe(res => {
-                  this.getDeclineReasons();
-                  this.app.hideLoading();
-                  this.facade.toastrService.success('Decline reason was successfully edited!');
-                  modal.destroy();
-                }, err => {
-                  this.app.hideLoading();
-                  modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                });
+            .subscribe(res => {
+              this.getDeclineReasons();
+              this.app.hideLoading();
+              this.facade.toastrService.success('Decline reason was successfully edited!');
+              modal.destroy();
+            }, err => {
+              this.app.hideLoading();
+              modal.nzFooter[1].loading = false;
+              this.facade.errorHandlerService.showErrorMessage(err);
+            });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
@@ -191,8 +189,7 @@ export class DeclineReasonComponent implements OnInit {
           this.getDeclineReasons();
           this.facade.toastrService.success('DeclineReason was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

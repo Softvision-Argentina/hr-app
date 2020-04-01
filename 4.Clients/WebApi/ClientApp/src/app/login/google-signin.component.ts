@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppConfig } from './../app-config/app.config';
 import { FacadeService } from '../services/facade.service';
 import { JwtHelper } from 'angular2-jwt';
+import { Community } from 'src/entities/community';
 declare const gapi: any;
 
 @Component({
@@ -54,9 +55,11 @@ export class GoogleSigninComponent implements AfterViewInit {
           email: profile.getEmail(),
           role: '',
           token: googleUser.getAuthResponse().id_token,
+          community: null,
           userDashboards: []
         };
         that.externalLogin(currentUser);
+
 
       }, function (error) {
         that.zone.run(() => { that.router.navigate(['/unauthorized']); });
@@ -77,18 +80,18 @@ export class GoogleSigninComponent implements AfterViewInit {
             email: res.user.username,
             role: res.user.role,
             token: res.token,
+            community: res.user.community,
             userDashboards: []
           };
 
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           this.facade.userService.getRoles();
           this.facade.modalService.closeAll();
-          this.zone.run(() => { this.router.navigate(['/']); });
+          this.zone.run(() => { this.navigateByRole(currentUser.role); });
         }
       }, err => {
         this.zone.run(() => { this.router.navigate(['/unauthorized']); });
         this.eraseCookie('accounts.google.com');
-        console.log(err);
       });
   }
 
@@ -99,7 +102,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   isUserAuthenticated(): boolean {
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     } else {
       localStorage.clear();
@@ -112,6 +115,13 @@ export class GoogleSigninComponent implements AfterViewInit {
     this.router.navigate(['/login']);
   }
 
+  navigateByRole(role: string) {
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
   eraseCookie(domain: string) {
     document.cookie = domain + '=; Max-Age=-99999999;';
   }

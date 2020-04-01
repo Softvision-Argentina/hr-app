@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -11,33 +11,36 @@ import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-days-off',
   templateUrl: './days-off.component.html',
   styleUrls: ['./days-off.component.css']
 })
-export class DaysOffComponent implements OnInit {
+export class DaysOffComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
-  validateForm: FormGroup;
+  validateForm: FormGroup = null;
   listOfDaysOff: DaysOff[] = [];
-  employee;
+  employee: any = null;
   searchValue = '';
   searchValueType = '';
   searchValueStatus = '';
-  listOfSearch = [];
-  listOfDisplayData = [...this.listOfDaysOff];
-  sortDni = null;
-  sortValue = null;
-  sortName = null;
-  reasons: any[];
+  listOfSearch: any[] = [];
+  listOfDisplayData: DaysOff[] = [...this.listOfDaysOff];
+  sortDni: any = null;
+  sortValue: string = null;
+  sortName: any = null;
+  reasons: any[] = null;
   showCalendarSelected = false;
-  isHr: boolean;
-  today = new Date();
-  currentUser: User;
-  statusList: any[];
+  isHr: boolean = null;
+  today: Date = new Date();
+  currentUser: User = null;
+  statusList: any[] = [];
+  searchSub: Subscription = null;
+  searchDni = '';
 
   constructor(private facade: FacadeService,
     private fb: FormBuilder,
@@ -51,13 +54,14 @@ export class DaysOffComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.isHr = this.currentUser.role === 'Admin';
+    this.isHr = this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter';
     this.employeeService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.employee = res.body;
         this.getDaysOff();
         this.resetForm();
       });
+    this.getSearchInfo();
   }
 
   getDaysOff() {
@@ -67,7 +71,7 @@ export class DaysOffComponent implements OnInit {
           this.listOfDaysOff = res;
           this.listOfDisplayData = res;
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
       this.daysOffService.getByDNI(this.employee.dni)
@@ -76,6 +80,11 @@ export class DaysOffComponent implements OnInit {
           this.listOfDisplayData = res.body;
         });
     }
+  }
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+      this.searchDni = data;
+    });
   }
 
   hideCalendar() {
@@ -112,7 +121,7 @@ export class DaysOffComponent implements OnInit {
   }
 
   canAssign(): boolean {
-    // if (this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin'])) return true;
+    // if (this.currentConsultant && this.app.isUserRole(["HRManagement", "Admin"])) return true;
     // else return false;
     return true;
   }
@@ -127,7 +136,6 @@ export class DaysOffComponent implements OnInit {
     // }
 
   }
-
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({
@@ -182,13 +190,9 @@ export class DaysOffComponent implements OnInit {
                             modal.destroy();
                           }, err => {
                             this.app.hideLoading();
-                            // modal.nzFooter[1].loading = false;
-                            // tslint:disable-next-line: max-line-length
-                            if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                            this.facade.errorHandlerService.showErrorMessage(err);
                           });
                       }
-                      // else modal.nzFooter[1].loading = false;
-                      // this.app.hideLoading();
                     }
                   });
               }
@@ -202,9 +206,7 @@ export class DaysOffComponent implements OnInit {
     // Edit Consultant Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
-
     this.fillForm(editedDayOff);
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit day off',
       nzContent: modalContent,
@@ -262,18 +264,12 @@ export class DaysOffComponent implements OnInit {
                 this.facade.daysOffService.update(id, editedDayOff)
                   .subscribe(res => {
                     this.getDaysOff();
-                    // this.app.hideLoading();
                     this.facade.toastrService.success('Day off was successfully edited !');
                     modal.destroy();
                   }, err => {
-                    // this.app.hideLoading();
-                    // modal.nzFooter[1].loading = false;
-                    // tslint:disable-next-line: max-line-length
-                    if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                    this.facade.errorHandlerService.showErrorMessage(err);
                   });
               }
-              // else modal.nzFooter[1].loading = false;
-              // this.app.hideLoading();
             }
           }
         }]
@@ -293,8 +289,7 @@ export class DaysOffComponent implements OnInit {
           this.getDaysOff();
           this.facade.toastrService.success('Day off was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -322,13 +317,9 @@ export class DaysOffComponent implements OnInit {
     this.facade.daysOffService.update(daysOff.id, daysOff)
       .subscribe(res => {
         this.getDaysOff();
-        // this.app.hideLoading();
         this.facade.toastrService.success('Petition was succesfully accepted !');
       }, err => {
-        // this.app.hideLoading();
-        // modal.nzFooter[1].loading = false;
-        // tslint:disable-next-line: max-line-length
-        if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -394,15 +385,25 @@ export class DaysOffComponent implements OnInit {
     this.searchStatus();
   }
 
-  getStatus(status: number): string {
-    return this.statusList.filter(st => st.id === status)[0].name;
+  getStatus(daysOff: any): string {
+    const statusFilter = this.statusList.filter(st => st.id === daysOff.status);
+    if (statusFilter.length !== 0) {
+      return statusFilter[0].name;
+    }
   }
 
-  getType(type: number): string {
-    return this.reasons.filter(st => st.id === type)[0].name;
+  getType(daysOff: any): string {
+    const typeFilter = this.reasons.filter(st => st.id === daysOff.type);
+    if (typeFilter.length !== 0) {
+      return typeFilter[0].name;
+    }
   }
 
   showAcceptButton(status: DaysOffStatusEnum) {
     return this.isHr && status === DaysOffStatusEnum.InReview;
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }

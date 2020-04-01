@@ -6,6 +6,7 @@ using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Services.Impl.Services
 {
@@ -77,17 +78,18 @@ namespace Domain.Services.Impl.Services
 
         private User Login(string username, string password)
         {
-            var user = _userRepository.Query().FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
-
-            if (user == null)
-                return null;
+            var user = _userRepository.Query()
+                .Include(r => r.Community)
+                .FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
 
             return user;
         }
 
         private User ExternalLogin(string username)
         {
-            var user = _userRepository.Query().FirstOrDefault(x => x.Username == username);
+            var user = _userRepository.Query()
+                .Include(r => r.Community)
+                .FirstOrDefault(x => x.Username == username );
 
             if (user == null)
                 return null;

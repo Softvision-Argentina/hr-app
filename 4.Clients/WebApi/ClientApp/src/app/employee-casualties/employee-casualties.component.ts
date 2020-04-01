@@ -39,7 +39,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
         res.forEach(hp => {
           if (this.yearList.filter(yl => yl === hp.year).length === 0) { this.yearList.push(hp.year); }
         });
-      }, err => console.log(err));
+      }, err => this.facade.errorHandlerService.showErrorMessage(err));
   }
 
   onMonthChange(result: Date) {
@@ -94,8 +94,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
@@ -148,8 +147,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
@@ -172,8 +170,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
           this.getEmployeeCasualties();
           this.facade.toastrService.success('Casualty was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

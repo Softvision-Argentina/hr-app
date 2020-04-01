@@ -77,6 +77,15 @@ namespace Domain.Services.Impl.Services
 
             return _mapper.Map<ReadedProcessContract>(process);
         }
+        public IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community)
+        {
+            var candidateQuery = _processRepository
+                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community));
+
+            var candidateResult = candidateQuery.ToList();
+
+            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
+        }
 
         public void Delete(int id)
         {
@@ -424,5 +433,6 @@ namespace Domain.Services.Impl.Services
                     return ProcessCurrentStage.Finished;
             }
         }
+
     }
 }

@@ -56,11 +56,11 @@ export class RoomComponent implements OnInit, OnChanges {
 
   getOffices() {
     this.facade.OfficeService.get()
-      .subscribe(res => {
-        this.offices = res;
-      }, err => {
-        console.log(err);
-      });
+    .subscribe(res => {
+      this.offices = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
@@ -111,8 +111,7 @@ export class RoomComponent implements OnInit, OnChanges {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -169,8 +168,7 @@ export class RoomComponent implements OnInit, OnChanges {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -191,8 +189,7 @@ export class RoomComponent implements OnInit, OnChanges {
           this.settings.getRooms();
           this.facade.toastrService.success('Room was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

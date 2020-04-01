@@ -11,7 +11,7 @@
 <br/>
 <div class="grid-padding" nz-row>
     <div nz-col nzSpan="24">
-        <nz-table #daysOffTable [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
+        <nz-table  #daysOffTable [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
             <thead>
                 <tr>
                     <th nzCustomFilter>D.N.I.
@@ -58,14 +58,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let daysOff of daysOffTable.data">
-                    <td>{{ daysOff.employee.dni | number:'8.0-0' }}</td>
-                    <td>{{ getType(daysOff.type) }}</td>
+                <tr *ngFor="let daysOff of daysOffTable.data | daysOffFilter:searchDni:'dni'">
+                    <td>{{ daysOff.employee?.dni | number:'8.0-0' }}</td>
+                    <td>{{ getType(daysOff) }}</td>
                     <td>{{ daysOff.date | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ daysOff.endDate | date: 'dd/MM/yyyy' }}</td>
-                    <td>{{ getStatus(daysOff.status) }}</td>
-                    <td [style.text-align]="'center'">
-                        <!-- <nz-divider nzType="vertical"></nz-divider> -->
+
+                    <td>{{ getStatus(daysOff) }}</td>
+                    <td [style.text-align]="'center'" *ngIf="daysOff.id">
                         <i (click)="showEditModal(DaysOffModal, daysOff.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showDeleteConfirm(daysOff.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>

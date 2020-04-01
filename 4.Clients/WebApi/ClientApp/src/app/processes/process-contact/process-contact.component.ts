@@ -140,7 +140,7 @@ export class ProcessContactComponent implements OnInit {
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getConsultants();
-    this.getCandidates().subscribe(() => { }, err => this.handleError);
+    this.getCandidates().subscribe(() => {}, err => this.facade.errorHandlerService.showErrorMessage(err));
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
     this.facade.consultantService.GetByEmail(this.currentUser.email)
@@ -169,7 +169,7 @@ export class ProcessContactComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        this.handleError(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -229,7 +229,7 @@ export class ProcessContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          this.handleError(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -318,7 +318,7 @@ export class ProcessContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
-          this.handleError(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
     this.isEditCandidate = false;
@@ -354,7 +354,7 @@ export class ProcessContactComponent implements OnInit {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
-        this.handleError(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -403,15 +403,14 @@ export class ProcessContactComponent implements OnInit {
           this.isNewCandidate = false;
           this.app.hideLoading();
           this.getCandidates()
-            .subscribe(() => {
-              this.startNewProcess(res.id);
-            }, err => {
-              this.handleError(err);
-            });
+          .subscribe(() => {
+            this.startNewProcess(res.id);
+          }, err => {
+            this.facade.errorHandlerService.showErrorMessage(err);
+          });
         }, err => {
-          this.handleError(err);
-          // tslint:disable-next-line: no-unused-expression
-          this.app.hideLoading;
+          this.facade.errorHandlerService.showErrorMessage(err);
+          this.app.hideLoading();
         });
     }
   }
@@ -441,11 +440,4 @@ export class ProcessContactComponent implements OnInit {
       });
   }
 
-  private handleError(error: any) {
-    if (!!error.message) {
-      this.facade.toastrService.error(error.message);
-    } else {
-      this.facade.toastrService.error('the service is not available now. Try again later.');
-    }
-  }
 }

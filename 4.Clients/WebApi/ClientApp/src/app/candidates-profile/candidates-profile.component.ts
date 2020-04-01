@@ -73,7 +73,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       .subscribe(res => {
         this.communitys = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -135,8 +135,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -192,8 +191,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -220,8 +218,8 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
           this.settings.getCandidatesProfile();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          // tslint:disable-next-line: no-unused-expression
+          this, this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

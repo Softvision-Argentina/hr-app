@@ -159,7 +159,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   }
 
-
   ngAfterViewChecked() {
     if (this.slickModal && this.openFromEdit) {
       this.slickModal.slickGoTo(this.stepIndex);
@@ -235,7 +234,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProcesses() {
-    this.facade.processService.get()
+    this.facade.processService.getProcessByUserRole(this.currentUser)
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
@@ -591,9 +590,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
       this.openFromEdit = true;
-      // TODO: Is this working?
-      // tslint:disable-next-line: max-line-length
-      this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
+      if (this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
+        // tslint:disable-next-line: max-line-length
+        this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
+      } else {
+        this.stepIndex = 0;
+      }
     } else { this.emptyProcess = undefined; }
     const modal = this.facade.modalService.create({
       nzTitle: null,

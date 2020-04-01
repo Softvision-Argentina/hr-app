@@ -10,6 +10,7 @@ import { Process } from 'src/entities/process';
 import { Candidate } from 'src/entities/candidate';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Globals } from '../app-globals/globals';
+import { User } from 'src/entities/user';
 
 @Injectable()
 export class ProcessService extends BaseService<Process> {
@@ -34,17 +35,29 @@ export class ProcessService extends BaseService<Process> {
     return this.http.get(`${this.apiUrl}/${candidateId}`,
       {headers: this.headersWithAuth, observe: 'body'})
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
 
+  public getProcessByUserRole(currentUser: User): Observable<any> {
+    if (currentUser.role === "CommunityManager") {
+      return this.http.get(`${this.apiUrl}/com/${currentUser.community.name}`,
+        { headers: this.headersWithAuth, observe: "body" })
+        .pipe(
+          tap(data => { }),
+          catchError(this.handleErrors)
+        );
+    } else {
+      return this.get();
+    }
+  }
   public approve(processID: number): Observable<any> {
     return this.http.post(this.apiUrl + '/Approve', processID, {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
@@ -58,7 +71,7 @@ export class ProcessService extends BaseService<Process> {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(entities => {}),
+        tap(entities => { }),
         catchError(this.handleErrors)
       );
   }
@@ -70,14 +83,14 @@ export class ProcessService extends BaseService<Process> {
     const processCall = this.http.put(processUrl, process, {
       headers: this.headersWithAuth
     }).pipe(
-      tap(_ => {}),
+      tap(_ => { }),
       catchError(this.handleErrors)
     );
 
     const candidateCall = this.http.put(candidateUrl, candidate, {
       headers: this.headersWithAuth
     }).pipe(
-      tap(_ => {}),
+      tap(_ => { }),
       catchError(this.handleErrors)
     );
 

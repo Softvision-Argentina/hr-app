@@ -168,7 +168,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.candidates = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -177,7 +177,7 @@ export class ReferralsContactComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -237,8 +237,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -329,8 +328,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
     this.isEditCandidate = false;
@@ -368,8 +366,7 @@ export class ReferralsContactComponent implements OnInit {
         this.getCandidates();
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
-        // tslint:disable-next-line: max-line-length
-        if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -420,8 +417,7 @@ export class ReferralsContactComponent implements OnInit {
           this.getCandidates();
           this.modalService.closeAll();
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
           this.app.hideLoading();
         });
     }

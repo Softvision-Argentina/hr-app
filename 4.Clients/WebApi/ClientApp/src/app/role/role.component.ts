@@ -31,7 +31,7 @@ export class RoleComponent implements OnInit {
       .subscribe(res => {
         this.roles = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -51,8 +51,7 @@ export class RoleComponent implements OnInit {
             this.getRoles();
             this.facade.toastrService.success('Role was deleted !');
           }, err => {
-            // tslint:disable-next-line: max-line-length
-            if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+            this.facade.errorHandlerService.showErrorMessage(err);
           });
         }
       }
@@ -64,7 +63,7 @@ export class RoleComponent implements OnInit {
       .subscribe(res => {
         this.employeesWithDeleteRole = res.filter(e => e.role.id === role.id);
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -107,8 +106,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully created !');
                 modal.destroy();
               }, err => {
-                // tslint:disable-next-line: max-line-length
-                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                this.facade.errorHandlerService.showErrorMessage(err);
               });
             } else { modal.nzFooter[1].loading = false; }
           }
@@ -155,8 +153,7 @@ export class RoleComponent implements OnInit {
                 this.facade.toastrService.success('Role was successfully edited !');
                 modal.destroy();
               }, err => {
-                // tslint:disable-next-line: max-line-length
-                if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+                this.facade.errorHandlerService.showErrorMessage(err);
               });
             } else { modal.nzFooter[1].loading = false; }
           }

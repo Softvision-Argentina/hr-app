@@ -73,7 +73,7 @@ export class ReservationsComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -81,12 +81,7 @@ export class ReservationsComponent implements OnInit {
     await this.facade.ReservationService.get()
       .toPromise()
       .then(res => this.reservations = res.filter(r => r.room.officeId.toString() === this.selectedOffice))
-      .catch(err => console.log(err));
-    // .subscribe(res => {
-    //   this.reservations = res.filter(r => r.room.officeId.toString() === this.selectedOffice);
-    // }, err => {
-    //   console.log(err);
-    // });
+      .catch(err => this.facade.errorHandlerService.showErrorMessage(err));
   }
 
   getRooms() {
@@ -95,7 +90,7 @@ export class ReservationsComponent implements OnInit {
         this.room = res;
         this.filteredRoom = this.room.filter(c => c.officeId === this.reservationForm.controls['office'].value);
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -104,7 +99,7 @@ export class ReservationsComponent implements OnInit {
       .subscribe(res => {
         this.offices = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -176,8 +171,7 @@ export class ReservationsComponent implements OnInit {
           this.getCurrentDayReservations();
           this.facade.toastrService.success('Reservation deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -270,8 +264,7 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully created!');
               modal.destroy();
             }, err => {
-              // tslint:disable-next-line: max-line-length
-              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              this.facade.errorHandlerService.showErrorMessage(err);
             });
         }
       }
@@ -305,8 +298,7 @@ export class ReservationsComponent implements OnInit {
               await this.getReservations();
               this.reservateDay(modal);
             }, err => {
-              // tslint:disable-next-line: max-line-length
-              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              this.facade.errorHandlerService.showErrorMessage(err);
             });
         } else {
           this.facade.ReservationService.update(reservation.id, editReservation)
@@ -316,8 +308,7 @@ export class ReservationsComponent implements OnInit {
               this.facade.toastrService.success('Reservation was successfully updated!');
               modal.destroy();
             }, err => {
-              // tslint:disable-next-line: max-line-length
-              if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+              this.facade.errorHandlerService.showErrorMessage(err);
             });
         }
       }

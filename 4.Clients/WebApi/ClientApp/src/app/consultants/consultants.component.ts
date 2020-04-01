@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { Consultant } from 'src/entities/consultant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
@@ -6,16 +6,14 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { ConsultantDetailsComponent } from './details/consultant-details.component';
 import { AppComponent } from '../app.component';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
-
-
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-consultants',
   templateUrl: './consultants.component.html',
   styleUrls: ['./consultants.component.css'],
   providers: [ConsultantDetailsComponent, AppComponent]
 })
-export class ConsultantsComponent implements OnInit {
+export class ConsultantsComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
@@ -24,7 +22,8 @@ export class ConsultantsComponent implements OnInit {
   searchValue = '';
   listOfSearchConsultants = [];
   listOfDisplayData = [...this.filteredConsultants];
-
+  searchSub: Subscription;
+  searchConsultant = '';
   sortName = 'name';
   sortValue = 'ascend';
 
@@ -44,6 +43,7 @@ export class ConsultantsComponent implements OnInit {
     this.app.showLoading();
     this.app.removeBgImage();
     this.getConsultants();
+    this.getSearchInfo();
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
@@ -64,8 +64,18 @@ export class ConsultantsComponent implements OnInit {
         // tslint:disable-next-line: max-line-length
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
+  }
+
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+      if (isNaN(Number(data))) {
+        this.searchConsultant = data;
+      } else {
+        this.searchConsultant = '';
+      }
+    });
   }
 
   reset(): void {
@@ -209,18 +219,17 @@ export class ConsultantsComponent implements OnInit {
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
               };
               this.facade.consultantService.update(editedConsultant.id, editedConsultant)
-                .subscribe(res => {
-                  this.getConsultants();
-                  this.app.hideLoading();
-                  this.facade.toastrService.success('Interviewer successfully edited.');
-                  modal.destroy();
-                }, err => {
-                  this.app.hideLoading();
-                  modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                  if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
-                });
-            } else {modal.nzFooter[1].loading = false; }
+            .subscribe(res => {
+              this.getConsultants();
+              this.app.hideLoading();
+              this.facade.toastrService.success('Interviewer successfully edited.');
+              modal.destroy();
+            }, err => {
+              this.app.hideLoading();
+              modal.nzFooter[1].loading = false;
+              this.facade.errorHandlerService.showErrorMessage(err);
+            });
+            } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
           }
         }],
@@ -240,8 +249,7 @@ export class ConsultantsComponent implements OnInit {
           this.getConsultants();
           this.facade.toastrService.success('Interviewer was deleted !');
         }, err => {
-          // tslint:disable-next-line: max-line-length
-          if (err.message !== undefined) {this.facade.toastrService.error(err.message); } else {this.facade.toastrService.error('The service is not available now. Try again later.'); }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -259,4 +267,7 @@ export class ConsultantsComponent implements OnInit {
     };
   }
 
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
+  }
 }
