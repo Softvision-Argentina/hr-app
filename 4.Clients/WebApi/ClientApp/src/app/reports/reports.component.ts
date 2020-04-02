@@ -314,7 +314,7 @@ export class ReportsComponent implements OnInit {
 
         // Cards de porcentajes
         this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
-        // tslint:disable-next-line: max-line-length
+
         if (this.stadisticAbove === 100) { this.stadisticBelow = 0; } else { this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates; }
         if (this.stadisticBelow === 100) { this.stadisticAbove = 0; }
         if (this.stadisticAbove.toString() === 'NaN') { this.stadisticAbove = 0; }
@@ -332,13 +332,13 @@ export class ReportsComponent implements OnInit {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchCandidates.length ? this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }

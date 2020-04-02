@@ -128,7 +128,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
 
   filterTasks() {
     // if(!this.showAllTasks){
-    // tslint:disable-next-line: max-line-length
+
     //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
     // }
     // else{
@@ -167,7 +167,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                         if (this.validateForm.controls[i]) {
                           this.validateForm.controls[i].markAsDirty();
                           this.validateForm.controls[i].updateValueAndValidity();
-                          // tslint:disable-next-line: max-line-length
+
                           if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
                         }
                       }
@@ -238,15 +238,15 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                 if (this.validateForm.controls[i]) {
                   this.validateForm.controls[i].markAsDirty();
                   this.validateForm.controls[i].updateValueAndValidity();
-                  // tslint:disable-next-line: max-line-length
+
                   if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
                 }
               }
 
               let newDate; let newEndDate;
-              // tslint:disable-next-line: max-line-length
+
               newDate = editedDayOff.date === this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
-              // tslint:disable-next-line: max-line-length
+
               newEndDate = editedDayOff.endDate === this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
 
               const newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
@@ -344,7 +344,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         (item.employee.dni.toString().indexOf(this.searchValue.trim()) !== -1); // trimvalidator
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortDni] > b[this.sortDni] ? 1 : -1) : (b[this.sortDni] > a[this.sortDni] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
@@ -355,7 +355,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         (item.type === this.searchValueType);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueType = '';
     this.nameDropdown.nzVisible = false;
@@ -373,7 +373,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         (item.status === this.searchValueStatus);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.nameDropdown.nzVisible = false;

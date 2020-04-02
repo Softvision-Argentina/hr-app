@@ -82,8 +82,10 @@ export class ReportHireProjectionComponent implements OnInit, OnChanges {
       projection = this.hireProjections.filter(hp => hp.month === (date.getMonth() + 1) && hp.year === date.getFullYear())[0];
       this.processes.forEach(proc => {
         if (proc.status === ProcessStatusEnum.Hired) {
-          // tslint:disable-next-line: max-line-length
-          if (new Date(proc.offerStage.date).getMonth() === date.getMonth() && new Date(proc.offerStage.date).getFullYear() === date.getFullYear()) { actualHires++; }
+          const offerStageDate = new Date(proc.offerStage.date);
+          if (offerStageDate.getMonth() === date.getMonth() && offerStageDate.getFullYear() === date.getFullYear()) {
+            actualHires++;
+          }
         }
       });
       this.hireChartData = [

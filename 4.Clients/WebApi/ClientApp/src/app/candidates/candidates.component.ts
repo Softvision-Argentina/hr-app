@@ -61,8 +61,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   statusList: any[];
   englishLevelList: any[];
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
-    private app: AppComponent, private globals: Globals) {
+  constructor(
+    private facade: FacadeService,
+    private fb: FormBuilder,
+    private detailsModal: CandidateDetailsComponent,
+    private app: AppComponent,
+    private globals: Globals
+  ) {
     this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
     this.statusList = globals.candidateStatusList;
     this.englishLevelList = globals.englishLevelList;
@@ -86,8 +91,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.facade.candidateService.get()
       .subscribe(res => {
         this.filteredCandidates = res;
-        this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
-          : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+        this.listOfDisplayData = res.sort((a, b) => {
+          if (this.sortValue === 'ascend') {
+            return a[this.sortName] > b[this.sortName] ? 1 : -1;
+          } else {
+            return b[this.sortName] > a[this.sortName] ? 1 : -1;
+          }
+        });
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

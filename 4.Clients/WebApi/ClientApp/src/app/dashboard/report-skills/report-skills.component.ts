@@ -74,8 +74,10 @@ export class ReportSkillsComponent implements OnInit {
         this.skillRankedList = skillRanking.splice(0, 3);
       }
       this.topSkillsLoading = false;
-      // tslint:disable-next-line: max-line-length
-      if ((this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id) === 0) { return false; } else { return true; }
+
+      const totalSkillRank = this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id;
+
+      return totalSkillRank === 0;
     } catch {
       return false;
     }

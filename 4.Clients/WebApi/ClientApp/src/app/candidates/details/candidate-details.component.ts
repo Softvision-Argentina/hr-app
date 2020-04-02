@@ -5,8 +5,7 @@ import { Globals } from '../../app-globals/globals';
 
 
 @Component({
-    // tslint:disable-next-line: component-selector
-    selector: 'candidate-details',
+    selector: 'app-candidate-details',
     templateUrl: './candidate-details.component.html',
     styleUrls: ['./candidate-details.component.css']
   })

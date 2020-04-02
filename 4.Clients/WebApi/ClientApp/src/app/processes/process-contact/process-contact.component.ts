@@ -200,7 +200,7 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    // tslint:disable-next-line: max-line-length
+
     this.candidateForm.controls['recruiter'].setValue(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
@@ -240,7 +240,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    // tslint:disable-next-line: max-line-length
+
     const candidate = this.candidates.filter(s => (replaceAccent(s.name).toLowerCase() + ' ' + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1);
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
@@ -420,7 +420,7 @@ export class ProcessContactComponent implements OnInit {
       .subscribe((res: Process[]) => {
         if (res.length > 0) {
           this.facade.modalService.confirm({
-            // tslint:disable-next-line: max-line-length
+
             nzTitle: 'There is already another process of ' + res[0].candidate.lastName + ', ' + res[0].candidate.name + '. Do you want to open a new one ?',
             nzContent: '',
             nzOkText: 'Yes',

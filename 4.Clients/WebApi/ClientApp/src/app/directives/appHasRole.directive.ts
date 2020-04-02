@@ -24,11 +24,10 @@ export class HasRoleDirective implements OnInit {
     }
 
   isUserAuthenticated(): boolean {
-    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
-    }
-    else {
+    } else {
       localStorage.clear();
       return false;
     }

@@ -3,8 +3,8 @@ import { Consultant } from 'src/entities/consultant';
 import { FacadeService } from 'src/app/services/facade.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'consultant-details',
+
+  selector: 'app-consultant-details',
   templateUrl: './consultant-details.component.html',
   styleUrls: ['./consultant-details.component.css']
 })

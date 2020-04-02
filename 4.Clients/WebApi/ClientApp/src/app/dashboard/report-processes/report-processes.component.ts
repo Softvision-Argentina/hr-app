@@ -90,10 +90,15 @@ export class ReportProcessesComponent implements OnInit, OnChanges, AfterViewChe
     this.processCompleted = process.filter(p => p.status === ProcessStatusEnum.Declined ||
       p.status === ProcessStatusEnum.Hired || p.status === ProcessStatusEnum.Rejected).length;
     this.processFinishedSuccess = process.filter(p => p.status === ProcessStatusEnum.Hired).length;
-    // tslint:disable-next-line: max-line-length
-    this.processInProgress = process.filter(p => p.status === ProcessStatusEnum.InProgress || p.status === ProcessStatusEnum.Recall || p.status === ProcessStatusEnum.OfferAccepted).length;
-    // tslint:disable-next-line: max-line-length
-    this.processNotStarted = process.filter(p => p.status === ProcessStatusEnum.Declined || p.status === ProcessStatusEnum.Rejected).length;
+
+    this.processInProgress = process.filter(p =>
+      p.status === ProcessStatusEnum.InProgress
+      || p.status === ProcessStatusEnum.Recall
+      || p.status === ProcessStatusEnum.OfferAccepted).length;
+
+    this.processNotStarted = process.filter(p =>
+      p.status === ProcessStatusEnum.Declined
+      || p.status === ProcessStatusEnum.Rejected).length;
   }
 
   getProgressPercentage() {
@@ -101,8 +106,12 @@ export class ReportProcessesComponent implements OnInit, OnChanges, AfterViewChe
     const totalCandidates: number = this.processCompleted;
     if (totalCandidates > 0) {
       this.stadisticFinished = (this.processFinishedSuccess * 100) / 2;
-      // tslint:disable-next-line: max-line-length
-      if (this.stadisticFinished === 100) { this.stadisticFailed = 0; } else { this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates; }
+
+      if (this.stadisticFinished === 100) {
+        this.stadisticFailed = 0;
+      } else {
+        this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates;
+      }
       if (this.stadisticFailed === 100) { this.stadisticFinished = 0; }
       this.isChartComplete = true;
     }

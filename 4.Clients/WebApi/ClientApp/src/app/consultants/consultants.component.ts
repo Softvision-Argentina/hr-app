@@ -61,8 +61,13 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     this.facade.consultantService.get()
       .subscribe(res => {
         this.filteredConsultants = res;
-        // tslint:disable-next-line: max-line-length
-        this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+        this.listOfDisplayData = res.sort((a, b) => {
+          if (this.sortValue === 'ascend') {
+            return a[this.sortName] > b[this.sortName] ? 1 : -1;
+          } else {
+            return b[this.sortName] > a[this.sortName] ? 1 : -1;
+          }
+        });
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -85,14 +90,20 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
-      return (this.listOfSearchConsultants.length ? this.listOfSearchConsultants.some(consultants => item.name.indexOf(consultants) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
-        (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
+      return (this.listOfSearchConsultants.length ?
+        this.listOfSearchConsultants.some(consultants => item.name.indexOf(consultants) !== -1)
+        : true) &&
+        (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase())
+        .indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredConsultants.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => {
+      if (this.sortValue === 'ascend') {
+        return a[this.sortName] > b[this.sortName] ? 1 : -1;
+      } else {
+        return b[this.sortName] > a[this.sortName] ? 1 : -1;
+      }
+  });
     this.nameDropdown.nzVisible = false;
   }
 
@@ -134,15 +145,16 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
               }
             }
             if (isCompleted) {
+              const prefix = this.validateForm.controls['phoneNumberPrefix'].value;
+              const phoneNumber = this.validateForm.controls['phoneNumber'].value;
+
               const newConsultant: Consultant = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 lastName: this.validateForm.controls['lastName'].value.toString(),
                 emailAddress: this.validateForm.controls['email'].value.toString(),
-                // tslint:disable-next-line: max-line-length
-                phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(),
-                // tslint:disable-next-line: max-line-length
-                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
+                phoneNumber: '(' + prefix + ')' + phoneNumber,
+                additionalInformation: this.validateForm.controls['additionalInformation'].value
               };
               this.facade.consultantService.add(newConsultant)
                 .subscribe(res => {
@@ -153,8 +165,12 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  // tslint:disable-next-line: max-line-length
-                    if (err.message !== undefined) { this.facade.toastrService.error(err.message); } else { this.facade.toastrService.error('The service is not available now. Try again later.'); }
+
+                    if (err.message) {
+                      this.facade.toastrService.error(err.message);
+                    } else {
+                      this.facade.toastrService.error('The service is not available now. Try again later.');
+                    }
                 });
             } else { modal.nzFooter[1].loading = false; }
             this.app.hideLoading();
@@ -173,11 +189,12 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     // Edit Consultant Modal
     this.validateForm.reset();
     let editedConsultant: Consultant = this.filteredConsultants.filter(consultant => consultant.id === id)[0];
+    const prefix = editedConsultant.phoneNumber.substring(1, editedConsultant.phoneNumber.indexOf(')'));
+
     this.validateForm.controls['name'].setValue(editedConsultant.name);
     this.validateForm.controls['lastName'].setValue(editedConsultant.lastName);
     this.validateForm.controls['email'].setValue(editedConsultant.emailAddress);
-    // tslint:disable-next-line: max-line-length
-    this.validateForm.controls['phoneNumberPrefix'].setValue(editedConsultant.phoneNumber.substring(1, editedConsultant.phoneNumber.indexOf(')')));
+    this.validateForm.controls['phoneNumberPrefix'].setValue(prefix);
     this.validateForm.controls['phoneNumber'].setValue(editedConsultant.phoneNumber.split(')')[1]);
     this.validateForm.controls['additionalInformation'].setValue(editedConsultant.additionalInformation);
     const modal = this.facade.modalService.create({
@@ -208,15 +225,15 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
               }
             }
             if (isCompleted) {
+              const phPrefix =  this.validateForm.controls['phoneNumberPrefix'].value;
+              const phoneNumber = this.validateForm.controls['phoneNumber'].value;
               editedConsultant = {
                 id: editedConsultant.id,
                 name: this.validateForm.controls['name'].value.toString(),
                 lastName: this.validateForm.controls['lastName'].value.toString(),
                 emailAddress: this.validateForm.controls['email'].value.toString(),
-                // tslint:disable-next-line: max-line-length
-                phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(),
-                // tslint:disable-next-line: max-line-length
-                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
+                phoneNumber: '(' + phPrefix + ')' + phoneNumber,
+                additionalInformation: this.validateForm.controls['additionalInformation'].value
               };
               this.facade.consultantService.update(editedConsultant.id, editedConsultant)
             .subscribe(res => {

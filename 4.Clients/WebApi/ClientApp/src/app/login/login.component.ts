@@ -5,8 +5,8 @@ import { AppComponent } from '../app.component';
 import { CSoftComponent } from '../login/csoft-signin.component';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'login',
+
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   providers: [GoogleSigninComponent, AppComponent, CSoftComponent]

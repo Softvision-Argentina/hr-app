@@ -8,8 +8,8 @@ import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'client-stage',
+
+  selector: 'app-client-stage',
   templateUrl: './client-stage.component.html',
   styleUrls: ['./client-stage.component.css']
 })

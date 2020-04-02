@@ -26,7 +26,7 @@ export class NumbersOnlyDirective {
             return;
         }
         // Otherwise prevent if not a number
-        // tslint:disable-next-line: max-line-length
+
         if ((element.keyCode < 96 || element.keyCode > 105) && (element.shiftKey || (element.keyCode < 48 || element.keyCode > 57))        ) {
             element.preventDefault();
         }

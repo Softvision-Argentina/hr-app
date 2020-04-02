@@ -311,7 +311,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
 
     this.facade.modalService.confirm({
-      // tslint:disable-next-line: max-line-length
+
       nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all stages associated with the process',
       nzContent: '',
       nzOkText: 'Yes',
@@ -423,7 +423,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
               const declineReason: DeclineReason = {
                 id: this.declineProcessForm.controls['declineReasonName'].value,
                 name: '',
-                // tslint:disable-next-line: max-line-length
+
                 description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
               };
               process.declineReason = declineReason;
@@ -467,13 +467,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -482,14 +482,14 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
     // const data = this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -509,14 +509,14 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -529,7 +529,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         (item.status === this.searchValueStatus);
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.statusDropdown.nzVisible = false;
@@ -541,7 +541,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         (item.currentStage === this.searchValueCurrentStage);
     };
     const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
     this.currentStageDropdown.nzVisible = false;
@@ -588,7 +588,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
       this.openFromEdit = true;
-      // tslint:disable-next-line: max-line-length
+
       this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
     } else { this.emptyProcess = undefined; }
     const modal = this.facade.modalService.create({
@@ -857,7 +857,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
-      // tslint:disable-next-line: max-line-length
+
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }
