@@ -19,7 +19,7 @@
                         </ng-container>
                     </nz-form-explain>
                 </nz-form-control>
-                <button nz-button nzType="primary" style="background-color: green; margin: 0.5% 0% 0% 1%;" (click)="searchCandidate(candidateForm.get('name').value,consultantDetailModal)">Check</button>
+                <button nz-button nzType="primary" style="background-color: green; margin: 0.5% 0% 0% 1%;" (click)="searchCandidate(candidateForm.get('name').value,userDetailModal)">Check</button>
             </nz-form-item>
         </div>
     </div>
@@ -120,11 +120,11 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type" [hidden]="!visible">Recruiter</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <nz-select formControlName="recruiter">
-                        <nz-option *ngFor="let r of recruiters" nzLabel="{{r.name}} {{r.lastName}}" [nzValue]="r.id">
+                    <nz-select formControlName="user">
+                        <nz-option *ngFor="let r of users" nzLabel="{{r.name}} {{r.lastName}}" [nzValue]="r.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('recruiter').dirty && candidateForm.get('recruiter').errors">Please input the recruiter</nz-form-explain>
+                    <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -182,7 +182,7 @@
     </div>
 </form>
 
-<ng-template #consultantDetailModal>
+<ng-template #userDetailModal>
     <nz-table #CandidateTable [nzData]="filteredCandidate" [nzPageSize]="10">
         <thead>
             <tr>

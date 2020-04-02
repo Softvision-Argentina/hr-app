@@ -14,7 +14,8 @@ import { ReportsComponent } from './reports/reports.component';
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
-import { ConsultantService } from './services/consultant.service';
+import { UserService } from './services/user.service';
+import { UsersComponent } from  './users/users.component';
 import { StageService } from './services/stage.service';
 import { ConfigService } from './services/config.service';
 import { CandidatesComponent } from './candidates/candidates.component';
@@ -26,7 +27,6 @@ import { ProcessesComponent } from './processes/processes/processes.component';
 import { ProcessDetailComponent } from './processes/process-detail/process-detail.component';
 import { StageDetailComponent } from './stages/stage-detail/stage-detail.component';
 import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
-import { ConsultantsComponent } from './consultants/consultants.component';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { LoginComponent } from './login/login.component';
 import {
@@ -56,12 +56,11 @@ import { FacadeService } from './services/facade.service';
 import { UnauthorizedComponent } from './unauthorized/unauthorized/unauthorized.component';
 import { ProcessStepsComponent } from './processes/process-steps/process-steps.component';
 import { CandidateDetailsComponent } from './candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from './consultants/details/consultant-details.component';
+import { UserDetailsComponent } from './users/details/user-details.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/taskSort.pipe';
 import { TaskService } from './services/task.service';
-import { UserService } from './services/user.service';
 import { SettingsComponent } from './settings/settings.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -166,11 +165,11 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       LoginComponent,
       GoogleSigninComponent,
       CSoftComponent,
-      ConsultantsComponent,
       SkillTypeComponent,
       UnauthorizedComponent,
       ProcessStepsComponent,
-      ConsultantDetailsComponent,
+      UserDetailsComponent,
+      UsersComponent,
       TasksComponent,
       FilterPipe,
       SortPipe,
@@ -303,7 +302,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     ProcessService,
     StageService,
     ConfigService,
-    ConsultantService,
     UserService,
     JwtHelper,
     CommonGuard,

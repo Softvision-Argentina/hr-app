@@ -7,7 +7,6 @@ import { CandidateSkill } from 'src/entities/candidateSkill';
 import { Skill } from 'src/entities/skill';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { AppComponent } from '../app.component';
-import { Consultant } from 'src/entities/consultant';
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { Office } from '../../entities/office';
@@ -35,7 +34,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   listOfDisplayData: Candidate[] = [...this.filteredCandidates];
   sortName: string = 'name';
   sortValue: string = 'ascend';
-  recruiters: Consultant[] = [];
+  users: User[] = [];
   profiles: CandidateProfile[] = [];
   communities: Community[] = [];
   _offices: Office[] = [];
@@ -56,14 +55,14 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   editingCandidateId: number = 0;
   isDniLoading: boolean = false;
   isDniValid: boolean = false;
-  currentConsultant: User;
+  currentUser: User;
   searchValueStatus: string = '';
   statusList: any[];
   englishLevelList: any[];
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
     private app: AppComponent, private globals: Globals) {
-      this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.statusList = globals.candidateStatusList;
       this.englishLevelList = globals.englishLevelList;
   }
@@ -72,7 +71,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.app.showLoading();
     this.app.removeBgImage();
     this.getCandidates();
-    this.getRecruiters();
+    this.getUsers();
     this.getProfiles();
     this.getCommunities();
     this.getOffices();
@@ -93,10 +92,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       });
   }
 
-  getRecruiters() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.recruiters = res;
+        this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -159,7 +158,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       phoneNumber: [null],
       linkedin: [null, [trimValidator]],
       additionalInformation: [null, [trimValidator]],
-      recruiter: [null, [Validators.required]],
+      user: [null, [Validators.required]],
       englishLevel: 'none',
       status: null,
       contactDay: null,
@@ -210,7 +209,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    // Edit Consultant Modal
+    // Edit User Modal
     this.resetForm();
     this.getSkills();
     if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }
@@ -284,7 +283,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
-                recruiter: new Consultant(this.validateForm.controls['recruiter'].value, null, null),
+                user: new User(this.validateForm.controls['user'].value, null, null),
                 contactDay: new Date(),
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),
@@ -421,7 +420,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.validateForm.controls['additionalInformation'].setValue(candidate.additionalInformation);
-    this.validateForm.controls['recruiter'].setValue(candidate.recruiter.id);
+    this.validateForm.controls['user'].setValue(candidate.user.id);
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);
     this.validateForm.controls['status'].setValue(candidate.status);

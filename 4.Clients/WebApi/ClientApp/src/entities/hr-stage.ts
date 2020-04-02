@@ -13,7 +13,7 @@ export class HrStage {
     wantedSalary: number;
     englishLevel: EnglishLevelEnum;
     rejectionReasonsHr?: RejectionReasonsHrEnum;
-    consultantOwnerId?: number;
-    consultantDelegateId?: number;
+    userOwnerId?: number;
+    userDelegateId?: number;
     rejectionReason?: string;
 }

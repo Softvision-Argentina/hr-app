@@ -1,14 +1,13 @@
 import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Consultant } from '../../entities/consultant';
+import { User } from '../../entities/user';
 import { trimValidator } from '../directives/trim.validator';
 import { Task } from 'src/entities/task';
 import { TaskItem } from 'src/entities/taskItem';
 import { AppConfig } from '../app-config/app.config';
 import { dateValidator } from '../directives/date.validator';
 import { AppComponent } from '../app.component';
-import { User } from 'src/entities/user';
 import { SearchbarService } from '../services/searchbar.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -22,7 +21,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   showCloseIcon: boolean = false;
   searchTitle: string = '';
-  consultants: Consultant[] = [];
+  users: User[] = [];
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   loading = true;
@@ -32,13 +31,13 @@ export class TasksComponent implements OnInit, OnDestroy {
   toDoListDisplay: any = [...this.toDoList];
   dummyTask: Task;
   showAllTasks = true;
-  currentConsultant: Consultant;
+  currentUser: User;
   user: User;
 
   ngOnInit() {
     this.app.showLoading();
     this.app.removeBgImage();
-    this.getConsultants();
+    this.getUsers();
     this.getTasks();
     this.resetForm();
     this.loading = false;
@@ -58,11 +57,11 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
-        this.currentConsultant = res.filter(c => this.isSameTextInLowerCase(c.emailAddress, this.user.email))[0];
+        this.users = res;
+        this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.email, this.user.email))[0];
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -78,7 +77,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
-      this.facade.taskService.getByConsultant(this.user.email)
+      this.facade.taskService.getByUser(this.user.email)
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
@@ -233,7 +232,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   showToDoList(option: string) {
-    const currentConsultantEmail = this.currentConsultant.emailAddress;
+    const currentUserEmail = this.currentUser.email;
 
     switch (option) {
       case 'ALL':
@@ -241,7 +240,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoList
-                                    .filter(task => this.isSameTextInLowerCase(task.consultant.emailAddress, currentConsultantEmail));
+                                    .filter(task => this.isSameTextInLowerCase(task.user.email, currentUserEmail));
         }
 
         break;
@@ -251,7 +250,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoListDisplay
-                                    .filter(task => this.isSameTextInLowerCase(task.consultant.emailAddress, currentConsultantEmail));
+                                    .filter(task => this.isSameTextInLowerCase(task.user.emailAddress, currentUserEmail));
         }
 
         break;
@@ -261,7 +260,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay =  this.toDoListDisplay
-                                      .filter(task => this.isSameTextInLowerCase(task.consultant.emailAddress, currentConsultantEmail));
+                                      .filter(task => this.isSameTextInLowerCase(task.user.emailAddress, currentUserEmail));
         }
 
         break;
@@ -296,7 +295,7 @@ export class TasksComponent implements OnInit, OnDestroy {
             const items: any[] = [];
 
             if (!this.app.isUserRole(['HRManagement', 'Admin'])) {
-              this.validateForm.controls['consultant'].setValue(this.currentConsultant.id.toString());
+              this.validateForm.controls['user'].setValue(this.currentUser.id.toString());
             }
 
             for (const i in this.validateForm.controls) {
@@ -317,15 +316,15 @@ export class TasksComponent implements OnInit, OnDestroy {
             if (isCompleted) {
               const newId: number = this.toDoList.length > 0 ? this.toDoList[this.toDoList.length - 1].id + 1 : 0;
               const taskItems: TaskItem[] = [];
-              const consultantID: number = this.validateForm.controls['consultant'].value;
+              const userID: number = this.validateForm.controls['user'].value;
               const newTask: Task = {
                 id: newId,
                 title: this.validateForm.controls['title'].value,
                 isApprove: false,
                 creationDate: new Date(),
                 endDate: this.validateForm.controls['endDate'].value.toISOString(),
-                consultantId: consultantID,
-                consultant: this.consultants.filter(consultant => consultant.id === consultantID)[0],
+                userId: userID,
+                user: this.users.filter(user => user.id === userID)[0],
                 isNew: true,
                 taskItems: taskItems
               };
@@ -365,7 +364,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.validateForm = this.fb.group({
       title: [null, [Validators.required, trimValidator]],
       endDate: [null, [Validators.required, dateValidator]],
-      consultant: [null, [Validators.required, trimValidator]]
+      user: [null, [Validators.required, trimValidator]]
     });
   }
 
@@ -436,12 +435,12 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   canAssign(): boolean {
-    return this.currentConsultant && this.app.isUserRole(['HRManagement', 'Admin']);
+    return this.currentUser && this.app.isUserRole(['HRManagement', 'Admin']);
   }
 
   assignToMe() {
-    if (this.currentConsultant) {
-      this.validateForm.controls['consultant'].setValue(this.currentConsultant.id.toString());
+    if (this.currentUser) {
+      this.validateForm.controls['user'].setValue(this.currentUser.id.toString());
     }
   }
 
@@ -470,13 +469,13 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   isCurrentUser(task: Task): boolean {
-    return task.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase();
+    return task.user.email.toLowerCase() === this.currentUser.email.toLowerCase();
   }
 
   filterTasks() {
     if (!this.showAllTasks) {
       this.toDoListDisplay = this.toDoListDisplay
-        .filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
+        .filter(todo => todo.user.email.toLowerCase() === this.currentUser.email.toLowerCase());
     } else {
       this.toDoListDisplay = this.toDoList;
     }

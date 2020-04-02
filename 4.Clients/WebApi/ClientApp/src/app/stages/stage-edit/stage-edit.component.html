@@ -87,19 +87,19 @@
 
 <pre>{{stageForm.value | json}}</pre>
 
-<form class="example-form" [formGroup]='consultantForm'>
+<form class="example-form" [formGroup]='userForm'>
     <mat-form-field class="example-full-width">
-        <input matInput type="text" [matAutocomplete]="auto"  class="form-control" id="consultantName" placeholder="Choose a consultant"
-        name="type" formControlName="consultantName" style="margin-right:5px;">
+        <input matInput type="text" [matAutocomplete]="auto"  class="form-control" id="userName" placeholder="Choose a user"
+        name="type" formControlName="userName" style="margin-right:5px;">
     </mat-form-field>
-    <span>Your choice is: {{consultantForm.get('consultantName').value | json}}</span>
+    <span>Your choice is: {{userForm.get('userName').value | json}}</span>
 
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
         <ng-container *ngIf="!isLoading">
-          <mat-option *ngFor="let consultant of consultants" [value]="consultant">
-            <span>{{ consultant.name }}</span>
-            <small> | ID: {{consultant.id}}</small>
+          <mat-option *ngFor="let user of users" [value]="user">
+            <span>{{ user.name }}</span>
+            <small> | ID: {{user.id}}</small>
           </mat-option>
         </ng-container>
       </mat-autocomplete>

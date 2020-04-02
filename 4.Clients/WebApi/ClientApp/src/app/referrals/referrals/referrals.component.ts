@@ -3,9 +3,8 @@ import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from 'src/app/consultants/details/consultant-details.component';
+import { UserDetailsComponent } from 'src/app/users/details/user-details.component';
 import { AppComponent } from 'src/app/app.component';
 import { Stage } from 'src/entities/stage';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
@@ -33,7 +32,7 @@ import { DeclineReason } from 'src/entities/declineReason';
   selector: 'app-referrals',
   templateUrl: './referrals.component.html',
   styleUrls: ['./referrals.component.css'],
-  providers: [CandidateDetailsComponent, ConsultantDetailsComponent, AppComponent]
+  providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 
 export class ReferralsComponent implements OnInit, AfterViewChecked {
@@ -81,7 +80,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   candidatesFullList: Candidate[] = [];
   candidateReferred: Candidate[] = [];
 
-  consultants: Consultant[] = [];
+  users: User[] = [];
 
   profileSearch: number = 0;
   profileSearchName: string = 'ALL';
@@ -95,10 +94,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   currentStageList: any[];
 
   emptyCandidate: Candidate;
-  emptyConsultant: Consultant;
+  emptyUser: User;
   currentCandidate: Candidate;
 
-  currentConsultant: any;
 
   isEdit: boolean = false;
   openFromEdit: boolean = false;
@@ -126,7 +124,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   forms: FormGroup[] = [];
   visible: boolean;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
-    private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
+    private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
@@ -139,15 +137,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
-    this.getConsultants();
+    this.getUsers();
     this.getOffices();
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentConsultant = res.body;
-    });
 
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
@@ -237,10 +231,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.visible = false;
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.users = res;
       }, err => {
         console.log(err);
       });
@@ -303,7 +297,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         console.log(err);
       });
   }
-  getProcessesByConsultant() {
+  getProcessesByUser() {
     this.facade.processService.get()
       .subscribe(res => {
         this.filteredProcesses = res;
@@ -493,8 +487,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
     // const data = this.filteredProcesses;
@@ -505,7 +499,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue=this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
+    this.searchRecruiterValue=this.currentUser.name;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -517,8 +511,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
@@ -647,9 +641,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
-  showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id == consultantID)[0];
-    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
+  showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    this.emptyUser = this.users.filter(user => user.id == userID)[0];
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.name);
   }
 
   showDeleteConfirm(processID: number): void {
@@ -761,7 +755,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills=this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
-      newProcess.consultantOwnerId = newCandidate.recruiter.id;
+      newProcess.userOwnerId = newCandidate.user.id;
       newProcess.candidate = newCandidate;
 
       if (!this.isEdit) {
@@ -827,10 +821,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: !this.isEdit ? 0 : this.emptyProcess.candidate.id,
       candidate: null,
-      consultantOwnerId: 0,
-      consultantOwner: null,
-      consultantDelegate: null,
-      consultantDelegateId: null,
+      userOwnerId: 0,
+      userOwner: null,
+      userDelegate: null,
+      userDelegateId: null,
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
@@ -931,10 +925,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      consultantOwnerId: candidate.recruiter.id,
-      consultantOwner: candidate.recruiter,
-      consultantDelegateId: null,
-      consultantDelegate: null,
+      userOwnerId: candidate.user.id,
+      userOwner: candidate.user,
+      userDelegateId: null,
+      userDelegate: null,
       rejectionReason: null,
       declineReasonId: null,
       declineReason: null,
@@ -947,8 +941,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.InProgress,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        userOwnerId: candidate.user.id,
+        userDelegateId: candidate.user.id,
         processId: 0,
         actualSalary: 0,
         wantedSalary: 0,
@@ -961,8 +955,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        userOwnerId: candidate.user.id,
+        userDelegateId: candidate.user.id,
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
@@ -973,8 +967,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        userOwnerId: candidate.user.id,
+        userDelegateId: candidate.user.id,
         processId: 0,
         interviewer: '',
         delegateName: ''
@@ -984,8 +978,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: null,
+        userOwnerId: candidate.user.id,
+        userDelegateId: null,
         processId: 0,        
         seniority: SeniorityEnum.NA,        
         hireDate: new Date(),

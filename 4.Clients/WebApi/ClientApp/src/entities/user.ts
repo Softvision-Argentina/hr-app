@@ -2,10 +2,10 @@ import { Community } from "./community";
 import { UserDashboard } from "./userDashboard";
 
 export class User {
-    id: number;
-    name: string;
+
+    constructor(public id: number, public name: string, public email: string) { }
+
     imgURL: string;
-    email: string;
     role: string;
     token: string;
     community: Community;

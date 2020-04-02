@@ -21,7 +21,7 @@ export class EmployeeDetailsComponent implements OnInit {
     this._detailedEmployee = value;
   }
 
-  recruiterName: string;
+  userName: string;
 
   constructor(private facade: FacadeService) { }
 
@@ -30,10 +30,10 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   getRecruiterName() {
-    this.facade.consultantService.get()
+    this.facade.userService.get()
       .subscribe(res => {
-        this.recruiterName = res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].name + ' '
-          + res.filter(r => r.id === this._detailedEmployee.recruiterId)[0].lastName;
+        this.userName = res.filter(r => r.id === this._detailedEmployee.userId)[0].name
+          //+ res.filter(r => r.id === this._detailedEmployee.userId)[0].lastName;
       }, err => {
         console.log(err);
       })

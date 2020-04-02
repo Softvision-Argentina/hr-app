@@ -121,14 +121,14 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   };
 
   canAssign(): boolean {
-    // if (this.currentConsultant && this.app.isUserRole(["HRManagement", "Admin"])) return true;
+    // if (this.currentUser && this.app.isUserRole(["HRManagement", "Admin"])) return true;
     // else return false;
     return true;
   }
 
   filterTasks() {
     // if(!this.showAllTasks){
-    //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.consultant.emailAddress.toLowerCase() === this.currentConsultant.emailAddress.toLowerCase());
+    //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.user.emailAddress.toLowerCase() === this.currentUser.emailAddress.toLowerCase());
     // }
     // else{
     //   this.toDoListDisplay = this.toDoList;
@@ -200,7 +200,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit Consultant Modal
+    //Edit User Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
     this.fillForm(editedDayOff);

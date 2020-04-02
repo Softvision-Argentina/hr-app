@@ -36,20 +36,20 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Responsible</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="consultantOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
+                        <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('consultantOwnerId').dirty && offerForm.get('consultantOwnerId').errors">Please input the recruiter</nz-form-explain>
+                    <nz-form-explain *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">Please input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="consultantDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
+                        <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
 

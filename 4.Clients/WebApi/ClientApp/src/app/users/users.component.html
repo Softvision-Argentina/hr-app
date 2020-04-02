@@ -1,13 +1,13 @@
 <div nz-row>
     <div nz-col nzSpan="24">
-        <button nz-button nzType="primary" (click)="showAddModal(consultantModal)" nzShape="round">
+        <button nz-button nzType="primary" (click)="showAddModal(userModal)" nzShape="round">
       <i nz-icon type="plus" theme="outline"></i>Add new interviewer</button>
     </div>
 </div>
 <br />
 <div nz-row>
     <div nz-col nzSpan="24">
-        <nz-table #consultantTable [nzData]="listOfDisplayData" [nzPageSize]="10">
+        <nz-table #userTable [nzData]="listOfDisplayData" [nzPageSize]="10">
             <thead>
                 <tr>
                     <th nzCustomFilter>Name
@@ -26,16 +26,16 @@
                 </tr>
             </thead>
             <tbody> 
-                <tr *ngFor="let consultant of consultantTable.data | filter:searchConsultant:'name'">
-                    <td>{{ consultant.name }} {{ consultant.lastName }}</td>
-                    <td>{{ consultant.phoneNumber }}</td>
-                    <td>{{ consultant.emailAddress }}</td>
-                    <td *ngIf="consultant.id" [style.text-align]="'center'">
-                        <i (click)="showDetailsModal(consultant.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
+                <tr *ngFor="let user of userTable.data | filter:searchUser:'name'">
+                    <td>{{ user.name }} {{ user.lastName }}</td>
+                    <td>{{ user.phoneNumber }}</td>
+                    <td>{{ user.emailAddress }}</td>
+                    <td *ngIf="user.id" [style.text-align]="'center'">
+                        <i (click)="showDetailsModal(user.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showEditModal(consultantModal, consultant.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+                        <i (click)="showEditModal(userModal, user.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showDeleteConfirm(consultant.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
+                        <i (click)="showDeleteConfirm(user.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
                     </td>
                 </tr>
             </tbody>
@@ -44,10 +44,10 @@
 </div>
 
 <ng-template #detailModal>
-    <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
+    <user-details [_detailedUser]="emptyUser"></user-details>
 </ng-template>
 
-<ng-template #consultantModal>
+<ng-template #userModal>
     <form nz-form [formGroup]="validateForm">
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">First Name</nz-form-label>

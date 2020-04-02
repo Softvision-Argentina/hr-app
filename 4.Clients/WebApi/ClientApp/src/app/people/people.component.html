@@ -6,6 +6,6 @@
     </nz-tab>
 
     <nz-tab nzTitle="Interviewers" *ngIf="isUserAuthenticated()  && isUserRole(['HRManagement', 'Admin','Recruiter'])">
-        <app-consultants></app-consultants>
+        <app-users></app-users>
     </nz-tab>
 </nz-tabset>

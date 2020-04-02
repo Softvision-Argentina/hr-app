@@ -1,29 +1,29 @@
 import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { FacadeService } from 'src/app/services/facade.service';
-import { ConsultantDetailsComponent } from './details/consultant-details.component';
+import { UserDetailsComponent } from './details/user-details.component';
 import { AppComponent } from '../app.component';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-consultants',
-  templateUrl: './consultants.component.html',
-  styleUrls: ['./consultants.component.css'],
-  providers: [ConsultantDetailsComponent, AppComponent]
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css'],
+  providers: [UserDetailsComponent, AppComponent]
 })
-export class ConsultantsComponent implements OnInit, OnDestroy {
+export class UsersComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
 
-  filteredConsultants: Consultant[] = [];
+  filteredUsers: User[] = [];
   isLoadingResults = false;
   searchValue = '';
-  listOfSearchConsultants = [];
-  listOfDisplayData = [...this.filteredConsultants];
+  listOfSearchUsers = [];
+  listOfDisplayData = [...this.filteredUsers];
   searchSub: Subscription;
-  searchConsultant = '';
+  searchUser = '';
   sortName = 'name';
   sortValue = 'ascend';
 
@@ -32,16 +32,16 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
   isDetailsVisible: boolean = false;
   isAddVisible: boolean = false;
   isAddOkLoading: boolean = false;
-  emptyConsultant: Consultant;
+  emptyUser: User;
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: ConsultantDetailsComponent,
+  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: UserDetailsComponent,
     private app: AppComponent) { }
 
   ngOnInit() {
     this.app.showLoading();
     this.app.removeBgImage();
-    this.getConsultants();
+    this.getUsers();
     this.getSearchInfo();
 
     this.validateForm = this.fb.group({
@@ -56,10 +56,10 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     this.app.hideLoading();
   }
 
-  getConsultants(){
-    this.facade.consultantService.get()
+  getUsers(){
+    this.facade.userService.get()
       .subscribe(res => {
-        this.filteredConsultants = res;
+        this.filteredUsers = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
@@ -69,9 +69,9 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
       if (isNaN(Number(data))) {
-        this.searchConsultant = data;
+        this.searchUser = data;
       } else {
-        this.searchConsultant = '';
+        this.searchUser = '';
       }
     });
   }
@@ -83,10 +83,10 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
 
   search(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchConsultants.length ? this.listOfSearchConsultants.some(consultants => item.name.indexOf(consultants) !== -1) : true) &&
+      return (this.listOfSearchUsers.length ? this.listOfSearchUsers.some(users => item.name.indexOf(users) !== -1) : true) &&
         (replaceAccent(item.name.toString().toUpperCase() + item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
-    const data = this.filteredConsultants.filter(item => filterFunc(item));
+    const data = this.filteredUsers.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
@@ -98,7 +98,7 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
   }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
-    //Add New Consultant Modal
+    //Add New User Modal
     this.validateForm.reset();
     this.validateForm.controls['phoneNumberPrefix'].setValue('+54'); 
     const modal = this.facade.modalService.create({
@@ -127,17 +127,19 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
                 (this.validateForm.controls[i] != this.validateForm.controls['phoneNumberPrefix'])) isCompleted = false;
             }
             if(isCompleted){
-              let newConsultant: Consultant = {
+/*               let newUser: User = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 lastName: this.validateForm.controls['lastName'].value.toString(),
+
                 emailAddress: this.validateForm.controls['email'].value.toString(),
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
-              }
-              this.facade.consultantService.add(newConsultant)
+              } */
+              let newUser: User = new User(0,this.validateForm.controls['name'].value.toString(),this.validateForm.controls['email'].value.toString())
+              this.facade.userService.add(newUser)
             .subscribe(res => {
-              this.getConsultants();
+              this.getUsers();
               this.app.hideLoading();
               this.facade.toastrService.success("Interviewer successfully created !");
               modal.destroy();
@@ -156,21 +158,21 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     });
   }
 
-  showDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.filteredConsultants.filter(consultant => consultant.id == consultantID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyConsultant.name + " " + this.emptyConsultant.lastName);
+  showDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    this.emptyUser = this.filteredUsers.filter(user => user.id == userID)[0];
+    this.detailsModal.showModal(modalContent, this.emptyUser.name);
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void{
-    //Edit Consultant Modal
+    //Edit User Modal
     this.validateForm.reset();
-    let editedConsultant: Consultant = this.filteredConsultants.filter(consultant => consultant.id == id)[0];
-    this.validateForm.controls['name'].setValue(editedConsultant.name);
-    this.validateForm.controls['lastName'].setValue(editedConsultant.lastName);
-    this.validateForm.controls['email'].setValue(editedConsultant.emailAddress);
-    this.validateForm.controls['phoneNumberPrefix'].setValue(editedConsultant.phoneNumber.substring(1, editedConsultant.phoneNumber.indexOf(')'))); 
-    this.validateForm.controls['phoneNumber'].setValue(editedConsultant.phoneNumber.split(')')[1]);
-    this.validateForm.controls['additionalInformation'].setValue(editedConsultant.additionalInformation);
+    let editedUser: User = this.filteredUsers.filter(user => user.id == id)[0];
+    this.validateForm.controls['name'].setValue(editedUser.name);
+    //this.validateForm.controls['lastName'].setValue(editedUser.lastName);
+    this.validateForm.controls['email'].setValue(editedUser.email);
+    //this.validateForm.controls['phoneNumberPrefix'].setValue(editedUser.phoneNumber.substring(1, editedUser.phoneNumber.indexOf(')'))); 
+    //this.validateForm.controls['phoneNumber'].setValue(editedUser.phoneNumber.split(')')[1]);
+    //this.validateForm.controls['additionalInformation'].setValue(editedUser.additionalInformation);
     const modal = this.facade.modalService.create({
       nzTitle: 'Edit Interviewer',
       nzContent: modalContent,
@@ -197,17 +199,18 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
                 (this.validateForm.controls[i] != this.validateForm.controls['phoneNumberPrefix'])) isCompleted = false;
             }
             if(isCompleted){
-              editedConsultant = {
-                id: editedConsultant.id,
-                name: this.validateForm.controls['name'].value.toString(),
-                lastName: this.validateForm.controls['lastName'].value.toString(),
-                emailAddress: this.validateForm.controls['email'].value.toString(),
-                phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
-                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
-              }
-              this.facade.consultantService.update(editedConsultant.id, editedConsultant)
+//              editedUser = {
+//                id: editedUser.id,
+//                name: this.validateForm.controls['name'].value.toString(),
+//                lastName: this.validateForm.controls['lastName'].value.toString(),
+//                emailAddress: this.validateForm.controls['email'].value.toString(),
+//                phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
+//                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
+//              }
+                editedUser = new User(editedUser.id,this.validateForm.controls['name'].value.toString(),this.validateForm.controls['name'].value.toString())
+              this.facade.userService.update(editedUser.id, editedUser)
             .subscribe(res => {
-              this.getConsultants();
+              this.getUsers();
               this.app.hideLoading();
               this.facade.toastrService.success("Interviewer successfully edited.");
               modal.destroy();
@@ -224,17 +227,17 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
     });
   }
 
-  showDeleteConfirm(consultantID: number): void {
-    let consultantDelete: Consultant = this.filteredConsultants.filter(consultant => consultant.id == consultantID)[0];
+  showDeleteConfirm(userID: number): void {
+    let userDelete: User = this.filteredUsers.filter(user => user.id == userID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure you want to delete ' + consultantDelete.lastName + ', ' + consultantDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + ', ' + userDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.consultantService.delete(consultantID)
+      nzOnOk: () => this.facade.userService.delete(userID)
         .subscribe(res => {
-          this.getConsultants();
+          this.getUsers();
           this.facade.toastrService.success('Interviewer was deleted !');
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
@@ -245,15 +248,16 @@ export class ConsultantsComponent implements OnInit, OnDestroy {
   handleCancel(): void {
     this.isDetailsVisible = false;
     this.isAddVisible = false;
-    this.emptyConsultant = {
+    this.emptyUser = new User(0,'','');
+/*     this.emptyUser = {
       id: 0,
       name: '',
       lastName: '',
       additionalInformation: '',
       emailAddress: '',
       phoneNumber: ''
-    };
-  }
+    };*/
+  } 
 
   ngOnDestroy() {
     this.searchSub.unsubscribe();

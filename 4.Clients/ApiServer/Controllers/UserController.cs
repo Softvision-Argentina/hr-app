@@ -42,6 +42,23 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return ApiAction(() =>
+            {
+                var users = _userService.GetAll();
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                var vm = users;
+                return Accepted(vm);
+            });
+        }
+
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
