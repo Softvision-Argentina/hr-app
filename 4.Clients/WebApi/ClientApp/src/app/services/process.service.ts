@@ -41,9 +41,9 @@ export class ProcessService extends BaseService<Process> {
   }
 
   public getProcessByUserRole(currentUser: User): Observable<any> {
-    if (currentUser.role === "CommunityManager") {
+    if (currentUser.role === 'CommunityManager') {
       return this.http.get(`${this.apiUrl}/com/${currentUser.community.name}`,
-        { headers: this.headersWithAuth, observe: "body" })
+        { headers: this.headersWithAuth, observe: 'body' })
         .pipe(
           tap(data => { }),
           catchError(this.handleErrors)

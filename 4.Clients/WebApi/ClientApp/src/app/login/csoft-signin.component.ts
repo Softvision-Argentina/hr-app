@@ -6,8 +6,8 @@ import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'csoft-login',
+
+  selector: 'app-csoft-login',
   templateUrl: './csoft-signin.component.html',
   styleUrls: ['./csoft-signin.component.css']
 })

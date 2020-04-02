@@ -60,12 +60,12 @@ export class DeclineReasonComponent implements OnInit {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchDeclineReasons.length ? this.listOfSearchDeclineReasons.some(declineReason => item.name.indexOf(declineReason) !== -1) : true) &&
         (item.name.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1);
     };
     const data = this.filteredDeclineReasons.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }

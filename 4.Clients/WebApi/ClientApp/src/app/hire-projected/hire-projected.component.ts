@@ -14,7 +14,7 @@ export class HireProjectedComponent implements OnInit {
   projectionForm: FormGroup;
   hireProjections: HireProjection[] = [];
   listOfDisplayData = [...this.hireProjections];
-  // tslint:disable-next-line: max-line-length
+
   monthList: string[] = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   yearList: number[] = [];
 

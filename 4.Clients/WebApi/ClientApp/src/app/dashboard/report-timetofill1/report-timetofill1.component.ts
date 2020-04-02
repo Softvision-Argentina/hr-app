@@ -114,13 +114,18 @@ export class ReportTimetofill1Component implements OnInit, OnChanges {
     const date = new Date(this.month);
     const days: number[] = [];
     const dayChartLabels: Label[] = [];
-    // tslint:disable-next-line: max-line-length
-    const validArray: Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1 && proc.status === ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
+
+
+    const validArray: Process[] = this.processes.filter(proc =>
+      new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1
+      && proc.status === ProcessStatusEnum.OfferAccepted
+      && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
+
     if (validArray.length > 0) {
       validArray.forEach(va => {
-        // tslint:disable-next-line: max-line-length
+
         averageDays += Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));
-        // tslint:disable-next-line: max-line-length
+
         days.push(Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));
         dayChartLabels.push(new Date(va.hrStage.date).toDateString());
       });

@@ -4,7 +4,7 @@ import { Employee } from 'src/entities/employee';
 
 
 @Component({
-  // tslint:disable-next-line: component-selector
+
   selector: 'employee-details',
   templateUrl: './employee-details.component.html',
   styleUrls: ['./employee-details.component.css'],

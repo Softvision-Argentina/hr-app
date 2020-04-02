@@ -79,7 +79,7 @@ export class ReportWeeklyCandidatesComponent implements OnInit, OnChanges {
 
       for (const key in this.processesByCandidate) {
         if (this.processesByCandidate[key]) {
-          // tslint:disable-next-line: max-line-length
+
           this.processesByCandidate[key] = this.processesByCandidate[key].filter(p => getISOWeek(new Date(p.createdDate)) === getISOWeek(this.date) && new Date(p.createdDate).getFullYear() === this.date.getFullYear());
         }
       }
@@ -88,7 +88,7 @@ export class ReportWeeklyCandidatesComponent implements OnInit, OnChanges {
 
       if (this.hasCandidates) {
         this.chartData = [];
-        // tslint:disable-next-line: max-line-length
+
         this.processesByCandidate.forEach(p => this.chartData.push({ data: [p.length], label: p[0].candidate.recruiter.name + ' ' + p[0].candidate.recruiter.lastName }));
       }
     }

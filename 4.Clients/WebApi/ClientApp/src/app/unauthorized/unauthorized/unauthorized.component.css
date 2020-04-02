@@ -24,7 +24,7 @@ h5 {
       rgba(200, 0, 161, 0.85),
       rgba(244, 99, 58, 0.85)
     ),
-    url("./../../../assets/images/oakland-careers-2.jpg");
+    url("src/assets/images/oakland-careers-2.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;

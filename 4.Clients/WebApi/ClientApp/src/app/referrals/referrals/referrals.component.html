@@ -56,11 +56,11 @@
 
 
 <ng-template #candidateDetailModal>
-  <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
+  <app-candidate-details [_detailedCandidate]="emptyCandidate"></app-candidate-details>
 </ng-template>
 
 <ng-template #consultantDetailModal>
-  <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
+  <app-consultant-details [_detailedConsultant]="emptyConsultant"></app-consultant-details>
 </ng-template>
 
 
@@ -105,20 +105,20 @@
              [config]="slideConfig"
              (destroy)="closeModal()">
     <div ngxSlickItem class="slide">
-      <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess" [_consultants]="consultants" [_candidate]="currentCandidate" [_offices]="offices">
-      </candidate-add>
+      <app-candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess" [_consultants]="consultants" [_candidate]="currentCandidate" [_offices]="offices">
+      </app-candidate-add>
     </div>
     <div ngxSlickItem class="slide">
-      <hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></hr-stage>
+      <app-hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></app-hr-stage>
     </div>
     <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
-      <technical-stage [_process]="emptyProcess" [_consultants]="consultants" [technicalStage]="emptyProcess.technicalStage" (selectedSeniority)="updateSeniority($event)"></technical-stage>
+      <app-technical-stage [_process]="emptyProcess" [_consultants]="consultants" [technicalStage]="emptyProcess.technicalStage" (selectedSeniority)="updateSeniority($event)"></app-technical-stage>
     </div>
     <div ngxSlickItem class="slide">
-      <client-stage [_consultants]="consultants" [clientStage]="emptyProcess.clientStage"></client-stage>
+      <app-client-stage [_consultants]="consultants" [clientStage]="emptyProcess.clientStage"></app-client-stage>
     </div>
     <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
-      <offer-stage [_consultants]="consultants" [offerStage]="emptyProcess.offerStage" (selectedSeniority)="updateSeniority($event)"></offer-stage>
+      <app-offer-stage [_consultants]="consultants" [offerStage]="emptyProcess.offerStage" (selectedSeniority)="updateSeniority($event)"></app-offer-stage>
     </div>
   </ngx-slick>
 </ng-template>

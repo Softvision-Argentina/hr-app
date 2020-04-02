@@ -13,8 +13,21 @@ h5 {
 }
 
 .divider {
-    width: 82px;
-    height: 177px;
-    border-right: 5px solid white;
-    position: absolute;
+  width: 82px;
+  height: 225px;
+  border-right: 5px solid white;
+  position: absolute;
+}
+
+.img {
+  background-image: linear-gradient(
+    to left,
+    rgba(200, 0, 161, 0.85),
+    rgba(244, 99, 58, 0.85)
+  ),
+  url("src/assets/images/oakland-careers-2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  background-attachment: fixed;
 }

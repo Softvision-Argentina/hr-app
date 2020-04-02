@@ -6,10 +6,8 @@ import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
 import { Skill } from 'src/entities/skill';
-import { CandidateSkill } from 'src/entities/candidateSkill';
 import { Process } from 'src/entities/process';
 import { AppComponent } from 'src/app/app.component';
-import { getMatIconFailedToSanitizeUrlError } from '@angular/material';
 import { Globals } from '../../app-globals/globals';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
@@ -17,8 +15,7 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'candidate-add',
+  selector: 'app-candidate-add',
   templateUrl: './candidate-add.component.html',
   styleUrls: ['./candidate-add.component.css']
 })
@@ -107,7 +104,10 @@ export class CandidateAddComponent implements OnInit {
 
   selectedValue = 1;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
+  constructor(
+    private fb: FormBuilder,
+    private facade: FacadeService,
+    private app: AppComponent,
     private globals: Globals) {
     this.statusList = globals.candidateStatusList;
     this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
@@ -159,7 +159,11 @@ export class CandidateAddComponent implements OnInit {
         (this.candidateForm.controls[i] !== this.candidateForm.controls['additionalInformation']) &&
         (this.candidateForm.controls[i] !== this.candidateForm.controls['linkedin']) &&
         (this.candidateForm.controls[i] !== this.candidateForm.controls['preferredOffice'])) {
-        if (enable) { this.candidateForm.controls[i].enable(); } else { this.candidateForm.controls[i].disable(); }
+        if (enable) {
+          this.candidateForm.controls[i].enable();
+        } else {
+          this.candidateForm.controls[i].disable();
+        }
       }
     }
   }
@@ -168,9 +172,10 @@ export class CandidateAddComponent implements OnInit {
     this.facade.processService.getActiveProcessByCandidate(id)
       .subscribe((res: Process[]) => {
         if (res.length > 0) {
+          const candidate: Candidate = res[0].candidate;
+
           this.facade.modalService.confirm({
-            // tslint:disable-next-line: max-line-length
-            nzTitle: 'There is already another process of ' + res[0].candidate.lastName + ', ' + res[0].candidate.name + '. Do you want to open a new one ?',
+            nzTitle: `There is already another process of ${candidate.lastName}, ${candidate.name}. Do you want to open a new one ?`,
             nzContent: '',
             nzOkText: 'Yes',
             nzOkType: 'danger',
@@ -191,9 +196,6 @@ export class CandidateAddComponent implements OnInit {
   }
 
   fillCandidateForm(candidate: Candidate) {
-    // let statusIndex = this.statusList.filter((status) =>
-    //      status.name.toLowerCase() === candidate.status.toLowerCase()
-    //     )[0].id;
     this.candidateForm.controls['dni'].setValue(candidate.dni);
     this.candidateForm.controls['name'].setValue(candidate.name);
     this.candidateForm.controls['lastName'].setValue(candidate.lastName);
@@ -233,44 +235,50 @@ export class CandidateAddComponent implements OnInit {
   }
 
   getFormData(): Candidate {
-    const pn = this.candidateForm.controls['phoneNumber'].value === undefined
-      || this.candidateForm.controls['phoneNumber'].value === null ? ''
-      : this.candidateForm.controls['phoneNumber'].value.toString();
+    let recruiter: Consultant = null;
+    let profile: CandidateProfile = null;
+    let community: Community = null;
+    const pn = this.candidateForm.controls['phoneNumber'].value ?
+      this.candidateForm.controls['phoneNumber'].value.toString() : '';
 
-    const prefix = this.candidateForm.controls['phoneNumberPrefix'].value === undefined
-      || this.candidateForm.controls['phoneNumberPrefix'].value === null ? ''
-      : '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')';
+    const prefix = this.candidateForm.controls['phoneNumberPrefix'].value ?
+      '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')'
+      : '';
+
+      if (this.candidateForm.controls['recruiter'].value) {
+        recruiter = new Consultant(this.candidateForm.controls['recruiter'].value, null, null);
+      }
+
+      if (this.candidateForm.controls['profile'].value) {
+        profile = new CandidateProfile(this.candidateForm.controls['profile'].value);
+      }
+
+      if (this.candidateForm.controls['community'].value) {
+        community = new Community(this.candidateForm.controls['community'].value);
+      }
 
     const newCandidate: Candidate = {
-      id: !this.isEdit ? this._candidate.id : this._process.candidate.id,
-      name: this.candidateForm.controls['name'].value === null ? null : this.candidateForm.controls['name'].value.toString(),
-      lastName: this.candidateForm.controls['lastName'].value === null ? null : this.candidateForm.controls['lastName'].value.toString(),
-      dni: this.candidateForm.controls['dni'].value === null ? null : this.candidateForm.controls['dni'].value,
-      emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
+      id: this.isEdit ? this._process.candidate.id : this._candidate.id ,
+      name: this.candidateForm.controls['name'].value,
+      lastName: this.candidateForm.controls['lastName'].value,
+      dni: this.candidateForm.controls['dni'].value,
+      emailAddress: this.candidateForm.controls['email'].value,
       phoneNumber: prefix + pn,
-      // tslint:disable-next-line: max-line-length
-      linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
+      linkedInProfile: this.candidateForm.controls['linkedin'].value,
       candidateSkills: null,
-      // tslint:disable-next-line: max-line-length
-      additionalInformation: this.candidateForm.controls['additionalInformation'].value === null ? null : this.candidateForm.controls['additionalInformation'].value.toString(),
+      additionalInformation: this.candidateForm.controls['additionalInformation'].value,
       englishLevel: EnglishLevelEnum.None,
-      status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
-      // tslint:disable-next-line: max-line-length
-      recruiter: !this.candidateForm.controls['recruiter'].value ? null : new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
-      // tslint:disable-next-line: max-line-length
-      preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
+      status: this.candidateForm.controls['status'].value,
+      recruiter,
+      preferredOfficeId: this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
-      // tslint:disable-next-line: max-line-length
-      profile: this.candidateForm.controls['profile'].value === null ? null : new CandidateProfile(this.candidateForm.controls['profile'].value),
-      // tslint:disable-next-line: max-line-length
-      community: this.candidateForm.controls['community'].value === null ? null : new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null ? null : this.candidateForm.controls['community'].value,
-      // contactDay: this.candidateForm.controls['contactDay'].value
-      cv: this.candidateForm.controls['cv'].value === null ? null : this.candidateForm.controls['cv'].value,
-      knownFrom: this.candidateForm.controls['knownFrom'].value === null ? null : this.candidateForm.controls['knownFrom'].value,
-      referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
+      profile,
+      community,
+      isReferred: this.candidateForm.controls['isReferred'].value,
+      cv: this.candidateForm.controls['cv'].value,
+      knownFrom: this.candidateForm.controls['knownFrom'].value,
+      referredBy: this.candidateForm.controls['referredBy'].value
     };
-    newCandidate.phoneNumber.toString();
     return newCandidate;
   }
 

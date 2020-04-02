@@ -8,8 +8,8 @@ import { Community } from 'src/entities/community';
 declare const gapi: any;
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'google-signin',
+
+  selector: 'app-google-signin',
   templateUrl: './google-signin.component.html',
   styleUrls: ['./google-signin.component.css']
 })
@@ -24,7 +24,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   public auth2: any;
 
-  // tslint:disable-next-line: max-line-length
+
   constructor(private jwtHelper: JwtHelper, private element: ElementRef, private router: Router, public zone: NgZone, private appConfig: AppConfig,
     private facade: FacadeService) {
   }

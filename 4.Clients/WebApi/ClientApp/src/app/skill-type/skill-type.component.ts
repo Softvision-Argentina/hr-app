@@ -43,7 +43,7 @@ export class SkillTypeComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  getSkillTypes(){
+  getSkillTypes() {
     this.facade.skillTypeService.get()
       .subscribe(res => {
         this.filteredSkillTypes = res;

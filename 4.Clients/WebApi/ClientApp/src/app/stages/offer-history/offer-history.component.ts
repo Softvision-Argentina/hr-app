@@ -7,8 +7,8 @@ import { Globals } from 'src/app/app-globals/globals';
 
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'offer-history',
+
+  selector: 'app-offer-history',
   templateUrl: './offer-history.component.html',
   styleUrls: ['./offer-history.component.css']
 })

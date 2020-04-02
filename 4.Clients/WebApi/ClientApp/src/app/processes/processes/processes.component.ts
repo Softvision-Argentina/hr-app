@@ -456,13 +456,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -478,13 +478,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -503,14 +503,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
+
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
+
         (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -530,7 +530,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         (item.status === this.searchValueStatus);
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     console.log(this.listOfDisplayData);
     console.log(this.statusList);
@@ -548,7 +548,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         (item.currentStage === this.searchValueCurrentStage);
     };
     const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
+
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
   }
@@ -591,7 +591,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isEdit = true;
       this.openFromEdit = true;
       if (this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
-        // tslint:disable-next-line: max-line-length
+
         this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
       } else {
         this.stepIndex = 0;
@@ -841,7 +841,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
-      // tslint:disable-next-line: max-line-length
+
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }

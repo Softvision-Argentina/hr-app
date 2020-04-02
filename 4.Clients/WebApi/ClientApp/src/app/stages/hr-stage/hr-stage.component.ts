@@ -10,8 +10,8 @@ import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'hr-stage',
+
+  selector: 'app-hr-stage',
   templateUrl: './hr-stage.component.html',
   styleUrls: ['./hr-stage.component.css']
 })

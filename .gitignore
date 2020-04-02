@@ -557,7 +557,9 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
-.vscode/settings.json
+.vs/
+.vscode/
+.idea/
 /4.Clients/ApiServer/package-lock.json
 /4.Clients/WebApi/package-lock.json
 /4.Clients/package-lock.json

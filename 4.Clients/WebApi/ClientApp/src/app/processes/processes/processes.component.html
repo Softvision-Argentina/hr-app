@@ -3,7 +3,7 @@
   <br />
   <div class="proximaNova">
     <div nz-row class="wrapper">
-        <h1 class="headerFont">B.A Studio Processes</h1>  
+        <h1 class="headerFont">B.A Studio Processes</h1>
         <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)"
           class="buttonStyle buttonFont" >
           NEW CANDIDATE
@@ -21,7 +21,7 @@
           (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
           (showDeleteConfirm)="showDeleteConfirm($event)"
           (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-          (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
+          (rejectProcess)="rejectProcess($event, rejectProcessModal)"
           (profileName)="findProfileByName($event)" (searchValueCurrentStage)="triggerSearchCurrentStage($event)"
           (status)="triggerSearchStatus($event)" (recruiterValue)="triggerSearchRecruiter($event)"
           (resetRecruiter)="resetRecruiter()" (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()"
@@ -38,18 +38,17 @@
             (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
             (showDeleteConfirm)="showDeleteConfirm($event)"
             (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-            (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
+            (rejectProcess)="rejectProcess($event, rejectProcessModal)"
             (profileName)="findProfileByName($event)" (searchValueCurrentStage)="triggerSearchCurrentStage($event)"
             (status)="triggerSearchStatus($event)" (recruiterValue)="triggerSearchRecruiter($event)"
             (resetRecruiter)="resetRecruiter()" (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()"
             (resetStatus)="resetStatus()">
           </app-processes-table>
-      </nz-tab> 
+      </nz-tab>
 
     </nz-tabset>
 
-    <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null"
-      (nzOnCancel)="handleCancel()">
+    <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
       <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
       <nz-divider></nz-divider>
       <div *ngIf="emptyProcess" nz-row>
@@ -65,11 +64,11 @@
     </nz-modal>
 
     <ng-template #candidateDetailModal>
-      <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
+      <app-candidate-details [_detailedCandidate]="emptyCandidate"></app-candidate-details>
     </ng-template>
 
     <ng-template #consultantDetailModal>
-      <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
+      <app-consultant-details [_detailedConsultant]="emptyConsultant"></app-consultant-details>
     </ng-template>
 
     <ng-template #rejectProcessModal>
@@ -112,24 +111,24 @@
       <br />
       <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (destroy)="closeModal()">
         <div ngxSlickItem class="slide">
-          <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
+          <app-candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
             [_consultants]="consultants" [_candidate]="currentCandidate" [_offices]="offices">
-          </candidate-add>
+          </app-candidate-add>
         </div>
         <div ngxSlickItem class="slide">
-          <hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></hr-stage>
+          <app-hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></app-hr-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
-          <technical-stage [_process]="emptyProcess" [_consultants]="consultants"
+          <app-technical-stage [_process]="emptyProcess" [_consultants]="consultants"
             [technicalStage]="emptyProcess.technicalStage" (selectedSeniority)="updateSeniority($event)">
-          </technical-stage>
+          </app-technical-stage>
         </div>
         <div ngxSlickItem class="slide">
-          <client-stage [_consultants]="consultants" [clientStage]="emptyProcess.clientStage"></client-stage>
+          <app-client-stage [_consultants]="consultants" [clientStage]="emptyProcess.clientStage"></app-client-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
-          <offer-stage [_consultants]="consultants" [offerStage]="emptyProcess.offerStage"
-            (selectedSeniority)="updateSeniority($event)"></offer-stage>
+          <app-offer-stage [_consultants]="consultants" [offerStage]="emptyProcess.offerStage"
+            (selectedSeniority)="updateSeniority($event)"></app-offer-stage>
         </div>
       </ngx-slick>
     </ng-template>

@@ -14,8 +14,8 @@ import { CandidateSkill } from 'src/entities/candidateSkill';
 import { ProcessService } from '../../services/process.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'technical-stage',
+
+  selector: 'app-technical-stage',
   templateUrl: './technical-stage.component.html',
   styleUrls: ['./technical-stage.component.css']
 })
