@@ -1,8 +1,10 @@
 using ApiServer;
+using Domain.Services.Repositories.EF;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Persistance.EF.Extensions;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -17,6 +19,7 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         private static string _env = "IntegrationTest";
         public TestServer Server { get; internal set; }
         public HttpClient Client { get; internal set; }
+        public DataBaseContext Context { get; internal set; }
         public IServiceProvider Services { get; internal set; }
 
         public ServiceFixture()
@@ -36,6 +39,8 @@ namespace Domain.Services.Impl.IntegrationTests.Core
 
                     Services = Server.Host.Services;
                     Client = Server.CreateClient();
+                    Context = Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
+
                     _configured = true;
                 }
             }
@@ -43,8 +48,10 @@ namespace Domain.Services.Impl.IntegrationTests.Core
 
         public void Dispose()
         {
+            Context.ResetAllIdentitiesId();
             Client.Dispose();
             Server.Dispose();
+            Context.Dispose();
         }
     }
 
