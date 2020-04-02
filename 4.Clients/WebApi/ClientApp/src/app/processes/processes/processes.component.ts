@@ -30,6 +30,7 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
+import { CandidateSkill } from 'src/entities/candidateSkill';
 
 @Component({
   selector: 'app-processes',
@@ -149,7 +150,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName : [null, [Validators.required]]
-    });    
+    });
     this.app.hideLoading();
   }
 
@@ -552,9 +553,31 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate: Candidate): void {
     this.app.showLoading();
-    this.createEmptyProcess(candidate);
+    let nuevoCandidato: Candidate = {
+      id: null,
+      name: '',
+      lastName: '',
+      dni: null,
+      emailAddress: '',
+      phoneNumber: null,
+      additionalInformation: '',
+      englishLevel: null,
+      status: null,
+      candidateSkills: [],
+      recruiter: null,
+      preferredOfficeId: null,
+      contactDay: null,
+      profile: null,
+      community: null,
+      isReferred: false,
+      linkedInProfile: null,
+      referredBy: null,
+      knownFrom: null,
+      cv: null,
+    };
+    this.createEmptyProcess(nuevoCandidato);
 
-    this.currentCandidate = candidate;
+    this.currentCandidate = nuevoCandidato;
 
     const modal = this.facade.modalService.create({
       nzTitle: null,
@@ -617,6 +640,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   validateForms(): boolean {
+    console.log("Y AHORA ESTOY VALIDANDO");
     this.getForms();
     let slide: number = this.onCheck();
     if (slide > -1) {
@@ -668,7 +692,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
+
+    console.log("RECIEN ENTRE");
     if (this.validateForms()) {
+      console.log("AHORA ENTRE ACA CHE");
       this.app.showLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
@@ -676,21 +703,28 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
+      console.log(newCandidate);
       newProcess.consultantOwnerId = newCandidate.recruiter.id;
       newProcess.candidate = newCandidate;
-
+      console.log(newProcess);
+      //newProcess.candidate.id = 12031204;
       if (!this.isEdit) {
-        this.facade.processService.add(newProcess)
-          .subscribe(res => {
-            this.getProcesses();
-            this.app.hideLoading();
-            this.facade.toastrService.success('The process was successfully saved !');
-            this.createEmptyProcess(newCandidate);
-            this.closeModal();
-          }, err => {
-            this.app.hideLoading();
-            this.facade.toastrService.error(err.message);
-          });
+        this.facade.candidateService.add(newCandidate).subscribe(res =>{
+          console.log(res);
+          newProcess.candidate.id = res.id;
+          this.facade.processService.add(newProcess)
+            .subscribe(res => {
+              this.getProcesses();
+              this.app.hideLoading();
+              this.facade.toastrService.success('The process was successfully saved !');
+              this.createEmptyProcess(newCandidate);
+              this.closeModal();
+            }, err => {
+              this.app.hideLoading();
+              console.log(err);
+              this.facade.toastrService.error(err);
+            });
+        });
       }
       else {
         this.facade.processService.getByID(newProcess.id)
@@ -739,7 +773,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       endDate: null,
       status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
       currentStage: ProcessCurrentStageEnum.NA,
-      candidateId: !this.isEdit ? 0 : this.emptyProcess.candidate.id,
+      candidateId: !this.isEdit ? 0 : 123123,
       candidate: null,
       consultantOwnerId: 0,
       consultantOwner: null,
@@ -842,7 +876,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      consultantOwnerId: candidate.recruiter.id,
+      consultantOwnerId: null,  // candidate.recruiter.id
       consultantOwner: candidate.recruiter,
       consultantDelegateId: null,
       consultantDelegate: null,
@@ -859,8 +893,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.InProgress,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        consultantOwnerId: null, // candidate.recruiter.id
+        consultantDelegateId: null, // candidate.recruiter.id
         processId: 0,
         actualSalary: 0,
         wantedSalary: 0,
@@ -872,8 +906,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        consultantOwnerId: null, // candidate.recruiter.id
+        consultantDelegateId: null, // candidate.recruiter.id
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
@@ -884,8 +918,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
-        consultantDelegateId: candidate.recruiter.id,
+        consultantOwnerId: null, // candidate.recruiter.id
+        consultantDelegateId: null, // candidate.recruiter.id
         processId: 0,
         interviewer: '',
         delegateName: ''
@@ -895,7 +929,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: candidate.recruiter.id,
+        consultantOwnerId: null, // candidate.recruiter.id
         consultantDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,

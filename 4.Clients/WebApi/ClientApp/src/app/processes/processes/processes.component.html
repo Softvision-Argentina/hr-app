@@ -6,7 +6,7 @@
             <i nz-icon type="search" theme="outline"></i></button>
     </div>
     <div nz-col nzSpan="20">
-        <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)" nzShape="round" >New candidate</button>
+        <button nz-button nzType="primary" (click)="newProcessStart(processStart,startModalButtons,emptyCandidate)" nzShape="round" >New candidate</button>
     </div>
     <div nz-col nzSpan="3">
         <button nz-button nzType="primary" (click)="searchOwnRecruiter()" nzShape="round" [hidden]="isOwnedProcesses">My processes</button>
@@ -185,11 +185,10 @@
         <nz-steps [nzCurrent]="stepIndex">
             <nz-step nzTitle="Candidate" id="candidateButton" (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
             </nz-step>
-            <nz-step nzTitle="HR" id="hrButton" (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)"></nz-step>
-            <nz-step nzTitle="Technical" id="technicalButton" (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)">
+            <nz-step nzTitle="Technical" id="technicalButton" (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)">
             </nz-step>
-            <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Client" id="clientButton" (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
-            <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Offer" id="offerButton" (click)="slickModal.slickGoTo(4);wishedStage(4, $event.currentTarget.id)"></nz-step>
+            <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Client" id="clientButton" (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)"></nz-step>
+            <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Offer" id="offerButton" (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
         </nz-steps>
     </div>
     <br />
@@ -203,9 +202,7 @@
       <div ngxSlickItem class="slide">
         <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess" [_consultants]="consultants" [_candidate]="currentCandidate" [_offices]="offices">
         </candidate-add>
-        </div>
-        <div ngxSlickItem class="slide">
-            <hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></hr-stage>
+        <hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></hr-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
             <technical-stage [_process]="emptyProcess" [_consultants]="consultants" [technicalStage]="emptyProcess.technicalStage" (selectedSeniority)="updateSeniority($event)"></technical-stage>

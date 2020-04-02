@@ -116,17 +116,17 @@ export class CandidateAddComponent implements OnInit {
     this.recruiters = this._consultants;
     this.comms = this._communities;
     this.profiles = this._candidateProfiles
-    this.fillCandidate = this._candidate;
-    this.fillCandidateForm(this._process.candidate);
-    this.isEdit = this._process.id !== 0;
+    //this.fillCandidate = this._candidate;
+    //this.fillCandidateForm(this._process.candidate);
+    //this.isEdit = this._process.id !== 0;
     if (this.isEdit) {
       this.candidateForm.controls['dni'].disable();
       this.candidateForm.controls['additionalInformation'].disable();
       this.candidateForm.controls['linkedin'].disable();
-      this.candidateForm.controls['preferredOffice'].disable();     
+      this.candidateForm.controls['preferredOffice'].disable();
     }
-    this.selectedValue = this._process.candidate.preferredOfficeId === 0 ? 1 : this._process.candidate.preferredOfficeId;
-    this.changeFormStatus(false);
+    //this.selectedValue = this._process.candidate.preferredOfficeId === 0 ? 1 : this._process.candidate.preferredOfficeId;
+    //this.changeFormStatus(false);
   }
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
@@ -148,7 +148,7 @@ export class CandidateAddComponent implements OnInit {
 
   dniChanged() {
     this.isDniValid = false;
-    this.changeFormStatus(false);
+    //this.changeFormStatus(false);
   }
 
   changeFormStatus(enable: boolean) {
@@ -257,7 +257,7 @@ export class CandidateAddComponent implements OnInit {
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value===null?null:this.candidateForm.controls['community'].value,
+      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
       // contactDay: this.candidateForm.controls['contactDay'].value
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
