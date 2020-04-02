@@ -40,7 +40,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="consultantOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of _consultants" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
+                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="hrForm.get( 'consultantOwnerId').dirty && hrForm.get( 'consultantOwnerId').errors">Please input the recruiter</nz-form-explain>
@@ -52,15 +52,15 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="consultantDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of _consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    
+
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
-    <div nz-row *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])">
+    <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">Actual Salary</nz-form-label>

@@ -1,5 +1,5 @@
-import { Reservation } from "./reservation";
-import { Office } from "./office";
+import { Reservation } from './reservation';
+import { Office } from './office';
 
 
 export class Room {

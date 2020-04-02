@@ -98,7 +98,7 @@ export class EmployeesComponent implements OnInit {
           this.reviewersFullNameAndId.push(r);
         }
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -107,7 +107,7 @@ export class EmployeesComponent implements OnInit {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       })
   }
 
@@ -116,7 +116,7 @@ export class EmployeesComponent implements OnInit {
       .subscribe(res => {
         this.activeRoles = res.filter(role => role.isActive);
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       })
   }
 
@@ -133,8 +133,7 @@ export class EmployeesComponent implements OnInit {
           this.getEmployees();
           this.facade.toastrService.success('Employee was deleted !');
         }, err => {
-          if (err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
@@ -193,8 +192,7 @@ export class EmployeesComponent implements OnInit {
                 }, err => {
                   this.app.hideLoading();
                   modal.nzFooter[1].loading = false;
-                  if (err.message != undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else {
@@ -249,8 +247,7 @@ export class EmployeesComponent implements OnInit {
                   modal.destroy();
                   this.facade.toastrService.success('Employee succesfully updated.');
                 }, err => {
-                  if (err.error.message != undefined) this.facade.toastrService.error(err.error.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  this.facade.errorHandlerService.showErrorMessage(err);
                   modal.nzFooter[1].loading = false;
                   this.app.hideLoading();
                 });
@@ -419,8 +416,7 @@ export class EmployeesComponent implements OnInit {
                     modal.destroy();
                     this.facade.toastrService.success('Employee succesfully updated.');
                   }, err => {
-                    if (err.error.message != undefined) this.facade.toastrService.error(err.error.message);
-                    else this.facade.toastrService.error("The service is not available now. Try again later.");
+                    this.facade.errorHandlerService.showErrorMessage(err);
                   });
               }
             }

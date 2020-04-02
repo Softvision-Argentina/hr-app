@@ -18,8 +18,9 @@
     <PackageReference Include="Google.Apis.Core" Version="1.43.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.43.0.1863" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
-      <PrivateAssets>all</PrivateAssets>
+    <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
@@ -27,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\0.Core\Core.Persistance\Core.Persistance.csproj" />
     <ProjectReference Include="..\..\1.Domain\Domain.Model\Domain.Model.csproj" />
+    <ProjectReference Include="..\..\4.Clients\ApiServer.Contracts\ApiServer.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

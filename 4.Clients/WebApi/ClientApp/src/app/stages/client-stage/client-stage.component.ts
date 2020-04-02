@@ -22,7 +22,7 @@ export class ClientStageComponent implements OnInit {
     public set consultants(value: Consultant[]) {
         this._consultants = value;
     }
-    
+
   clientForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -54,26 +54,28 @@ export class ClientStageComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.clientForm.controls) {
-      if (this.clientForm.controls[i] != this.clientForm.controls['status']) {
-        if (enable) this.clientForm.controls[i].enable();
-        else this.clientForm.controls[i].disable();
+      if (this.clientForm.controls[i] !== this.clientForm.controls['status']) {
+        if (enable) {
+          this.clientForm.controls[i].enable();
+        } else {
+          this.clientForm.controls[i].disable();
+        }
       }
     }
   }
 
-  statusChanged(){
-    if (this.clientForm.controls['status'].value == 1){
+  statusChanged() {
+    if (this.clientForm.controls['status'].value === 1) {
        this.changeFormStatus(true);
        this.clientForm.markAsTouched();
-    }
-    else{
+    } else {
        this.changeFormStatus(false);
     }
   }
 
   getFormData(processId: number): ClientStage {
-    let stage: ClientStage = new ClientStage();
-    let form = this.clientForm;
+    const stage: ClientStage = new ClientStage();
+    const form = this.clientForm;
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
@@ -92,26 +94,43 @@ export class ClientStageComponent implements OnInit {
     return (control === null ? null : control.value);
   }
 
-  fillForm(clientStage: ClientStage){
+  fillForm(clientStage: ClientStage) {
     const status: number = this.statusList.filter(s => s.id === clientStage.status)[0].id;
-    if (status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
+    if (status === StageStatusEnum.InProgress) {
+      this.changeFormStatus(true);
+    }
     this.clientForm.controls['status'].setValue(status);
-    if (clientStage.id != null) { this.clientForm.controls['id'].setValue(clientStage.id); }
-    if (clientStage.date != null) { this.clientForm.controls['date'].setValue(clientStage.date); }
-    if (clientStage.consultantOwnerId != null) {
+
+    if (clientStage.id) {
+      this.clientForm.controls['id'].setValue(clientStage.id);
+    }
+
+    if (clientStage.date) {
+      this.clientForm.controls['date'].setValue(clientStage.date);
+    }
+
+    if (clientStage.consultantOwnerId) {
       this.clientForm.controls['consultantOwnerId'].setValue(clientStage.consultantOwnerId);
     }
-    if (clientStage.interviewer != null) {
+
+    if (clientStage.interviewer) {
       this.clientForm.controls['interviewer'].setValue(clientStage.interviewer);
     }
-    if (clientStage.consultantDelegateId != null) {
+
+    if (clientStage.consultantDelegateId) {
       this.clientForm.controls['consultantDelegateId'].setValue(clientStage.consultantDelegateId);
     }
-    if (clientStage.delegateName != null) {
+
+    if (clientStage.delegateName) {
       this.clientForm.controls['delegateName'].setValue(clientStage.delegateName);
     }
-    if (clientStage.feedback != null) { this.clientForm.controls['feedback'].setValue(clientStage.feedback); }
-    if (clientStage.rejectionReason != null) { this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason); }
+
+    if (clientStage.feedback) {
+      this.clientForm.controls['feedback'].setValue(clientStage.feedback);
+    }
+    if (clientStage.rejectionReason) {
+      this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);
+    }
   }
 
   showRejectionReason() {

@@ -1,26 +1,26 @@
-<nz-list nzBordered nzSize="large" *ngIf="_detailedEmployee">
-    <nz-list-item><strong style="margin-right: 1%">DNI:</strong> {{_detailedEmployee.dni}}</nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{_detailedEmployee.emailAddress}}
-        <div style="margin-left: 1%; margin-bottom: 1%;" *ngIf="_detailedEmployee.linkedInProfile">
+<nz-list nzBordered nzSize="large" *ngIf="detailedEmployee">
+    <nz-list-item><strong style="margin-right: 1%">DNI:</strong> {{detailedEmployee.dni}}</nz-list-item>
+    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{detailedEmployee.emailAddress}}
+        <div style="margin-left: 1%; margin-bottom: 1%;" *ngIf="detailedEmployee.linkedInProfile">
             <nz-divider nzType="vertical" style="margin-top: 20%;"></nz-divider>
-            <a href="{{_detailedEmployee.linkedInProfile}}"><i nz-icon type="linkedin" theme="fill"></i></a>
+            <a href="{{detailedEmployee.linkedInProfile}}"><i nz-icon type="linkedin" theme="fill"></i></a>
         </div>
     </nz-list-item>
-    <nz-list-item *ngIf="_detailedEmployee.phoneNumber"><strong style="margin-right: 1%">Phone:</strong>
-        {{_detailedEmployee.phoneNumber}}</nz-list-item>
+    <nz-list-item *ngIf="detailedEmployee.phoneNumber"><strong style="margin-right: 1%">Phone:</strong>
+        {{detailedEmployee.phoneNumber}}</nz-list-item>
     <nz-list-item><strong style="margin-right: 2%">Status: </strong>
-        <div *ngIf="_detailedEmployee.status === 1; else notHired">Hired</div>
+        <div *ngIf="detailedEmployee.status === 1; else notHired">Hired</div>
         <ng-template #notHired>
             <div>Not Hired</div>
         </ng-template>
     </nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Recruiter:</strong> {{ recruiterName }}</nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%">Role:</strong> {{_detailedEmployee.role.name}}</nz-list-item>
-    <nz-list-item *ngIf="_detailedEmployee.isReviewer"><button nz-button>Reviewer</button></nz-list-item>
-    <nz-list-item *ngIf="(_detailedEmployee.reviewer != null && _detailedEmployee.reviewer.id != 1)"><strong
+    <nz-list-item><strong style="margin-right: 1%">Role:</strong> {{detailedEmployee.role.name}}</nz-list-item>
+    <nz-list-item *ngIf="detailedEmployee.isReviewer"><button nz-button>Reviewer</button></nz-list-item>
+    <nz-list-item *ngIf="(detailedEmployee.reviewer != null && detailedEmployee.reviewer.id != 1)"><strong
             style="margin-right: 1%">Reviewer:</strong>
-        {{_detailedEmployee.reviewer.name}} {{_detailedEmployee.reviewer.lastName}}</nz-list-item>
-    <nz-list-item *ngIf="_detailedEmployee.additionalInformation"><strong style="margin-right: 1%">Additional
+        {{detailedEmployee.reviewer.name}} {{detailedEmployee.reviewer.lastName}}</nz-list-item>
+    <nz-list-item *ngIf="detailedEmployee.additionalInformation"><strong style="margin-right: 1%">Additional
             info:</strong>
-        {{_detailedEmployee.additionalInformation}}</nz-list-item>
+        {{detailedEmployee.additionalInformation}}</nz-list-item>
 </nz-list>
