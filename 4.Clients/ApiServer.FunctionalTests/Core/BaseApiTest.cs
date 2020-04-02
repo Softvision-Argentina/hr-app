@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Xunit;
 using Core;
 using Domain.Services.Repositories.EF;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.TestHost;
 
 namespace ApiServer.FunctionalTests.Core
 {
@@ -13,14 +15,19 @@ namespace ApiServer.FunctionalTests.Core
     public class BaseApiTest
     {
         protected HttpClient Client { get; }
-
+        protected TestServer Server { get; }
+        public IServiceProvider Services { get; }
+        protected DataBaseContext Context { get; }
+        public IConfiguration Configuration { get; }
         protected string ControllerName { get; set; }
-        protected DataBaseContext Context {get;}
 
         public BaseApiTest(ApiFixture apiFixture)
         {
             Client = apiFixture.Client;
+            Server = apiFixture.Server;
+            Services = apiFixture.Services;
             Context = apiFixture.Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
+            Configuration = apiFixture.Server.Host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
             Context.Database.EnsureCreated();
         }
 
@@ -43,83 +50,115 @@ namespace ApiServer.FunctionalTests.Core
             return JsonConvert.DeserializeObject<U>(responseString);
         }
 
-        private async Task<HttpResultData> GetHttpCallAsync<T>(string controllerName, T model, string controllerMethod = "", string param = "")
+        private T ParseJsonStringToEntity<T>(string responseString) where T : class
         {
-            var response = await Client.GetAsync($"/api/{controllerName}/{controllerMethod}/{param}", HttpCompletionOption.ResponseContentRead);
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(responseString);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        private ResponseError ParseJsonStringErrorToResponseError(string responseString)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<ResponseError>(responseString);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        private async Task<HttpResultData<T>> GetHttpCallAsync<T>(string endPoint) where T: class
+        {
+            var response = await Client.GetAsync($"/api/{endPoint}", HttpCompletionOption.ResponseContentRead);
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var result = new HttpResultData
+            var result = new HttpResultData<T>
             {
                 Response = response,
-                ResponseString = responseString
+                ResponseString = responseString,
+                ResponseEntity = ParseJsonStringToEntity<T>(responseString),
+                ResponseError = ParseJsonStringErrorToResponseError(responseString)
             };
 
             return result;
         }
 
-        private async Task<HttpResultData> DeleteHttpCallAsync<T>(string controllerName, T model, string controllerMethod = "", string param = "")
+        private async Task<HttpResultData<T>> DeleteHttpCallAsync<T>(string endPoint, int id) where T: class
         {
-            var response = await Client.DeleteAsync($"/api/{controllerName}/{controllerMethod}/{param}");
+            var response = await Client.DeleteAsync($"/api/{endPoint}/{id}");
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var result = new HttpResultData
+            var result = new HttpResultData<T>
             {
                 Response = response,
-                ResponseString = responseString
+                ResponseString = responseString,
+                ResponseEntity = ParseJsonStringToEntity<T>(responseString),
+                ResponseError = ParseJsonStringErrorToResponseError(responseString)
             };
 
             return result;
         }
 
-        private async Task<HttpResultData> PostHttpCallAsync<T>(string controllerName, T model, string controllerMethod = "", string param = "")
+        private async Task<HttpResultData<T>> PostHttpCallAsync<T>(string endPoint, object model) where T: class
         {
-            var response = await Client.PostAsync($"/api/{controllerName}/{controllerMethod}/{param}",
+            var response = await Client.PostAsync($"/api/{endPoint}",
                 new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var result = new HttpResultData
+            var result = new HttpResultData<T>
             {
                 Response = response,
-                ResponseString = responseString
+                ResponseString = responseString,
+                ResponseEntity = ParseJsonStringToEntity<T>(responseString),
+                ResponseError = ParseJsonStringErrorToResponseError(responseString)
             };
 
             return result;
         }
 
-        private async Task<HttpResultData> PutHttpCallAsync<T>(string controllerName, T model, string controllerMethod = "")
+        private async Task<HttpResultData<T>> PutHttpCallAsync<T>(string endPoint, object model, int id) where T: class
         {
-            var response = await Client.PutAsync($"/api/{controllerName}/{controllerMethod}",
+            var response = await Client.PutAsync($"/api/{endPoint}/{id}",
                 new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var result = new HttpResultData
+            var result = new HttpResultData<T>
             {
                 Response = response,
-                ResponseString = responseString
+                ResponseString = responseString,
+                ResponseEntity = ParseJsonStringToEntity<T>(responseString),
+                ResponseError = ParseJsonStringErrorToResponseError(responseString)
             };
 
             return result;
         }
 
-        protected async Task<HttpResultData> HttpCallAsync<T>(string httpVerb, T model, string controllerName, string controllerMethod = "", string param = "") where T: class
+        protected async Task<HttpResultData<T>> HttpCallAsync<T>(string httpVerb, string endPoint, object model = null, int id = default) where T: class
         {
-            HttpResultData result;
+            HttpResultData<T> result;
 
             switch (httpVerb)
             {
                 case HttpVerb.GET:
-                    result = await GetHttpCallAsync(controllerName, model, controllerMethod);
+                    result = await GetHttpCallAsync<T>(endPoint);
                     break;
                 case HttpVerb.POST:
-                    result = await PostHttpCallAsync(controllerName, model, controllerMethod);
+                    result = await PostHttpCallAsync<T>(endPoint, model);
                     break;
                 case HttpVerb.PUT:
-                    result = await PutHttpCallAsync(controllerName, model, controllerMethod);
+                    result = await PutHttpCallAsync<T>(endPoint, model, id);
                     break;
                 case HttpVerb.DELETE:
-                    result = await DeleteHttpCallAsync(controllerName, model, controllerMethod);
+                    result = await DeleteHttpCallAsync<T>(endPoint, id);
                     break;
                 default: throw new NotImplementedException("Http verb is not implemented");
             }
