@@ -16,6 +16,7 @@ import { EmployeeCasualtiesComponent } from './employee-casualties/employee-casu
 import { HireProjectedComponent } from './hire-projected/hire-projected.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ReportsComponent } from './reports/reports.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PeopleComponent } from './people/people.component';
 import { CommunitiesComponent } from './communities/communities.component';
@@ -41,11 +42,7 @@ export const appRoutes: Routes = [
   { path: 'communities', component: CommunitiesComponent, canActivate: [HRGuard] },
   { path: 'people', component: PeopleComponent, canActivate: [HRGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [HRGuard] },
-  {
-    path: 'login',
-    loadChildren: './reports/reports.module#ReportsModule',
-    canLoad: [ManagementGuard]
-  },
+  { path: 'reports', component: ReportsComponent, canActivate: [ManagementGuard] },
   { path: 'settings', component: SettingsComponent, canActivate: [ManagementGuard], children: [
     { path: 'festivities', component: CompanyCalendarComponent },
     { path: 'hire-projected', component: HireProjectedComponent },

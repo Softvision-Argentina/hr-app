@@ -130,6 +130,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 import { PersonFilter } from './pipes/personFIlter.pipe';
 import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
 import { AppRoutingModule } from './app-routing.module';
+import { ReportsComponent } from './reports/reports.component';
 
 
 registerLocaleData(en);
@@ -155,6 +156,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ProcessDetailComponent,
       StageDetailComponent,
       StageEditComponent,
+      ReportsComponent,
       ConsultantsComponent,
       SkillTypeComponent,
       ProcessStepsComponent,
