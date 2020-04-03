@@ -118,7 +118,7 @@
                     </td>
                     <td scope="row">
                         <a *ngIf="process.candidate.user" style="color: #1890ff;" (click)="showUserDetailsModal(process.candidate.user.id, userDetailModal)">
-                        {{ process.candidate.user.name }}
+                        {{ process.candidate.user.firstName }}
                         {{ process.candidate.user.lastName }}</a>
                     </td>
                     <td [style.text-align]="'center'">

@@ -94,7 +94,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   currentStageList: any[];
 
   emptyCandidate: Candidate;
-  emptyUser: User;
+  emptyUser: any;
   currentCandidate: Candidate;
 
 
@@ -570,8 +570,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    console.log(userID);
+    console.log(this.users);
+    
+    
     this.emptyUser = this.users.filter(user => user.id == userID)[0];
-    this.userDetailsModal.showModal(modalContent, this.emptyUser.name);
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName);
   }
 
   showDeleteConfirm(processID: number): void {
