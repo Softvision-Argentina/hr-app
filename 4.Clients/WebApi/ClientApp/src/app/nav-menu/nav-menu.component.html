@@ -11,7 +11,7 @@
                 <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.imgURL}}"></nz-avatar>
             </div>
             <div *ngIf="showUserSettings">
-                <nz-card nzTitle="{{currentUser.firstName}} {{currentUser.lastName}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
+                <nz-card nzTitle="{{currentUser.firstName}} {{ currentUser.lastName}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
                     <nz-list>
                         <nz-list-item>
                             {{currentUser.username}}

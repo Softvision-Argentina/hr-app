@@ -436,8 +436,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));    
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -459,8 +459,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
@@ -570,10 +570,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
-    console.log(userID);
-    console.log(this.users);
-    
-    
     this.emptyUser = this.users.filter(user => user.id == userID)[0];
     this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName);
   }

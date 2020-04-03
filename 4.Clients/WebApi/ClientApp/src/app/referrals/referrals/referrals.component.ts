@@ -487,8 +487,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 h
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
     // const data = this.filteredProcesses;
@@ -511,8 +511,8 @@ h
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
