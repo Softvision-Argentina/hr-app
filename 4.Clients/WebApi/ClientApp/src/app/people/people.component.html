@@ -4,8 +4,4 @@
     <nz-tab nzTitle="Candidates" *ngIf="isUserAuthenticated()  && isUserRole(['Admin'])">
         <app-candidates></app-candidates> 
     </nz-tab>
-
-    <nz-tab nzTitle="Interviewers" *ngIf="isUserAuthenticated()  && isUserRole(['Admin'])">
-        <app-users></app-users>
-    </nz-tab>
 </nz-tabset>

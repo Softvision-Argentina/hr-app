@@ -15,7 +15,6 @@ import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
 import { UserService } from './services/user.service';
-import { UsersComponent } from  './users/users.component';
 import { StageService } from './services/stage.service';
 import { ConfigService } from './services/config.service';
 import { CandidatesComponent } from './candidates/candidates.component';
@@ -169,7 +168,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       UnauthorizedComponent,
       ProcessStepsComponent,
       UserDetailsComponent,
-      UsersComponent,
       TasksComponent,
       FilterPipe,
       SortPipe,
