@@ -3,7 +3,7 @@ using System;
 
 namespace Domain.Services.Repositories.EF.UnitTests
 {
-    public class BaseRepositoryTest
+    public class BaseRepositoryTest : IDisposable
     {
         protected readonly DataBaseContext dbContext;
 
@@ -14,6 +14,11 @@ namespace Domain.Services.Repositories.EF.UnitTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString())
                         .Options;
             dbContext = new DataBaseContext(options);
+        }
+
+        public void Dispose()
+        {
+            dbContext.Dispose();
         }
     }
 }
