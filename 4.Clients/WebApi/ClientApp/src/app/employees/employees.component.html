@@ -197,7 +197,7 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="userId">
                             <nz-option *ngFor="let user of users"
-                                [nzLabel]="user.name + ' ' + user.lastName" [nzValue]="user.id">
+                                [nzLabel]="user.firstName + ' ' + user.lastName" [nzValue]="user.id">
                             </nz-option>
                         </nz-select>
                     </nz-form-control>

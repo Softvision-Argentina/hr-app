@@ -47,7 +47,7 @@
 
                 <ng-template #titleTemplate>
                     <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span> <br />
-                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.user.name}} {{toDo.user.lastName}}</span>
+                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.user.firstName}} {{toDo.user.lastName}}</span>
                     <span style="font-size: small;" *ngIf="canAssign() && isCurrentUser(toDo)">Owner: You</span>
                 </ng-template>
 
@@ -145,7 +145,7 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <div class="display-flex">
                             <nz-select  formControlName="user" [attr.id]="user" id="user" nzShowSearch nzAllowClear nzPlaceHolder="Select a user">
-                                <nz-option *ngFor="let user of users;" nzLabel="{{user.name}} {{user.lastName}}" nzValue="{{user.id}}">
+                                <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}" nzValue="{{user.id}}">
                                 </nz-option>
                             </nz-select>
                             <button nz-button nzType="primary" nz-tooltip nzTitle="Assign to me" (click)="assignToMe()">

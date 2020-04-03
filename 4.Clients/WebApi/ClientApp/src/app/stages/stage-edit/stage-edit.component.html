@@ -98,7 +98,7 @@
         <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
         <ng-container *ngIf="!isLoading">
           <mat-option *ngFor="let user of users" [value]="user">
-            <span>{{ user.name }}</span>
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
             <small> | ID: {{user.id}}</small>
           </mat-option>
         </ng-container>
