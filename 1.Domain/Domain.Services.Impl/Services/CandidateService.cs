@@ -76,7 +76,7 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             createdCandidate.CreatedDate = date;
             return _mapper.Map<CreatedCandidateContract>(createdCandidate);
         }
@@ -133,45 +133,30 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
-        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate,bool> filterRule)
-        {
-          
-            var candidateQuery = _candidateRepository
+        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filterRule)
+        {          
+            var candidateResult = _candidateRepository
                 .QueryEager()
-                .Where(filterRule);
-
-
-            var candidateResult = candidateQuery.ToList();
+                .Where(filterRule)
+                .ToList();
 
             return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
         }
 
-        //public ReadedCandidateContract Exists(int dni)
-        //{
-        //    var candidateQuery = _candidateRepository
-        //        .QueryEager()
-        //        .Where(_ => _.DNI == dni);
-
-        //    var candidateResult = candidateQuery.SingleOrDefault();
-
-        //    return _mapper.Map<ReadedCandidateContract>(candidateResult);
-        //}
         public ReadedCandidateContract Exists(int id)
         {
-            var candidateQuery = _candidateRepository
+            var candidateResult = _candidateRepository
                 .QueryEager()
-                .Where(_ => _.Id == id);
-
-            var candidateResult = candidateQuery.SingleOrDefault();
-
+                .Where(_ => _.Id == id)
+                .SingleOrDefault();
+            
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
         public IEnumerable<ReadedCandidateContract> List()
         {
-            var candidateQuery = _candidateRepository
-                .QueryEager();
-
-            var candidateResult = candidateQuery.ToList();
+            var candidateResult = _candidateRepository
+                .QueryEager()
+                .ToList();
 
             return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
         }
@@ -179,18 +164,16 @@ namespace Domain.Services.Impl.Services
 
         public IEnumerable<ReadedCandidateAppContract> ListApp()
         {
-            var candidateQuery = _candidateRepository
-                .QueryEager();
+            var candidateResult = _candidateRepository
+                .QueryEager()
+                .ToList();
 
-            var candidateResult = candidateQuery.ToList();
             return _mapper.Map<List<ReadedCandidateAppContract>>(candidateResult);
         }
 
         public Candidate GetCandidate(int id)
         {
-            var users = _context.Candidates.Find(id);
-
-            return users;
+            return _context.Candidates.Find(id);
         }
 
         private void ValidateContract(CreateCandidateContract contract)
@@ -215,12 +198,12 @@ namespace Domain.Services.Impl.Services
             }
             catch (ValidationException ex)
             {
-                    throw new CreateContractInvalidException(ex.ToListOfMessages());
+                throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
 
             try
             {
-                if(linkedInProfile != null)
+                if (linkedInProfile != null)
                 {
                     Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile != "N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
                     if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
@@ -276,8 +259,6 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
-        }
-
-       
+        }       
     }
 }

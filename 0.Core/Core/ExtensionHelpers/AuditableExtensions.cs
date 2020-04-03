@@ -10,7 +10,7 @@ namespace Core.ExtensionHelpers
                 throw new InvalidAuditableUsernameException();
 
             auditable.CreatedBy = userName;
-            auditable.CreatedDate = DateTime.Now;
+            auditable.CreatedDate = DateTime.UtcNow;
 
             auditable.LastModifiedBy = auditable.CreatedBy;
             auditable.LastModifiedDate = auditable.CreatedDate;
@@ -22,7 +22,7 @@ namespace Core.ExtensionHelpers
                 throw new InvalidAuditableUsernameException();
 
             auditable.LastModifiedBy = userName;
-            auditable.LastModifiedDate = DateTime.Now;
+            auditable.LastModifiedDate = DateTime.UtcNow;
         }
     }
 }

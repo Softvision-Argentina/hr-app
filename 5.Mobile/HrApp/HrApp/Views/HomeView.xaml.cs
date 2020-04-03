@@ -158,10 +158,10 @@ namespace HrApp.Views
 
             for (int i = length; i >= 0; i--)
             {
-                var proc = res.Count(r => r.HireDate.Year == DateTime.Now.AddMonths(-i).Year && r.HireDate.Month == DateTime.Now.AddMonths(-i).Month);
+                var proc = res.Count(r => r.HireDate.Year == DateTime.UtcNow.AddMonths(-i).Year && r.HireDate.Month == DateTime.Now.AddMonths(-i).Month);
                 var entry = new Microcharts.Entry(proc)
                 {
-                    Label = DateTime.Now.AddMonths(-i).ToString("MMMM", CultureInfo.CreateSpecificCulture("en")),
+                    Label = DateTime.UtcNow.AddMonths(-i).ToString("MMMM", CultureInfo.CreateSpecificCulture("en")),
                     ValueLabel = proc.ToString(),
                     Color = SKColor.Parse("#ff6666")
                 };
