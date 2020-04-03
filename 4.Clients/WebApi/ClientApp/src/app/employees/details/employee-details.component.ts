@@ -32,8 +32,8 @@ export class EmployeeDetailsComponent implements OnInit {
   getRecruiterName() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.userName = res.filter(r => r.id === this._detailedEmployee.userId)[0].name
-          //+ res.filter(r => r.id === this._detailedEmployee.userId)[0].lastName;
+        this.userName = res.filter(r => r.id === this._detailedEmployee.userId)[0].firstName
+          + res.filter(r => r.id === this._detailedEmployee.userId)[0].lastName;
       }, err => {
         console.log(err);
       })

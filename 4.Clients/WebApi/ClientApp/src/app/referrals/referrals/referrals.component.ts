@@ -193,7 +193,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.name);
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.lastName + ' ' + this.currentUser.firstName);
       }, err => {
         console.log(err);
       });
@@ -484,7 +484,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     this.profileSearchName = 'ALL';
     this.nameDropdown.nzVisible = false;
   }
-
+h
   searchRecruiter(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.name.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
@@ -499,7 +499,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue=this.currentUser.name;
+    this.searchRecruiterValue= this.currentUser.lastName + ' ' + this.currentUser.firstName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -643,7 +643,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
     this.emptyUser = this.users.filter(user => user.id == userID)[0];
-    this.userDetailsModal.showModal(modalContent, this.emptyUser.name);
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 
   showDeleteConfirm(processID: number): void {

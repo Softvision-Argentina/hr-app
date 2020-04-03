@@ -10,7 +10,7 @@ import { UserDashboard } from 'src/entities/userDashboard';
 })
 export class PreferencesComponent implements OnInit {
   dashboards: Dashboard[] = [];
-  currentUser: User = new User(null,null,null);
+  currentUser: User = new User(null,null);
   dashboardStatus: boolean[] = new Array()
 
   constructor(private facade: FacadeService) {

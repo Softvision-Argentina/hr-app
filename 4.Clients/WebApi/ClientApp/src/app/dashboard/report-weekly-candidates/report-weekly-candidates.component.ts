@@ -83,7 +83,7 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
 
       if (this.hasCandidates) {
         this.chartData = [];
-        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.user.name}))
+        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.user.firstName + ' ' + p[0].candidate.user.firstName }))
       }
     }
   }

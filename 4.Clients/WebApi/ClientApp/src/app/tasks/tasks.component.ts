@@ -61,7 +61,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.facade.userService.get()
       .subscribe(res => {
         this.users = res;
-        this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.email, this.user.email))[0];
+        this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.username, this.user.username))[0];
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -77,7 +77,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
-      this.facade.taskService.getByUser(this.user.email)
+      this.facade.taskService.getByUser(this.user.username)
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
@@ -232,7 +232,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   showToDoList(option: string) {
-    const currentUserEmail = this.currentUser.email;
+    const currentUserEmail = this.currentUser.username;
 
     switch (option) {
       case 'ALL':
@@ -240,7 +240,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoList
-                                    .filter(task => this.isSameTextInLowerCase(task.user.email, currentUserEmail));
+                                    .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
@@ -469,13 +469,13 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   isCurrentUser(task: Task): boolean {
-    return task.user.email.toLowerCase() === this.currentUser.email.toLowerCase();
+    return task.user.username.toLowerCase() === this.currentUser.username.toLowerCase();
   }
 
   filterTasks() {
     if (!this.showAllTasks) {
       this.toDoListDisplay = this.toDoListDisplay
-        .filter(todo => todo.user.email.toLowerCase() === this.currentUser.email.toLowerCase());
+        .filter(todo => todo.user.email.toLowerCase() === this.currentUser.username.toLowerCase());
     } else {
       this.toDoListDisplay = this.toDoList;
     }

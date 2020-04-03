@@ -42,7 +42,7 @@ export class StageEditComponent implements OnInit {
   }
 
   displayFn(user: User) {
-    if (user) { return user.name; }
+    if (user) { return user.lastName; }
   }
 
   getStageByID(id) {

@@ -197,7 +197,7 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.email.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
+    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
 
@@ -329,7 +329,7 @@ export class ProcessContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      user: this.users.filter(r => r.email.toLowerCase() === this.currentUser.email.toLowerCase())[0],
+      user: this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,
@@ -371,7 +371,7 @@ export class ProcessContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: new User(this.candidateForm.controls['user'].value, null, null),
+        user: new User(this.candidateForm.controls['user'].value, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,

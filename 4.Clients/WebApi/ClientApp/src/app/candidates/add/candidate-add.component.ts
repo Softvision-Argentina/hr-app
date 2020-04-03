@@ -251,7 +251,7 @@ export class CandidateAddComponent implements OnInit {
       additionalInformation: this.candidateForm.controls['additionalInformation'].value === null ? null : this.candidateForm.controls['additionalInformation'].value.toString(),
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
-      user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null, null),
+      user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),

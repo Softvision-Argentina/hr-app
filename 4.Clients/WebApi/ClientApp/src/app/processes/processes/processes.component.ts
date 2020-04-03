@@ -447,7 +447,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.name;
+    this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }

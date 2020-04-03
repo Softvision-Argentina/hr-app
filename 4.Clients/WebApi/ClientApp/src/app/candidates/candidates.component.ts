@@ -283,7 +283,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
-                user: new User(this.validateForm.controls['user'].value, null, null),
+                user: new User(this.validateForm.controls['user'].value, null),
                 contactDay: new Date(),
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),

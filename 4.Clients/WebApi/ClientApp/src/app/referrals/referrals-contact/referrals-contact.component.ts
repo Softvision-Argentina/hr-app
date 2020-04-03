@@ -205,7 +205,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.email.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
+    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
 
@@ -336,7 +336,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   Recontact(idCandidate: number) {
-    console.log(this.users.filter(r => r.email.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
+    console.log(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
@@ -345,7 +345,7 @@ export class ReferralsContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      user: this.users.filter(r => r.email.toLowerCase() === this.currentUser.email.toLowerCase())[0],
+      user: this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,
@@ -388,7 +388,7 @@ export class ReferralsContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: new User(this.candidateForm.controls['user'].value, null, null),
+        user: new User(this.candidateForm.controls['user'].value, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         //linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
         linkedInProfile: null,
@@ -402,7 +402,7 @@ export class ReferralsContactComponent implements OnInit {
         profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
         cv: null,
         knownFrom: null,
-        referredBy: this.currentUser.name
+        referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();

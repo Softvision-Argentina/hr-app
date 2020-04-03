@@ -259,6 +259,6 @@ export class ProcessDetailComponent implements OnInit {
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
     this.emptyUser = this.users.filter(user => user.id === userID)[0];
-    this.userDetailsModal.showModal(modalContent, this.emptyUser.name);
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 }

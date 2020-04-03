@@ -1,6 +1,6 @@
 <nz-list nzBordered nzSize="large" *ngIf="detailedUser">
   <nz-list-item><strong style="margin-right: 1%;">E-mail:</strong> {{detailedUser.username}}</nz-list-item>
-  <nz-list-item><strong style="margin-right: 1%;">Phone:</strong> {{detailedUser.phoneNumber}}</nz-list-item>
+  <nz-list-item *ngIf="detailedUser.phoneNumber"><strong style="margin-right: 1%;">Phone:</strong> {{detailedUser.phoneNumber}}</nz-list-item>
   <nz-list-item *ngIf="detailedUser.additionalInformation"><strong  style="margin-right: 1%;">More info:</strong>
     {{detailedUser.additionalInformation}}</nz-list-item>
 </nz-list>

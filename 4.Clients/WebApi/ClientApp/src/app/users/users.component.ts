@@ -136,7 +136,7 @@ export class UsersComponent implements OnInit, OnDestroy {
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
               } */
-              let newUser: User = new User(0,this.validateForm.controls['name'].value.toString(),this.validateForm.controls['email'].value.toString())
+              let newUser: User = new User(0,this.validateForm.controls['username'].value.toString())
               this.facade.userService.add(newUser)
             .subscribe(res => {
               this.getUsers();
@@ -160,16 +160,16 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   showDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
     this.emptyUser = this.filteredUsers.filter(user => user.id == userID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyUser.name);
+    this.detailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void{
     //Edit User Modal
     this.validateForm.reset();
     let editedUser: User = this.filteredUsers.filter(user => user.id == id)[0];
-    this.validateForm.controls['name'].setValue(editedUser.name);
+    this.validateForm.controls['firstName'].setValue(editedUser.firstName);
     //this.validateForm.controls['lastName'].setValue(editedUser.lastName);
-    this.validateForm.controls['email'].setValue(editedUser.email);
+    this.validateForm.controls['username'].setValue(editedUser.username);
     //this.validateForm.controls['phoneNumberPrefix'].setValue(editedUser.phoneNumber.substring(1, editedUser.phoneNumber.indexOf(')'))); 
     //this.validateForm.controls['phoneNumber'].setValue(editedUser.phoneNumber.split(')')[1]);
     //this.validateForm.controls['additionalInformation'].setValue(editedUser.additionalInformation);
@@ -207,7 +207,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 //                phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')' + this.validateForm.controls['phoneNumber'].value.toString(), 
 //                additionalInformation: this.validateForm.controls['additionalInformation'].value === null ? null : this.validateForm.controls['additionalInformation'].value.toString()
 //              }
-                editedUser = new User(editedUser.id,this.validateForm.controls['name'].value.toString(),this.validateForm.controls['name'].value.toString())
+                editedUser = new User(editedUser.id,this.validateForm.controls['username'].value.toString())
               this.facade.userService.update(editedUser.id, editedUser)
             .subscribe(res => {
               this.getUsers();
@@ -230,7 +230,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   showDeleteConfirm(userID: number): void {
     let userDelete: User = this.filteredUsers.filter(user => user.id == userID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure you want to delete ' + ', ' + userDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + ', ' + userDelete.firstName + ' ' + userDelete.lastName + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
@@ -248,7 +248,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   handleCancel(): void {
     this.isDetailsVisible = false;
     this.isAddVisible = false;
-    this.emptyUser = new User(0,'','');
+    this.emptyUser = new User(0,'');
 /*     this.emptyUser = {
       id: 0,
       name: '',
