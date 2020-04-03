@@ -9,7 +9,6 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ReportsComponent } from './reports/reports.component';
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
@@ -156,7 +155,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       ProcessDetailComponent,
       StageDetailComponent,
       StageEditComponent,
-      ReportsComponent,
       ConsultantsComponent,
       SkillTypeComponent,
       ProcessStepsComponent,

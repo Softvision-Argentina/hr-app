@@ -16,7 +16,6 @@ import { EmployeeCasualtiesComponent } from './employee-casualties/employee-casu
 import { HireProjectedComponent } from './hire-projected/hire-projected.component';
 import { CompanyCalendarComponent } from './company-calendar/company-calendar.component';
 import { SettingsComponent } from './settings/settings.component';
-import { ReportsComponent } from './reports/reports.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PeopleComponent } from './people/people.component';
 import { CommunitiesComponent } from './communities/communities.component';
@@ -29,8 +28,6 @@ import { ProcessStepsComponent } from './processes/process-steps/process-steps.c
 import { ReferralsComponent } from './referrals/referrals/referrals.component';
 import { StageDetailComponent } from './stages/stage-detail/stage-detail.component';
 import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
-import { UnauthorizedComponent } from './unauthorized/unauthorized/unauthorized.component';
-import { NotFoundComponent } from './not-found/not-found.component';
 
 export const appRoutes: Routes = [
   { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [HRGuard] },
@@ -44,7 +41,11 @@ export const appRoutes: Routes = [
   { path: 'communities', component: CommunitiesComponent, canActivate: [HRGuard] },
   { path: 'people', component: PeopleComponent, canActivate: [HRGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [HRGuard] },
-  { path: 'reports', component: ReportsComponent, canActivate: [ManagementGuard] },
+  {
+    path: 'login',
+    loadChildren: './reports/reports.module#ReportsModule',
+    canLoad: [ManagementGuard]
+  },
   { path: 'settings', component: SettingsComponent, canActivate: [ManagementGuard], children: [
     { path: 'festivities', component: CompanyCalendarComponent },
     { path: 'hire-projected', component: HireProjectedComponent },
