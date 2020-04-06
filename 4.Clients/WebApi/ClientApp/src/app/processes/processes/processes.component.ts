@@ -551,33 +551,38 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.app.hideLoading();
   }
 
-  newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate: Candidate): void {
+  newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate?: Candidate): void {
     this.app.showLoading();
-    let nuevoCandidato: Candidate = {
-      id: null,
-      name: '',
-      lastName: '',
-      dni: null,
-      emailAddress: '',
-      phoneNumber: null,
-      additionalInformation: '',
-      englishLevel: null,
-      status: null,
-      candidateSkills: [],
-      recruiter: null,
-      preferredOfficeId: null,
-      contactDay: null,
-      profile: null,
-      community: null,
-      isReferred: false,
-      linkedInProfile: null,
-      referredBy: null,
-      knownFrom: null,
-      cv: null,
-    };
-    this.createEmptyProcess(nuevoCandidato);
+    if (!candidate) {
+      let nuevoCandidato: Candidate = {
+        id: null,
+        name: '',
+        lastName: '',
+        dni: null,
+        emailAddress: '',
+        phoneNumber: null,
+        additionalInformation: '',
+        englishLevel: null,
+        status: null,
+        candidateSkills: [],
+        recruiter: null,
+        preferredOfficeId: null,
+        contactDay: null,
+        profile: null,
+        community: null,
+        isReferred: false,
+        linkedInProfile: null,
+        referredBy: null,
+        knownFrom: null,
+        cv: null,
+      };
+      this.currentCandidate = nuevoCandidato;
+    } else {
+      this.currentCandidate = candidate;
+    }
 
-    this.currentCandidate = nuevoCandidato;
+    this.createEmptyProcess(this.currentCandidate);
+    
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -640,16 +645,38 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   validateForms(): boolean {
     this.getForms(this.stepIndex);
-    let slide: number = this.onCheck();
-    if (slide > -1) {
-      this.slickModal.slickGoTo(slide);
-      this.stepIndex = slide;
-      const elementName: string = slide === 0 ? 'candidateButton'  : slide === 1 ? 'technicalButton'
-        : slide === 2 ? 'clientButton' : slide === 3 ? 'offerButton' : slide === 4 ? 'hireButton' : 'none';
-      this.checkSlideIndex(elementName);
+    const formNumber: number = this.onCheck();
+    if (formNumber > -1) {
+      this.checkSlideIndex(this.getInvalidFormSlide(formNumber));
       return false;
     } else {
       return true;
+    }
+  }
+  getInvalidFormSlide(slide: number){
+    switch (slide) {
+      case 0:
+        this.slickModal.slickGoTo(0);
+        this.stepIndex = 0;
+        return 'candidateButton';
+      case 1:
+        this.slickModal.slickGoTo(0);
+        this.stepIndex = 0;
+        return 'candidateButton';
+      case 2:
+        this.slickModal.slickGoTo(1);
+        this.stepIndex = 1;
+        return 'technicalButton';
+      case 3:
+        this.slickModal.slickGoTo(2);
+        this.stepIndex = 2;
+        return 'clientButton';
+      case 4:
+        this.slickModal.slickGoTo(3);
+        this.stepIndex = 3;
+        return 'clientButton';
+      default:
+        return 'hireButton';
     }
   }
 
@@ -703,63 +730,79 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       newProcess = this.generateProcess(newProcess, newCandidate);
-      if (!this.isEdit) {
-        this.facade.candidateService.add(newCandidate).subscribe(res => {
-          console.log(res);
-          newProcess.candidate.id = res.id;
-          this.facade.processService.add(newProcess)
-            .subscribe(res => {
-              this.isLoading = false;
-              this.getProcesses();
-              this.app.hideLoading();
-              this.facade.toastrService.success('The process was successfully saved !');
-              this.createEmptyProcess(newCandidate);
-              this.closeModal();
-            }, err => {
-              this.isLoading = false;
-              this.app.hideLoading();
-              this.facade.toastrService.error(err);
-            });
-        });
-      }
-      else {
-        console.log(newProcess.id);
-        console.log(newProcess.id);
-        this.facade.processService.getByID(newProcess.id)
-          .subscribe(res => {
-            if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
-              // Used for verifying whether user pressed OK or Cancel on decline modal.
-              let declineReason = newProcess.declineReason;
-              this.openDeclineModal(newProcess, declineProcessModal).afterClose
-                .subscribe(sel => {
-                  if (declineReason !== newProcess.declineReason) {
-                    this.getCandidates();
-                    this.getProcesses();
-                    this.app.hideLoading();
-                    this.facade.toastrService.success('The process was successfully saved!');
-                    this.createEmptyProcess(newCandidate);
-                    this.closeModal();
-                  }
-                });
-            } else {
-              this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(res => {
-                  this.getProcesses();
-                  this.getCandidates();
-                  this.app.hideLoading();
-                  this.facade.toastrService.success('The process was successfully saved !');
-                  this.createEmptyProcess(newCandidate);
-                  this.closeModal();
-                }, err => {
-                  this.app.hideLoading();
-                  this.facade.toastrService.error(err.message);
-                });
-            }
-          }, err => {
-            this.app.hideLoading();
-            this.facade.toastrService.error(err.message);
-          });
-      }
+      console.log(newCandidate);
+      // if (!this.isEdit) {
+      //   if (!newCandidate.id) {
+      //     console.log("ACA NO TENGO ID")
+      //     this.facade.candidateService.add(newCandidate).subscribe(res => {
+      //       newProcess.candidate.id = res.id;
+      //       this.facade.processService.add(newProcess)
+      //         .subscribe(res => {
+      //           this.isLoading = false;
+      //           this.getProcesses();
+      //           this.app.hideLoading();
+      //           this.facade.toastrService.success('The process was successfully saved !');
+      //           this.createEmptyProcess(newCandidate);
+      //           this.closeModal();
+      //         }, err => {
+      //           this.isLoading = false;
+      //           this.app.hideLoading();
+      //           this.facade.toastrService.error(err);
+      //         });
+      //     });
+      //   } else{
+      //     console.log("ACA SI TENGO ID");
+      //     this.facade.processService.add(newProcess)
+      //     .subscribe(res => {
+      //       this.isLoading = false;
+      //       this.getProcesses();
+      //       this.app.hideLoading();
+      //       this.facade.toastrService.success('The process was successfully saved !');
+      //       this.createEmptyProcess(newCandidate);
+      //       this.closeModal();
+      //     }, err => {
+      //       this.isLoading = false;
+      //       this.app.hideLoading();
+      //       this.facade.toastrService.error(err);
+      //     });
+      //   }
+      // }
+      // else {
+      //   this.facade.processService.getByID(newProcess.id)
+      //     .subscribe(res => {
+      //       if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
+      //         // Used for verifying whether user pressed OK or Cancel on decline modal.
+      //         let declineReason = newProcess.declineReason;
+      //         this.openDeclineModal(newProcess, declineProcessModal).afterClose
+      //           .subscribe(sel => {
+      //             if (declineReason !== newProcess.declineReason) {
+      //               this.getCandidates();
+      //               this.getProcesses();
+      //               this.app.hideLoading();
+      //               this.facade.toastrService.success('The process was successfully saved!');
+      //               this.createEmptyProcess(newCandidate);
+      //               this.closeModal();
+      //             }
+      //           });
+      //       } else {
+      //         this.facade.processService.update(newProcess.id, newProcess)
+      //           .subscribe(res => {
+      //             this.getProcesses();
+      //             this.getCandidates();
+      //             this.app.hideLoading();
+      //             this.facade.toastrService.success('The process was successfully saved !');
+      //             this.createEmptyProcess(newCandidate);
+      //             this.closeModal();
+      //           }, err => {
+      //             this.app.hideLoading();
+      //             this.facade.toastrService.error(err.message);
+      //           });
+      //       }
+      //     }, err => {
+      //       this.app.hideLoading();
+      //       this.facade.toastrService.error(err.message);
+      //     });
+      // }
     }
   }
 
@@ -894,8 +937,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         consultantOwnerId: null, // candidate.recruiter.id
         consultantDelegateId: null, // candidate.recruiter.id
         processId: 0,
-        actualSalary: 0,
-        wantedSalary: 0,
+        actualSalary: null,
+        wantedSalary: null,
         englishLevel: EnglishLevelEnum.None,
         rejectionReasonsHr: null
       },

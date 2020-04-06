@@ -126,6 +126,8 @@ export class CandidateAddComponent implements OnInit {
       this.candidateForm.controls['linkedin'].disable();
       this.candidateForm.controls['preferredOffice'].disable();
       this.changeFormStatus(false);
+    } else if (!!this._candidate.id) {
+      this.fillCandidateForm(this._candidate);
     }
   }
   onCheckAndSave(): boolean {
@@ -193,9 +195,6 @@ export class CandidateAddComponent implements OnInit {
   }
 
   fillCandidateForm(candidate: Candidate) {
-    // let statusIndex = this.statusList.filter((status) =>       
-    //      status.name.toLowerCase() === candidate.status.toLowerCase()
-    //     )[0].id;
     this.candidateForm.controls['dni'].setValue(candidate.dni);
     this.candidateForm.controls['name'].setValue(candidate.name);
     this.candidateForm.controls['lastName'].setValue(candidate.lastName);

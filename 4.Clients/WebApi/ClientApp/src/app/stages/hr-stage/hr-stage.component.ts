@@ -143,11 +143,11 @@ export class HrStageComponent implements OnInit {
       this.hrForm.controls['feedback'].setValue(hrStage.feedback);
     }
 
-    if (hrStage.actualSalary) {
+    if (hrStage.actualSalary !== null) {
       this.hrForm.controls['actualSalary'].setValue(hrStage.actualSalary);
     }
 
-    if (hrStage.wantedSalary) {
+    if (hrStage.wantedSalary !== null) {
       this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary);
     }
 
