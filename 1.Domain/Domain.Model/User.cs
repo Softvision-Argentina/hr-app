@@ -12,6 +12,7 @@ namespace Domain.Model
         public string Token { get; set; }
         public Roles Role { get; set; }
         public string Password { get; set; }
+        public Community Community { get; set; }
         public IList<UserDashboard> UserDashboards { get; set; }
     }
 }

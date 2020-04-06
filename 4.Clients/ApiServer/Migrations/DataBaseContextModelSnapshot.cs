@@ -1104,6 +1104,8 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CommunityId");
+
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -1127,6 +1129,8 @@ namespace ApiServer.Migrations
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
 
                     b.ToTable("Users");
                 });
@@ -1376,6 +1380,13 @@ namespace ApiServer.Migrations
                         .WithOne("TechnicalStage")
                         .HasForeignKey("Domain.Model.TechnicalStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.User", b =>
+                {
+                    b.HasOne("Domain.Model.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId");
                 });
 
             modelBuilder.Entity("Domain.Model.UserDashboard", b =>

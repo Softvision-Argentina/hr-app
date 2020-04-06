@@ -1,27 +1,19 @@
-<nz-list nzBordered nzSize="large" *ngIf="_detailedCandidate">
+<nz-list nzBordered nzSize="large" *ngIf="detailedCandidate">
     <nz-list-item><strong style="margin-right: 1%">Recruiter:</strong> {{ recruiterName }}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Profile:</strong> {{ profileName}}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Community:</strong> {{communityName}}</nz-list-item>
     <nz-list-item><strong style="margin-right: 2%">Status:</strong>
         <button nz-button>{{ getCandidateStatus() }}</button>
     </nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{_detailedCandidate.emailAddress}}
-        <div style="margin-left: 1%; margin-bottom: 1%;" *ngIf="_detailedCandidate.linkedInProfile">
+    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{detailedCandidate.emailAddress}}
+        <div style="margin-left: 1%; margin-bottom: 1%;" *ngIf="detailedCandidate.linkedInProfile">
             <nz-divider nzType="vertical" style="margin-top: 20%;"></nz-divider>
-            <a href="{{_detailedCandidate.linkedInProfile}}"><i nz-icon type="linkedin" theme="fill"></i></a>
+            <a href="{{detailedCandidate.linkedInProfile}}"><i nz-icon type="linkedin" theme="fill"></i></a>
         </div>
     </nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%">Phone:</strong> {{_detailedCandidate.phoneNumber}}</nz-list-item>
-
-    <!-- <nz-list-item><strong style="margin-right: 2%">English Level:</strong> {{ getEnglishLevel() }}
-    </nz-list-item>
-    <nz-list-item *ngIf="_detailedCandidate.candidateSkills"><strong style="margin-right: 1%">Skills:</strong>
-        <div>
-            <nz-tag nz-popover nzContent="{{skill.rate}} % - {{skill.comment}}" style="margin: 1%;" [nzColor]="getColor(_detailedCandidate.candidateSkills, skill)" *ngFor="let skill of _detailedCandidate.candidateSkills">{{ skill.skill.name }}</nz-tag>
-        </div>
-    </nz-list-item> -->
-    <nz-list-item *ngIf="_detailedCandidate.additionalInformation"><strong style="margin-right: 1%">Additional
-            info:</strong> {{_detailedCandidate.additionalInformation}}
+    <nz-list-item><strong style="margin-right: 1%">Phone:</strong> {{detailedCandidate.phoneNumber}}</nz-list-item>
+    <nz-list-item *ngIf="detailedCandidate.additionalInformation"><strong style="margin-right: 1%">Additional
+            info:</strong> {{detailedCandidate.additionalInformation}}
     </nz-list-item>
 
 </nz-list>

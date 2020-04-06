@@ -1,11 +1,11 @@
-import { Room } from "./room";
+import { Room } from './room';
 
 export class Reservation {
-    id:number;    
+    id: number;
     description: string;
     sinceReservation: Date;
     untilReservation: Date;
-    recruiter: number; 
+    recruiter: number;
     roomId: number;
     room: Room;
   }

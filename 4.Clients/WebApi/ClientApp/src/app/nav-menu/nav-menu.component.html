@@ -2,7 +2,7 @@
     <nav class="main-nav">
         <div class="main-nav__input">
             <i nz-icon nzType="search" nzTheme="outline" style="font-size: 30px;"></i>
-            <input placeholder="Search..." (input)="onSearchChange($event.target.value)">
+            <input placeholder="Search..." [(ngModel)]="search" (input)="onSearchChange($event.target.value)">
         </div>
         <div class="avatar" (click)="changeUserSettings()">
             <div class="user-info">

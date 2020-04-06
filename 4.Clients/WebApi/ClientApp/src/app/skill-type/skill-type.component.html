@@ -20,15 +20,15 @@
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th [style.text-align]="center">Description</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Description</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let skillType of skillTypeTable.data">
                     <td>{{ skillType.name }}</td>
                     <td>{{ skillType.description }}</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <i (click)="showDetailsModal(skillType.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(skillTypeModal, skillType.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>

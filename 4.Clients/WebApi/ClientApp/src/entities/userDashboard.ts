@@ -1,5 +1,5 @@
-import { User } from "./user";
-import { Dashboard } from "./dashboard";
+import { User } from './user';
+import { Dashboard } from './dashboard';
 
 export class UserDashboard {
     userId: number;

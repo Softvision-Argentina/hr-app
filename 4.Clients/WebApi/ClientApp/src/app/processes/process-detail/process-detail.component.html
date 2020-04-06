@@ -41,10 +41,12 @@
 
 <nz-divider nzText="Process progress">Stages</nz-divider>
 
-<button [nzSize]="small" nz-button nzType="primary" (click)="showAddModal(stageModal)" nzShape="round">
+<button [nzSize]="'small'" nz-button nzType="primary" (click)="showAddModal(stageModal)" nzShape="round">
   <i nz-icon type="plus" theme="outline"></i>Add new stage</button>
 <br /><br />
-<div class="table-responsive" *ngIf="process && process.stages && process.stages.length > 0">
+
+<!-- TODO: stages does not exist in proccess it should be deleted or should be add stages as a property? -->
+<!-- <div class="table-responsive" *ngIf="process && process.stages && process.stages.length > 0">
 
     <nz-table #stagesTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
         <thead>
@@ -59,9 +61,9 @@
                         </div>
                     </nz-dropdown>
                 </th>
-                <th [style.text-align]="center">Date</th>
-                <th [style.text-align]="center">Status</th>
-                <th [style.text-align]="center">Actions</th>
+                <th [style.text-align]="'center'">Date</th>
+                <th [style.text-align]="'center'">Status</th>
+                <th [style.text-align]="'center'">Actions</th>
             </tr>
         </thead>
         <tbody cdkDropList (cdkDropListDropped)="dropStage($event)">
@@ -70,7 +72,7 @@
                 <td scope="row">{{ stage.startDate | date:'shortDate' }}</td>
                 <td scope="row">{{ stage.status }}</td>
 
-                <td [style.text-align]="center">
+                <td [style.text-align]="'center'">
                     <i (click)="showDetailsModal(stage)" nzTitle="Details" style="cursor: pointer" nz-tooltip nz-icon type="info-circle" theme="outline"></i>
                     <nz-divider nzType="vertical"></nz-divider>
                     <i (click)="showEditModal(stageModal, stage.id)" nzTitle="Edit" style="cursor: pointer" nz-tooltip nz-icon type="edit" theme="outline"></i>
@@ -85,7 +87,7 @@
 </div>
 <p *ngIf="!process || !process.stages || process.stages.length == 0">
     There are no stages yet
-</p>
+</p> -->
 
 
 
@@ -237,7 +239,3 @@
 <ng-template #consultantDetailModal>
     <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
 </ng-template>
-
-<div cdkDropList (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let artist of artists" class=”pop” cdkDrag>{{artist}}</div>
-</div>

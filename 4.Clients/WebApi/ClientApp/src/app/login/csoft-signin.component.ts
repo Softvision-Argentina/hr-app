@@ -57,12 +57,13 @@ export class CSoftComponent {
           email: res.user.username,
           role: res.user.role,
           token: res.token,
+          community: res.user.community,
           userDashboards: []
         }
         localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
         this.facade.userService.getRoles();          
         this.facade.modalService.closeAll();
-        this.router.navigate(['/']);
+        this.navigateByRole(this.authenticatedUser.role);
       }       
     }, err => {
       this.invalidUser();
@@ -71,14 +72,22 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean{
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if(currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }else{
       localStorage.clear();
       return false;
     }
   }
+  navigateByRole(role: string) {
 
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    }
+    else {
+      this.router.navigate(['/'])
+    }
+  }
   invalidUser(){
     this.zone.run(() => { this.router.navigate(['/unauthorized']);});
     this.facade.toastrService.error('Invalid username or password.');
