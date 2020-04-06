@@ -249,7 +249,7 @@ namespace Domain.Services.Impl.Services
         {
             var user = _userRepository.Query().Where(_ => _.Id == userID).FirstOrDefault();
             if (user == null)
-                //throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
+               throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
 
             candidate.User = user;
         }

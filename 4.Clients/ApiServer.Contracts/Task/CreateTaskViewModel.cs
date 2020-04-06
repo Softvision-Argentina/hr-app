@@ -16,7 +16,7 @@ namespace ApiServer.Contracts.Task
         public DateTime CreationDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int ConsultantId { get; set; }
+        public int UserId { get; set; }
         public CreateUserViewModel User { get; set; }
 
         public ICollection<CreateTaskItemViewModel> TaskItems { get; set; }
