@@ -34,7 +34,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
@@ -66,7 +66,7 @@ namespace ApiServer.Controllers
 
         // PUT api/dashboard/5
         // Mutation
-        [HttpPut("{Id}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]UpdateDashboardViewModel vm)
         {
             return ApiAction(() =>
@@ -80,7 +80,7 @@ namespace ApiServer.Controllers
         }
 
         // DELETE api/dashboard/5
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
