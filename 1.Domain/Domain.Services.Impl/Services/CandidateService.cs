@@ -70,7 +70,6 @@ namespace Domain.Services.Impl.Services
             this.AddRecruiterToCandidate(candidate, contract.Recruiter.Id);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
             this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
-            //this.AddOfficeToCandidate(candidate, contract.PreferredOfficeId);
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
