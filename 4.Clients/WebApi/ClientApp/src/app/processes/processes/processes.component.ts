@@ -172,7 +172,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -181,7 +181,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.consultants = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -190,7 +190,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.offices = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -203,7 +203,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.communities = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -212,7 +212,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.profiles = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -221,7 +221,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         this.declineReasons = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -239,7 +239,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           this.candidatesFullList.push(newProc.candidate);
         }
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
   getProcessesByConsultant() {
@@ -252,7 +252,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           this.candidatesFullList.push(newProc.candidate);
         }
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -290,7 +290,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.facade.toastrService.success('Process approved!');
       }, err => {
         this.app.hideLoading();
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -536,7 +536,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       if (this.currentUser.role === "Admin" || this.currentUser.role === "Recruiter") {
         this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
       } else {
-        console.log(this.stepIndex);
         this.stepIndex = 0;
       }
     }
@@ -747,6 +746,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 this.app.hideLoading();
                 this.facade.toastrService.error(err);
               });
+          }, err => {
+            this.isLoading = false;
+            this.facade.errorHandlerService.showErrorMessage(err);
           });
         } else{
           this.facade.processService.add(newProcess)

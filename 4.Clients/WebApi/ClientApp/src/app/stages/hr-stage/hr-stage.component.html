@@ -98,19 +98,6 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <!-- <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && hrForm.get('rejectionReason').dirty && hrForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="hrForm.get('rejectionReason')?.dirty && hrForm.get('rejectionReason')?.errors ">
-                        Please input rejection reason!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div> -->
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
@@ -119,9 +106,6 @@
                         <nz-option *ngFor="let reason of rejectionReasonsHRList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
                         </nz-option>
                     </nz-select>
-                    <!-- <nz-radio-group formControlName="rejectionReasonsHr">
-                        <label id="radio" style="display:block; line-height: 30px; height: 30px;" *ngFor="let reason of rejectionReasonsHRList" [nzDisabled]="disabled" nz-radio [nzValue]="reason.id"><span>{{reason.name}}</span></label>
-                    </nz-radio-group> -->
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Please, briefly explain what happened."></textarea>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && hrForm.get('rejectionReason').dirty && hrForm.get('rejectionReason').errors ">
