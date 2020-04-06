@@ -145,16 +145,6 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
         }
 
-        //public ReadedCandidateContract Exists(int dni)
-        //{
-        //    var candidateQuery = _candidateRepository
-        //        .QueryEager()
-        //        .Where(_ => _.DNI == dni);
-
-        //    var candidateResult = candidateQuery.SingleOrDefault();
-
-        //    return _mapper.Map<ReadedCandidateContract>(candidateResult);
-        //}
         public ReadedCandidateContract Exists(int id)
         {
             var candidateQuery = _candidateRepository
