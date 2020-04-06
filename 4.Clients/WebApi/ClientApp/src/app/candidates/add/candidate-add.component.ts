@@ -77,7 +77,7 @@ export class CandidateAddComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [null],
+    dni: [null, [Validators.required,Validators.pattern('^\\d{7,8}$')]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
@@ -115,18 +115,18 @@ export class CandidateAddComponent implements OnInit {
   ngOnInit() {
     this.recruiters = this._consultants;
     this.comms = this._communities;
-    this.profiles = this._candidateProfiles
-    //this.fillCandidate = this._candidate;
-    //this.fillCandidateForm(this._process.candidate);
-    //this.isEdit = this._process.id !== 0;
+    this.profiles = this._candidateProfiles;
+    this.isEdit = this._process.id !== 0;
+    this.setRecruiter();
     if (this.isEdit) {
+      this.fillCandidate = this._candidate;
+      this.fillCandidateForm(this._process.candidate);
       this.candidateForm.controls['dni'].disable();
       this.candidateForm.controls['additionalInformation'].disable();
       this.candidateForm.controls['linkedin'].disable();
       this.candidateForm.controls['preferredOffice'].disable();
+      this.changeFormStatus(false);
     }
-    //this.selectedValue = this._process.candidate.preferredOfficeId === 0 ? 1 : this._process.candidate.preferredOfficeId;
-    //this.changeFormStatus(false);
   }
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
@@ -138,7 +138,14 @@ export class CandidateAddComponent implements OnInit {
     }
 
   }
-
+  setRecruiter() {
+    const currentRecruiter = this.consultants.find(consultant => consultant.emailAddress === this.currentConsultant.email);
+    if(!!currentRecruiter) {
+      this.candidateForm.controls['recruiter'].setValue(currentRecruiter.id);
+    } else {
+      this.candidateForm.controls['recruiter'].setValue(1);
+    }
+  }
   checkForm() {
     for (const i in this.candidateForm.controls) {
       this.candidateForm.controls[i].markAsDirty();
@@ -146,10 +153,6 @@ export class CandidateAddComponent implements OnInit {
     }
   }
 
-  dniChanged() {
-    this.isDniValid = false;
-    //this.changeFormStatus(false);
-  }
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {

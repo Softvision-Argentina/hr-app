@@ -121,6 +121,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   isOwnedProcesses: boolean = false;
 
   forms: FormGroup[] = [];
+  isLoading:boolean = false;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent, ) {
@@ -327,9 +328,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-    
               const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-    
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
@@ -395,7 +394,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -537,6 +536,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       if (this.currentUser.role === "Admin" || this.currentUser.role === "Recruiter") {
         this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
       } else {
+        console.log(this.stepIndex);
         this.stepIndex = 0;
       }
     }
@@ -578,7 +578,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.createEmptyProcess(nuevoCandidato);
 
     this.currentCandidate = nuevoCandidato;
-
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -601,7 +600,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showDeleteConfirm(processID: number): void {
     let procesDelete: Process = this.filteredProcesses.find(p => p.id == processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);    
+    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -619,11 +618,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   onCheck(): number {
-    let i: number = 0;
+    let i: number = 0;  
     let carouselSlide: number = -1;
     this.forms.forEach(form => {
       form = this.checkForm(form);
-      if (form.invalid) {
+      if (carouselSlide === -1 && form.invalid) {
         carouselSlide = i;
       }
       i++;
@@ -640,17 +639,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   validateForms(): boolean {
-    console.log("Y AHORA ESTOY VALIDANDO");
-    this.getForms();
+    this.getForms(this.stepIndex);
     let slide: number = this.onCheck();
     if (slide > -1) {
-      this.processCarousel.goTo(slide);
-      let elementName: string = slide == 0 ? 'candidateButton' : slide == 1 ? 'hrButton' : slide == 2 ? 'technicalButton'
-        : slide == 3 ? 'clientButton' : slide == 4 ? 'offerButton' : slide == 5 ? 'hireButton' : 'none';
+      this.slickModal.slickGoTo(slide);
+      this.stepIndex = slide;
+      const elementName: string = slide === 0 ? 'candidateButton'  : slide === 1 ? 'technicalButton'
+        : slide === 2 ? 'clientButton' : slide === 3 ? 'offerButton' : slide === 4 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
+    } else {
+      return true;
     }
-    else return true;
   }
 
   wishedStage(choosenStage: number, elementName: string) {
@@ -664,18 +664,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.stepIndex = 0;
   }
 
-  getForms() {
-    this.forms = [];
-    this.forms.push(this.candidateAdd.candidateForm);
-    this.forms.push(this.hrStage.hrForm);
-    this.forms.push(this.technicalStage.technicalForm);
-    this.forms.push(this.clientStage.clientForm);
-    this.forms.push(this.offerStage.offerForm);
+  getForms(slide: number) {
+    const allForms = [];
+    const currentSlideForm = slide + 2;
+    allForms.push(this.candidateAdd.candidateForm);
+    allForms.push(this.hrStage.hrForm);
+    allForms.push(this.technicalStage.technicalForm);
+    allForms.push(this.clientStage.clientForm);
+    allForms.push(this.offerStage.offerForm);
+    this.forms = [...allForms.slice(0, currentSlideForm)];
   }
 
   checkSlideIndex(elementName: string) {
     this.currentComponent = elementName;
-    if (this.times == 0) {
+    if (this.times === 0) {
       this.lastComponent = this.currentComponent;
     }
     document.getElementById('candidateButton').style.borderWidth = '0px';
@@ -692,41 +694,37 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
-
-    console.log("RECIEN ENTRE");
     if (this.validateForms()) {
-      console.log("AHORA ENTRE ACA CHE");
       this.app.showLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
-
+      this.isLoading = true;
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
-      console.log(newCandidate);
-      newProcess.consultantOwnerId = newCandidate.recruiter.id;
-      newProcess.candidate = newCandidate;
-      console.log(newProcess);
-      //newProcess.candidate.id = 12031204;
+      newProcess = this.generateProcess(newProcess, newCandidate);
       if (!this.isEdit) {
-        this.facade.candidateService.add(newCandidate).subscribe(res =>{
+        this.facade.candidateService.add(newCandidate).subscribe(res => {
           console.log(res);
           newProcess.candidate.id = res.id;
           this.facade.processService.add(newProcess)
             .subscribe(res => {
+              this.isLoading = false;
               this.getProcesses();
               this.app.hideLoading();
               this.facade.toastrService.success('The process was successfully saved !');
               this.createEmptyProcess(newCandidate);
               this.closeModal();
             }, err => {
+              this.isLoading = false;
               this.app.hideLoading();
-              console.log(err);
               this.facade.toastrService.error(err);
             });
         });
       }
       else {
+        console.log(newProcess.id);
+        console.log(newProcess.id);
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
@@ -941,7 +939,23 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       },
     };
   }
+  generateProcess(process: Process, candidate: Candidate) {
+    const recruiterId = candidate.recruiter.id;
 
+    process.candidateId = candidate.id;
+    process.candidate = candidate;
+    process.consultantOwnerId = recruiterId;
+    process.consultantOwner = candidate.recruiter;
+    process.hrStage.consultantOwnerId = recruiterId;
+    process.hrStage.consultantDelegateId = recruiterId;
+    process.technicalStage.consultantOwnerId = recruiterId;
+    process.technicalStage.consultantDelegateId = recruiterId;
+    process.clientStage.consultantOwnerId = recruiterId;
+    process.clientStage.consultantDelegateId = recruiterId;
+    process.offerStage.consultantOwnerId = recruiterId;
+    return process;
+
+  }
   isDeclined(process: Process): Boolean {
     if (process.hrStage.status === StageStatusEnum.Declined ||
       process.technicalStage.status === StageStatusEnum.Declined ||

@@ -128,11 +128,15 @@ export class HrStageComponent implements OnInit {
     }
 
     if (hrStage.consultantOwnerId) {
-      this.hrForm.controls['consultantOwnerId'].setValue(hrStage.consultantOwnerId);
+      this.hrForm.controls['consultantOwnerId'].setValue(this.hrStage.consultantOwnerId);
+    } else {
+      this.hrForm.controls['consultantOwnerId'].setValue(1);
     }
 
     if (hrStage.consultantDelegateId) {
       this.hrForm.controls['consultantDelegateId'].setValue(hrStage.consultantDelegateId);
+    } else {
+      this.hrForm.controls['consultantDelegateId'].setValue(1);
     }
 
     if (hrStage.feedback) {
