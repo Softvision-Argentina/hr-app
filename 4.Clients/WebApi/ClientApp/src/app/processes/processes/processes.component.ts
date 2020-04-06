@@ -730,79 +730,76 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       newProcess = this.generateProcess(newProcess, newCandidate);
-      console.log(newCandidate);
-      // if (!this.isEdit) {
-      //   if (!newCandidate.id) {
-      //     console.log("ACA NO TENGO ID")
-      //     this.facade.candidateService.add(newCandidate).subscribe(res => {
-      //       newProcess.candidate.id = res.id;
-      //       this.facade.processService.add(newProcess)
-      //         .subscribe(res => {
-      //           this.isLoading = false;
-      //           this.getProcesses();
-      //           this.app.hideLoading();
-      //           this.facade.toastrService.success('The process was successfully saved !');
-      //           this.createEmptyProcess(newCandidate);
-      //           this.closeModal();
-      //         }, err => {
-      //           this.isLoading = false;
-      //           this.app.hideLoading();
-      //           this.facade.toastrService.error(err);
-      //         });
-      //     });
-      //   } else{
-      //     console.log("ACA SI TENGO ID");
-      //     this.facade.processService.add(newProcess)
-      //     .subscribe(res => {
-      //       this.isLoading = false;
-      //       this.getProcesses();
-      //       this.app.hideLoading();
-      //       this.facade.toastrService.success('The process was successfully saved !');
-      //       this.createEmptyProcess(newCandidate);
-      //       this.closeModal();
-      //     }, err => {
-      //       this.isLoading = false;
-      //       this.app.hideLoading();
-      //       this.facade.toastrService.error(err);
-      //     });
-      //   }
-      // }
-      // else {
-      //   this.facade.processService.getByID(newProcess.id)
-      //     .subscribe(res => {
-      //       if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
-      //         // Used for verifying whether user pressed OK or Cancel on decline modal.
-      //         let declineReason = newProcess.declineReason;
-      //         this.openDeclineModal(newProcess, declineProcessModal).afterClose
-      //           .subscribe(sel => {
-      //             if (declineReason !== newProcess.declineReason) {
-      //               this.getCandidates();
-      //               this.getProcesses();
-      //               this.app.hideLoading();
-      //               this.facade.toastrService.success('The process was successfully saved!');
-      //               this.createEmptyProcess(newCandidate);
-      //               this.closeModal();
-      //             }
-      //           });
-      //       } else {
-      //         this.facade.processService.update(newProcess.id, newProcess)
-      //           .subscribe(res => {
-      //             this.getProcesses();
-      //             this.getCandidates();
-      //             this.app.hideLoading();
-      //             this.facade.toastrService.success('The process was successfully saved !');
-      //             this.createEmptyProcess(newCandidate);
-      //             this.closeModal();
-      //           }, err => {
-      //             this.app.hideLoading();
-      //             this.facade.toastrService.error(err.message);
-      //           });
-      //       }
-      //     }, err => {
-      //       this.app.hideLoading();
-      //       this.facade.toastrService.error(err.message);
-      //     });
-      // }
+      if (!this.isEdit) {
+        if (!newCandidate.id) {
+          this.facade.candidateService.add(newCandidate).subscribe(res => {
+            newProcess.candidate.id = res.id;
+            this.facade.processService.add(newProcess)
+              .subscribe(res => {
+                this.isLoading = false;
+                this.getProcesses();
+                this.app.hideLoading();
+                this.facade.toastrService.success('The process was successfully saved !');
+                this.createEmptyProcess(newCandidate);
+                this.closeModal();
+              }, err => {
+                this.isLoading = false;
+                this.app.hideLoading();
+                this.facade.toastrService.error(err);
+              });
+          });
+        } else{
+          this.facade.processService.add(newProcess)
+          .subscribe(res => {
+            this.isLoading = false;
+            this.getProcesses();
+            this.app.hideLoading();
+            this.facade.toastrService.success('The process was successfully saved !');
+            this.createEmptyProcess(newCandidate);
+            this.closeModal();
+          }, err => {
+            this.isLoading = false;
+            this.app.hideLoading();
+            this.facade.toastrService.error(err);
+          });
+        }
+      }
+      else {
+        this.facade.processService.getByID(newProcess.id)
+          .subscribe(res => {
+            if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
+              // Used for verifying whether user pressed OK or Cancel on decline modal.
+              let declineReason = newProcess.declineReason;
+              this.openDeclineModal(newProcess, declineProcessModal).afterClose
+                .subscribe(sel => {
+                  if (declineReason !== newProcess.declineReason) {
+                    this.getCandidates();
+                    this.getProcesses();
+                    this.app.hideLoading();
+                    this.facade.toastrService.success('The process was successfully saved!');
+                    this.createEmptyProcess(newCandidate);
+                    this.closeModal();
+                  }
+                });
+            } else {
+              this.facade.processService.update(newProcess.id, newProcess)
+                .subscribe(res => {
+                  this.getProcesses();
+                  this.getCandidates();
+                  this.app.hideLoading();
+                  this.facade.toastrService.success('The process was successfully saved !');
+                  this.createEmptyProcess(newCandidate);
+                  this.closeModal();
+                }, err => {
+                  this.app.hideLoading();
+                  this.facade.toastrService.error(err.message);
+                });
+            }
+          }, err => {
+            this.app.hideLoading();
+            this.facade.toastrService.error(err.message);
+          });
+      }
     }
   }
 
