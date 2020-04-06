@@ -136,6 +136,7 @@ import { OfferService } from './services/offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { PersonFilter } from './pipes/personFIlter.pipe';
 import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
+import { ReferralsService } from './services/referrals.service';
 
 
 registerLocaleData(en);
@@ -299,6 +300,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BaseService,
     RegisterService,
     CandidateService,
+    ReferralsService,
     SkillService,
     ProcessService,
     StageService,

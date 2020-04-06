@@ -8,11 +8,11 @@ import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from 'src/entities/candidate';
 
 @Injectable()
-export class CandidateService extends BaseService<Candidate> {
+export class ReferralsService extends BaseService<Candidate> {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
-    this.apiUrl += 'Candidates';
+    this.apiUrl += 'Referrals';
   }
   
   public idExists(id: number): Observable<any>{
