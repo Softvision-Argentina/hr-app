@@ -354,6 +354,8 @@ export class ProcessContactComponent implements OnInit {
   }
 
   createNewCandidate() {
+    console.log("here");
+    
     this.app.showLoading;
     let isCompleted: boolean = true;
 
@@ -371,7 +373,7 @@ export class ProcessContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: new User(this.candidateForm.controls['user'].value, null),
+        user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
@@ -389,6 +391,8 @@ export class ProcessContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
+      console.log(newCandidate);
+      
       this.facade.candidateService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');

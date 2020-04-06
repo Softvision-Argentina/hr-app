@@ -85,7 +85,7 @@
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Recruiter</nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-select formControlName="user">
-              <nz-option *ngFor="let r of users" nzLabel="{{r.name}} {{r.lastName}}" [nzValue]="r.id">
+              <nz-option *ngFor="let r of users" nzLabel="{{r.firstName}} {{r.lastName}}" [nzValue]="r.id">
               </nz-option>
             </nz-select>
             <nz-form-explain *ngIf="reservationForm.get('user').dirty && reservationForm.get('user').errors">

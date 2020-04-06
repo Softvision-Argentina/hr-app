@@ -250,7 +250,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoListDisplay
-                                    .filter(task => this.isSameTextInLowerCase(task.user.emailAddress, currentUserEmail));
+                                    .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
@@ -260,7 +260,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay =  this.toDoListDisplay
-                                      .filter(task => this.isSameTextInLowerCase(task.user.emailAddress, currentUserEmail));
+                                      .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
@@ -475,7 +475,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   filterTasks() {
     if (!this.showAllTasks) {
       this.toDoListDisplay = this.toDoListDisplay
-        .filter(todo => todo.user.email.toLowerCase() === this.currentUser.username.toLowerCase());
+        .filter(todo => todo.user.username.toLowerCase() === this.currentUser.username.toLowerCase());
     } else {
       this.toDoListDisplay = this.toDoList;
     }

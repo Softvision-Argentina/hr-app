@@ -26,7 +26,7 @@
             <li><strong style="margin-right: 1%;">Wanted Salary:</strong> {{ process.wantedSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Start Date:</strong> {{ process.startDate | date:'medium' }}</li>
             <li *ngIf="process.endDate"><strong style="margin-right: 1%;">End Date:</strong> {{ process.endDate | date:'medium' }}</li>
-            <li *ngIf="process.userOwner"><strong style="margin-right: 1%;">User: </strong><a style="color: #1890ff;" (click)="showUserDetailsModal(process.userOwner.id, userDetailModal)">{{ process.userOwner.name }} {{ process.userOwner.lastName }}</a></li>
+            <li *ngIf="process.userOwner"><strong style="margin-right: 1%;">User: </strong><a style="color: #1890ff;" (click)="showUserDetailsModal(process.userOwner.id, userDetailModal)">{{ process.userOwner.firstName }} {{ process.userOwner.lastName }}</a></li>
             <li *ngIf="process.candidate"><strong style="margin-right: 1%;">Candidate: </strong><a style="color: #1890ff;" (click)="showCandidateDetailsModal(process.candidate.id, candidateDetailModal)">{{ process.candidate.name }}
           {{ process.candidate.lastName }}</a></li>
         </ul>
@@ -223,10 +223,10 @@
         </nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Status: </strong> {{emptyStage.status}}</nz-list-item>
         <nz-list-item *ngIf="emptyStage.userOwnerId">
-            <strong style="margin-right: 1%;">Owner user: </strong> {{userOwner.name }} {{ userOwner.lastName }}
+            <strong style="margin-right: 1%;">Owner user: </strong> {{userOwner.firstName }} {{ userOwner.lastName }}
         </nz-list-item>
         <nz-list-item *ngIf="emptyStage.userDelegateId">
-            <strong style="margin-right: 1%;">Delegate user: </strong> {{userDelegate.name}} {{ userDelegate.lastName }}
+            <strong style="margin-right: 1%;">Delegate user: </strong> {{userDelegate.firstName}} {{ userDelegate.lastName }}
         </nz-list-item>
     </nz-list>
 </nz-modal>
