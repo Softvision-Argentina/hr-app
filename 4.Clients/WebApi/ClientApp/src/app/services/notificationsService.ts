@@ -5,7 +5,7 @@ import { AppConfig } from '../app-config/app.config';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Globals } from '../app-globals/globals';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

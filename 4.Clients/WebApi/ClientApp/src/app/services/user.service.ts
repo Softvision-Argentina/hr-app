@@ -3,7 +3,7 @@ import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { AppConfig } from '../app-config/app.config';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from 'src/entities/user';
 
