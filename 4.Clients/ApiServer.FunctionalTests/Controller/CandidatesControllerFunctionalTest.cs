@@ -25,7 +25,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
         {
             //Arrange
@@ -48,7 +48,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] and an empty collection when does not find entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGet_WhenThereAreNoEntities_ShouldReturnAccepted202AndEmptyCollection()
         {
             //Arrange
@@ -63,7 +63,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning right entity when a valid filter is provided and there is a match")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsValidFilterAndValidData_ShouldReturnEntitiesAndAccepted202()
         {
             //Arrange
@@ -81,7 +81,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning Accepted [202] and a empty collection when there is no match")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsNoMatchForFilter_ShouldReturnAcceptedAndAnEmptyCollectionOfEntities()
         {
             //Arrange
@@ -98,7 +98,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get/{id}] is returning Accepted [202] and entity when Id is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted202()
         {
             //Arrange
@@ -115,7 +115,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get/{id}] is returning Not Found [404] when id is not valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsNotFound_ShouldReturnNotFound404()
         {
             //Arrange
@@ -131,7 +131,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Exists/{id}] is returning Accepted [202] entity when Id is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesExistsId_WhenEntityIsFound_ShouldReturnAccepted202()
         {
             //Arrange
@@ -148,7 +148,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Exists/{id}] is returning Accepted[202](?) when id is not valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesExiststId_WhenEntityIsNotFound_ShouldReturnNotFound404()
         {
             //Arrange
@@ -164,7 +164,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [GetApp] is returning Accepted[202] when there are entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetApp_WhenEntitiesAreFound_ShouldReturnAccepted200AndEntities()
         {
             //Arrange
@@ -181,7 +181,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [GetApp] is returning Accepted[202] and a empty collection when ther are not entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetApp_WhenEntiesAreNotFound_ShouldReturnAcceptedAndEmptyCollection()
         {
             //Arrange
@@ -196,7 +196,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Post] is returning Created [201] when data is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPost_WhenCreationIsSuccesfull_ShouldReturnCreated201()
         {
             //Arrange
@@ -229,7 +229,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Theory(DisplayName = "Verify api/Candidates [Post] is returning Bad Request [400] when validation of model fails ")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         [InlineData("DNI")]
         [InlineData("Name")]
         [InlineData("LastName")]
@@ -265,7 +265,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when email is already in database")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnEmail_ShouldReturnInternalServerError500()
         {
             //Arrange
@@ -301,7 +301,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when Linkedin profile is already in database")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnLinkedinProfile_ShouldReturnInternalServerError500()
         {
             //Arrange
@@ -336,7 +336,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPut_WhenModelIsValid_ShouldUpdateEntityAndReturnAccepted202()
         {
             //Arrange
@@ -395,7 +395,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Theory(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         [InlineData("Name")]
         [InlineData("LastName")]
         public async System.Threading.Tasks.Task GivenCandidatesPut_WhenModelIsInValid_ShouldNotUpdateEntitiesAndReturnBadRequest400(string propertyName)
@@ -440,7 +440,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Accepted [202] and deletes the entity when is found")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesDeleteId_WhenEntityIsFound_ShouldDeleteEntityAndReturnAccepted202()
         {
             //Arrange
@@ -460,7 +460,7 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.NotEqual(entityCountBeforeDelete, entityCountAfterDelete);
         }
         [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Internal Server Error [500] when id is not found")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted2022()
         {
             //Arrange
@@ -476,7 +476,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify that pings returns ok")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldRetssurnAccepted2022()
         {
             //Arrange
