@@ -66,6 +66,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   currentUser: User;
+
   sortName = null;
   sortValue = null;
 
@@ -118,7 +119,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   forms: FormGroup[] = [];
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent,) {
+    private globals: Globals, private _appComponent: AppComponent, ) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -187,7 +188,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getCommunity(community: number): string {
-    return this.communities.find(x =>x.id === community).name;
+    return this.communities.find(x => x.id === community).name;
   }
 
   getCommunities() {
@@ -218,11 +219,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getProfile(profile: number): string {
-    return this.profiles.filter(x =>x.id === profile)[0].name;
+    return this.profiles.filter(x => x.id === profile)[0].name;
   }
 
   getProcesses() {
-    this.facade.processService.get()
+    this.facade.processService.getProcessByUserRole(this.currentUser)
       .subscribe(res => {
         this.filteredProcesses = res;
         this.listOfDisplayData = res;
@@ -441,12 +442,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue=this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
+    this.searchRecruiterValue = this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
 
-  searchAllProcess(){
+  searchAllProcess() {
     this.getProcesses();
     this.isOwnedProcesses = false;
   }
@@ -480,7 +481,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
         (item.currentStage === this.searchValueCurrentStage)
     };
-    const data =  this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
+    const data = this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
     this.currentStageDropdown.nzVisible = false;
@@ -489,7 +490,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
     if (this.profileSearch == 0) {
-    this.listOfDisplayData = this.filteredProcesses;
+      this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
     }
     else {
@@ -502,7 +503,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
     if (this.communitySearch === 0) {
-    this.listOfDisplayData = this.filteredProcesses;
+      this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
     } else {
       this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
@@ -524,10 +525,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
       this.openFromEdit = true;
-      // TODO: Is this working?
-      this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
-    } else {
-      this.emptyProcess = undefined;
+      if (this.currentUser.role === "Admin" || this.currentUser.role === "Recruiter") {
+        this.emptyProcess.currentStage == ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
+      } else {
+        this.stepIndex = 0;
+      }
     }
     const modal = this.facade.modalService.create({
       nzTitle: null,
@@ -714,7 +716,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
           }, err => {
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
-          }); 
+          });
       }
     }
   }
@@ -755,7 +757,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     process.seniority = this.selectedSeniority ? this.selectedSeniority :
       (process.technicalStage.seniority ? process.technicalStage.seniority :
         process.technicalStage.alternativeSeniority ? process.technicalStage.alternativeSeniority :
-        (process.offerStage.seniority));
+          (process.offerStage.seniority));
     process.englishLevel = process.englishLevel;
 
     return process;
@@ -867,7 +869,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         alternativeSeniority: SeniorityEnum.NA,
         client: ''
       },
-    clientStage: {
+      clientStage: {
         id: 0,
         date: new Date(),
         status: StageStatusEnum.NA,
@@ -898,11 +900,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   isDeclined(process: Process): Boolean {
     if (process.hrStage.status === StageStatusEnum.Declined ||
-        process.technicalStage.status === StageStatusEnum.Declined ||
-        process.clientStage.status === StageStatusEnum.Declined ||
-        process.offerStage.status === StageStatusEnum.Declined) {
-          return true;
-        }
+      process.technicalStage.status === StageStatusEnum.Declined ||
+      process.clientStage.status === StageStatusEnum.Declined ||
+      process.offerStage.status === StageStatusEnum.Declined) {
+      return true;
+    }
     return false;
   }
 

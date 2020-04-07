@@ -1,7 +1,5 @@
 ﻿using Domain.Model.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Domain.Services.Contracts.Community;
 
 namespace Domain.Services.Contracts.User
 {
@@ -12,6 +10,7 @@ namespace Domain.Services.Contracts.User
         public string Username { get; set; }
         public string Token { get; set; }
         public Roles Role { get; set; }
+        public CreateCommunityContract Community { get; set; }
         public string Password { get; set; }
     }
 }

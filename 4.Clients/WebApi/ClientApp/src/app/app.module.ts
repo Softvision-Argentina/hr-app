@@ -1,6 +1,5 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { AppConfig } from './app-config/app.config';
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,19 +7,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
-
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
 import { ConsultantService } from './services/consultant.service';
 import { StageService } from './services/stage.service';
 import { ConfigService } from './services/config.service';
-
 import { CandidatesComponent } from './candidates/candidates.component';
 import { SkillsComponent } from './skills/skills.component';
 import { SkillService } from './services/skill.service';
@@ -62,7 +58,7 @@ import { ProcessStepsComponent } from './processes/process-steps/process-steps.c
 import { CandidateDetailsComponent } from './candidates/details/candidate-details.component';
 import { ConsultantDetailsComponent } from './consultants/details/consultant-details.component';
 import { TasksComponent } from './tasks/tasks.component';
-import { FilterPipe } from './pipes/titleFilter.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/taskSort.pipe';
 import { TaskService } from './services/task.service';
 import { UserService } from './services/user.service';
@@ -138,6 +134,8 @@ import { ReferralsCardComponent } from './referrals/referrals-card/referrals-car
 import { ReportDeclineReasonsComponent } from './dashboard/report-decline-reasons/report-decline-reasons.component';
 import { OfferService } from './services/offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { PersonFilter } from './pipes/personFIlter.pipe';
+import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
 
 
 registerLocaleData(en);
@@ -221,7 +219,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       HasRoleDirective,
       ReportDeclineReasonsComponent,
       SideMenuComponent,
-      OfferHistory
+      OfferHistory,
+      PersonFilter,
+      DaysOffFilter
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -256,10 +256,10 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     ToastrModule.forRoot(),
     Ng2LoadingSpinnerModule.forRoot({}),
     RouterModule.forRoot([
-      { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [CommonGuard] },
-      { path: 'processes', component: ProcessesComponent, canActivate: [CommonGuard] },
-      { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [CommonGuard] },
-      { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [CommonGuard] },
+      { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [HRGuard] },
+      { path: 'processes', component: ProcessesComponent, canActivate: [HRGuard] },
+      { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [HRGuard] },
+      { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [HRGuard] },
       { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
       { path: 'stage-details/:id', component: StageDetailComponent, canActivate: [CommonGuard] },
       { path: 'stage-edit/:id', component: StageEditComponent, canActivate: [CommonGuard] },
@@ -278,7 +278,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         { path: 'locations/:tab', component: LocationsComponent },
         { path: 'roles', component: RoleComponent },
         { path: 'declining-reasons', component: DeclineReasonComponent },
-
       ] },
       { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
       { path: 'login', component: LoginComponent },

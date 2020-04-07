@@ -20,8 +20,8 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class TasksComponent implements OnInit, OnDestroy {
 
-  showCloseIcon = false;
-  searchTitle = '';
+  showCloseIcon: boolean = false;
+  searchTitle: string = '';
   consultants: Consultant[] = [];
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
@@ -64,18 +64,18 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.consultants = res;
         this.currentConsultant = res.filter(c => this.isSameTextInLowerCase(c.emailAddress, this.user.email))[0];
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
   getTasks() {
-    if (this.app.isUserRole(['HRManagement', 'Admin'])) {
+    if (this.app.isUserRole(['HRManagement', 'Admin', 'Recruiter'])) {
       this.facade.taskService.get()
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     } else {
       this.facade.taskService.getByConsultant(this.user.email)
@@ -83,7 +83,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
           this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
         }, err => {
-          console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
         });
     }
   }
@@ -128,11 +128,7 @@ export class TasksComponent implements OnInit, OnDestroy {
               this.toDoList.splice(index, 1);
             }
           }, err => {
-            if (err.message) {
-              this.facade.toastrService.error(err.message);
-            } else {
-              this.facade.toastrService.error('The service is not available now. Try again later.');
-            }
+            this.facade.errorHandlerService.showErrorMessage(err);
           });
       }
     });
@@ -171,11 +167,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         }
       }, err => {
         taskItem.checked = !taskItem.checked;
-        if (err.message) {
-          this.facade.toastrService.error(err.message);
-        } else {
-          this.facade.toastrService.error('The service is not available now. Try again later.');
-        }
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -205,16 +197,17 @@ export class TasksComponent implements OnInit, OnDestroy {
           input.value = '';
         }, err => {
           if (err && err.errorCode === 900) {
-            this.facade.toastrService.error(err.message);
-          } else {
-            this.facade.toastrService.error('An error has ocurred. Please try again later');
+            this.facade.errorHandlerService.showErrorMessage(err);
+          }
+          else {
+            this.facade.errorHandlerService.showErrorMessage(null, 'An error has ocurred. Please try again later');
           }
           input.value = '';
           const itemIndex: number = updateTask.taskItems.indexOf(newItem);
           updateTask.taskItems.splice(itemIndex, 1);
         });
     } else {
-      this.facade.toastrService.error('You must enter a valid text.');
+      this.facade.errorHandlerService.showErrorMessage(null, 'You must enter a valid text.');
     }
   }
 
@@ -234,11 +227,7 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.toDoList[taskIndex].isApprove = true;
         }
       }, err => {
-        if (!err.message) {
-          this.facade.toastrService.error(err.message);
-        } else {
-          this.facade.toastrService.error('The service is not available now. Try again later.');
-        }
+        this.facade.errorHandlerService.showErrorMessage(err);
         updateTask.taskItems.splice(itemIndex, 0, item);
       });
   }
@@ -364,14 +353,8 @@ export class TasksComponent implements OnInit, OnDestroy {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message) {
-                    this.facade.toastrService.error(err.message);
-                  } else {
-                    this.facade.toastrService.error('The service is not available now. Try again later.');
-                  }
-                });
-            } else {
-              modal.nzFooter[1].loading = false;
+                  this.facade.errorHandlerService.showErrorMessage(err);
+                })
             }
           }
         }]

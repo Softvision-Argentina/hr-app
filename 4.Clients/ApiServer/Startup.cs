@@ -185,6 +185,7 @@ namespace ApiServer
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.DisplayRequestDuration();
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseCookiePolicy();

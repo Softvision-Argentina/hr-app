@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppConfig } from './../app-config/app.config';
 import { FacadeService } from '../services/facade.service';
 import { JwtHelper } from 'angular2-jwt';
+import { Community } from 'src/entities/community';
 declare const gapi: any;
 
 @Component({
@@ -16,8 +17,8 @@ export class GoogleSigninComponent implements AfterViewInit {
   @ViewChild("googleBtn")
   public googleBtn: ElementRef;
 
-  private clientId:string = this.appConfig.getConfig("clientId");
-  
+  private clientId: string = this.appConfig.getConfig("clientId");
+
   private scope = this.appConfig.getConfig("scopes").join(' ');
 
   public auth2: any;
@@ -52,43 +53,44 @@ export class GoogleSigninComponent implements AfterViewInit {
           email: profile.getEmail(),
           role: '',
           token: googleUser.getAuthResponse().id_token,
+          community: null,
           userDashboards: []
         }
         that.externalLogin(currentUser);
 
+
       }, function (error) {
-        that.zone.run(() => { that.router.navigate(['/unauthorized']);});
+        that.zone.run(() => { that.router.navigate(['/unauthorized']); });
         this.facade.toastrService.error('An error has ocurred, please try again with another account.');
         that.eraseCookie('accounts.google.com');
       });
   }
 
-  externalLogin(gUser: User) {      
+  externalLogin(gUser: User) {
     this.facade.authService.externalLogin(gUser.token)
-    .subscribe(res => {
-      
-      if (res != null)
-      {
-        let currentUser: User = {
-          id: res.user.id,
-          name: res.user.firstName + " " + res.user.lastName,
-          imgURL: gUser.imgURL,
-          email: res.user.username,
-          role: res.user.role,
-          token: res.token,
-          userDashboards: []
-        }
+      .subscribe(res => {
 
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        this.facade.userService.getRoles();
-        this.facade.modalService.closeAll();
-        this.zone.run(() => { this.router.navigate(['/']);});
-      }
-    }, err => {
-      this.zone.run(() => { this.router.navigate(['/unauthorized']);});
-      this.eraseCookie('accounts.google.com');
-      console.log(err);
-    });
+        if (res) {
+          let currentUser: User = {
+            id: res.user.id,
+            name: res.user.firstName + " " + res.user.lastName,
+            imgURL: gUser.imgURL,
+            email: res.user.username,
+            role: res.user.role,
+            token: res.token,
+            community: res.user.community,
+            userDashboards: []
+          }
+
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          this.facade.userService.getRoles();
+          this.facade.modalService.closeAll();
+          this.zone.run(() => { this.navigateByRole(currentUser.role) });
+        }
+      }, err => {
+        this.zone.run(() => { this.router.navigate(['/unauthorized']); });
+        this.eraseCookie('accounts.google.com');
+      });
   }
 
   ngAfterViewInit() {
@@ -96,9 +98,9 @@ export class GoogleSigninComponent implements AfterViewInit {
     this.isUserAuthenticated();
   }
 
-  isUserAuthenticated(): boolean{
-  let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+  isUserAuthenticated(): boolean {
+    let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {
@@ -107,13 +109,21 @@ export class GoogleSigninComponent implements AfterViewInit {
     }
   }
 
-  logout(){
-      localStorage.clear();
-      this.router.navigate(['/login']);
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 
-  eraseCookie(domain: string) { 
-    document.cookie = domain+'=; Max-Age=-99999999;';
+  navigateByRole(role: string) {
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    }
+    else {
+      this.router.navigate(['/'])
+    }
+  }
+  eraseCookie(domain: string) {
+    document.cookie = domain + '=; Max-Age=-99999999;';
   }
 
 }
