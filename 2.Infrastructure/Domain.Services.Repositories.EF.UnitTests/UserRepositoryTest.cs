@@ -9,13 +9,13 @@ namespace Domain.Services.Repositories.EF.UnitTests
 {
     public class UserRepositoryTest : BaseRepositoryTest
     {
-        private readonly UserRepository repository;
-        private readonly Mock<IUnitOfWork> mockUnitOfWork;
+        private readonly UserRepository _repository;
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
 
         public UserRepositoryTest() : base()
         {
-            mockUnitOfWork = new Mock<IUnitOfWork>();
-            repository = new UserRepository(dbContext, mockUnitOfWork.Object);
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+            _repository = new UserRepository(DbContext, _mockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]
@@ -23,7 +23,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             User expectedValue = null;
 
-            var actualValue = repository.Query();
+            var actualValue = _repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -34,10 +34,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
         public void GivenUsersInRepositorysDbcontext_WhenQuery_ThenReturnsUser()
         {
             var expectedValue = new User();
-            dbContext.Users.Add(expectedValue);
-            dbContext.SaveChanges();
+            DbContext.Users.Add(expectedValue);
+            DbContext.SaveChanges();
 
-            var actualValue = repository.Query();
+            var actualValue = _repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -51,10 +51,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
             {
                 UserDashboards = new List<UserDashboard>() { new UserDashboard() }
             };
-            dbContext.Users.Add(expectedValue);
-            dbContext.SaveChanges();
+            DbContext.Users.Add(expectedValue);
+            DbContext.SaveChanges();
 
-            var actualValue = repository.QueryEager();
+            var actualValue = _repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());

@@ -5,7 +5,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
 {
     public class BaseRepositoryTest : IDisposable
     {
-        protected readonly DataBaseContext dbContext;
+        protected readonly DataBaseContext DbContext;
 
         public BaseRepositoryTest()
         {
@@ -13,12 +13,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
                    new DbContextOptionsBuilder<DataBaseContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString())
                         .Options;
-            dbContext = new DataBaseContext(options);
+            DbContext = new DataBaseContext(options);
         }
 
         public void Dispose()
         {
-            dbContext.Dispose();
+            DbContext.Dispose();
         }
     }
 }
