@@ -5,6 +5,7 @@ using Domain.Model;
 using Domain.Model.Exceptions.CandidateProfile;
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Impl.Services;
+using Domain.Services.Impl.UnitTests.Dummy;
 using Domain.Services.Impl.Validators.CandidateProfile;
 using FluentValidation;
 using FluentValidation.Results;
@@ -14,34 +15,34 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Domain.Services.Tests.Impl.Services
+namespace Domain.Services.Impl.UnitTests.Services
 {
     public class CandidateProfileServiceTest : BaseDomainTest    
     {
-        private readonly CandidateProfileService service;
-        private readonly Mock<IMapper> mockMapper;
-        private readonly Mock<IRepository<CandidateProfile>> mockRepositoryCandidateProfile;
-        private readonly Mock<IRepository<Model.Community>> mockRepositoryModelCommunity;
-        private readonly Mock<ILog<CandidateProfileService>> mockLogCandidateProfileService;
-        private readonly Mock<UpdateCandidateProfileContractValidator> mockUpdateCandidateProfileContractValidator;
-        private readonly Mock<CreateCandidateProfileContractValidator> mockCreateCandidateProfileContractValidator;
+        private readonly CandidateProfileService _service;
+        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IRepository<CandidateProfile>> _mockRepositoryCandidateProfile;
+        private readonly Mock<IRepository<Community>> _mockRepositoryModelCommunity;
+        private readonly Mock<ILog<CandidateProfileService>> _mockLogCandidateProfileService;
+        private readonly Mock<UpdateCandidateProfileContractValidator> _mockUpdateCandidateProfileContractValidator;
+        private readonly Mock<CreateCandidateProfileContractValidator> _mockCreateCandidateProfileContractValidator;
 
         public CandidateProfileServiceTest()
         {
-            mockMapper = new Mock<IMapper>();
-            mockRepositoryCandidateProfile = new Mock<IRepository<CandidateProfile>>();
-            mockRepositoryModelCommunity = new Mock<IRepository<Model.Community>>();
-            mockLogCandidateProfileService = new Mock<ILog<CandidateProfileService>>();
-            mockUpdateCandidateProfileContractValidator = new Mock<UpdateCandidateProfileContractValidator>();
-            mockCreateCandidateProfileContractValidator = new Mock<CreateCandidateProfileContractValidator>();
-            service = new CandidateProfileService(
-                mockMapper.Object, 
-                mockRepositoryCandidateProfile.Object, 
-                mockRepositoryModelCommunity.Object, 
+            _mockMapper = new Mock<IMapper>();
+            _mockRepositoryCandidateProfile = new Mock<IRepository<CandidateProfile>>();
+            _mockRepositoryModelCommunity = new Mock<IRepository<Community>>();
+            _mockLogCandidateProfileService = new Mock<ILog<CandidateProfileService>>();
+            _mockUpdateCandidateProfileContractValidator = new Mock<UpdateCandidateProfileContractValidator>();
+            _mockCreateCandidateProfileContractValidator = new Mock<CreateCandidateProfileContractValidator>();
+            _service = new CandidateProfileService(
+                _mockMapper.Object, 
+                _mockRepositoryCandidateProfile.Object, 
+                _mockRepositoryModelCommunity.Object, 
                 MockUnitOfWork.Object, 
-                mockLogCandidateProfileService.Object,
-                mockUpdateCandidateProfileContractValidator.Object,
-                mockCreateCandidateProfileContractValidator.Object
+                _mockLogCandidateProfileService.Object,
+                _mockUpdateCandidateProfileContractValidator.Object,
+                _mockCreateCandidateProfileContractValidator.Object
             );
         }
 
@@ -50,19 +51,19 @@ namespace Domain.Services.Tests.Impl.Services
         {
             var contract = new CreateCandidateProfileContract();
             var expectedCandidateProfile = new CreatedCandidateProfileContract();
-            mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult());
-            mockMapper.Setup(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(expectedCandidateProfile);
+            _mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult());
+            _mockMapper.Setup(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(expectedCandidateProfile);
 
-            var createdCandidateProfile = service.Create(contract);
+            var createdCandidateProfile = _service.Create(contract);
 
             Assert.NotNull(createdCandidateProfile);
             Assert.Equal(expectedCandidateProfile, createdCandidateProfile);
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
-            mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<CreateCandidateProfileContract>()), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Create(It.IsAny<CandidateProfile>()), Times.Once);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
+            _mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<CreateCandidateProfileContract>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Create(It.IsAny<CandidateProfile>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that throws error when data for creation is invalid")]
@@ -71,19 +72,19 @@ namespace Domain.Services.Tests.Impl.Services
             var contract = new CreateCandidateProfileContract();
             var expectedCandidateProfile = new CreatedCandidateProfileContract();
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            mockMapper.Setup(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(expectedCandidateProfile);
+            _mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            _mockMapper.Setup(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(expectedCandidateProfile);
 
-            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.CreateContractInvalidException>(() => service.Create(contract));
+            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.CreateContractInvalidException>(() => _service.Create(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<CreateCandidateProfileContract>()), Times.Never);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Create(It.IsAny<CandidateProfile>()), Times.Never);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<CreateCandidateProfileContract>()), Times.Never);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Create(It.IsAny<CandidateProfile>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
-            mockMapper.Verify(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Never);
+            _mockMapper.Verify(mm => mm.Map<CreatedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that given a model that already exists on the database, throws an exception")]
@@ -91,13 +92,13 @@ namespace Domain.Services.Tests.Impl.Services
         {
             var contract = new CreateCandidateProfileContract { Name ="Name" };
             var candidateProfiles = new List<CandidateProfile>() { new CandidateProfile { Name = "Name", Id = 1 } }.AsQueryable();
-            mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult());
-            mockRepositoryCandidateProfile.Setup(mockRep => mockRep.Query()).Returns(candidateProfiles);
+            _mockCreateCandidateProfileContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>())).Returns(new ValidationResult());
+            _mockRepositoryCandidateProfile.Setup(mockRep => mockRep.Query()).Returns(candidateProfiles);
 
-            Exception ex = Assert.Throws<InvalidCandidateProfileException>(() => service.Create(contract));
+            Exception ex = Assert.Throws<InvalidCandidateProfileException>(() => _service.Create(contract));
 
-            mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
+            _mockCreateCandidateProfileContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateCandidateProfileContract>>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
             Assert.NotNull(ex);
             Assert.IsType<InvalidCandidateProfileException>(ex);            
             Assert.Equal($"The Profile already exists .", ex.Message);
@@ -107,13 +108,13 @@ namespace Domain.Services.Tests.Impl.Services
         public void GivenDelete_WhenDataIsValid_DeleteCandidateProfileService()
         {            
             var candidateProfiles = new List<CandidateProfile>() { new CandidateProfile() { Id = 1 } }.AsQueryable();
-            mockRepositoryCandidateProfile.Setup(mrt => mrt.Query()).Returns(candidateProfiles);
+            _mockRepositoryCandidateProfile.Setup(mrt => mrt.Query()).Returns(candidateProfiles);
 
-            service.Delete(1);
+            _service.Delete(1);
 
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Delete(It.IsAny<CandidateProfile>()), Times.Once);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Delete(It.IsAny<CandidateProfile>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
@@ -122,13 +123,13 @@ namespace Domain.Services.Tests.Impl.Services
         {            
             var expectedErrorMEssage = $"Profile not found for the Profile Id: {0}";
 
-            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.DeleteCandidateProfileNotFoundException>(() => service.Delete(0));
+            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.DeleteCandidateProfileNotFoundException>(() => _service.Delete(0));
 
             Assert.NotNull(exception);
             Assert.Equal(expectedErrorMEssage, exception.Message);
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Delete(It.IsAny<CandidateProfile>()), Times.Never);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Query(), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Delete(It.IsAny<CandidateProfile>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
         }
 
@@ -136,15 +137,15 @@ namespace Domain.Services.Tests.Impl.Services
         public void GivenUpdate_WhenDataIsValidNotApprovedAndNew_UpdateCorrectly()
         {
             var contract = new UpdateCandidateProfileContract();
-            mockUpdateCandidateProfileContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>())).Returns(new ValidationResult());
-            mockMapper.Setup(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>())).Returns(new CandidateProfile());
+            _mockUpdateCandidateProfileContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>())).Returns(new ValidationResult());
+            _mockMapper.Setup(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>())).Returns(new CandidateProfile());
 
-            service.Update(contract);
+            _service.Update(contract);
             
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
-            mockUpdateCandidateProfileContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>()), Times.Once);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Update(It.IsAny<CandidateProfile>()), Times.Once);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
+            _mockUpdateCandidateProfileContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Update(It.IsAny<CandidateProfile>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
@@ -153,17 +154,17 @@ namespace Domain.Services.Tests.Impl.Services
         {
             var contract = new UpdateCandidateProfileContract();
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            mockUpdateCandidateProfileContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            mockMapper.Setup(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>())).Returns(new CandidateProfile());
+            _mockUpdateCandidateProfileContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            _mockMapper.Setup(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>())).Returns(new CandidateProfile());
 
-            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.CreateContractInvalidException>(() => service.Update(contract));
+            var exception = Assert.Throws<Model.Exceptions.CandidateProfile.CreateContractInvalidException>(() => _service.Update(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockUpdateCandidateProfileContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>()), Times.Never);
-            mockRepositoryCandidateProfile.Verify(mrt => mrt.Update(It.IsAny<CandidateProfile>()), Times.Never);
+            _mockLogCandidateProfileService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockUpdateCandidateProfileContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateCandidateProfileContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CandidateProfile>(It.IsAny<UpdateCandidateProfileContract>()), Times.Never);
+            _mockRepositoryCandidateProfile.Verify(mrt => mrt.Update(It.IsAny<CandidateProfile>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
         }
 
@@ -172,15 +173,15 @@ namespace Domain.Services.Tests.Impl.Services
         {
             var candidateProfiles = new List<CandidateProfile>() { new CandidateProfile() { Id = 1 } }.AsQueryable();
             var readedCandidatePCList = new List<ReadedCandidateProfileContract> { new ReadedCandidateProfileContract { Id = 1 } };
-            mockRepositoryCandidateProfile.Setup(mrt => mrt.QueryEager()).Returns(candidateProfiles);
-            mockMapper.Setup(mm => mm.Map<List<ReadedCandidateProfileContract>>(It.IsAny<List<CandidateProfile>>())).Returns(readedCandidatePCList);
+            _mockRepositoryCandidateProfile.Setup(mrt => mrt.QueryEager()).Returns(candidateProfiles);
+            _mockMapper.Setup(mm => mm.Map<List<ReadedCandidateProfileContract>>(It.IsAny<List<CandidateProfile>>())).Returns(readedCandidatePCList);
 
-            var actualResult = service.List();
+            var actualResult = _service.List();
 
             Assert.NotNull(actualResult);
             Assert.Equal(1, actualResult.ToList()[0].Id);
-            mockRepositoryCandidateProfile.Verify(_ => _.QueryEager(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedCandidateProfileContract>>(It.IsAny<List<CandidateProfile>>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(_ => _.QueryEager(), Times.Once);
+            _mockMapper.Verify(_ => _.Map<List<ReadedCandidateProfileContract>>(It.IsAny<List<CandidateProfile>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that read returns a value")]
@@ -188,15 +189,15 @@ namespace Domain.Services.Tests.Impl.Services
         {
             var candidateProfiles = new List<CandidateProfile>() { new CandidateProfile() { Id = 1, Name="Name" } }.AsQueryable();
             var readedCandidatePC = new ReadedCandidateProfileContract { Id = 1, Name ="Name" };
-            mockRepositoryCandidateProfile.Setup(mrt => mrt.QueryEager()).Returns(candidateProfiles);
-            mockMapper.Setup(mm => mm.Map<ReadedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(readedCandidatePC);
+            _mockRepositoryCandidateProfile.Setup(mrt => mrt.QueryEager()).Returns(candidateProfiles);
+            _mockMapper.Setup(mm => mm.Map<ReadedCandidateProfileContract>(It.IsAny<CandidateProfile>())).Returns(readedCandidatePC);
 
-            var actualResult = service.Read(1);
+            var actualResult = _service.Read(1);
 
             Assert.NotNull(actualResult);
             Assert.Equal("Name", actualResult.Name);
-            mockRepositoryCandidateProfile.Verify(_ => _.QueryEager(), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Once);
+            _mockRepositoryCandidateProfile.Verify(_ => _.QueryEager(), Times.Once);
+            _mockMapper.Verify(_ => _.Map<ReadedCandidateProfileContract>(It.IsAny<CandidateProfile>()), Times.Once);
         }
     }
 }
