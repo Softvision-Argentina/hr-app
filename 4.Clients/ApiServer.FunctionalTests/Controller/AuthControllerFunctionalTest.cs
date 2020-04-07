@@ -16,7 +16,6 @@ using Persistance.EF.Extensions;
 
 namespace ApiServer.FunctionalTests.Controller
 {
-    [Collection("Api collection")]
     public class AuthControllerFunctionalTest : BaseApiTest
     {
         public AuthControllerFunctionalTest(ApiFixture apiFixture) : base(apiFixture)
@@ -24,8 +23,8 @@ namespace ApiServer.FunctionalTests.Controller
             ControllerName = "Auth";
         }
 
-        [Fact(DisplayName = "Verify api/login [Post] is returning ok when data is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Fact(DisplayName = "Verify api/login [Post] is returning ok [200] when data is valid")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenValidLoginData_ShouldReturnOk()
         {
             //Arrange
@@ -37,7 +36,7 @@ namespace ApiServer.FunctionalTests.Controller
             var model = new LoginViewModelBuilder().GetValidData();
 
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.POST, $"{ControllerName}/login", model);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
@@ -45,8 +44,8 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.NotEmpty(httpResultData.ResponseString);
         }
 
-        [Fact(DisplayName = "Verify api/login [Post] is returning unauthorized when data is invalid")]
-        [Trait("Category", "API-Tasks")]
+        [Fact(DisplayName = "Verify api/login [Post] is returning unauthorized [401] when data is invalid")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenInvalidLoginData_ShouldReturnUnauthorized()
         {
             //Arrange
@@ -54,15 +53,15 @@ namespace ApiServer.FunctionalTests.Controller
             var model = new LoginViewModelBuilder().GetInvalidData();
 
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.POST, $"{ControllerName}/login", model);
 
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
 
-        [Fact(DisplayName = "Verify api/login [Post] is returning bad request when data in null")]
-        [Trait("Category", "API-Tasks")]
+        [Fact(DisplayName = "Verify api/login [Post] is returning bad request [400] when data in null")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenNullLoginData_ShouldReturnBadRequest()
         {
             //Arrange
@@ -70,27 +69,28 @@ namespace ApiServer.FunctionalTests.Controller
             LoginViewModel model = null;
 
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, model, ControllerName, "login");
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.POST, $"{ControllerName}/login", model);
 
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
 
-        [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Ok when valid token is provided")]
+        [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Ok [200] when valid token is provided")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendValidToken_ShouldReturnOk()
         {
             //Arrange
             Context.SetupDatabaseForTesting();
             string expectedUsername = "rodrigo.ramirez@softvision.com";
             string expectedRole = "Admin";
-            TokenViewModel token = GetTestToken(TokenType.Valid);
+            var token = GetTestToken(TokenType.Valid);
             Context.Users.Add(new User { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
             Context.SaveChanges();
             
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, token, ControllerName, "loginExternal");
-            SuccessAuthData successAuthData = JsonConvert.DeserializeObject<SuccessAuthData>(httpResultData.ResponseString);
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.POST, $"{ControllerName}/loginExternal", token);
+            var successAuthData = JsonConvert.DeserializeObject<SuccessAuthData>(httpResultData.ResponseString);
 
             //Assert
             Assert.Equal(expectedUsername, successAuthData.User.Username);
@@ -100,42 +100,45 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.NotEmpty(httpResultData.ResponseString);
         }
 
-        [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Unauthorized when token expired")]
+        [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Unauthorized [401] when token expired")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendExpiredToken_ShouldReturnUnauthorized()
         {
             //Arrange
             Context.SetupDatabaseForTesting();
-            TokenViewModel token = GetTestToken(TokenType.Invalid);
+            TokenViewModel token = GetTestToken(TokenType.Expired);
             Context.Users.Add(new Domain.Model.User { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" });
             Context.SaveChanges();
 
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.POST, token, ControllerName, "loginExternal");
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.POST, $"{ControllerName}/loginExternal", token);
 
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
 
-        [Fact(DisplayName = "Verify api/ping [Get] is returning ok")]
-        [Trait("Category", "API-Tasks")]
+        [Fact(DisplayName = "Verify api/ping [Get] is returning ok [200]")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenPing_ShouldReturnOk()
         {
             //Arrange
             Context.SetupDatabaseForTesting();
-            LoginViewModel model = null;
 
             //Act
-            HttpResultData httpResultData = await HttpCallAsync(HttpVerb.GET, model, ControllerName, "ping");
+            var httpResultData = await HttpCallAsync<object>(HttpVerb.GET, $"{ControllerName}/ping");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
 
-        enum TokenType{
+        #region Auth helpers
+
+        enum TokenType
+        {
             Valid,
-            Invalid
+            Expired
         }
 
         private TokenViewModel GetTestToken(TokenType tokenType)
@@ -162,5 +165,6 @@ namespace ApiServer.FunctionalTests.Controller
 
             return tokenViewModel;
         }
+        #endregion Auth helpers
     }
 }

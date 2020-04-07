@@ -8,7 +8,6 @@ using Core;
 using Domain.Services.Repositories.EF;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.TestHost;
-using Domain.Services.Repositories.EF;
 
 namespace ApiServer.FunctionalTests.Core
 {
@@ -22,7 +21,6 @@ namespace ApiServer.FunctionalTests.Core
         public IConfiguration Configuration { get; }
         protected string ControllerName { get; set; }
 
-
         public BaseApiTest(ApiFixture apiFixture)
         {
             Client = apiFixture.Client;
@@ -32,7 +30,6 @@ namespace ApiServer.FunctionalTests.Core
             Configuration = apiFixture.Server.Host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
             Context.Database.EnsureCreated();
         }
-
         protected static void AssertSuccess(HttpResponseMessage response, string responseString)
         {
             Assert.True(response.IsSuccessStatusCode,
@@ -40,7 +37,6 @@ namespace ApiServer.FunctionalTests.Core
             Assert.NotNull(responseString);
             Assert.NotEmpty(responseString);
         }
-
         protected async Task<U> CreateAsync<T, U>(T model)
         {
             var response = await Client.PostAsync($"/api/{ControllerName}/",
@@ -51,7 +47,6 @@ namespace ApiServer.FunctionalTests.Core
 
             return JsonConvert.DeserializeObject<U>(responseString);
         }
-
         private T ParseJsonStringToEntity<T>(string responseString) where T : class
         {
             try
@@ -63,7 +58,6 @@ namespace ApiServer.FunctionalTests.Core
                 return default;
             }
         }
-
         private ResponseError ParseJsonStringErrorToResponseError(string responseString)
         {
             try
@@ -75,7 +69,6 @@ namespace ApiServer.FunctionalTests.Core
                 return default;
             }
         }
-
         private async Task<HttpResultData<T>> GetHttpCallAsync<T>(string endPoint) where T: class
         {
             var response = await Client.GetAsync($"/api/{endPoint}", HttpCompletionOption.ResponseContentRead);
@@ -91,7 +84,6 @@ namespace ApiServer.FunctionalTests.Core
 
             return result;
         }
-
         private async Task<HttpResultData<T>> DeleteHttpCallAsync<T>(string endPoint, int id) where T: class
         {
             var response = await Client.DeleteAsync($"/api/{endPoint}/{id}");
@@ -107,7 +99,6 @@ namespace ApiServer.FunctionalTests.Core
 
             return result;
         }
-
         private async Task<HttpResultData<T>> PostHttpCallAsync<T>(string endPoint, object model) where T: class
         {
             var response = await Client.PostAsync($"/api/{endPoint}",
@@ -125,7 +116,6 @@ namespace ApiServer.FunctionalTests.Core
 
             return result;
         }
-
         private async Task<HttpResultData<T>> PutHttpCallAsync<T>(string endPoint, object model, int id) where T: class
         {
             var response = await Client.PutAsync($"/api/{endPoint}/{id}",
@@ -143,7 +133,6 @@ namespace ApiServer.FunctionalTests.Core
 
             return result;
         }
-
         protected async Task<HttpResultData<T>> HttpCallAsync<T>(string httpVerb, string endPoint, object model = null, int id = default) where T: class
         {
             HttpResultData<T> result;
