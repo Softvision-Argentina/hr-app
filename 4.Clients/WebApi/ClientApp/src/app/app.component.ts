@@ -1,4 +1,4 @@
-import { Component, Renderer2, OnInit } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from './services/facade.service';
@@ -11,7 +11,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
   styleUrls: ['./app.component.css'],
   providers: [GoogleSigninComponent]
 })
-export class AppComponent implements OnInit {
+export class AppComponent   {
   title = 'app';
   showSpinner = true;
   loadingConfig: INg2LoadingSpinnerConfig = {
@@ -23,24 +23,16 @@ export class AppComponent implements OnInit {
     spinnerSize: 'xl'
   };
 
-  constructor(private renderer: Renderer2, private google: GoogleSigninComponent,
-     private facade: FacadeService, private config: AppConfig) {
+  constructor(
+    private renderer: Renderer2,
+    private google: GoogleSigninComponent,
+    private facade: FacadeService,
+    private config: AppConfig) {
     setTimeout(() => {
       this.showSpinner = false;
     }, 1500);
   }
 
-  ngOnInit(): void {
-    this.changeBg();
-  }
-
-  changeBg() {
-    if (this.google.isUserAuthenticated()) {
-      this.removeBgImage();
-    } else {
-      this.renderBgImage();
-    }
-  }
 
   isUserRole(roles: string[]): boolean {
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
