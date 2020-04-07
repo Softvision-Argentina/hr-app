@@ -23,7 +23,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Get] is returning Accepted [202] when does find entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
         {
             //Arrange
@@ -47,7 +47,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Get] is returning Accepted [202] and an empty collection when does not find entities")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGet_WhenThereAreNoEntities_ShouldReturnAccepted202AndEmptyCollection()
         {
             //Arrange
@@ -64,7 +64,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Get/{id}] is returning Accepted [202] entity when Id is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGetId_WhenEntityIsFound_ShouldReturnAccepted202()
         {
             //Arrange
@@ -84,7 +84,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Get/{id}] is returning Not Found [404] when id is not valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGetId_WhenEntityIsNotFound_ShouldReturnNotFound404()
         {
             //Arrange
@@ -101,7 +101,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Post] is returning Created [201] when data is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsSuccesfull_ShouldReturnCreated201()
         {
             //Arrange
@@ -122,7 +122,7 @@ namespace ApiServer.FunctionalTests.Controller
         [Theory(DisplayName = "Verify api/CandidateProfile [Post] is returning Bad Request [400] when model is not valid")]
         [InlineData("Name")]
         [InlineData("Description")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseValidationError_ShouldReturnBadRequest400(string propertyName)
         {
             //Arrange
@@ -140,7 +140,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Post] is returning Internal Server error [500] when model is not valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseExistenceError_ShouldReturnInternalServerError500()
         {
             //Arrange
@@ -159,7 +159,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Accepted [202] when data is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsSuccesfull_ShouldReturnAccepted202()
         {
             //Arrange
@@ -194,7 +194,7 @@ namespace ApiServer.FunctionalTests.Controller
         [Theory(DisplayName = "Verify api/CandidateProfile [Put] is returning Bad Request [400] when model is not valid")]
         [InlineData("Name")]
         [InlineData("Description")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsNotSuccesfull_ShouldReturnInternalServerError500(string propertyName)
         {
             //Arrange
@@ -213,7 +213,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Internal Server Error [500] when candidate profile already exists in database")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsSuccesfull_ShouldReturnA3ccepted202()
         {
             //Arrange
@@ -244,7 +244,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Accepted [202] when id is valid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenDeleteIsSuccesfull_ShouldReturnAccepted()
         {
             //Arrange
@@ -265,7 +265,7 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Invalid Server [500] when id is invalid")]
-        [Trait("Category", "API-Tasks")]
+        [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileDeleteId_WhenIdIsValid_ShouldReturnAccepted202()
         {
             //Arrange
