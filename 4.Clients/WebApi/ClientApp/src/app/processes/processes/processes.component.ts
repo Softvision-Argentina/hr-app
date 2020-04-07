@@ -70,56 +70,40 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   currentUser: User;
-
   sortName = null;
   sortValue = null;
-
   processForm: FormGroup;
   rejectProcessForm: FormGroup;
   declineProcessForm: FormGroup;
   isDetailsVisible: boolean = false;
   emptyProcess: Process;
-
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
   consultants: Consultant[] = [];
-
   profileSearch: number = 0;
   profileSearchName: string = 'ALL';
-
   communitySearch: number = 0;
   communitySearchName: string = 'ALL';
-
   profileList: any[];
-
   statusList: any[];
   currentStageList: any[];
-
   emptyCandidate: Candidate;
   emptyConsultant: Consultant;
   currentCandidate: Candidate;
-
   currentConsultant: any;
-
   isEdit: boolean = false;
   openFromEdit: boolean = false;
-
   currentComponent: string;
   lastComponent: string;
   times: number = 0;
-
   selectedSeniority: SeniorityEnum;
-
   offices: Office[] = [];
   communities: Community[] = [];
   profiles: CandidateProfile[] = [];
   stepIndex: number = 0;
-
   declineReasons: DeclineReason[] = [];
   isDeclineReasonOther: boolean = false;
-
   isOwnedProcesses: boolean = false;
-
   forms: FormGroup[] = [];
   isLoading:boolean = false;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
@@ -217,7 +201,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getDeclineReasons() {
-    this.facade.declineReasonService.get("Named")
+    this.facade.declineReasonService.get('Named')
       .subscribe(res => {
         this.declineReasons = res;
       }, err => {
@@ -301,7 +285,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
     this.rejectProcessForm.reset();
-    let process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
+    const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
 
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
@@ -351,11 +335,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
   openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
     this.declineProcessForm.reset();
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
+      // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
       nzZIndex: 5,
       nzFooter: [
         {
@@ -379,12 +362,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               }
             }
             if (isCompleted) {
-              let declineReason : DeclineReason = {
+              const declineReason: DeclineReason = {
                   id: this.declineProcessForm.controls['declineReasonName'].value,
                   name: '',
-                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? 
-                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-                }
+                  description: this.declineProcessForm.controls['declineReasonDescription'].enabled ?
+                      this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
+                };
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -496,11 +479,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
-    if (this.profileSearch == 0) {
+    if (this.profileSearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
-    }
-    else {
+    } else {
       this.profileSearchName = (this.profiles.find(p => p.id == this.profileSearch)).name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.profile.id == searchedProfile);
       this.communitySearchName = 'ALL';
@@ -509,11 +491,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
-    if (this.communitySearch == 0) {
+    if (this.communitySearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
-    }
-    else {
+    } else {
       this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
       this.communitySearchName = (this.communities.filter(p => p.id == this.communitySearch))[0].name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id == searchedCommunity);
@@ -538,8 +519,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       } else {
         this.stepIndex = 0;
       }
+    } else {
+      this.emptyProcess = undefined;
     }
-    else this.emptyProcess = undefined;
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -553,7 +535,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate?: Candidate): void {
     this.app.showLoading();
     if (!candidate) {
-      let nuevoCandidato: Candidate = {
+      const newCandidate: Candidate = {
         id: null,
         name: '',
         lastName: '',
@@ -575,13 +557,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         knownFrom: null,
         cv: null,
       };
-      this.currentCandidate = nuevoCandidato;
+      this.currentCandidate = newCandidate;
     } else {
       this.currentCandidate = candidate;
     }
-
     this.createEmptyProcess(this.currentCandidate);
-    
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -593,18 +573,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id === candidateID)[0];
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id == consultantID)[0];
+    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
     this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
   }
 
   showDeleteConfirm(processID: number): void {
-    let procesDelete: Process = this.filteredProcesses.find(p => p.id == processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
+    const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
+    const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -622,7 +602,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   onCheck(): number {
-    let i: number = 0;  
+    let i: number = 0;
     let carouselSlide: number = -1;
     this.forms.forEach(form => {
       form = this.checkForm(form);
@@ -750,9 +730,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
             this.isLoading = false;
             this.facade.errorHandlerService.showErrorMessage(err);
           });
-        } else{
+        } else {
           this.facade.processService.add(newProcess)
           .subscribe(res => {
+            newCandidate.status = CandidateStatusEnum.InProgress;
             this.isLoading = false;
             this.getProcesses();
             this.app.hideLoading();
@@ -765,15 +746,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
             this.facade.toastrService.error(err);
           });
         }
-      }
-      else {
+      } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
-              let declineReason = newProcess.declineReason;
+              const declineReason = newProcess.declineReason;
               this.openDeclineModal(newProcess, declineProcessModal).afterClose
-                .subscribe(sel => {
+                .subscribe( sel => {
                   if (declineReason !== newProcess.declineReason) {
                     this.getCandidates();
                     this.getProcesses();
@@ -785,7 +765,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(res => {
+                .subscribe( res => {
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();
@@ -813,7 +793,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       endDate: null,
       status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
       currentStage: ProcessCurrentStageEnum.NA,
-      candidateId: !this.isEdit ? 0 : 123123,
+      candidateId: !this.isEdit ? 0 : null,
       candidate: null,
       consultantOwnerId: 0,
       consultantOwner: null,
@@ -865,7 +845,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   getStatusColor(status: number): string {
-    let statusName = this.statusList.filter(s => s.id == status)[0].name;
+    const statusName = this.statusList.filter(s => s.id === status)[0].name;
     switch (statusName) {
       case 'Hired': return 'success';
       case 'Rejected': return 'error';
