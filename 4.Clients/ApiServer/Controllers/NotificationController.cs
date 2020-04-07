@@ -1,5 +1,10 @@
-﻿using Domain.Services.Interfaces.Repositories;
+﻿using Core.Persistance;
+using Domain.Model;
+using Domain.Services.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
 namespace ApiServer.Controllers
 {
     [Route("api/Notifications")]
@@ -7,9 +12,13 @@ namespace ApiServer.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _notificationRepository;
-        public NotificationController(INotificationRepository notificationRepository)
+        private readonly IHttpContextAccessor _httpContext;
+        private readonly IRepository<User> _usersRepo;
+        public NotificationController(INotificationRepository notificationRepository, IHttpContextAccessor httpContext, IRepository<User> userRepo)
         {
             _notificationRepository = notificationRepository;
+            _httpContext = httpContext;
+            _usersRepo = userRepo;
         }
 
         [HttpGet]
@@ -33,9 +42,12 @@ namespace ApiServer.Controllers
 
         private string GetUserName()
         {
-            var userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            var name = userName.Split("\\");
-            return name[1];
+            var user = _httpContext.HttpContext.User.Identity.Name;
+            var userId = int.Parse(user);
+            var userName = _usersRepo.Query().Where(x => x.Id == userId).FirstOrDefault();
+            var name = $"{userName.FirstName}" + " " + $"{userName.LastName}";
+
+            return name;
         }
     }
 }
