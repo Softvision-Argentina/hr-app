@@ -15,6 +15,7 @@ import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
+import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 
 @Component({
   selector: 'candidate-add',
@@ -86,7 +87,7 @@ export class CandidateAddComponent implements OnInit {
     recruiter: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
-    status: 1,
+    status: CandidateStatusEnum.New,
     contacDay : [null],
     profile: [null, [Validators.required]],
     community: [null, [Validators.required]],
