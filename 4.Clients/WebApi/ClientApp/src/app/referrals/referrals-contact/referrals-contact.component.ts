@@ -409,7 +409,7 @@ export class ReferralsContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      this.facade.candidateService.add(newCandidate)
+      this.facade.referralsService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;

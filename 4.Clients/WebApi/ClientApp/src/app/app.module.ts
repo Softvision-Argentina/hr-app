@@ -131,6 +131,7 @@ import { PersonFilter } from './pipes/personFIlter.pipe';
 import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { ReportsComponent } from './reports/reports.component';
+import { ReferralsService } from './services/referrals.service';
 
 
 registerLocaleData(en);
@@ -256,6 +257,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BaseService,
     RegisterService,
     CandidateService,
+    ReferralsService,
     SkillService,
     ProcessService,
     StageService,
