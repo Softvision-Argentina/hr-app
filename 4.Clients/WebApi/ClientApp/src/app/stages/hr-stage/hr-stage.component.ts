@@ -129,21 +129,24 @@ export class HrStageComponent implements OnInit {
 
     if (hrStage.userOwnerId) {
       this.hrForm.controls['userOwnerId'].setValue(hrStage.userOwnerId);
+    }else {
+      this.hrForm.controls['userOwnerId'].setValue(1);
     }
-
     if (hrStage.userDelegateId) {
       this.hrForm.controls['userDelegateId'].setValue(hrStage.userDelegateId);
+    }else {
+      this.hrForm.controls['userDelegateId'].setValue(1);
     }
 
     if (hrStage.feedback) {
       this.hrForm.controls['feedback'].setValue(hrStage.feedback);
     }
 
-    if (hrStage.actualSalary) {
+    if (hrStage.actualSalary !== null) {
       this.hrForm.controls['actualSalary'].setValue(hrStage.actualSalary);
     }
 
-    if (hrStage.wantedSalary) {
+    if (hrStage.wantedSalary !== null) {
       this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary);
     }
 

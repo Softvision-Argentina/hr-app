@@ -1,6 +1,4 @@
 <form nz-form [formGroup]="hrForm" [nzLayout]="'horizontal'">
-    <nz-divider nzText="HR STAGE"></nz-divider>
-    <br />
     <nz-form-item>
         <nz-form-control>
             <input type="hidden" formControlName="id">
@@ -37,7 +35,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Interviewer *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
@@ -63,7 +61,7 @@
     <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">Actual Salary</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">Actual Salary *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="actualSalary" id="actualSalary" placeholder="Please input the actual salary" pattern="[0-9]+([\.,][0-9]+)?">
                     <nz-form-explain *ngIf="hrForm.get('actualSalary').dirty && hrForm.get('actualSalary').errors">
@@ -73,7 +71,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Wanted Salary</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Wanted Salary *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="wantedSalary" id="wantedSalary" placeholder="Please input the wanted salary" pattern="[0-9]+([\.,][0-9]+)?">
                     <nz-form-explain *ngIf="hrForm.get('wantedSalary').dirty && hrForm.get('wantedSalary').errors">
@@ -100,19 +98,6 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <!-- <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && hrForm.get('rejectionReason').dirty && hrForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="hrForm.get('rejectionReason')?.dirty && hrForm.get('rejectionReason')?.errors ">
-                        Please input rejection reason!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div> -->
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
@@ -121,9 +106,6 @@
                         <nz-option *ngFor="let reason of rejectionReasonsHRList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
                         </nz-option>
                     </nz-select>
-                    <!-- <nz-radio-group formControlName="rejectionReasonsHr">
-                        <label id="radio" style="display:block; line-height: 30px; height: 30px;" *ngFor="let reason of rejectionReasonsHRList" [nzDisabled]="disabled" nz-radio [nzValue]="reason.id"><span>{{reason.name}}</span></label>
-                    </nz-radio-group> -->
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Please, briefly explain what happened."></textarea>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && hrForm.get('rejectionReason').dirty && hrForm.get('rejectionReason').errors ">
@@ -146,4 +128,5 @@
             </nz-form-item>
         </div>
     </div>
+
 </form>

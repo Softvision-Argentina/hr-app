@@ -28,6 +28,7 @@ import { OfferService } from './offer.service';
 import { NotificationService } from './notificationsService';
 import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
+import { ReferralsService } from './referrals.service';
 @Injectable()
 export class FacadeService {
 
@@ -102,6 +103,14 @@ export class FacadeService {
       this._candidateService = this.injector.get(CandidateService);
     }
     return this._candidateService;
+  }
+
+  private _referralsService: ReferralsService;
+  public get referralsService(): ReferralsService {
+    if (!this._referralsService) {
+      this._referralsService = this.injector.get(ReferralsService);
+    }
+    return this._referralsService;
   }
 
   private _notificationsService: NotificationService;

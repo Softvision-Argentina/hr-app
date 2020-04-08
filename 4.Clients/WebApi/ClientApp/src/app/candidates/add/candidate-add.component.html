@@ -1,10 +1,10 @@
 <form nz-form [formGroup]="candidateForm" [nzLayout]="'horizontal'">
-    <nz-divider nzText="CANDIDATE'S DETAILS"></nz-divider>
+    <nz-divider nzText="HR"></nz-divider>
     <br />
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="name">First Name</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="name">First Name *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
                     <nz-form-explain *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
@@ -23,7 +23,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="lastName">Last Name *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="lastName" id="lastName" placeholder="Please input the last name">
                     <nz-form-explain *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
@@ -44,9 +44,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni">DNI *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input formControlName="dni" id="'dni'" (change)="dniChanged()" type="number" nz-input placeholder="Please input a DNI">
+                    <input formControlName="dni" id="'dni'"  type="number" nz-input placeholder="Please input a DNI">
                     <nz-form-explain *ngIf="candidateForm.get('dni').dirty && candidateForm.get('dni').errors">The input is not valid DNI!</nz-form-explain>
                     <nz-form-explain style="color: green;" *ngIf="isDniValid">This is a new DNI !</nz-form-explain>
                 </nz-form-control>
@@ -54,7 +54,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email">E-mail </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                     <nz-form-explain *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
@@ -81,7 +81,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber">Phone Number *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']">
                     <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                         <ng-template #addOnBeforeTemplate>
@@ -101,7 +101,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Recruiter</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Recruiter *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="user">
                         <nz-option *ngFor="let r of users" nzLabel="{{r.firstName}} {{r.lastName}}" [nzValue]="r.id">
@@ -128,7 +128,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile">Profile</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile">Profile *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="profile">
                         <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
@@ -141,7 +141,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community">Community</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community">Community *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="community">
                         <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">

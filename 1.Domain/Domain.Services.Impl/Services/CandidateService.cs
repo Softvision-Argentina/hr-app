@@ -69,8 +69,7 @@ namespace Domain.Services.Impl.Services
 
             this.AddUserToCandidate(candidate, contract.User.Id);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
-            //this.AddOfficeToCandidate(candidate, contract.PreferredOfficeId);
+            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);            
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
@@ -146,16 +145,6 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
         }
 
-        //public ReadedCandidateContract Exists(int dni)
-        //{
-        //    var candidateQuery = _candidateRepository
-        //        .QueryEager()
-        //        .Where(_ => _.DNI == dni);
-
-        //    var candidateResult = candidateQuery.SingleOrDefault();
-
-        //    return _mapper.Map<ReadedCandidateContract>(candidateResult);
-        //}
         public ReadedCandidateContract Exists(int id)
         {
             var candidateQuery = _candidateRepository
@@ -166,6 +155,7 @@ namespace Domain.Services.Impl.Services
 
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
+
         public IEnumerable<ReadedCandidateContract> List()
         {
             var candidateQuery = _candidateRepository
@@ -175,7 +165,6 @@ namespace Domain.Services.Impl.Services
 
             return _mapper.Map<List<ReadedCandidateContract>>(candidateResult);
         }
-
 
         public IEnumerable<ReadedCandidateAppContract> ListApp()
         {
@@ -253,6 +242,7 @@ namespace Domain.Services.Impl.Services
 
             candidate.User = user;
         }
+
         private void AddCommunityToCandidate(Candidate candidate, int communityID)
         {
             var community = _communityRepository.Query().Where(_ => _.Id == communityID).FirstOrDefault();
@@ -261,6 +251,7 @@ namespace Domain.Services.Impl.Services
 
             candidate.Community = community;
         }
+
         private void AddCandidateProfileToCandidate(Candidate candidate, int profileID)
         {
             var profile = _candidateProfileRepository.Query().Where(_ => _.Id == profileID).FirstOrDefault();
@@ -269,6 +260,7 @@ namespace Domain.Services.Impl.Services
 
             candidate.Profile = profile;
         }
+
         private void AddOfficeToCandidate(Candidate candidate, int officeId)
         {
             var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
@@ -276,8 +268,6 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
-        }
-
-       
+        }       
     }
 }
