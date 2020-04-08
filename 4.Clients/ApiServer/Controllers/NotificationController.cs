@@ -14,6 +14,7 @@ namespace ApiServer.Controllers
         private readonly INotificationRepository _notificationRepository;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IRepository<User> _usersRepo;
+
         public NotificationController(INotificationRepository notificationRepository, IHttpContextAccessor httpContext, IRepository<User> userRepo)
         {
             _notificationRepository = notificationRepository;
@@ -44,7 +45,7 @@ namespace ApiServer.Controllers
         {
             var user = _httpContext.HttpContext.User.Identity.Name;
             var userId = int.Parse(user);
-            var userName = _usersRepo.Query().Where(x => x.Id == userId).FirstOrDefault();
+            var userName = _usersRepo.Query().FirstOrDefault(x => x.Id == userId);
             var name = $"{userName.FirstName}" + " " + $"{userName.LastName}";
 
             return name;
