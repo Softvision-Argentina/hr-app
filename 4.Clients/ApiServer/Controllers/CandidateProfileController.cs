@@ -7,7 +7,6 @@ using AutoMapper;
 using Core;
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
