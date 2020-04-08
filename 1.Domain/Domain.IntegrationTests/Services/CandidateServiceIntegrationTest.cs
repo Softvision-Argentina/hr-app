@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Persistance;
-using Domain.IntegrationTests.Services.Core;
+using Domain.Services.Impl.IntegrationTests.Core;
 using Domain.Model;
 using Domain.Model.Exceptions.Candidate;
 using Domain.Services.Contracts.Candidate;
@@ -8,20 +8,20 @@ using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.Community;
 using Domain.Services.Contracts.Consultant;
 using Domain.Services.Interfaces.Services;
-using System;
 using System.Linq;
 using Xunit;
+using Persistance.EF.Extensions;
 
-namespace Domain.IntegrationTests.Services
+namespace Domain.Services.Impl.IntegrationTests.Services
 {
     public class CandidateServiceIntegrationTest : BaseServiceIntegrationTest
     {
-        readonly ICandidateService _candidateService;
-        readonly IConsultantService _consultantService;
-        readonly ICommunityService _communityService;
-        readonly ICandidateProfileService _candidateProfileService;
-        readonly IRepository<Candidate> _candidateRepository;
-        readonly IMapper _mapper;
+        private readonly ICandidateService _candidateService;
+        private readonly IConsultantService _consultantService;
+        private readonly ICommunityService _communityService;
+        private readonly ICandidateProfileService _candidateProfileService;
+        private readonly IRepository<Candidate> _candidateRepository;
+        private readonly IMapper _mapper;
         public CandidateServiceIntegrationTest(ServiceFixture serviceFixture) : base(serviceFixture)
         {
             _candidateRepository = Services.GetService(typeof(IRepository<Candidate>)) as IRepository<Candidate>;
@@ -81,7 +81,7 @@ namespace Domain.IntegrationTests.Services
                 .WithPropertyValue(propertyName, null);
 
             //Act
-            Exception ex = Assert.Throws<CreateContractInvalidException>(() => _candidateService.Create(invalidCreateCandidateContract));
+            var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateService.Create(invalidCreateCandidateContract));
 
             //Assert
             Assert.IsType<CreateContractInvalidException>(ex);
@@ -115,7 +115,7 @@ namespace Domain.IntegrationTests.Services
             invalidCreateCandidateContract.Community = readedCommunityContract;
             invalidCreateCandidateContract.Profile = readedCandidateProfileContract;
 
-            Exception ex = Assert.Throws<InvalidCandidateException>(() => _candidateService.Create(invalidCreateCandidateContract));
+            var ex = Assert.Throws<InvalidCandidateException>(() => _candidateService.Create(invalidCreateCandidateContract));
 
             Assert.IsType<InvalidCandidateException>(ex);
             Assert.NotNull(ex);

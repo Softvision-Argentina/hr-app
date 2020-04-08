@@ -122,6 +122,8 @@ namespace Domain.Services.Impl.Services
 
             this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
+            process.Candidate.Status = CandidateStatus.InProgress;
+
             _candidateRepository.Update(process.Candidate);
 
             process.CurrentStage = SetProcessCurrentStage(process);
@@ -245,8 +247,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
-                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall)
+            if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
+                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall))
             {
                 var notification = new Notification
                 {
