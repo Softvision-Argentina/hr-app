@@ -122,6 +122,8 @@ namespace Domain.Services.Impl.Services
 
             this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
+            process.Candidate.Status = CandidateStatus.InProgress;
+
             _candidateRepository.Update(process.Candidate);
 
             process.CurrentStage = SetProcessCurrentStage(process);
