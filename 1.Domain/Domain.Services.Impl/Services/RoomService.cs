@@ -8,11 +8,8 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Room;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 
 namespace Domain.Services.Impl.Services
 {

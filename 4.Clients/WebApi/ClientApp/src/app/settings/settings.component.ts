@@ -28,9 +28,7 @@ export class SettingsComponent implements OnInit {
   listOfDisplayDataOffice = [...this.emptyOffice];
 
   ngOnInit() {
-    this.app.showLoading();
     this.app.removeBgImage();
-    this.app.hideLoading();
     this.getOffices();
     this.getRooms();
     this.getCandidatesProfile();
