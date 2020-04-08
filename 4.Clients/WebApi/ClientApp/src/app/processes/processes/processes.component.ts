@@ -697,7 +697,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
+    console.log("save process");
+    
     if (this.validateForms()) {
+      console.log("valid");
+      
       this.app.showLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
@@ -896,7 +900,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      userOwnerId: candidate.user.id,
+      userOwnerId: null,
       userOwner: candidate.user,
       userDelegateId: null,
       userDelegate: null,
@@ -913,8 +917,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.InProgress,
         feedback: '',
-        userOwnerId: candidate.user.id,
-        userDelegateId: candidate.user.id,
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         actualSalary: null,
         wantedSalary: null,
@@ -926,8 +930,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        userOwnerId: candidate.user.id,
-        userDelegateId: candidate.user.id,
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
@@ -938,8 +942,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        userOwnerId: candidate.user.id,
-        userDelegateId: candidate.user.id,
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         interviewer: '',
         delegateName: ''
@@ -949,7 +953,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        userOwnerId: candidate.user.id,
+        userOwnerId: null,
         userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
@@ -975,6 +979,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     process.clientStage.userOwnerId = userId;
     process.clientStage.userDelegateId = userId;
     process.offerStage.userOwnerId = userId;
+    
     return process;
 
   }
