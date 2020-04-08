@@ -28,7 +28,7 @@
             <tbody>
                 <tr *ngFor="let skill of skillTable.data">
                     <td>{{ skill.name }}</td>
-                    <td>{{ skill.description | truncate:70 }}</td>
+                    <td>{{ skill.description | truncate: 70 }}</td>
                     <td>{{ getSkillTypeNameByID(skill.type) }}</td>
                     <td [style.text-align]="'center'">
                         <i (click)="showDetailsModal(skill.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>

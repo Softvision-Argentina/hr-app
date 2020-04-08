@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { filterTransform } from './filterTransform';
 @Pipe({
     name: 'personFilter'
 })
@@ -15,7 +14,7 @@ export class PersonFilter implements PipeTransform {
         } else {
             result = items;
         }
-    
+
         if (result.length === 0) {
             return [-1];
         } else {

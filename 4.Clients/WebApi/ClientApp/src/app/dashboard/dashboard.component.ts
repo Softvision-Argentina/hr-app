@@ -6,7 +6,6 @@ import { SingleDataSet, Label } from 'ng2-charts';
 import { Skill } from 'src/entities/skill';
 import { CandidateSkill } from 'src/entities/candidateSkill';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { AppComponent } from '../app.component';
 import { HireProjection } from 'src/entities/hireProjection';
 import { EmployeeCasualty } from 'src/entities/employeeCasualty';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
@@ -15,8 +14,7 @@ import { Dashboard } from 'src/entities/dashboard';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  providers: [AppComponent]
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
 
@@ -78,18 +76,18 @@ export class DashboardComponent implements OnInit {
 
   isLoaded = false;
 
-  constructor(private facade: FacadeService, private app: AppComponent) {
+  constructor(private facade: FacadeService) {
   }
 
   ngOnInit(): void {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getHireProjection();
     this.getEmployeeCasualties();
     this.getDashboards();
     this.facade.dashboardService.dashboards.subscribe(res => this.dashboards = res);
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   getDashboards() {

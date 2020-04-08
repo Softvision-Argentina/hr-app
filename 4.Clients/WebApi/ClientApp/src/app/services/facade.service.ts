@@ -29,7 +29,10 @@ import { OfferService } from './offer.service';
 import { NotificationService } from './notificationsService';
 import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
-@Injectable()
+import { AppService } from './app.service';
+@Injectable({
+  providedIn: 'root'
+})
 export class FacadeService {
 
   private _appConfig: AppConfig;
@@ -280,6 +283,15 @@ export class FacadeService {
       this._errorHandlerService = this.injector.get(ErrorHandlerService);
     }
     return this._errorHandlerService;
+  }
+
+  private _appService: AppService;
+  public get appService(): AppService {
+    if (!this._appService) {
+      this._appService = this.injector.get(AppService);
+    }
+
+    return this._appService;
   }
 
   constructor(private injector: Injector) {

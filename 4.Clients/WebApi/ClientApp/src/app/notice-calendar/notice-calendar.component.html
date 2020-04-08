@@ -1,7 +1,11 @@
 <nz-calendar [(ngModel)]="selectedDate" [(nzMode)]="calendarMode" (nzSelectChange)="getCurrentDayEvents()">
     <ul *nzDateCell="let date" class="events">
         <ng-container *ngFor="let event of listOfCompanyCalendar">
-            <li nz-popover *ngIf="event.date.toString().substr(0, 10) == date.toISOString().substr(0, 10)" nzTitle="{{event.type}}" nzContent="{{event.comments}}">
+            <li nz-popover
+              *ngIf="event.date.toString().substr(0, 10) == date.toISOString().substr(0, 10)"
+              nzTitle="{{event.type}}"
+              nzContent="{{event.comments}}"
+            >
                 <nz-badge *ngIf="event.type == 'Festivity'" [nzStatus]="'success'" [nzText]="event.comments"></nz-badge>
                 <nz-badge *ngIf="event.type == 'Reminder'" [nzStatus]="'error'" [nzText]="event.comments"></nz-badge>
             </li>

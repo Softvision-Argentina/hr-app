@@ -1,7 +1,6 @@
-import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
-import { FacadeService } from '../services/facade.service';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { SettingsComponent } from '../settings/settings.component';
+import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
 import { Office } from 'src/entities/office';
 import { Room } from 'src/entities/room';
@@ -11,7 +10,7 @@ import { Room } from 'src/entities/room';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css']
 })
-export class RoomComponent implements OnInit {
+export class RoomComponent implements OnInit, OnChanges {
 
   @Input()
   private _detailedRoom: Room[];
@@ -31,21 +30,22 @@ export class RoomComponent implements OnInit {
       this._detailedOffice = value;
   }
 
+  @Output() roomsChanged = new EventEmitter();
+
   rooms: Room[] = [];
   offices: Office[] = [];
   roomForm: FormGroup;
   isEdit = false;
-  editingRoomId: number = 0;
+  editingRoomId = 0;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private settings: SettingsComponent) { }
+  constructor(private fb: FormBuilder, private facade: FacadeService) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.getOffices();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    changes._detailedOffice;
-    this.getOffices();    
+    this.getOffices();
   }
 
   getOfficeNameByID(id: number) {
@@ -87,12 +87,16 @@ export class RoomComponent implements OnInit {
             modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
-              this.roomForm.controls[i].markAsDirty();
-              this.roomForm.controls[i].updateValueAndValidity();
-              if ((!this.roomForm.controls[i].valid)) { isCompleted = false; }
+              if (this.roomForm.controls.hasOwnProperty(i)) {
+                this.roomForm.controls[i].markAsDirty();
+                this.roomForm.controls[i].updateValueAndValidity();
+                if ((!this.roomForm.controls[i].valid)) {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
-              let newRoom: Room = {
+              const newRoom: Room = {
                 id: 0,
                 name: this.roomForm.controls['name'].value.toString(),
                 description: this.roomForm.controls['description'].value.toString(),
@@ -101,8 +105,8 @@ export class RoomComponent implements OnInit {
                 reservationItems: null
               };
               this.facade.RoomService.add(newRoom)
-                .subscribe(res => {          
-                  this.settings.getRooms();                  
+                .subscribe(() => {
+                  this.roomsChanged.emit();
                   this.facade.toastrService.success('Room was successfully created !');
 
                   modal.destroy();
@@ -116,11 +120,11 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void {    
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.resetForm();
     this.editingRoomId = id;
-    this.isEdit = true;    
-    let editedRoom: Room = this._detailedRoom.filter(Room => Room.id === id)[0];
+    this.isEdit = true;
+    let editedRoom: Room = this._detailedRoom.filter(room => room.id === id)[0];
 
     this.fillRoomForm(editedRoom);
 
@@ -143,9 +147,13 @@ export class RoomComponent implements OnInit {
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
-              this.roomForm.controls[i].markAsDirty();
-              this.roomForm.controls[i].updateValueAndValidity();
-              if (!this.roomForm.controls[i].valid) { isCompleted = false; }
+              if (this.roomForm.controls.hasOwnProperty(i)) {
+                this.roomForm.controls[i].markAsDirty();
+                this.roomForm.controls[i].updateValueAndValidity();
+                if (!this.roomForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
               editedRoom = {
@@ -157,8 +165,8 @@ export class RoomComponent implements OnInit {
                 reservationItems: null
               };
               this.facade.RoomService.update(id, editedRoom)
-                .subscribe(res => {
-                  this.settings.getRooms();
+                .subscribe(() => {
+                  this.roomsChanged.emit();
                   this.facade.toastrService.success('Room was successfully edited !');
                   modal.destroy();
                 }, err => {
@@ -180,8 +188,8 @@ export class RoomComponent implements OnInit {
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => this.facade.RoomService.delete(RoomID)
-        .subscribe(res => {
-          this.settings.getRooms();
+        .subscribe(() => {
+          this.roomsChanged.emit();
           this.facade.toastrService.success('Room was deleted !');
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
@@ -189,9 +197,9 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  fillRoomForm(Room: Room) {
-    this.roomForm.controls['name'].setValue(Room.name);
-    this.roomForm.controls['description'].setValue(Room.description);
+  fillRoomForm(room: Room) {
+    this.roomForm.controls['name'].setValue(room.name);
+    this.roomForm.controls['description'].setValue(room.description);
     if (this.offices.length > 0) {
     this.roomForm.controls['profileId'].setValue(this.offices[0].id);
     }
