@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Persistance;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 
 namespace Domain.Services.Repositories.EF.UnitTests
@@ -6,6 +8,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
     public class BaseRepositoryTest : IDisposable
     {
         protected readonly DataBaseContext DbContext;
+        protected readonly Mock<IUnitOfWork> MockUnitOfWork;
 
         public BaseRepositoryTest()
         {
@@ -14,6 +17,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString())
                         .Options;
             DbContext = new DataBaseContext(options);
+            MockUnitOfWork = new Mock<IUnitOfWork>();
         }
 
         public void Dispose()

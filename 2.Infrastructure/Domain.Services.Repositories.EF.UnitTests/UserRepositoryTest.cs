@@ -1,6 +1,4 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Moq;
+﻿using Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -10,12 +8,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
     public class UserRepositoryTest : BaseRepositoryTest
     {
         private readonly UserRepository _repository;
-        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
 
         public UserRepositoryTest() : base()
         {
-            _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _repository = new UserRepository(DbContext, _mockUnitOfWork.Object);
+            _repository = new UserRepository(DbContext, MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]

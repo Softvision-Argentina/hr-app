@@ -7,7 +7,7 @@ namespace Domain.Services.Impl.Validators.Candidate
     {
         public CreateCandidateContractValidator()
         {
-            RuleSet("Create", () =>
+            RuleSet(ValidatorConstants.RULESET_CREATE, () =>
             {
                 RuleFor(_ => _.DNI).NotEmpty();
                 RuleFor(_ => _.DNI).GreaterThan(0);

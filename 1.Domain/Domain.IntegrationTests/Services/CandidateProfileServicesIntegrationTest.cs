@@ -109,7 +109,6 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             string newDescription = "An entirely new description";
             var candidateProfile = new CandidateProfile { Name = "Testy Testirino", Description = "This description should change on update" };
             Context.SeedDatabaseWith(candidateProfile);
-            Context.Entry(candidateProfile).State = EntityState.Detached;
             var updateCandidateProfile = new UpdateCandidateProfileContract { Id = candidateProfile.Id, Name = candidateProfile.Name, Description = newDescription };
 
             _candidateProfileService.Update(updateCandidateProfile);
