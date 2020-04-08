@@ -12,14 +12,12 @@ namespace Domain.Services.Impl.Validators.Candidate
         {
             RuleSet(ValidatorConstants.RULESET_CREATE, () =>
             {
-                RuleFor(_ => _.DNI).NotEmpty();
-                RuleFor(_ => _.DNI).GreaterThan(0);
+                RuleFor(_ => _.DNI).GreaterThanOrEqualTo(0);
                 RuleFor(_ => _.Name).NotEmpty();
                 RuleFor(_ => _.LastName).NotEmpty();
                 RuleFor(_ => _.Recruiter).NotEmpty();
                 RuleFor(_ => _.Community).NotEmpty();
                 RuleFor(_ => _.Profile).NotEmpty();
-                RuleFor(_ => _.LinkedInProfile).NotEmpty();
             });
         }
     }
