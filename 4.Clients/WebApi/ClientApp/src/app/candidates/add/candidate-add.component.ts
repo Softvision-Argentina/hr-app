@@ -139,7 +139,7 @@ export class CandidateAddComponent implements OnInit {
 
   }
   setRecruiter() {
-    const currentRecruiter = this.consultants.find(consultant => consultant.emailAddress === this.currentConsultant.email);
+    const currentRecruiter = this.users.find(user => user.username === this.currentUser.username);
     if(!!currentRecruiter) {
       this.candidateForm.controls['recruiter'].setValue(currentRecruiter.id);
     } else {
