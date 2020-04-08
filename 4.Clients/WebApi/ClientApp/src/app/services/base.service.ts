@@ -91,7 +91,7 @@ export class BaseService<T> {
     return errorMessage;
   }
 
-  public handleErrors(error) {
+  public handleErrors = (error) => {
 
     // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
     if (error.error && error.status !== 400) {
