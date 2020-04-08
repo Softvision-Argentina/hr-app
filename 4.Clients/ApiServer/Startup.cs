@@ -125,7 +125,9 @@ namespace ApiServer
 
             // Add framework services.
             services.AddMvc()
-                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
+                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddLogging();
 
