@@ -1,8 +1,6 @@
 ﻿using Domain.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace Domain.Services.Repositories.EF.UnitTests
@@ -47,7 +45,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             var expectedValue = new SkillType()
             {
-                Skills= new List<Skill>() { new Skill() }
+                Skills = new List<Skill>() { new Skill() }
             };
             DbContext.SkillTypes.Add(expectedValue);
             DbContext.SaveChanges();

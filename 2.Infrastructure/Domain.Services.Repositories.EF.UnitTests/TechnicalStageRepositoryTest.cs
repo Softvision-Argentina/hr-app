@@ -99,7 +99,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
             };
             DbContext.TechnicalStages.Add(existingStage);
             DbContext.SaveChanges();
-            
+
             _repository.UpdateTechnicalStage(newStage, existingStage);
 
             Assert.NotNull(DbContext.Entry(existingStage));
