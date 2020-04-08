@@ -18,23 +18,23 @@ namespace Domain.Services.Impl.UnitTests.Services
 {
     public class TaskServiceTest : BaseDomainTest
     {
-        private readonly TaskService service;
-        private readonly Mock<IMapper> mockMapper;
-        private readonly Mock<IRepository<Task>> mockRepositoryTask;
-        private readonly Mock<IRepository<TaskItem>> mockRepositoryTaskItem;
-        private readonly Mock<ILog<TaskService>> mockLogTaskService;
-        private readonly Mock<UpdateTaskContractValidator> mockUpdateTaskContractValidator;
-        private readonly Mock<CreateTaskContractValidator> mockCreateTaskContractValidator;
+        private readonly TaskService _service;
+        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IRepository<Task>> _mockRepositoryTask;
+        private readonly Mock<IRepository<TaskItem>> _mockRepositoryTaskItem;
+        private readonly Mock<ILog<TaskService>> _mockLogTaskService;
+        private readonly Mock<UpdateTaskContractValidator> _mockUpdateTaskContractValidator;
+        private readonly Mock<CreateTaskContractValidator> _mockCreateTaskContractValidator;
 
         public TaskServiceTest()
         {
-            mockMapper = new Mock<IMapper>();
-            mockRepositoryTask = new Mock<IRepository<Task>>();
-            mockRepositoryTaskItem = new Mock<IRepository<TaskItem>>();
-            mockLogTaskService = new Mock<ILog<TaskService>>();
-            mockUpdateTaskContractValidator = new Mock<UpdateTaskContractValidator>();
-            mockCreateTaskContractValidator = new Mock<CreateTaskContractValidator>();
-            service = new TaskService(mockMapper.Object, mockRepositoryTask.Object, mockRepositoryTaskItem.Object, MockUnitOfWork.Object, mockLogTaskService.Object, mockUpdateTaskContractValidator.Object, mockCreateTaskContractValidator.Object);
+            _mockMapper = new Mock<IMapper>();
+            _mockRepositoryTask = new Mock<IRepository<Task>>();
+            _mockRepositoryTaskItem = new Mock<IRepository<TaskItem>>();
+            _mockLogTaskService = new Mock<ILog<TaskService>>();
+            _mockUpdateTaskContractValidator = new Mock<UpdateTaskContractValidator>();
+            _mockCreateTaskContractValidator = new Mock<CreateTaskContractValidator>();
+            _service = new TaskService(_mockMapper.Object, _mockRepositoryTask.Object, _mockRepositoryTaskItem.Object, MockUnitOfWork.Object, _mockLogTaskService.Object, _mockUpdateTaskContractValidator.Object, _mockCreateTaskContractValidator.Object);
         }
 
         [Fact(DisplayName = "Verify that create TaskService when data is valid")]
@@ -42,19 +42,19 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateTaskContract();
             var expectedTask = new CreatedTaskContract();
-            mockCreateTaskContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>())).Returns(new ValidationResult());
-            mockMapper.Setup(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>())).Returns(expectedTask);
+            _mockCreateTaskContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>())).Returns(new ValidationResult());
+            _mockMapper.Setup(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>())).Returns(expectedTask);
 
-            var createdTask = service.Create(contract);
+            var createdTask = _service.Create(contract);
 
             Assert.NotNull(createdTask);
             Assert.Equal(expectedTask, createdTask);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
-            mockCreateTaskContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<CreateTaskContract>()), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.Create(It.IsAny<Task>()), Times.Once);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
+            _mockCreateTaskContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<CreateTaskContract>()), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.Create(It.IsAny<Task>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
-            mockMapper.Verify(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that throws error when data for creation is invalid")]
@@ -63,19 +63,19 @@ namespace Domain.Services.Impl.UnitTests.Services
             var contract = new CreateTaskContract();
             var expectedTask = new CreatedTaskContract();
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            mockCreateTaskContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            mockMapper.Setup(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>())).Returns(expectedTask);
+            _mockCreateTaskContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            _mockMapper.Setup(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>())).Returns(expectedTask);
 
-            var exception = Assert.Throws<Model.Exceptions.Task.CreateContractInvalidException>(() => service.Create(contract));
+            var exception = Assert.Throws<Model.Exceptions.Task.CreateContractInvalidException>(() => _service.Create(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockCreateTaskContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<CreateTaskContract>()), Times.Never);
-            mockRepositoryTask.Verify(mrt => mrt.Create(It.IsAny<Task>()), Times.Never);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockCreateTaskContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateTaskContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<CreateTaskContract>()), Times.Never);
+            _mockRepositoryTask.Verify(mrt => mrt.Create(It.IsAny<Task>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
-            mockMapper.Verify(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>()), Times.Never);
+            _mockMapper.Verify(mm => mm.Map<CreatedTaskContract>(It.IsAny<Task>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that delete TaskService when data is valid")]
@@ -83,13 +83,13 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var id = 0;
             var tasks = new List<Task>() { new Task() { Id = id } }.AsQueryable();
-            mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
+            _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
 
-            service.Delete(id);
+            _service.Delete(id);
 
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
-            mockRepositoryTask.Verify(mrt => mrt.QueryEager(), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.Delete(It.IsAny<Task>()), Times.Once);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
+            _mockRepositoryTask.Verify(mrt => mrt.QueryEager(), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.Delete(It.IsAny<Task>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
@@ -99,13 +99,13 @@ namespace Domain.Services.Impl.UnitTests.Services
             var id = 0;
             var expectedErrorMEssage = $"Task not found for the TaskId: {id}";
 
-            var exception = Assert.Throws<Model.Exceptions.Task.DeleteTaskNotFoundException>(() => service.Delete(id));
+            var exception = Assert.Throws<Model.Exceptions.Task.DeleteTaskNotFoundException>(() => _service.Delete(id));
 
             Assert.NotNull(exception);
             Assert.Equal(expectedErrorMEssage, exception.Message);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.QueryEager(), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.Delete(It.IsAny<Task>()), Times.Never);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.QueryEager(), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.Delete(It.IsAny<Task>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
         }
 
@@ -117,17 +117,17 @@ namespace Domain.Services.Impl.UnitTests.Services
                 IsNew = true,
                 TaskItems = new List<CreateTaskItemContract>()
             };
-            mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult());
-            mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
+            _mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult());
+            _mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
 
-            service.Update(contract);
+            _service.Update(contract);
 
             Assert.False(contract.IsApprove);
             Assert.True(contract.IsNew);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
-            mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Once);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
+            _mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
@@ -142,17 +142,17 @@ namespace Domain.Services.Impl.UnitTests.Services
                     new CreateTaskItemContract(){ Checked = true }
                 }
             };
-            mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult());
-            mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
+            _mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult());
+            _mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
 
-            service.Update(contract);
+            _service.Update(contract);
 
             Assert.True(contract.IsApprove);
             Assert.False(contract.IsNew);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
-            mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Once);
-            mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Once);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
+            _mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Once);
+            _mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
@@ -164,18 +164,79 @@ namespace Domain.Services.Impl.UnitTests.Services
                 TaskItems = new List<CreateTaskItemContract>()
             };
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
+            _mockUpdateTaskContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            _mockMapper.Setup(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>())).Returns(new Task());
 
-            var exception = Assert.Throws<Model.Exceptions.Task.CreateContractInvalidException>(() => service.Update(contract));
+            var exception = Assert.Throws<Model.Exceptions.Task.CreateContractInvalidException>(() => _service.Update(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
-            mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Never);
-            mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Never);
+            _mockLogTaskService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            _mockUpdateTaskContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateTaskContract>>()), Times.Once);
+            _mockMapper.Verify(mm => mm.Map<Task>(It.IsAny<UpdateTaskContract>()), Times.Never);
+            _mockRepositoryTask.Verify(mrt => mrt.Update(It.IsAny<Task>()), Times.Never);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
+        }
+
+        [Fact(DisplayName = "Verify that list returns a value")]
+        public void GivenList_WhenRegularCall_ReturnsValue()
+        {
+            var tasks = new List<Task>() { new Task() { Id = 1 } }.AsQueryable();
+            var readedTaksContract = new List<ReadedTaskContract> { new ReadedTaskContract { Id = 1 } };
+            _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
+            _mockMapper.Setup(mm => mm.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>())).Returns(readedTaksContract);
+
+            var actualResult = _service.List();
+
+            Assert.NotNull(actualResult);
+            Assert.Equal(1, actualResult.ToList()[0].Id);
+            _mockRepositoryTask.Verify(_ => _.QueryEager(), Times.Once);
+            _mockMapper.Verify(_ => _.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>()), Times.Once);
+        }
+
+        [Fact(DisplayName = "Verify that listByConsultant returns a value")]
+        public void GivenListByConsultant_WhenRegularCall_ReturnsValue()
+        {
+            var tasks = new List<Task>() { new Task() { Id = 1, Consultant = new Consultant {EmailAddress = "Email" } } }.AsQueryable();
+            var readedTaksContract = new List<ReadedTaskContract> { new ReadedTaskContract { Id = 1 } };
+            _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
+            _mockMapper.Setup(mm => mm.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>())).Returns(readedTaksContract);
+
+            var actualResult = _service.ListByConsultant("Email");
+
+            Assert.NotNull(actualResult);
+            Assert.Equal(1, actualResult.ToList()[0].Id);
+            _mockRepositoryTask.Verify(_ => _.QueryEager(), Times.Once);
+            _mockMapper.Verify(_ => _.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>()), Times.Once);
+        }
+
+        [Fact(DisplayName = "Verify that read returns a value")]
+        public void GivenRead_WhenRegularCall_ReturnsValue()
+        {
+            var tasks = new List<Task>() { new Task() { Id = 1 } }.AsQueryable();
+            var readedTaksContract = new ReadedTaskContract { Id = 1 };
+            _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
+            _mockMapper.Setup(mm => mm.Map<ReadedTaskContract>(It.IsAny<Task>())).Returns(readedTaksContract);
+
+            var actualResult = _service.Read(1);
+
+            Assert.NotNull(actualResult);
+            Assert.Equal(1,actualResult.Id);
+            _mockRepositoryTask.Verify(_ => _.QueryEager(), Times.Once);
+            _mockMapper.Verify(_ => _.Map<ReadedTaskContract>(It.IsAny<Task>()), Times.Once);
+        }
+
+        [Fact(DisplayName = "Verify that Approve runs correctly")]
+        public void GivenApprove_WhenRegularCall_RunsCorrectly()
+        {
+            var taskItems = new List<TaskItem> { new TaskItem() } ;
+            var tasks = new List<Task>() { new Task() { Id = 1, TaskItems = taskItems } }.AsQueryable();            
+            _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);            
+
+            _service.Approve(1);
+
+            _mockRepositoryTask.Verify(_ => _.QueryEager(), Times.Once);
+            MockUnitOfWork.Verify(x => x.Complete(), Times.Once);
         }
     }
 }

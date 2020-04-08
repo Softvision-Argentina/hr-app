@@ -6,6 +6,8 @@ using System.IO;
 using System.Net.Http;
 using Microsoft.AspNetCore;
 using Xunit;
+using Domain.Services.Repositories.EF;
+using Persistance.EF.Extensions;
 
 namespace ApiServer.FunctionalTests.Core
 {
@@ -14,6 +16,10 @@ namespace ApiServer.FunctionalTests.Core
         private static readonly object Sync = new object();
         private static bool _configured;
         private static string _env = "IntegrationTest";
+        public TestServer Server { get; internal set; }
+        public HttpClient Client { get; internal set; }
+        public DataBaseContext Context { get; internal set; }
+        public IServiceProvider Services { get; internal set; }
 
         public ApiFixture()
         {
@@ -30,19 +36,21 @@ namespace ApiServer.FunctionalTests.Core
                         .UseConfiguration(builder.Build())
                         .UseStartup<Startup>());
 
+                    Services = Server.Host.Services;
+                    Context = Server.Host.Services.GetService(typeof(DataBaseContext)) as DataBaseContext;
                     Client = Server.CreateClient();
+
                     _configured = true;
                 }
             }
         }
 
-        public TestServer Server { get; internal set; }
-        public HttpClient Client { get; internal set; }
-
         public void Dispose()
         {
+            Context.ResetAllIdentitiesId();
             Client.Dispose();
             Server.Dispose();
+            Context.Dispose();
         }
     }
 

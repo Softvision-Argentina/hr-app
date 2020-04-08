@@ -19,12 +19,10 @@ import { SeniorityEnum } from '../../../entities/enums/seniority.enum';
 import { Globals } from '../../app-globals/globals';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
-import { HrStage } from 'src/entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.enum';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
@@ -52,7 +50,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
-
   @ViewChild('processCarousel') processCarousel;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
@@ -116,7 +113,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.app.showLoading();
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
@@ -136,7 +132,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName : [null, [Validators.required]]
     });
-    this.app.hideLoading();
   }
 
   ngAfterViewChecked() {
@@ -323,7 +318,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -365,9 +360,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               const declineReason: DeclineReason = {
                   id: this.declineProcessForm.controls['declineReasonName'].value,
                   name: '',
+
                   description: this.declineProcessForm.controls['declineReasonDescription'].enabled ?
                       this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
-                };
+              };
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
@@ -765,7 +761,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe( res => {
+                .subscribe( () => {
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();

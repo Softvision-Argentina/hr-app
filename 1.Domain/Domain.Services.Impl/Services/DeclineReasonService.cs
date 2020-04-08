@@ -8,10 +8,8 @@ using Domain.Services.Contracts;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -64,7 +62,7 @@ namespace Domain.Services.Impl.Services
 
             if (declineReason == null)
             {
-                throw new DeleteSkillNotFoundException(id);
+                throw new DeleteDeclineReasonNotFoundException(id);
             }
             _log.LogInformation($"Deleting skill {id}");
             _declineReasonRepository.Delete(declineReason);
