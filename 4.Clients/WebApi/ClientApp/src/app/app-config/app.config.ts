@@ -43,7 +43,7 @@ export class AppConfig {
               }))
             .subscribe( (envResponse) => {
                 this.env = envResponse;
-                let request:any = null;
+                let request: any = null;
 
                 switch (envResponse.env) {
                     case 'production': {

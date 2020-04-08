@@ -125,7 +125,9 @@ namespace ApiServer
 
             // Add framework services.
             services.AddMvc()
-                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
+                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddLogging();
 
@@ -185,6 +187,7 @@ namespace ApiServer
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.DisplayRequestDuration();
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseCookiePolicy();

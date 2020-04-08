@@ -8,11 +8,8 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Office;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 
 namespace Domain.Services.Impl.Services
 {
@@ -95,8 +92,7 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedOfficeContract> List()
         {
             var OfficeQuery = _OfficeRepository
-                .QueryEager(); 
-                //.Query();
+                .QueryEager();                 
                 
             var OfficeResult = OfficeQuery.ToList();
 
@@ -106,8 +102,7 @@ namespace Domain.Services.Impl.Services
         public ReadedOfficeContract Read(int Id)
         {
             var OfficeQuery = _OfficeRepository
-                .QueryEager()
-                // .Query()
+                .QueryEager()                
                 .Where(_ => _.Id == Id);
 
             var OfficeResult = OfficeQuery.SingleOrDefault();

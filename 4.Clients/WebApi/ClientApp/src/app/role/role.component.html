@@ -11,16 +11,16 @@
         <nz-table #RoleTable [nzData]="roles" [nzPageSize]="10" *ngIf="roles.length > 0">
             <thead>
                 <tr>
-                    <th [style.text-align]="center">Name</th>
-                    <th [style.text-align]="center">Status</th>
-                    <th [style.text-align]="center">Action</th>
+                    <th [style.text-align]="'center'">Name</th>
+                    <th [style.text-align]="'center'">Status</th>
+                    <th [style.text-align]="'center'">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let role of RoleTable.data">
                     <td>{{ role.name }}</td>
                     <td *ngIf="role.isActive; else Inactive">Active</td>
-                    <td [style.text-align]="center">
+                    <td [style.text-align]="'center'">
                         <nz-divider nzType="vertical"></nz-divider>
                         <i (click)="showEditModal(roleModal, role)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

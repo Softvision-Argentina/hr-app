@@ -22,11 +22,11 @@ export class SkillTypeComponent implements OnInit {
   listOfDisplayData = [...this.filteredSkillTypes];
   sortName = null;
   sortValue = null;
-  
+
   validateForm: FormGroup;
-  isDetailsVisible: boolean = false;
-  isAddVisible: boolean = false;
-  isAddOkLoading: boolean = false;
+  isDetailsVisible = false;
+  isAddVisible = false;
+  isAddOkLoading = false;
   emptySkillType: SkillType;
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
@@ -38,7 +38,7 @@ export class SkillTypeComponent implements OnInit {
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required,trimValidator]],
+      description: [null, [Validators.required, trimValidator]],
     });
     this.app.hideLoading();
   }
@@ -49,7 +49,7 @@ export class SkillTypeComponent implements OnInit {
         this.filteredSkillTypes = res;
         this.listOfDisplayData = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -59,12 +59,27 @@ export class SkillTypeComponent implements OnInit {
   }
 
   search(): void {
+    // TODO check if it is working
     const filterFunc = (item) => {
-      return (this.listOfSearchSkillTypes.length ? this.listOfSearchSkillTypes.some(skillType => item.name.indexOf(skillType) !== -1) : true) &&
-        (item.name.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) !== -1);
+      if (item.name.toString().toUpperCase().indexOf(this.searchValue.toUpperCase()) === -1) {
+        return false;
+      }
+
+      if (this.listOfSearchSkillTypes.length) {
+        return this.listOfSearchSkillTypes.some(skillType => item.name.indexOf(skillType) !== -1);
+      }
+
+      return true;
     };
+
     const data = this.filteredSkillTypes.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayData = data.sort((a, b) => {
+      if (this.sortValue === 'ascend') {
+        return a[this.sortName] > b[this.sortName] ? 1 : -1;
+      } else {
+        return b[this.sortName] > a[this.sortName] ? 1 : -1;
+      }
+    });
     this.nameDropdown.nzVisible = false;
   }
 
@@ -82,37 +97,52 @@ export class SkillTypeComponent implements OnInit {
       nzClosable: true,
       nzWrapClassName: 'vertical-center-modal',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
-        { label: 'Save', type: 'primary', loading: false,
+        {
+          label: 'Cancel',
+          shape: 'default',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Save',
+          type: 'primary',
+          loading: false,
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
+
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) isCompleted = false;
+              if (this.validateForm.controls.hasOwnProperty(i)) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if (!this.validateForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
-            if(isCompleted){
-              let newSkillType: SkillType = {
+
+            if (isCompleted) {
+              const newSkillType: SkillType = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
-              }
+              };
+
               this.facade.skillTypeService.add(newSkillType)
-                      .subscribe(res => {
-                        this.getSkillTypes();
-                        this.app.hideLoading();
-                        this.facade.toastrService.success("SkillType was successfuly created !");
-                        modal.destroy();
-                      }, err => {
-                        this.app.hideLoading();
-                        modal.nzFooter[1].loading = false;
-                        if(err.message != undefined) this.facade.toastrService.error(err.message);
-                        else this.facade.toastrService.error("The service is not available now. Try again later.");
-                      })
-            } 
-            else modal.nzFooter[1].loading = false;
+                  .subscribe(() => {
+                    this.getSkillTypes();
+                    this.app.hideLoading();
+                    this.facade.toastrService.success('SkillType was successfuly created!');
+                    modal.destroy();
+                  }, err => {
+                    this.app.hideLoading();
+                    modal.nzFooter[1].loading = false;
+                    this.facade.errorHandlerService.showErrorMessage(err);
+                  });
+            } else {
+              modal.nzFooter[1].loading = false;
+            }
+
             this.app.hideLoading();
           }
         }],
@@ -120,13 +150,13 @@ export class SkillTypeComponent implements OnInit {
   }
 
   showDetailsModal(skillTypeID: number): void {
-    this.emptySkillType = this.filteredSkillTypes.filter(skillType => skillType.id == skillTypeID)[0];
+    this.emptySkillType = this.filteredSkillTypes.filter(skillType => skillType.id === skillTypeID)[0];
     this.isDetailsVisible = true;
   }
 
-  showEditModal(modalContent: TemplateRef<{}>, id: number): void{
+  showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.validateForm.reset();
-    let editedSkillType: SkillType = this.filteredSkillTypes.filter(skillType => skillType.id == id)[0];
+    let editedSkillType: SkillType = this.filteredSkillTypes.filter(skillType => skillType.id === id)[0];
     this.validateForm.controls['name'].setValue(editedSkillType.name);
     this.validateForm.controls['description'].setValue(editedSkillType.description);
     const modal = this.facade.modalService.create({
@@ -135,39 +165,56 @@ export class SkillTypeComponent implements OnInit {
       nzClosable: true,
       nzWrapClassName: 'vertical-center-modal',
       nzFooter: [
-        {  label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
         {
-          label: 'Save', type: 'primary', loading: false,
+          label: 'Cancel',
+          shape: 'default',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Save',
+          type: 'primary',
+          loading: false,
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
+
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) isCompleted = false;
+              if (this.validateForm.controls.hasOwnProperty(i)) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if (!this.validateForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
 
-            if(isCompleted){
+            if (isCompleted) {
               editedSkillType = {
                 id: editedSkillType.id,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString()
-              }
+              };
+
               this.facade.skillTypeService.update(editedSkillType.id, editedSkillType)
-            .subscribe(res => {
-              this.getSkillTypes();
-              this.app.hideLoading();
-              this.facade.toastrService.success('SkillType was successfully edited !');
-              modal.destroy();
-            }, err => {
-              this.app.hideLoading();
+                .subscribe(res => {
+                  this.getSkillTypes();
+                  this.app.hideLoading();
+                  this.facade.toastrService.success('SkillType was successfully edited !');
+                  modal.destroy();
+                }, err => {
+                  this.app.hideLoading();
+                  modal.nzFooter[1].loading = false;
+                  if (err.message) {
+                    this.facade.toastrService.error(err.message);
+                  } else {
+                    this.facade.toastrService.error('The service is not available now. Try again later.');
+                  }
+                });
+            } else {
               modal.nzFooter[1].loading = false;
-              if(err.message != undefined) this.facade.toastrService.error(err.message);
-              else this.facade.toastrService.error("The service is not available now. Try again later.");
-            })
-            } 
-            else modal.nzFooter[1].loading = false;
+            }
+
             this.app.hideLoading();
           }
         }],
@@ -175,7 +222,7 @@ export class SkillTypeComponent implements OnInit {
   }
 
   showDeleteConfirm(skillTypeID: number): void {
-    let skillTypeDelete: SkillType = this.filteredSkillTypes.find(skillType => skillType.id == skillTypeID);
+    const skillTypeDelete: SkillType = this.filteredSkillTypes.find(skillType => skillType.id === skillTypeID);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ' + skillTypeDelete.name + ' ?',
       nzContent: 'This action will delete all skills associated with this type',
@@ -183,12 +230,11 @@ export class SkillTypeComponent implements OnInit {
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => this.facade.skillTypeService.delete(skillTypeID)
-        .subscribe(res => {
+        .subscribe(() => {
           this.getSkillTypes();
           this.facade.toastrService.success('SkillType was deleted !');
         }, err => {
-          if(err.message != undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

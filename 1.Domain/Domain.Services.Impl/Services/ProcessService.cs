@@ -77,6 +77,15 @@ namespace Domain.Services.Impl.Services
 
             return _mapper.Map<ReadedProcessContract>(process);
         }
+        public IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community)
+        {
+            var candidateQuery = _processRepository
+                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community));
+
+            var candidateResult = candidateQuery.ToList();
+
+            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
+        }
 
         public void Delete(int id)
         {
@@ -112,6 +121,8 @@ namespace Domain.Services.Impl.Services
             var process = _mapper.Map<Process>(createProcessContract);
 
             this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+
+            process.Candidate.Status = CandidateStatus.InProgress;
 
             _candidateRepository.Update(process.Candidate);
 
@@ -236,8 +247,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
-                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall)
+            if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
+                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall))
             {
                 var notification = new Notification
                 {
@@ -424,5 +435,6 @@ namespace Domain.Services.Impl.Services
                     return ProcessCurrentStage.Finished;
             }
         }
+
     }
 }

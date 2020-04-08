@@ -1,3 +1,4 @@
+import { Community } from "./community";
 import { UserDashboard } from "./userDashboard";
 
 export class User {
@@ -7,5 +8,6 @@ export class User {
     email: string;
     role: string;
     token: string;
+    community: Community;
     userDashboards: UserDashboard[]
 }

@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.Postulant;
 using Domain.Services.Interfaces.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -16,9 +13,10 @@ namespace Domain.Services.Impl.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Postulant> _postulantRepository;
 
-        public PostulantService(IMapper mapper,
-            IRepository<Postulant> postulandRepository,
-            ILog<PostulantService> log)
+        public PostulantService(
+            IMapper mapper,
+            IRepository<Postulant> postulandRepository
+            )
         {
             _mapper = mapper;
             _postulantRepository = postulandRepository;

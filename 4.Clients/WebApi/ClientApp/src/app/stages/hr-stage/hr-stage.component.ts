@@ -16,7 +16,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class HrStageComponent implements OnInit {
 
-  disabled: boolean = false;
+  disabled = false;
 
     @Input()
     private _consultants: Consultant[];
@@ -65,10 +65,10 @@ export class HrStageComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.hrForm.controls) {
-      if (this.hrForm.controls[i] != this.hrForm.controls['status']) {
+      if (this.hrForm.controls[i] !== this.hrForm.controls['status']) {
         if (enable) {
           this.hrForm.controls[i].enable();
-           if (this.hrForm.controls[i] == this.hrForm.controls['englishLevel']){
+           if (this.hrForm.controls[i] === this.hrForm.controls['englishLevel']) {
              this.disabled = false;
           }
         } else {
@@ -80,7 +80,7 @@ export class HrStageComponent implements OnInit {
   }
 
   statusChanged() {
-    if (this.hrForm.controls['status'].value == 1) {
+    if (this.hrForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.hrForm.markAsTouched();
     } else {
@@ -90,7 +90,7 @@ export class HrStageComponent implements OnInit {
 
 
   getFormData(processId: number): HrStage {
-    let hrStage: HrStage = new HrStage();
+    const hrStage: HrStage = new HrStage();
 
     hrStage.id = this.getControlValue(this.hrForm.controls.id);
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
@@ -112,25 +112,56 @@ export class HrStageComponent implements OnInit {
     return (control === null ? null : control.value);
   }
 
-  fillForm(hrStage: HrStage){
+  fillForm(hrStage: HrStage) {
     const status: number = this.statusList.filter(s => s.id === hrStage.status)[0].id;
-    if (status === StageStatusEnum.InProgress) { this.changeFormStatus(true); }
+    if (status === StageStatusEnum.InProgress) {
+      this.changeFormStatus(true);
+    }
     this.hrForm.controls['status'].setValue(status);
-    if (hrStage.id != null) { this.hrForm.controls['id'].setValue(hrStage.id); }
-    if (hrStage.date != null) { this.hrForm.controls['date'].setValue(hrStage.date); }
-    if (hrStage.consultantOwnerId != null) {
-      this.hrForm.controls['consultantOwnerId'].setValue(hrStage.consultantOwnerId);
+
+    if (hrStage.id) {
+      this.hrForm.controls['id'].setValue(hrStage.id);
     }
-    if (hrStage.consultantDelegateId != null) {
+
+    if (hrStage.date) {
+      this.hrForm.controls['date'].setValue(hrStage.date);
+    }
+
+    if (hrStage.consultantOwnerId) {
+      this.hrForm.controls['consultantOwnerId'].setValue(this.hrStage.consultantOwnerId);
+    } else {
+      this.hrForm.controls['consultantOwnerId'].setValue(1);
+    }
+
+    if (hrStage.consultantDelegateId) {
       this.hrForm.controls['consultantDelegateId'].setValue(hrStage.consultantDelegateId);
+    } else {
+      this.hrForm.controls['consultantDelegateId'].setValue(1);
     }
-    if (hrStage.feedback != null) { this.hrForm.controls['feedback'].setValue(hrStage.feedback); }
-    if (hrStage.actualSalary != null) { this.hrForm.controls['actualSalary'].setValue(hrStage.actualSalary); }
-    if (hrStage.wantedSalary != null) { this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary); }
-    if (hrStage.englishLevel != null) { this.hrForm.controls['englishLevel'].setValue(hrStage.englishLevel); }
-    if (hrStage.rejectionReason != null) { this.hrForm.controls['rejectionReason'].setValue(hrStage.rejectionReason)};
-    if (hrStage.rejectionReasonsHr != null) { this.hrForm.controls['rejectionReasonsHr'].setValue(hrStage.rejectionReasonsHr)};
-    
+
+    if (hrStage.feedback) {
+      this.hrForm.controls['feedback'].setValue(hrStage.feedback);
+    }
+
+    if (hrStage.actualSalary !== null) {
+      this.hrForm.controls['actualSalary'].setValue(hrStage.actualSalary);
+    }
+
+    if (hrStage.wantedSalary !== null) {
+      this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary);
+    }
+
+    if (hrStage.englishLevel) {
+      this.hrForm.controls['englishLevel'].setValue(hrStage.englishLevel);
+    }
+
+    if (hrStage.rejectionReason) {
+      this.hrForm.controls['rejectionReason'].setValue(hrStage.rejectionReason);
+    }
+
+    if (hrStage.rejectionReasonsHr) {
+      this.hrForm.controls['rejectionReasonsHr'].setValue(hrStage.rejectionReasonsHr);
+    }
   }
 
   showRejectionReason() {

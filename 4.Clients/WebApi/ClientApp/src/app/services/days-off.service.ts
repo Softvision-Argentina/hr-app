@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConfig } from '../app-config/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { catchError, tap } from 'rxjs/operators';
 import { DaysOff } from 'src/entities/days-off';
 

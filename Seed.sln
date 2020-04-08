@@ -44,9 +44,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBProject", "DBProject\DBPr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.Contracts", "4.Clients\ApiServer.Contracts\ApiServer.Contracts.csproj", "{40BA86FF-5507-4F32-9606-99D4340A4991}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Tests", "1.Domain\Domain.Services.Tests\Domain.Services.Tests.csproj", "{303DF880-8C0A-496E-86EC-AA6556B14363}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Impl.UnitTests", "1.Domain\Domain.UnitTests\Domain.Services.Impl.UnitTests.csproj", "{303DF880-8C0A-496E-86EC-AA6556B14363}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.Tests", "4.Clients\ApiServer.Tests\ApiServer.Tests.csproj", "{8F6CC0B7-E05C-47CF-A7DA-353F12FB823F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.UnitTests", "4.Clients\ApiServer.UnitTests\ApiServer.UnitTests.csproj", "{8F6CC0B7-E05C-47CF-A7DA-353F12FB823F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "4.Clients\WebApi\WebApi.csproj", "{29146226-DFC7-45F9-AFC7-EFD8528C1B17}"
 EndProject
@@ -58,9 +58,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.iOS", "5.Mobile\HrApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrApp", "5.Mobile\HrApp\HrApp\HrApp.csproj", "{A417CACA-DD79-4BB0-BA9E-5F4AF0189B9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Test", "Core.Test\Core.Test.csproj", "{C97674B0-493C-490D-AD07-8DF071663626}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.UnitTests", "0.Core\Core.UnitTests\Core.UnitTests.csproj", "{C97674B0-493C-490D-AD07-8DF071663626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.IntegrationTests", "Domain.IntegrationTests\Domain.IntegrationTests.csproj", "{07432911-FBD7-4C42-94AC-C784A576EF4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Impl.IntegrationTests", "1.Domain\Domain.IntegrationTests\Domain.Services.Impl.IntegrationTests.csproj", "{07432911-FBD7-4C42-94AC-C784A576EF4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.FunctionalTests", "4.Clients\ApiServer.FunctionalTests\ApiServer.FunctionalTests.csproj", "{354C991D-5C99-4F3F-8ADD-59F393E41D58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Services.Repositories.EF.UnitTests", "2.Infrastructure\Domain.Services.Repositories.EF.UnitTests\Domain.Services.Repositories.EF.UnitTests.csproj", "{84992DE0-0DC3-4DD5-89A6-C5025C006B4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -965,6 +969,48 @@ Global
 		{07432911-FBD7-4C42-94AC-C784A576EF4D}.UAT|iPhone.Build.0 = Debug|Any CPU
 		{07432911-FBD7-4C42-94AC-C784A576EF4D}.UAT|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{07432911-FBD7-4C42-94AC-C784A576EF4D}.UAT|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|Any CPU.ActiveCfg = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|Any CPU.Build.0 = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|iPhone.ActiveCfg = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|iPhone.Build.0 = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|iPhoneSimulator.ActiveCfg = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.INT|iPhoneSimulator.Build.0 = INT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|Any CPU.ActiveCfg = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|Any CPU.Build.0 = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|iPhone.ActiveCfg = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|iPhone.Build.0 = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|iPhoneSimulator.ActiveCfg = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.IntegrationTest|iPhoneSimulator.Build.0 = IntegrationTest|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|Any CPU.ActiveCfg = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|Any CPU.Build.0 = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|iPhone.ActiveCfg = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|iPhone.Build.0 = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|iPhoneSimulator.ActiveCfg = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.PROD|iPhoneSimulator.Build.0 = PROD|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|Any CPU.Build.0 = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|iPhone.ActiveCfg = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|iPhone.Build.0 = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|iPhoneSimulator.ActiveCfg = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.QA|iPhoneSimulator.Build.0 = QA|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|iPhone.Build.0 = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|Any CPU.ActiveCfg = UAT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|Any CPU.Build.0 = UAT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|iPhone.ActiveCfg = UAT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|iPhone.Build.0 = UAT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|iPhoneSimulator.ActiveCfg = UAT|Any CPU
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58}.UAT|iPhoneSimulator.Build.0 = UAT|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -991,6 +1037,8 @@ Global
 		{A417CACA-DD79-4BB0-BA9E-5F4AF0189B9B} = {71CD2C2A-E0A3-486B-BB65-CD85BF27EAA5}
 		{C97674B0-493C-490D-AD07-8DF071663626} = {3AB24D8A-3508-445C-B9A2-BD501CE2FB42}
 		{07432911-FBD7-4C42-94AC-C784A576EF4D} = {E76C3EDA-6D18-4A29-A8C3-9DB22FBF8A6B}
+		{354C991D-5C99-4F3F-8ADD-59F393E41D58} = {6D69BD77-3E0D-4E74-B0AC-4D5CB3972DA5}
+		{84992DE0-0DC3-4DD5-89A6-C5025C006B4F} = {3485A0AC-2544-42A8-9927-72F980FE3FB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9182871B-9D98-4E7F-855B-C984EE5AD602}

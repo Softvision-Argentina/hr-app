@@ -17,27 +17,25 @@ export class SettingsComponent implements OnInit {
 
   emptyCandidateProfile: CandidateProfile[] = [];
   listOfDisplayData = [...this.emptyCandidateProfile];
-  
+
   emptyCommunity: Community[] = [];
   listOfDisplayDataCommunity = [...this.emptyCommunity];
-  
+
   emptyRoom: Room[] = [];
   listOfDisplayDataRoom = [...this.emptyRoom];
 
   emptyOffice: Office[] = [];
   listOfDisplayDataOffice = [...this.emptyOffice];
-  
+
   ngOnInit() {
-    this.app.showLoading();
     this.app.removeBgImage();
-    this.app.hideLoading();
     this.getOffices();
     this.getRooms();
     this.getCandidatesProfile();
     this.getCommunities();
   }
 
-  
+
   getCandidatesProfile() {
     this.facade.candidateProfileService.get()
       .subscribe(res => {
@@ -47,7 +45,7 @@ export class SettingsComponent implements OnInit {
         console.log(err);
       });
   }
-  
+
   getCommunities() {
     this.facade.communityService.get()
       .subscribe(res => {
@@ -57,7 +55,7 @@ export class SettingsComponent implements OnInit {
         console.log(err);
       });
   }
-  
+
   getRooms() {
     this.facade.RoomService.get()
     .subscribe(res => {
@@ -66,7 +64,7 @@ export class SettingsComponent implements OnInit {
       }, err => {
       console.log(err);
     });
-  }  
+  }
 
   getOffices() {
     this.facade.OfficeService.get().subscribe(res => {
@@ -74,10 +72,10 @@ export class SettingsComponent implements OnInit {
       this.listOfDisplayDataOffice = res;
     }, err => {
       console.log(err);
-    })
+    });
   }
 
-  refresh(): void{
+  refresh(): void {
     this.getCommunities();
     this.getCandidatesProfile();
   }

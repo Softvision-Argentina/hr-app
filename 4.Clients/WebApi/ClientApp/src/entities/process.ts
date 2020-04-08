@@ -20,7 +20,7 @@ export class Process {
     rejectionReason: string;
     declineReason: DeclineReason;
     actualSalary: number;
-    wantedSalary: number;    
+    wantedSalary: number;
     englishLevel: EnglishLevelEnum;
     seniority: SeniorityEnum;
     hrStage: HrStage;
