@@ -21,7 +21,7 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
         [Fact(DisplayName = "Verify that throws error when DNI int is zero")]
         public void Should_Have_Error_When_DNI_Is_Zero()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.DNI, 0);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.DNI, 0, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when DNI int is not greater than zero")]
@@ -38,7 +38,7 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
                 LinkedInProfile = "Test"
             };
 
-            var result = validator.TestValidate(CandidateContract)
+            var result = validator.TestValidate(CandidateContract, "Create")
                 .Which
                 .Property(x => x.DNI)
                 .ShouldHaveValidationError()
@@ -48,55 +48,55 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
         [Fact(DisplayName = "Verify that throws error when Name string is null")]
         public void Should_Have_Error_When_Name_Is_Null()
         {  
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, (string) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, (string) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Name string is empty")]
         public void Should_Have_Error_When_Name_Is_Blank()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, String.Empty);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, String.Empty, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when LastName string is null")]
         public void Should_Have_Error_When_LastName_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, (string) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, (string) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when LastName string is Blank")]
         public void Should_Have_Error_When_LastName_Is_Blank()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, String.Empty);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, String.Empty, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Recruiter object is null")]
         public void Should_Have_Error_When_Recruiter_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Recruiter, (ReadedConsultantContract) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Recruiter, (ReadedConsultantContract) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Community object is null")]
         public void Should_Have_Error_When_Community_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Community, (ReadedCommunityContract) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Community, (ReadedCommunityContract) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Profile object is null")]
         public void Should_Have_Error_When_Profile_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Profile, (ReadedCandidateProfileContract) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Profile, (ReadedCandidateProfileContract) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when LinkedInProfile is null")]
         public void Should_Have_Error_When_LinkedInProfile_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LinkedInProfile, (string) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LinkedInProfile, (string) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when LinkedInProfile string is empty")]
         public void Should_Have_Error_When_LinkedInProfile_Is_Blank()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LinkedInProfile, String.Empty);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LinkedInProfile, String.Empty, "Create");
         }
     }
 }

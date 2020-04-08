@@ -109,7 +109,6 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             string newDescription = "An entirely new description";
             var candidateProfile = new CandidateProfile { Name = "Testy Testirino", Description = "This description should change on update" };
             Context.SeedDatabaseWith(candidateProfile);
-            Context.Entry(candidateProfile).State = EntityState.Detached;
             var updateCandidateProfile = new UpdateCandidateProfileContract { Id = candidateProfile.Id, Name = candidateProfile.Name, Description = newDescription };
 
             _candidateProfileService.Update(updateCandidateProfile);
@@ -140,8 +139,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             Context.SetupDatabaseForTesting();
             var candidateProfile = new CandidateProfile { Name = "Testy Testirino", Description = "This description should not change on update" };
             Context.SeedDatabaseWith(candidateProfile);
-            Context.Entry(candidateProfile).State = EntityState.Detached;
-            var updateCandidateProfile = new UpdateCandidateProfileContract { Id = 1, Name = candidateProfile.Name, Description = "Description" };
+            var updateCandidateProfile = new UpdateCandidateProfileContract { Id = 999, Name = candidateProfile.Name, Description = "Description" };
             
             var ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Update(updateCandidateProfile));
 
