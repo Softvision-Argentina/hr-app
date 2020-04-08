@@ -20,7 +20,7 @@ export class ReferralsService extends BaseService<Candidate> {
       headers: this.headersWithAuth
     })
       .pipe(
-        tap(data => {}),
+        tap(_ => {}),
         catchError(this.handleErrors)
       );
   }
@@ -31,7 +31,7 @@ export class ReferralsService extends BaseService<Candidate> {
       headers: this.headersWithAuth
     })
       .pipe(
-        tap(data => {}),
+        tap(_ => {}),
         catchError(this.handleErrors)
       );
   }

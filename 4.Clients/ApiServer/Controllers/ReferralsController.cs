@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Candidates;
+﻿using ApiServer.Contracts.Candidates;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Candidate;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System;
-using Domain.Model;
 
 namespace ApiServer.Controllers
 {
@@ -15,8 +11,8 @@ namespace ApiServer.Controllers
     [ApiController]
     public class ReferralsController : BaseController<ReferralsController>
     {
-        ICandidateService _candidateService;
-        private IMapper _mapper;
+        private readonly ICandidateService _candidateService;
+        private readonly IMapper _mapper;
 
         public ReferralsController(ICandidateService candidateService,
                                  ILog<ReferralsController> logger,
