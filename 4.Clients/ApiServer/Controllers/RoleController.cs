@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Role;
 using AutoMapper;
 using Core;
@@ -14,12 +11,13 @@ namespace ApiServer.Controllers
     [Route("api/[controller]")]
     public class RoleController : BaseController<RoleController>
     {
-        IRoleService _roleService;
-        private IMapper _mapper;
+        private readonly IRoleService _roleService;
+        private readonly IMapper _mapper;
 
-        public RoleController(IRoleService roleService,
-                         ILog<RoleController> logger,
-                         IMapper mapper) : base(logger)
+        public RoleController(
+            IRoleService roleService,
+            ILog<RoleController> logger,
+            IMapper mapper) : base(logger)
         {
             _roleService = roleService;
             _mapper = mapper;
@@ -37,11 +35,11 @@ namespace ApiServer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody]CreateRoleViewModel viewModel)
+        public IActionResult Add([FromBody]CreateRoleViewModel createRoleVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateRoleContract>(viewModel);
+                var contract = _mapper.Map<CreateRoleContract>(createRoleVm);
                 var returnContract = _roleService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedRoleViewModel>(returnContract));
@@ -58,29 +56,29 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpPut("{Id}")]
-        public IActionResult Update(int Id, [FromBody]UpdateRoleViewModel viewModel)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody]UpdateRoleViewModel updateRoleVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateRoleContract>(viewModel);
-                contract.Id = Id;
+                var contract = _mapper.Map<UpdateRoleContract>(updateRoleVm);
+                contract.Id = id;
                 _roleService.Update(contract);
 
-                return Accepted(new { Id });
+                return Accepted(new { id });
             });
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var role = _roleService.Read(Id);
+                var role = _roleService.Read(id);
 
                 if (role == null)
                 {
-                    return NotFound(Id);
+                    return NotFound(id);
                 }
 
                 return Accepted(_mapper.Map<ReadedRoleViewModel>(role));

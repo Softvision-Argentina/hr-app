@@ -4,7 +4,6 @@ using AutoMapper;
 using Core;
 using Domain.Services.Contracts;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -13,10 +12,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class DeclineReasonController : BaseController<DeclineReasonController>
     {
-        IDeclineReasonService _declineReasonService;
-        private IMapper _mapper;
+        private readonly IDeclineReasonService _declineReasonService;
+        private readonly IMapper _mapper;
 
-        public DeclineReasonController(IDeclineReasonService declineReasonService, ILog<DeclineReasonController> logger, IMapper mapper) : base(logger)
+        public DeclineReasonController(
+            IDeclineReasonService declineReasonService,
+            ILog<DeclineReasonController> logger,
+            IMapper mapper) : base(logger)
         {
             _declineReasonService = declineReasonService;
             _mapper = mapper;
@@ -44,7 +46,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/declineReason/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -61,28 +62,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/declineReason
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDeclineReasonViewModel vm)
+        public IActionResult Post([FromBody]CreateDeclineReasonViewModel createDeclineReasonVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDeclineReasonContract>(vm);
+                var contract = _mapper.Map<CreateDeclineReasonContract>(createDeclineReasonVm);
                 var returnContract = _declineReasonService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedDeclineReasonViewModel>(returnContract));
             });
         }
 
-        // PUT api/declineReason/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDeclineReasonViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateDeclineReasonViewModel updateDeclineReasonVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDeclineReasonContract>(vm);
+                var contract = _mapper.Map<UpdateDeclineReasonContract>(updateDeclineReasonVm);
                 contract.Id = id;
                 _declineReasonService.Update(contract);
 
@@ -90,7 +87,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/declineReason/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

@@ -4,7 +4,6 @@ using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Reservation;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -13,12 +12,15 @@ namespace ApiServer.Controllers
     [ApiController]
     public class ReservationController : BaseController<ReservationController>
     {
-        IReservationService _ReservationService;
-        private IMapper _mapper;
+        private readonly IReservationService _reservationService;
+        private readonly IMapper _mapper;
 
-        public ReservationController(IReservationService ReservationService, ILog<ReservationController> logger, IMapper mapper) : base(logger)
+        public ReservationController(
+            IReservationService reservationService,
+            ILog<ReservationController> logger,
+            IMapper mapper) : base(logger)
         {
-            _ReservationService = ReservationService;
+            _reservationService = reservationService;
             _mapper = mapper;
         }
 
@@ -27,65 +29,59 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var communities = _ReservationService.List();
+                var communities = _reservationService.List();
 
                 return Accepted(_mapper.Map<List<ReadedReservationViewModel>>(communities));
             });
         }
 
-        // GET api/Reservations/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var Reservation = _ReservationService.Read(id);
+                var reservation = _reservationService.Read(id);
 
-                if (Reservation == null)
+                if (reservation == null)
                 {
                     return NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedReservationViewModel>(Reservation));
+                return Accepted(_mapper.Map<ReadedReservationViewModel>(reservation));
             });
         }
 
-        // POST api/Reservations
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateReservationViewModel vm)
+        public IActionResult Post([FromBody]CreateReservationViewModel createReservationVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateReservationContract>(vm);
-                var returnContract = _ReservationService.Create(contract);
+                var contract = _mapper.Map<CreateReservationContract>(createReservationVm);
+                var returnContract = _reservationService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedReservationViewModel>(returnContract));
             });
         }
 
-        // PUT api/Reservations/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateReservationViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateReservationViewModel UpdateReservationVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateReservationContract>(vm);
+                var contract = _mapper.Map<UpdateReservationContract>(UpdateReservationVm);
                 contract.Id = id;
-                _ReservationService.Update(contract);
+                _reservationService.Update(contract);
 
                 return Accepted();
             });
         }
 
-        // DELETE api/Reservations/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _ReservationService.Delete(id);
+                _reservationService.Delete(id);
                 return Accepted();
             });
         }

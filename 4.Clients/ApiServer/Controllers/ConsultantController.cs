@@ -5,17 +5,16 @@ using Core;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ApiServer.Controllers
 {
     [Route("api/[controller]")]
     public class ConsultantController : BaseController<ConsultantController>
     {
-        readonly IConsultantService _consultantService;
+        private readonly IConsultantService _consultantService;
         private readonly IMapper _mapper;
 
-        public ConsultantController(IConsultantService consultantService, IMemCache cache, ILog<ConsultantController> logger, IMapper mapper) : base(logger)
+        public ConsultantController(IConsultantService consultantService, ILog<ConsultantController> logger, IMapper mapper) : base(logger)
         {
             _consultantService = consultantService;
             _mapper = mapper;
@@ -32,7 +31,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/consultant/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -45,12 +43,12 @@ namespace ApiServer.Controllers
                     return NotFound(id);
                 }
 
-                var vm = _mapper.Map<ReadedConsultantViewModel>(consultant);
-                return Accepted(vm);
+                var readedConsultantVm = _mapper.Map<ReadedConsultantViewModel>(consultant);
+                
+                return Accepted(readedConsultantVm);
             });
         }
 
-        // GET api/consultant/GetByName/jhon
         [HttpGet]
         [Route("GetByName/{name}")]
         public IActionResult GetByName(string name)
@@ -73,28 +71,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/consultant
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateConsultantViewModel vm)
+        public IActionResult Post([FromBody]CreateConsultantViewModel createConsultantVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateConsultantContract>(vm);
+                var contract = _mapper.Map<CreateConsultantContract>(createConsultantVm);
                 var returnContract = _consultantService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedConsultantViewModel>(returnContract));
             });
         }
 
-        // PUT api/consultant/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateConsultantViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateConsultantViewModel updateConsultantVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateConsultantContract>(vm);
+                var contract = _mapper.Map<UpdateConsultantContract>(updateConsultantVm);
                 contract.Id = id;
                 _consultantService.Update(contract);
 
@@ -102,7 +96,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/consultant/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

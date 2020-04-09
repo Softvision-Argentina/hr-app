@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.CandidateProfile;
 using AutoMapper;
 using Core;
@@ -13,17 +10,18 @@ namespace ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    public class CandidateProfileController : BaseController<CandidateProfileController>
+    {
 
-    public class CandidateProfileController : BaseController<CandidateProfileController> {
+        private readonly ICandidateProfileService _candidateProfileService;
+        private readonly IMapper _mapper;
 
-        ICandidateProfileService _CandidateProfileService;
-        private IMapper _mapper;
-
-        public CandidateProfileController(ICandidateProfileService CandidateProfileService,
-                                   ILog<CandidateProfileController> logger,
-                                   IMapper mapper): base(logger)
+        public CandidateProfileController(
+            ICandidateProfileService candidateProfileService,
+            ILog<CandidateProfileController> logger,
+            IMapper mapper) : base(logger)
         {
-            _CandidateProfileService = CandidateProfileService;
+            _candidateProfileService = candidateProfileService;
             _mapper = mapper;
         }
 
@@ -32,64 +30,59 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var CandidateProfiles = _CandidateProfileService.List();
+                var candidateProfiles = _candidateProfileService.List();
 
-                return Accepted(_mapper.Map<List<ReadedCandidateProfileViewModel>>(CandidateProfiles));
+                return Accepted(_mapper.Map<List<ReadedCandidateProfileViewModel>>(candidateProfiles));
             });
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var CandidateProfile = _CandidateProfileService.Read(Id);
+                var candidateProfile = _candidateProfileService.Read(id);
 
-                if (CandidateProfile == null)
+                if (candidateProfile == null)
                 {
-                    return NotFound(Id);
+                    return NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedCandidateProfileViewModel>(CandidateProfile));
+                return Accepted(_mapper.Map<ReadedCandidateProfileViewModel>(candidateProfile));
             });
         }
 
-        // POST api/skills
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody] CreateCandidateProfileViewModel vm)
+        public IActionResult Post([FromBody] CreateCandidateProfileViewModel createCandidateProfileVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateCandidateProfileContract>(vm);
-                var returnContract = _CandidateProfileService.Create(contract);
+                var contract = _mapper.Map<CreateCandidateProfileContract>(createCandidateProfileVm);
+                var returnContract = _candidateProfileService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedCandidateProfileViewModel>(returnContract));
             });
         }
 
-        // PUT api/skills/5
-        // Mutation
-        [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody]UpdateCandidateProfileViewModel vm)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]UpdateCandidateProfileViewModel updateCandidateProfileVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateCandidateProfileContract>(vm);
-                contract.Id = Id;
-                _CandidateProfileService.Update(contract);
+                var contract = _mapper.Map<UpdateCandidateProfileContract>(updateCandidateProfileVm);
+                contract.Id = id;
+                _candidateProfileService.Update(contract);
 
-                return Accepted(new { Id });
+                return Accepted(new { id });
             });
         }
 
-        // DELETE api/skills/5
-        [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _CandidateProfileService.Delete(Id);
+                _candidateProfileService.Delete(id);
                 return Accepted();
             });
         }

@@ -22,12 +22,10 @@ namespace ApiServer.Controllers
         const CacheLevel CACHE_LEVEL = CacheLevel.OneHour;
         const CacheGroup CACHE_GROUP = CacheGroup.Assignee;
         readonly IMemCache _cache;
-        private IMapper _mapper;
 
-        public ConfigsController(IMemCache cache, ILog<ConfigsController> logger, IMapper mapper)
+        public ConfigsController(IMemCache cache, ILog<ConfigsController> logger)
         {
             this._cache = cache;
-            this._mapper = mapper;
         }
 
         [HttpGet("SkillTypes")]

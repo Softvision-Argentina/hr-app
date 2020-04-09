@@ -18,25 +18,25 @@ namespace ApiServer.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        public IConfiguration _configuration { get; }
-        readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AuthController(IConfiguration configuration, IUserService userService, IMapper mapper)
+        public AuthController(
+            IConfiguration configuration, 
+            IUserService userService, 
+            IMapper mapper)
         {
             this._configuration = configuration;
             this._userService = userService;
             this._mapper = mapper;
         }
 
-        // GET api/values
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody]LoginViewModel user)
         {
             if (user == null)
-            {
                 return BadRequest("Invalid client request");
-            }
 
             var jwtSettings = new JwtSettings
             {
@@ -46,20 +46,16 @@ namespace ApiServer.Controllers
                 MinutesToExpiration = int.Parse(_configuration["jwtSettings:minutesToExpiration"])
             };
 
-            var _user = _userService.Authenticate(user.UserName, user.Password);
+            var userContract = _userService.Authenticate(user.UserName, user.Password);
 
-            if (_user != null)
+            if (userContract != null)
             {
-                ReadedUserViewModel userViewModel;
-                string tokenString;
-                GetToken(jwtSettings, _user, out userViewModel, out tokenString);
+                GetToken(jwtSettings, userContract, out var userViewModel, out var tokenString);
                 return Ok(new { Token = tokenString, User = userViewModel });
             }
-            else
-            {
-                return Unauthorized();
-            }
-        }        
+
+            return Unauthorized();
+        }
 
         [HttpPost, Route("loginExternal")]
         public IActionResult LoginExternal([FromBody]TokenViewModel jwt)
@@ -74,25 +70,21 @@ namespace ApiServer.Controllers
 
             try
             {
-                var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(jwt.Token);
+                var token = new JwtSecurityToken(jwt.Token);
                 var email = token.Claims.First(c => c.Type == "email");
-                var exp = token.Claims.First(c => c.Type == "exp");
-                //var emailVerified = token.Claims.First(c => c.Type == "email_verified");
+                
                 if (token.ValidTo > DateTime.UtcNow)
                 {
-                    var _user = this._userService.Authenticate(email.Value);
+                    var userContract = this._userService.Authenticate(email.Value);
 
-                    if (_user != null)
+                    if (userContract != null)
                     {
-                        ReadedUserViewModel userViewModel;
-                        string tokenString;
-                        GetToken(jwtSettings, _user, out userViewModel, out tokenString);
+                        GetToken(jwtSettings, userContract, out var userViewModel, out var tokenString);
                         return Ok(new { Token = tokenString, User = userViewModel });
                     }
-                }                
-               
+                }
+
                 return Unauthorized();
-                
             }
             catch (Exception)
             {
