@@ -57,7 +57,7 @@
               <button nz-button nz-dropdown><i style="font-size: 20px" nz-icon type="filter"
                   theme="outline"></i></button>
               <ul nz-menu>
-                <li nz-menu-item (click)="emitCurrentStageValue(0)">
+                <li nz-menu-item (click)="emitResetCurrentStage()">
                   <label>ALL</label>
                 </li>
                 <li nz-menu-item *ngFor="let cs of currentStageList" (click)="emitCurrentStageValue(cs.id)">

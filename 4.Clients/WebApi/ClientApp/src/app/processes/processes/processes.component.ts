@@ -1038,14 +1038,4 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
   }
-
-  findProfileByName(name) {
-    let counter = 0;
-    this.profiles.some(function(p) {
-      name.toLowerCase() === p.name.toLowerCase() ? this.searchProfile(p.id) : counter++;
-      return name.toLowerCase() === p.name.toLowerCase();
-    });
-    // tslint:disable-next-line: no-unused-expression
-    counter === this.profiles.length ? this.searchProfile(0) : null;
-  }
 }
