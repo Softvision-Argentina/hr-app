@@ -13,8 +13,8 @@ import { SearchbarService } from '../services/searchbar.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'tasks',
+
+  selector: 'app-tasks',
   templateUrl: 'tasks.component.html',
   styleUrls: ['tasks.component.css'],
   providers: [AppComponent]

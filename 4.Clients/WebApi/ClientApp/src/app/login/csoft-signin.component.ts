@@ -6,8 +6,8 @@ import { FacadeService } from '../services/facade.service';
 import { User } from '../../entities/user';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'csoft-login',
+
+  selector: 'app-csoft-login',
   templateUrl: './csoft-signin.component.html',
   styleUrls: ['./csoft-signin.component.css']
 })

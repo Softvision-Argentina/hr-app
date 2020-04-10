@@ -50,8 +50,12 @@ export class ReportCompletedProcessesComponent implements OnInit, OnChanges {
     const totalCandidates: number = this.processCompleted;
     if (totalCandidates > 0) {
       this.stadisticFinished = (this.processFinishedSuccess * 100) / 2;
-      // tslint:disable-next-line: max-line-length
-      if (this.stadisticFinished === 100) { this.stadisticFailed = 0; } else { this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates; }
+
+      if (this.stadisticFinished === 100) {
+        this.stadisticFailed = 0;
+      } else {
+        this.stadisticFailed = ((totalCandidates - this.processFinishedSuccess) * 100) / totalCandidates;
+      }
       if (this.stadisticFailed === 100) { this.stadisticFinished = 0; }
       this.isChartComplete = true;
     }
@@ -87,10 +91,15 @@ export class ReportCompletedProcessesComponent implements OnInit, OnChanges {
     this.processCompleted = this._processes.filter(process => process.status === ProcessStatusEnum.Declined ||
       process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
     this.processFinishedSuccess = this._processes.filter(process => process.status === ProcessStatusEnum.Hired).length;
-    // tslint:disable-next-line: max-line-length
-    this.processInProgress = this._processes.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
-    // tslint:disable-next-line: max-line-length
-    this.processNotStarted = this._processes.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
+
+    this.processInProgress = this._processes.filter(process =>
+      process.status === ProcessStatusEnum.InProgress
+      || process.status === ProcessStatusEnum.Recall
+      || process.status === ProcessStatusEnum.OfferAccepted).length;
+
+    this.processNotStarted = this._processes.filter(process =>
+      process.status === ProcessStatusEnum.Declined
+      || process.status === ProcessStatusEnum.Rejected).length;
     this.getProgressPercentage();
   }
 

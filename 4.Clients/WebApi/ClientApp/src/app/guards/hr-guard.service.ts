@@ -21,7 +21,7 @@ export class HRGuard implements CanActivate {
 
     if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
       if (this.roles.indexOf(this.currentUser.role) !== -1
-        // tslint:disable-next-line: max-line-length
+
         && (this.currentUser.role === 'Admin' || this.currentUser.role === 'HRManagement' || this.currentUser.role === 'HRUser')) { return true; } else {
         this.router.navigate(['unauthorized'], { queryParams: { returnUrl: state.url } });
         return false;

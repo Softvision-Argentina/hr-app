@@ -4,8 +4,7 @@ import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days
 import { DaysOff } from 'src/entities/days-off';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'nz-basic-calendar',
+  selector: 'app-nz-basic-calendar',
   template: `
   <div nz-row>
     <div >

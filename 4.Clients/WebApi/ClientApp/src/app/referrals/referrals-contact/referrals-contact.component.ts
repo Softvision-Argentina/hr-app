@@ -130,7 +130,7 @@ export class ReferralsContactComponent implements OnInit {
 
   editingCandidateId = 0;
 
-  // tslint:disable-next-line: max-line-length
+
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService, private process: ReferralsComponent) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -208,7 +208,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    // tslint:disable-next-line: max-line-length
+
     this.candidateForm.controls['recruiter'].setValue(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
@@ -249,7 +249,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    // tslint:disable-next-line: max-line-length
+
     const candidate = this.candidates.filter(s => (replaceAccent(s.name).toLowerCase() + ' ' + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1);
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);

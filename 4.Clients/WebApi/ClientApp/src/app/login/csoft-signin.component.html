@@ -14,9 +14,7 @@
       <nz-input-group [nzSuffix]="prefixLock">
         <input type="password" nz-input formControlName="password" placeholder="Password" />
       </nz-input-group>
-      <nz-form-explain *ngIf="checkDirtyandErrors('password')"
-        >Please input your Password!</nz-form-explain
-      >
+      <nz-form-explain *ngIf="checkDirtyandErrors('password')">Please input your Password!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item class="login-button">

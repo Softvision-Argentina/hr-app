@@ -15,7 +15,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
   employeecasualties: EmployeeCasualty[] = [];
   listOfDisplayData = [...this.employeecasualties];
 
-  // tslint:disable-next-line: max-line-length
+
   monthList: string[] = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
   yearList: number[] = [];
@@ -157,7 +157,7 @@ export class EmployeeCasualtiesComponent implements OnInit {
   }
 
   showDeleteConfirm(employeeCasualtyId: number): void {
-    // tslint:disable-next-line: max-line-length
+
     const employeeCasualtyDelete: EmployeeCasualty = this.employeecasualties.find(employeeCasualty => employeeCasualty.id === employeeCasualtyId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ' + this.monthList[employeeCasualtyDelete.month - 1] + ' of ' + employeeCasualtyDelete.year + ' ?',

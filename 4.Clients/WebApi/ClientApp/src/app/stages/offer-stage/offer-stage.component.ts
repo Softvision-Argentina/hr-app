@@ -8,8 +8,8 @@ import { ProcessService } from '../../services/process.service';
 import { OfferHistory } from '../offer-history/offer-history.component';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'offer-stage',
+
+  selector: 'app-offer-stage',
   templateUrl: './offer-stage.component.html',
   styleUrls: ['./offer-stage.component.css'],
   providers: [OfferHistory]

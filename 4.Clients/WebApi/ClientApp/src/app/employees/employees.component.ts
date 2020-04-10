@@ -169,7 +169,7 @@ export class EmployeesComponent implements OnInit {
                 name: this.employeeForm.controls['name'].value,
                 lastName: this.employeeForm.controls['lastName'].value,
                 emailAddress: this.employeeForm.controls['emailAddress'].value,
-                // tslint:disable-next-line: max-line-length
+
                 phoneNumber: '(' + this.employeeForm.controls['phoneNumberPrefix'].value + ')' + this.employeeForm.controls['phoneNumber'].value,
                 linkedInProfile: this.employeeForm.controls['linkedInProfile'].value,
                 additionalInformation: this.employeeForm.controls['additionalInformation'].value,
@@ -177,7 +177,7 @@ export class EmployeesComponent implements OnInit {
                 recruiterId: this.employeeForm.controls['recruiterId'].value,
                 role: null,
                 roleId: this.employeeForm.controls['roleId'].value,
-                // tslint:disable-next-line: max-line-length
+
                 isReviewer: this.employeeForm.controls['isReviewer'].value === null ? false : this.employeeForm.controls['isReviewer'].value,
                 reviewer: null,
                 reviewerId: null
@@ -234,14 +234,14 @@ export class EmployeesComponent implements OnInit {
               editEmployee.lastName = this.employeeForm.controls['lastName'].value;
               editEmployee.dni = this.employeeForm.controls['dni'].value;
               editEmployee.emailAddress = this.employeeForm.controls['emailAddress'].value;
-              // tslint:disable-next-line: max-line-length
+
               editEmployee.phoneNumber = '(' + this.employeeForm.controls['phoneNumberPrefix'].value + ')' + this.employeeForm.controls['phoneNumber'].value;
               editEmployee.linkedInProfile = this.employeeForm.controls['linkedInProfile'].value;
               editEmployee.status = this.employeeForm.controls['status'].value;
               editEmployee.roleId = this.employeeForm.controls['roleId'].value;
               editEmployee.recruiterId = this.employeeForm.controls['recruiterId'].value;
               editEmployee.isReviewer = this.employeeForm.controls['isReviewer'].value;
-              // tslint:disable-next-line: max-line-length
+
               this.employeeForm.controls['reviewerName'].value === '' ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id;
               editEmployee.additionalInformation = this.employeeForm.controls['additionalInformation'].value;
 
@@ -305,7 +305,7 @@ export class EmployeesComponent implements OnInit {
     } else {
       this.employeeForm.controls['reviewerName'].setValue(employee.reviewer.name + ' ' + employee.reviewer.lastName);
     }
-    // tslint:disable-next-line: max-line-length
+
     this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== employee.id && r.reviewerId !== employee.id).map(r => r.fullName);
   }
 
@@ -328,14 +328,14 @@ export class EmployeesComponent implements OnInit {
 
   filterReviewers(event) {
     const filteredReviewer = event.target.value;
-    // tslint:disable-next-line: max-line-length
+
     this.filteredReviewersNames = this.reviewersFullNameAndId.filter(r => r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
 
   filterEditReviewers(event) {
     const filteredReviewer = event.target.value;
-    // tslint:disable-next-line: max-line-length
+
     this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== this.editEmployee.id && r.reviewerId !== this.editEmployee.id && r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
@@ -421,7 +421,7 @@ export class EmployeesComponent implements OnInit {
             }
             if (isCompleted) {
               for (const editEmployee of this.employeesWithSelectedReviewer) {
-                // tslint:disable-next-line: max-line-length
+
                 editEmployee.isReviewer ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.newReviewerForm.controls['reviewerId'].value;
                 editEmployee.roleId = editEmployee.role.id;
                 this.facade.employeeService.Update(editEmployee)
@@ -442,7 +442,7 @@ export class EmployeesComponent implements OnInit {
   showNoReviewersAvailablesModal() {
     const modal = this.facade.modalService.create({
       nzTitle: 'New Reviewer',
-      // tslint:disable-next-line: max-line-length
+
       nzContent: 'There are no availables reviewers to reeplace ' + this.editEmployee.name + ' ' + this.editEmployee.lastName + ' as reviewer.',
       nzClosable: true,
       nzFooter: [

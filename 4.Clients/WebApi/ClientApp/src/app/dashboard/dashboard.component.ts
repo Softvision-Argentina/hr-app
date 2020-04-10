@@ -140,10 +140,15 @@ export class DashboardComponent implements OnInit {
         this.processCompleted = res.filter(process => process.status === ProcessStatusEnum.Declined ||
           process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
         this.processFinishedSuccess = res.filter(process => process.status === ProcessStatusEnum.Hired).length;
-        // tslint:disable-next-line: max-line-length
-        this.processInProgress = res.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
-        // tslint:disable-next-line: max-line-length
-        this.processNotStarted = res.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
+
+        this.processInProgress = res.filter(process =>
+          process.status === ProcessStatusEnum.InProgress
+          || process.status === ProcessStatusEnum.Recall
+          || process.status === ProcessStatusEnum.OfferAccepted).length;
+
+        this.processNotStarted = res.filter(process =>
+          process.status === ProcessStatusEnum.Declined ||
+          process.status === ProcessStatusEnum.Rejected).length;
       }, err => {
         console.log(err);
       });
