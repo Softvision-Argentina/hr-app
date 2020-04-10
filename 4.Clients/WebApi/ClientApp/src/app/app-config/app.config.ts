@@ -11,7 +11,7 @@ export class AppConfig {
     private config: Object = null;
     private env: Object = null;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: Http) {
 
     }
 
