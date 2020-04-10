@@ -115,10 +115,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.app.removeBgImage();
-
-    this.getMyProcesses()
-
-
+    this.getProcesses()
     this.getCandidates();
     this.getConsultants();
     this.getOffices();
