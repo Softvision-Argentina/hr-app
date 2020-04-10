@@ -5,7 +5,7 @@ import { AppConfig } from '../app-config/app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Postulant } from 'src/entities/postulant';
 import { tap, catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class PostulantsService extends BaseService<Postulant> {

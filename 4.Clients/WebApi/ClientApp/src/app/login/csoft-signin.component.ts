@@ -1,9 +1,9 @@
 import { Component, NgZone, OnInit, AfterViewInit } from '@angular/core';
-import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { User } from '../../entities/user';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
+import { FacadeService } from '../services/facade.service';
+import { User } from '../../entities/user';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -52,7 +52,7 @@ export class CSoftComponent implements OnInit, AfterViewInit {
     .subscribe(res => {
       if (!res.user) {
         this.invalidUser();
-      } else {
+      }else{
         this.authenticatedUser = {
           id: res.user.id,
           name: res.user.firstName + ' ' + res.user.lastName,

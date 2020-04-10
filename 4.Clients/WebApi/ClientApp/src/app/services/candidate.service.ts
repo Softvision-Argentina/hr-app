@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from 'src/entities/candidate';
 
@@ -14,8 +14,8 @@ export class CandidateService extends BaseService<Candidate> {
     super(router, config, http);
     this.apiUrl += 'Candidates';
   }
-
-  public idExists(id: number): Observable<any> {
+  
+  public idExists(id: number): Observable<any>{
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
     })

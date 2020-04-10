@@ -56,7 +56,6 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Validating contract {contract.Status}");
             ValidateContract(contract);
 
-
             _log.LogInformation($"Mapping contract {contract.Status}");
             var stage = _mapper.Map<Stage>(contract);
 
@@ -102,16 +101,10 @@ namespace Domain.Services.Impl.Services
         }
 
         public void Update(UpdateStageContract contract)
-        {
-            //_log.LogInformation($"Validating contract {contract.Id}");
-            ValidateContract(contract);
-
-            //_log.LogInformation($"Mapping contract {contract.Id}");
+        {            
+            ValidateContract(contract);         
             var stage = _mapper.Map<Stage>(contract);
-
             var updatedStage = UpdateStage(stage);
-
-            //_log.LogInformation($"Complete for {contract.Id}");
             _unitOfWork.Complete();
         }
 
@@ -140,16 +133,11 @@ namespace Domain.Services.Impl.Services
         }
 
         public void UpdateStageItem(UpdateStageItemContract updateStageItemContract)
-        {
-            //_log.LogInformation($"Validating contract {contract.Name}");
-            // ValidateContract(contract);
-
-            //_log.LogInformation($"Mapping contract {contract.Name}");
+        {            
             var stageItem = _mapper.Map<StageItem>(updateStageItemContract);
 
             var updatedStageItem = _stageItemRepository.Update(stageItem);
-
-            //_log.LogInformation($"Complete for {contract.Name}");
+         
             _unitOfWork.Complete();
         }
 

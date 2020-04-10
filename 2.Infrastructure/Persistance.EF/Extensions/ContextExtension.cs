@@ -6,9 +6,10 @@ namespace Persistance.EF.Extensions
 {
     public static class ContextExtension
     {
-        public static string DisableTablesConstraintCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL' ";
-        public static string DeleteDatabaseDataCommand = "EXEC sp_MSForEachTable 'SET QUOTED_IDENTIFIER ON; DELETE FROM ?'";
-        public static string EnableTablesConstraintCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'";
+        public readonly static string DisableTablesConstraintsCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL' ";
+        public readonly static string DeleteDatabaseDataCommand = "EXEC sp_MSForEachTable 'SET QUOTED_IDENTIFIER ON; DELETE FROM ?'";
+        public readonly static string EnableTablesConstraintsCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'";
+        public readonly static string ResetAllIds = "EXEC sp_MSForEachTable 'IF OBJECTPROPERTY(object_id(''?''), ''TableHasIdentity'') = 1 DBCC CHECKIDENT(''?'', RESEED, 0)'";
     }
 
     public static class TestDatabaseHelper
@@ -16,14 +17,20 @@ namespace Persistance.EF.Extensions
         public static IEnumerable<Entity<int>> EntitiesSeeded;
         public static Entity<int> EntitySeeded;
 
+        public static void ResetAllIdentitiesId(this DbContext context)
+        {
+            context.Database.EnsureCreated();
+            context.Database.ExecuteSqlCommand(ContextExtension.ResetAllIds);
+        }
+
         public static void SetupDatabaseForTesting(this DbContext context)
         {
             EntitiesSeeded = null;
             EntitySeeded = null;
             context.Database.EnsureCreated();
-            context.Database.ExecuteSqlCommand(ContextExtension.DisableTablesConstraintCommand);
+            context.Database.ExecuteSqlCommand(ContextExtension.DisableTablesConstraintsCommand);
             context.Database.ExecuteSqlCommand(ContextExtension.DeleteDatabaseDataCommand);
-            context.Database.ExecuteSqlCommand(ContextExtension.EnableTablesConstraintCommand);
+            context.Database.ExecuteSqlCommand(ContextExtension.EnableTablesConstraintsCommand);
         }
 
         public static void SeedDatabaseWith<T>(this DbContextBase arLabContext, IEnumerable<T> entities) where T : Entity<int>
@@ -47,6 +54,7 @@ namespace Persistance.EF.Extensions
             arLabContext.Set<T>().Add(entity);
             arLabContext.SaveChanges();
             EntitySeeded = entity;
+            arLabContext.Entry(entity).State = EntityState.Detached;
         }
 
         public static void SeedDatabaseWithDummy<T>(this DbContextBase arLabContext, int entityCount = 1) where T : Entity<int>

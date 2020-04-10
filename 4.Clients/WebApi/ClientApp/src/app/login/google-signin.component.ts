@@ -1,10 +1,9 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, NgZone } from '@angular/core';
-import { User } from 'src/entities/user';
 import { Router } from '@angular/router';
+import { JwtHelper } from 'angular2-jwt';
+import { User } from 'src/entities/user';
 import { AppConfig } from './../app-config/app.config';
 import { FacadeService } from '../services/facade.service';
-import { JwtHelper } from 'angular2-jwt';
-import { Community } from 'src/entities/community';
 declare const gapi: any;
 
 @Component({

@@ -135,7 +135,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.app.showLoading();
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
@@ -157,8 +156,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName: [null, [Validators.required]]
     });
-
-    this.app.hideLoading();
     this.getNotifications();
   }
 

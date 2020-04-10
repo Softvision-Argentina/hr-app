@@ -8,10 +8,8 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Offer;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -44,8 +42,7 @@ namespace Domain.Services.Impl.Services
         public CreatedOfferContract Create(CreateOfferContract contract)
         {
             _log.LogInformation($"Validating contract {contract.Status}");
-            ValidateContract(contract);
-            //ValidateExistence(0, contract.RejectionReason);
+            ValidateContract(contract);            
 
             _log.LogInformation($"Mapping contract {contract.Status}");
             var offer = _mapper.Map<Offer>(contract);            
@@ -75,8 +72,7 @@ namespace Domain.Services.Impl.Services
         public void Update(UpdateOfferContract contract)
         {
             _log.LogInformation($"Validating contract {contract.Status}");
-            ValidateContract(contract);
-            //ValidateExistence(contract.Id, contract.RejectionReason);
+            ValidateContract(contract);            
 
             _log.LogInformation($"Mapping contract {contract.Status}");
             var offer = _mapper.Map<Offer>(contract);            
@@ -132,18 +128,5 @@ namespace Domain.Services.Impl.Services
                 throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
         }
-
-        //private void ValidateExistence(int id, string name)
-        //{
-        //    try
-        //    {
-        //        Offer offer = _offerRepository.Query().Where(_ => _.Id != id).FirstOrDefault();
-        //        if (offer != null) throw new InvalidOfferException("The offer already exists .");
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        throw new CreateContractInvalidException(ex.ToListOfMessages());
-        //    }
-        //}
     }
 }
