@@ -52,7 +52,7 @@ export class CSoftComponent implements OnInit, AfterViewInit {
     .subscribe(res => {
       if (!res.user) {
         this.invalidUser();
-      }else{
+      } else {
         this.authenticatedUser = {
           id: res.user.id,
           name: res.user.firstName + ' ' + res.user.lastName,

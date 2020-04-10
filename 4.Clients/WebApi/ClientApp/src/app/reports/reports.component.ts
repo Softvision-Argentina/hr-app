@@ -148,7 +148,7 @@ export class ReportsComponent implements OnInit {
       community: [this.defaultCommunity],
       preferredOffice: [this.defaultOffice]
     });
-    this.addField()
+    this.addField();
   }
   addField(e?: MouseEvent): void {
     if (e) {
@@ -388,5 +388,3 @@ export class ReportsComponent implements OnInit {
     console.log(event, active);
   }
 }
-
-

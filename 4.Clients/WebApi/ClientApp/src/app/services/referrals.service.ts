@@ -14,8 +14,8 @@ export class ReferralsService extends BaseService<Candidate> {
     super(router, config, http);
     this.apiUrl += 'Referrals';
   }
-  
-  public idExists(id: number): Observable<any>{
+
+  public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
     })
@@ -25,9 +25,9 @@ export class ReferralsService extends BaseService<Candidate> {
       );
   }
 
-  public getCandidatesBySkills(candidatesFilters): Observable<any>{
+  public getCandidatesBySkills(candidatesFilters): Observable<any> {
 
-    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters ,{
+    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters , {
       headers: this.headersWithAuth
     })
       .pipe(

@@ -77,7 +77,7 @@ export class CandidateAddComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [null, [Validators.required,Validators.pattern('^\\d{7,8}$')]],
+    dni: [null, [Validators.required, Validators.pattern('^\\d{7,8}$')]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
@@ -141,7 +141,7 @@ export class CandidateAddComponent implements OnInit {
   }
   setRecruiter() {
     const currentRecruiter = this.consultants.find(consultant => consultant.emailAddress === this.currentConsultant.email);
-    if(!!currentRecruiter) {
+    if (!!currentRecruiter) {
       this.candidateForm.controls['recruiter'].setValue(currentRecruiter.id);
     } else {
       this.candidateForm.controls['recruiter'].setValue(1);
@@ -261,9 +261,11 @@ export class CandidateAddComponent implements OnInit {
       // tslint:disable-next-line: max-line-length
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
-      profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
-      community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
+      // tslint:disable-next-line: max-line-length
+      profile: this.candidateForm.controls['profile'].value === null ? null : new CandidateProfile(this.candidateForm.controls['profile'].value),
+      // tslint:disable-next-line: max-line-length
+      community: this.candidateForm.controls['community'].value === null  ? null : new Community(this.candidateForm.controls['community'].value),
+      isReferred: this.candidateForm.controls['isReferred'].value === null ? false : this.candidateForm.controls['community'].value,
       // contactDay: this.candidateForm.controls['contactDay'].value
       cv: this.candidateForm.controls['cv'].value === null ? null : this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value === null ? null : this.candidateForm.controls['knownFrom'].value,

@@ -21,8 +21,8 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class TasksComponent implements OnInit, OnDestroy {
 
-  showCloseIcon: boolean = false;
-  searchTitle: string = '';
+  showCloseIcon = false;
+  searchTitle = '';
   consultants: Consultant[] = [];
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
@@ -199,8 +199,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         }, err => {
           if (err && err.errorCode === 900) {
             this.facade.errorHandlerService.showErrorMessage(err);
-          }
-          else {
+          } else {
             this.facade.errorHandlerService.showErrorMessage(null, 'An error has ocurred. Please try again later');
           }
           input.value = '';
@@ -355,7 +354,7 @@ export class TasksComponent implements OnInit, OnDestroy {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                })
+                });
             }
           }
         }]

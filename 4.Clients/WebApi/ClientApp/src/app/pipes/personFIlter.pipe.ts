@@ -15,7 +15,7 @@ export class PersonFilter implements PipeTransform {
         } else {
             result = items;
         }
-    
+
         if (result.length === 0) {
             return [-1];
         } else {

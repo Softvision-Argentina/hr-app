@@ -1,5 +1,5 @@
-import { Community } from "./community";
-import { UserDashboard } from "./userDashboard";
+import { Community } from './community';
+import { UserDashboard } from './userDashboard';
 
 export class User {
     id: number;
@@ -9,5 +9,5 @@ export class User {
     role: string;
     token: string;
     community: Community;
-    userDashboards: UserDashboard[]
+    userDashboards: UserDashboard[];
 }

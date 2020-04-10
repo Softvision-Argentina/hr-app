@@ -14,8 +14,8 @@ export class CandidateService extends BaseService<Candidate> {
     super(router, config, http);
     this.apiUrl += 'Candidates';
   }
-  
-  public idExists(id: number): Observable<any>{
+
+  public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
     })

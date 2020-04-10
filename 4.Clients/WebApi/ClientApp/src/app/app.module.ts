@@ -1,3 +1,4 @@
+import { AppRoutingModule } from './app-routing.module';
 import { APP_INITIALIZER } from '@angular/core';
 import { AppConfig } from './app-config/app.config';
 import { BrowserModule } from '@angular/platform-browser';
@@ -5,10 +6,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReportsComponent } from './reports/reports.component';
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
@@ -129,9 +130,6 @@ import { OfferService } from './services/offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { PersonFilter } from './pipes/personFIlter.pipe';
 import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
-import { AppRoutingModule } from './app-routing.module';
-import { ReportsComponent } from './reports/reports.component';
-import { ReferralsService } from './services/referrals.service';
 
 
 registerLocaleData(en);
@@ -230,7 +228,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     FileUploadModule,
     ReactiveFormsModule,
-    HttpModule,
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -246,7 +243,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SlickModule.forRoot(),
     ToastrModule.forRoot(),
     Ng2LoadingSpinnerModule.forRoot({}),
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [
     Globals,
@@ -257,7 +254,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BaseService,
     RegisterService,
     CandidateService,
-    ReferralsService,
     SkillService,
     ProcessService,
     StageService,
