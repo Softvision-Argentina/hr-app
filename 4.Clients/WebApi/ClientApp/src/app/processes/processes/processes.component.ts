@@ -46,7 +46,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     draggable: false
   };
 
-
   @ViewChild('slickModal') slickModal: SlickComponent;
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
@@ -115,7 +114,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.app.removeBgImage();
-    this.getProcesses()
+    this.getProcesses();
     this.getCandidates();
     this.getConsultants();
     this.getOffices();
@@ -125,7 +124,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.facade.consultantService.GetByEmail(this.currentUser.email)
       .subscribe(res => {
         this.currentConsultant = res.body;
-      });
+    });
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
@@ -222,9 +221,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
-
-
-
   getProcessesByConsultant() {
     this.facade.processService.get()
       .subscribe(res => {
@@ -237,6 +233,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+  }
+
+  getStatus(status: number): string {
+    return this.statusList.find(st => st.id === status).name;
+  }
+
+  getCurrentStage(cr: number): string {
+    return this.currentStageList.find(st => st.id === cr).name;
   }
 
   showApproveProcessConfirm(processID: number): void {
@@ -399,11 +403,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.searchCurrentStage();
   }
 
-  triggerSearch(val) {
-    this.searchValue = val;
-    this.search()
-  }
-
   search(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + " " + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
@@ -416,22 +415,16 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.nameDropdown.nzVisible = false;
   }
 
-  triggerSearchRecruiter(val) {
-    console.log('val: ' + val)
-    this.searchRecruiterValue = val;
-    console.log('trigger: ' + this.searchRecruiterValue)
-    this.searchRecruiter();
-  }
-
   searchRecruiter(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
         (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
-    const data = this.filteredProcesses.filter(item => filterFunc(item));
+    const data = this.filteredProcesses.filter(item => filterFunc(item));    
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
+    this.nameDropdown.nzVisible = false;
   }
 
   searchOwnRecruiter(): void {
@@ -458,13 +451,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.nameDropdown.nzVisible = false;
   }
 
-  triggerSearchStatus(id) {
-
-    this.searchValueStatus = id;
-    console.log("test:" + this.searchValueStatus)
-    this.searchStatus()
-  }
-
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
@@ -472,14 +458,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    console.log(this.listOfDisplayData)
-    console.log(this.statusList)
     this.searchValueStatus = '';
-  }
-
-  triggerSearchCurrentStage(id) {
-    this.searchValueCurrentStage = id;
-    this.searchCurrentStage()
+    this.statusDropdown.nzVisible = false;
   }
 
   searchCurrentStage(): void {
@@ -490,6 +470,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     const data = this.searchValueCurrentStage != '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
+    this.currentStageDropdown.nzVisible = false;
   }
 
   searchProfile(searchedProfile: number) {
@@ -1011,13 +992,5 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
-  }
-
-  findProfileByName(name) {
-    let counter = 0;
-    for (let i = 0; i < this.profiles.length; i++) {
-      name.toLowerCase() === this.profiles[i].name.toLowerCase() ? this.searchProfile(this.profiles[i].id) : counter++
-    }
-    counter === this.profiles.length ? this.searchProfile(0) : null
   }
 }
