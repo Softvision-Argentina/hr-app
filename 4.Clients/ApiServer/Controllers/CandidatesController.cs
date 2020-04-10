@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using ApiServer.Contracts.Candidates;
-using ApiServer.Contracts.CandidateSkill;
 using AutoMapper;
 using Core;
-using Domain.Model.Enum;
 using Domain.Services.Contracts.Candidate;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
@@ -31,7 +28,6 @@ namespace ApiServer.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult Get()
         {
             return ApiAction(() =>
@@ -43,7 +39,6 @@ namespace ApiServer.Controllers
         }
 
         [HttpPost("filter")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult Get([FromBody] FilterCandidateViewModel filterData)
         {
 
@@ -86,25 +81,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        //// GET api/candidates/exists/1
-        //[HttpGet("Exists/{dni}")]
-        //public IActionResult Exists(int dni)
-        //{
-        //    return ApiAction(() =>
-        //    {
-        //        var candidate = _candidateService.Exists(dni);
-
-        //        if (candidate == null)
-        //        {
-        //            return Accepted();
-        //        }
-
-        //        var vm = _mapper.Map<ReadedCandidateViewModel>(candidate);
-        //        return Accepted(vm);
-        //    });
-        //}
-
-        // GET api/candidates/exists/1
         [HttpGet("Exists/{id}")]
         public IActionResult Exists(int id)
         {
@@ -124,7 +100,6 @@ namespace ApiServer.Controllers
 
 
         [HttpGet("GetApp")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult GetCandidateApp()
         {
             return ApiAction(() =>
@@ -135,8 +110,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/candidates
-        // Creation
         [HttpPost]
         public IActionResult Post([FromBody]CreateCandidateViewModel vm)
         {
@@ -149,9 +122,6 @@ namespace ApiServer.Controllers
             });
         }
 
-
-        // PUT api/candidates/5
-        // Mutation
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]UpdateCandidateViewModel vm)
         {
@@ -165,7 +135,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/candidates/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

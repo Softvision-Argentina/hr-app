@@ -114,7 +114,6 @@ export class ReportsComponent implements OnInit {
     private app: AppComponent) { }
 
   ngOnInit() {
-    this.app.showLoading();
     this.isLoadingResults = true;
     this.app.removeBgImage();
     this.getSkills();
@@ -127,7 +126,6 @@ export class ReportsComponent implements OnInit {
       preferredOffice: [this.defaultOffice]
     });
     this.addField()
-    this.app.hideLoading();
   }
   addField(e?: MouseEvent): void {
     if (e) {

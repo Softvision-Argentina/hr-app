@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { EmployeesComponent } from '../employees/employees.component';
 import { Employee } from 'src/entities/employee';
 import { map } from 'rxjs/internal/operators/map';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

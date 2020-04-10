@@ -21,12 +21,17 @@ export class NavMenuComponent implements OnInit {
     private google: GoogleSigninComponent,
     private facade: FacadeService
   ) { }
-  isExpanded = false;
-  currentUser: User;
-  showUserSettings = false;
+  isExpanded: boolean = false;
+  currentUser: User = null;
+  showUserSettings: boolean = false;
+  url: string = '';
+  search: string = '';
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.router.events.subscribe(data => {
+      this.search = '';
+    });
   }
 
   logout() {

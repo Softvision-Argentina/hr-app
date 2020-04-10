@@ -27,7 +27,8 @@ namespace Domain.Services.Impl.Services
         private readonly UpdateReservationContractValidator _updateReservationContractValidator;
         private readonly CreateReservationContractValidator _createReservationContractValidator;
 
-        public ReservationService(IMapper mapper,
+        public ReservationService(
+            IMapper mapper,
             IRepository<Reservation> ReservationRepository,
             IRepository<Consultant> ConsultantRepository,
             IRepository<Room> RoomRepository,
@@ -100,14 +101,12 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Validating contract {contract.Description}");
             ValidateContract(contract);
 
-
             _log.LogInformation($"Mapping contract {contract.Description}");
             var Reservation = _mapper.Map<Reservation>(contract);
 
             ValidateSchedule(Reservation);
             CheckOverlap(Reservation);
             Reservation.Recruiter = _ConsultantRepository.Query().Where(x => x.Id == contract.Recruiter).FirstOrDefault();
-
 
             _ReservationRepository.Update(Reservation);
             _log.LogInformation($"Complete for {contract.Description}");
@@ -215,7 +214,6 @@ namespace Domain.Services.Impl.Services
                 }
             };
             _googleCalendarService.CreateEvent(newEvent);
-
         }
     }
 }

@@ -1,9 +1,9 @@
 import { Component, NgZone } from '@angular/core';
-import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { User } from '../../entities/user';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
+import { FacadeService } from '../services/facade.service';
+import { User } from '../../entities/user';
 
 @Component({
   selector: 'csoft-login',
@@ -16,10 +16,10 @@ export class CSoftComponent {
   authenticatedUser:User;
 
   constructor(
-    private fb: FormBuilder, 
-    private facade: FacadeService, 
-    private jwtHelper: JwtHelper, 
-    private router: Router, 
+    private fb: FormBuilder,
+    private facade: FacadeService,
+    private jwtHelper: JwtHelper,
+    private router: Router,
     public zone: NgZone
   ) {}
 
@@ -27,10 +27,10 @@ export class CSoftComponent {
     this.loginForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]]
-    });    
+    });
   }
 
-  ngAfterViewInit() {    
+  ngAfterViewInit() {
     this.isUserAuthenticated();
   }
 
@@ -40,30 +40,31 @@ export class CSoftComponent {
       this.loginForm.controls[i].updateValueAndValidity();
     }
     if (this.loginForm.valid) {
-      this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);        
-    }      
+      this.authenticateUser(this.loginForm.controls.userName.value, this.loginForm.controls.password.value);
+    }
   }
 
-  authenticateUser(userName: string, password: string) {      
+  authenticateUser(userName: string, password: string) {
     this.facade.authService.authenticate(userName, password)
     .subscribe(res => {
       if(!res.user){
         this.invalidUser();
-      }else{              
-        this.authenticatedUser = {            
+      }else{
+        this.authenticatedUser = {
           id: res.user.id,
           name: res.user.firstName + " " + res.user.lastName,
           imgURL: "",
           email: res.user.username,
           role: res.user.role,
           token: res.token,
+          community: res.user.community,
           userDashboards: []
         }
         localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
-        this.facade.userService.getRoles();          
+        this.facade.userService.getRoles();
         this.facade.modalService.closeAll();
-        this.router.navigate(['/']);
-      }       
+        this.navigateByRole(this.authenticatedUser.role);
+      }
     }, err => {
       this.invalidUser();
     });
@@ -71,14 +72,22 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean{
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser !== null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if(currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
     }else{
       localStorage.clear();
       return false;
     }
   }
+  navigateByRole(role: string) {
 
+    if (role === 'Common') {
+      this.router.navigate(['/referrals']);
+    }
+    else {
+      this.router.navigate(['/'])
+    }
+  }
   invalidUser(){
     this.zone.run(() => { this.router.navigate(['/unauthorized']);});
     this.facade.toastrService.error('Invalid username or password.');

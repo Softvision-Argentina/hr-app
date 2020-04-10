@@ -101,6 +101,7 @@ namespace Domain.Services.Repositories.EF
             context.Consultants.Add(consultant23);
             context.Consultants.Add(consultant24);
             context.Consultants.Add(consultant25);
+            context.Consultants.Add(consultant26);
             context.SaveChanges();
             #endregion
 
@@ -631,12 +632,24 @@ namespace Domain.Services.Repositories.EF
             var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community2};
+
+           // Users for testing Roles 
+           var user99 = new User { FirstName = "root", LastName = "root", Username = "root@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user90 = new User { FirstName = "communitymanager", LastName = "communitymanager", Username = "communitymanager@softvision.com", Role = Roles.CommunityManager, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community1};
+           var user91 = new User { FirstName = "recruiter", LastName = "recruiter", Username = "recruiter@softvision.com", Role = Roles.Recruiter, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user92 = new User { FirstName = "common", LastName = "common", Username = "common@softvision.com", Role = Roles.Common, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user93 = new User { FirstName = "interviewer", LastName = "interviewer", Username = "interviewer@softvision.com", Role = Roles.Interviewer, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+
+
+
             var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user24 = new User { FirstName = "Gustavo", LastName = "Petruzzi", Username = "gustavo.petruzzi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user25 = new User { FirstName = "Marcelo", LastName = "Martin", Username = "marcelo.martin@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user26 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-
+            var user27 = new User { FirstName = "Damian", LastName = "Costa", Username = "damian.costa@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user28 = new User { FirstName = "Gabriel", LastName = "Damalis", Username = "gabriel.damalis@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            
             context.Users.Add(user2);
             context.Users.Add(user3);
             context.Users.Add(user4);
@@ -658,11 +671,17 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user20);
             context.Users.Add(user21);
             context.Users.Add(user22);
+            context.Users.Add(user99);
+            context.Users.Add(user90);
+            context.Users.Add(user91);
+            context.Users.Add(user92);
+            context.Users.Add(user93);
             context.Users.Add(user23);
             context.Users.Add(user24);
             context.Users.Add(user25);
             context.Users.Add(user26);
-
+            context.Users.Add(user27);
+            context.Users.Add(user28); 
             context.SaveChanges();
             #endregion
 

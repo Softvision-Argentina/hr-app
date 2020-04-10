@@ -43,13 +43,13 @@ export class SkillTypeComponent implements OnInit {
     this.app.hideLoading();
   }
 
-  getSkillTypes() {
+  getSkillTypes(){
     this.facade.skillTypeService.get()
       .subscribe(res => {
         this.filteredSkillTypes = res;
         this.listOfDisplayData = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -137,11 +137,7 @@ export class SkillTypeComponent implements OnInit {
                   }, err => {
                     this.app.hideLoading();
                     modal.nzFooter[1].loading = false;
-                    if (err.message) {
-                      this.facade.toastrService.error(err.message);
-                    } else {
-                      this.facade.toastrService.error('The service is not available now. Try again later.');
-                    }
+                    this.facade.errorHandlerService.showErrorMessage(err);
                   });
             } else {
               modal.nzFooter[1].loading = false;
@@ -238,11 +234,7 @@ export class SkillTypeComponent implements OnInit {
           this.getSkillTypes();
           this.facade.toastrService.success('SkillType was deleted !');
         }, err => {
-          if (err.message) {
-            this.facade.toastrService.error(err.message);
-          } else {
-            this.facade.toastrService.error('The service is not available now. Try again later.');
-          }
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }

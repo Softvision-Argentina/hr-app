@@ -20,8 +20,8 @@ export class HRGuard implements CanActivate {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
-      if (this.roles.indexOf(this.currentUser.role) !== -1
-        && (this.currentUser.role === "Admin" || this.currentUser.role === "HRManagement" || this.currentUser.role === "HRUser")) return true;
+      if (this.roles.indexOf(this.currentUser.role) != -1
+        && (this.currentUser.role == "Admin" || this.currentUser.role == "HRManagement" || this.currentUser.role == "HRUser") || this.currentUser.role == "Interviewer" || this.currentUser.role == "CommunityManager" || this.currentUser.role == "Recruiter" ) return true;
       else {
         this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
         return false;

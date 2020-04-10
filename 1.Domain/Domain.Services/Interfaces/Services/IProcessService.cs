@@ -15,6 +15,7 @@ namespace Domain.Services.Interfaces.Services
 
         IEnumerable<ReadedProcessContract> List();
         IEnumerable<ReadedProcessContract> GetActiveByCandidateId(int candidateId);
+        IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community);
         void Approve(int processID);
 
         void Reject(int id, string rejectionReason);

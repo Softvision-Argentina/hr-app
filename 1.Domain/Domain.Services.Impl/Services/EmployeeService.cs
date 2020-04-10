@@ -10,7 +10,6 @@ using Domain.Services.Interfaces.Services;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
-using Domain.Services.Contracts.Candidate;
 
 namespace Domain.Services.Impl.Services
 {
@@ -208,7 +207,5 @@ namespace Domain.Services.Impl.Services
             Employee employee = _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
             return _mapper.Map<Employee>(employee);
         }
-
-
     }
 }

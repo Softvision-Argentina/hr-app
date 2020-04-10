@@ -69,11 +69,11 @@ export class CommunitiesComponent implements OnInit {
 
   getCandidateProfiles() {
     this.facade.candidateProfileService.get()
-      .subscribe(res => {
-        this.candidateprofiles = res;
-      }, err => {
-        console.log(err);
-      });
+    .subscribe(res => {
+      this.candidateprofiles = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
   }
 
   resetForm() {
@@ -132,8 +132,7 @@ export class CommunitiesComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else modal.nzFooter[1].loading = false;
@@ -190,8 +189,7 @@ export class CommunitiesComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
-                  if (err.message !== undefined) this.facade.toastrService.error(err.message);
-                  else this.facade.toastrService.error("The service is not available now. Try again later.");
+                  this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else modal.nzFooter[1].loading = false;
@@ -213,8 +211,7 @@ export class CommunitiesComponent implements OnInit {
           this.settings.getCommunities();
           this.facade.toastrService.success('Community was deleted !');
         }, err => {
-          if (err.message !== undefined) this.facade.toastrService.error(err.message);
-          else this.facade.toastrService.error("The service is not available now. Try again later.");
+          this.facade.errorHandlerService.showErrorMessage(err);
         })
     });
   }
