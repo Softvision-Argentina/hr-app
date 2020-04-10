@@ -8,8 +8,8 @@
           </th>
           <th class="tableHead">
             Profile
-            <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 30px;">
-              <button nz-button nz-dropdown style="border: none"><i style="font-size: 20px" nz-icon type="filter"
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown><i style="font-size: 20px" nz-icon type="filter"
                   theme="outline"></i></button>
               <ul nz-menu>
                 <li nz-menu-item (click)="emitProfileId(0)">
@@ -23,8 +23,8 @@
           </th>
           <th class="tableHead">
             Community
-            <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 30px;">
-              <button nz-button nz-dropdown style="border: none"><i style="font-size: 20px" nz-icon nzType="filter"
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown><i style="font-size: 20px" nz-icon nzType="filter"
                   theme="outline"></i></button>
               <ul nz-menu>
                 <li nz-menu-item (click)="emitCommunityId(0)">
@@ -38,8 +38,8 @@
           </th>
           <th class="tableHead">
             Status
-            <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 30px;">
-              <button nz-button nz-dropdown style="border: none"><i style="font-size: 20px" nz-icon type="filter"
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown><i style="font-size: 20px" nz-icon type="filter"
                   theme="outline"></i></button>
               <ul nz-menu>
                 <li nz-menu-item (click)="emitResetStatus()">
@@ -53,8 +53,8 @@
           </th>
           <th class="tableHead">
             Current Stage
-            <nz-dropdown [nzPlacement]="'bottomCenter'" style="margin-left: 30px;">
-              <button nz-button nz-dropdown style="border: none"><i style="font-size: 20px" nz-icon type="filter"
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown><i style="font-size: 20px" nz-icon type="filter"
                   theme="outline"></i></button>
               <ul nz-menu>
                 <li nz-menu-item (click)="emitCurrentStageValue(0)">
