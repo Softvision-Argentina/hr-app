@@ -12,7 +12,6 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -69,7 +68,7 @@ namespace Domain.Services.Impl.Services
 
             this.AddRecruiterToCandidate(candidate, contract.Recruiter.Id);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);            
+            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
@@ -268,6 +267,6 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
-        }       
+        }
     }
 }
