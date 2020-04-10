@@ -28,7 +28,6 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-import { CandidateSkill } from 'src/entities/candidateSkill';
 
 @Component({
   selector: 'app-processes',
@@ -46,7 +45,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     draggable: false
   };
 
-
   @ViewChild('slickModal') slickModal: SlickComponent;
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
@@ -60,7 +58,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
 
   filteredProcesses: Process[] = [];
-
   searchValue = '';
   searchRecruiterValue = '';
   searchValueStatus = '';
@@ -115,10 +112,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.app.removeBgImage();
-
     this.getMyProcesses();
-
-
     this.getCandidates();
     this.getConsultants();
     this.getOffices();
@@ -136,11 +130,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName: [null, [Validators.required]]
     });
-
     this.app.hideLoading();
-
   }
-
 
   ngAfterViewChecked() {
     if (this.slickModal && this.openFromEdit) {
@@ -251,11 +242,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-
-
   }
-
-
 
   getProcessesByConsultant() {
     this.facade.processService.get()
@@ -452,9 +439,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   triggerSearchRecruiter(val) {
-    console.log('val: ' + val);
     this.searchRecruiterValue = val;
-    console.log('trigger: ' + this.searchRecruiterValue);
     this.searchRecruiter();
   }
 
@@ -500,9 +485,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   triggerSearchStatus(id) {
-
     this.searchValueStatus = id;
-    console.log('test:' + this.searchValueStatus);
     this.searchStatus();
   }
 
@@ -514,8 +497,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    console.log(this.listOfDisplayData);
-    console.log(this.statusList);
     this.searchValueStatus = '';
   }
 
@@ -1060,10 +1041,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   findProfileByName(name) {
     let counter = 0;
-
-    for (let i = 0; i < this.profiles.length; i++) {
-      name.toLowerCase() === this.profiles[i].name.toLowerCase() ? this.searchProfile(this.profiles[i].id) : counter++;
-    }
+    this.profiles.some(function(p) {
+      name.toLowerCase() === p.name.toLowerCase() ? this.searchProfile(p.id) : counter++;
+      return name.toLowerCase() === p.name.toLowerCase();
+    });
     // tslint:disable-next-line: no-unused-expression
     counter === this.profiles.length ? this.searchProfile(0) : null;
   }
