@@ -20,14 +20,14 @@ export class ReservationsComponent implements OnInit {
 
   @Input()
   private _users: User[];
-  public get usr(): User[] {
+  public get users(): User[] {
     return this._users;
   }
-  public set usr(value: User[]) {
-    this.users = value;
+  public set users(value: User[]) {
+    this.fillUsers = value;
     }
 
-  users: User[] = [];
+  fillUsers: User[] = [];
   reservations: Reservation[] = [];
   room: Room[] = [];
   filteredRoom: Room[] = [];
@@ -57,7 +57,7 @@ export class ReservationsComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.users = this._users;
+    this.fillUsers = this._users;
     this.getUsers();
     this.getReservations();
     this.getOffices();
@@ -70,7 +70,7 @@ export class ReservationsComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.fillUsers = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

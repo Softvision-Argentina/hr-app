@@ -104,7 +104,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Recruiter *</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="user">
-                        <nz-option *ngFor="let user of users" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
+                        <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>

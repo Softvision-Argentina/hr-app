@@ -31,11 +31,11 @@ export class ProcessContactComponent implements OnInit {
 
   @Input()
   private _users: User[];
-  public get usr(): User[] {
+  public get users(): User[] {
     return this._users;
   }
-  public set usr(value: User[]) {
-    this.users = value;
+  public set users(value: User[]) {
+    this.fillUsers = value;
   }
 
   @Input()
@@ -85,7 +85,7 @@ export class ProcessContactComponent implements OnInit {
 
   processStartModal: TemplateRef<{}>;
   processFooterModal: TemplateRef<{}>;
-  users: User[] = [];
+  fillUsers: User[] = [];
   comms: Community[] = [];
   filteredCommunity: Community[] = [];
   profiles: CandidateProfile[] = [];
@@ -131,7 +131,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.users = this._users;
+    this.fillUsers = this._users;
     this.comms = this._communities;
     this.filteredCommunity = this._communities;
     this.profiles = this._candidateProfiles;
@@ -159,7 +159,7 @@ export class ProcessContactComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.fillUsers = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -192,7 +192,7 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
+    this.candidateForm.controls['user'].setValue(this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
 
@@ -324,7 +324,7 @@ export class ProcessContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      user: this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
+      user: this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,

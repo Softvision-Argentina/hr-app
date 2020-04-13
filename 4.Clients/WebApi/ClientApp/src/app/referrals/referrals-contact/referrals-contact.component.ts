@@ -29,11 +29,11 @@ export class ReferralsContactComponent implements OnInit {
 
   @Input()
   private _users: User[];
-  public get usr(): User[] {
+  public get users(): User[] {
     return this._users;
   }
-  public set usr(value: User[]) {
-    this.users = value;
+  public set users(value: User[]) {
+    this.fillUsers = value;
   }
 
 
@@ -86,7 +86,7 @@ export class ReferralsContactComponent implements OnInit {
 
   processStartModal: TemplateRef<{}>;
   processFooterModal: TemplateRef<{}>;
-  users: User[] = [];
+  fillUsers: User[] = [];
   comms: Community[] = [];
   filteredCommunity: Community[] = [];
   profiles: CandidateProfile[] = [];
@@ -132,7 +132,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.users = this._users;
+    this.fillUsers = this._users;
     this.comms = this._communities;
     this.filteredCommunity = this._communities;
     this.profiles = this._candidateProfiles;
@@ -143,13 +143,6 @@ export class ReferralsContactComponent implements OnInit {
 
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-
-/*     this.facade.userservice.getbyemail(this.currentuser.email)
-      .subscribe(res => {
-        this.currentuser = res.body;
-        this.currentuser != null ? this.candidateform.controls['user'].setvalue(this.currentuser.id) : null   
-    });
- */
   }
   profileChanges(profileId){
     this.candidateForm.controls['community'].reset();
@@ -169,7 +162,7 @@ export class ReferralsContactComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.fillUsers = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -202,7 +195,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['user'].setValue(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
+    this.candidateForm.controls['user'].setValue(this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
 
@@ -287,13 +280,7 @@ export class ReferralsContactComponent implements OnInit {
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
-
-    // for (const i in this.candidateForm.controls) {
-    //   this.candidateForm.controls[i].markAsDirty();
-    //   this.candidateForm.controls[i].updateValueAndValidity();
-    //   if (!this.candidateForm.controls[i].valid) isCompleted = false;
-    // }
-    if (isCompleted) {
+   if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
         name: this.candidateForm.controls['firstName'].value.toString(),
@@ -340,7 +327,7 @@ export class ReferralsContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      user: this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
+      user: this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,

@@ -32,11 +32,11 @@ export class CandidateAddComponent implements OnInit {
 
     @Input()
     private _users: User[];
-    public get usr(): User[] {
+    public get users(): User[] {
         return this._users;
     }
-    public set usr(value: User[]) {
-        this.users = value;
+    public set users(value: User[]) {
+        this.fillUsers = value;
     }
 
     @Input()
@@ -67,7 +67,7 @@ export class CandidateAddComponent implements OnInit {
     }
     
   fillCandidate: Candidate;
-  users: User[] = [];
+  fillUsers: User[] = [];
   comms: Community[] =[];
   profiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
@@ -111,7 +111,7 @@ export class CandidateAddComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.users = this._users;
+    this.fillUsers = this._users;
     this.comms = this._communities;
     this.profiles = this._candidateProfiles;
     this.isEdit = this._process.id !== 0;
@@ -139,7 +139,7 @@ export class CandidateAddComponent implements OnInit {
 
   }
   setRecruiter() {
-    const currentRecruiter = this.users.find(user => user.username === this.currentUser.username);
+    const currentRecruiter = this.fillUsers.find(user => user.username === this.currentUser.username);
     if(!!currentRecruiter) {
       this.candidateForm.controls['user'].setValue(currentRecruiter.id);
     } else {
