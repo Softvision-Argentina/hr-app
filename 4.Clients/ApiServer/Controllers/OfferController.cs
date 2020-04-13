@@ -4,10 +4,7 @@ using Core;
 using Domain.Services.Contracts.Offer;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
 {
@@ -15,10 +12,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class OfferController : BaseController<OfferController>
     {
-        IOfferService _offerService;
-        private IMapper _mapper;
+        private readonly IOfferService _offerService;
+        private readonly IMapper _mapper;
 
-        public OfferController(IOfferService offerService, ILog<OfferController> logger, IMapper mapper) : base(logger)
+        public OfferController(
+            IOfferService offerService, 
+            ILog<OfferController> logger, 
+            IMapper mapper) : base(logger)
         {
             _offerService = offerService;
             _mapper = mapper;
@@ -35,7 +35,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/offer/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -52,8 +51,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/offer
-        // Creation
         [HttpPost]
         public IActionResult Post([FromBody] CreateOfferViewModel vm)
         {
@@ -66,8 +63,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // PUT api/offer/5
-        // Mutation
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]UpdateOfferViewModel vm)
         {
@@ -81,7 +76,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/offer/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

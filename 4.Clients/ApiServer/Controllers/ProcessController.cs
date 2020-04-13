@@ -23,7 +23,6 @@ namespace ApiServer.Controllers
     {
         private readonly IProcessService _processService;
         private readonly IMapper _mapper;
-        private INotificationRepository _notificationRepository;
 
         public ProcessController(IProcessService processService,
             ILog<ProcessController> logger, IMapper mapper)
@@ -33,7 +32,6 @@ namespace ApiServer.Controllers
             _mapper = mapper;
         }
 
-        // GET api/<controller>/5
         [HttpGet]
         public IActionResult Get()
         {
@@ -45,7 +43,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/<controller>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -68,8 +65,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/<controller>
-        // Create
         [HttpPost]
         public IActionResult Post([FromBody]CreateProcessViewModel createProcessViewModel)
         {
@@ -81,8 +76,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // PUT api/<controller>/5
-        // Update
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]UpdateProcessViewModel updateProcessContract)
         {
@@ -99,7 +92,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -111,7 +103,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/dummies/5
+        //TODO: cant we use de convention over configuration?
         [HttpPost("Approve")]
         public IActionResult Approve([FromBody]int id)
         {
@@ -123,19 +115,17 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/dummies/5
         [HttpPost("Reject")]
-        public IActionResult Reject([FromBody] RejectProcessViewModel processVM)
+        public IActionResult Reject([FromBody] RejectProcessViewModel rejectProcessVm)
         {
             return ApiAction(() =>
             {
-                _processService.Reject(processVM.Id, processVM.RejectionReason);
+                _processService.Reject(rejectProcessVm.Id, rejectProcessVm.RejectionReason);
 
                 return Accepted();
             });
         }
 
-        // GET api/<controller>/5
         [HttpGet("{candidateId}")]
         public IActionResult GetActiveProcessByCandidate(int candidateId)
         {
