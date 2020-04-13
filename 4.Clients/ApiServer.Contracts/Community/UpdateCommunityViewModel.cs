@@ -9,7 +9,7 @@ namespace ApiServer.Contracts.Community
 {
     public class UpdateCommunityViewModel
     {
-        public string name { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
         public int ProfileId { get; set; }
