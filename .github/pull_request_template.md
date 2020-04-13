@@ -1,7 +1,7 @@
 ## What is this fix/feature about?
 INSERT_BRIEF_DESCRIPTION
 
-**This PR is blocked by the following PR:** INSERT_LINK_HERE
+**This PR is blocked by the following PR:** #
 
 ## Ticket
 **NetCoreApi trello card URL:** INSERT_LINK_HERE
