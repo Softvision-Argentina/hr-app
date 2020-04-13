@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.User;
+﻿using ApiServer.Contracts.User;
 using AutoMapper;
 using Core;
-using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,19 +10,19 @@ namespace ApiServer.Controllers
     [ApiController]
     public class UserController : BaseController<UserController>
     {
-        IUserService _userService;
-        private IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService,
-                                 ILog<UserController> logger,
-                                 IMapper mapper) : base(logger)
+        public UserController(
+            IUserService userService,
+            ILog<UserController> logger,
+            IMapper mapper) : base(logger)
         {
             _userService = userService;
             _mapper = mapper;
         }
 
-        // GET api/user/john.doe@softvision.com
-        // returns the role
+        //Todo: convention over configuration
         [HttpGet("GetRoleByUserName/{username}")]
         public IActionResult GetRoleByUserName(string username)
         {
@@ -47,6 +45,5 @@ namespace ApiServer.Controllers
         {
             return Ok(new { Status = "OK" });
         }
-
     }
 }

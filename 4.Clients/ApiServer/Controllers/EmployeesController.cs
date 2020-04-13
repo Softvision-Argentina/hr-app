@@ -1,15 +1,10 @@
 using ApiServer.Contracts.Employee;
-using ApiServer.Contracts.EmployeeCasualty;
 using AutoMapper;
 using Core;
-using Domain.Model;
 using Domain.Services.Contracts.Employee;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
 {
@@ -18,12 +13,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class EmployeesController : BaseController<EmployeesController>
     {
-        IEmployeeService _employeeService;
-        private IMapper _mapper;
+        private readonly IEmployeeService _employeeService;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IEmployeeService employeeService,
-                                 ILog<EmployeesController> logger,
-                                 IMapper mapper) : base(logger)
+        public EmployeesController(
+            IEmployeeService employeeService,
+            ILog<EmployeesController> logger,
+            IMapper mapper) : base(logger)
         {
             _employeeService = employeeService;
             _mapper = mapper;
@@ -39,6 +35,7 @@ namespace ApiServer.Controllers
             });
         }
 
+        //TODO: we could simplify this base on convention over configuration same for the rest of the endpoints
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
@@ -80,11 +77,11 @@ namespace ApiServer.Controllers
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody]UpdateEmployeeViewModel viewModel)
+        public IActionResult Update([FromBody]UpdateEmployeeViewModel updateEmployeeVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateEmployeeContract>(viewModel);
+                var contract = _mapper.Map<UpdateEmployeeContract>(updateEmployeeVm);
                 _employeeService.UpdateEmployee(contract);
 
                 return Accepted();
@@ -92,11 +89,11 @@ namespace ApiServer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody]CreateEmployeeViewModel viewModel)
+        public IActionResult Add([FromBody]CreateEmployeeViewModel createEmployeeVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateEmployeeContract>(viewModel);
+                var contract = _mapper.Map<CreateEmployeeContract>(createEmployeeVm);
                 var returnContract = _employeeService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedEmployeeViewModel>(returnContract));

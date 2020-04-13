@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Task;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Task;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -16,12 +12,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class TasksController : BaseController<TasksController>
     {
-        ITaskService _taskService;
-        private IMapper _mapper;
+        private readonly ITaskService _taskService;
+        private readonly IMapper _mapper;
 
-        public TasksController(ITaskService taskService,
-                                 ILog<TasksController> logger,
-                                 IMapper mapper) : base(logger)
+        public TasksController(
+            ITaskService taskService,
+            ILog<TasksController> logger,
+            IMapper mapper) : base(logger)
         {
             _taskService = taskService;
             _mapper = mapper;
@@ -38,7 +35,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/tasks/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -56,29 +52,25 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/tasks
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateTaskViewModel vm)
+        public IActionResult Post([FromBody]CreateTaskViewModel createTaskVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateTaskContract>(vm);
+                var contract = _mapper.Map<CreateTaskContract>(createTaskVm);
                 var returnContract = _taskService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedTaskViewModel>(returnContract));
             });
         }
 
-
-        // PUT api/tasks/5
-        // Mutation
+        //Todo: review this code
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateTaskViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateTaskViewModel updateTaskVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateTaskContract>(vm);
+                var contract = _mapper.Map<UpdateTaskContract>(updateTaskVm);
                 contract.Id = id;
                 contract.IsNew = false; //Damos por sentado que ya no es nueva para que desaparezca el icono. El usuario la editó
                 _taskService.Update(contract);
@@ -87,7 +79,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/tasks/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -104,6 +95,7 @@ namespace ApiServer.Controllers
             return Ok(new { Status = "OK" });
         }
 
+        //Todo: convention over configuration
         [HttpPost("Approve/{id}")]
         public IActionResult Approve(int id)
         {

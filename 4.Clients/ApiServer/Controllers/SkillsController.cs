@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Skills;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Skill;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -17,10 +12,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class SkillsController : BaseController<SkillsController>
     {
-        ISkillService _skillService;
-        private IMapper _mapper;
+        private readonly ISkillService _skillService;
+        private readonly IMapper _mapper;
 
-        public SkillsController(ISkillService skillService, ILog<SkillsController> logger, IMapper mapper): base(logger)
+        public SkillsController(
+            ISkillService skillService, 
+            ILog<SkillsController> logger, 
+            IMapper mapper): base(logger)
         {
             _skillService = skillService;
             _mapper = mapper;
@@ -37,7 +35,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/skills/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -54,28 +51,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/skills
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody] CreateSkillViewModel vm)
+        public IActionResult Post([FromBody] CreateSkillViewModel createSkillsVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateSkillContract>(vm);
+                var contract = _mapper.Map<CreateSkillContract>(createSkillsVm);
                 var returnContract = _skillService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedSkillViewModel>(returnContract));
             });
         }
 
-        // PUT api/skills/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateSkillViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateSkillViewModel updateSkillsVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateSkillContract>(vm);
+                var contract = _mapper.Map<UpdateSkillContract>(updateSkillsVm);
                 contract.Id = id;
                 _skillService.Update(contract);
 
@@ -83,7 +76,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/skills/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

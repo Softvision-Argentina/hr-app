@@ -15,7 +15,10 @@ namespace ApiServer.Controllers
         private readonly IHttpContextAccessor _httpContext;
         private readonly IRepository<User> _usersRepo;
 
-        public NotificationController(INotificationRepository notificationRepository, IHttpContextAccessor httpContext, IRepository<User> userRepo)
+        public NotificationController(
+            INotificationRepository notificationRepository, 
+            IHttpContextAccessor httpContext, 
+            IRepository<User> userRepo)
         {
             _notificationRepository = notificationRepository;
             _httpContext = httpContext;
