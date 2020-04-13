@@ -68,7 +68,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   getTasks() {
-    if (this.app.isUserRole(["HRManagement", "Admin", "Recruiter"])) {
+    if (this.app.isUserRole(['HRManagement', 'Admin', 'Recruiter'])) {
       this.facade.taskService.get()
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));

@@ -141,12 +141,7 @@ export class ProcessContactComponent implements OnInit {
     this.getCandidates().subscribe(() => {}, err => this.facade.errorHandlerService.showErrorMessage(err));
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-/*     this.facade.userService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentUser = res.body;
-        this.currentUser != null ? this.candidateForm.controls['user'].setValue(this.currentUser.id) : null
-    }); */
-  }
+ }
 
   profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
@@ -354,8 +349,6 @@ export class ProcessContactComponent implements OnInit {
   }
 
   createNewCandidate() {
-    console.log("here");
-    
     this.app.showLoading;
     let isCompleted: boolean = true;
 
@@ -391,8 +384,6 @@ export class ProcessContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
-      console.log(newCandidate);
-      
       this.facade.candidateService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');

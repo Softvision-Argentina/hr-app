@@ -7,15 +7,12 @@ import { AppComponent } from 'src/app/app.component';
 import { User } from 'src/entities/user';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ProcessesComponent } from 'src/app/processes/processes/processes.component';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
-import { Globals } from 'src/app/app-globals/globals';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers'
-import { Process } from 'src/entities/process';
 import { ReferralsComponent } from '../referrals/referrals.component';
 
 @Component({
@@ -239,7 +236,6 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    console.log(this.filteredCandidate);
     this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
@@ -336,7 +332,6 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   Recontact(idCandidate: number) {
-    console.log(this.users.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
     editedCandidate = {
       id: idCandidate,

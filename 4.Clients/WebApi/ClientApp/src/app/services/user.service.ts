@@ -37,14 +37,4 @@ export class UserService extends BaseService<User> {
       });
     }
   }
-//  constructor(router: Router, config: AppConfig, http: HttpClient) {
-//    super(router, config, http);
-//    this.apiUrl += 'User';
-//  }
-//
-//  public GetByEmail(email: string){
-//    return this.http.get(this.apiUrl
-//      + '/GetByEmail?email=' + email, { headers: this.headers, observe: "response" })
-//      
-
 }

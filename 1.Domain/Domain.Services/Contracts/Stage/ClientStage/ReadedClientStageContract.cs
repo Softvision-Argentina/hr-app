@@ -1,7 +1,4 @@
-﻿using Domain.Services.Contracts.Candidate;
-using Domain.Services.Contracts.Stage.StageItem;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Domain.Model.Enum;
 using Domain.Services.Contracts.User;
 

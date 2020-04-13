@@ -47,7 +47,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
             var expectedValue = new Task()
             {
                 TaskItems = new List<TaskItem>() { new TaskItem() },
-                Consultant = new Consultant()
+                User = new User()
             };
             DbContext.Tasks.Add(expectedValue);
             DbContext.SaveChanges();
@@ -59,7 +59,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
             Assert.Equal(expectedValue, actualValue.FirstOrDefault());
             Assert.Equal(expectedValue.TaskItems.Count, actualValue.FirstOrDefault().TaskItems.Count);
             Assert.Equal(expectedValue.TaskItems.FirstOrDefault(), actualValue.FirstOrDefault().TaskItems.FirstOrDefault());
-            Assert.Equal(expectedValue.Consultant, actualValue.FirstOrDefault().Consultant);
+            Assert.Equal(expectedValue.User, actualValue.FirstOrDefault().User);
         }
 
         [Fact(DisplayName = "Verify that repository returns task when QueryEager there is data")]
@@ -78,8 +78,8 @@ namespace Domain.Services.Repositories.EF.UnitTests
                 IsNew = true,
                 CreatedDate = DateTime.Today.AddDays(-1),
                 EndDate = DateTime.Today,
-                ConsultantId = 1,
-                Consultant = new Consultant() { Id = 1 },
+                UserId = 1,
+                User = new User() { Id = 1 },
                 TaskItems = new List<TaskItem>() { new TaskItem() { Id = 1 } },
             };
             DbContext.Tasks.Add(newTask);

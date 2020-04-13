@@ -121,7 +121,7 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type" [hidden]="!visible">Recruiter</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                     <nz-select formControlName="user">
-                        <nz-option *ngFor="let r of users" nzLabel="{{r.firstName}} {{r.lastName}}" [nzValue]="r">
+                        <nz-option *ngFor="let user of users" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>

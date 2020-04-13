@@ -19,7 +19,7 @@ namespace Domain.Services.Impl.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Reservation> _ReservationRepository;
-        private readonly IRepository<User> _UserRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<Room> _RoomRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<ReservationService> _log;
@@ -45,7 +45,7 @@ namespace Domain.Services.Impl.Services
             _updateReservationContractValidator = updateReservationContractValidator;
             _createReservationContractValidator = createReservationContractValidator;
             _RoomRepository = RoomRepository;
-            _UserRepository = UserRepository;
+            _userRepository = UserRepository;
             _googleCalendarService = googleCalendarService;
         }
 
@@ -62,7 +62,7 @@ namespace Domain.Services.Impl.Services
             ValidateSchedule(Reservation);
             CheckOverlap(Reservation);
 
-            Reservation.User = _UserRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
+            Reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
             Reservation.Room = _RoomRepository.Query().Where(x => x.Id == Reservation.RoomId).FirstOrDefault();
 
             var createdReservation = _ReservationRepository.Create(Reservation);
@@ -106,7 +106,7 @@ namespace Domain.Services.Impl.Services
 
             ValidateSchedule(Reservation);
             CheckOverlap(Reservation);
-            Reservation.User = _UserRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
+            Reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
 
             _ReservationRepository.Update(Reservation);
             _log.LogInformation($"Complete for {contract.Description}");

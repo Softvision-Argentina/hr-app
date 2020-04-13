@@ -120,21 +120,6 @@ export class DaysOffComponent implements OnInit, OnDestroy {
     };
   };
 
-  canAssign(): boolean {
-    // if (this.currentUser && this.app.isUserRole(["HRManagement", "Admin"])) return true;
-    // else return false;
-    return true;
-  }
-
-  filterTasks() {
-    // if(!this.showAllTasks){
-    //   this.toDoListDisplay = this.toDoListDisplay.filter(todo => todo.user.emailAddress.toLowerCase() === this.currentUser.emailAddress.toLowerCase());
-    // }
-    // else{
-    //   this.toDoListDisplay = this.toDoList;
-    // }
-
-  }
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({

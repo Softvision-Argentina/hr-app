@@ -209,7 +209,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    // Edit User Modal
     this.resetForm();
     this.getSkills();
     if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }

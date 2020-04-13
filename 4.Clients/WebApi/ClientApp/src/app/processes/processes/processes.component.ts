@@ -88,7 +88,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   emptyUser: any;
   currentCandidate: Candidate;
 
-
   isEdit: boolean = false;
   openFromEdit: boolean = false;
   currentComponent: string;
@@ -122,10 +121,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-/*     this.facade.userService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentUser = res.body;
-    }); */
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
