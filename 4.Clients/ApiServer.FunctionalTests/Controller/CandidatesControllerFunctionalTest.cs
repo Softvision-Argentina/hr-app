@@ -230,10 +230,8 @@ namespace ApiServer.FunctionalTests.Controller
 
         [Theory(DisplayName = "Verify api/Candidates [Post] is returning Bad Request [400] when validation of model fails ")]
         [Trait("Category", "Functional-Test")]
-        [InlineData("DNI")]
         [InlineData("Name")]
         [InlineData("LastName")]
-        [InlineData("LinkedInProfile")]
         public async System.Threading.Tasks.Task GivenCandidatesPost_WhenValidationFails_ShouldReturnBadRequest(string parameterName)
         {
             //Arrange
