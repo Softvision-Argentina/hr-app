@@ -92,7 +92,7 @@
             </td>
             <td scope="row">
               <a *ngIf="process.candidate.recruiter" class="nameStyle"
-                (click)="emitRecruiterId(process.consultantOwner.id)">
+                (click)="emitRecruiterId(process.candidate.recruiter.id)">
                 {{ process.candidate.recruiter.name }}
                 {{ process.candidate.recruiter.lastName }}
               </a>
