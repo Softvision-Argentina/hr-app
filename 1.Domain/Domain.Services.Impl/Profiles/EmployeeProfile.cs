@@ -11,7 +11,7 @@ namespace Domain.Services.Impl.Profiles
     {
         public EmployeeProfile()
         {
-            CreateMap<Employee, ReadedEmployeeContract>().ForMember(contract => contract.RecruiterId, opt => opt.MapFrom(employee => employee.Recruiter.Id)); ;
+            CreateMap<Employee, ReadedEmployeeContract>().ForMember(contract => contract.UserId, opt => opt.MapFrom(employee => employee.User.Id)); ;
             CreateMap<CreateEmployeeContract, Employee>();
             CreateMap<Employee, CreatedEmployeeContract>();
             CreateMap<UpdateEmployeeContract, Employee>();

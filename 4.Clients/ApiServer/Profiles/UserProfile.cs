@@ -18,6 +18,7 @@ namespace ApiServer.Profiles
             CreateMap<ReadedUserContract, ReadedUserViewModel>();
             CreateMap<UpdateUserViewModel, UpdateUserContract>();
             CreateMap<ReadedUserRoleContract, ReadedUserRoleViewModel>();
+            CreateMap<ReadedUserViewModel,ReadedUserContract>();
         }
 
         private static string ConverToString(System.Type propertyType, object propertyValue)

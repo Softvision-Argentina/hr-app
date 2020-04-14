@@ -1,7 +1,7 @@
-import { CandidateSkill } from './candidateSkill';
+  import { CandidateSkill } from './candidateSkill';
 import { CandidateStatusEnum } from './enums/candidate-status.enum';
 import { EnglishLevelEnum } from './enums/english-level.enum';
-import { Consultant } from './consultant';
+import { User } from './user';
 import { Community } from './community';
 import { CandidateProfile } from './Candidate-Profile';
 
@@ -16,7 +16,7 @@ export class Candidate {
   englishLevel: EnglishLevelEnum;
   status: CandidateStatusEnum;
   candidateSkills: CandidateSkill[];
-  recruiter: Consultant;
+  user: User;
   preferredOfficeId?: number;
   contactDay: Date;
   profile: CandidateProfile;

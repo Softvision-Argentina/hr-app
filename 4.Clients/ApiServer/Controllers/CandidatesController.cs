@@ -16,12 +16,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class CandidatesController : BaseController<CandidatesController>
     {
-        ICandidateService _candidateService;
-        private IMapper _mapper;
+        private readonly ICandidateService _candidateService;
+        private readonly IMapper _mapper;
 
-        public CandidatesController(ICandidateService candidateService, 
-                                 ILog<CandidatesController> logger, 
-                                 IMapper mapper): base(logger)
+        public CandidatesController(
+            ICandidateService candidateService,
+            ILog<CandidatesController> logger,
+            IMapper mapper) : base(logger)
         {
             _candidateService = candidateService;
             _mapper = mapper;
@@ -59,11 +60,10 @@ namespace ApiServer.Controllers
             {
                 var candidates = _candidateService.Read(filter);
                 return Accepted(_mapper.Map<List<ReadedCandidateViewModel>>(candidates));
-                
+
             });
         }
 
-        // GET api/candidates/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -93,8 +93,8 @@ namespace ApiServer.Controllers
                     return Accepted();
                 }
 
-                var vm = _mapper.Map<ReadedCandidateViewModel>(candidate);
-                return Accepted(vm);
+                var readedCandidateVm = _mapper.Map<ReadedCandidateViewModel>(candidate);
+                return Accepted(readedCandidateVm);
             });
         }
 
@@ -117,7 +117,7 @@ namespace ApiServer.Controllers
             {
                 var contract = _mapper.Map<CreateCandidateContract>(vm);
                 var returnContract = _candidateService.Create(contract);
-             
+
                 return Created("Get", _mapper.Map<CreatedCandidateViewModel>(returnContract));
             });
         }

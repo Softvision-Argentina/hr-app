@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Process } from 'src/entities/process';
@@ -24,20 +24,20 @@ export class HireStageComponent implements OnInit {
     }
 
     @Input()
-    private _consultants: Consultant[];
-    public get consultants(): Consultant[] {
-        return this._consultants;
+    private _users: User[];
+    public get users(): User[] {
+        return this._users;
     }
-    public set consultants(value: Consultant[]) {
-        this._consultants = value;
+    public set users(value: User[]) {
+        this._users = value;
     }
 
   hireForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    consultantOwnerId: [null, [Validators.required]],
-    consultantDelegateId: [null],
+    userOwnerId: [null, [Validators.required]],
+    userDelegateId: [null],
     feedback: [null, [trimValidator]]
   });
 

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Room;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Room;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -17,14 +13,15 @@ namespace ApiServer.Controllers
 
     public class RoomController : BaseController<RoomController> {
 
-        IRoomService _RoomService;
-        private IMapper _mapper;
+        private readonly IRoomService _roomService;
+        private readonly IMapper _mapper;
 
-        public RoomController(IRoomService RoomService,
-                                   ILog<RoomController> logger,
-                                   IMapper mapper): base(logger)
+        public RoomController(
+            IRoomService roomService,
+            ILog<RoomController> logger,
+            IMapper mapper): base(logger)
         {
-            _RoomService = RoomService;
+            _roomService = roomService;
             _mapper = mapper;
         }
 
@@ -33,64 +30,59 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var Rooms = _RoomService.List();
+                var rooms = _roomService.List();
 
-                return Accepted(_mapper.Map<List<ReadedRoomViewModel>>(Rooms));
+                return Accepted(_mapper.Map<List<ReadedRoomViewModel>>(rooms));
             });
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var Room = _RoomService.Read(Id);
+                var room = _roomService.Read(id);
 
-                if (Room == null)
+                if (room == null)
                 {
-                    return NotFound(Id);
+                    return NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedRoomViewModel>(Room));
+                return Accepted(_mapper.Map<ReadedRoomViewModel>(room));
             });
         }
 
-        // POST api/skills
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody] CreateRoomViewModel vm)
+        public IActionResult Post([FromBody] CreateRoomViewModel createRoomVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateRoomContract>(vm);
-                var returnContract = _RoomService.Create(contract);
+                var contract = _mapper.Map<CreateRoomContract>(createRoomVm);
+                var returnContract = _roomService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedRoomViewModel>(returnContract));
             });
         }
 
-        // PUT api/skills/5
-        // Mutation
-        [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody]UpdateRoomViewModel vm)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]UpdateRoomViewModel updateRoomVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateRoomContract>(vm);
-                contract.Id = Id;
-                _RoomService.Update(contract);
+                var contract = _mapper.Map<UpdateRoomContract>(updateRoomVm);
+                contract.Id = id;
+                _roomService.Update(contract);
 
-                return Accepted(new { Id });
+                return Accepted(new { id });
             });
         }
 
-        // DELETE api/skills/5
-        [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _RoomService.Delete(Id);
+                _roomService.Delete(id);
                 return Accepted();
             });
         }

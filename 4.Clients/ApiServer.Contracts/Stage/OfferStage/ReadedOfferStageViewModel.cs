@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ApiServer.Contracts.Consultant;
+using ApiServer.Contracts.User;
 using Domain.Model;
 using Domain.Model.Enum;
 
@@ -19,11 +19,11 @@ namespace ApiServer.Contracts.Stage
 
         public string Feedback { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
-        public ReadedConsultantViewModel ConsultantOwner { get; set; }
+        public int? UserOwnerId { get; set; }
+        public ReadedUserViewModel UserOwner { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
-        public ReadedConsultantViewModel ConsultantDelegate { get; set; }
+        public int? UserDelegateId { get; set; }
+        public ReadedUserViewModel UserDelegate { get; set; }
         public string RejectionReason { get; set; }        
         public DateTime HireDate { get; set; }
         public Seniority Seniority { get; set; }        

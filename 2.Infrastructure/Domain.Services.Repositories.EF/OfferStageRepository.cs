@@ -20,8 +20,8 @@ namespace Domain.Services.Repositories.EF
         public override IQueryable<OfferStage> QueryEager()
         {
             return Query()
-                .Include(x => x.ConsultantDelegate)
-                .Include(x => x.ConsultantOwner);
+                .Include(x => x.UserDelegate)
+                .Include(x => x.UserOwner);
         }
 
         public void UpdateOfferStage(OfferStage newStage, OfferStage existingStage)

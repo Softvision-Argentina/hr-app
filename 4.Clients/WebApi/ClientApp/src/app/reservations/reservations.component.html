@@ -84,13 +84,13 @@
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Recruiter</nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-select formControlName="recruiter">
-              <nz-option *ngFor="let r of recruiters" nzLabel="{{r.name}} {{r.lastName}}" [nzValue]="r.id">
+            <nz-select formControlName="user">
+              <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
               </nz-option>
             </nz-select>
-            <nz-form-explain *ngIf="reservationForm.get('recruiter').dirty && reservationForm.get('recruiter').errors">
+            <nz-form-explain *ngIf="reservationForm.get('user').dirty && reservationForm.get('user').errors">
               Please
-              input the recruiter</nz-form-explain>
+              input the user</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
       </div>

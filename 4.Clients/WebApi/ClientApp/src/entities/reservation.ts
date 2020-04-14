@@ -5,7 +5,7 @@ export class Reservation {
     description: string;
     sinceReservation: Date;
     untilReservation: Date;
-    recruiter: number;
+    user: number;
     roomId: number;
     room: Room;
   }

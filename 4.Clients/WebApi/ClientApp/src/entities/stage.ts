@@ -5,8 +5,8 @@ export class Stage {
     date: Date;
     feedback: string;
     status: StageStatusEnum;
-    consultantOwnerId: number;
-    consultantDelegateId: number;
+    userOwnerId: number;
+    userDelegateId: number;
     processId: number;
     rejectionReason?: string;
 }

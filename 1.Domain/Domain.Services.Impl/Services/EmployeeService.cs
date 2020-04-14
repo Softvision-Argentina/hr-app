@@ -21,7 +21,7 @@ namespace Domain.Services.Impl.Services
         private readonly ILog<EmployeeService> _logger;
         private readonly UpdateEmployeeContractValidator _updateEmployeeContractValidator;
         private readonly CreateEmployeeContractValidator _createEmployeeContractValidator;
-        private readonly IRepository<Consultant> _consultantRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<Role> _roleRepository;
 
         public EmployeeService(IMapper mapper,
@@ -30,7 +30,7 @@ namespace Domain.Services.Impl.Services
             ILog<EmployeeService> log,
             UpdateEmployeeContractValidator updateEmployeeContractValidator,
             CreateEmployeeContractValidator createEmployeeContractValidator,
-            IRepository<Consultant> consultantRepository,
+            IRepository<User> userRepository,
             IRepository<Role> roleRepository)
         {
             _mapper = mapper;
@@ -39,7 +39,7 @@ namespace Domain.Services.Impl.Services
             _logger = log;
             _updateEmployeeContractValidator = updateEmployeeContractValidator;
             _createEmployeeContractValidator = createEmployeeContractValidator;
-            _consultantRepository = consultantRepository;
+            _userRepository = userRepository;
             _roleRepository = roleRepository;
         }
 
@@ -89,7 +89,7 @@ namespace Domain.Services.Impl.Services
             _logger.LogInformation($"Mapping contract {contract.Name}");
             var employee = _mapper.Map<Employee>(contract);
 
-            this.AddRecruiterToEmployee(employee, contract.RecruiterId);
+            this.AddUserToEmployee(employee, contract.UserId);
             this.AddRoleToEmployee(employee, contract.RoleId);
             if(contract.ReviewerId != null)
                 this.AddReviewerToEmployee(employee, contract.ReviewerId);
@@ -111,7 +111,7 @@ namespace Domain.Services.Impl.Services
             _logger.LogInformation($"Mapping contract {contract.Name}");
             var employee = _mapper.Map<Employee>(contract);
 
-            this.AddRecruiterToEmployee(employee, contract.RecruiterId);
+            this.AddUserToEmployee(employee, contract.UserId);
             this.AddRoleToEmployee(employee, contract.RoleId);
             if (contract.ReviewerId != null)
                 this.AddReviewerToEmployee(employee, contract.ReviewerId);
@@ -122,19 +122,19 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
         }
 
-        private void AddRecruiterToEmployee(Employee employee, int recruiterID)
+        private void AddUserToEmployee(Employee employee, int userID)
         {
 
-            var recruiter = _consultantRepository.Query().Where(consultant => consultant.Id == recruiterID).FirstOrDefault();
-            //if recruiter == null => throw
-            employee.Recruiter = recruiter ?? throw new Domain.Model.Exceptions.Consultant.ConsultantNotFoundException(recruiterID);
+            var user = _userRepository.Query().Where(usr => usr.Id == userID).FirstOrDefault();
+            //if user == null => throw
+            employee.User = user ?? throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
         }
 
         private void AddRoleToEmployee(Employee employee, int roleId)
         {
 
             var role = _roleRepository.Query().Where(r => r.Id == roleId).FirstOrDefault();
-            //if recruiter == null => throw
+            //if user == null => throw
             employee.Role = role ?? throw new Domain.Model.Exceptions.Role.RoleNotFoundException(roleId);
         }
 

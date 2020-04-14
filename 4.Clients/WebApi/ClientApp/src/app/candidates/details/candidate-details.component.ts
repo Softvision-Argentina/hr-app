@@ -22,7 +22,7 @@ import { Globals } from '../../app-globals/globals';
         this._detailedCandidate = value;
     }
 
-    recruiterName: string = '';
+    userName: string = '';
     profileName: string = '';
     communityName: string = '';
     englishLevelList: any[] = [];
@@ -40,10 +40,10 @@ import { Globals } from '../../app-globals/globals';
     }
 
     getRecruiterName(){
-        this.facade.consultantService.get()
+        this.facade.userService.get()
         .subscribe(res => {
-          this.recruiterName = res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].name + ' ' +
-                                    res.filter(x => x.id === this._detailedCandidate.recruiter.id)[0].lastName;
+          this.userName = res.filter(x => x.id === this._detailedCandidate.user.id)[0].firstName + ' ' +
+                                    res.filter(x => x.id === this._detailedCandidate.user.id)[0].lastName;
         }, err => {
           console.log(err);
         });

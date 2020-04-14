@@ -12,12 +12,15 @@ namespace ApiServer.Controllers
     [ApiController]
     public class EmployeeCasualtyController : BaseController<EmployeeCasualtyController>
     {
-        IEmployeeCasualtyService _employeeCasualtyervice;
-        private IMapper _mapper;
+        private readonly IEmployeeCasualtyService _employeeCasualtyService;
+        private readonly IMapper _mapper;
 
-        public EmployeeCasualtyController(IEmployeeCasualtyService employeeCasualtyervice, ILog<EmployeeCasualtyController> logger, IMapper mapper) : base(logger)
+        public EmployeeCasualtyController(
+            IEmployeeCasualtyService employeeCasualtyService, 
+            ILog<EmployeeCasualtyController> logger, 
+            IMapper mapper) : base(logger)
         {
-            _employeeCasualtyervice = employeeCasualtyervice;
+            _employeeCasualtyService = employeeCasualtyService;
             _mapper = mapper;
         }
 
@@ -26,19 +29,18 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var employeeCasualty = _employeeCasualtyervice.List();
+                var employeeCasualty = _employeeCasualtyService.List();
 
                 return Accepted(_mapper.Map<List<ReadedEmployeeCasualtyViewModel>>(employeeCasualty));
             });
         }
 
-        //GET api/employeeCasualty/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var employeeCasualty = _employeeCasualtyervice.Read(id);
+                var employeeCasualty = _employeeCasualtyService.Read(id);
 
                 if (employeeCasualty == null)
                 {
@@ -49,42 +51,37 @@ namespace ApiServer.Controllers
             });
         }
 
-        //POST api/employeeCasualty
-        //Creation
        [HttpPost]
-        public IActionResult Post([FromBody]CreateEmployeeCasualtyViewModel vm)
+        public IActionResult Post([FromBody]CreateEmployeeCasualtyViewModel createEmployeeCasualtyVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateEmployeeCasualtyContract>(vm);
-                var returnContract = _employeeCasualtyervice.Create(contract);
+                var contract = _mapper.Map<CreateEmployeeCasualtyContract>(createEmployeeCasualtyVm);
+                var returnContract = _employeeCasualtyService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedEmployeeCasualtyViewModel>(returnContract));
             });
         }
 
-        //PUT api/employeeCasualty/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateEmployeeCasualtyViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateEmployeeCasualtyViewModel updateEmployeeCasualtyVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateEmployeeCasualtyContract>(vm);
+                var contract = _mapper.Map<UpdateEmployeeCasualtyContract>(updateEmployeeCasualtyVm);
                 contract.Id = id;
-                _employeeCasualtyervice.Update(contract);
+                _employeeCasualtyService.Update(contract);
 
                 return Accepted(new { id });
             });
         }
 
-        //DELETE api/employeeCasualty/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _employeeCasualtyervice.Delete(id);
+                _employeeCasualtyService.Delete(id);
                 return Accepted();
             });
         }

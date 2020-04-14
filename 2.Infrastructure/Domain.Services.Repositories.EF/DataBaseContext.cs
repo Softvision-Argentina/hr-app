@@ -32,7 +32,6 @@ namespace Domain.Services.Repositories.EF
 
         public DbSet<StageItem> StageItems { get; set; }
 
-        public DbSet<Consultant> Consultants { get; set; }
 
         public DbSet<User> Users { get; set; }
 
