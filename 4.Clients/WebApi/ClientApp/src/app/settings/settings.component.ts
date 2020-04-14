@@ -1,5 +1,5 @@
+
 import { Component, OnInit } from '@angular/core';
-import { AppComponent } from '../app.component';
 import { CandidateProfile} from 'src/entities/Candidate-Profile';
 import { Community } from 'src/entities/community';
 import { FacadeService } from '../services/facade.service';
@@ -13,7 +13,7 @@ import { Room } from 'src/entities/room';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private facade: FacadeService, private app: AppComponent) { }
+  constructor(private facade: FacadeService) { }
 
   emptyCandidateProfile: CandidateProfile[] = [];
   listOfDisplayData = [...this.emptyCandidateProfile];
@@ -28,7 +28,9 @@ export class SettingsComponent implements OnInit {
   listOfDisplayDataOffice = [...this.emptyOffice];
 
   ngOnInit() {
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
+    this.facade.appService.stopLoading();
     this.getOffices();
     this.getRooms();
     this.getCandidatesProfile();

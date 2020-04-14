@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Room } from 'src/entities/room';
 import { Office } from 'src/entities/office';
 import { FacadeService } from '../services/facade.service';
-import { AppComponent } from '../app.component';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-locations',
@@ -18,16 +17,23 @@ export class LocationsComponent implements OnInit {
 
   emptyOffice: Office[] = [];
   listOfDisplayDataOffice = [...this.emptyOffice];
-  
-  constructor(private route: ActivatedRoute, private facade: FacadeService, private app: AppComponent) { }
+
+  constructor(private route: ActivatedRoute, private facade: FacadeService) { }
 
   ngOnInit() {
     this.getOffices();
     this.getRooms();
-    this.tab=this.route.snapshot.params['tab'];
-    this.route.params.subscribe((params: Params)=>{
-      this.tab=this.route.snapshot.params['tab'];
+    this.tab = this.route.snapshot.params['tab'];
+    this.route.params.subscribe(() => {
+      this.tab = this.route.snapshot.params['tab'];
     });
+  }
+
+  onOfficesChanged() {
+    this.getOffices();
+  }
+  onRoomsChanged() {
+    this.getRooms();
   }
 
   getRooms() {
@@ -38,7 +44,7 @@ export class LocationsComponent implements OnInit {
       }, err => {
       console.log(err);
     });
-  }  
+  }
 
   getOffices() {
     this.facade.OfficeService.get().subscribe(res => {
@@ -46,7 +52,7 @@ export class LocationsComponent implements OnInit {
       this.listOfDisplayDataOffice = res;
     }, err => {
       console.log(err);
-    })
+    });
   }
 
 }

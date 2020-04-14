@@ -3,13 +3,11 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { SkillType } from 'src/entities/skillType';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
-import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-skill-type',
   templateUrl: './skill-type.component.html',
   styleUrls: ['./skill-type.component.css'],
-  providers: [AppComponent]
 })
 export class SkillTypeComponent implements OnInit {
 
@@ -29,21 +27,21 @@ export class SkillTypeComponent implements OnInit {
   isAddOkLoading = false;
   emptySkillType: SkillType;
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getSkillTypes();
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]],
     });
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
-  getSkillTypes(){
+  getSkillTypes() {
     this.facade.skillTypeService.get()
       .subscribe(res => {
         this.filteredSkillTypes = res;
@@ -107,7 +105,7 @@ export class SkillTypeComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
 
@@ -131,11 +129,11 @@ export class SkillTypeComponent implements OnInit {
               this.facade.skillTypeService.add(newSkillType)
                   .subscribe(() => {
                     this.getSkillTypes();
-                    this.app.hideLoading();
+                    this.facade.appService.stopLoading();
                     this.facade.toastrService.success('SkillType was successfuly created!');
                     modal.destroy();
                   }, err => {
-                    this.app.hideLoading();
+                    this.facade.appService.stopLoading();
                     modal.nzFooter[1].loading = false;
                     this.facade.errorHandlerService.showErrorMessage(err);
                   });
@@ -143,7 +141,7 @@ export class SkillTypeComponent implements OnInit {
               modal.nzFooter[1].loading = false;
             }
 
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }],
     });
@@ -175,7 +173,7 @@ export class SkillTypeComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
 
@@ -199,11 +197,11 @@ export class SkillTypeComponent implements OnInit {
               this.facade.skillTypeService.update(editedSkillType.id, editedSkillType)
                 .subscribe(res => {
                   this.getSkillTypes();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('SkillType was successfully edited !');
                   modal.destroy();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.nzFooter[1].loading = false;
                   if (err.message) {
                     this.facade.toastrService.error(err.message);
@@ -215,7 +213,7 @@ export class SkillTypeComponent implements OnInit {
               modal.nzFooter[1].loading = false;
             }
 
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }],
     });

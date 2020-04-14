@@ -1,18 +1,18 @@
+import { FacadeService } from './../../services/facade.service';
 import { Component, OnInit } from '@angular/core';
-import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-unauthorized',
   templateUrl: './unauthorized.component.html',
   styleUrls: ['./unauthorized.component.css'],
-  providers: [AppComponent]
 })
 export class UnauthorizedComponent implements OnInit {
 
-  constructor(private app: AppComponent) { }
+  constructor(private facade: FacadeService) { }
 
   ngOnInit() {
-    this.app.renderBgImage();
+    this.facade.appService.showBgImage();
+    this.facade.appService.stopLoading();
   }
 
 }

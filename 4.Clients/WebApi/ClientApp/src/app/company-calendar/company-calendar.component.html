@@ -26,7 +26,7 @@
                 <tr *ngFor="let CompanyCalendar of CompanyCalendarTable.data">
                     <td>{{ CompanyCalendar.type }}</td>
                     <td>{{ CompanyCalendar.date | date: 'dd/MM/yyyy' }}</td>
-                    <td>{{ CompanyCalendar.comments | truncate:75 }}</td>
+                    <td>{{ CompanyCalendar.comments | truncate: 75 }}</td>
                     <td [style.text-align]="'center'">
                         <i (click)="showEditModal(CompanyCalendarModal, CompanyCalendar.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>

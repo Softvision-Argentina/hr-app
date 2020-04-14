@@ -1,18 +1,17 @@
+import { FacadeService } from './../services/facade.service';
 import { Component, OnInit } from '@angular/core';
-import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.css'],
-  providers: [AppComponent]
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor(private app: AppComponent) { }
+  constructor(private facade: FacadeService) { }
 
   ngOnInit() {
-    this.app.renderBgImage();
+    this.facade.appService.showBgImage();
   }
 
 }
