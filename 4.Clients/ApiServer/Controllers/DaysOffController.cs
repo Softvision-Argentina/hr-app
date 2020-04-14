@@ -12,12 +12,15 @@ namespace ApiServer.Controllers
     [ApiController]
     public class DaysOffController : BaseController<DaysOffController>
     {
-        IDaysOffService _daysOffervice;
-        private IMapper _mapper;
+        private readonly IDaysOffService _daysOffService;
+        private readonly IMapper _mapper;
 
-        public DaysOffController(IDaysOffService daysOffervice, ILog<DaysOffController> logger, IMapper mapper) : base(logger)
+        public DaysOffController(
+            IDaysOffService daysOffService,
+            ILog<DaysOffController> logger,
+            IMapper mapper) : base(logger)
         {
-            _daysOffervice = daysOffervice;
+            _daysOffService = daysOffService;
             _mapper = mapper;
         }
 
@@ -26,19 +29,18 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var daysOff = _daysOffervice.List();
+                var daysOff = _daysOffService.List();
 
                 return Accepted(_mapper.Map<List<ReadedDaysOffViewModel>>(daysOff));
             });
         }
 
-        //GET api/daysOff/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var daysOff = _daysOffervice.Read(id);
+                var daysOff = _daysOffService.Read(id);
 
                 if (daysOff == null)
                 {
@@ -49,13 +51,12 @@ namespace ApiServer.Controllers
             });
         }
 
-        //GET api/daysOff/dni
         [HttpGet("GetByDni")]
         public IActionResult GetByDni([FromQuery]int dni)
         {
             return ApiAction(() =>
             {
-                var daysOff = _daysOffervice.ReadByDni(dni);
+                var daysOff = _daysOffService.ReadByDni(dni);
 
                 if (daysOff == null)
                 {
@@ -66,42 +67,37 @@ namespace ApiServer.Controllers
             });
         }
 
-        //POST api/daysOff
-        //Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDaysOffViewModel vm)
+        public IActionResult Post([FromBody]CreateDaysOffViewModel createDaysOffVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDaysOffContract>(vm);
-                var returnContract = _daysOffervice.Create(contract);
+                var contract = _mapper.Map<CreateDaysOffContract>(createDaysOffVm);
+                var returnContract = _daysOffService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedDaysOffViewModel>(returnContract));
             });
         }
 
-        //PUT api/daysOff/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDaysOffViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateDaysOffViewModel updateDaysOffVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDaysOffContract>(vm);
+                var contract = _mapper.Map<UpdateDaysOffContract>(updateDaysOffVm);
                 contract.Id = id;
-                _daysOffervice.Update(contract);
+                _daysOffService.Update(contract);
 
                 return Accepted(new { id });
             });
         }
 
-        //DELETE api/daysOff/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _daysOffervice.Delete(id);
+                _daysOffService.Delete(id);
                 return Accepted();
             });
         }

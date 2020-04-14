@@ -1,5 +1,5 @@
 import { Stage } from './stage';
-import { Consultant } from './consultant';
+import { User } from './user';
 import { Candidate } from './candidate';
 import { ProcessStatusEnum } from './enums/process-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
@@ -16,7 +16,7 @@ export class Process {
     status: ProcessStatusEnum;
     currentStage: ProcessCurrentStageEnum;
     candidate: Candidate;
-    consultantOwner: Consultant;
+    userOwner: User;
     rejectionReason: string;
     declineReason: DeclineReason;
     actualSalary: number;
@@ -31,8 +31,8 @@ export class Process {
     startDate?: Date;
     endDate?: Date;
     candidateId?: number;
-    consultantDelegateId?: number;
-    consultantOwnerId?: number;
-    consultantDelegate?: Consultant;
+    userDelegateId?: number;
+    userOwnerId?: number;
+    userDelegate?: User;
     declineReasonId?: number;
 }

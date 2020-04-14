@@ -1,9 +1,7 @@
 ﻿using Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 
 namespace ApiServer.Controllers
@@ -13,9 +11,10 @@ namespace ApiServer.Controllers
     {
         protected ILog<TController> Logger { get; set; }
 
+        //TODO: is not call from anywhere can we remove it?
         public Guid ClientSystemId { get; private set; }
 
-        public BaseController(ILog<TController> logger)
+        protected BaseController(ILog<TController> logger)
         {
             Logger = logger;
         }
@@ -67,7 +66,7 @@ namespace ApiServer.Controllers
 
         private string GetRequestBody()
         {
-            string jsonData = string.Empty;
+            var jsonData = string.Empty;
             try
             {
                 using (var stream = Request.Body)
@@ -85,6 +84,7 @@ namespace ApiServer.Controllers
             catch
             {
             }
+
             return jsonData;
         }
     }

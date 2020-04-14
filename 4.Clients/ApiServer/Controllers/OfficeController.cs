@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ApiServer.Contracts.Office;
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Office;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -17,14 +13,15 @@ namespace ApiServer.Controllers
 
     public class OfficeController : BaseController<OfficeController> {
 
-        IOfficeService _OfficeService;
-        private IMapper _mapper;
+        private readonly IOfficeService _officeService;
+        private readonly IMapper _mapper;
 
-        public OfficeController(IOfficeService OfficeService,
-                                   ILog<OfficeController> logger,
-                                   IMapper mapper): base(logger)
+        public OfficeController(
+            IOfficeService officeService,
+            ILog<OfficeController> logger,
+            IMapper mapper): base(logger)
         {
-            _OfficeService = OfficeService;
+            _officeService = officeService;
             _mapper = mapper;
         }
 
@@ -33,9 +30,9 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var Offices = _OfficeService.List();
+                var offices = _officeService.List();
 
-                return Accepted(_mapper.Map<List<ReadedOfficeViewModel>>(Offices));
+                return Accepted(_mapper.Map<List<ReadedOfficeViewModel>>(offices));
             });
         }
 
@@ -44,53 +41,48 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var Office = _OfficeService.Read(Id);
+                var office = _officeService.Read(Id);
 
-                if (Office == null)
+                if (office == null)
                 {
                     return NotFound(Id);
                 }
 
-                return Accepted(_mapper.Map<ReadedOfficeViewModel>(Office));
+                return Accepted(_mapper.Map<ReadedOfficeViewModel>(office));
             });
         }
 
-        // POST api/skills
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody] CreateOfficeViewModel vm)
+        public IActionResult Post([FromBody] CreateOfficeViewModel createOfficeVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateOfficeContract>(vm);
-                var returnContract = _OfficeService.Create(contract);
+                var contract = _mapper.Map<CreateOfficeContract>(createOfficeVm);
+                var returnContract = _officeService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedOfficeViewModel>(returnContract));
             });
         }
 
-        // PUT api/skills/5
-        // Mutation
         [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody]UpdateOfficeViewModel vm)
+        public IActionResult Put(int Id, [FromBody]UpdateOfficeViewModel updateOfficeVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateOfficeContract>(vm);
+                var contract = _mapper.Map<UpdateOfficeContract>(updateOfficeVm);
                 contract.Id = Id;
-                _OfficeService.Update(contract);
+                _officeService.Update(contract);
 
                 return Accepted(new { Id });
             });
         }
 
-        // DELETE api/skills/5
         [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _OfficeService.Delete(Id);
+                _officeService.Delete(id);
                 return Accepted();
             });
         }

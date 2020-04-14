@@ -10,8 +10,8 @@ export class TechnicalStage {
     seniority: SeniorityEnum;
     alternativeSeniority: SeniorityEnum;
     client: string;
-    consultantOwnerId?: number;
-    consultantDelegateId?: number;
+    userOwnerId?: number;
+    userDelegateId?: number;
     rejectionReason?: string;
     date?: Date;
 }

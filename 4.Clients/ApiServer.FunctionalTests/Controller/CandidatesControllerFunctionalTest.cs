@@ -10,7 +10,7 @@ using System.Linq;
 using ApiServer.Contracts.Community;
 using Microsoft.EntityFrameworkCore;
 using ApiServer.Contracts.CandidateSkill;
-using ApiServer.Contracts.Consultant;
+using ApiServer.Contracts.User;
 using ApiServer.Contracts.CandidateProfile;
 
 namespace ApiServer.FunctionalTests.Controller
@@ -202,10 +202,10 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             Context.SetupDatabaseForTesting();
 
-            var recruiter = new Consultant() { Name = "Testing" };
+            var user = new User() { FirstName = "Testing" };
             var community = new Community() { Name = "Net", Profile = new CandidateProfile() { Name = "Testing profile" } };
 
-            Context.SeedDatabaseWith(recruiter);
+            Context.SeedDatabaseWith(user);
             Context.SeedDatabaseWith(community);
 
             var model = new CreateCandidateViewModel()
@@ -213,7 +213,7 @@ namespace ApiServer.FunctionalTests.Controller
                 DNI = 36501240,
                 Name = "Rodrigo",
                 LastName = "Ramirez",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 LinkedInProfile = "/linkedin"
@@ -238,9 +238,9 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             Context.SetupDatabaseForTesting();
-            var recruiter = new Consultant() { Name = "Testing" };
+            var user = new User() { FirstName = "Testing" };
             var community = new Community() { Name = "Net", Profile = new CandidateProfile() { Name = "Testing profile" } };
-            Context.SeedDatabaseWith(recruiter);
+            Context.SeedDatabaseWith(user);
             Context.SeedDatabaseWith(community);
 
             var model = new CreateCandidateViewModel()
@@ -248,7 +248,7 @@ namespace ApiServer.FunctionalTests.Controller
                 DNI = 36501240,
                 Name = "Rodrigo",
                 LastName = "Ramirez",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 LinkedInProfile = "/linkedin"
@@ -271,11 +271,11 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             Context.SetupDatabaseForTesting();
 
-            var recruiter = new Consultant() { Name = "Testing" };
+            var user = new User() { FirstName = "Testing" };
             var community = new Community() { Name = "Net", Profile = new CandidateProfile() { Name = "Testing profile" } };
             var candidate = new Candidate() { Name = "Testirino", EmailAddress = "testirino99@gmail.com" };
 
-            Context.SeedDatabaseWith(recruiter);
+            Context.SeedDatabaseWith(user);
             Context.SeedDatabaseWith(community);
             Context.SeedDatabaseWith(candidate);
 
@@ -284,7 +284,7 @@ namespace ApiServer.FunctionalTests.Controller
                 DNI = 36501240,
                 Name = "Rodrigo",
                 LastName = "Ramirez",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 EmailAddress = candidate.EmailAddress,
@@ -307,11 +307,11 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             Context.SetupDatabaseForTesting();
 
-            var recruiter = new Consultant() { Name = "Testing" };
+            var user = new User() { FirstName = "Testing" };
             var community = new Community() { Name = "Net", Profile = new CandidateProfile() { Name = "Testing profile" } };
             var candidate = new Candidate() { Name = "Testirino", LinkedInProfile = "/Testirino99" };
 
-            Context.SeedDatabaseWith(recruiter);
+            Context.SeedDatabaseWith(user);
             Context.SeedDatabaseWith(community);
             Context.SeedDatabaseWith(candidate);
 
@@ -320,7 +320,7 @@ namespace ApiServer.FunctionalTests.Controller
                 DNI = 36501240,
                 Name = "Rodrigo",
                 LastName = "Ramirez",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 LinkedInProfile = candidate.LinkedInProfile
@@ -342,11 +342,11 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             Context.SetupDatabaseForTesting();
 
-            var recruiter = new Consultant() { Name = "new recruiter" };
+            var user = new User() { FirstName = "new user" };
             var community = new Community() { Name = "new community", Profile = new CandidateProfile() { Name = "new candidate profile name" } };
             var office = new Office() { Name = "new office preference" };
 
-            Context.SeedDatabaseWith(recruiter);
+            Context.SeedDatabaseWith(user);
             Context.SeedDatabaseWith(community);
             Context.SeedDatabaseWith(office);
 
@@ -356,7 +356,7 @@ namespace ApiServer.FunctionalTests.Controller
                 LastName = "Testerino with TYPO",
                 LinkedInProfile = "/TestingTestirino99 with TYPO",
                 PreferredOffice = new Office() { Name = "Outdated Office" },
-                Recruiter = new Consultant() { Name = "Outdated recruiter" },
+                User = new User() { FirstName = "Outdated user" },
                 Community = new Community() { Name = "Outdated Community", Profile = new CandidateProfile() { Name = "Outdated candidate profile name" } }
             };
 
@@ -367,7 +367,7 @@ namespace ApiServer.FunctionalTests.Controller
                 Name = "Testing",
                 LastName = "Testerino",
                 LinkedInProfile = "/TestingTestirino99",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 PreferredOfficeId = office.Id
@@ -377,7 +377,7 @@ namespace ApiServer.FunctionalTests.Controller
             var httpResultData = await HttpCallAsync<object>(HttpVerb.PUT, $"{ControllerName}", model, candidate.Id);
             var candidateFromDatabase = Context.Candidates
                 .AsNoTracking()
-                .Include(_ => _.Recruiter)
+                .Include(_ => _.User)
                 .Include(_ => _.Community)
                 .Include(_ => _.Profile)
                 .Include(_ => _.PreferredOffice)
@@ -388,7 +388,7 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(model.Name, candidateFromDatabase.Name);
             Assert.Equal(model.LastName, candidateFromDatabase.LastName);
             Assert.Equal(model.LinkedInProfile, candidateFromDatabase.LinkedInProfile);
-            Assert.Equal(model.Recruiter.Id, candidateFromDatabase.Recruiter.Id);
+            Assert.Equal(model.User.Id, candidateFromDatabase.User.Id);
             Assert.Equal(model.Community.Id, candidateFromDatabase.Community.Id);
             Assert.Equal(model.Profile.Id, candidateFromDatabase.Profile.Id);
             Assert.Equal(model.PreferredOfficeId, candidateFromDatabase.PreferredOffice.Id);
@@ -403,7 +403,7 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             Context.SetupDatabaseForTesting();
 
-            var recruiter = new Consultant() { Name = "new recruiter" };
+            var user = new User() { FirstName = "new user" };
             var community = new Community() { Name = "new community", Profile = new CandidateProfile() { Name = "new candidate profile name" } };
             var office = new Office() { Name = "new office preference" };
 
@@ -413,7 +413,7 @@ namespace ApiServer.FunctionalTests.Controller
                 LastName = "Testerino with TYPO",
                 LinkedInProfile = "/TestingTestirino99 with TYPO",
                 PreferredOffice = new Office() { Name = "Outdated Office" },
-                Recruiter = new Consultant() { Name = "Outdated recruiter" },
+                User = new User() { FirstName = "Outdated user" },
                 Community = new Community() { Name = "Outdated Community", Profile = new CandidateProfile() { Name = "Outdated candidate profile name" } }
             };
 
@@ -424,7 +424,7 @@ namespace ApiServer.FunctionalTests.Controller
                 Name = "this property will be invalid",
                 LastName = "This property will be invalid",
                 LinkedInProfile = "/TestingTestirino99",
-                Recruiter = new ReadedConsultantViewModel() { Id = recruiter.Id },
+                User = new ReadedUserViewModel() { Id = user.Id },
                 Community = new ReadedCommunityViewModel() { Id = community.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = community.Profile.Id },
                 PreferredOfficeId = office.Id

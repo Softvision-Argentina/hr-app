@@ -1,21 +1,21 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 
 @Component({
-  selector: 'consultant-details',
-  templateUrl: './consultant-details.component.html',
-  styleUrls: ['./consultant-details.component.css']
+  selector: 'user-details',
+  templateUrl: './user-details.component.html',
+  styleUrls: ['./user-details.component.css']
 })
-export class ConsultantDetailsComponent implements OnInit {
+export class UserDetailsComponent implements OnInit {
 
   @Input()
-  private _detailedConsultant: Consultant;
-  public get detailedConsultant(): Consultant {
-    return this._detailedConsultant;
+  private _detailedUser: User;
+  public get detailedUser(): User {
+    return this._detailedUser;
   }
-  public set detailedConsultant(value: Consultant) {
-    this._detailedConsultant = value;
+  public set detailedUser(value: User) {
+    this._detailedUser = value;
   }
 
   constructor(private facade: FacadeService) { }

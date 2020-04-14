@@ -14,5 +14,7 @@ namespace Domain.Model
         public string Password { get; set; }
         public Community Community { get; set; }
         public IList<UserDashboard> UserDashboards { get; set; }
+        public IList<Candidate> Candidates { get; set; }
+        public IList<Task> Tasks { get; set; }
     }
 }
