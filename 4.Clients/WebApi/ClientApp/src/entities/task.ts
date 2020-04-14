@@ -1,5 +1,5 @@
 import { TaskItem } from './taskItem';
-import { Consultant } from './consultant';
+import { User } from './user';
 
 export class Task {
     id: number;
@@ -9,8 +9,8 @@ export class Task {
     creationDate: Date;
     endDate: Date;
 
-    consultantId: number;
-    consultant: Consultant;
+    userId: number;
+    user: User;
 
     taskItems: TaskItem[];
 }

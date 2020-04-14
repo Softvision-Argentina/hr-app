@@ -194,15 +194,15 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockMapper.Verify(_ => _.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that listByConsultant returns a value")]
-        public void GivenListByConsultant_WhenRegularCall_ReturnsValue()
+        [Fact(DisplayName = "Verify that listByUser returns a value")]
+        public void GivenListByUser_WhenRegularCall_ReturnsValue()
         {
-            var tasks = new List<Task>() { new Task() { Id = 1, Consultant = new Consultant {EmailAddress = "Email" } } }.AsQueryable();
+            var tasks = new List<Task>() { new Task() { Id = 1, User = new User {Username = "Email" } } }.AsQueryable();
             var readedTaksContract = new List<ReadedTaskContract> { new ReadedTaskContract { Id = 1 } };
             _mockRepositoryTask.Setup(mrt => mrt.QueryEager()).Returns(tasks);
             _mockMapper.Setup(mm => mm.Map<List<ReadedTaskContract>>(It.IsAny<List<Task>>())).Returns(readedTaksContract);
 
-            var actualResult = _service.ListByConsultant("Email");
+            var actualResult = _service.ListByUser("Email");
 
             Assert.NotNull(actualResult);
             Assert.Equal(1, actualResult.ToList()[0].Id);

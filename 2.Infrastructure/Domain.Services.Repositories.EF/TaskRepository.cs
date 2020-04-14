@@ -23,7 +23,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Task> QueryEager()
         {
-            return Query().Include(c => c.TaskItems).Include(c => c.Consultant);
+            return Query().Include(c => c.TaskItems).Include(c => c.User);
         }
 
         public override Task Update(Task entity)

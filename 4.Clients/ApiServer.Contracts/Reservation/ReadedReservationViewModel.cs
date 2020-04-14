@@ -1,4 +1,4 @@
-﻿using ApiServer.Contracts.Consultant;
+﻿using ApiServer.Contracts.User;
 using ApiServer.Contracts.TaskItem;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace ApiServer.Contracts.Reservation
         public DateTime SinceReservation { get; set; }
         public DateTime UntilReservation { get; set; }
         //public TimeSpan Time { get; set; }
-        public int Recruiter { get; set; }
+        public int User { get; set; }
         public int RoomId { get; set; }
         public ReadedRoomViewModel Room { get; set; }
     }

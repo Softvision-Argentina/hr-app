@@ -11,7 +11,7 @@ namespace Domain.Model
         public string Description { get; set; }
         public DateTime SinceReservation { get; set; }
         public DateTime UntilReservation { get; set; }
-        public Consultant Recruiter { get; set; }
+        public User User { get; set; }
         public int RoomId { get; set; }
         public Room Room { get; set; }
 

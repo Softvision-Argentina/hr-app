@@ -16,7 +16,7 @@ namespace Domain.Model
         public string LinkedInProfile { get; set; }
         public string AdditionalInformation { get; set; }
         public EmployeeStatus Status { get; set; }
-        public Consultant Recruiter { get; set; }
+        public User User { get; set; }
         public Role Role { get; set; }
         public bool isReviewer { get; set; }
         public Employee Reviewer { get; set; }
