@@ -9,7 +9,7 @@ export class ClientStage {
     interviewer: string;
     delegateName: string;
     date?: Date;
-    consultantOwnerId?: number;
-    consultantDelegateId?: number;
+    userOwnerId?: number;
+    userDelegateId?: number;
     rejectionReason?: string;
 }

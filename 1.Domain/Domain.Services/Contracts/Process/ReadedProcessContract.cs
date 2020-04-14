@@ -1,7 +1,7 @@
 ﻿using Domain.Model;
 using Domain.Model.Enum;
 using Domain.Services.Contracts.Candidate;
-using Domain.Services.Contracts.Consultant;
+using Domain.Services.Contracts.User;
 using Domain.Services.Contracts.Stage;
 using System;
 
@@ -20,10 +20,10 @@ namespace Domain.Services.Contracts.Process
         public DeclineReason DeclineReason { get; set; }
         public int? CandidateId { get; set; }
         public ReadedCandidateContract Candidate { get; set; }
-        public int? ConsultantOwnerId { get; set; }
-        public ReadedConsultantContract ConsultantOwner { get; set; }
-        public int? ConsultantDelegateId { get; set; }
-        public ReadedConsultantContract ConsultantDelegate { get; set; }
+        public int? UserOwnerId { get; set; }
+        public ReadedUserContract UserOwner { get; set; }
+        public int? UserDelegateId { get; set; }
+        public ReadedUserContract UserDelegate { get; set; }
         public float? ActualSalary { get; set; }
         public float? WantedSalary { get; set; }        
         public string EnglishLevel { get; set; }

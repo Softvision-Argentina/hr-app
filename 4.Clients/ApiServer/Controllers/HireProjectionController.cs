@@ -12,10 +12,13 @@ namespace ApiServer.Controllers
     [ApiController]
     public class HireProjectionsController : BaseController<HireProjectionsController>
     {
-        IHireProjectionService _hireProjectionService;
-        private IMapper _mapper;
+        private readonly IHireProjectionService _hireProjectionService;
+        private readonly IMapper _mapper;
 
-        public HireProjectionsController(IHireProjectionService hireProjectionService, ILog<HireProjectionsController> logger, IMapper mapper) : base(logger)
+        public HireProjectionsController(
+            IHireProjectionService hireProjectionService, 
+            ILog<HireProjectionsController> logger, 
+            IMapper mapper) : base(logger)
         {
             _hireProjectionService = hireProjectionService;
             _mapper = mapper;
@@ -32,7 +35,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/hireProjections/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -49,28 +51,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/hireProjections
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateHireProjectionViewModel vm)
+        public IActionResult Post([FromBody]CreateHireProjectionViewModel createHireProjectVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateHireProjectionContract>(vm);
+                var contract = _mapper.Map<CreateHireProjectionContract>(createHireProjectVm);
                 var returnContract = _hireProjectionService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedHireProjectionViewModel>(returnContract));
             });
         }
 
-        // PUT api/hireProjections/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateHireProjectionViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateHireProjectionViewModel updateHireProjectionVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateHireProjectionContract>(vm);
+                var contract = _mapper.Map<UpdateHireProjectionContract>(updateHireProjectionVm);
                 contract.Id = id;
                 _hireProjectionService.Update(contract);
 
@@ -78,7 +76,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/hireProjections/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

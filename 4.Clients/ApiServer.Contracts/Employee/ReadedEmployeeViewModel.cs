@@ -1,4 +1,4 @@
-﻿using ApiServer.Contracts.Consultant;
+﻿using ApiServer.Contracts.User;
 using ApiServer.Contracts.Role;
 using Domain.Model.Enum;
 using System;
@@ -18,7 +18,7 @@ namespace ApiServer.Contracts.Employee
         public string LinkedInProfile { get; set; }
         public string AdditionalInformation { get; set; }
         public EmployeeStatus Status { get; set; }
-        public int RecruiterId { get; set; }
+        public int UserId { get; set; }
         public ReadedRoleViewModel Role { get; set; }
         public bool isReviewer { get; set; }
         public ReadedEmployeeViewModel Reviewer { get; set; }

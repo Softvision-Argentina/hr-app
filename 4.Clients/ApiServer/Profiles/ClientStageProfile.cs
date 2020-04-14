@@ -1,6 +1,7 @@
 ﻿using ApiServer.Contracts.Stage;
 using AutoMapper;
 using Domain.Services.Contracts.Stage;
+using Domain.Services.Contracts.Stage.ClientStage;
 using System;
 using System.Collections.Generic;
 using System.Linq;

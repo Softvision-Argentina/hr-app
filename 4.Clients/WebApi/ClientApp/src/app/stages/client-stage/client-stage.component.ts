@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
@@ -15,21 +15,21 @@ import { ClientStage } from 'src/entities/client-stage';
 export class ClientStageComponent implements OnInit {
 
     @Input()
-    private _consultants: Consultant[];
-    public get consultants(): Consultant[] {
-        return this._consultants;
+    private _users: User[];
+    public get users(): User[] {
+        return this._users;
     }
-    public set consultants(value: Consultant[]) {
-        this._consultants = value;
+    public set users(value: User[]) {
+        this._users = value;
     }
 
   clientForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    consultantOwnerId: [null, [Validators.required]],
+    userOwnerId: [null, [Validators.required]],
     interviewer: [null],
-    consultantDelegateId:  [null, [Validators.required]],
+    userDelegateId:  [null, [Validators.required]],
     feedback: [null],
     delegateName: [null],
     rejectionReason: [null, [Validators.required]]
@@ -82,8 +82,8 @@ export class ClientStageComponent implements OnInit {
     stage.feedback = this.getControlValue(form.controls.feedback);
     stage.interviewer = this.getControlValue(form.controls.interviewer);
     stage.status = this.getControlValue(form.controls.status);
-    stage.consultantOwnerId = this.getControlValue(form.controls.consultantOwnerId);
-    stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
+    stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
+    stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.delegateName = this.getControlValue(form.controls.delegateName);
     stage.processId = processId;
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
@@ -109,16 +109,16 @@ export class ClientStageComponent implements OnInit {
       this.clientForm.controls['date'].setValue(clientStage.date);
     }
 
-    if (clientStage.consultantOwnerId) {
-      this.clientForm.controls['consultantOwnerId'].setValue(clientStage.consultantOwnerId);
+    if (clientStage.userOwnerId) {
+      this.clientForm.controls['userOwnerId'].setValue(clientStage.userOwnerId);
     }
 
     if (clientStage.interviewer) {
       this.clientForm.controls['interviewer'].setValue(clientStage.interviewer);
     }
 
-    if (clientStage.consultantDelegateId) {
-      this.clientForm.controls['consultantDelegateId'].setValue(clientStage.consultantDelegateId);
+    if (clientStage.userDelegateId) {
+      this.clientForm.controls['userDelegateId'].setValue(clientStage.userDelegateId);
     }
 
     if (clientStage.delegateName) {

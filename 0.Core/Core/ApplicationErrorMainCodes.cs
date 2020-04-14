@@ -9,7 +9,7 @@
         Stage = 500,
         Skill = 600,
         SkillType = 700,
-        Consultant = 800,
+        User = 800,
         Task = 900,
         DefaultStages = 1000,
         HireProjection = 1100,

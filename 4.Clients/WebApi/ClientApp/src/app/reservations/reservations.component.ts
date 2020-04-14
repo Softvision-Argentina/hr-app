@@ -4,7 +4,6 @@ import { trimValidator } from 'src/app/directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { Reservation } from 'src/entities/reservation'
-import { Consultant } from 'src/entities/consultant';
 import { User } from 'src/entities/user';
 import { Room } from 'src/entities/room';
 import { Office } from 'src/entities/office';
@@ -20,20 +19,20 @@ import { getDate } from 'date-fns';
 export class ReservationsComponent implements OnInit {
 
   @Input()
-  private _consultants: Consultant[];
-  public get consultants(): Consultant[] {
-    return this._consultants;
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
   }
-  public set consultants(value: Consultant[]) {
-    this.recruiters = value;
-  }
+  public set users(value: User[]) {
+    this.fillUsers = value;
+    }
 
-  recruiters: Consultant[] = [];
+  fillUsers: User[] = [];
   reservations: Reservation[] = [];
   room: Room[] = [];
   filteredRoom: Room[] = [];
   offices: Office[] = [];
-  currentConsultant: User;
+  currentUser: User;
   currentDayReservations: Reservation[] = [];
   selectedOffice: string;
   selectedDate: Date;
@@ -51,15 +50,15 @@ export class ReservationsComponent implements OnInit {
     description: [null, [Validators.required, trimValidator]],
     sinceReservation: [null, [Validators.required]],
     untilReservation: [null, [Validators.required]],
-    recruiter: [null, [Validators.required]],
+    user: [null, [Validators.required]],
     roomId: [null, [Validators.required, trimValidator]],
     room: [null],
     office: [2, [Validators.required]]
   });
 
   ngOnInit() {
-    this.recruiters = this._consultants;
-    this.getConsultants();
+    this.fillUsers = this._users;
+    this.getUsers();
     this.getReservations();
     this.getOffices();
     this.getRooms();
@@ -68,10 +67,10 @@ export class ReservationsComponent implements OnInit {
     this.selectedOffice = '2';
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.fillUsers = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -180,7 +179,7 @@ export class ReservationsComponent implements OnInit {
     this.reservationForm.controls['office'].setValue(reservation.room.officeId);
     this.reservationForm.controls['roomId'].setValue(reservation.room.id);
     this.reservationForm.controls['description'].setValue(reservation.description);
-    this.reservationForm.controls['recruiter'].setValue(reservation.recruiter);
+    this.reservationForm.controls['user'].setValue(reservation.user);
     this.reservationForm.controls['sinceReservation'].setValue(reservation.sinceReservation);
     this.reservationForm.controls['untilReservation'].setValue(reservation.untilReservation);
   }
@@ -249,7 +248,7 @@ export class ReservationsComponent implements OnInit {
           description: this.reservationForm.controls['description'].value.toString(),
           sinceReservation: newSince,
           untilReservation: newUntil,
-          recruiter: this.reservationForm.controls['recruiter'].value,
+          user: this.reservationForm.controls['user'].value,
           roomId: this.reservationForm.controls['roomId'].value,
           room: null
         }
@@ -280,7 +279,7 @@ export class ReservationsComponent implements OnInit {
         description: this.reservationForm.controls['description'].value,
         roomId: this.reservationForm.controls['roomId'].value,
         room: null,
-        recruiter: this.reservationForm.controls['recruiter'].value,
+        user: this.reservationForm.controls['user'].value,
         sinceReservation: this.reservationForm.controls['sinceReservation'].value,
         untilReservation: this.reservationForm.controls['untilReservation'].value
       }

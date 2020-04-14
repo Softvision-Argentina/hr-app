@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
@@ -16,20 +16,20 @@ import { OfferHistory } from '../offer-history/offer-history.component';
 export class OfferStageComponent implements OnInit {
 
   @Input()
-  private _consultants: Consultant[];
-  public get consultants(): Consultant[] {
-      return this._consultants;
+  private _users: User[];
+  public get users(): User[] {
+      return this._users;
   }
-  public set consultants(value: Consultant[]) {
-      this._consultants = value;
+  public set users(value: User[]) {
+      this._users = value;
   }
 
   offerForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    consultantOwnerId: 0,
-    consultantDelegateId: [null],
+    userOwnerId: 0,
+    userDelegateId: [null],
     feedback: '',
     seniority: [0, [Validators.required]],
     hireDate: [new Date(), [Validators.required]],
@@ -117,10 +117,10 @@ export class OfferStageComponent implements OnInit {
     stage.date = this.getControlValue(form.controls.date);
     stage.feedback = this.getControlValue(form.controls.feedback);
     stage.status = this.getControlValue(form.controls.status);
-    stage.consultantOwnerId = this.getControlValue(form.controls.consultantOwnerId);
-    stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
+    stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
+    stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.processId = processId;
-    stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
+    stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
@@ -152,8 +152,8 @@ export class OfferStageComponent implements OnInit {
       this.offerForm.controls['date'].setValue(offerStage.date);
     }
 
-    if (offerStage.consultantOwnerId) {
-      this.offerForm.controls['consultantOwnerId'].setValue(offerStage.consultantOwnerId);
+    if (offerStage.userOwnerId) {
+      this.offerForm.controls['userOwnerId'].setValue(offerStage.userOwnerId);
     }
 
     if (offerStage.seniority) {
