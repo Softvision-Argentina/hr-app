@@ -63,7 +63,6 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // tslint:disable-next-line: no-unused-expression
     changes._detailedCandidateProfile;
     this.getCommunity();
   }
