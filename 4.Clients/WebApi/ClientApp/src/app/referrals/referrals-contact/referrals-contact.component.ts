@@ -395,7 +395,7 @@ export class ReferralsContactComponent implements OnInit {
           this.isNewCandidate = false;
           this.visible = false;
           this.app.hideLoading();
-          this.getCandidates();
+          this.facade.referralsService.addNew(newCandidate);
           this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);

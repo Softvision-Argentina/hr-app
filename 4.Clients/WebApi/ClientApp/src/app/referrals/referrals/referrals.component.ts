@@ -172,6 +172,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
         this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.lastName + ' ' + this.currentUser.firstName);
+ 
+        this.facade.referralsService.updateList(this.candidateReferred);
+        this.facade.referralsService.referrals.subscribe((referralList) => {
+          this.candidateReferred = referralList;
+        }); 
       }, err => {
         console.log(err);
       });
