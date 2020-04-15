@@ -79,7 +79,7 @@ namespace HrApp.Droid
                 var libraryPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal); // iOS: Environment.SpecialFolder.Resources
                 var errorFilePath = Path.Combine(libraryPath, errorFileName);
                 var errorMessage = String.Format("Time: {0}\r\nError: Unhandled Exception\r\n{1}",
-                DateTime.Now, exception.ToString());
+                DateTime.UtcNow, exception.ToString());
                 File.WriteAllText(errorFilePath, errorMessage);
 
                 // Log to Android Device Logging.
@@ -115,8 +115,8 @@ namespace HrApp.Droid
                 })
                 .SetNegativeButton("Close", (sender, args) =>
                 {
-            // User pressed Close.
-        })
+                    // User pressed Close.
+                })
                 .SetMessage(errorText)
                 .SetTitle("Crash Report")
                 .Show();

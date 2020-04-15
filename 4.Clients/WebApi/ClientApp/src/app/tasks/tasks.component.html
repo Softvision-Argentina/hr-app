@@ -5,12 +5,12 @@
             <div class="studio" nz-col>B.A Studio Tasks</div>
         </div>
         <div nz-row class="navOptions">
-            <div class="button" nz-col nzSpan="4" >
+            <div class="button" nz-col nzSpan="4">
                 <button class="newTask" (click)="showAddModal(taskModal)">NEW TASK</button>
             </div>
             <div nz-col nzSpan="3" nzOffset="10">
                 <span class="showing" *ngIf="canAssign()">Showing: </span>
-                <nz-switch  *ngIf="canAssign()" [(ngModel)]="showAllTasks"  (click)="filterTasks()">
+                <nz-switch *ngIf="canAssign()" [(ngModel)]="showAllTasks" (click)="filterTasks()">
                 </nz-switch>
             </div>
             <div class="div-dropdown" nz-col nzSpan="2">
@@ -87,11 +87,13 @@
                         </label>
                     </div>
                     <nz-divider nzDashed [nzText]="text">
-                        <ng-template #text><i class="add-item plus" nz-icon type="plus"></i><span class="add-item">Add Item</span> </ng-template>
+                        <ng-template #text><i class="add-item plus" nz-icon type="plus"></i><span class="add-item">Add
+                                Item</span> </ng-template>
                     </nz-divider>
                     <div>
                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                            <input class="input" id="newItem_{{toDo.id}}" type="text" nz-input placeholder="Input a new item" />
+                            <input class="input" id="newItem_{{toDo.id}}" type="text" nz-input
+                                placeholder="Input a new item" />
                         </nz-input-group>
                         <ng-template #suffixIconButton>
                             <button class="input-button" nz-button nzType="primary" (click)="addItem(toDo.id)" nzSearch>
@@ -101,10 +103,12 @@
                     </div>
                     <br />
                     <ul class="ant-card-actions">
-                        <li [style.width.%]="50" *ngIf="!toDo.isApprove" (click)="checkAll(toDo.id)" nz-tooltip nzTitle="Check All">
+                        <li [style.width.%]="50" *ngIf="!toDo.isApprove" (click)="checkAll(toDo.id)" nz-tooltip
+                            nzTitle="Check All">
                             <span><i nz-icon type="check"></i></span>
                         </li>
-                        <li [ngStyle]="{'width.%': !toDo.isApprove ? 50 : 100}" (click)="deleteTask(toDo.id)" nz-tooltip nzTitle="Delete Task">
+                        <li [ngStyle]="{'width.%': !toDo.isApprove ? 50 : 100}" (click)="deleteTask(toDo.id)" nz-tooltip
+                            nzTitle="Delete Task">
                             <span><i nz-icon type="delete"></i></span>
                         </li>
                     </ul>
@@ -122,7 +126,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="title" id="title" placeholder="Please input the Title of the task">
+                        <input type="text" nz-input formControlName="title" id="title"
+                            placeholder="Please input the Title of the task">
                         <nz-form-explain *ngIf="validateForm.get('title').dirty && validateForm.get('title').errors">
                             <ng-container *ngIf="validateForm.get('title')?.hasError('trimBeginError')">
                                 The input has leading whitespace!
@@ -166,7 +171,8 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-date-picker formControlName="endDate"></nz-date-picker>
 
-                        <nz-form-explain *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
+                        <nz-form-explain
+                            *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
                             <ng-container *ngIf="validateForm.get('endDate')?.hasError('required')">
                                 Please input the date
                             </ng-container>
@@ -194,7 +200,8 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-control style="margin-left: 25% !important;" [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
+                    <nz-form-control style="margin-left: 25% !important;" [nzXs]="{ span: 24, offset: 0 }"
+                        [nzSm]="{ span: 20, offset: 4 }">
                         <button nz-button nzType="dashed" style="width:60%" (click)="addField($event)">
                             <i nz-icon type="plus"></i>
                             Add field

@@ -71,5 +71,5 @@
     </PropertyGroup>
     <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
   </Target>
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>
 </Project>

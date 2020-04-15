@@ -10,9 +10,9 @@ import { Candidate } from 'src/entities/candidate';
   styleUrls: ['./report-skills.component.css']
 })
 export class ReportSkillsComponent implements OnInit {
- 
-  @Input() _processes ;
-  
+
+  @Input() _processes;
+
   //Ranking Chart
   skillRankedList: any[] = [
     { id: 0, name: '', points: 0 },
@@ -34,7 +34,7 @@ export class ReportSkillsComponent implements OnInit {
     this.getCandidatesSkills();
     this.getSkills();
   }
-  
+
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
@@ -60,7 +60,7 @@ export class ReportSkillsComponent implements OnInit {
         skills.forEach(skill => {
           let points: number = 0;
           cdSkills.forEach(candSkill => {
-            if (candSkill.skill.id == skill.id) points = points + 1;
+            if (candSkill.skill.id === skill.id) points = points + 1;
           });
           skillRanking.push({
             id: skill.id,
@@ -74,7 +74,7 @@ export class ReportSkillsComponent implements OnInit {
         this.skillRankedList = skillRanking.splice(0, 3);
       }
       this.topSkillsLoading = false;
-      if ((this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id) == 0) return false; //por que
+      if ((this.skillRankedList[0].id + this.skillRankedList[1].id + this.skillRankedList[2].id) === 0) return false; //por que
       else return true;
     }
     catch{

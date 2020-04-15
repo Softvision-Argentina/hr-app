@@ -20,23 +20,23 @@ export class ReportTimetofill1Component implements OnInit {
 
   constructor(private app: AppComponent, private facade: FacadeService) { }
 
-  processes: Process[] = [];  
+  processes: Process[] = [];
   month: Date = new Date();
   hasProjections: boolean = false;
   offers: Offer[] = [];
-  auxDate : Date = new Date();
+  auxDate: Date = new Date();
 
   isChartComplete: boolean = false;
 
   ngOnInit() {
-    this.app.showLoading();    
+    this.app.showLoading();
     this.getOffers();
     this.getProjectionReport();
-    this.app.hideLoading();    
+    this.app.hideLoading();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    changes._processes;    
+    changes._processes;
     this.complete();
     if (!this.isChartComplete) {
       setTimeout(() => {
@@ -45,7 +45,7 @@ export class ReportTimetofill1Component implements OnInit {
     }
   }
 
-  getOffers(){
+  getOffers() {
     this.facade.offerService.get()
       .subscribe(res => {
         this.offers = res;
@@ -55,7 +55,7 @@ export class ReportTimetofill1Component implements OnInit {
   }
 
   complete() {
-    this.processes = this._processes;    
+    this.processes = this._processes;
   }
 
   public chartColors: any[] = [
@@ -69,9 +69,9 @@ export class ReportTimetofill1Component implements OnInit {
     },
   ];
 
-  public chartOptions: ChartOptions = {    
-    responsive: true,    
-    layout:{
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    layout: {
       padding: {
         left: 0,
         right: 20,
@@ -81,9 +81,9 @@ export class ReportTimetofill1Component implements OnInit {
     },
     scales: {
       yAxes: [{
-        id: 'y-axis-0',        
+        id: 'y-axis-0',
         ticks: {
-          beginAtZero: true        
+          beginAtZero: true
         }
       }],
       xAxes: [{
@@ -95,7 +95,7 @@ export class ReportTimetofill1Component implements OnInit {
     plugins: {
       datalabels: {
         anchor: 'end',
-        align: 'end',        
+        align: 'end',
       }
     }
   };
@@ -105,35 +105,35 @@ export class ReportTimetofill1Component implements OnInit {
   public chartPlugins = [pluginDataLabels];
 
   public chartData: ChartDataSets[] = [
-    { data: [], label: 'Dates' }    
+    { data: [], label: 'Dates' }
   ];
 
   getProjectionReport() {
-    let averageDays : number = 0;
-    let date = new Date(this.month);    
-    let days : number[] = [];
+    let averageDays: number = 0;
+    let date = new Date(this.month);
+    let days: number[] = [];
     let dayChartLabels: Label[] = []
-    let validArray : Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() +1  == date.getMonth() + 1 && proc.status == ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() == date.getFullYear());
+    let validArray: Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1 && proc.status === ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
     if (validArray.length > 0) {
-      validArray.forEach(va => {                          
-        averageDays+= Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));
-        days.push(Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));          
-        dayChartLabels.push(new Date(va.hrStage.date).toDateString());         
-      });      
-      days.push(Number((averageDays/days.length).toFixed(2)));
-      dayChartLabels.push("Average");      
+      validArray.forEach(va => {
+        averageDays += Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));
+        days.push(Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24)));
+        dayChartLabels.push(new Date(va.hrStage.date).toDateString());
+      });
+      days.push(Number((averageDays / days.length).toFixed(2)));
+      dayChartLabels.push("Average");
       this.chartData = [
-        { data: days, label: 'Days' }        
+        { data: days, label: 'Days' }
       ]
       this.chartLabels = dayChartLabels;
-      this.hasProjections = true;      
+      this.hasProjections = true;
     }
     else this.hasProjections = false;
   }
 
-  getLastOffer(id: number) : Date{
+  getLastOffer(id: number): Date {
     let lastOfferDate: Date;
-    lastOfferDate = (this.offers.filter(x=>x.id == id)).pop().offerDate;
+    lastOfferDate = (this.offers.filter(x => x.id === id)).pop().offerDate;
     return lastOfferDate;
   }
 

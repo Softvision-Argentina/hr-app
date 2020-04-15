@@ -76,11 +76,11 @@ export class ReportHireProjectionComponent implements OnInit {
     let date = new Date(this.month);
     let projection: HireProjection;
     let actualHires: number = 0;
-    if (this.hireProjections.filter(hp => hp.month == date.getMonth() + 1 && hp.year == date.getFullYear()).length > 0) {
-      projection = this.hireProjections.filter(hp => hp.month == (date.getMonth() + 1) && hp.year == date.getFullYear())[0];
+    if (this.hireProjections.filter(hp => hp.month === date.getMonth() + 1 && hp.year === date.getFullYear()).length > 0) {
+      projection = this.hireProjections.filter(hp => hp.month === (date.getMonth() + 1) && hp.year === date.getFullYear())[0];
       this.processes.forEach(proc => {
-        if (proc.status == ProcessStatusEnum.Hired) {
-          if (new Date(proc.offerStage.date).getMonth() == date.getMonth() && new Date(proc.offerStage.date).getFullYear() == date.getFullYear()) actualHires++;
+        if (proc.status === ProcessStatusEnum.Hired) {
+          if (new Date(proc.offerStage.date).getMonth() === date.getMonth() && new Date(proc.offerStage.date).getFullYear() === date.getFullYear()) actualHires++;
         }
       });
       this.hireChartData = [
