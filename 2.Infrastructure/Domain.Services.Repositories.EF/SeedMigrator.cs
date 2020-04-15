@@ -77,7 +77,7 @@ namespace Domain.Services.Repositories.EF
 
 
 
-            var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user23 = new User { FirstName = "Marcelo", LastName = "Martin", Username = "marcelo.martin@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user24 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             
             context.Users.Add(user2);
@@ -169,10 +169,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Postulants
-            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
+            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
 
             context.Postulants.Add(postulant1);
             context.Postulants.Add(postulant2);
@@ -602,9 +602,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region HireProjection
-            var hProjection1 = new HireProjection { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 65};
-            var hProjection2 = new HireProjection { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 35 };
-            var hProjection3 = new HireProjection { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 85 };
+            var hProjection1 = new HireProjection { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 65 };
+            var hProjection2 = new HireProjection { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 35 };
+            var hProjection3 = new HireProjection { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 85 };
             context.HireProjection.Add(hProjection1);
             context.HireProjection.Add(hProjection2);
             context.HireProjection.Add(hProjection3);
@@ -612,9 +612,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region EmployeeCasualty
-            var eCasualty1 = new EmployeeCasualty { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 45 };
-            var eCasualty2 = new EmployeeCasualty { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 22 };
-            var eCasualty3 = new EmployeeCasualty { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 68 };
+            var eCasualty1 = new EmployeeCasualty { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 45 };
+            var eCasualty2 = new EmployeeCasualty { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 22 };
+            var eCasualty3 = new EmployeeCasualty { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 68 };
             context.EmployeeCasualty.Add(eCasualty1);
             context.EmployeeCasualty.Add(eCasualty2);
             context.EmployeeCasualty.Add(eCasualty3);
@@ -661,7 +661,7 @@ namespace Domain.Services.Repositories.EF
 
             #region Dashboards
             var dashboard1 = new Dashboard { Name = "Processes Dashboard" };
-            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" }; 
+            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" };
             var dashboard3 = new Dashboard { Name = "Progress Processes Dashboard" };
             var dashboard4 = new Dashboard { Name = "Completed Processes Dashboard" };
             var dashboard5 = new Dashboard { Name = "Casualties and actual hires comparation Dashboard" };
@@ -686,10 +686,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region DaysOff
-            var daysOff1 = new DaysOff {  Date = DateTime.Today.AddDays(-12), EndDate= DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff2 = new DaysOff {  Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
-            var daysOff3 = new DaysOff {  Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff4 = new DaysOff {  Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff1 = new DaysOff { Date = DateTime.Today.AddDays(-12), EndDate = DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff2 = new DaysOff { Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff3 = new DaysOff { Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff4 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
             var daysOff5 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             var daysOff6 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.PTO, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             context.DaysOff.Add(daysOff1);

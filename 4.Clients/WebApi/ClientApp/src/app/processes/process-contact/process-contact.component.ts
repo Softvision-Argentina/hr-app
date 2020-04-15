@@ -127,7 +127,7 @@ export class ProcessContactComponent implements OnInit {
     private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService,
     private process: ProcessesComponent) {
-      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
@@ -150,7 +150,7 @@ export class ProcessContactComponent implements OnInit {
 
   getCandidates() {
     return this.facade.candidateService.get().pipe(
-      tap( res => {
+      tap(res => {
         this.candidates = res;
       })
     );
@@ -202,13 +202,13 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -226,12 +226,12 @@ export class ProcessContactComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id === candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    let candidate = this.candidates.filter(s => { return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1 });
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
@@ -276,7 +276,7 @@ export class ProcessContactComponent implements OnInit {
 
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
     if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
@@ -316,7 +316,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   Recontact(idCandidate: number) {
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -414,14 +414,14 @@ export class ProcessContactComponent implements OnInit {
             nzCancelText: 'No',
             nzOnOk: () => {
               this.modalService.closeAll();
-              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
+              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === candidateId)[0];
               this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
             }
           });
         }
         else {
           this.modalService.closeAll();
-          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
+          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === candidateId)[0];
           this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
         }
       });

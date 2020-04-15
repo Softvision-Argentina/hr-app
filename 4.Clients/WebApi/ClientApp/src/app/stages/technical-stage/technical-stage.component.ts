@@ -298,7 +298,7 @@ export class TechnicalStageComponent implements OnInit {
 
     if (this.controlArray.length >= 1) {
 
-      if (this.technicalForm.controls[i.controlInstance[0]].value != null) {
+      if (this.technicalForm.controls[i.controlInstance[0]].value !== null) {
         const singleSkill = skillList.filter(skill => (skill.id === this.technicalForm.controls[i.controlInstance[0]].value)
           || (skill.id === i.id))[0];
 
