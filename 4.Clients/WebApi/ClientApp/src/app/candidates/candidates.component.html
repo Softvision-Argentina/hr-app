@@ -172,13 +172,13 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="recruiter">Recruiter</nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">Recruiter</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <nz-select formControlName="recruiter">
-                            <nz-option *ngFor="let r of recruiters" nzLabel="{{r.name}} {{r.lastName}}" [nzValue]="r.id">
+                        <nz-select formControlName="user">
+                            <nz-option *ngFor="let user of users" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="validateForm.get('recruiter').dirty && validateForm.get('recruiter').errors">Please input the recruiter</nz-form-explain>
+                        <nz-form-explain *ngIf="validateForm.get('user').dirty && validateForm.get('user').errors">Please input the user</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>

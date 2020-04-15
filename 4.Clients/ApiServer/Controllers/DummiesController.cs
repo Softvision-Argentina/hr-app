@@ -11,15 +11,19 @@ using System.Collections.Generic;
 
 namespace ApiServer.Controllers
 {
+    //TODO:do we use actually this controller ? or we can remove it.
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class DummiesController : BaseController<DummiesController>
     {
-        IDummyService _dummyService;
-        private IMapper _mapper;
+        private readonly IDummyService _dummyService;
+        private readonly IMapper _mapper;
 
-        public DummiesController(IDummyService dummyService, ILog<DummiesController> logger, IMapper mapper)
+        public DummiesController(
+            IDummyService dummyService,
+            ILog<DummiesController> logger,
+            IMapper mapper)
             : base(logger)
         {
             _dummyService = dummyService;
@@ -38,7 +42,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/dummies/5
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -58,25 +61,23 @@ namespace ApiServer.Controllers
         // POST api/dummies
         // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDummyViewModel vm)
+        public IActionResult Post([FromBody]CreateDummyViewModel createDummyVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDummyContract>(vm);
+                var contract = _mapper.Map<CreateDummyContract>(createDummyVm);
                 var returnContract = _dummyService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedDummyViewModel>(returnContract));
             });
         }
 
-        // PUT api/dummies/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody]UpdateDummyViewModel vm)
+        public IActionResult Put(Guid id, [FromBody]UpdateDummyViewModel updateDummyVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDummyContract>(vm);
+                var contract = _mapper.Map<UpdateDummyContract>(updateDummyVm);
                 contract.Id = id;
                 _dummyService.Update(contract);
 
@@ -84,7 +85,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/dummies/5
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {

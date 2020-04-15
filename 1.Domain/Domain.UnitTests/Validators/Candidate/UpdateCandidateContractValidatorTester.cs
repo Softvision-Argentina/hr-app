@@ -1,6 +1,6 @@
 ﻿using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.Community;
-using Domain.Services.Contracts.Consultant;
+using Domain.Services.Contracts.User;
 using Domain.Services.Impl.Validators.Candidate;
 using FluentValidation.TestHelper;
 using System;
@@ -41,10 +41,10 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
             validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, String.Empty);
         }
 
-        [Fact(DisplayName = "Verify that throws error when Recruiter object is null")]
-        public void Should_Have_Error_When_Recruiter_Is_Null()
+        [Fact(DisplayName = "Verify that throws error when User object is null")]
+        public void Should_Have_Error_When_User_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Recruiter, (ReadedConsultantContract) null);
+            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.User, (ReadedUserContract) null);
         }
 
         [Fact(DisplayName = "Verify that throws error when Community object is null")]

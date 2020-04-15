@@ -17,7 +17,7 @@ namespace Domain.Services.Contracts.Employee
         public string LinkedInProfile { get; set; }
         public string AdditionalInformation { get; set; }
         public EmployeeStatus Status { get; set; }
-        public int RecruiterId { get; set; }
+        public int UserId { get; set; }
         public ReadedRoleContract Role { get; set; }
         public bool isReviewer { get; set; }
         public ReadedEmployeeContract Reviewer { get; set; }

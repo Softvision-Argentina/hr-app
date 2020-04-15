@@ -4,10 +4,10 @@ import { Process } from 'src/entities/process';
 import { FacadeService } from 'src/app/services/facade.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { Stage } from 'src/entities/stage';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from 'src/app/consultants/details/consultant-details.component';
+import { UserDetailsComponent } from 'src/app/users/details/user-details.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 
@@ -15,12 +15,12 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
   selector: 'app-process-detail',
   templateUrl: './process-detail.component.html',
   styleUrls: ['./process-detail.component.css'],
-  providers: [CandidateDetailsComponent, ConsultantDetailsComponent]
+  providers: [CandidateDetailsComponent, UserDetailsComponent]
 })
 export class ProcessDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private facade: FacadeService, private formBuilder: FormBuilder,
-    private consultantDetailsModal: ConsultantDetailsComponent, private candidateDetailsModal: CandidateDetailsComponent) { }
+    private userDetailsModal: UserDetailsComponent, private candidateDetailsModal: CandidateDetailsComponent) { }
 
   @ViewChild('dropdown') nameDropdown;
 
@@ -35,7 +35,7 @@ export class ProcessDetailComponent implements OnInit {
   ];
 
   candidates: Candidate[] = [];
-  consultants: Consultant[] = [];
+  users: User[] = [];
   processID: number = this.route.snapshot.params['id'];
 
   isEdit: boolean = false;
@@ -54,10 +54,10 @@ export class ProcessDetailComponent implements OnInit {
   listOfDisplayData = [...this.filteredStages];
 
   emptyCandidate: Candidate;
-  emptyConsultant: Consultant;
+  emptyUser: User;
 
-  consultantOwner: Consultant;
-  consultantDelegate: Consultant;
+  userOwner: User;
+  userDelegate: User;
 
   dropStage(event: CdkDragDrop<string[]>) {
     console.log("Drop method in table");
@@ -67,7 +67,7 @@ export class ProcessDetailComponent implements OnInit {
 
   ngOnInit() {
     this.getProcessByID(this.processID);
-    this.getConsultants();
+    this.getUsers();
     this.getCandidates();
 
     this.stageForm = this.formBuilder.group({
@@ -77,8 +77,8 @@ export class ProcessDetailComponent implements OnInit {
       description: [null, [Validators.required]],
       feedback: [null, [Validators.required]],
       status: [null, [Validators.required]],
-      consultantOwnerId: [null, [Validators.required]],
-      consultantDelegateId: [null, [Validators.required]]
+      userOwnerId: [null, [Validators.required]],
+      userDelegateId: [null, [Validators.required]]
     });
   }
 
@@ -100,10 +100,10 @@ export class ProcessDetailComponent implements OnInit {
       })
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.users = res;
       }, err => {
         console.log(err);
       });
@@ -126,9 +126,9 @@ export class ProcessDetailComponent implements OnInit {
     this.isEdit = false;
     this.stageForm.reset();
 
-    if (this.consultants.length > 0) {
-      this.stageForm.controls['consultantOwnerId'].setValue(this.consultants[0].id);
-      this.stageForm.controls['consultantDelegateId'].setValue(this.consultants[0].id);
+    if (this.users.length > 0) {
+      this.stageForm.controls['userOwnerId'].setValue(this.users[0].id);
+      this.stageForm.controls['userDelegateId'].setValue(this.users[0].id);
     }
 
     this.stageForm.controls['status'].setValue('3');
@@ -166,8 +166,8 @@ export class ProcessDetailComponent implements OnInit {
                 date: new Date,
                 feedback: this.stageForm.controls['feedback'].value.toString(),
                 status: this.stageForm.controls['status'].value.toString(),
-                consultantOwnerId: this.stageForm.controls['consultantOwnerId'].value.toString(),
-                consultantDelegateId: this.stageForm.controls['consultantDelegateId'].value.toString(),
+                userOwnerId: this.stageForm.controls['userOwnerId'].value.toString(),
+                userDelegateId: this.stageForm.controls['userDelegateId'].value.toString(),
                 processId: this.processID
               };
 
@@ -219,8 +219,8 @@ export class ProcessDetailComponent implements OnInit {
       date: new Date,
       feedback: '',
       status: 0,
-      consultantOwnerId: 0,
-      consultantDelegateId: 0
+      userOwnerId: 0,
+      userDelegateId: 0
     };
   }
 
@@ -257,8 +257,8 @@ export class ProcessDetailComponent implements OnInit {
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
-  showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
-    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
+  showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    this.emptyUser = this.users.filter(user => user.id === userID)[0];
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 }

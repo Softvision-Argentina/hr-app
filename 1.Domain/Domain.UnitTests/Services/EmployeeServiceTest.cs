@@ -23,7 +23,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<ILog<EmployeeService>> _mockLogEmployeeService;
         private readonly Mock<UpdateEmployeeContractValidator> _mockUpdateEmployeeContractValidator;
         private readonly Mock<CreateEmployeeContractValidator> _mockCreateEmployeeContractValidator;
-        private readonly Mock<IRepository<Consultant>> _mockRepositoryConsultant;
+        private readonly Mock<IRepository<User>> _mockRepositoryUser;
         private readonly Mock<IRepository<Role>> _mockRepositoryRole;
 
         public EmployeeServiceTest()
@@ -33,7 +33,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockLogEmployeeService = new Mock<ILog<EmployeeService>>();
             _mockUpdateEmployeeContractValidator = new Mock<UpdateEmployeeContractValidator>();
             _mockCreateEmployeeContractValidator = new Mock<CreateEmployeeContractValidator>();
-            _mockRepositoryConsultant = new Mock<IRepository<Consultant>>();
+            _mockRepositoryUser = new Mock<IRepository<User>>();
             _mockRepositoryRole = new Mock<IRepository<Role>>();
 
             _service = new EmployeeService(
@@ -43,7 +43,7 @@ namespace Domain.Services.Impl.UnitTests.Services
                 _mockLogEmployeeService.Object,
                 _mockUpdateEmployeeContractValidator.Object,
                 _mockCreateEmployeeContractValidator.Object,
-                _mockRepositoryConsultant.Object,
+                _mockRepositoryUser.Object,
                 _mockRepositoryRole.Object
             );
         }
@@ -53,12 +53,12 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateEmployeeContract();
             var expectedEmployee = new CreatedEmployeeContract();
-            var consultants = new List<Consultant> { new Consultant { Id = 0 } }.AsQueryable();
+            var users = new List<User> { new User { Id = 0 } }.AsQueryable();
             var roles = new List<Role> { new Role { Id = 0 } }.AsQueryable();
             _mockCreateEmployeeContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateEmployeeContract>>())).Returns(new ValidationResult());
             _mockMapper.Setup(mm => mm.Map<Employee>(It.IsAny<CreateEmployeeContract>())).Returns(new Employee());
             _mockRepositoryEmployee.Setup(repoEmp => repoEmp.Create(It.IsAny<Employee>())).Returns(new Employee());
-            _mockRepositoryConsultant.Setup(repoCon => repoCon.Query()).Returns(consultants);
+            _mockRepositoryUser.Setup(repoCon => repoCon.Query()).Returns(users);
             _mockRepositoryRole.Setup(repoRole => repoRole.Query()).Returns(roles);
             _mockMapper.Setup(mm => mm.Map<CreatedEmployeeContract>(It.IsAny<Employee>())).Returns(expectedEmployee);
 
@@ -112,7 +112,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         [Fact(DisplayName = "Verify that delete throws error when data for deletion is invalid")]
         public void GivenDelete__WhenDataIsInvalid_ThrowDeleteEmployeeNotFoundException()
         {
-            var expectedErrorMEssage = $"Employee not found for the ConsultantId: {0}";
+            var expectedErrorMEssage = $"Employee not found for the UserId: {0}";
 
             var exception = Assert.Throws<Model.Exceptions.Employee.DeleteEmployeeNotFoundException>(() => _service.Delete(0));
 
@@ -128,11 +128,11 @@ namespace Domain.Services.Impl.UnitTests.Services
         public void GivenUpdate_WhenDataIsValid_UpdateCorrectly()
         {
             var contract = new UpdateEmployeeContract();
-            var consultants = new List<Consultant> { new Consultant { Id = 0 } }.AsQueryable();
+            var users = new List<User> { new User { Id = 0 } }.AsQueryable();
             var roles = new List<Role> { new Role { Id = 0 } }.AsQueryable();
             _mockUpdateEmployeeContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateEmployeeContract>>())).Returns(new ValidationResult());
             _mockMapper.Setup(mm => mm.Map<Employee>(It.IsAny<UpdateEmployeeContract>())).Returns(new Employee());
-            _mockRepositoryConsultant.Setup(repoCon => repoCon.Query()).Returns(consultants);
+            _mockRepositoryUser.Setup(repoCon => repoCon.Query()).Returns(users);
             _mockRepositoryRole.Setup(repoRole => repoRole.Query()).Returns(roles);
 
             _service.UpdateEmployee(contract);

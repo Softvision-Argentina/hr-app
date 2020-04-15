@@ -18,7 +18,7 @@ namespace Domain.Model.Exceptions.Employee
     public class InvalidEmployeeException : EmployeeException
     {
         public InvalidEmployeeException(string message)
-            : base(string.IsNullOrEmpty(message) ? "The consultant is not valid" : message)
+            : base(string.IsNullOrEmpty(message) ? "The User is not valid" : message)
         {
         }
     }
@@ -36,7 +36,7 @@ namespace Domain.Model.Exceptions.Employee
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.DeleteEmployeeNotFound;
         public DeleteEmployeeNotFoundException(int employeeId)
-            : base($"Employee not found for the ConsultantId: {employeeId}")
+            : base($"Employee not found for the UserId: {employeeId}")
         {
             EmployeeId = employeeId;
         }
@@ -62,7 +62,7 @@ namespace Domain.Model.Exceptions.Employee
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.UpdateEmployeeNotFound;
         public UpdateEmployeeNotFoundException(int employeeId, Guid clientSystemId)
-            : base($"Consultant {employeeId} and Client System Id {clientSystemId} was not found.")
+            : base($"User {employeeId} and Client System Id {clientSystemId} was not found.")
         {
             EmployeeId = employeeId;
             ClientSystemId = clientSystemId;

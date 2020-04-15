@@ -3,9 +3,8 @@ import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from 'src/app/consultants/details/consultant-details.component';
+import { UserDetailsComponent } from 'src/app/users/details/user-details.component';
 import { AppComponent } from 'src/app/app.component';
 import { Stage } from 'src/entities/stage';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
@@ -34,7 +33,7 @@ import { CandidateSkill } from 'src/entities/candidateSkill';
   selector: 'app-processes',
   templateUrl: './processes.component.html',
   styleUrls: ['./processes.component.css'],
-  providers: [CandidateDetailsComponent, ConsultantDetailsComponent, AppComponent]
+  providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 
 export class ProcessesComponent implements OnInit, AfterViewChecked {
@@ -76,7 +75,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   emptyProcess: Process;
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
-  consultants: Consultant[] = [];
+  users: User[] = [];
+
   profileSearch: number = 0;
   profileSearchName: string = 'ALL';
   communitySearch: number = 0;
@@ -85,9 +85,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   statusList: any[];
   currentStageList: any[];
   emptyCandidate: Candidate;
-  emptyConsultant: Consultant;
+  emptyUser: any;
   currentCandidate: Candidate;
-  currentConsultant: any;
+
   isEdit: boolean = false;
   openFromEdit: boolean = false;
   currentComponent: string;
@@ -104,7 +104,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   forms: FormGroup[] = [];
   isLoading:boolean = false;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
-    private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
+    private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent, ) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
@@ -116,15 +116,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.app.removeBgImage();
     this.getProcesses();
     this.getCandidates();
-    this.getConsultants();
+    this.getUsers();
     this.getOffices();
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentConsultant = res.body;
-    });
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
@@ -155,10 +151,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       });
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -221,7 +217,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
-  getProcessesByConsultant() {
+  getProcessesByUser() {
     this.facade.processService.get()
       .subscribe(res => {
         this.filteredProcesses = res;
@@ -417,8 +413,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));    
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -428,7 +424,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentConsultant.name + ' ' + this.currentConsultant.lastName;
+    this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -440,8 +436,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.recruiter.name.toString() + " " + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
@@ -542,7 +538,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         englishLevel: null,
         status: null,
         candidateSkills: [],
-        recruiter: null,
+        user: null,
         preferredOfficeId: null,
         contactDay: null,
         profile: null,
@@ -573,9 +569,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
-  showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
-    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
+  showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    this.emptyUser = this.users.filter(user => user.id == userID)[0];
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName);
   }
 
   showDeleteConfirm(processID: number): void {
@@ -696,7 +692,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   }
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
+    console.log("save process");
+    
     if (this.validateForms()) {
+      console.log("valid");
+      
       this.app.showLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
@@ -704,6 +704,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
+      newProcess.userOwnerId = newCandidate.user.id;
+      newProcess.candidate = newCandidate;
+
       newProcess = this.generateProcess(newProcess, newCandidate);
       if (!this.isEdit) {
         if (!newCandidate.id) {
@@ -791,10 +794,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: !this.isEdit ? 0 : null,
       candidate: null,
-      consultantOwnerId: 0,
-      consultantOwner: null,
-      consultantDelegate: null,
-      consultantDelegateId: null,
+      userOwnerId: 0,
+      userOwner: null,
+      userDelegate: null,
+      userDelegateId: null,
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
@@ -892,10 +895,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      consultantOwnerId: null,  // candidate.recruiter.id
-      consultantOwner: candidate.recruiter,
-      consultantDelegateId: null,
-      consultantDelegate: null,
+      userOwnerId: null,
+      userOwner: candidate.user,
+      userDelegateId: null,
+      userDelegate: null,
       rejectionReason: null,
       declineReasonId: null,
       declineReason: null,
@@ -909,8 +912,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.InProgress,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         actualSalary: null,
         wantedSalary: null,
@@ -922,8 +925,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
@@ -934,8 +937,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         interviewer: '',
         delegateName: ''
@@ -945,8 +948,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null,
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
         hireDate: new Date(),
@@ -958,19 +961,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     };
   }
   generateProcess(process: Process, candidate: Candidate) {
-    const recruiterId = candidate.recruiter.id;
+    const userId = candidate.user.id;
 
     process.candidateId = candidate.id;
     process.candidate = candidate;
-    process.consultantOwnerId = recruiterId;
-    process.consultantOwner = candidate.recruiter;
-    process.hrStage.consultantOwnerId = recruiterId;
-    process.hrStage.consultantDelegateId = recruiterId;
-    process.technicalStage.consultantOwnerId = recruiterId;
-    process.technicalStage.consultantDelegateId = recruiterId;
-    process.clientStage.consultantOwnerId = recruiterId;
-    process.clientStage.consultantDelegateId = recruiterId;
-    process.offerStage.consultantOwnerId = recruiterId;
+    process.userOwnerId = userId;
+    process.userOwner = candidate.user;
+    process.hrStage.userOwnerId = userId;
+    process.hrStage.userDelegateId = userId;
+    process.technicalStage.userOwnerId = userId;
+    process.technicalStage.userDelegateId = userId;
+    process.clientStage.userOwnerId = userId;
+    process.clientStage.userDelegateId = userId;
+    process.offerStage.userOwnerId = userId;
+    
     return process;
 
   }

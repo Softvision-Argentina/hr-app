@@ -2,7 +2,7 @@
 using Domain.Model;
 using Domain.Model.Enum;
 using Domain.Services.Contracts.Candidate;
-using Domain.Services.Contracts.Consultant;
+using Domain.Services.Contracts.User;
 using Domain.Services.Contracts.Stage;
 using System;
 using System.Collections.Generic;
@@ -30,11 +30,11 @@ namespace Domain.Services.Contracts.Process
 
         //public ReadedCandidateContract Candidate { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
-        public UpdateConsultantContract ConsultantOwner { get; set; }
+        public int? UserOwnerId { get; set; }
+        public UpdateUserContract UserOwner { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
-        public UpdateConsultantContract ConsultantDelegate { get; set; }
+        public int? UserDelegateId { get; set; }
+        public UpdateUserContract UserDelegate { get; set; }
 
         public float? ActualSalary { get; set; }
         public float? WantedSalary { get; set; }        
