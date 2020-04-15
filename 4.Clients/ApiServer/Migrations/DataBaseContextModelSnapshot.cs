@@ -63,8 +63,6 @@ namespace ApiServer.Migrations
 
                     b.Property<int?>("ProfileId");
 
-                    b.Property<int?>("RecruiterId");
-
                     b.Property<string>("ReferredBy");
 
                     b.Property<int>("Status");
@@ -80,8 +78,6 @@ namespace ApiServer.Migrations
                     b.HasIndex("PreferredOfficeId");
 
                     b.HasIndex("ProfileId");
-
-                    b.HasIndex("RecruiterId");
 
                     b.HasIndex("UserId");
 
@@ -136,10 +132,6 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -164,16 +156,20 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("ClientStages");
                 });
@@ -232,37 +228,6 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CompanyCalendar");
-                });
-
-            modelBuilder.Entity("Domain.Model.Consultant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AdditionalInformation");
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("EmailAddress");
-
-                    b.Property<string>("LastModifiedBy");
-
-                    b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<long>("Version");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Consultants");
                 });
 
             modelBuilder.Entity("Domain.Model.Cv", b =>
@@ -405,13 +370,13 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<int?>("RecruiterId");
-
                     b.Property<int?>("ReviewerId");
 
                     b.Property<int?>("RoleId");
 
                     b.Property<int>("Status");
+
+                    b.Property<int?>("UserId");
 
                     b.Property<long>("Version");
 
@@ -419,11 +384,11 @@ namespace ApiServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecruiterId");
-
                     b.HasIndex("ReviewerId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Employees");
                 });
@@ -490,10 +455,6 @@ namespace ApiServer.Migrations
 
                     b.Property<float>("ActualSalary");
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -518,18 +479,22 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.Property<float>("WantedSalary");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("HrStages");
                 });
@@ -596,10 +561,6 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime?>("BackgroundCheckDoneDate");
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -628,16 +589,20 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("OfferStages");
                 });
@@ -704,10 +669,6 @@ namespace ApiServer.Migrations
 
                     b.Property<int?>("CandidateId");
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -728,17 +689,21 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Status");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CandidateId");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("DeclineReasonId");
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("Processes");
                 });
@@ -759,21 +724,21 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("LastModifiedDate");
 
-                    b.Property<int?>("RecruiterId");
-
                     b.Property<int>("RoomId");
 
                     b.Property<DateTime>("SinceReservation");
 
                     b.Property<DateTime>("UntilReservation");
 
+                    b.Property<int?>("UserId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecruiterId");
-
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reservation");
                 });
@@ -918,10 +883,6 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -942,15 +903,19 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("ProcessId");
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("Stages");
                 });
@@ -990,8 +955,6 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ConsultantId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -1010,11 +973,13 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("UserId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
@@ -1058,10 +1023,6 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("Client");
 
-                    b.Property<int?>("ConsultantDelegateId");
-
-                    b.Property<int?>("ConsultantOwnerId");
-
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -1084,16 +1045,20 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("Type");
 
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
                     b.Property<long>("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultantDelegateId");
-
-                    b.HasIndex("ConsultantOwnerId");
-
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
 
                     b.ToTable("TechnicalStages");
                 });
@@ -1162,12 +1127,8 @@ namespace ApiServer.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Domain.Model.Consultant", "Recruiter")
-                        .WithMany("Candidates")
-                        .HasForeignKey("RecruiterId");
-
                     b.HasOne("Domain.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Candidates")
                         .HasForeignKey("UserId");
                 });
 
@@ -1186,18 +1147,18 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.ClientStage", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("ClientStage")
                         .HasForeignKey("Domain.Model.ClientStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.Community", b =>
@@ -1226,10 +1187,6 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.Employee", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "Recruiter")
-                        .WithMany()
-                        .HasForeignKey("RecruiterId");
-
                     b.HasOne("Domain.Model.Employee", "Reviewer")
                         .WithMany()
                         .HasForeignKey("ReviewerId");
@@ -1237,22 +1194,26 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Model.HrStage", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("HrStage")
                         .HasForeignKey("Domain.Model.HrStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.Notification", b =>
@@ -1265,18 +1226,18 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.OfferStage", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("OfferStage")
                         .HasForeignKey("Domain.Model.OfferStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.Process", b =>
@@ -1285,29 +1246,29 @@ namespace ApiServer.Migrations
                         .WithMany()
                         .HasForeignKey("CandidateId");
 
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.DeclineReason", "DeclineReason")
                         .WithMany()
                         .HasForeignKey("DeclineReasonId");
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.Reservation", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "Recruiter")
-                        .WithMany()
-                        .HasForeignKey("RecruiterId");
-
                     b.HasOne("Domain.Model.Room", "Room")
                         .WithMany("ReservationItems")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Model.Room", b =>
@@ -1328,18 +1289,18 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.Stage", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithMany()
                         .HasForeignKey("ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.StageItem", b =>
@@ -1352,9 +1313,9 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.Task", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "Consultant")
+                    b.HasOne("Domain.Model.User", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("ConsultantId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -1368,18 +1329,18 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("Domain.Model.TechnicalStage", b =>
                 {
-                    b.HasOne("Domain.Model.Consultant", "ConsultantDelegate")
-                        .WithMany()
-                        .HasForeignKey("ConsultantDelegateId");
-
-                    b.HasOne("Domain.Model.Consultant", "ConsultantOwner")
-                        .WithMany()
-                        .HasForeignKey("ConsultantOwnerId");
-
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("TechnicalStage")
                         .HasForeignKey("Domain.Model.TechnicalStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
                 });
 
             modelBuilder.Entity("Domain.Model.User", b =>

@@ -2,7 +2,6 @@
 using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Stage;
-using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -14,18 +13,19 @@ namespace ApiServer.Controllers
     [Route("api/[controller]")]
     public class ProcessStageController : BaseController<ProcessStageController>
     {
-        IProcessStageService _processStageService;
-        private IMapper _mapper;
+        private readonly IProcessStageService _processStageService;
+        private readonly IMapper _mapper;
 
-        public ProcessStageController(IProcessStageService processStageService,
-            ILog<ProcessStageController> logger, IMapper mapper)
+        public ProcessStageController(
+            IProcessStageService processStageService,
+            ILog<ProcessStageController> logger,
+            IMapper mapper)
             : base(logger)
         {
             _processStageService = processStageService;
             _mapper = mapper;
         }
 
-        // GET: api/<controller>
         [HttpGet]
         public IActionResult Get()
         {
@@ -37,9 +37,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        // GET api/<controller>/5
         [HttpGet("{id}")]
-        //[Authorize(Policy = SecurityClaims.CAN_LIST_CANDIDATE)]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
@@ -50,28 +48,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/<controller>
-        //creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateStageViewModel createStageViewModel)
+        public IActionResult Post([FromBody]CreateStageViewModel createStageVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateStageContract>(createStageViewModel);
+                var contract = _mapper.Map<CreateStageContract>(createStageVm);
                 var returnContract = _processStageService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedStageViewModel>(returnContract));
             });
         }
 
-        // PUT api/dummies/5
-        // Update
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateStageViewModel updateStageViewModel)
+        public IActionResult Put(int id, [FromBody]UpdateStageViewModel updateStageVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateStageContract>(updateStageViewModel);
+                var contract = _mapper.Map<UpdateStageContract>(updateStageVm);
                 contract.Id = id;
 
                 _processStageService.Update(contract);
@@ -80,7 +74,6 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/dummies/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -91,7 +84,5 @@ namespace ApiServer.Controllers
                 return Accepted();
             });
         }
-
-
     }
 }

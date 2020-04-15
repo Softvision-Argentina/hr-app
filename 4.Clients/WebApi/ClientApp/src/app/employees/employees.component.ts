@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { Consultant } from 'src/entities/consultant';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -27,7 +26,7 @@ export class EmployeesComponent implements OnInit {
   listOfDisplayData: Employee[] = [];
   searchValue = '';
   currentUser: User;
-  consultants: Consultant[] = [];
+  users: User[] = [];
   employee: Employee;
   editForm: FormGroup;
   activeRoles: Role[] = [];
@@ -49,7 +48,7 @@ export class EmployeesComponent implements OnInit {
 
   ngOnInit() {
     this.getEmployees();
-    this.getConsultants();
+    this.getUsers();
     this.getRoles();
     this.editMode = false;
     this.statusList = [{ id: 0, name: "Not Hired" }, { id: 1, name: "Hired" }];
@@ -64,7 +63,7 @@ export class EmployeesComponent implements OnInit {
       emailAddress: [null, [Validators.email, Validators.required]],
       linkedInProfile: [null, [trimValidator]],
       additionalInformation: [null, [trimValidator]],
-      recruiterId: [null, [Validators.required]],
+      userId: [null, [Validators.required]],
       status: [null],
       role: [null],
       roleId: [null, [Validators.required]],
@@ -102,10 +101,10 @@ export class EmployeesComponent implements OnInit {
       });
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       })
@@ -173,7 +172,7 @@ export class EmployeesComponent implements OnInit {
                 linkedInProfile: this.employeeForm.controls['linkedInProfile'].value,
                 additionalInformation: this.employeeForm.controls['additionalInformation'].value,
                 status: this.employeeForm.controls['status'].value,
-                recruiterId: this.employeeForm.controls['recruiterId'].value,
+                userId: this.employeeForm.controls['userId'].value,
                 role: null,
                 roleId: this.employeeForm.controls['roleId'].value,
                 isReviewer: this.employeeForm.controls['isReviewer'].value === null ? false : this.employeeForm.controls['isReviewer'].value,
@@ -236,7 +235,7 @@ export class EmployeesComponent implements OnInit {
               editEmployee.linkedInProfile = this.employeeForm.controls['linkedInProfile'].value;
               editEmployee.status = this.employeeForm.controls['status'].value;
               editEmployee.roleId = this.employeeForm.controls['roleId'].value;
-              editEmployee.recruiterId = this.employeeForm.controls['recruiterId'].value;
+              editEmployee.userId = this.employeeForm.controls['userId'].value;
               editEmployee.isReviewer = this.employeeForm.controls['isReviewer'].value;
               this.employeeForm.controls['reviewerName'].value === "" ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id
               editEmployee.additionalInformation = this.employeeForm.controls['additionalInformation'].value;
@@ -274,8 +273,8 @@ export class EmployeesComponent implements OnInit {
     this.showReviewerNotFoundMessage = false;
     this.employeeForm.controls['phoneNumberPrefix'].setValue('+54');
     this.employeeForm.controls['status'].setValue(1);
-    let recruiterId = this.consultants.filter(c => c.emailAddress === this.currentUser.email)[0].id;
-    this.employeeForm.controls['recruiterId'].setValue(recruiterId);
+    let userId = this.users.filter(c => c.username== this.currentUser.username)[0].id;
+    this.employeeForm.controls['userId'].setValue(userId);
     if (this.activeRoles.length > 0)
       this.employeeForm.controls['roleId'].setValue(this.activeRoles[0].id);
   }
@@ -292,9 +291,9 @@ export class EmployeesComponent implements OnInit {
     this.employeeForm.controls['linkedInProfile'].setValue(employee.linkedInProfile);
     this.employeeForm.controls['additionalInformation'].setValue(employee.additionalInformation);
     this.employeeForm.controls['status'].setValue(employee.status);
-    this.employeeForm.controls['recruiterId'].setValue(employee.recruiterId);
+    this.employeeForm.controls['userId'].setValue(employee.userId);
     this.employeeForm.controls['roleId'].setValue(employee.role.id);
-    this.employeeForm.controls['recruiterId'].setValue(employee.recruiterId);
+    this.employeeForm.controls['userId'].setValue(employee.userId);
     this.employeeForm.controls['isReviewer'].setValue(employee.isReviewer);
     if (employee.reviewer.id === 1)
       this.employeeForm.controls['reviewerName'].setValue("");

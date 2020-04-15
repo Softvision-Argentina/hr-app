@@ -33,7 +33,7 @@ export class CommunitiesComponent implements OnInit {
     this._detailedCandidateProfile = value;
   }
 
-  currentConsultant: User;
+  currentUser: User;
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
@@ -43,7 +43,7 @@ export class CommunitiesComponent implements OnInit {
 
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) {
-    this.currentConsultant = JSON.parse(localStorage.getItem("currentUser"));
+      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {

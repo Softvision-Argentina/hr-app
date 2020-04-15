@@ -1,6 +1,6 @@
 ﻿using Domain.Model.Enum;
 using Domain.Services.Contracts.CandidateSkill;
-using Domain.Services.Contracts.Consultant;
+using Domain.Services.Contracts.User;
 using Domain.Services.Contracts.Role;
 using System;
 using System.Collections.Generic;
@@ -18,8 +18,8 @@ namespace Domain.Services.Contracts.Employee
         public string LinkedInProfile { get; set; }
         public string AdditionalInformation { get; set; }
         public EmployeeStatus Status { get; set; }
-        public int RecruiterId { get; set; }
-        public CreateConsultantContract Recruiter { get; set; }
+        public int UserId { get; set; }
+        public CreateUserContract User { get; set; }
         public int RoleId { get; set; }
         public CreateRoleContract Role { get; set; }
         public bool isReviewer { get; set; }

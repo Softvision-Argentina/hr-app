@@ -16,7 +16,7 @@ namespace Domain.Services.Impl.Validators.Employee
             RuleFor(employee => employee.DNI).NotEmpty();
             RuleFor(employee => employee.DNI).GreaterThan(0);
             RuleFor(employee => employee.PhoneNumber).NotEmpty();
-            RuleFor(employee => employee.Recruiter).NotNull();
+            RuleFor(employee => employee.User).NotNull();
             RuleFor(employee => employee.isReviewer).NotNull();
             RuleFor(employee => employee.Role).NotNull();
         }

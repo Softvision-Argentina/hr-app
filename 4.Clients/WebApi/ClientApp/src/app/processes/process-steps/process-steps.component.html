@@ -39,16 +39,14 @@
   <div nz-col nzSpan="24">
 
     <nz-timeline *ngIf="process.stages && process.stages.length > 0">
-      <nz-timeline-item *ngFor="let stage of process.stages" [nzColor]="getStatusColor(stage.status)">
-        <p>{{stage.title}}</p>
-        <p>{{stage.description}}</p>
-        <p *ngIf="stage && stage.status.toLowerCase() === 'finish'">End date: {{stage.endDate}}</p>
-        <p *ngIf="stage && stage.status.toLowerCase() !== 'finish'">Start date: {{stage.startDate}}</p>
-        <p *ngIf="stage && stage.consultantOwner">Owner: {{stage.consultantOwner.name}}
-          {{stage.consultantOwner.lastName}}</p>
-        <p *ngIf="stage && stage.consultantDelegate">Delegate: {{stage.consultantDelegate.name}}
-          {{stage.consultantDelegate.lastName}}</p>
-      </nz-timeline-item>
+        <nz-timeline-item *ngFor="let stage of process.stages" [nzColor]="getStatusColor(stage.status)">
+          <p>{{stage.title}}</p>
+          <p>{{stage.description}}</p>
+          <p *ngIf="stage && stage.status.toLowerCase() == 'finish'">End date: {{stage.endDate}}</p>
+          <p *ngIf="stage && stage.status.toLowerCase() != 'finish'">Start date: {{stage.startDate}}</p>
+          <p *ngIf="stage && stage.userOwner">Owner: {{stage.userOwner.firstName}} {{stage.userOwner.lastName}}</p>
+          <p *ngIf="stage && stage.userDelegate">Delegate: {{stage.userDelegate.name}} {{stage.userDelegate.lastName}}</p>
+        </nz-timeline-item>
     </nz-timeline>
 
   </div>

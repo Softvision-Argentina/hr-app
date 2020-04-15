@@ -42,7 +42,7 @@ namespace HrApp.API.Json
             res.EnglishLevel = (EnglishLevel)(int)jObject["englishLevel"];
             res.Status = (CandidateStatus)(int)jObject["status"];
             res.ContactDay = DateTime.Parse((string)jObject["contactDay"]);
-            res.Recruiter = jObject["recruiter"].ToObject<Consultant>();
+            res.User = jObject["recruiter"].ToObject<User>();
             res.PreferredOffice = jObject["preferredOffice"].ToObject<Office>();
           
             List<CandidateSkill> CandidateSkillsList = new List<CandidateSkill>();

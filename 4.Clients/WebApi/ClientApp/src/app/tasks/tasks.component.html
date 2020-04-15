@@ -46,10 +46,8 @@
             <nz-card class="card-style" [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate" [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
 
                 <ng-template #titleTemplate>
-                    <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span>
-                    <br />
-                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner:
-                        {{toDo.consultant.name}} {{toDo.consultant.lastName}}</span>
+                    <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span> <br />
+                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.user.firstName}} {{toDo.user.lastName}}</span>
                     <span style="font-size: small;" *ngIf="canAssign() && isCurrentUser(toDo)">Owner: You</span>
                 </ng-template>
 
@@ -148,20 +146,19 @@
         <div nz-row *ngIf="canAssign()">
             <div nz-col nzSpan="24">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="consultant">Consultant</nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">User</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <div class="display-flex">
-                            <nz-select  formControlName="consultant" [attr.id]="consultant" id="consultant" nzShowSearch nzAllowClear nzPlaceHolder="Select a consultant">
-                                <nz-option *ngFor="let consultant of consultants;" nzLabel="{{consultant.name}} {{consultant.lastName}}" nzValue="{{consultant.id}}">
+                            <nz-select  formControlName="user" [attr.id]="user" id="user" nzShowSearch nzAllowClear nzPlaceHolder="Select a user">
+                                <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}" nzValue="{{user.id}}">
                                 </nz-option>
                             </nz-select>
                             <button nz-button nzType="primary" nz-tooltip nzTitle="Assign to me" (click)="assignToMe()">
                                 <i nz-iconnzType="user" nzTheme="outline"></i>
                             </button>
                         </div>
-                        <nz-form-explain
-                            *ngIf="validateForm.get('consultant')?.dirty && validateForm.get('consultant')?.hasError('required')">
-                            Please select a consultant
+                        <nz-form-explain *ngIf="validateForm.get('user')?.dirty && validateForm.get('user')?.hasError('required')">
+                            Please select a user
                         </nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>

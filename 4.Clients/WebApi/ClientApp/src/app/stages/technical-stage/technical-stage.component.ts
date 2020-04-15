@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
 import { Globals } from '../../app-globals/globals';
@@ -21,12 +21,12 @@ import { ProcessService } from '../../services/process.service';
 export class TechnicalStageComponent implements OnInit {
 
   @Input()
-  private _consultants: Consultant[];
-  public get consultants(): Consultant[] {
-    return this._consultants;
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
   }
-  public set consultants(value: Consultant[]) {
-    this._consultants = value;
+  public set users(value: User[]) {
+    this._users = value;
   }
 
   @Input()
@@ -44,8 +44,8 @@ export class TechnicalStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     seniority: [0, [Validators.required]],
     alternativeSeniority: [0, [Validators.required]],
-    consultantOwnerId: [null, [Validators.required]],
-    consultantDelegateId: [null],
+    userOwnerId: [null, [Validators.required]],
+    userDelegateId: [null],
     feedback: [null, [trimValidator]],
     client: [null],
     rejectionReason: [null, [Validators.required]]
@@ -141,10 +141,10 @@ export class TechnicalStageComponent implements OnInit {
     stage.date = this.getControlValue(form.controls.date);
     stage.feedback = this.getControlValue(form.controls.feedback);
     stage.status = this.getControlValue(form.controls.status);
-    stage.consultantOwnerId = this.getControlValue(form.controls.consultantOwnerId);
-    stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
+    stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
+    stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.processId = processId;
-    stage.consultantDelegateId = this.getControlValue(form.controls.consultantDelegateId);
+    stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.alternativeSeniority = this.getControlValue(form.controls.alternativeSeniority);
     stage.client = this.getControlValue(form.controls.client);
@@ -190,12 +190,12 @@ export class TechnicalStageComponent implements OnInit {
       this.technicalForm.controls['date'].setValue(technicalStage.date);
     }
 
-    if (technicalStage.consultantOwnerId) {
-      this.technicalForm.controls['consultantOwnerId'].setValue(technicalStage.consultantOwnerId);
+    if (technicalStage.userOwnerId) {
+      this.technicalForm.controls['userOwnerId'].setValue(technicalStage.userOwnerId);
     }
 
-    if (technicalStage.consultantDelegateId) {
-      this.technicalForm.controls['consultantDelegateId'].setValue(technicalStage.consultantDelegateId);
+    if (technicalStage.userDelegateId) {
+      this.technicalForm.controls['userDelegateId'].setValue(technicalStage.userDelegateId);
     }
 
     if (technicalStage.feedback) {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Domain.Services.Contracts.Consultant;
-using Domain.Services.Contracts.Stage.StageItem;
-
-namespace Domain.Services.Contracts.Stage
+﻿namespace Domain.Services.Contracts.Stage.ClientStage
 {
     public class CreatedClientStageContract
     {

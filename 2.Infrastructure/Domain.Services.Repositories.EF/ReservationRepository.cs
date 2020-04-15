@@ -15,7 +15,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Reservation> Query()
         {
-            return base.Query().AsNoTracking().Include(r => r.Room).Include(r => r.Recruiter);
+            return base.Query().AsNoTracking().Include(r => r.Room).Include(r => r.User);
         }
 
     }

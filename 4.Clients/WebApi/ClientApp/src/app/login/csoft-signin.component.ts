@@ -52,9 +52,10 @@ export class CSoftComponent {
       }else{
         this.authenticatedUser = {
           id: res.user.id,
-          name: res.user.firstName + " " + res.user.lastName,
+          firstName: res.user.firstName,
+          lastName: res.user.lastName,
           imgURL: "",
-          email: res.user.username,
+          username: res.user.username,
           role: res.user.role,
           token: res.token,
           community: res.user.community,

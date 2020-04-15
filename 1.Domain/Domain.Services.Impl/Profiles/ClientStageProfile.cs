@@ -4,7 +4,7 @@ using AutoMapper;
 using Domain.Model;
 using Domain.Model.Enum;
 using Domain.Services.Contracts.Stage;
-using Domain.Services.Contracts.Stage.StageItem;
+using Domain.Services.Contracts.Stage.ClientStage;
 
 namespace Domain.Services.Impl.Profiles
 {

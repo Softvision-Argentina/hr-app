@@ -26,7 +26,7 @@
             <li><strong style="margin-right: 1%;">Wanted Salary:</strong> {{ process.wantedSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Start Date:</strong> {{ process.startDate | date:'medium' }}</li>
             <li *ngIf="process.endDate"><strong style="margin-right: 1%;">End Date:</strong> {{ process.endDate | date:'medium' }}</li>
-            <li *ngIf="process.consultantOwner"><strong style="margin-right: 1%;">Consultant: </strong><a style="color: #1890ff;" (click)="showConsultantDetailsModal(process.consultantOwner.id, consultantDetailModal)">{{ process.consultantOwner.name }} {{ process.consultantOwner.lastName }}</a></li>
+            <li *ngIf="process.userOwner"><strong style="margin-right: 1%;">User: </strong><a style="color: #1890ff;" (click)="showUserDetailsModal(process.userOwner.id, userDetailModal)">{{ process.userOwner.firstName }} {{ process.userOwner.lastName }}</a></li>
             <li *ngIf="process.candidate"><strong style="margin-right: 1%;">Candidate: </strong><a style="color: #1890ff;" (click)="showCandidateDetailsModal(process.candidate.id, candidateDetailModal)">{{ process.candidate.name }}
           {{ process.candidate.lastName }}</a></li>
         </ul>
@@ -132,23 +132,23 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <nz-select formControlName="consultantOwnerId">
-                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-select formControlName="userOwnerId">
+                            <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('consultantOwnerId').dirty && stageForm.get('consultantOwnerId').errors">Please input the owner</nz-form-explain>
+                        <nz-form-explain *ngIf="stageForm.get('userOwnerId').dirty && stageForm.get('userOwnerId').errors">Please input the owner</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="consultantDelegateId">Delegate</nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <nz-select formControlName="consultantDelegateId">
-                            <nz-option *ngFor="let c of consultants" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-select formControlName="userDelegateId">
+                            <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('consultantDelegateId').dirty && stageForm.get('consultantDelegateId').errors">Please input the consultant</nz-form-explain>
+                        <nz-form-explain *ngIf="stageForm.get('userDelegateId').dirty && stageForm.get('userDelegateId').errors">Please input the user</nz-form-explain>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -222,11 +222,11 @@
         <nz-list-item><strong style="margin-right: 1%;">End date: </strong> {{emptyStage.endDate | date:'medium'}}
         </nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Status: </strong> {{emptyStage.status}}</nz-list-item>
-        <nz-list-item *ngIf="emptyStage.consultantOwnerId">
-            <strong style="margin-right: 1%;">Owner consultant: </strong> {{consultantOwner.name }} {{ consultantOwner.lastName }}
+        <nz-list-item *ngIf="emptyStage.userOwnerId">
+            <strong style="margin-right: 1%;">Owner user: </strong> {{userOwner.firstName }} {{ userOwner.lastName }}
         </nz-list-item>
-        <nz-list-item *ngIf="emptyStage.consultantDelegateId">
-            <strong style="margin-right: 1%;">Delegate consultant: </strong> {{consultantDelegate.name}} {{ consultantDelegate.lastName }}
+        <nz-list-item *ngIf="emptyStage.userDelegateId">
+            <strong style="margin-right: 1%;">Delegate user: </strong> {{userDelegate.firstName}} {{ userDelegate.lastName }}
         </nz-list-item>
     </nz-list>
 </nz-modal>
@@ -236,6 +236,6 @@
     <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
 </ng-template>
 
-<ng-template #consultantDetailModal>
-    <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
+<ng-template #userDetailModal>
+    <user-details [_detailedUser]="emptyUser"></user-details>
 </ng-template>
