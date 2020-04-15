@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+   <DataCollectionRunSettings>
+     <DataCollectors>
+        <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+           <Configuration>
+             <CodeCoverage>
+               <ModulePaths>
+                 <Exclude>
+                 <ModulePath>.*system.*</ModulePath>
+                    <ModulePath>.*google.*</ModulePath>
+                    <ModulePath>.*microsoft.*</ModulePath>
+                    <ModulePath>.*xunit.*</ModulePath>
+                    <ModulePath>.*moq.*</ModulePath>
+                    <ModulePath>.*apiserver.functionaltests.*</ModulePath>
+                    <ModulePath>.*apiserver.unittests.*</ModulePath>
+                    <ModulePath>.*core.unittests.*</ModulePath>
+                    <ModulePath>.*domain.services.impl.integrationtests.*</ModulePath>
+                    <ModulePath>.*domain.services.impl.unittests.*</ModulePath>
+                    <ModulePath>.*automapper.*</ModulePath>
+                    <ModulePath>.*fluentvalidation.*</ModulePath>
+                 </Exclude>
+               </ModulePaths>
+             </CodeCoverage>
+           </Configuration>
+        </DataCollector>
+     </DataCollectors>
+  </DataCollectionRunSettings>
+
+</RunSettings>
