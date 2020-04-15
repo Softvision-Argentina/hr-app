@@ -10,8 +10,11 @@ namespace Domain.Services.Impl.Validators.Community
     {
         public CreateCommunityContractValidator()
         {
-            RuleFor(_ => _.Name).NotEmpty();
-            RuleFor(_ => _.Description).NotNull();
+            RuleSet(ValidatorConstants.RULESET_CREATE, () =>
+            {
+                RuleFor(_ => _.Name).NotEmpty();
+                RuleFor(_ => _.Description).NotNull();
+            });
         }
     }
 }
