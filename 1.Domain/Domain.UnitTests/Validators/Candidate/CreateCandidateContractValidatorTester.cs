@@ -72,7 +72,7 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
         [Fact(DisplayName = "Verify that throws error when User object is null")]
         public void Should_Have_Error_When_User_Is_Null()
         {
-            _validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.Recruiter, (ReadedConsultantContract) null, "Create");
+            _validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.User, (ReadedUserContract) null, "Create");
         }
 
         [Fact(DisplayName = "Verify that throws error when Community object is null")]

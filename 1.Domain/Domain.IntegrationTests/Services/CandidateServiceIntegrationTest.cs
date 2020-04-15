@@ -6,7 +6,7 @@ using Domain.Model.Exceptions.Candidate;
 using Domain.Services.Contracts.Candidate;
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.Community;
-using Domain.Services.Contracts.Consultant;
+using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
 using System.Linq;
 using Xunit;
@@ -17,7 +17,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
     public class CandidateServiceIntegrationTest : BaseServiceIntegrationTest
     {
         private readonly ICandidateService _candidateService;
-        private readonly IConsultantService _consultantService;
+        private readonly IUserService _userService;
         private readonly ICommunityService _communityService;
         private readonly ICandidateProfileService _candidateProfileService;
         private readonly IRepository<Candidate> _candidateRepository;
@@ -26,7 +26,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         {
             _candidateRepository = Services.GetService(typeof(IRepository<Candidate>)) as IRepository<Candidate>;
             _candidateService = Services.GetService(typeof(ICandidateService)) as ICandidateService;
-            _consultantService = Services.GetService(typeof(IConsultantService)) as IConsultantService;
+            _userService = Services.GetService(typeof(IUserService)) as IUserService;
             _communityService = Services.GetService(typeof(ICommunityService)) as ICommunityService;
             _candidateProfileService = Services.GetService(typeof(ICandidateProfileService)) as ICandidateProfileService;
             _mapper = Services.GetService(typeof(IMapper)) as IMapper;
@@ -36,46 +36,45 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         public void GivenValidCreateCandidateContract_ShouldCreateItWithoutProblems()
         {
             //Arrange
-            int recordsCount = GetCandidatesCount();
-            var validCreateCandidateContract = DataFactory.CreateInstance<CreateCandidateContract>();
+            Context.SetupDatabaseForTesting();
 
-            var validConsultant = DataFactory.CreateInstance<Consultant>();
-            var createConsultantContract = _mapper.Map<CreateConsultantContract>(validConsultant);
-            CreatedConsultantContract createdConsultantContract = _consultantService.Create(createConsultantContract);
-            var readedConsultantContract = _consultantService.Read(createdConsultantContract.Id);
-
-            var validCandidateProfile = DataFactory.CreateInstance<CandidateProfile>();
-            var createCandidateProfileContract = _mapper.Map<CreateCandidateProfileContract>(validCandidateProfile);
-            CreatedCandidateProfileContract createdCandidateProfileContract = _candidateProfileService.Create(createCandidateProfileContract);
-            var readedCandidateProfileContract = _candidateProfileService.Read(createdCandidateProfileContract.Id);
-
-            var validCommunity = DataFactory.CreateInstance<Community>();
-            var createCommunityContract = _mapper.Map<CreateCommunityContract>(validCommunity);
-            createCommunityContract.ProfileId = readedCandidateProfileContract.Id;
-            CreatedCommunityContract createdCommunityContract = _communityService.Create(createCommunityContract);
-            var readedCommunityContract = _communityService.Read(createdCommunityContract.Id);
-
+            var user = new User();
+            Context.SeedDatabaseWith(user);
+            var profile = new CandidateProfile();
+            Context.SeedDatabaseWith(profile);
+            var community = new Community();
+            community.ProfileId = profile.Id;
+            Context.SeedDatabaseWith(community);
             
+            var userContract = DataFactory.CreateInstance<ReadedUserContract>();
+            var communityContract = DataFactory.CreateInstance<ReadedCommunityContract>();
+            var profileContract = DataFactory.CreateInstance<ReadedCandidateProfileContract>();
 
-            validCreateCandidateContract.Recruiter = readedConsultantContract;
-            validCreateCandidateContract.Community = readedCommunityContract;
-            validCreateCandidateContract.Profile = readedCandidateProfileContract;
+            userContract.Id = user.Id;
+            communityContract.Id = community.Id;
+            profileContract.Id = profile.Id;
+
+            var candidateContract = DataFactory.CreateInstance<CreateCandidateContract>();
+            candidateContract.User = userContract;
+            candidateContract.Community = communityContract;
+            candidateContract.Profile = profileContract;
 
             //Act
-            CreatedCandidateContract result = _candidateService.Create(validCreateCandidateContract);
+            var result = _candidateService.Create(candidateContract);
 
             //Assert
-            Assert.Equal(recordsCount + 1, GetCandidatesCount());
             Assert.NotNull(result);
         }
 
         [Theory(DisplayName = "Verify that given a invalid model, should throw an exception")]
         [InlineData("Community")]
-        [InlineData("Recruiter")]
+        [InlineData("User")]
         [InlineData("CandidateProfile")]
         public void GivenInvalidCreateCandidateContract_ShouldThrowException(string propertyName)
         {
             //Arrange
+            Context.SetupDatabaseForTesting();
+
             var invalidCreateCandidateContract =
                 DataFactory.CreateInstance<CreateCandidateContract>()
                 .WithPropertyValue(propertyName, null);
@@ -91,44 +90,29 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         [Fact(DisplayName = "Verify that given a model that already exists on the database, throws an exception")]
         public void GivenAlreadyCreatedCreateCandidateContract_ShouldValidateExistanceAndThrowException()
         {
-            var invalidCreateCandidateContract =
-                DataFactory.CreateInstance<CreateCandidateContract>()
-                .WithPropertyValue("EmailAddress", GetCandidateFromDatabase().EmailAddress);
+            //Arrange
+            Context.SetupDatabaseForTesting();
 
-            var validConsultant = DataFactory.CreateInstance<Consultant>();
-            var createConsultantContract = _mapper.Map<CreateConsultantContract>(validConsultant);
-            CreatedConsultantContract createdConsultantContract = _consultantService.Create(createConsultantContract);
-            var readedConsultantContract = _consultantService.Read(createdConsultantContract.Id);
+            var candidate = new Candidate();
+            candidate.EmailAddress = "test@test.com";
+            Context.SeedDatabaseWith(candidate);
 
-            var validCandidateProfile = DataFactory.CreateInstance<CandidateProfile>();
-            var createCandidateProfileContract = _mapper.Map<CreateCandidateProfileContract>(validCandidateProfile);
-            CreatedCandidateProfileContract createdCandidateProfileContract = _candidateProfileService.Create(createCandidateProfileContract);
-            var readedCandidateProfileContract = _candidateProfileService.Read(createdCandidateProfileContract.Id);
+            var userContract = DataFactory.CreateInstance<ReadedUserContract>();
+            var communityContract = DataFactory.CreateInstance<ReadedCommunityContract>();
+            var profileContract = DataFactory.CreateInstance<ReadedCandidateProfileContract>();
 
-            var validCommunity = DataFactory.CreateInstance<Community>();
-            var createCommunityContract = _mapper.Map<CreateCommunityContract>(validCommunity);
-            createCommunityContract.ProfileId = readedCandidateProfileContract.Id;
-            CreatedCommunityContract createdCommunityContract = _communityService.Create(createCommunityContract);
-            var readedCommunityContract = _communityService.Read(createdCommunityContract.Id);
+            var invalidCreateCandidateContract = DataFactory.CreateInstance<CreateCandidateContract>()
+                .WithPropertyValue("EmailAddress", candidate.EmailAddress)
+                .WithPropertyValue("User", userContract)
+                .WithPropertyValue("Profile", profileContract)
+                .WithPropertyValue("Community", communityContract);
 
-            invalidCreateCandidateContract.Recruiter = readedConsultantContract;
-            invalidCreateCandidateContract.Community = readedCommunityContract;
-            invalidCreateCandidateContract.Profile = readedCandidateProfileContract;
-
+            //Act
             var ex = Assert.Throws<InvalidCandidateException>(() => _candidateService.Create(invalidCreateCandidateContract));
 
+            //Assert
             Assert.IsType<InvalidCandidateException>(ex);
             Assert.NotNull(ex);
-        }
-
-        private int GetCandidatesCount()
-        {
-            return _candidateRepository.Query().Count();
-        }
-
-        private Candidate GetCandidateFromDatabase()
-        {
-            return _candidateRepository.Query().FirstOrDefault();
         }
     }
 }
