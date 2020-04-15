@@ -531,7 +531,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         id: null,
         name: '',
         lastName: '',
-        dni: null,
+        dni: 0,
         emailAddress: '',
         phoneNumber: null,
         additionalInformation: '',

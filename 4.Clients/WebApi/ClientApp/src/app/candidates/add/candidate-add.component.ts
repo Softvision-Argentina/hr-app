@@ -75,7 +75,7 @@ export class CandidateAddComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [null, [Validators.required,Validators.pattern('^\\d{7,8}$')]],
+    dni: [0],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
@@ -93,8 +93,8 @@ export class CandidateAddComponent implements OnInit {
     knownFrom: [null],
     referredBy: [null]
   });
-  isDniValid: boolean = false;
-  isDniLoading: boolean = false;
+  isDniValid: boolean = true;
+  isDniLoading: boolean = true;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   private completeSkillList: Skill[] = [];

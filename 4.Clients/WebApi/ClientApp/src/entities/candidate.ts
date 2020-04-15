@@ -9,7 +9,6 @@ export class Candidate {
   id: number;
   name: string;
   lastName: string;
-  dni: number;
   emailAddress: string;
   phoneNumber: string;
   additionalInformation: string;
@@ -26,4 +25,5 @@ export class Candidate {
   referredBy: string;
   knownFrom: string;
   cv: string;
+  dni?: number;
 }
