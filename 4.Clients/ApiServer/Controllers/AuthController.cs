@@ -53,8 +53,10 @@ namespace ApiServer.Controllers
                 GetToken(jwtSettings, userContract, out var userViewModel, out var tokenString);
                 return Ok(new { Token = tokenString, User = userViewModel });
             }
-
-            return Unauthorized();
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpPost, Route("loginExternal")]
@@ -104,7 +106,7 @@ namespace ApiServer.Controllers
                           new Claim(ClaimTypes.Name, _user.Id.ToString()),
                           new Claim(ClaimTypes.Role, _user.Role.ToString())
                 },
-                expires: DateTime.Now.AddMinutes(jwtSettings.MinutesToExpiration),
+                expires: DateTime.UtcNow.AddMinutes(jwtSettings.MinutesToExpiration),
                 signingCredentials: signinCredentials
             );
 

@@ -90,7 +90,7 @@ export class ReportProcessesComponent implements OnInit {
     this.processCompleted = process.filter(process => process.status === ProcessStatusEnum.Declined ||
       process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
     this.processFinishedSuccess = process.filter(process => process.status === ProcessStatusEnum.Hired).length;
-    this.processInProgress = process.filter(process => process.status === ProcessStatusEnum.InProgress || process.status == ProcessStatusEnum.Recall || process.status == ProcessStatusEnum.OfferAccepted).length;
+    this.processInProgress = process.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
     this.processNotStarted = process.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
   }
 
@@ -121,7 +121,7 @@ export class ReportProcessesComponent implements OnInit {
     }
     this.pieChartLabels = labels;
     this.pieChartData = percentages;
-    if (colors.length == 0) colors = ["#81FB15", "#F6FB15", "#6FC8CE"];
+    if (colors.length === 0) colors = ["#81FB15", "#F6FB15", "#6FC8CE"];
     this.pieChartColors = [
       {
         backgroundColor: colors

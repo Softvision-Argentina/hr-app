@@ -289,7 +289,7 @@
         <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-select formControlName="reviewerId">
                 <ng-container *ngFor="let reviewer of reviewers">
-                    <nz-option *ngIf="reviewer.id != editEmployee.id"
+                    <nz-option *ngIf="reviewer.id !== editEmployee.id"
                         [nzLabel]="reviewer.name + ' ' + reviewer.lastName" [nzValue]="reviewer.id">
                     </nz-option>
                 </ng-container>

@@ -133,25 +133,25 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           onClick: () => {
             if (this.compareTwoDates()) {
               this.app.showLoading();
-              if (this.validateForm.controls.DNI.valid == false) {
+              if (this.validateForm.controls.DNI.valid === false) {
                 this.facade.toastrService.error('Please input a valid DNI.');
                 this.app.hideLoading();
               }
               else {
-                const dni: number = this.validateForm.controls.DNI.value == null || this.validateForm.controls.DNI.value === undefined ? 0
+                const dni: number = this.validateForm.controls.DNI.value === null || this.validateForm.controls.DNI.value === undefined ? 0
                   : this.validateForm.controls.DNI.value;
                 this.employeeService.GetByDNI(dni)
                   .subscribe(res => {
                     this.app.hideLoading();
                     this.employee = res.body;
-                    if (!this.employee || this.employee == null) {
+                    if (!this.employee || this.employee === null) {
                       this.facade.toastrService.error('There is no employee with that DNI.');
                     } else {
                       let isCompleted: boolean = true;
                       for (const i in this.validateForm.controls) {
                         this.validateForm.controls[i].markAsDirty();
                         this.validateForm.controls[i].updateValueAndValidity();
-                        if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                        if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
                       }
                       let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview
                       if (isCompleted) {
@@ -219,7 +219,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
               for (const i in this.validateForm.controls) {
                 this.validateForm.controls[i].markAsDirty();
                 this.validateForm.controls[i].updateValueAndValidity();
-                if ((this.validateForm.controls[i].status != 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
               }
 
               let newDate; let newEndDate;
@@ -252,7 +252,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   }
 
   showDeleteConfirm(dayOffId: number): void {
-    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id == dayOffId);
+    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id === dayOffId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ?',
       nzContent: 'This action will delete the day off',

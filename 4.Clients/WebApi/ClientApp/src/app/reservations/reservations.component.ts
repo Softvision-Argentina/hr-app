@@ -87,7 +87,7 @@ export class ReservationsComponent implements OnInit {
     this.facade.RoomService.get()
       .subscribe(res => {
         this.room = res;
-        this.filteredRoom = this.room.filter(c => c.officeId == this.reservationForm.controls['office'].value);
+        this.filteredRoom = this.room.filter(c => c.officeId === this.reservationForm.controls['office'].value);
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -190,7 +190,7 @@ export class ReservationsComponent implements OnInit {
     }
     return differenceInCalendarDays(date, this.today) < 0 ||
       date.getMonth() > this.endValue.getMonth() ||
-      (date.getMonth() == this.endValue.getMonth() && date.getDate() > this.endValue.getDate());
+      (date.getMonth() === this.endValue.getMonth() && date.getDate() > this.endValue.getDate());
   };
 
   disabledEndDate = (date: Date): boolean => {
@@ -199,7 +199,7 @@ export class ReservationsComponent implements OnInit {
     }
     return differenceInCalendarDays(date, this.today) < 0 ||
       date.getMonth() < this.startValue.getMonth() ||
-      (date.getMonth() == this.startValue.getMonth() && date.getDate() < this.startValue.getDate());
+      (date.getMonth() === this.startValue.getMonth() && date.getDate() < this.startValue.getDate());
   };
 
   disabledDateTime = (): object => {
@@ -292,8 +292,8 @@ export class ReservationsComponent implements OnInit {
         let editReservationUntil = new Date(Date.parse(editReservation.untilReservation.toString())).getDate();
         let reservationSince = new Date(Date.parse(reservation.sinceReservation.toString())).getDate();
         let reservationUntil = new Date(Date.parse(reservation.untilReservation.toString())).getDate();
-        if (editReservationSince != reservationSince ||
-          editReservationUntil != reservationUntil) {
+        if (editReservationSince !== reservationSince ||
+          editReservationUntil !== reservationUntil) {
           this.facade.ReservationService.delete(reservation.id)
             .subscribe(async res => {
               await this.getReservations();
@@ -322,12 +322,12 @@ export class ReservationsComponent implements OnInit {
     let newReservationSince = Math.floor(Date.parse(newReservation.sinceReservation.toString()) / 60000);
     let newReservationUntil = Math.floor(Date.parse(newReservation.untilReservation.toString()) / 60000);
 
-    let roomReservations = this.reservations.filter((reservation) => reservation.roomId == newReservationRoomId);
+    let roomReservations = this.reservations.filter((reservation) => reservation.roomId === newReservationRoomId);
 
     for (let reservation of roomReservations) {
       let currentReservationSince = Math.floor(Date.parse(reservation.sinceReservation.toString()) / 60000)
       let currentReservationUntil = Math.floor(Date.parse(reservation.untilReservation.toString()) / 60000)
-      if (reservationId != reservation.id &&
+      if (reservationId !== reservation.id &&
         (((newReservationSince >= currentReservationSince && newReservationSince < currentReservationUntil) ||
           (newReservationUntil > currentReservationSince && newReservationUntil <= currentReservationUntil)) ||
           ((currentReservationSince >= newReservationSince && currentReservationSince < newReservationUntil) ||
@@ -341,7 +341,7 @@ export class ReservationsComponent implements OnInit {
 
   getCurrentDayReservations(): void {
     this.currentDayReservations = this.reservations
-      .filter(r => r.sinceReservation.toString().substr(0, 10) == this.selectedDate.toISOString().substr(0, 10));
+      .filter(r => r.sinceReservation.toString().substr(0, 10) === this.selectedDate.toISOString().substr(0, 10));
   }
 
   onChangeOffice() {

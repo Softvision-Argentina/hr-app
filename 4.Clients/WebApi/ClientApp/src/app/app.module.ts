@@ -214,6 +214,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserModule,
+    HttpModule,
     FormsModule,
     HttpClientModule,
     HttpClientJsonpModule,
@@ -227,7 +228,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     FileUploadModule,
     ReactiveFormsModule,
-    HttpModule,
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
