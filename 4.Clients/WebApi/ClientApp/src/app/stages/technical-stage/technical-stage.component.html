@@ -37,7 +37,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="technicalForm.get('userOwnerId').dirty && technicalForm.get('userOwnerId').errors">Please input the user</nz-form-explain>

@@ -37,4 +37,18 @@ export class UserService extends BaseService<User> {
       });
     }
   }
+
+  public getFilteredForTech() {
+    const url = `${this.apiUrl}/GetFilteredForTech`;
+    return this.http.get<User[]>(url, {
+      headers: this.headersWithAuth
+    })
+  }
+
+  public getFilteredForHr() {
+    const url = `${this.apiUrl}/GetFilteredForHr`;
+    return this.http.get<User[]>(url, {
+      headers: this.headersWithAuth
+    })
+  }
 }

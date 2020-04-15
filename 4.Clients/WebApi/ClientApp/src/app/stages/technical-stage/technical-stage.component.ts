@@ -22,6 +22,7 @@ export class TechnicalStageComponent implements OnInit {
 
   @Input()
   private _users: User[];
+
   public get users(): User[] {
     return this._users;
   }
@@ -61,6 +62,7 @@ export class TechnicalStageComponent implements OnInit {
   seniorityList: any[];
 
   selectedSeniorities: any[2];
+  usersFiltered: User[];
 
   @Input() technicalStage: TechnicalStage;
 
@@ -77,6 +79,16 @@ export class TechnicalStageComponent implements OnInit {
     this.getSkills();
     this.changeFormStatus(false);
     if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
+    this.getFilteredUsersForTech();
+  }
+
+  getFilteredUsersForTech() {
+    this.facade.userService.getFilteredForTech()
+    .subscribe(res => {
+      this.usersFiltered = res;
+    }, err => {
+      console.log(err);
+    });
   }
 
   updateSeniority(seniorityId) {

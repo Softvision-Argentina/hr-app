@@ -40,6 +40,40 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpGet("GetFilteredForTech")]
+        public IActionResult GetFilteredForTech()
+        {
+            return ApiAction(() =>
+            {
+                var users = _userService.GetFilteredForTech();
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                var vm = users;
+                return Accepted(vm);
+            });
+        }
+
+        [HttpGet("GetFilteredForHr")]
+        public IActionResult GetFilteredForHr()
+        {
+            return ApiAction(() =>
+            {
+                var users = _userService.GetFilteredForHr();
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                var vm = users;
+                return Accepted(vm);
+            });
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
