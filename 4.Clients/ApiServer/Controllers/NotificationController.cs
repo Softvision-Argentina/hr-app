@@ -21,9 +21,9 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                _notificationService.GetNotification();
+                var notis = _notificationService.GetNotification();
 
-                return Accepted();
+                return Accepted(notis);
             });
         }
 
