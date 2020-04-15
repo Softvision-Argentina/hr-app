@@ -83,13 +83,13 @@ export class ReportsComponent implements OnInit {
   searchValue = '';
   listOfSearchCandidates = [];
   listOfDisplayData = [...this.filteredCandidates];
-  defaultOffice : Office = {
+  defaultOffice: Office = {
     id: null,
     name: 'NA',
     description: '',
     roomItems: []
   }
-  defaultCommunity : Community = {
+  defaultCommunity: Community = {
     id: null,
     name: 'NA',
     description: '',
@@ -153,7 +153,7 @@ export class ReportsComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id === candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
@@ -179,12 +179,12 @@ export class ReportsComponent implements OnInit {
 
   getCommunities() {
     this.facade.communityService.get()
-    .subscribe(res => {
-      this.communities.push(this.defaultCommunity)
-      this.communities.push(...res);
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.communities.push(this.defaultCommunity)
+        this.communities.push(...res);
+      }, err => {
+        console.log(err);
+      });
   }
 
   getOffices() {
@@ -288,17 +288,19 @@ export class ReportsComponent implements OnInit {
         return result;
       });
 
-      const filteredCandidateRequest : { community : number
-        , preferredOffice : number
-        , selectedSkills:  Array<{ skillId: number; minRate: number; maxRate: number }> } = 
-        {
-          community : parseInt(this.validateSkillsForm.get('community').value.id),
-          preferredOffice : parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
-          selectedSkills : selectedSkills
-        }
+    const filteredCandidateRequest: {
+      community: number
+      , preferredOffice: number
+      , selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }>
+    } =
+    {
+      community: parseInt(this.validateSkillsForm.get('community').value.id),
+      preferredOffice: parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
+      selectedSkills: selectedSkills
+    }
 
-      
-     
+
+
     this.facade.candidateService.getCandidatesBySkills(filteredCandidateRequest)
       .subscribe(res => {
         this.listOfDisplayData = res;
@@ -310,8 +312,8 @@ export class ReportsComponent implements OnInit {
         if (this.stadisticAbove === 100) this.stadisticBelow = 0;
         else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
         if (this.stadisticBelow === 100) this.stadisticAbove = 0;
-        if (this.stadisticAbove.toString() == 'NaN') this.stadisticAbove = 0;
-        if (this.stadisticBelow.toString() == 'NaN') this.stadisticBelow = 0;
+        if (this.stadisticAbove.toString() === 'NaN') this.stadisticAbove = 0;
+        if (this.stadisticBelow.toString() === 'NaN') this.stadisticBelow = 0;
         this.app.hideLoading();
       }, err => {
         console.log(err);

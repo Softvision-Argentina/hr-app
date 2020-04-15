@@ -12,7 +12,7 @@ export class ManagementGuard implements CanActivate {
   currentUser: User;
   roles: string[];
 
-  constructor(private jwtHelper: JwtHelper, private router: Router,  config: AppConfig) {
+  constructor(private jwtHelper: JwtHelper, private router: Router, config: AppConfig) {
     this.roles = config.getConfig("roles");
   }
 

@@ -12,7 +12,6 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -69,13 +68,13 @@ namespace Domain.Services.Impl.Services
 
             this.AddUserToCandidate(candidate, contract.User.Id);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);            
+            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             createdCandidate.CreatedDate = date;
             return _mapper.Map<CreatedCandidateContract>(createdCandidate);
         }
@@ -132,9 +131,9 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
-        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate,bool> filterRule)
+        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filterRule)
         {
-          
+
             var candidateQuery = _candidateRepository
                 .QueryEager()
                 .Where(filterRule);
@@ -204,12 +203,12 @@ namespace Domain.Services.Impl.Services
             }
             catch (ValidationException ex)
             {
-                    throw new CreateContractInvalidException(ex.ToListOfMessages());
+                throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
 
             try
             {
-                if(linkedInProfile != null)
+                if (linkedInProfile != null)
                 {
                     Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile != "N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
                     if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
@@ -268,6 +267,6 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
-        }       
+        }
     }
 }

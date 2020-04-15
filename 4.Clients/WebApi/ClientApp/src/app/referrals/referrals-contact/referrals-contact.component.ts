@@ -37,7 +37,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
 
-  
+
   @Input()
   private _visible: boolean;
   public get visibles(): boolean {
@@ -148,7 +148,7 @@ export class ReferralsContactComponent implements OnInit {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
-  
+
 
   getCandidates() {
     this.facade.candidateService.get()
@@ -205,13 +205,13 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -234,7 +234,7 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    let candidate = this.candidates.filter(s => { return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1 });
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }

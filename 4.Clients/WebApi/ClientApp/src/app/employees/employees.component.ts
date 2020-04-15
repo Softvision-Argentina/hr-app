@@ -80,7 +80,7 @@ export class EmployeesComponent implements OnInit {
   getEmployees() {
     this.facade.employeeService.get("GetAll")
       .subscribe(res => {
-        this.listOfDisplayData = res.filter(e => e.id != 1);
+        this.listOfDisplayData = res.filter(e => e.id !== 1);
         this.employees = res;
         this.reviewers = res.filter(e => e.isReviewer);
         this.filteredReviewersNames = this.reviewers.map(r => r.name + ' ' + r.lastName);
@@ -91,7 +91,7 @@ export class EmployeesComponent implements OnInit {
             fullName: reviewer.name + ' ' + reviewer.lastName,
             reviewerId: null
           }
-          if (reviewer.reviewer != null) {
+          if (reviewer.reviewer !== null) {
             r.reviewerId = reviewer.reviewer.id;
           }
           this.reviewersFullNameAndId.push(r);
@@ -120,7 +120,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   showDeleteConfirm(employeeID: number): void {
-    let employeeDelete: Employee = this.employees.filter(employee => employee.id == employeeID)[0];
+    let employeeDelete: Employee = this.employees.filter(employee => employee.id === employeeID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete ' + employeeDelete.lastName + ', ' + employeeDelete.name + ' ?',
       nzContent: '',
@@ -175,13 +175,13 @@ export class EmployeesComponent implements OnInit {
                 userId: this.employeeForm.controls['userId'].value,
                 role: null,
                 roleId: this.employeeForm.controls['roleId'].value,
-                isReviewer: this.employeeForm.controls['isReviewer'].value == null ? false : this.employeeForm.controls['isReviewer'].value,
+                isReviewer: this.employeeForm.controls['isReviewer'].value === null ? false : this.employeeForm.controls['isReviewer'].value,
                 reviewer: null,
                 reviewerId: null
               }
-              this.employeeForm.controls['reviewerName'].value == "" || this.employeeForm.controls['reviewerName'].value == null ?
+              this.employeeForm.controls['reviewerName'].value === "" || this.employeeForm.controls['reviewerName'].value === null ?
                 newEmployee.reviewerId = 1 :
-                this.reviewersFullNameAndId.find(r => r.fullName == this.employeeForm.controls['reviewerName'].value).id;
+                this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id;
               this.facade.employeeService.add(newEmployee)
                 .subscribe(res => {
                   this.getEmployees();
@@ -237,7 +237,7 @@ export class EmployeesComponent implements OnInit {
               editEmployee.roleId = this.employeeForm.controls['roleId'].value;
               editEmployee.userId = this.employeeForm.controls['userId'].value;
               editEmployee.isReviewer = this.employeeForm.controls['isReviewer'].value;
-              this.employeeForm.controls['reviewerName'].value == "" ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName == this.employeeForm.controls['reviewerName'].value).id
+              this.employeeForm.controls['reviewerName'].value === "" ? editEmployee.reviewerId = 1 : editEmployee.reviewerId = this.reviewersFullNameAndId.find(r => r.fullName === this.employeeForm.controls['reviewerName'].value).id
               editEmployee.additionalInformation = this.employeeForm.controls['additionalInformation'].value;
 
               this.facade.employeeService.Update(editEmployee)
@@ -295,11 +295,11 @@ export class EmployeesComponent implements OnInit {
     this.employeeForm.controls['roleId'].setValue(employee.role.id);
     this.employeeForm.controls['userId'].setValue(employee.userId);
     this.employeeForm.controls['isReviewer'].setValue(employee.isReviewer);
-    if (employee.reviewer.id == 1)
+    if (employee.reviewer.id === 1)
       this.employeeForm.controls['reviewerName'].setValue("");
     else
       this.employeeForm.controls['reviewerName'].setValue(employee.reviewer.name + ' ' + employee.reviewer.lastName);
-    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id != employee.id && r.reviewerId != employee.id).map(r => r.fullName);
+    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== employee.id && r.reviewerId !== employee.id).map(r => r.fullName);
   }
 
   search(): void {
@@ -309,7 +309,7 @@ export class EmployeesComponent implements OnInit {
         employee.lastName.toString().toUpperCase().indexOf(sValue.toUpperCase()) !== -1;
     }
     const data = this.employees.filter(employeeFilter);
-    this.listOfDisplayData = data.filter(e => e.id != 1);
+    this.listOfDisplayData = data.filter(e => e.id !== 1);
     this.searchValue = '';
     this.nameDropdown.nzVisible = false;
   }
@@ -321,13 +321,13 @@ export class EmployeesComponent implements OnInit {
 
   filterReviewers(event) {
     let filteredReviewer = event.target.value;
-    this.filteredReviewersNames = this.reviewersFullNameAndId.filter(r => r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) != -1).map(r => r.fullName);
+    this.filteredReviewersNames = this.reviewersFullNameAndId.filter(r => r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
 
   filterEditReviewers(event) {
     let filteredReviewer = event.target.value;
-    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id != this.editEmployee.id && r.reviewerId != this.editEmployee.id && r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) != -1).map(r => r.fullName);
+    this.filteredEditReviewersNames = this.reviewersFullNameAndId.filter(r => r.id !== this.editEmployee.id && r.reviewerId !== this.editEmployee.id && r.fullName.toLowerCase().indexOf(filteredReviewer.toLowerCase()) !== -1).map(r => r.fullName);
     this.showReviewerNotFoundMessage = false;
   }
 
@@ -338,8 +338,8 @@ export class EmployeesComponent implements OnInit {
       this.employeeForm.controls[i].updateValueAndValidity();
       if (!this.employeeForm.controls[i].valid) isCompleted = false;
     }
-    if (this.employeeForm.controls['reviewerName'].value == "" || this.employeeForm.controls['reviewerName'].value == undefined) {
-      if (this.employeeForm.controls['isReviewer'].value == false || this.employeeForm.controls['isReviewer'].value == undefined) {
+    if (this.employeeForm.controls['reviewerName'].value === "" || this.employeeForm.controls['reviewerName'].value === undefined) {
+      if (this.employeeForm.controls['isReviewer'].value === false || this.employeeForm.controls['isReviewer'].value === undefined) {
         isCompleted = false;
         this.showInputReviewerMessage = true;
         this.showReviewerNotFoundMessage = false;
@@ -348,10 +348,10 @@ export class EmployeesComponent implements OnInit {
     else {
       let existReviewer;
       if (this.editMode)
-        existReviewer = this.filteredEditReviewersNames.find(r => r == this.employeeForm.controls['reviewerName'].value)
+        existReviewer = this.filteredEditReviewersNames.find(r => r === this.employeeForm.controls['reviewerName'].value)
       else
-        existReviewer = this.filteredReviewersNames.find(r => r == this.employeeForm.controls['reviewerName'].value)
-      if (existReviewer == undefined) {
+        existReviewer = this.filteredReviewersNames.find(r => r === this.employeeForm.controls['reviewerName'].value)
+      if (existReviewer === undefined) {
         isCompleted = false;
         this.showInputReviewerMessage = false;
         this.showReviewerNotFoundMessage = true;
@@ -370,9 +370,9 @@ export class EmployeesComponent implements OnInit {
     this.showInputReviewerMessage = false;
     this.showReviewerNotFoundMessage = false;
     if (!value) {
-      this.employeesWithSelectedReviewer = this.listOfDisplayData.filter(e => e.reviewer.id == this.editEmployee.id);
+      this.employeesWithSelectedReviewer = this.listOfDisplayData.filter(e => e.reviewer.id === this.editEmployee.id);
       if (this.employeesWithSelectedReviewer.length > 0) {
-        let availableReviewers = this.reviewers.filter(r => r.id != this.editEmployee.id);
+        let availableReviewers = this.reviewers.filter(r => r.id !== this.editEmployee.id);
         if (availableReviewers.length > 0)
           this.showNewReviewerModal(modalContent);
         else
