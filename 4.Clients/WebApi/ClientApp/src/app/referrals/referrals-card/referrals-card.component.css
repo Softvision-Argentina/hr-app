@@ -33,11 +33,14 @@ input[type="file"] { display: none; }
     display: inline-block;
 }
 
-.btn + label {
-	cursor: pointer;
-}
-
 .btn:focus + label,
 .btn + label:hover {
     color: black;
+    cursor: pointer;
+}
+
+.btn:disabled + label,
+.btn:disabled + label:hover {
+    color: rgb(190, 190, 190);
+    cursor: default;
 }

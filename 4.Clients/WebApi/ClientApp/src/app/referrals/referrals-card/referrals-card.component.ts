@@ -10,11 +10,12 @@ import { BaseService } from 'src/app/services/base.service';
   styleUrls: ['./referrals-card.component.css']
 })
 export class ReferralsCardComponent implements OnInit {
-  @Input() 
+  @Input()
   cand: Candidate;
   cv: Cv;
   uploader: FileUploader;
   response: string;
+  hasFile: boolean = false;
 
   constructor(private b: BaseService<Cv>) { }
 
@@ -36,7 +37,7 @@ export class ReferralsCardComponent implements OnInit {
     
     this.uploader.response.subscribe( res => this.response = res );
     
-    this.uploader.onAfterAddingFile = (file) => {file.withCredentials = false; };
+    this.uploader.onAfterAddingFile = (file) => {file.withCredentials = false; this.hasFile = true;};
     
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if(response) {
