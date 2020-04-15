@@ -1,8 +1,8 @@
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Component, OnInit, TemplateRef, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsComponent } from '../settings/settings.component';
 import { Office } from 'src/entities/office';
 import { Room } from 'src/entities/room';
@@ -12,23 +12,23 @@ import { Room } from 'src/entities/room';
   templateUrl: './office.component.html',
   styleUrls: ['./office.component.css']
 })
-export class OfficeComponent implements OnInit {  
+export class OfficeComponent implements OnInit {
   @Input()
   private _detailedRoom: Room[];
-  public get detailedRoom(): Room[]{
-      return this._detailedRoom;
+  public get detailedRoom(): Room[] {
+    return this._detailedRoom;
   }
   public set detailedRoom(value: Room[]) {
-      this._detailedRoom = value;
+    this._detailedRoom = value;
   }
 
   @Input()
   private _detailedOffice: Office[];
   public get detailedOffice(): Office[] {
-      return this._detailedOffice;
+    return this._detailedOffice;
   }
   public set detailedOffice(value: Office[]) {
-      this._detailedOffice = value;
+    this._detailedOffice = value;
   }
 
   officeForm: FormGroup;
@@ -40,7 +40,7 @@ export class OfficeComponent implements OnInit {
   constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
 
   ngOnInit() {
-    this.app.removeBgImage();    
+    this.app.removeBgImage();
     this.getRooms();
 
     this.officeForm = this.fb.group({
@@ -48,8 +48,8 @@ export class OfficeComponent implements OnInit {
       description: [null, [Validators.required]],
     });
   }
-  
-  ngOnChanges(changes: SimpleChanges){
+
+  ngOnChanges(changes: SimpleChanges) {
     changes._detailedOffice;
     changes._detailedRoom;
     this.getOffices();
@@ -63,11 +63,11 @@ export class OfficeComponent implements OnInit {
       this.facade.errorHandlerService.showErrorMessage(err);
     })
   }
-  
+
   getRooms() {
     this.facade.RoomService.get()
-    .subscribe(res => {
-      this.rooms = res;
+      .subscribe(res => {
+        this.rooms = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -91,13 +91,13 @@ export class OfficeComponent implements OnInit {
     });
   }
 
-  resetForm(){
-    this.officeForm =  this.fb.group({
+  resetForm() {
+    this.officeForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]]    
+      description: [null, [Validators.required, trimValidator]]
     });
   }
-  
+
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
     const modal = this.facade.modalService.create({

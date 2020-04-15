@@ -15,14 +15,14 @@ import { DeclineReason } from 'src/entities/declineReason';
 })
 export class ReportDeclineReasonsComponent implements OnInit {
 
-  @Input() _processes;  
+  @Input() _processes;
 
   constructor(private facade: FacadeService, private app: AppComponent) { }
 
-  processes: Process[] = [];    
+  processes: Process[] = [];
   hasProjections: boolean = false;
   isChartComplete: boolean = false;
-  filteredDeclineReasons : DeclineReason[] = [];
+  filteredDeclineReasons: DeclineReason[] = [];
 
   ngOnInit() {
     this.app.showLoading();
@@ -32,26 +32,26 @@ export class ReportDeclineReasonsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    changes._processes;    
+    changes._processes;
     this.complete();
     if (!this.isChartComplete) {
       setTimeout(() => {
         this.getProjectionReport();
       });
-    }    
+    }
   }
 
-  getDeclineReasons(){
+  getDeclineReasons() {
     this.facade.declineReasonService.get()
       .subscribe(res => {
-        this.filteredDeclineReasons = res;        
+        this.filteredDeclineReasons = res;
       }, err => {
         console.log(err);
       });
   }
 
   complete() {
-    this.processes = this._processes;  
+    this.processes = this._processes;
   }
 
   public chartLabels: Label[] = [];
@@ -59,7 +59,7 @@ export class ReportDeclineReasonsComponent implements OnInit {
   public chartLegend = true;
   public chartPlugins = [pluginDataLabels];
   public chartData: ChartDataSets[] = [
-    { data: [], label: '' }    
+    { data: [], label: '' }
   ];
   public chartOptions: ChartOptions = {
     responsive: true,
@@ -71,35 +71,35 @@ export class ReportDeclineReasonsComponent implements OnInit {
     }
   };
 
-  getProjectionReport() {    
-    let reasons : string[] = [];
-    let dataArray : number[] = [];
-    let quantity : number;
+  getProjectionReport() {
+    let reasons: string[] = [];
+    let dataArray: number[] = [];
+    let quantity: number;
     let otherCount: number = 0;
-    let procArray = this.processes.filter(proc => proc.status == ProcessStatusEnum.Declined);
-    if (procArray.length > 0){
+    let procArray = this.processes.filter(proc => proc.status === ProcessStatusEnum.Declined);
+    if (procArray.length > 0) {
       this.filteredDeclineReasons.forEach(decR => {
         quantity = 0;
-        procArray.forEach(procA =>{
-          if(decR.id == procA.declineReason.id){
-            if(decR.name != 'Other'){
+        procArray.forEach(procA => {
+          if (decR.id === procA.declineReason.id) {
+            if (decR.name !== 'Other') {
               quantity++;
-            }else{
+            } else {
               otherCount++;
-            }            
+            }
           }
         })
-        if (quantity >0){
+        if (quantity > 0) {
           reasons.push(decR.name);
-          dataArray.push(quantity);     
-        }   
+          dataArray.push(quantity);
+        }
       });
-      if (otherCount > 0){
+      if (otherCount > 0) {
         reasons.push('Other');
         dataArray.push(otherCount);
-      }      
+      }
       this.chartData = [
-        { data: dataArray, label: 'Times' }        
+        { data: dataArray, label: 'Times' }
       ];
       this.chartLabels = reasons;
       this.hasProjections = true;

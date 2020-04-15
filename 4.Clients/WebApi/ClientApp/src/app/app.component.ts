@@ -62,7 +62,7 @@ export class AppComponent   {
   hideLoading() {
     this.showSpinner = false;
   }
-  
+
   isAuthenticated() {
     return localStorage.getItem('currentUser') !== null;
   }

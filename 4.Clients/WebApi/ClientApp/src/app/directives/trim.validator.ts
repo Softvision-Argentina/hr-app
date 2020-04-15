@@ -1,7 +1,7 @@
 import { ValidatorFn, FormControl } from '@angular/forms';
 
 export const trimValidator: ValidatorFn = (control: FormControl) => {
-    if (control.value != null) {
+    if (control.value !== null) {
         let validationRuleStart = /^\s/;
         if (validationRuleStart.test(control.value.toString())) {
             return {
