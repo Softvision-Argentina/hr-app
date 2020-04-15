@@ -25,8 +25,8 @@ export class TaskService extends BaseService<Task> {
       );
   }
 
-  public getByConsultant(consultantEmail: string): Observable<any> {
-    return this.http.get(this.apiUrl + '/GetByConsultant/' + consultantEmail, {
+  public getByUser(userEmail: string): Observable<any> {
+    return this.http.get(this.apiUrl + '/GetByUser/' + userEmail, {
       headers: this.headersWithAuth
     })
       .pipe(

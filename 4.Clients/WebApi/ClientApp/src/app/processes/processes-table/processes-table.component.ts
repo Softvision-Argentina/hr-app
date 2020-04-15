@@ -14,10 +14,8 @@ export class ProcessTableComponent {
     @Input() currentStageList;
     @Input() emptyProcess;
 
-    @ViewChild('dropdownCurrentStage') currentStageDropdown;
-
     @Output() candidateId = new EventEmitter();
-    @Output() recruiterId = new EventEmitter();
+    @Output() userId = new EventEmitter();
     @Output() searchProfile = new EventEmitter();
     @Output() searchCommunity = new EventEmitter();
     @Output() searchStatus = new EventEmitter();
@@ -35,8 +33,8 @@ export class ProcessTableComponent {
         this.candidateId.emit(id);
     }
 
-    emitRecruiterId(id) {
-        this.recruiterId.emit(id);
+    emitUserId(id) {
+        this.userId.emit(id);
     }
 
     emitProfileId(id) {

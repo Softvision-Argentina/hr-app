@@ -33,7 +33,7 @@ export class CandidatesProfileComponent implements OnInit {a
       this._detailedCommunity = value;
   }
 
-  currentConsultant: User;
+  currentUser: User;
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];

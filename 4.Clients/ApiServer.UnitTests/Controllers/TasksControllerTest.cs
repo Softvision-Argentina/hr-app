@@ -135,20 +135,20 @@ namespace ApiServer.UnitTests.Controllers
             mockTaskService.Verify(_ => _.Approve(It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that GetByConsultant returns AcceptedResult when data is valid")]
-        public void Should_GetByConsultant_When_DataIsValid()
+        [Fact(DisplayName = "Verify that GetByUser returns AcceptedResult when data is valid")]
+        public void Should_GetByUser_When_DataIsValid()
         {
             string consultantEmail = null;
             var expectedValue = new List<ReadedTaskViewModel>();
-            mockTaskService.Setup(_ => _.ListByConsultant(It.IsAny<string>())).Returns(new List<ReadedTaskContract>());
+            mockTaskService.Setup(_ => _.ListByUser(It.IsAny<string>())).Returns(new List<ReadedTaskContract>());
             mockMapper.Setup(_ => _.Map<List<ReadedTaskViewModel>>(It.IsAny<IEnumerable<ReadedTaskContract>>())).Returns(expectedValue);
 
-            var result = controller.GetByConsultant(consultantEmail);
+            var result = controller.GetByUser(consultantEmail);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue, (result as AcceptedResult).Value);
-            mockTaskService.Verify(_ => _.ListByConsultant(It.IsAny<string>()), Times.Once);
+            mockTaskService.Verify(_ => _.ListByUser(It.IsAny<string>()), Times.Once);
             mockMapper.Verify(_ => _.Map<List<ReadedTaskViewModel>>(It.IsAny<IEnumerable<ReadedTaskContract>>()), Times.Once);
         }
     }

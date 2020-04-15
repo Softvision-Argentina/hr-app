@@ -1,201 +1,197 @@
 <div class="container">
+  <br />
+  <br />
+  <div class="proximaNova">
+    <div nz-row class="wrapper">
+      <h1 class="headerFont">B.A Studio Processes</h1>
+      <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)"
+        class="buttonStyle buttonFont">
+        NEW CANDIDATE
+      </button>
+    </div>
     <br />
-    <br />
-    <div class="proximaNova">
-      <div nz-row class="wrapper">
-          <h1 class="headerFont">B.A Studio Processes</h1>  
-          <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)"
-            class="buttonStyle buttonFont" >
-            NEW CANDIDATE
-          </button>
-      </div>
-      <br />
-      <nz-tabset>
-  
-        <nz-tab nzTitle="MY PROCESSES" (nzClick)="searchOwnRecruiter()">
-          <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayData"
-            [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
-            (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
-            (recruiterId)="showConsultantDetailsModal($event, consultantDetailModal)"
-            (searchProfile)="searchProfile($event)" (searchCommunity)="searchCommunity($event)"
-            (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
-            (showDeleteConfirm)="showDeleteConfirm($event)"
-            (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-            (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
-            (searchValueCurrentStage)="triggerSearchCurrentStage($event)"
-            (status)="triggerSearchStatus($event)" (recruiterValue)="triggerSearchRecruiter($event)"
-            (resetRecruiter)="resetRecruiter()" (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()"
-            (resetStatus)="resetStatus()"
-            (resetCurrentStage)="resetCurrentStage()">
-          </app-processes-table>
-        </nz-tab>
-  
-        <nz-tab nzTitle="BA STUDIO" (nzClick)="searchAllProcess()" class="process">
-            <app-processes-table #processTable [profiles]="profiles" [communities]="communities"
-              [listOfDisplayData]="listOfDisplayData" [statusList]="statusList" [currentStageList]="currentStageList"
-              [emptyProcess]="emptyProcess" (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
-              (recruiterId)="showConsultantDetailsModal($event, consultantDetailModal)"
-              (searchProfile)="searchProfile($event)" (searchCommunity)="searchCommunity($event)"
-              (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
-              (showDeleteConfirm)="showDeleteConfirm($event)"
-              (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-              (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
-              (searchValueCurrentStage)="triggerSearchCurrentStage($event)"
-              (status)="triggerSearchStatus($event)" (recruiterValue)="triggerSearchRecruiter($event)"
-              (resetRecruiter)="resetRecruiter()" (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()"
-              (resetStatus)="resetStatus()"
-              (resetCurrentStage)="resetCurrentStage()">
-            </app-processes-table>
-        </nz-tab> 
-  
-      </nz-tabset>
-  
-      <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null"
-        (nzOnCancel)="handleCancel()">
-        <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
-        <nz-divider></nz-divider>
-        <div *ngIf="emptyProcess" nz-row>
-          <div nz-col nzSpan="24">
-            <nz-steps *ngIf="emptyProcess.stages && emptyProcess.stages.length > 0" nzDirection="horizontal"
-              nzSize="small">
-              <nz-step *ngFor="let stage of emptyProcess.stages" [nzTitle]="stage.title"
-                [nzStatus]="stage.status.toLowerCase()" [nzDescription]="stage.description">
-              </nz-step>
-            </nz-steps>
-          </div>
-        </div>
-      </nz-modal>
-  
-      <ng-template #candidateDetailModal>
-        <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
-      </ng-template>
-  
-      <ng-template #consultantDetailModal>
-        <consultant-details [_detailedConsultant]="emptyConsultant"></consultant-details>
-      </ng-template>
-  
-      <ng-template #rejectProcessModal>
-        <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">
-          <nz-form-item>
-            <div nz-row>
-              <div nz-col nzSpan="24">
-                <nz-form-label [nzSm]="9" [nzXs]="24" nzFor="type">Rejection reason</nz-form-label>
-              </div>
-            </div>
-            <div nz-row>
-              <div nz-col nzSpan="24">
-                <nz-form-control [nzSm]="22" [nzXs]="24">
-                  <textarea rows="5" id="rejectionReasonDescription" nz-input formControlName="rejectionReasonDescription"
-                    placeholder="Please enter reason of rejection" id="rejectionReasonDescription"></textarea>
-                  <nz-form-explain
-                    *ngIf="rejectProcessForm.get('rejectionReasonDescription').dirty && rejectProcessForm.get('rejectionReasonDescription').errors">
-                    Please specify why the process is rejected
-                  </nz-form-explain>
-                </nz-form-control>
-              </div>
-            </div>
-          </nz-form-item>
-        </form>
-      </ng-template>
-  
-      <ng-template #processStart>
+    <nz-tabset>
+
+      <nz-tab nzTitle="MY PROCESSES" (nzClick)="searchOwnRecruiter()">
+        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayData"
+          [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
+          (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
+          (userId)="showUserDetailsModal($event, userDetailModal)"
+          (searchProfile)="searchProfile($event)" (searchCommunity)="searchCommunity($event)"
+          (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
+          (showDeleteConfirm)="showDeleteConfirm($event)"
+          (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
+          (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
+          (searchValueCurrentStage)="triggerSearchCurrentStage($event)" (status)="triggerSearchStatus($event)"
+          (recruiterValue)="triggerSearchRecruiter($event)" (resetRecruiter)="resetRecruiter()"
+          (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()" (resetStatus)="resetStatus()"
+          (resetCurrentStage)="resetCurrentStage()">
+        </app-processes-table>
+      </nz-tab>
+
+      <nz-tab nzTitle="BA STUDIO" (nzClick)="searchAllProcess()" class="process">
+        <app-processes-table #processTable [profiles]="profiles" [communities]="communities"
+          [listOfDisplayData]="listOfDisplayData" [statusList]="statusList" [currentStageList]="currentStageList"
+          [emptyProcess]="emptyProcess" (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
+          (userId)="showUserDetailsModal($event, userDetailModal)"
+          (searchProfile)="searchProfile($event)" (searchCommunity)="searchCommunity($event)"
+          (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
+          (showDeleteConfirm)="showDeleteConfirm($event)"
+          (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
+          (rejectProcess)="rejectProcess($event, rejectProcessModal, rejectConfirmButtons)"
+          (searchValueCurrentStage)="triggerSearchCurrentStage($event)" (status)="triggerSearchStatus($event)"
+          (recruiterValue)="triggerSearchRecruiter($event)" (resetRecruiter)="resetRecruiter()"
+          (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()" (resetStatus)="resetStatus()"
+          (resetCurrentStage)="resetCurrentStage()">
+        </app-processes-table>
+      </nz-tab>
+
+    </nz-tabset>
+
+    <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
+      <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
+      <nz-divider></nz-divider>
+      <div *ngIf="emptyProcess" nz-row>
         <div nz-col nzSpan="24">
-          <nz-steps [nzCurrent]="stepIndex">
-            <nz-step nzTitle="Candidate" id="candidateButton"
-              (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
+          <nz-steps *ngIf="emptyProcess.stages && emptyProcess.stages.length > 0" nzDirection="horizontal"
+            nzSize="small">
+            <nz-step *ngFor="let stage of emptyProcess.stages" [nzTitle]="stage.title"
+              [nzStatus]="stage.status.toLowerCase()" [nzDescription]="stage.description">
             </nz-step>
-            <nz-step nzTitle="HR" id="hrButton" (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)">
-            </nz-step>
-            <nz-step nzTitle="Technical" id="technicalButton"
-              (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)">
-            </nz-step>
-            <nz-step *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])" nzTitle="Client" id="clientButton"
-              (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
-            <nz-step *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])" nzTitle="Offer" id="offerButton"
-              (click)="slickModal.slickGoTo(4);wishedStage(4, $event.currentTarget.id)"></nz-step>
           </nz-steps>
         </div>
-        <br />
-        <br />
-        <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (destroy)="closeModal()">
-          <div ngxSlickItem class="slide">
-            <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
-              [_consultants]="consultants" [_candidate]="currentCandidate" [_offices]="offices">
-            </candidate-add>
-          </div>
-          <div ngxSlickItem class="slide">
-            <hr-stage [_consultants]="consultants" [hrStage]="emptyProcess.hrStage"></hr-stage>
-          </div>
-          <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
-            <technical-stage [_process]="emptyProcess" [_consultants]="consultants"
-              [technicalStage]="emptyProcess.technicalStage" (selectedSeniority)="updateSeniority($event)">
-            </technical-stage>
-          </div>
-          <div ngxSlickItem class="slide">
-            <client-stage [_consultants]="consultants" [clientStage]="emptyProcess.clientStage"></client-stage>
-          </div>
-          <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
-            <offer-stage [_consultants]="consultants" [offerStage]="emptyProcess.offerStage"
-              (selectedSeniority)="updateSeniority($event)"></offer-stage>
-          </div>
-        </ngx-slick>
-      </ng-template>
-  
-      <ng-template #declineProcessModal>
-        <form nz-form [formGroup]="declineProcessForm" [nzLayout]="'horizontal'">
+      </div>
+    </nz-modal>
+
+    <ng-template #candidateDetailModal>
+      <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
+    </ng-template>
+
+    <ng-template #userDetailModal>
+      <user-details [_detailedUser]="emptyUser"></user-details>
+    </ng-template>
+
+    <ng-template #rejectProcessModal>
+      <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">
+        <nz-form-item>
           <div nz-row>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                  <nz-select name="declineReasonName" formControlName="declineReasonName"
-                    (ngModelChange)="declineReasonNameChanged()" nzPlaceHolder="Choose a decline reason">
-                    <nz-option *ngFor="let declineReason of declineReasons" nzLabel="{{declineReason.name}}"
-                      nzValue="{{declineReason.id}}">
-                    </nz-option>
-                    <nz-option nzLabel="Other" [nzValue]="-1">
-                    </nz-option>
-                  </nz-select>
-                  <nz-form-explain
-                    *ngIf="declineProcessForm.get('declineReasonName').dirty && declineProcessForm.get('declineReasonName').errors">
-                    Please select a decline reason</nz-form-explain>
-                </nz-form-control>
-              </nz-form-item>
+            <div nz-col nzSpan="24">
+              <nz-form-label [nzSm]="9" [nzXs]="24" nzFor="type">Rejection reason</nz-form-label>
             </div>
           </div>
           <div nz-row>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control *ngIf="isDeclineReasonOther" [nzSm]="22" [nzXs]="24">
-                  <textarea rows="5" id="declineReasonDescription" nz-input formControlName="declineReasonDescription"
-                    placeholder="Please enter the decline reason" id="declineReasonDescription"></textarea>
-                  <nz-form-explain
-                    *ngIf="declineProcessForm.get('declineReasonDescription').dirty && declineProcessForm.get('declineReasonDescription').errors">
-                    Please specify why the process was declined
-                  </nz-form-explain>
-                </nz-form-control>
-              </nz-form-item>
+            <div nz-col nzSpan="24">
+              <nz-form-control [nzSm]="22" [nzXs]="24">
+                <textarea rows="5" id="rejectionReasonDescription" nz-input formControlName="rejectionReasonDescription"
+                  placeholder="Please enter reason of rejection" id="rejectionReasonDescription"></textarea>
+                <nz-form-explain
+                  *ngIf="rejectProcessForm.get('rejectionReasonDescription').dirty && rejectProcessForm.get('rejectionReasonDescription').errors">
+                  Please specify why the process is rejected
+                </nz-form-explain>
+              </nz-form-control>
             </div>
           </div>
-        </form>
-      </ng-template>
-  
-      <ng-template #startModalButtons>
-        <div nz-row>
-          <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
-          <button nz-button nzType="primary" (click)="saveProcess(declineProcessModal)">Save</button>
+        </nz-form-item>
+      </form>
+    </ng-template>
+
+    <ng-template #processStart>
+      <div nz-col nzSpan="24">
+        <nz-steps [nzCurrent]="stepIndex">
+          <nz-step nzTitle="HR" id="candidateButton"
+            (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
+          </nz-step>
+          <nz-step nzTitle="Technical" id="technicalButton"
+            (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)">
+          </nz-step>
+          <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Client" id="clientButton"
+            (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)"></nz-step>
+          <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Offer" id="offerButton"
+            (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
+        </nz-steps>
+      </div>
+      <br />
+      <br />
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (destroy)="closeModal()">
+        <div ngxSlickItem class="slide">
+          <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
+            [_users]="users" [_candidate]="currentCandidate" [_offices]="offices">
+          </candidate-add>
+          <hr-stage [_users]="users" [hrStage]="emptyProcess.hrStage"></hr-stage>
         </div>
-      </ng-template>
-  
-      <ng-template #searchContactedCandidate>
-        <app-process-contact [_candidateProfiles]=profiles [_communities]=communities [_processModal]=processStart
-          [_processFooterModal]=startModalButtons></app-process-contact>
-      </ng-template>
-  
-      <ng-template #newCandidate>
-        <app-process-contact [_visible]=true [_candidateProfiles]=profiles [_communities]=communities
-          [_processModal]=processStart [_processFooterModal]=startModalButtons></app-process-contact>
-      </ng-template>
-  
-    </div>
-  </div>
-  
+        <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
+          <technical-stage [_process]="emptyProcess" [_users]="users" [technicalStage]="emptyProcess.technicalStage"
+            (selectedSeniority)="updateSeniority($event)"></technical-stage>
+        </div>
+        <div ngxSlickItem class="slide">
+          <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"></client-stage>
+        </div>
+        <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
+          <offer-stage [_users]="users" [offerStage]="emptyProcess.offerStage"
+            (selectedSeniority)="updateSeniority($event)"></offer-stage>
+        </div>
+      </ngx-slick>
+    </ng-template>
+
+    <ng-template #declineProcessModal>
+      <form nz-form [formGroup]="declineProcessForm" [nzLayout]="'horizontal'">
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-select name="declineReasonName" formControlName="declineReasonName"
+                  (ngModelChange)="declineReasonNameChanged()" nzPlaceHolder="Choose a decline reason">
+                  <nz-option *ngFor="let declineReason of declineReasons" nzLabel="{{declineReason.name}}"
+                    nzValue="{{declineReason.id}}">
+                  </nz-option>
+                  <nz-option nzLabel="Other" [nzValue]="-1">
+                  </nz-option>
+                </nz-select>
+                <nz-form-explain
+                  *ngIf="declineProcessForm.get('declineReasonName').dirty && declineProcessForm.get('declineReasonName').errors">
+                  Please select a decline reason</nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <nz-form-control *ngIf="isDeclineReasonOther" [nzSm]="22" [nzXs]="24">
+                <textarea rows="5" id="declineReasonDescription" nz-input formControlName="declineReasonDescription"
+                  placeholder="Please enter the decline reason" id="declineReasonDescription"></textarea>
+                <nz-form-explain
+                  *ngIf="declineProcessForm.get('declineReasonDescription').dirty && declineProcessForm.get('declineReasonDescription').errors">
+                  Please specify why the process was declined
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template #startModalButtons>
+      <div nz-row nzType="flex" nzJustify="space-between">
+        <div nz-col>(*) Mandatory fields</div>
+        <div nz-col>
+          <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+          <button nz-button nzType="primary" (click)="saveProcess(declineProcessModal)">Save <nz-spin *ngIf="isLoading"
+              nzSimple style="display: inline-block!important;" [nzIndicator]="indicatorTemplate" [nzSize]="'small'">
+            </nz-spin></button>
+
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #searchContactedCandidate>
+      <app-process-contact [_candidateProfiles]=profiles [_communities]=communities [_processModal]=processStart
+        [_processFooterModal]=startModalButtons></app-process-contact>
+    </ng-template>
+
+    <ng-template #newCandidate>
+      <app-process-contact [_visible]=true [_candidateProfiles]=profiles [_communities]=communities
+        [_processModal]=processStart [_processFooterModal]=startModalButtons></app-process-contact>
+    </ng-template>
+
+    <ng-template #indicatorTemplate><i nz-icon nzType="loading" style="font-size: 24px;color:white"></i> </ng-template>

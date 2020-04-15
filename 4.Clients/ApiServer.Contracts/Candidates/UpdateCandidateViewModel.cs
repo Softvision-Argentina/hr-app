@@ -1,6 +1,6 @@
 ﻿using ApiServer.Contracts.CandidateSkill;
 using ApiServer.Contracts.Community;
-using ApiServer.Contracts.Consultant;
+using ApiServer.Contracts.User;
 using ApiServer.Contracts.CandidateProfile;
 using ApiServer.Contracts.Office;
 using Domain.Model.Enum;
@@ -22,7 +22,7 @@ namespace ApiServer.Contracts.Candidates
         public EnglishLevel EnglishLevel { get; set; }
         public CandidateStatus Status { get; set; }
         public string AdditionalInformation { get; set; }
-        public ReadedConsultantViewModel Recruiter { get; set; }
+        public ReadedUserViewModel User { get; set; }
         public DateTime ContactDay { get; set; }
         public int PreferredOfficeId { get; set; }
         public ReadedCandidateProfileViewModel Profile { get; set; }

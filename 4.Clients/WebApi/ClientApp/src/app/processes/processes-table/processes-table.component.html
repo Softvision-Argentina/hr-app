@@ -91,10 +91,10 @@
               {{ getCurrentStage(process.currentStage) }}
             </td>
             <td scope="row">
-              <a *ngIf="process.candidate.recruiter" class="nameStyle"
-                (click)="emitRecruiterId(process.candidate.recruiter.id)">
-                {{ process.candidate.recruiter.name }}
-                {{ process.candidate.recruiter.lastName }}
+              <a *ngIf="process.candidate.user" class="nameStyle"
+                (click)="emitUserId(process.candidate.user.id)">
+                {{ process.candidate.user.firstName }}
+                {{ process.candidate.user.lastName }}
               </a>
             </td>
             <td [style.text-align]="center">

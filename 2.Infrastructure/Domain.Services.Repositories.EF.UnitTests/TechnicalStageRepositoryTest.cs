@@ -29,12 +29,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
         [Fact(DisplayName = "Verify that repository returns TechnicalStage when QueryEager there is data")]
         public void GivenDataInRepositorysDbcontext_WhenQuery_ThenReturnsTechnicalStage()
         {
-            var consultantDelegate = new Consultant();
-            var consultantOwner = new Consultant();
+            var userDelegate = new User();
+            var userOwner = new User();
             var expectedValue = new TechnicalStage()
             {
-                ConsultantDelegate = consultantDelegate,
-                ConsultantOwner = consultantOwner
+                UserDelegate = userDelegate,
+                UserOwner = userOwner
             };
             DbContext.TechnicalStages.Add(expectedValue);
             DbContext.SaveChanges();
@@ -44,8 +44,8 @@ namespace Domain.Services.Repositories.EF.UnitTests
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
             Assert.Equal(expectedValue, actualValue.FirstOrDefault());
-            Assert.Equal(expectedValue.ConsultantDelegate, actualValue.FirstOrDefault().ConsultantDelegate);
-            Assert.Equal(expectedValue.ConsultantOwner, actualValue.FirstOrDefault().ConsultantOwner);
+            Assert.Equal(expectedValue.UserDelegate, actualValue.FirstOrDefault().UserDelegate);
+            Assert.Equal(expectedValue.UserOwner, actualValue.FirstOrDefault().UserOwner);
         }
 
         [Fact(DisplayName = "Verify that repository returns user when QueryEager there is data", Skip = "There are no calls to UpdateTechnicalStage")]
@@ -55,10 +55,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
             {
                 AlternativeSeniority = Model.Enum.Seniority.Junior1,
                 Client = "client1",
-                ConsultantDelegate = new Consultant(),
-                ConsultantDelegateId = 0,
-                ConsultantOwner = new Consultant(),
-                ConsultantOwnerId = 0,
+                UserDelegate = new User(),
+                UserDelegateId = 0,
+                UserOwner = new User(),
+                UserOwnerId = 0,
                 CreatedBy = "creator",
                 CreatedDate = DateTime.Today,
                 Date = DateTime.Today,
@@ -78,10 +78,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
             {
                 AlternativeSeniority = Model.Enum.Seniority.Junior2,
                 Client = "client2",
-                ConsultantDelegate = new Consultant(),
-                ConsultantDelegateId = 2,
-                ConsultantOwner = new Consultant(),
-                ConsultantOwnerId = 2,
+                UserDelegate = new User(),
+                UserDelegateId = 2,
+                UserOwner = new User(),
+                UserOwnerId = 2,
                 CreatedBy = "creator",
                 CreatedDate = DateTime.Today,
                 Date = DateTime.Today,

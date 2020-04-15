@@ -23,9 +23,9 @@ namespace ApiServer.Contracts.Process
 
         public UpdateCandidateViewModel Candidate { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
+        public int? UserOwnerId { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
+        public int? UserDelegateId { get; set; }
 
         public float? ActualSalary { get; set; }
         public float? WantedSalary { get; set; }        

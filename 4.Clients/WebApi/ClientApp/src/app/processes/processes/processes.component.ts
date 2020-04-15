@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from 'src/app/consultants/details/consultant-details.component';
+import { UserDetailsComponent } from 'src/app/users/details/user-details.component';
 import { AppComponent } from 'src/app/app.component';
 import { Stage } from 'src/entities/stage';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
@@ -33,7 +32,7 @@ import { DeclineReason } from 'src/entities/declineReason';
   selector: 'app-processes',
   templateUrl: './processes.component.html',
   styleUrls: ['./processes.component.css'],
-  providers: [CandidateDetailsComponent, ConsultantDetailsComponent, AppComponent]
+  providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 
 export class ProcessesComponent implements OnInit, AfterViewChecked {
@@ -74,7 +73,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   emptyProcess: Process;
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
-  consultants: Consultant[] = [];
+  users: User[] = [];
   profileSearch = 0;
   profileSearchName = 'ALL';
   communitySearch = 0;
@@ -83,9 +82,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   statusList: any[];
   currentStageList: any[];
   emptyCandidate: Candidate;
-  emptyConsultant: Consultant;
+  emptyUser: any;
   currentCandidate: Candidate;
-  currentConsultant: any;
   isEdit = false;
   openFromEdit = false;
   currentComponent: string;
@@ -102,7 +100,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   forms: FormGroup[] = [];
   isLoading = false;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
-    private candidateDetailsModal: CandidateDetailsComponent, private consultantDetailsModal: ConsultantDetailsComponent,
+    private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent, ) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
@@ -112,17 +110,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.app.removeBgImage();
-    this.getMyProcesses();
+    this.getUserProcesses();
     this.getCandidates();
-    this.getConsultants();
+    this.getUsers();
     this.getOffices();
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
-    this.facade.consultantService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentConsultant = res.body;
-      });
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
@@ -154,10 +148,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       });
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -222,13 +216,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   }
 
-  getMyProcesses() {
+  getUserProcesses() {
     this.facade.processService.get()
       .subscribe(res => {
         const result = [];
         for (let i = 0; i < res.length; i++) {
-          const sessionConsultant = res[i].candidate.recruiter.name + ' ' + res[i].candidate.recruiter.lastName;
-          if (sessionConsultant === this.currentUser.name) {
+          const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
+          if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
             result.push(res[i]);
           }
         }
@@ -244,26 +238,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       });
   }
 
-  getProcessesByConsultant() {
-    this.facade.processService.get()
-      .subscribe(res => {
-        this.filteredProcesses = res;
-        this.listOfDisplayData = res;
-        const newProc: Process = res[res.length - 1];
-        if (newProc && newProc.candidate) {
-          this.candidatesFullList.push(newProc.candidate);
-        }
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-  }
-
   showApproveProcessConfirm(processID: number): void {
     const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
     const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
     const title = 'Are you sure you want to approve the process for ' +
       processText + '? This will approve all stages associated with the process';
-
     this.facade.modalService.confirm({
       nzTitle: title,
       nzContent: '',
@@ -296,7 +275,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
     this.rejectProcessForm.reset();
     const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
-
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
@@ -375,7 +353,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
               const declineReason: DeclineReason = {
                 id: this.declineProcessForm.controls['declineReasonName'].value,
                 name: '',
-
                 description: this.declineProcessForm.controls['declineReasonDescription'].enabled ?
                   this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
               };
@@ -425,13 +402,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   search(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
-        (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) && (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -445,20 +418,17 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
-        (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.name;
+    this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -470,14 +440,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      // tslint:disable-next-line: max-line-length
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).indexOf(p) !== -1) : true) &&
-        // tslint:disable-next-line: max-line-length
-        (replaceAccent(item.candidate.recruiter.name.toString() + ' ' + item.candidate.recruiter.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-
-    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -495,7 +461,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         (item.status === this.searchValueStatus);
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
   }
@@ -511,7 +476,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         (item.currentStage === this.searchValueCurrentStage);
     };
     const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    // tslint:disable-next-line: max-line-length
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueCurrentStage = '';
   }
@@ -554,7 +518,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isEdit = true;
       this.openFromEdit = true;
       if (this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
-        // tslint:disable-next-line: max-line-length
         this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
       } else {
         this.stepIndex = 0;
@@ -586,7 +549,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         englishLevel: null,
         status: null,
         candidateSkills: [],
-        recruiter: null,
+        user: null,
         preferredOfficeId: null,
         contactDay: null,
         profile: null,
@@ -617,9 +580,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
-  showConsultantDetailsModal(consultantID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyConsultant = this.consultants.filter(consultant => consultant.id === consultantID)[0];
-    this.consultantDetailsModal.showModal(modalContent, this.emptyConsultant.name + ' ' + this.emptyConsultant.lastName);
+  showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
+    this.emptyUser = this.users.filter(user => user.id == userID)[0];
+    this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName);
   }
 
   showDeleteConfirm(processID: number): void {
@@ -750,6 +713,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
+      newProcess.userOwnerId = newCandidate.user.id;
+      newProcess.candidate = newCandidate;
       newProcess = this.generateProcess(newProcess, newCandidate);
       if (!this.isEdit) {
         if (!newCandidate.id) {
@@ -837,10 +802,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: !this.isEdit ? 0 : null,
       candidate: null,
-      consultantOwnerId: 0,
-      consultantOwner: null,
-      consultantDelegate: null,
-      consultantDelegateId: null,
+      userOwnerId: 0,
+      userOwner: null,
+      userDelegate: null,
+      userDelegateId: null,
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
@@ -858,14 +823,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     process.technicalStage = this.technicalStage.getFormData(process.id);
     process.clientStage = this.clientStage.getFormData(process.id);
     process.offerStage = this.offerStage.getFormData(process.id);
-
     // Seniority is now handled global between technical stage and offer stage. The process uses the last updated value.
     process.seniority = this.selectedSeniority ? this.selectedSeniority :
       (process.technicalStage.seniority ? process.technicalStage.seniority :
         process.technicalStage.alternativeSeniority ? process.technicalStage.alternativeSeniority :
           (process.offerStage.seniority));
     process.englishLevel = process.englishLevel;
-
     return process;
   }
 
@@ -879,7 +842,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
-      // tslint:disable-next-line: max-line-length
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }
@@ -939,10 +901,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
       candidate: candidate,
-      consultantOwnerId: null,  // candidate.recruiter.id
-      consultantOwner: candidate.recruiter,
-      consultantDelegateId: null,
-      consultantDelegate: null,
+      userOwnerId: null,
+      userOwner: candidate.user,
+      userDelegateId: null,
+      userDelegate: null,
       rejectionReason: null,
       declineReasonId: null,
       declineReason: null,
@@ -956,8 +918,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.InProgress,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         actualSalary: null,
         wantedSalary: null,
@@ -969,8 +931,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
@@ -981,8 +943,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null, // candidate.recruiter.id
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         interviewer: '',
         delegateName: ''
@@ -992,8 +954,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
-        consultantOwnerId: null, // candidate.recruiter.id
-        consultantDelegateId: null,
+        userOwnerId: null,
+        userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
         hireDate: new Date(),
@@ -1005,21 +967,19 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     };
   }
   generateProcess(process: Process, candidate: Candidate) {
-    const recruiterId = candidate.recruiter.id;
-
+    const userId = candidate.user.id;
     process.candidateId = candidate.id;
     process.candidate = candidate;
-    process.consultantOwnerId = recruiterId;
-    process.consultantOwner = candidate.recruiter;
-    process.hrStage.consultantOwnerId = recruiterId;
-    process.hrStage.consultantDelegateId = recruiterId;
-    process.technicalStage.consultantOwnerId = recruiterId;
-    process.technicalStage.consultantDelegateId = recruiterId;
-    process.clientStage.consultantOwnerId = recruiterId;
-    process.clientStage.consultantDelegateId = recruiterId;
-    process.offerStage.consultantOwnerId = recruiterId;
+    process.userOwnerId = userId;
+    process.userOwner = candidate.user;
+    process.hrStage.userOwnerId = userId;
+    process.hrStage.userDelegateId = userId;
+    process.technicalStage.userOwnerId = userId;
+    process.technicalStage.userDelegateId = userId;
+    process.clientStage.userOwnerId = userId;
+    process.clientStage.userDelegateId = userId;
+    process.offerStage.userOwnerId = userId;
     return process;
-
   }
 
   isDeclined(process: Process): Boolean {

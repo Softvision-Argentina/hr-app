@@ -13,10 +13,10 @@ namespace Domain.Services.Impl.Profiles
         public ReservationProfile()
         {
 
-            CreateMap<Reservation, ReadedReservationContract>().ForMember(x => x.Recruiter, opt => opt.MapFrom(r => r.Recruiter.Id));
-            CreateMap<CreateReservationContract, Reservation>().ForMember(x => x.Recruiter, opt => opt.Ignore());
+            CreateMap<Reservation, ReadedReservationContract>().ForMember(x => x.User, opt => opt.MapFrom(r => r.User.Id));
+            CreateMap<CreateReservationContract, Reservation>().ForMember(x => x.User, opt => opt.Ignore());
             CreateMap<Reservation, CreatedReservationContract>();
-            CreateMap<UpdateReservationContract, Reservation>().ForMember(x => x.Recruiter, opt => opt.Ignore());
+            CreateMap<UpdateReservationContract, Reservation>().ForMember(x => x.User, opt => opt.Ignore());
         }
     }
 }

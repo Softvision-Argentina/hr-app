@@ -22,7 +22,7 @@ namespace Domain.Services.Repositories.EF
         public override IQueryable<Candidate> QueryEager()
         {
             return Query().Include(c => c.CandidateSkills).ThenInclude(cs => cs.Skill)
-                .Include(r => r.Recruiter)
+                .Include(r => r.User)
                 .Include(r => r.PreferredOffice)
                 .Include(r => r.Community)
                 .Include(r => r.Profile);

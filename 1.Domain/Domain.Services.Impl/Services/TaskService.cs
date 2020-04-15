@@ -141,11 +141,11 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedTaskContract>>(taskResult);
         }
 
-        public IEnumerable<ReadedTaskContract> ListByConsultant(string consultantEmail)
+        public IEnumerable<ReadedTaskContract> ListByUser(string userEmail)
         {
             var taskQuery = _taskRepository
                 .QueryEager()
-                .Where(_ => _.Consultant.EmailAddress.ToLower() == consultantEmail.ToLower())
+                .Where(_ => _.User.Username.ToLower() == userEmail.ToLower())
                 .OrderBy(_ => _.Id)
                 .ThenBy(_ => _.CreationDate);
 
