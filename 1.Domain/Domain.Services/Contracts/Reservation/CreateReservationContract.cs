@@ -10,7 +10,7 @@ namespace Domain.Services.Contracts.Reservation
         public DateTime SinceReservation { get; set; } 
         public DateTime UntilReservation { get; set; }
         //public TimeSpan Time { get; set; }
-        public int Recruiter { get; set; }
+        public int User { get; set; }
         public int RoomId { get; set; }
         public CreateRoomContract Room { get; set; }
     }

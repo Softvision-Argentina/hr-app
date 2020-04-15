@@ -1,20 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
-import { Consultant } from 'src/entities/consultant';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
 import { Skill } from 'src/entities/skill';
-import { CandidateSkill } from 'src/entities/candidateSkill';
 import { Process } from 'src/entities/process';
 import { AppComponent } from 'src/app/app.component';
-import { getMatIconFailedToSanitizeUrlError } from '@angular/material';
 import { Globals } from '../../app-globals/globals';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
+import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 
 @Component({
   selector: 'candidate-add',
@@ -33,12 +31,12 @@ export class CandidateAddComponent implements OnInit {
     }
 
     @Input()
-    private _consultants: Consultant[];
-    public get consultants(): Consultant[] {
-        return this._consultants;
+    private _users: User[];
+    public get users(): User[] {
+        return this._users;
     }
-    public set consultants(value: Consultant[]) {
-        this.recruiters = value;
+    public set users(value: User[]) {
+        this.fillUsers = value;
     }
 
     @Input()
@@ -69,24 +67,24 @@ export class CandidateAddComponent implements OnInit {
     }
     
   fillCandidate: Candidate;
-  recruiters: Consultant[] = [];
+  fillUsers: User[] = [];
   comms: Community[] =[];
   profiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
-  currentConsultant: User;
+  currentUser: User;
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [null],
+    dni: [null, [Validators.required,Validators.pattern('^\\d{7,8}$')]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
     linkedin: [null, [trimValidator]],
     additionalInformation: [null, [trimValidator]],
-    recruiter: [null, [Validators.required]],
+    user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
-    status: 1,
+    status: CandidateStatusEnum.New,
     contacDay : [null],
     profile: [null, [Validators.required]],
     community: [null, [Validators.required]],
@@ -109,24 +107,26 @@ export class CandidateAddComponent implements OnInit {
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
               private globals: Globals) {
                 this.statusList = globals.candidateStatusList;
-                this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
-    this.recruiters = this._consultants;
+    this.fillUsers = this._users;
     this.comms = this._communities;
-    this.profiles = this._candidateProfiles
-    this.fillCandidate = this._candidate;
-    this.fillCandidateForm(this._process.candidate);
+    this.profiles = this._candidateProfiles;
     this.isEdit = this._process.id !== 0;
+    this.setRecruiter();
     if (this.isEdit) {
+      this.fillCandidate = this._candidate;
+      this.fillCandidateForm(this._process.candidate);
       this.candidateForm.controls['dni'].disable();
       this.candidateForm.controls['additionalInformation'].disable();
       this.candidateForm.controls['linkedin'].disable();
-      this.candidateForm.controls['preferredOffice'].disable();     
+      this.candidateForm.controls['preferredOffice'].disable();
+      this.changeFormStatus(false);
+    } else if (!!this._candidate.id) {
+      this.fillCandidateForm(this._candidate);
     }
-    this.selectedValue = this._process.candidate.preferredOfficeId === 0 ? 1 : this._process.candidate.preferredOfficeId;
-    this.changeFormStatus(false);
   }
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
@@ -138,7 +138,14 @@ export class CandidateAddComponent implements OnInit {
     }
 
   }
-
+  setRecruiter() {
+    const currentRecruiter = this.fillUsers.find(user => user.username === this.currentUser.username);
+    if(!!currentRecruiter) {
+      this.candidateForm.controls['user'].setValue(currentRecruiter.id);
+    } else {
+      this.candidateForm.controls['user'].setValue(1);
+    }
+  }
   checkForm() {
     for (const i in this.candidateForm.controls) {
       this.candidateForm.controls[i].markAsDirty();
@@ -146,10 +153,6 @@ export class CandidateAddComponent implements OnInit {
     }
   }
 
-  dniChanged() {
-    this.isDniValid = false;
-    this.changeFormStatus(false);
-  }
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
@@ -190,9 +193,6 @@ export class CandidateAddComponent implements OnInit {
   }
 
   fillCandidateForm(candidate: Candidate) {
-    // let statusIndex = this.statusList.filter((status) =>       
-    //      status.name.toLowerCase() === candidate.status.toLowerCase()
-    //     )[0].id;
     this.candidateForm.controls['dni'].setValue(candidate.dni);
     this.candidateForm.controls['name'].setValue(candidate.name);
     this.candidateForm.controls['lastName'].setValue(candidate.lastName);
@@ -201,7 +201,7 @@ export class CandidateAddComponent implements OnInit {
     this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]); //(54),1123445678
     this.candidateForm.controls['additionalInformation'].setValue(candidate.additionalInformation);
-    this.candidateForm.controls['recruiter'].setValue(candidate.recruiter.id);
+    this.candidateForm.controls['user'].setValue(candidate.user.id);
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
     this.candidateForm.controls['community'].setValue(candidate.community.id);
@@ -252,12 +252,12 @@ export class CandidateAddComponent implements OnInit {
       additionalInformation: this.candidateForm.controls['additionalInformation'].value === null ? null : this.candidateForm.controls['additionalInformation'].value.toString(),
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
-      recruiter: !this.candidateForm.controls['recruiter'].value ? null : new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
+      user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value===null?null:this.candidateForm.controls['community'].value,
+      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
       // contactDay: this.candidateForm.controls['contactDay'].value
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,

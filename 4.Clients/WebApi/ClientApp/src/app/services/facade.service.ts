@@ -4,7 +4,6 @@ import { SkillTypeService } from './skillType.service.';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { SkillService } from './skill.service';
 import { CandidateService } from './candidate.service';
-import { ConsultantService } from './consultant.service';
 import { ProcessService } from './process.service';
 import { ToastrService } from 'ngx-toastr';
 import { StageService } from './stage.service';
@@ -29,6 +28,7 @@ import { OfferService } from './offer.service';
 import { NotificationService } from './notificationsService';
 import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
+import { ReferralsService } from './referrals.service';
 @Injectable()
 export class FacadeService {
 
@@ -105,6 +105,14 @@ export class FacadeService {
     return this._candidateService;
   }
 
+  private _referralsService: ReferralsService;
+  public get referralsService(): ReferralsService {
+    if (!this._referralsService) {
+      this._referralsService = this.injector.get(ReferralsService);
+    }
+    return this._referralsService;
+  }
+
   private _notificationsService: NotificationService;
   public get NotificationSevice(): NotificationService {
     if (!this._notificationsService) {
@@ -121,12 +129,12 @@ export class FacadeService {
     return this._postulantService;
   }
 
-  private _consultantService: ConsultantService;
-  public get consultantService(): ConsultantService {
-    if (!this._consultantService) {
-      this._consultantService = this.injector.get(ConsultantService);
+  private _userService: UserService;
+  public get userService(): UserService {
+    if (!this._userService) {
+      this._userService = this.injector.get(UserService);
     }
-    return this._consultantService;
+    return this._userService;
   }
 
   private _processService: ProcessService;
@@ -166,14 +174,6 @@ export class FacadeService {
       this._employeeService = this.injector.get(EmployeeService);
     }
     return this._employeeService;
-  }
-
-  private _userService: UserService;
-  public get userService(): UserService {
-    if (!this._userService) {
-      this._userService = this.injector.get(UserService);
-    }
-    return this._userService;
   }
 
   private _reservationService: ReservationService;

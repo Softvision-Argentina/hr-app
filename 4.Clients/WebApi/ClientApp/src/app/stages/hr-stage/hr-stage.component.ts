@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Globals } from '../../app-globals/globals';
@@ -19,12 +19,12 @@ export class HrStageComponent implements OnInit {
   disabled = false;
 
     @Input()
-    private _consultants: Consultant[];
-    public get consultants(): Consultant[] {
-        return this._consultants;
+    private _users: User[];
+    public get users(): User[] {
+        return this._users;
     }
-    public set consultants(value: Consultant[]) {
-        this._consultants = value;
+    public set users(value: User[]) {
+        this._users = value;
     }
 
   hrForm: FormGroup = this.fb.group({
@@ -33,8 +33,8 @@ export class HrStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     actualSalary: [null, [Validators.required]],
     wantedSalary: [null, [Validators.required]],
-    consultantOwnerId: [null, [Validators.required]],
-    consultantDelegateId: [null],
+    userOwnerId: [null, [Validators.required]],
+    userDelegateId: [null],
     feedback: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null, [Validators.required]],
@@ -96,13 +96,13 @@ export class HrStageComponent implements OnInit {
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
     hrStage.feedback = this.getControlValue(this.hrForm.controls.feedback);
     hrStage.status = this.getControlValue(this.hrForm.controls.status);
-    hrStage.consultantOwnerId = this.getControlValue(this.hrForm.controls.consultantOwnerId);
-    hrStage.consultantDelegateId = this.getControlValue(this.hrForm.controls.consultantDelegateId);
+    hrStage.userOwnerId = this.getControlValue(this.hrForm.controls.userOwnerId);
+    hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.processId = processId;
     hrStage.englishLevel = this.getControlValue(this.hrForm.controls.englishLevel);
     hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary);
     hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary);
-    hrStage.consultantDelegateId = this.getControlValue(this.hrForm.controls.consultantDelegateId);
+    hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
     return hrStage;
@@ -127,23 +127,26 @@ export class HrStageComponent implements OnInit {
       this.hrForm.controls['date'].setValue(hrStage.date);
     }
 
-    if (hrStage.consultantOwnerId) {
-      this.hrForm.controls['consultantOwnerId'].setValue(hrStage.consultantOwnerId);
+    if (hrStage.userOwnerId) {
+      this.hrForm.controls['userOwnerId'].setValue(hrStage.userOwnerId);
+    }else {
+      this.hrForm.controls['userOwnerId'].setValue(1);
     }
-
-    if (hrStage.consultantDelegateId) {
-      this.hrForm.controls['consultantDelegateId'].setValue(hrStage.consultantDelegateId);
+    if (hrStage.userDelegateId) {
+      this.hrForm.controls['userDelegateId'].setValue(hrStage.userDelegateId);
+    }else {
+      this.hrForm.controls['userDelegateId'].setValue(1);
     }
 
     if (hrStage.feedback) {
       this.hrForm.controls['feedback'].setValue(hrStage.feedback);
     }
 
-    if (hrStage.actualSalary) {
+    if (hrStage.actualSalary !== null) {
       this.hrForm.controls['actualSalary'].setValue(hrStage.actualSalary);
     }
 
-    if (hrStage.wantedSalary) {
+    if (hrStage.wantedSalary !== null) {
       this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary);
     }
 

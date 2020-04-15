@@ -15,9 +15,7 @@ export class PeopleComponent implements OnInit {
   constructor(private app: AppComponent, private google: GoogleSigninComponent) { }
 
   ngOnInit() {
-    this.app.showLoading();
     this.app.removeBgImage();
-    this.app.hideLoading();
   }
 
   isUserAuthenticated() {

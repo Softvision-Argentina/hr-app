@@ -5,7 +5,7 @@
   <li><strong>Description:</strong> {{ stage.stageDescription }}</li>
   <li><strong>Start Date:</strong> {{ stage.startDate }}</li>
   <li><strong>End Date:</strong> {{ stage.endDate }}</li>
-  <li *ngIf="stage.consultantOwner"><strong>Consultant: </strong><a [routerLink]="">{{ stage.consultantOwner.name }} {{ stage.consultantOwner.lastName }}</a></li>
+  <li *ngIf="stage.userOwner"><strong>User: </strong><a [routerLink]="">{{ stage.userOwner.firstName }} {{ stage.userOwner.lastName }}</a></li>
   <li><strong>Status:</strong> {{ stage.status }}</li>
 </ul>
 
@@ -29,7 +29,7 @@
   </tbody>
 </table>
 </div>
-<p *ngIf="!stage || !stage.stageItems || stage.stageItems.length == 0">
+<p *ngIf="!stage || !stage.stageItems || stage.stageItems.length === 0">
   There are no stage items yet
 </p> -->
 

@@ -1,5 +1,4 @@
-﻿using ApiServer.Contracts.Consultant;
-using ApiServer.Contracts.TaskItem;
+﻿using ApiServer.Contracts.TaskItem;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +8,7 @@ namespace ApiServer.Contracts.Community
 {
     public class UpdateCommunityViewModel
     {
-        public string name { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
         public int ProfileId { get; set; }

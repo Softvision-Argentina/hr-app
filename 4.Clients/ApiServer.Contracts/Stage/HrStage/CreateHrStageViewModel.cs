@@ -16,9 +16,9 @@ namespace ApiServer.Contracts.Stage
 
         public string Feedback { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
+        public int? UserOwnerId { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
+        public int? UserDelegateId { get; set; }
         public string RejectionReason { get; set; }
 
         public float ActualSalary { get; set; }

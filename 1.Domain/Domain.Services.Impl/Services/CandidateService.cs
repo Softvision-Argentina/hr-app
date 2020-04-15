@@ -12,7 +12,6 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -21,7 +20,7 @@ namespace Domain.Services.Impl.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Process> _processRepository;
         private readonly IRepository<Candidate> _candidateRepository;
-        private readonly IRepository<Consultant> _consultantRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<Office> _officeRepository;
         private readonly IRepository<Community> _communityRepository;
         private readonly IRepository<CandidateProfile> _candidateProfileRepository;
@@ -35,7 +34,7 @@ namespace Domain.Services.Impl.Services
             IRepository<Candidate> candidateRepository,
             IRepository<Community> communityRepository,
             IRepository<CandidateProfile> candidateProfileRepository,
-            IRepository<Consultant> consultantRepository,
+            IRepository<User> userRepository,
             IRepository<Office> officeRepository,
             IRepository<Process> processRepository,
             IUnitOfWork unitOfWork,
@@ -48,7 +47,7 @@ namespace Domain.Services.Impl.Services
             _unitOfWork = unitOfWork;
             _processRepository = processRepository;
             _candidateRepository = candidateRepository;
-            _consultantRepository = consultantRepository;
+            _userRepository = userRepository;
             _officeRepository = officeRepository;
             _communityRepository = communityRepository;
             _candidateProfileRepository = candidateProfileRepository;
@@ -67,15 +66,15 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Mapping contract {contract.Name}");
             var candidate = _mapper.Map<Candidate>(contract);
 
-            this.AddRecruiterToCandidate(candidate, contract.Recruiter.Id);
+            this.AddUserToCandidate(candidate, contract.User.Id);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);            
+            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             createdCandidate.CreatedDate = date;
             return _mapper.Map<CreatedCandidateContract>(createdCandidate);
         }
@@ -111,7 +110,7 @@ namespace Domain.Services.Impl.Services
                 _processRepository.Update(process);
             }
 
-            this.AddRecruiterToCandidate(candidate, contract.Recruiter.Id);
+            this.AddUserToCandidate(candidate, contract.User.Id);
             this.AddOfficeToCandidate(candidate, contract.PreferredOfficeId);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
             this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
@@ -132,9 +131,9 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
-        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate,bool> filterRule)
+        public IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filterRule)
         {
-          
+
             var candidateQuery = _candidateRepository
                 .QueryEager()
                 .Where(filterRule);
@@ -204,12 +203,12 @@ namespace Domain.Services.Impl.Services
             }
             catch (ValidationException ex)
             {
-                    throw new CreateContractInvalidException(ex.ToListOfMessages());
+                throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
 
             try
             {
-                if(linkedInProfile != null)
+                if (linkedInProfile != null)
                 {
                     Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile != "N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
                     if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
@@ -234,13 +233,13 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void AddRecruiterToCandidate(Candidate candidate, int recruiterID)
+        private void AddUserToCandidate(Candidate candidate, int userID)
         {
-            var recruiter = _consultantRepository.Query().Where(_ => _.Id == recruiterID).FirstOrDefault();
-            if (recruiter == null)
-                throw new Domain.Model.Exceptions.Consultant.ConsultantNotFoundException(recruiterID);
+            var user = _userRepository.Query().Where(_ => _.Id == userID).FirstOrDefault();
+            if (user == null)
+               throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
 
-            candidate.Recruiter = recruiter;
+            candidate.User = user;
         }
 
         private void AddCommunityToCandidate(Candidate candidate, int communityID)
@@ -268,6 +267,6 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
-        }       
+        }
     }
 }

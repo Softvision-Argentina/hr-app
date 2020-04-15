@@ -7,7 +7,6 @@ import { CandidateSkill } from 'src/entities/candidateSkill';
 import { Skill } from 'src/entities/skill';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { AppComponent } from '../app.component';
-import { Consultant } from 'src/entities/consultant';
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { Office } from '../../entities/office';
@@ -35,7 +34,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   listOfDisplayData: Candidate[] = [...this.filteredCandidates];
   sortName: string = 'name';
   sortValue: string = 'ascend';
-  recruiters: Consultant[] = [];
+  users: User[] = [];
   profiles: CandidateProfile[] = [];
   communities: Community[] = [];
   _offices: Office[] = [];
@@ -56,14 +55,14 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   editingCandidateId: number = 0;
   isDniLoading: boolean = false;
   isDniValid: boolean = false;
-  currentConsultant: User;
+  currentUser: User;
   searchValueStatus: string = '';
   statusList: any[];
   englishLevelList: any[];
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
     private app: AppComponent, private globals: Globals) {
-      this.currentConsultant = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.statusList = globals.candidateStatusList;
       this.englishLevelList = globals.englishLevelList;
   }
@@ -72,7 +71,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.app.showLoading();
     this.app.removeBgImage();
     this.getCandidates();
-    this.getRecruiters();
+    this.getUsers();
     this.getProfiles();
     this.getCommunities();
     this.getOffices();
@@ -87,16 +86,16 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.filteredCandidates = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
-        : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+          : (b[this.sortName] > a[this.sortName] ? 1 : -1));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
-  getRecruiters() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.recruiters = res;
+        this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -159,7 +158,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       phoneNumber: [null],
       linkedin: [null, [trimValidator]],
       additionalInformation: [null, [trimValidator]],
-      recruiter: [null, [Validators.required]],
+      user: [null, [Validators.required]],
       englishLevel: 'none',
       status: null,
       contactDay: null,
@@ -183,11 +182,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       return (this.listOfSearchCandidates.length ?
         this.listOfSearchCandidates.some(candidates => item.name.indexOf(candidates) !== -1) : true) &&
         (replaceAccent(item.name.toString().toUpperCase() +
-        item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
+          item.lastName.toString().toUpperCase()).indexOf(replaceAccent(this.searchValue.toUpperCase())) !== -1);
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
-     ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+      ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.nameDropdown.nzVisible = false;
   }
 
@@ -198,7 +197,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     };
     const data = this.filteredCandidates.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
-    ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+      ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
     this.statusDropdown.nzVisible = false;
   }
@@ -210,7 +209,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    // Edit Consultant Modal
     this.resetForm();
     this.getSkills();
     if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }
@@ -277,14 +275,14 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 emailAddress: this.validateForm.controls['email'].value ? this.validateForm.controls['email'].value.toString() : null,
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')',
                 linkedInProfile: this.validateForm.controls['linkedin'].value === null
-                ? null : this.validateForm.controls['linkedin'].value.toString(),
+                  ? null : this.validateForm.controls['linkedin'].value.toString(),
                 candidateSkills: candidateSkills,
                 additionalInformation: this.validateForm.controls['additionalInformation'].value === null
-                ? null : this.validateForm.controls['additionalInformation'].value.toString(),
+                  ? null : this.validateForm.controls['additionalInformation'].value.toString(),
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
-                recruiter: new Consultant(this.validateForm.controls['recruiter'].value, null, null),
+                user: new User(this.validateForm.controls['user'].value, null),
                 contactDay: new Date(),
                 profile: new CandidateProfile(this.validateForm.controls['profile'].value),
                 community: new Community(this.validateForm.controls['community'].value),
@@ -383,7 +381,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.completeSkillList.forEach(sk => skillList.push(sk));
     if (isEdit) {
       if (this.controlEditArray.length >= 1) {
-        if (this.validateForm.controls[i.controlInstance[0]].value != null) {
+        if (this.validateForm.controls[i.controlInstance[0]].value !== null) {
           this.skills.push(skillList.filter(skill => skill.name === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
@@ -394,7 +392,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       }
     } else {
       if (this.controlArray.length >= 1) {
-        if (this.validateForm.controls[i.controlInstance[0]].value != null) {
+        if (this.validateForm.controls[i.controlInstance[0]].value !== null) {
           this.skills.push(skillList.filter(skill => skill.id === this.validateForm.controls[i.controlInstance[0]].value)[0]);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
@@ -412,7 +410,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   fillCandidateForm(candidate: Candidate) {
     const candidateReferredBy = candidate.referredBy !== null ? candidate.referredBy : '';
-    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom  : '';
+    const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom : '';
     this.validateForm.controls['dni'].setValue(candidate.dni);
     this.validateForm.controls['name'].setValue(candidate.name);
     this.validateForm.controls['lastName'].setValue(candidate.lastName);
@@ -421,7 +419,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.validateForm.controls['additionalInformation'].setValue(candidate.additionalInformation);
-    this.validateForm.controls['recruiter'].setValue(candidate.recruiter.id);
+    this.validateForm.controls['user'].setValue(candidate.user.id);
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);
     this.validateForm.controls['status'].setValue(candidate.status);

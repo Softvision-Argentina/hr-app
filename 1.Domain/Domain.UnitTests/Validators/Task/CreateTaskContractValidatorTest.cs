@@ -22,7 +22,7 @@ namespace Domain.Services.Impl.UnitTests.Validators.Task
             {
                 Title = "test tittle",
                 IsApprove = true,
-                ConsultantId = 1
+                UserId = 1
             };
 
             validator.ValidateAndThrow(createTask);
@@ -36,10 +36,10 @@ namespace Domain.Services.Impl.UnitTests.Validators.Task
             validator.ShouldHaveValidationErrorFor(createTaskContract => createTaskContract.Title, string.Empty);
         }
 
-        [Fact(DisplayName = "Verify that throws error when ConsultantId is Empty")]
-        public void Should_ThrowError_When_ConsultantIdIsEmpty()
+        [Fact(DisplayName = "Verify that throws error when UserId is Empty")]
+        public void Should_ThrowError_When_UserIdIsEmpty()
         {
-            validator.ShouldHaveValidationErrorFor(createTaskContract => createTaskContract.ConsultantId, default(int));
+            validator.ShouldHaveValidationErrorFor(createTaskContract => createTaskContract.UserId, default(int));
         }
     }
 }

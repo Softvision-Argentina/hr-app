@@ -15,9 +15,10 @@ namespace ApiServer.Controllers
         private readonly IDashboardService _dashboardService;
         private readonly IMapper _mapper;
 
-        public DashboardController(IDashboardService dashboardService,
-                                   ILog<DashboardController> logger,
-                                   IMapper mapper) : base(logger)
+        public DashboardController(
+            IDashboardService dashboardService,
+            ILog<DashboardController> logger,
+            IMapper mapper) : base(logger)
         {
             _dashboardService = dashboardService;
             _mapper = mapper;
@@ -34,7 +35,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
@@ -50,28 +51,24 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/dashboard
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody] CreateDashboardViewModel vm)
+        public IActionResult Post([FromBody] CreateDashboardViewModel createDashboardVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDashboardContract>(vm);
+                var contract = _mapper.Map<CreateDashboardContract>(createDashboardVm);
                 var returnContract = _dashboardService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedDashboardViewModel>(returnContract));
             });
         }
 
-        // PUT api/dashboard/5
-        // Mutation
-        [HttpPut("{Id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDashboardViewModel vm)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]UpdateDashboardViewModel updateDashboardVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDashboardContract>(vm);
+                var contract = _mapper.Map<UpdateDashboardContract>(updateDashboardVm);
                 contract.Id = id;
                 _dashboardService.Update(contract);
 
@@ -79,8 +76,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        // DELETE api/dashboard/5
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>

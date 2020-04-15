@@ -11,15 +11,13 @@ namespace Domain.Services.ExternalServices
 {
     public class JwtSecurityTokenProvider : ISecurityTokenProvider
     {
-
-        JwtSettings _settings;
+        readonly JwtSettings _settings;
         public JwtSecurityTokenProvider(JwtSettings settings)
         {
             _settings = settings;
         }
-
         
-        public string BuildSecurityToken(string userName, List<(string claimType, bool authValue)> claims)
+        public string BuildSecurityToken(string userName, List<Claim> claims)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
             var jwtClaims = new List<Claim>();
@@ -27,9 +25,9 @@ namespace Domain.Services.ExternalServices
             jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             jwtClaims.Add(new Claim("isAuthenticated", "true"));
 
-            foreach ((string claimType, bool authValue) in claims)
+            foreach (var claim in claims)
             {
-                jwtClaims.Add(new Claim(claimType, authValue.ToString()));
+                jwtClaims.Add(claim);
             }
 
             var token = new JwtSecurityToken(

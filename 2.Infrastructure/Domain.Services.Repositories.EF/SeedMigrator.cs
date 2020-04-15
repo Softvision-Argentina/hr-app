@@ -22,16 +22,6 @@ namespace Domain.Services.Repositories.EF
 
         private static void SeedDummy(DataBaseContext context)
         {
-            #region Dummy
-            var dummy1 = new Dummy { Name = "dummy1", Description = "Dummy 1", TestValue = "value of dummy 1" };
-            var dummy2 = new Dummy { Name = "dummy2", Description = "Dummy 2", TestValue = "value of dummy 2" };
-            var dummy3 = new Dummy { Name = "dummy3", Description = "Dummy 3", TestValue = "value of dummy 3" };
-            context.Dummies.Add(dummy1);
-            context.Dummies.Add(dummy2);
-            context.Dummies.Add(dummy3);
-            context.SaveChanges();
-            #endregion
-
             #region CandidateProfiles
             var Profile1 = new CandidateProfile { Name = "Devs", Description = "Developers" };
             var Profile2 = new CandidateProfile { Name = "RRHH", Description = "Recursos Humanos" };
@@ -54,49 +44,85 @@ namespace Domain.Services.Repositories.EF
             context.SaveChanges();
             #endregion
 
-            #region Consultants
-            var consultant1 = new Consultant { Name = "Cristian", LastName = "Rodríguez", PhoneNumber = "(+54)12312312", EmailAddress = "critian.rodriguez@softvision.com" };
-            var consultant2 = new Consultant { Name = "Santiago", LastName = "Mayochi", PhoneNumber = "(+1)2123453423", EmailAddress = "santiago.mayochi@softvision.com", AdditionalInformation = "HR Analyst" };
-            var consultant3 = new Consultant { Name = "Samanta", LastName = "Fioretti", PhoneNumber = "(+1)2123453423", EmailAddress = "samanta.fioretti@softvision.com" };
-            var consultant4 = new Consultant { Name = "Fernanda", LastName = "García Utrera", PhoneNumber = "(+1)2123453423", EmailAddress = "fernanda.garciautrera@softvision.com" };
-            var consultant5 = new Consultant { Name = "Matías", LastName = "Baldi", PhoneNumber = "(+1)2123453423", EmailAddress = "matias.baldi@softvision.com", AdditionalInformation = "Community Manager Argentina" };
-            var consultant6 = new Consultant { Name = "Giselle", LastName = "Chanis", PhoneNumber = "(+54)2123453423", EmailAddress = "giselle.chanis@softvision.com" };
-            var consultant7 = new Consultant { Name = "Ignacio", LastName = "Costantini", PhoneNumber = "(+54)2123453423", EmailAddress = "ignacio.costantini@softvision.com" };
-            var consultant8 = new Consultant { Name = "Cristian", LastName = "Piqué", PhoneNumber = "(+54)2355677581", EmailAddress = "cristian.pique@softvision.com" };
-            var consultant9 = new Consultant { Name = "Lucas", LastName = "Stirpe", PhoneNumber = "(+54)12359742", EmailAddress = "lucas.stirpe@softvision.com" };
-            var consultant10 = new Consultant { Name = "Damian", LastName = "Fernandez Urroz", PhoneNumber = "(+54)129876543", EmailAddress = "damian.fernandezurroz@softvision.com" };
-            var consultant11 = new Consultant { Name = "Adrian", LastName = "Rodriguez Renda", PhoneNumber = "(+54)9876543", EmailAddress = "adrian.rodriguezrenda@softvision.com" };
-            var consultant12 = new Consultant { Name = "Kevin", LastName = "Zatel", PhoneNumber = "(+54)12359742", EmailAddress = "kevin.zatel@softvision.com" };
-            var consultant13 = new Consultant { Name = "Tomas", LastName = "Rebollo", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.rebollo@softvision.com" };
-            var consultant14 = new Consultant { Name = "Facundo", LastName = "Valeriano", PhoneNumber = "(+54)12359742", EmailAddress = "facundo.valeriano@softvision.com" };
-            var consultant15 = new Consultant { Name = "Matias", LastName = "Totaro", PhoneNumber = "(+54)12359742", EmailAddress = "matias.totaro@softvision.com" };
-            var consultant19 = new Consultant { Name = "Teo", LastName = "Benavides", PhoneNumber = "(+54)12359742", EmailAddress = "teo.benavides@softvision.com" };
-            var consultant20 = new Consultant { Name = "Tomas", LastName = "Guagnini", PhoneNumber = "(+54)12359742", EmailAddress = "tomas.guagnini@softvision.com" };
-            var consultant23 = new Consultant { Name = "Tomas", LastName = "Reisenman", PhoneNumber = "(+54)49794582", EmailAddress = "tomas.reisenman@softvision.com" };
-            var consultant21 = new Consultant { Name = "Nicolas", LastName = "Roldan", PhoneNumber = "(+54)49794582", EmailAddress = "nicolas.roldan@softvision.com" };
+            #region User
+            var user1 = new User { FirstName = "Cristian", LastName = "Pique", Username = "cristian.pique@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user2 = new User { FirstName = "Emanuel", LastName = "Flores", Username = "emanuel.flores@softvision.com", Role = Roles.HRManagement, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user3 = new User { FirstName = "Ignacio", LastName = "Costantini", Username = "ignacio.costantini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user4 = new User { FirstName = "Damian", LastName = "Fernandez Urroz", Username = "damian.fernandezurroz@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user5 = new User { FirstName = "Lucas", LastName = "Stirpe", Username = "lucas.stirpe@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user6 = new User { FirstName = "Adrian", LastName = "Rodriguez Renda", Username = "adrian.rodriguezrenda@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user7 = new User { FirstName = "Kevin", LastName = "Zatel", Username = "kevin.zatel@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user8 = new User { FirstName = "Tomas", LastName = "Rebollo", Username = "tomas.rebollo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user9 = new User { FirstName = "Matias", LastName = "Zatz", Username = "matias.zatz@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user10 = new User { FirstName = "Thomas", LastName = "Nazar", Username = "thomas.nazar@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user11 = new User { FirstName = "Ivan", LastName = "Cardozo", Username = "ivan.cardozo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user12 = new User { FirstName = "Karen", LastName = "Ono", Username = "karen.ono@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user13 = new User { FirstName = "Javier", LastName = "Benavente", Username = "javier.benavente@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user14 = new User { FirstName = "Facundo", LastName = "Valeriano", Username = "facundo.valeriano@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user15 = new User { FirstName = "Matias", LastName = "Otero", Username = "matias.otero@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user16 = new User { FirstName = "Matias", LastName = "Totaro", Username = "matias.totaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user17 = new User { FirstName = "Francisco", LastName = "Ghersi", Username = "francisco.ghersi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community2};
 
-            context.Consultants.Add(consultant1);
-            context.Consultants.Add(consultant2);
-            context.Consultants.Add(consultant3);
-            context.Consultants.Add(consultant4);
-            context.Consultants.Add(consultant5);
-            context.Consultants.Add(consultant6);
-            context.Consultants.Add(consultant7);
-            context.Consultants.Add(consultant8);
-            context.Consultants.Add(consultant9);
-            context.Consultants.Add(consultant10);
-            context.Consultants.Add(consultant11);
-            context.Consultants.Add(consultant12);
-            context.Consultants.Add(consultant13);
-            context.Consultants.Add(consultant14);
-            context.Consultants.Add(consultant15);
-            context.Consultants.Add(consultant19);
-            context.Consultants.Add(consultant20);
-            context.Consultants.Add(consultant21);
-            context.Consultants.Add(consultant23);
+           // Users for testing Roles 
+           var user99 = new User { FirstName = "root", LastName = "root", Username = "root@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user90 = new User { FirstName = "communitymanager", LastName = "communitymanager", Username = "communitymanager@softvision.com", Role = Roles.CommunityManager, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community1};
+           var user91 = new User { FirstName = "recruiter", LastName = "recruiter", Username = "recruiter@softvision.com", Role = Roles.Recruiter, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user92 = new User { FirstName = "common", LastName = "common", Username = "common@softvision.com", Role = Roles.Common, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+           var user93 = new User { FirstName = "interviewer", LastName = "interviewer", Username = "interviewer@softvision.com", Role = Roles.Interviewer, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+
+
+
+            var user23 = new User { FirstName = "Marcelo", LastName = "Martin", Username = "marcelo.martin@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user24 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            
+            context.Users.Add(user2);
+            context.Users.Add(user3);
+            context.Users.Add(user4);
+            context.Users.Add(user5);
+            context.Users.Add(user6);
+            context.Users.Add(user7);
+            context.Users.Add(user8);
+            context.Users.Add(user9);
+            context.Users.Add(user10);
+            context.Users.Add(user11);
+            context.Users.Add(user12);
+            context.Users.Add(user13);
+            context.Users.Add(user14);
+            context.Users.Add(user15);
+            context.Users.Add(user16);
+            context.Users.Add(user17);
+            context.Users.Add(user18);
+            context.Users.Add(user19);
+            context.Users.Add(user20);
+            context.Users.Add(user21);
+            context.Users.Add(user22);
+            context.Users.Add(user99);
+            context.Users.Add(user90);
+            context.Users.Add(user91);
+            context.Users.Add(user92);
+            context.Users.Add(user93);
+            context.Users.Add(user23);
+            context.Users.Add(user24);
+            
             context.SaveChanges();
             #endregion
 
+            #region Dummy
+            var dummy1 = new Dummy { Name = "dummy1", Description = "Dummy 1", TestValue = "value of dummy 1" };
+            var dummy2 = new Dummy { Name = "dummy2", Description = "Dummy 2", TestValue = "value of dummy 2" };
+            var dummy3 = new Dummy { Name = "dummy3", Description = "Dummy 3", TestValue = "value of dummy 3" };
+            context.Dummies.Add(dummy1);
+            context.Dummies.Add(dummy2);
+            context.Dummies.Add(dummy3);
+            context.SaveChanges();
+            #endregion
+
+           
             #region Office
             var Office1 = new Office { Name = "Almagro", Description = "Almagro" };
             var Office2 = new Office { Name = "Vte Lopez", Description = "Vicente Lopez" };
@@ -117,17 +143,17 @@ namespace Domain.Services.Repositories.EF
 
 
             #region Candidates
-            var candidate1 = new Candidate { Profile=Profile1, Name = "Cristian", LastName = "Piqué", DNI = 34578644, PhoneNumber = "(+54)2355677581", EmailAddress = "cristian.pique@softvision.com", LinkedInProfile = "https://www.linkedin.com/in/me-cristianpique/", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant1, PreferredOffice = Office1, Community=Community1};
-            var candidate2 = new Candidate { Profile = Profile2, Community =Community2, Name = "Cristian", LastName = "Piqué", DNI = 1234567, PhoneNumber = "(+54)1122334455", EmailAddress = "gerardo.chechik@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.Hired, Recruiter = consultant2, PreferredOffice = Office2};
-            var candidate3 = new Candidate { Profile = Profile3, Community = Community3, Name = "Javier", LastName = "Páez", DNI = 12345678, PhoneNumber = "(+54)1122334455", EmailAddress = "javier.paez@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Recall, Recruiter = consultant3, PreferredOffice = Office1};
-            var candidate4 = new Candidate { Profile = Profile2, Community = Community4, Name = "Matías", LastName = "Luraghi", DNI = 1234578, PhoneNumber = "(+54)1122334455", EmailAddress = "matias.luraghi@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant4, PreferredOffice = Office1};
-            var candidate5 = new Candidate { Profile = Profile1, Community = Community1, Name = "Juan Pablo", LastName = "Maldonado", DNI = 1345678, PhoneNumber = "(+54)1122334455", EmailAddress = "juanpablo.maldonado@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.InProgress, Recruiter = consultant5, PreferredOffice = Office2};
-            var candidate6 = new Candidate { Profile = Profile3, Community = Community2, Name = "Matías", LastName = "Caniglia", DNI = 1234568, PhoneNumber = "(+1)1122334455", EmailAddress = "matias.caniglia@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, Recruiter = consultant6, PreferredOffice = Office2};
-            var candidate7 = new Candidate { Profile = Profile2, Community = Community3, Name = "Gustavo", LastName = "Gilberto", DNI = 2345678, PhoneNumber = "(+54)1122334455", EmailAddress = "gustavo.gilberto@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant1, PreferredOffice = Office2};
-            var candidate8 = new Candidate { Profile = Profile1, Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, Recruiter = consultant2, PreferredOffice = Office1};
-            var candidate9 = new Candidate { Profile = Profile2, Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, Recruiter = consultant3, PreferredOffice = Office1};
-            var candidate10 = new Candidate { Profile = Profile3, Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, Recruiter = consultant4, PreferredOffice = Office1};
-            var candidate11 = new Candidate { Profile = Profile1, Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, Recruiter = consultant5, PreferredOffice = Office1};
+            var candidate1 = new Candidate { Profile=Profile1, Name = "Cristian", LastName = "Piqué", DNI = 34578644, PhoneNumber = "(+54)2355677581", EmailAddress = "cristian.pique@softvision.com", LinkedInProfile = "https://www.linkedin.com/in/me-cristianpique/", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, User = user1, PreferredOffice = Office1, Community=Community1};
+            var candidate2 = new Candidate { Profile = Profile2, Community =Community2, Name = "Cristian", LastName = "Piqué", DNI = 1234567, PhoneNumber = "(+54)1122334455", EmailAddress = "gerardo.chechik@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.Hired, User = user2, PreferredOffice = Office2};
+            var candidate3 = new Candidate { Profile = Profile3, Community = Community3, Name = "Javier", LastName = "Páez", DNI = 12345678, PhoneNumber = "(+54)1122334455", EmailAddress = "javier.paez@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Recall, User = user3, PreferredOffice = Office1};
+            var candidate4 = new Candidate { Profile = Profile2, Community = Community4, Name = "Matías", LastName = "Luraghi", DNI = 1234578, PhoneNumber = "(+54)1122334455", EmailAddress = "matias.luraghi@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, User = user4, PreferredOffice = Office1};
+            var candidate5 = new Candidate { Profile = Profile1, Community = Community1, Name = "Juan Pablo", LastName = "Maldonado", DNI = 1345678, PhoneNumber = "(+54)1122334455", EmailAddress = "juanpablo.maldonado@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.InProgress, User = user5, PreferredOffice = Office2};
+            var candidate6 = new Candidate { Profile = Profile3, Community = Community2, Name = "Matías", LastName = "Caniglia", DNI = 1234568, PhoneNumber = "(+1)1122334455", EmailAddress = "matias.caniglia@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.InProgress, User = user6, PreferredOffice = Office2};
+            var candidate7 = new Candidate { Profile = Profile2, Community = Community3, Name = "Gustavo", LastName = "Gilberto", DNI = 2345678, PhoneNumber = "(+54)1122334455", EmailAddress = "gustavo.gilberto@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.Rejected, User = user1, PreferredOffice = Office2};
+            var candidate8 = new Candidate { Profile = Profile1, Community = Community4, Name = "Pablo", LastName = "Gore", DNI = 345678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.gore@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.LowIntermediate, Status = CandidateStatus.Rejected, User = user2, PreferredOffice = Office1};
+            var candidate9 = new Candidate { Profile = Profile2, Community = Community1, Name = "Pablo", LastName = "Oubina", DNI = 12340678, PhoneNumber = "(+54)1122334455", EmailAddress = "pablo.oubina@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.Advanced, Status = CandidateStatus.InProgress, User = user3, PreferredOffice = Office1};
+            var candidate10 = new Candidate { Profile = Profile3, Community = Community3, Name = "Martín", LastName = "Pielvitori", DNI = 10345678, PhoneNumber = "(+54)1122334455", EmailAddress = "martin.pielvitori@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.None, Status = CandidateStatus.Hired, User = user4, PreferredOffice = Office1};
+            var candidate11 = new Candidate { Profile = Profile1, Community = Community2, Name = "Alejo", LastName = "Romano", DNI = 12345670, PhoneNumber = "(+1)1122334455", EmailAddress = "alejo.romano@softvision.com", LinkedInProfile = "N/A", EnglishLevel = EnglishLevel.HighIntermediate, Status = CandidateStatus.New, User = user5, PreferredOffice = Office1};
             context.Candidates.Add(candidate1);
             context.Candidates.Add(candidate2);
             context.Candidates.Add(candidate3);
@@ -143,10 +169,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Postulants
-            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
-            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.Now };
+            var postulant1 = new Postulant { Name = "Ariel Ortega", EmailAddress = "ariel.ortega@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant2 = new Postulant { Name = "Nicolas Pavlotsky", EmailAddress = "nicolas.pavlotsky@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant3 = new Postulant { Name = "Rodrigo Ramirez", EmailAddress = "rodrigo.ramirez@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
+            var postulant4 = new Postulant { Name = "Sebastian Liotta", EmailAddress = "seba.liotta@hotmail.com", LinkedInProfile = "N/A", Cv = "N/A", CreatedDate = DateTime.UtcNow };
 
             context.Postulants.Add(postulant1);
             context.Postulants.Add(postulant2);
@@ -438,86 +464,86 @@ namespace Domain.Services.Repositories.EF
             var process1 = new Process
             {
                 CandidateId = 1,
-                ConsultantDelegateId = 1,
-                ConsultantOwnerId = 2,     
+                UserDelegateId = 1,
+                UserOwnerId = 2,     
                 StartDate = DateTime.Today.AddDays(-100),
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
-                HrStage = new HrStage { ProcessId = 1, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14), EnglishLevel = EnglishLevel.HighIntermediate, WantedSalary = 10000, ActualSalary = 5000 },
-                TechnicalStage = new TechnicalStage { ProcessId = 1, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Seniority = Seniority.SemiSenior2, Client = "EY" },
-                ClientStage = new ClientStage { ProcessId = 1, ConsultantDelegateId = 2, Interviewer = "", ConsultantOwnerId = 1, DelegateName = "", Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 1, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-12), Seniority = Seniority.Senior1 }
+                HrStage = new HrStage { ProcessId = 1, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14), EnglishLevel = EnglishLevel.HighIntermediate, WantedSalary = 10000, ActualSalary = 5000 },
+                TechnicalStage = new TechnicalStage { ProcessId = 1, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Seniority = Seniority.SemiSenior2, Client = "EY" },
+                ClientStage = new ClientStage { ProcessId = 1, UserDelegateId = 2, Interviewer = "", UserOwnerId = 1, DelegateName = "", Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 1, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-12), Seniority = Seniority.Senior1 }
             };
 
             var process2 = new Process
             {
                 CandidateId = 2,
-                ConsultantDelegateId = 3,
-                ConsultantOwnerId = 4,
+                UserDelegateId = 3,
+                UserOwnerId = 4,
                 StartDate = DateTime.Today.AddDays(-80),
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
-                HrStage = new HrStage { ProcessId = 2, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 2, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "PWC" },
-                ClientStage = new ClientStage { ProcessId = 2, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 2, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-10) }
+                HrStage = new HrStage { ProcessId = 2, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
+                TechnicalStage = new TechnicalStage { ProcessId = 2, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "PWC" },
+                ClientStage = new ClientStage { ProcessId = 2, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 2, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-10) }
             };
 
             var process3 = new Process
             {
                 CandidateId = 7,
-                ConsultantDelegateId = 4,
-                ConsultantOwnerId = 5,
+                UserDelegateId = 4,
+                UserOwnerId = 5,
                 StartDate = DateTime.Today.AddDays(-40),
                 EndDate = DateTime.Today.AddDays(-10),
                 Status = ProcessStatus.Rejected,
                 CurrentStage = ProcessCurrentStage.Finished,
-                HrStage = new HrStage { ProcessId = 3, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 3, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "YL" },
-                ClientStage = new ClientStage { ProcessId = 3, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Rejected, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 3, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-1) }
+                HrStage = new HrStage { ProcessId = 3, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
+                TechnicalStage = new TechnicalStage { ProcessId = 3, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "YL" },
+                ClientStage = new ClientStage { ProcessId = 3, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Rejected, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 3, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-1) }
             };
 
             var process4 = new Process
             {
                 CandidateId = 4,
-                ConsultantDelegateId = 6,
-                ConsultantOwnerId = 1,
+                UserDelegateId = 6,
+                UserOwnerId = 1,
                 StartDate = DateTime.Today.AddDays(-5),
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
-                HrStage = new HrStage { ProcessId = 4, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 4, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
-                ClientStage = new ClientStage { ProcessId = 4, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 4, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(15) }
+                HrStage = new HrStage { ProcessId = 4, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
+                TechnicalStage = new TechnicalStage { ProcessId = 4, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
+                ClientStage = new ClientStage { ProcessId = 4, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 4, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(15) }
             };
 
             var process5 = new Process
             {
                 CandidateId = 5,
-                ConsultantDelegateId = 1,
-                ConsultantOwnerId = 4,
+                UserDelegateId = 1,
+                UserOwnerId = 4,
                 StartDate = DateTime.Today.AddDays(-1),
                 Status = ProcessStatus.Hired,
                 CurrentStage = ProcessCurrentStage.Finished,
-                HrStage = new HrStage { ProcessId = 5, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(12) },
-                TechnicalStage = new TechnicalStage { ProcessId = 5, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
-                ClientStage = new ClientStage { ProcessId = 5, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 5, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.Hired, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(35) }
+                HrStage = new HrStage { ProcessId = 5, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(12) },
+                TechnicalStage = new TechnicalStage { ProcessId = 5, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
+                ClientStage = new ClientStage { ProcessId = 5, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 5, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.Hired, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(35) }
         };
 
             var process6 = new Process
             {
                 CandidateId = 6,
-                ConsultantDelegateId = 5,
-                ConsultantOwnerId = 3,
+                UserDelegateId = 5,
+                UserOwnerId = 3,
                 StartDate = DateTime.Today.AddDays(-25),
                 Status = ProcessStatus.Recall,
                 CurrentStage = ProcessCurrentStage.ClientStage,
-                HrStage = new HrStage { ProcessId = 6, ConsultantDelegateId = 1, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 6, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "EY" },
-                ClientStage = new ClientStage { ProcessId = 6, ConsultantDelegateId = 2, ConsultantOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
-                OfferStage = new OfferStage { ProcessId = 6, ConsultantDelegateId = 4, ConsultantOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(3) }
+                HrStage = new HrStage { ProcessId = 6, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
+                TechnicalStage = new TechnicalStage { ProcessId = 6, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "EY" },
+                ClientStage = new ClientStage { ProcessId = 6, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
+                OfferStage = new OfferStage { ProcessId = 6, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(3) }
             };
 
             context.Processes.Add(process1);
@@ -530,12 +556,12 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Tasks
-            var task1 = new Task { Title = "Búsqueda de DevOps", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), ConsultantId = 1, IsApprove = false };
-            var task2 = new Task { Title = "Contactar candidato José Pérez", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), ConsultantId = 2, IsApprove = false };
-            var task3 = new Task { Title = "Envío de mail con feriados", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), ConsultantId = 3, IsApprove = false, IsNew = true };
-            var task4 = new Task { Title = "Búsqueda de .Net", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), ConsultantId = 7, IsApprove = false, IsNew = false };
-            var task5 = new Task { Title = "Contactar candidato Juan", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), ConsultantId = 7, IsApprove = false, IsNew = false };
-            var task6 = new Task { Title = "Envío de mail con WHF", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), ConsultantId = 7, IsApprove = false, IsNew = true };
+            var task1 = new Task { Title = "Búsqueda de DevOps", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), UserId = 1, IsApprove = false };
+            var task2 = new Task { Title = "Contactar candidato José Pérez", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), UserId = 2, IsApprove = false };
+            var task3 = new Task { Title = "Envío de mail con feriados", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), UserId = 3, IsApprove = false, IsNew = true };
+            var task4 = new Task { Title = "Búsqueda de .Net", CreatedDate = DateTime.Now.AddDays(-7), EndDate = DateTime.Now.AddDays(-1), UserId = 7, IsApprove = false, IsNew = false };
+            var task5 = new Task { Title = "Contactar candidato Juan", CreatedDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(1), UserId = 7, IsApprove = false, IsNew = false };
+            var task6 = new Task { Title = "Envío de mail con WHF", CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddDays(11), UserId = 7, IsApprove = false, IsNew = true };
             context.Tasks.Add(task1);
             context.Tasks.Add(task2);
             context.Tasks.Add(task3);
@@ -576,9 +602,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region HireProjection
-            var hProjection1 = new HireProjection { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 65};
-            var hProjection2 = new HireProjection { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 35 };
-            var hProjection3 = new HireProjection { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 85 };
+            var hProjection1 = new HireProjection { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 65 };
+            var hProjection2 = new HireProjection { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 35 };
+            var hProjection3 = new HireProjection { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 85 };
             context.HireProjection.Add(hProjection1);
             context.HireProjection.Add(hProjection2);
             context.HireProjection.Add(hProjection3);
@@ -586,9 +612,9 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region EmployeeCasualty
-            var eCasualty1 = new EmployeeCasualty { Month = DateTime.Now.Month - 1, Year = DateTime.Now.Year, Value = 45 };
-            var eCasualty2 = new EmployeeCasualty { Month = DateTime.Now.Month, Year = DateTime.Now.Year, Value = 22 };
-            var eCasualty3 = new EmployeeCasualty { Month = DateTime.Now.Month + 1, Year = DateTime.Now.Year, Value = 68 };
+            var eCasualty1 = new EmployeeCasualty { Month = DateTime.UtcNow.Month - 1, Year = DateTime.UtcNow.Year, Value = 45 };
+            var eCasualty2 = new EmployeeCasualty { Month = DateTime.UtcNow.Month, Year = DateTime.UtcNow.Year, Value = 22 };
+            var eCasualty3 = new EmployeeCasualty { Month = DateTime.UtcNow.Month + 1, Year = DateTime.UtcNow.Year, Value = 68 };
             context.EmployeeCasualty.Add(eCasualty1);
             context.EmployeeCasualty.Add(eCasualty2);
             context.EmployeeCasualty.Add(eCasualty3);
@@ -602,87 +628,20 @@ namespace Domain.Services.Repositories.EF
             context.Roles.Add(Role2);
             #endregion
 
-            #region User
-            var user1 = new User { FirstName = "Cristian", LastName = "Pique", Username = "cristian.pique@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user2 = new User { FirstName = "Emanuel", LastName = "Flores", Username = "emanuel.flores@softvision.com", Role = Roles.HRManagement, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user3 = new User { FirstName = "Ignacio", LastName = "Costantini", Username = "ignacio.costantini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user4 = new User { FirstName = "Damian", LastName = "Fernandez Urroz", Username = "damian.fernandezurroz@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user5 = new User { FirstName = "Lucas", LastName = "Stirpe", Username = "lucas.stirpe@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user6 = new User { FirstName = "Adrian", LastName = "Rodriguez Renda", Username = "adrian.rodriguezrenda@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user7 = new User { FirstName = "Kevin", LastName = "Zatel", Username = "kevin.zatel@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user8 = new User { FirstName = "Tomas", LastName = "Rebollo", Username = "tomas.rebollo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user9 = new User { FirstName = "Matias", LastName = "Zatz", Username = "matias.zatz@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user10 = new User { FirstName = "Thomas", LastName = "Nazar", Username = "thomas.nazar@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user11 = new User { FirstName = "Ivan", LastName = "Cardozo", Username = "ivan.cardozo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user12 = new User { FirstName = "Karen", LastName = "Ono", Username = "karen.ono@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user13 = new User { FirstName = "Javier", LastName = "Benavente", Username = "javier.benavente@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user14 = new User { FirstName = "Facundo", LastName = "Valeriano", Username = "facundo.valeriano@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user15 = new User { FirstName = "Matias", LastName = "Otero", Username = "matias.otero@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user16 = new User { FirstName = "Matias", LastName = "Totaro", Username = "matias.totaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user17 = new User { FirstName = "Francisco", LastName = "Ghersi", Username = "francisco.ghersi@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user18 = new User { FirstName = "Victor", LastName = "Hidalgo", Username = "victor.hidalgo@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user19 = new User { FirstName = "Teo", LastName = "Benavides", Username = "teo.benavides@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user20 = new User { FirstName = "Tomas", LastName = "Guagnini", Username = "tomas.guagnini@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user21 = new User { FirstName = "Ignacio", LastName = "Casciaro", Username = "ignacio.casciaro@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user22 = new User { FirstName = "Tomas", LastName = "Reisenman", Username = "tomas.reisenman@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community2};
-
-           // Users for testing Roles 
-           var user99 = new User { FirstName = "root", LastName = "root", Username = "root@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-           var user90 = new User { FirstName = "communitymanager", LastName = "communitymanager", Username = "communitymanager@softvision.com", Role = Roles.CommunityManager, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4",Community=Community1};
-           var user91 = new User { FirstName = "recruiter", LastName = "recruiter", Username = "recruiter@softvision.com", Role = Roles.Recruiter, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-           var user92 = new User { FirstName = "common", LastName = "common", Username = "common@softvision.com", Role = Roles.Common, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-           var user93 = new User { FirstName = "interviewer", LastName = "interviewer", Username = "interviewer@softvision.com", Role = Roles.Interviewer, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-
-
-
-            var user23 = new User { FirstName = "Nicolas", LastName = "Roldan", Username = "nicolas.roldan@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            var user24 = new User { FirstName = "Rodrigo", LastName = "Ramírez", Username = "rodrigo.ramirez@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             
-            context.Users.Add(user2);
-            context.Users.Add(user3);
-            context.Users.Add(user4);
-            context.Users.Add(user5);
-            context.Users.Add(user6);
-            context.Users.Add(user7);
-            context.Users.Add(user8);
-            context.Users.Add(user9);
-            context.Users.Add(user10);
-            context.Users.Add(user11);
-            context.Users.Add(user12);
-            context.Users.Add(user13);
-            context.Users.Add(user14);
-            context.Users.Add(user15);
-            context.Users.Add(user16);
-            context.Users.Add(user17);
-            context.Users.Add(user18);
-            context.Users.Add(user19);
-            context.Users.Add(user20);
-            context.Users.Add(user21);
-            context.Users.Add(user22);
-            context.Users.Add(user99);
-            context.Users.Add(user90);
-            context.Users.Add(user91);
-            context.Users.Add(user92);
-            context.Users.Add(user93);
-            context.Users.Add(user23);
-            context.Users.Add(user24);
-            
-            context.SaveChanges();
-            #endregion
-
             #region Employees
             var employee1 = new Employee { Name = "Without", LastName = "Reviewer" };
-            var employee2 = new Employee { Name = "Cristian", LastName = "Rodríguez", DNI = 38888888, PhoneNumber = "(+54)12312312", EmailAddress = "critian.rodriguez@softvision.com", LinkedInProfile = "cristianlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant1, Role = Role2, isReviewer = true, Status = EmployeeStatus.Hired, Reviewer = employee1 };
-            var employee3 = new Employee { Name = "Kevin", LastName = "Zatel", DNI = 38999999, PhoneNumber = "(+54)32132132", EmailAddress = "kevin.zatel@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee4 = new Employee { Name = "Tomas", LastName = "Rebollo", DNI = 40000000, PhoneNumber = "(+54)32132132", EmailAddress = "tomas.rebollo@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee5 = new Employee { Name = "Matias", LastName = "Zatz", DNI = 41111111, PhoneNumber = "(+54)32132132", EmailAddress = "matias.zatz@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee6 = new Employee { Name = "Thomas", LastName = "Nazar", DNI = 42222222, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee7 = new Employee { Name = "Ivan", LastName = "Cardozo", DNI = 43333333, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee8 = new Employee { Name = "Karen", LastName = "Ono", DNI = 44444444, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee9 = new Employee { Name = "Javier", LastName = "Benavente", DNI = 42222223, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee10 = new Employee { Name = "Facundo", LastName = "Valeriano", DNI = 42222278, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee11 = new Employee { Name = "Matias", LastName = "Otero", DNI = 42222452, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
-            var employee12 = new Employee { Name = "Matias", LastName = "Totaro", DNI = 42222452, PhoneNumber = "(+54)32132132", EmailAddress = "matias.totaro@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", Recruiter = consultant2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee2 = new Employee { Name = "Cristian", LastName = "Rodríguez", DNI = 38888888, PhoneNumber = "(+54)12312312", EmailAddress = "critian.rodriguez@softvision.com", LinkedInProfile = "cristianlinkedin.com", AdditionalInformation = "Some aditional", User = user1, Role = Role2, isReviewer = true, Status = EmployeeStatus.Hired, Reviewer = employee1 };
+            var employee3 = new Employee { Name = "Kevin", LastName = "Zatel", DNI = 38999999, PhoneNumber = "(+54)32132132", EmailAddress = "kevin.zatel@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee4 = new Employee { Name = "Tomas", LastName = "Rebollo", DNI = 40000000, PhoneNumber = "(+54)32132132", EmailAddress = "tomas.rebollo@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee5 = new Employee { Name = "Matias", LastName = "Zatz", DNI = 41111111, PhoneNumber = "(+54)32132132", EmailAddress = "matias.zatz@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee6 = new Employee { Name = "Thomas", LastName = "Nazar", DNI = 42222222, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee7 = new Employee { Name = "Ivan", LastName = "Cardozo", DNI = 43333333, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee8 = new Employee { Name = "Karen", LastName = "Ono", DNI = 44444444, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee9 = new Employee { Name = "Javier", LastName = "Benavente", DNI = 42222223, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee10 = new Employee { Name = "Facundo", LastName = "Valeriano", DNI = 42222278, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee11 = new Employee { Name = "Matias", LastName = "Otero", DNI = 42222452, PhoneNumber = "(+54)32132132", EmailAddress = "thomas.nazar@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
+            var employee12 = new Employee { Name = "Matias", LastName = "Totaro", DNI = 42222452, PhoneNumber = "(+54)32132132", EmailAddress = "matias.totaro@softvision.com", LinkedInProfile = "kevinlinkedin.com", AdditionalInformation = "Some aditional", User = user2, Role = Role1, isReviewer = false, Reviewer = employee2, Status = EmployeeStatus.Hired };
 
             context.Employees.Add(employee1);
             context.Employees.Add(employee2);
@@ -702,7 +661,7 @@ namespace Domain.Services.Repositories.EF
 
             #region Dashboards
             var dashboard1 = new Dashboard { Name = "Processes Dashboard" };
-            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" }; 
+            var dashboard2 = new Dashboard { Name = "Top 3 Known Skills Dashboard" };
             var dashboard3 = new Dashboard { Name = "Progress Processes Dashboard" };
             var dashboard4 = new Dashboard { Name = "Completed Processes Dashboard" };
             var dashboard5 = new Dashboard { Name = "Casualties and actual hires comparation Dashboard" };
@@ -727,10 +686,10 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region DaysOff
-            var daysOff1 = new DaysOff {  Date = DateTime.Today.AddDays(-12), EndDate= DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff2 = new DaysOff {  Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
-            var daysOff3 = new DaysOff {  Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
-            var daysOff4 = new DaysOff {  Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff1 = new DaysOff { Date = DateTime.Today.AddDays(-12), EndDate = DateTime.Today.AddDays(-12), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff2 = new DaysOff { Date = DateTime.Today.AddDays(-14), EndDate = DateTime.Today.AddDays(-14), Type = DaysOffType.Training, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
+            var daysOff3 = new DaysOff { Date = DateTime.Today.AddDays(-16), EndDate = DateTime.Today.AddDays(-16), Type = DaysOffType.Training, Status = DaysOffStatus.InReview, EmployeeId = 2, Employee = employee2 };
+            var daysOff4 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.Accepted, EmployeeId = 1, Employee = employee1 };
             var daysOff5 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.Holidays, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             var daysOff6 = new DaysOff { Date = DateTime.Today.AddDays(-18), EndDate = DateTime.Today.AddDays(-18), Type = DaysOffType.PTO, Status = DaysOffStatus.InReview, EmployeeId = 4, Employee = employee4 };
             context.DaysOff.Add(daysOff1);
@@ -757,10 +716,10 @@ namespace Domain.Services.Repositories.EF
 
 
             #region Reservation
-            var Reservation1 = new Reservation { Description = "Comunidad de .Net", RoomId = 1, Room = Room1, SinceReservation = new DateTime(2019, 8, 1, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 10, 50, 0), Recruiter = consultant1 };
-            var Reservation2 = new Reservation { Description = "Comunidad de Developers", RoomId = 1, Room = Room1, SinceReservation = new DateTime(2019, 8, 1, 12, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 12, 50, 0), Recruiter = consultant1 };
-            var Reservation3 = new Reservation { Description = "Comunidad de Recursos Humanos", RoomId = 2, Room = Room2, SinceReservation = new DateTime(2019, 8, 1, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 10, 50, 0), Recruiter = consultant1 };
-            var Reservation4 = new Reservation { Description = "Comunidad de Marketing", RoomId = 3, Room = Room3, SinceReservation = new DateTime(2019, 8, 5, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 5, 10, 50, 0), Recruiter = consultant1 };
+            var Reservation1 = new Reservation { Description = "Comunidad de .Net", RoomId = 1, Room = Room1, SinceReservation = new DateTime(2019, 8, 1, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 10, 50, 0), User = user1 };
+            var Reservation2 = new Reservation { Description = "Comunidad de Developers", RoomId = 1, Room = Room1, SinceReservation = new DateTime(2019, 8, 1, 12, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 12, 50, 0), User = user1 };
+            var Reservation3 = new Reservation { Description = "Comunidad de Recursos Humanos", RoomId = 2, Room = Room2, SinceReservation = new DateTime(2019, 8, 1, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 1, 10, 50, 0), User = user1 };
+            var Reservation4 = new Reservation { Description = "Comunidad de Marketing", RoomId = 3, Room = Room3, SinceReservation = new DateTime(2019, 8, 5, 10, 47, 0), UntilReservation = new DateTime(2019, 8, 5, 10, 50, 0), User = user1 };
             context.Reservation.Add(Reservation1);
             context.Reservation.Add(Reservation2);
             context.Reservation.Add(Reservation3);

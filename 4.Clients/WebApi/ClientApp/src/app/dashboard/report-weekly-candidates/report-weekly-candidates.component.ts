@@ -68,11 +68,11 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
       this.processesByCandidate = [];
 
       for (let process of this.processes) {
-        if (this.processesByCandidate[process.candidate.recruiter.id] === undefined) {
-          this.processesByCandidate[process.candidate.recruiter.id] = [];
+        if (this.processesByCandidate[process.candidate.user.id] === undefined) {
+          this.processesByCandidate[process.candidate.user.id] = [];
         }
 
-        this.processesByCandidate[process.candidate.recruiter.id].push(process)
+        this.processesByCandidate[process.candidate.user.id].push(process)
       }
 
       for (let key in this.processesByCandidate) {
@@ -83,7 +83,7 @@ export class ReportWeeklyCandidatesComponent implements OnInit {
 
       if (this.hasCandidates) {
         this.chartData = [];
-        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.recruiter.name + " " + p[0].candidate.recruiter.lastName}))
+        this.processesByCandidate.forEach(p => this.chartData.push({data: [p.length], label: p[0].candidate.user.firstName + ' ' + p[0].candidate.user.firstName }))
       }
     }
   }

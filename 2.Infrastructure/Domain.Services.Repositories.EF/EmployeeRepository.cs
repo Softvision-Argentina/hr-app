@@ -15,12 +15,12 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Employee> Query()
         {
-            return base.Query().Include(employee => employee.Recruiter).Include(employee => employee.Role).Include(employee => employee.Reviewer); 
+            return base.Query().Include(employee => employee.User).Include(employee => employee.Role).Include(employee => employee.Reviewer); 
         }
 
         public override IQueryable<Employee> QueryEager()
         {
-            return Query().Include(employee => employee.Recruiter).Include(employee => employee.Role).Include(employee => employee.Reviewer);
+            return Query().Include(employee => employee.User).Include(employee => employee.Role).Include(employee => employee.Reviewer);
         }
 
         public override Employee Update(Employee emp)

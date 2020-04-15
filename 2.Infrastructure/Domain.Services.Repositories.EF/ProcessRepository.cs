@@ -23,13 +23,13 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
                 .Include(x => x.OfferStage)
-                .Include(x => x.ConsultantOwner)
-                .Include(x => x.ConsultantDelegate)
+                .Include(x => x.UserOwner)
+                .Include(x => x.UserDelegate)
                 .Include(x => x.DeclineReason)
                 .Include(x => x.Candidate)
                 .ThenInclude(c => c.CandidateSkills)
                 .ThenInclude(cs => cs.Skill)
-                .Include(x => x.Candidate.Recruiter)
+                .Include(x => x.Candidate.User)
                 .Include(x => x.Candidate.PreferredOffice)
                 .Include(x => x.Candidate.Community)
                 .Include(x => x.Candidate.Profile);
@@ -42,7 +42,7 @@ namespace Domain.Services.Repositories.EF
             {
                 entity.RejectionReason = null;
                 entity.Status = Model.Enum.ProcessStatus.InProgress;
-                entity.EndDate = DateTime.Now;
+                entity.EndDate = DateTime.UtcNow;
                 entity.Candidate.Status = Model.Enum.CandidateStatus.InProgress;
                 //foreach (var stage in entity.Stages)
                 //{
@@ -90,8 +90,8 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
                 .Include(x => x.OfferStage)
-                .Include(x => x.ConsultantOwner)
-                .Include(x => x.ConsultantDelegate).FirstOrDefault();
+                .Include(x => x.UserOwner)
+                .Include(x => x.UserDelegate).FirstOrDefault();
         }
 
         public StageStatus RejectStage(StageStatus currentStatus)

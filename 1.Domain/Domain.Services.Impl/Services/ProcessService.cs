@@ -19,7 +19,6 @@ namespace Domain.Services.Impl.Services
         private readonly IProcessRepository _processRepository;
         private readonly IProcessStageRepository _processStageRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Consultant> _consultantRepository;
         private readonly IRepository<Community> _communityRepository;
         private readonly IRepository<CandidateProfile> _candidateProfileRepository;
         private readonly IRepository<Candidate> _candidateRepository;
@@ -35,7 +34,7 @@ namespace Domain.Services.Impl.Services
 
         public ProcessService(
             IMapper mapper,
-            IRepository<Consultant> consultantRepository,
+            IRepository<User> userRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<CandidateProfile> candidateProfileRepository,
             IRepository<Community> communityRepository,
@@ -49,7 +48,6 @@ namespace Domain.Services.Impl.Services
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
-            IRepository<User> userRepository,
             IConfiguration config)
         {
             _consultantRepository = consultantRepository;
@@ -122,6 +120,8 @@ namespace Domain.Services.Impl.Services
             var process = _mapper.Map<Process>(createProcessContract);
 
             this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+
+            process.Candidate.Status = CandidateStatus.InProgress;
 
             _candidateRepository.Update(process.Candidate);
 
@@ -216,8 +216,8 @@ namespace Domain.Services.Impl.Services
             var updatedProcess = _processRepository.Update(process);
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
-                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall)
+            if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
+                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall))
             {
                 var notification = new Notification
                 {

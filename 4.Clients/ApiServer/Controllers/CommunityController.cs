@@ -4,7 +4,6 @@ using AutoMapper;
 using Core;
 using Domain.Services.Contracts.Community;
 using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiServer.Controllers
@@ -13,12 +12,16 @@ namespace ApiServer.Controllers
     [ApiController]
     public class CommunityController : BaseController<CommunityController>
     {
-        ICommunityService _CommunityService;
-        private IMapper _mapper;
+        private readonly ICommunityService _communityService;
+        private readonly IMapper _mapper;
 
-        public CommunityController(ICommunityService CommunityService, ILog<CommunityController> logger, IMapper mapper) : base(logger)
+        public CommunityController(
+            ICommunityService communityService,
+            ILog<CommunityController> logger,
+            IMapper mapper
+            ) : base(logger)
         {
-            _CommunityService = CommunityService;
+            _communityService = communityService;
             _mapper = mapper;
         }
 
@@ -27,19 +30,18 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var communities = _CommunityService.List();
+                var communities = _communityService.List();
 
                 return Accepted(_mapper.Map<List<ReadedCommunityViewModel>>(communities));
             });
         }
 
-        // GET api/Communitys/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var community = _CommunityService.Read(id);
+                var community = _communityService.Read(id);
 
                 if (community == null)
                 {
@@ -50,46 +52,42 @@ namespace ApiServer.Controllers
             });
         }
 
-        // POST api/Communitys
-        // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateCommunityViewModel vm)
+        public IActionResult Post([FromBody]CreateCommunityViewModel createCommunityVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateCommunityContract>(vm);
-                var returnContract = _CommunityService.Create(contract);
+                var contract = _mapper.Map<CreateCommunityContract>(createCommunityVm);
+                var returnContract = _communityService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedCommunityViewModel>(returnContract));
             });
         }
 
-        // PUT api/Communitys/5
-        // Mutation
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateCommunityViewModel vm)
+        public IActionResult Put(int id, [FromBody]UpdateCommunityViewModel updateCommunityVm)
         {
             return ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateCommunityContract>(vm);
+                var contract = _mapper.Map<UpdateCommunityContract>(updateCommunityVm);
                 contract.Id = id;
-                _CommunityService.Update(contract);
+                _communityService.Update(contract);
 
                 return Accepted(new { id });
             });
         }
 
-        // DELETE api/Communitys/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
             {
-                _CommunityService.Delete(id);
+                _communityService.Delete(id);
                 return Accepted();
             });
         }
 
+        //TODO: esto es un health check? no podemos tenerlo en un solo controller.es necesario que este en todos?
         [HttpGet("Ping")]
         public IActionResult Ping()
         {

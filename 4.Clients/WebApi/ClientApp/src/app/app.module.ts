@@ -5,30 +5,24 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ReportsComponent } from './reports/reports.component';
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
 import { ProcessService } from './services/process.service';
-import { ConsultantService } from './services/consultant.service';
+import { UserService } from './services/user.service';
 import { StageService } from './services/stage.service';
 import { ConfigService } from './services/config.service';
 import { CandidatesComponent } from './candidates/candidates.component';
 import { SkillsComponent } from './skills/skills.component';
 import { SkillService } from './services/skill.service';
-import { NotFoundComponent } from './not-found/not-found.component';
 import { LoaderComponent } from './loader/loader.component';
 import { ProcessesComponent } from './processes/processes/processes.component';
 import { ProcessDetailComponent } from './processes/process-detail/process-detail.component';
 import { StageDetailComponent } from './stages/stage-detail/stage-detail.component';
 import { StageEditComponent } from './stages/stage-edit/stage-edit.component';
-import { ConsultantsComponent } from './consultants/consultants.component';
-import { GoogleSigninComponent } from './login/google-signin.component';
-import { LoginComponent } from './login/login.component';
 import {
   MatFormFieldModule,
   MatInputModule,
@@ -53,15 +47,13 @@ import { SkillTypeComponent } from './skill-type/skill-type.component';
 import { SkillTypeService } from './services/skillType.service.';
 import { BaseService } from './services/base.service';
 import { FacadeService } from './services/facade.service';
-import { UnauthorizedComponent } from './unauthorized/unauthorized/unauthorized.component';
 import { ProcessStepsComponent } from './processes/process-steps/process-steps.component';
 import { CandidateDetailsComponent } from './candidates/details/candidate-details.component';
-import { ConsultantDetailsComponent } from './consultants/details/consultant-details.component';
+import { UserDetailsComponent } from './users/details/user-details.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/taskSort.pipe';
 import { TaskService } from './services/task.service';
-import { UserService } from './services/user.service';
 import { SettingsComponent } from './settings/settings.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -72,7 +64,6 @@ import { TechnicalStageComponent } from './stages/technical-stage/technical-stag
 import { ClientStageComponent } from './stages/client-stage/client-stage.component';
 import { OfferStageComponent } from './stages/offer-stage/offer-stage.component';
 import { HireStageComponent } from './stages/hire-stage/hire-stage.component';
-import { CSoftComponent } from './login/csoft-signin.component';
 import { PeopleComponent } from './people/people.component';
 import { HireProjectedComponent } from './hire-projected/hire-projected.component';
 import { HireProjectionService } from './services/hireProjection.service';
@@ -136,6 +127,9 @@ import { OfferService } from './services/offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { PersonFilter } from './pipes/personFIlter.pipe';
 import { DaysOffFilter } from './pipes/daysOffFilter.pipe';
+import { AppRoutingModule } from './app-routing.module';
+import { ReportsComponent } from './reports/reports.component';
+import { ReferralsService } from './services/referrals.service';
 
 
 registerLocaleData(en);
@@ -156,21 +150,15 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       CandidatesComponent,
       CandidateDetailsComponent,
       SkillsComponent,
-      NotFoundComponent,
       LoaderComponent,
       ProcessesComponent,
       ProcessDetailComponent,
       StageDetailComponent,
       StageEditComponent,
       ReportsComponent,
-      LoginComponent,
-      GoogleSigninComponent,
-      CSoftComponent,
-      ConsultantsComponent,
       SkillTypeComponent,
-      UnauthorizedComponent,
       ProcessStepsComponent,
-      ConsultantDetailsComponent,
+      UserDetailsComponent,
       TasksComponent,
       FilterPipe,
       SortPipe,
@@ -226,6 +214,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserModule,
+    HttpModule,
     FormsModule,
     HttpClientModule,
     HttpClientJsonpModule,
@@ -239,7 +228,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     FileUploadModule,
     ReactiveFormsModule,
-    HttpModule,
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -255,40 +243,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SlickModule.forRoot(),
     ToastrModule.forRoot(),
     Ng2LoadingSpinnerModule.forRoot({}),
-    RouterModule.forRoot([
-      { path: '', component: ProcessesComponent, pathMatch: 'full', canActivate: [HRGuard] },
-      { path: 'processes', component: ProcessesComponent, canActivate: [HRGuard] },
-      { path: 'process-details/:id', component: ProcessDetailComponent, canActivate: [HRGuard] },
-      { path: 'process-steps/:id', component: ProcessStepsComponent, canActivate: [HRGuard] },
-      { path: 'referrals', component: ReferralsComponent, canActivate: [CommonGuard] },
-      { path: 'stage-details/:id', component: StageDetailComponent, canActivate: [CommonGuard] },
-      { path: 'stage-edit/:id', component: StageEditComponent, canActivate: [CommonGuard] },
-      { path: 'candidates-profile', component: CandidatesProfileComponent, canActivate: [HRGuard] },
-      { path: 'communities', component: CommunitiesComponent, canActivate: [HRGuard] },
-      { path: 'people', component: PeopleComponent, canActivate: [HRGuard] },
-      { path: 'dashboard', component: DashboardComponent, canActivate: [HRGuard] },
-      { path: 'reports', component: ReportsComponent, canActivate: [ManagementGuard] },
-      { path: 'settings', component: SettingsComponent, canActivate: [ManagementGuard], children: [
-        { path: 'festivities', component: CompanyCalendarComponent },
-        { path: 'hire-projected', component: HireProjectedComponent },
-        { path: 'employee-casualties', component: EmployeeCasualtiesComponent },
-        { path: 'skills-list', component: SkillsComponent },
-        { path: 'skills-types', component: SkillTypeComponent },
-        { path: 'profiles/:tab', component: ProfilesComponent },
-        { path: 'locations/:tab', component: LocationsComponent },
-        { path: 'roles', component: RoleComponent },
-        { path: 'declining-reasons', component: DeclineReasonComponent },
-      ] },
-      { path: 'daysOff', component: DaysOffComponent, canActivate: [ManagementGuard] },
-      { path: 'login', component: LoginComponent },
-      { path: 'tasks', component: TasksComponent, canActivate: [HRGuard] },
-      { path: 'reservation', component: ReservationsComponent, canActivate: [HRGuard] },
-      { path: 'employees', component: EmployeesComponent },
-      { path: 'postulants', component: PostulantsComponent },
-      { path: 'unauthorized', component: UnauthorizedComponent },
-      { path: '404', component: NotFoundComponent },
-      { path: '**', component: NotFoundComponent }
-    ])
+    AppRoutingModule,
   ],
   providers: [
     Globals,
@@ -299,11 +254,11 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BaseService,
     RegisterService,
     CandidateService,
+    ReferralsService,
     SkillService,
     ProcessService,
     StageService,
     ConfigService,
-    ConsultantService,
     UserService,
     JwtHelper,
     CommonGuard,

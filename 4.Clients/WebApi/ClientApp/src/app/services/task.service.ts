@@ -4,7 +4,7 @@ import { AppConfig } from '../app-config/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Task } from 'src/entities/task';
 
 @Injectable()
@@ -25,8 +25,8 @@ export class TaskService extends BaseService<Task> {
       );
   }
 
-  public getByConsultant(consultantEmail: string): Observable<any> {
-    return this.http.get(this.apiUrl + '/GetByConsultant/' + consultantEmail, {
+  public getByUser(userEmail: string): Observable<any> {
+    return this.http.get(this.apiUrl + '/GetByUser/' + userEmail, {
       headers: this.headersWithAuth
     })
       .pipe(

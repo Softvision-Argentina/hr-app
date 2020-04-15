@@ -3,7 +3,6 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
-import { Consultant } from 'src/entities/consultant';
 import { AppComponent } from 'src/app/app.component';
 import { User } from 'src/entities/user';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
@@ -31,12 +30,12 @@ export class ProcessContactComponent implements OnInit {
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
 
   @Input()
-  private _consultants: Consultant[];
-  public get consultants(): Consultant[] {
-    return this._consultants;
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
   }
-  public set consultants(value: Consultant[]) {
-    this.recruiters = value;
+  public set users(value: User[]) {
+    this.fillUsers = value;
   }
 
   @Input()
@@ -86,12 +85,11 @@ export class ProcessContactComponent implements OnInit {
 
   processStartModal: TemplateRef<{}>;
   processFooterModal: TemplateRef<{}>;
-  recruiters: Consultant[] = [];
+  fillUsers: User[] = [];
   comms: Community[] = [];
   filteredCommunity: Community[] = [];
   profiles: CandidateProfile[] = [];
   currentUser: User;
-  currentConsultant: any;
   candidateForm: FormGroup = this.fb.group({
     name: ['', [trimValidator]],
     firstName: [null, [Validators.required, trimValidator]],
@@ -99,7 +97,7 @@ export class ProcessContactComponent implements OnInit {
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, trimValidator],
-    recruiter: [null, [Validators.required]],
+    user: [null, [Validators.required]],
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
     profile: [null, [Validators.required]],
@@ -119,7 +117,7 @@ export class ProcessContactComponent implements OnInit {
   filteredCandidate: Candidate[] = [];
   listOfDisplayData = [...this.filteredCandidate];
   emptyCandidate: Candidate;
-  emptyConsultant: Consultant;
+  emptyUser: User;
   editingCandidateId: number = 0;
 
   constructor(
@@ -129,26 +127,21 @@ export class ProcessContactComponent implements OnInit {
     private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService,
     private process: ProcessesComponent) {
-      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
-    this.recruiters = this._consultants;
+    this.fillUsers = this._users;
     this.comms = this._communities;
     this.filteredCommunity = this._communities;
     this.profiles = this._candidateProfiles;
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
-    this.getConsultants();
+    this.getUsers();
     this.getCandidates().subscribe(() => {}, err => this.facade.errorHandlerService.showErrorMessage(err));
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-    this.facade.consultantService.GetByEmail(this.currentUser.email)
-      .subscribe(res => {
-        this.currentConsultant = res.body;
-        this.currentConsultant != null ? this.candidateForm.controls['recruiter'].setValue(this.currentConsultant.id) : null
-    });
-  }
+ }
 
   profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
@@ -157,16 +150,16 @@ export class ProcessContactComponent implements OnInit {
 
   getCandidates() {
     return this.facade.candidateService.get().pipe(
-      tap( res => {
+      tap(res => {
         this.candidates = res;
       })
     );
   }
 
-  getConsultants() {
-    this.facade.consultantService.get()
+  getUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
+        this.fillUsers = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -199,7 +192,7 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isEditCandidate = false;
     this.resetForm();
-    this.candidateForm.controls['recruiter'].setValue(this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0].id);
+    this.candidateForm.controls['user'].setValue(this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0].id);
     this.candidateForm.controls['contactDay'].setValue(new Date());
   }
 
@@ -209,13 +202,13 @@ export class ProcessContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == id)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id == CandidateID)[0];
+    let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -233,12 +226,12 @@ export class ProcessContactComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
+    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id === candidateID)[0];
     this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => {return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1});
+    let candidate = this.candidates.filter(s => { return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1 });
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
@@ -249,7 +242,7 @@ export class ProcessContactComponent implements OnInit {
     this.candidateForm.controls['phoneNumberPrefix'].setValue(Candidate.phoneNumber.substring(1, Candidate.phoneNumber.indexOf(')')));
     this.candidateForm.controls['phoneNumber'].setValue(Candidate.phoneNumber.split(')')[1]);
     this.candidateForm.controls['email'].setValue(Candidate.emailAddress);
-    this.candidateForm.controls['recruiter'].setValue(Candidate.recruiter);
+    this.candidateForm.controls['user'].setValue(Candidate.user);
     this.candidateForm.controls['id'].setValue(Candidate.id);
     this.candidateForm.controls['contactDay'].setValue(new Date(Candidate.contactDay));
     this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
@@ -268,7 +261,7 @@ export class ProcessContactComponent implements OnInit {
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null],
-      recruiter: [null, [Validators.required]],
+      user: [null, [Validators.required]],
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
@@ -283,7 +276,7 @@ export class ProcessContactComponent implements OnInit {
 
   saveEdit(idCandidate: number) {
     let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
     if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
@@ -292,7 +285,7 @@ export class ProcessContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: editedCandidate.dni,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        recruiter: this.candidateForm.controls['recruiter'].value,
+        user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: editedCandidate.linkedInProfile,
         englishLevel: editedCandidate.englishLevel,
@@ -323,7 +316,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   Recontact(idCandidate: number) {
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -331,7 +324,7 @@ export class ProcessContactComponent implements OnInit {
       phoneNumber: editedCandidate.phoneNumber,
       dni: editedCandidate.dni,
       emailAddress: editedCandidate.emailAddress,
-      recruiter: this.recruiters.filter(r => r.emailAddress.toLowerCase() === this.currentUser.email.toLowerCase())[0],
+      user: this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
       englishLevel: editedCandidate.englishLevel,
@@ -373,7 +366,7 @@ export class ProcessContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        recruiter: new Consultant(this.candidateForm.controls['recruiter'].value, null, null),
+        user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
@@ -421,14 +414,14 @@ export class ProcessContactComponent implements OnInit {
             nzCancelText: 'No',
             nzOnOk: () => {
               this.modalService.closeAll();
-              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
+              let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === candidateId)[0];
               this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
             }
           });
         }
         else {
           this.modalService.closeAll();
-          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == candidateId)[0];
+          let processCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === candidateId)[0];
           this.process.newProcessStart(this.processStartModal, this.processFooterModal, processCandidate);
         }
       });

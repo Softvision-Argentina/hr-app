@@ -21,11 +21,11 @@ namespace ApiServer.Contracts.Process
 
         public int? CandidateId { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
+        public int? UserOwnerId { get; set; }
 
         public string Interviewer { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
+        public int? UserDelegateId { get; set; }
 
         public string DelegateName { get; set; }
 

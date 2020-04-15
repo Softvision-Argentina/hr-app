@@ -1,5 +1,5 @@
 ﻿using ApiServer.Contracts.Candidates;
-using ApiServer.Contracts.Consultant;
+using ApiServer.Contracts.User;
 using ApiServer.Contracts.Postulant;
 using ApiServer.Contracts.Stage;
 using Domain.Model;
@@ -27,11 +27,11 @@ namespace ApiServer.Contracts.Process
         public ReadedCandidateViewModel Candidate { get; set; }
         public ReadedPostulantViewModel Postulant { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
-        public ReadedConsultantViewModel ConsultantOwner { get; set; }
+        public int? UserOwnerId { get; set; }
+        public ReadedUserViewModel UserOwner { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
-        public ReadedConsultantViewModel ConsultantDelegate { get; set; }
+        public int? UserDelegateId { get; set; }
+        public ReadedUserViewModel UserDelegate { get; set; }
 
         public float? ActualSalary { get; set; }
         public float? WantedSalary { get; set; }        

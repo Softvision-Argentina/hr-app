@@ -22,9 +22,9 @@ namespace Domain.Services.Contracts.Process
         public DeclineReason DeclineReason { get; set; }
         public int? CandidateId { get; set; }
 
-        public int? ConsultantOwnerId { get; set; }
+        public int? UserOwnerId { get; set; }
 
-        public int? ConsultantDelegateId { get; set; }
+        public int? UserDelegateId { get; set; }
 
         public float? ActualSalary { get; set; }
 

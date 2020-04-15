@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
 import { Role } from 'src/entities/role';
 import { Employee } from 'src/entities/employee';
@@ -62,7 +62,7 @@ export class RoleComponent implements OnInit {
   getEmployeesWithDeleteRole(role: Role) {
     this.facade.employeeService.get("GetAll")
       .subscribe(res => {
-        this.employeesWithDeleteRole = res.filter(e => e.role.id == role.id);
+        this.employeesWithDeleteRole = res.filter(e => e.role.id === role.id);
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

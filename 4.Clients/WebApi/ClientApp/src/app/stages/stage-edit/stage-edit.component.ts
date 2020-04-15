@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Validators, FormBuilder, FormGroup, NgForm, FormArray } from '@angular/forms';
 import { Stage } from 'src/entities/stage';
-import { Consultant } from 'src/entities/consultant';
+import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 
 @Component({
@@ -14,12 +14,12 @@ import { FacadeService } from 'src/app/services/facade.service';
 export class StageEditComponent implements OnInit {
 
   isLoading = false;
-  consultants: Consultant[] = [];
+  users: User[] = [];
   stageForm: FormGroup;
-  consultantForm: FormGroup;
+  userForm: FormGroup;
   stage: Stage;
-  consultantOwner: Consultant;
-  consultantDelegate: Consultant;
+  userOwner: User;
+  userDelegate: User;
   selected = 0;
 
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
@@ -34,23 +34,23 @@ export class StageEditComponent implements OnInit {
       stageItems: this.formBuilder.array([])
     });
 
-    this.consultantForm = this.formBuilder.group({
-      consultantName: null
+    this.userForm = this.formBuilder.group({
+      userName: null
     });
 
     this.getStageByID(this.route.snapshot.params['id']);
   }
 
-  displayFn(consultant: Consultant) {
-    if (consultant) { return consultant.name; }
+  displayFn(user: User) {
+    if (user) { return user.lastName; }
   }
 
   getStageByID(id) {
     this.facade.stageService.getByID(id)
       .subscribe(data => {
         this.stage = data;
-        this.consultantOwner = this.consultants.find(c => c.id === data.consultantOwnerId);
-        this.consultantDelegate = this.consultants.find(c => c.id === data.consultantDelegateId);
+        this.userOwner = this.users.find(c => c.id === data.userOwnerId);
+        this.userDelegate = this.users.find(c => c.id === data.userDelegateId);
 
         this.stageForm.setValue({
           type: '',
@@ -61,11 +61,11 @@ export class StageEditComponent implements OnInit {
       });
   }
 
-  getAllConsultants() {
-    this.facade.consultantService.get()
+  getAllUsers() {
+    this.facade.userService.get()
       .subscribe(res => {
-        this.consultants = res;
-        console.log(this.consultants);
+        this.users = res;
+        console.log(this.users);
       }, err => {
         console.log(err);
       });

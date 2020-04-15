@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AppConfig } from '../app-config/app.config';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -14,9 +14,9 @@ export class BaseService<T> {
   public token: string;
   public apiUrl: string;
 
-  constructor(private router: Router, private config: AppConfig, public http: HttpClient) {    
+  constructor(private router: Router, private config: AppConfig, public http: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = user != null ? user.token : null;
+    this.token = user !== null ? user.token : null;
     this.headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     this.headersWithAuth = new HttpHeaders({
       "Authorization": "Bearer " + this.token,
@@ -26,10 +26,10 @@ export class BaseService<T> {
     this.apiUrl = this.config.getConfig('apiUrl');
   }
 
-  public get(urlAdd?:string): Observable<T[]> {    
-    const url = urlAdd == undefined ? this.apiUrl : `${this.apiUrl}/${urlAdd}`;
-    return this.http.get<T[]>(url, 
-      {headers: this.headersWithAuth, observe: "body"})
+  public get(urlAdd?: string): Observable<T[]> {
+    const url = urlAdd === undefined ? this.apiUrl : `${this.apiUrl}/${urlAdd}`;
+    return this.http.get<T[]>(url,
+      { headers: this.headersWithAuth, observe: "body" })
       .pipe(
         tap(entities => { }),
         catchError(this.handleErrors)
@@ -91,7 +91,7 @@ export class BaseService<T> {
     return errorMessage;
   }
 
-  public handleErrors(error) {
+  public handleErrors = (error) => {
 
     // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
     if (error.error && error.status !== 400) {
