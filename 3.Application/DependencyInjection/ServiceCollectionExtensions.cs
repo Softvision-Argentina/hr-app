@@ -126,6 +126,7 @@ namespace DependencyInjection
             services.AddTransient<IOfferService, OfferService>();
             services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
             services.AddTransient<ICvService, CvService>();
+            services.AddTransient<INotificationService, NotificationService>();
 
         }
 
