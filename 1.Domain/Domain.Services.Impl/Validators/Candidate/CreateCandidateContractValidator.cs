@@ -12,7 +12,6 @@ namespace Domain.Services.Impl.Validators.Candidate
         {
             RuleSet(ValidatorConstants.RULESET_CREATE, () =>
             {
-                RuleFor(_ => _.DNI).GreaterThanOrEqualTo(0);
                 RuleFor(_ => _.Name).NotEmpty();
                 RuleFor(_ => _.LastName).NotEmpty();
                 RuleFor(_ => _.User).NotEmpty();

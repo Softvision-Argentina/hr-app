@@ -152,7 +152,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
       lastName: [null, [Validators.required, trimValidator]],
-      dni: [null, Validators.required],
+      dni: [null],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null],
