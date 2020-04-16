@@ -19,7 +19,7 @@ namespace ApiServer.Controllers
         [HttpGet]
         public IActionResult GetNotification()
         {
-            return ApiAction(() =>
+            return ApiAction( () =>
             {
                 var notis = _notificationService.GetNotification();
 
