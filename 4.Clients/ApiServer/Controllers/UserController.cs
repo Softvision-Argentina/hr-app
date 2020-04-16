@@ -40,7 +40,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("GetFilteredForTech")]
+        [HttpGet]
         public IActionResult GetFilteredForTech()
         {
             return ApiAction(() =>
@@ -52,12 +52,11 @@ namespace ApiServer.Controllers
                     return NotFound();
                 }
 
-                var vm = users;
-                return Accepted(vm);
+                return Accepted(users);
             });
         }
 
-        [HttpGet("GetFilteredForHr")]
+        [HttpGet]
         public IActionResult GetFilteredForHr()
         {
             return ApiAction(() =>
@@ -69,8 +68,7 @@ namespace ApiServer.Controllers
                     return NotFound();
                 }
 
-                var vm = users;
-                return Accepted(vm);
+                return Accepted(users);
             });
         }
 
