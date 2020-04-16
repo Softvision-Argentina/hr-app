@@ -12,7 +12,7 @@ export class AdminGuard implements CanActivate {
   currentUser: User;
   roles: string[];
 
-  constructor(private jwtHelper: JwtHelper, private router: Router,  config: AppConfig) {
+  constructor(private jwtHelper: JwtHelper, private router: Router, config: AppConfig) {
     this.roles = config.getConfig("roles");
   }
 
@@ -20,7 +20,7 @@ export class AdminGuard implements CanActivate {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
-      if (this.roles.indexOf(this.currentUser.role) != -1 && this.currentUser.role == "Admin") return true;
+      if (this.roles.indexOf(this.currentUser.role) !== -1 && this.currentUser.role === "Admin") return true;
       else {
         this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
         return false;

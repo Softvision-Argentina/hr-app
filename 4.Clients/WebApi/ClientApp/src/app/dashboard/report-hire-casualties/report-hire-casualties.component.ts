@@ -77,12 +77,12 @@ export class ReportHireCasualtiesComponent implements OnInit {
     let date = new Date(this.month);
     let actualHires: number = 0;
     let casualties: EmployeeCasualty;
-    if (this.employeeCasualty.filter(ec => ec.month == date.getMonth() + 1 && ec.year == date.getFullYear()).length > 0) {
-      casualties = this.employeeCasualty.filter(ec => ec.month == (date.getMonth() + 1) && ec.year == date.getFullYear())[0];
+    if (this.employeeCasualty.filter(ec => ec.month === date.getMonth() + 1 && ec.year === date.getFullYear()).length > 0) {
+      casualties = this.employeeCasualty.filter(ec => ec.month === (date.getMonth() + 1) && ec.year === date.getFullYear())[0];
       //------------------------------------------
       this.processes.forEach(proc => {
-        if (proc.status == ProcessStatusEnum.Hired) {
-          if (new Date(proc.offerStage.date).getMonth() == date.getMonth() && new Date(proc.offerStage.date).getFullYear() == date.getFullYear()) actualHires++;
+        if (proc.status === ProcessStatusEnum.Hired) {
+          if (new Date(proc.offerStage.date).getMonth() === date.getMonth() && new Date(proc.offerStage.date).getFullYear() === date.getFullYear()) actualHires++;
         }
       });
       //-----------------------------

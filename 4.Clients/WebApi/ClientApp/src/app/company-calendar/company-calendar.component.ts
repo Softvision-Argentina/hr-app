@@ -52,10 +52,10 @@ export class CompanyCalendarComponent implements OnInit {
     this.facade.companyCalendarService.get()
       .subscribe(res => {
         this.listOfCompanyCalendar = res.sort((a, b) => {
-          const d1 = new Date(a.date);
-          const d2 = new Date(b.date);
+          let d1 = new Date(a.date);
+          let d2 = new Date(b.date);
           return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
-        }  );
+        });
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -63,9 +63,9 @@ export class CompanyCalendarComponent implements OnInit {
 
   resetForm() {
     this.validateForm = this.fb.group({
-        type: [null, [Validators.required]],
-        date: [new Date(), [Validators.required]],
-        comments: [null, [Validators.required, trimValidator]],
+      type: [null, [Validators.required]],
+      date: [new Date(), [Validators.required]],
+      comments: [null, [Validators.required, trimValidator]],
     });
   }
 
@@ -116,9 +116,8 @@ export class CompanyCalendarComponent implements OnInit {
                 id: 0,
                 type: this.validateForm.controls['type'].value.toString(),
                 date: this.validateForm.controls['date'].value.toISOString(),
-                comments : this.validateForm.controls['comments'].value.toString()
-              };
-
+                comments: this.validateForm.controls['comments'].value.toString()
+              }
               this.facade.companyCalendarService.add(newCompanyCalendar)
                 .subscribe(() => {
                   this.getCompanyCalendar();
@@ -142,7 +141,7 @@ export class CompanyCalendarComponent implements OnInit {
     this.resetForm();
     this.controlArray = [];
     this.controlEditArray = [];
-    let editedCompanyCalendar: CompanyCalendar = this.listOfCompanyCalendar.filter(calendar => calendar.id === id)[0];
+    let editedCompanyCalendar: CompanyCalendar = this.listOfCompanyCalendar.filter(CompanyCalendar => CompanyCalendar.id === id)[0];
     this.fillCompanyCalendarForm(editedCompanyCalendar);
 
     const modal = this.facade.modalService.create({
@@ -223,9 +222,9 @@ export class CompanyCalendarComponent implements OnInit {
     });
   }
 
-  fillCompanyCalendarForm(companyCalendar: CompanyCalendar) {
-    this.validateForm.controls['type'].setValue(companyCalendar.type);
-    this.validateForm.controls['date'].setValue(companyCalendar.date);
-    this.validateForm.controls['comments'].setValue(companyCalendar.comments);
+  fillCompanyCalendarForm(CompanyCalendar: CompanyCalendar) {
+    this.validateForm.controls['type'].setValue(CompanyCalendar.type);
+    this.validateForm.controls['date'].setValue(CompanyCalendar.date);
+    this.validateForm.controls['comments'].setValue(CompanyCalendar.comments);
   }
 }

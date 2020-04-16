@@ -107,8 +107,8 @@ export class DashboardComponent implements OnInit {
   userHasItActivated(dashId: number) {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let dashboard: Dashboard;
-    dashboard = this.dashboards.find( x => x.id === dashId);
-    return dashboard.userDashboards.some( x => x.userId === currentUser.id);
+    dashboard = this.dashboards.find(x => x.id === dashId);
+    return dashboard.userDashboards.some(x => x.userId === currentUser.id);
   }
 
   getProcesses() {
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
         this.processCompleted = res.filter(process => process => process.status === ProcessStatusEnum.Declined ||
           process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
         this.processFinishedSuccess = res.filter(process => process.status === ProcessStatusEnum.Hired).length;
-        this.processInProgress = res.filter(process => process.status === ProcessStatusEnum.InProgress || process.status == ProcessStatusEnum.Recall || process.status == ProcessStatusEnum.OfferAccepted).length;
+        this.processInProgress = res.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
         this.processNotStarted = res.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
       }, err => {
         console.log(err);

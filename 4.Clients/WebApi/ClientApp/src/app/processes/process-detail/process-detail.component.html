@@ -21,7 +21,7 @@
         <ul>
             <li><strong style="margin-right: 1%;">Title:</strong> {{ process.title }}</li>
             <li><strong style="margin-right: 1%;">Description:</strong> {{ process.description }}</li>
-            <li *ngIf="process.status == 'Rejected'"><strong style="margin-right: 1%;">Rejection reason:</strong> {{ process.rejectionReason }}</li>
+            <li *ngIf="process.status === 'Rejected'"><strong style="margin-right: 1%;">Rejection reason:</strong> {{ process.rejectionReason }}</li>
             <li><strong style="margin-right: 1%;">Actual Salary:</strong> {{ process.actualSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Wanted Salary:</strong> {{ process.wantedSalary | currency }}</li>
             <li><strong style="margin-right: 1%;">Start Date:</strong> {{ process.startDate | date:'medium' }}</li>
@@ -85,7 +85,7 @@
     </nz-table>
 
 </div>
-<p *ngIf="!process || !process.stages || process.stages.length == 0">
+<p *ngIf="!process || !process.stages || process.stages.length === 0">
     There are no stages yet
 </p> -->
 

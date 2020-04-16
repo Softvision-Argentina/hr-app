@@ -14,21 +14,21 @@ import { CandidateProfile } from 'src/entities/Candidate-Profile';
 export class CommunitiesComponent implements OnInit, OnChanges {
 
   @Input()
-  private _detailedCommunity: Community[] = [];
+  private _detailedCommunity: Community[];
   public get detailedCommunity(): Community[] {
-      return this._detailedCommunity;
+    return this._detailedCommunity;
   }
   public set detailedCommunity(value: Community[]) {
-      this._detailedCommunity = value;
+    this._detailedCommunity = value;
   }
 
   @Input()
   private _detailedCandidateProfile: CandidateProfile[] = [];
   public get detailedCandidateProfile(): CandidateProfile[] {
-      return this._detailedCandidateProfile;
+    return this._detailedCandidateProfile;
   }
   public set detailedCandidateProfile(value: CandidateProfile[]) {
-      this._detailedCandidateProfile = value;
+    this._detailedCandidateProfile = value;
   }
 
 
@@ -158,7 +158,7 @@ export class CommunitiesComponent implements OnInit, OnChanges {
     this.isEdit = true;
     this.controlArray = [];
     this.controlEditArray = [];
-    let editedCommunity: Community = this._detailedCommunity.filter(community => community.id == id)[0];
+    let editedCommunity: Community = this._detailedCommunity.filter(community => community.id === id)[0];
 
     this.fillCommunityForm(editedCommunity);
 
@@ -213,7 +213,7 @@ export class CommunitiesComponent implements OnInit, OnChanges {
   }
 
   showDeleteConfirm(communityID: number): void {
-  const communityDelete: Community = this._detailedCommunity.filter(c => c.id == communityID)[0];
+    const communityDelete: Community = this._detailedCommunity.filter(c => c.id === communityID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + communityDelete.name + ' ?',
       nzContent: '',

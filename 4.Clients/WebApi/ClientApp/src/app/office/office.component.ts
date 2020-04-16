@@ -10,23 +10,23 @@ import { FacadeService } from '../services/facade.service';
   templateUrl: './office.component.html',
   styleUrls: ['./office.component.css']
 })
-export class OfficeComponent implements OnInit, OnChanges {
+export class OfficeComponent implements OnInit {
   @Input()
   private _detailedRoom: Room[];
   public get detailedRoom(): Room[] {
-      return this._detailedRoom;
+    return this._detailedRoom;
   }
   public set detailedRoom(value: Room[]) {
-      this._detailedRoom = value;
+    this._detailedRoom = value;
   }
 
   @Input()
   private _detailedOffice: Office[];
   public get detailedOffice(): Office[] {
-      return this._detailedOffice;
+    return this._detailedOffice;
   }
   public set detailedOffice(value: Office[]) {
-      this._detailedOffice = value;
+    this._detailedOffice = value;
   }
 
   @Output() officesChanged = new EventEmitter();
@@ -49,7 +49,9 @@ export class OfficeComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges (changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
+    changes._detailedOffice;
+    changes._detailedRoom;
     this.getOffices();
     this.getRooms();
   }
@@ -64,8 +66,8 @@ export class OfficeComponent implements OnInit, OnChanges {
 
   getRooms() {
     this.facade.RoomService.get()
-    .subscribe(res => {
-      this.rooms = res;
+      .subscribe(res => {
+        this.rooms = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -90,7 +92,7 @@ export class OfficeComponent implements OnInit, OnChanges {
   }
 
   resetForm() {
-    this.officeForm =  this.fb.group({
+    this.officeForm = this.fb.group({
       name: [null, [Validators.required, trimValidator]],
       description: [null, [Validators.required, trimValidator]]
     });
