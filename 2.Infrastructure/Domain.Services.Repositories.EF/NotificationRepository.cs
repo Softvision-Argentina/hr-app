@@ -19,7 +19,6 @@ namespace Domain.Services.Repositories.EF
 
         public void Create(Notification notification, int candId)
         {
-            //TODO: Assign notification to users 
             var candList = GetReferralsList(candId);
             foreach (var cand in candList)
             {

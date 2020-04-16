@@ -1,57 +1,41 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Interfaces.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using Core;
+using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace ApiServer.Controllers
 {
     [Route("api/Notifications")]
     [ApiController]
-    public class NotificationController : ControllerBase
+    public class NotificationController : BaseController<NotificationController>
     {
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IHttpContextAccessor _httpContext;
-        private readonly IRepository<User> _usersRepo;
+        private readonly INotificationService _notificationService;
 
-        public NotificationController(
-            INotificationRepository notificationRepository, 
-            IHttpContextAccessor httpContext, 
-            IRepository<User> userRepo)
+        public NotificationController(INotificationService notificationService, ILog<NotificationController> logger)
+            : base(logger)
         {
-            _notificationRepository = notificationRepository;
-            _httpContext = httpContext;
-            _usersRepo = userRepo;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
         public IActionResult GetNotification()
         {
-            var userName = GetUserName();
+            return ApiAction( () =>
+            {
+                var notifications = _notificationService.GetNotification();
 
-            var notification = _notificationRepository.GetUserNotifications(userName);
-
-            return Ok(notification);
+                return Accepted(notifications);
+            });
         }
 
         [HttpPut("{id}")]
         public IActionResult ReadNotification(int id)
         {
-            var userName = GetUserName();
+            return ApiAction(() =>
+            {
+                _notificationService.ReadNotification(id);
 
-            _notificationRepository.ReadNotification(id, userName);
-            return Ok();
-        }
-
-        private string GetUserName()
-        {
-            var user = _httpContext.HttpContext.User.Identity.Name;
-            var userId = int.Parse(user);
-            var userName = _usersRepo.Query().FirstOrDefault(x => x.Id == userId);
-            var name = $"{userName.FirstName}" + " " + $"{userName.LastName}";
-
-            return name;
+                return Accepted();
+            });
         }
     }
 }
