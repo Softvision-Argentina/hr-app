@@ -8,6 +8,8 @@ namespace Domain.Services.Interfaces.Services
         ReadedUserContract Authenticate(string username, string password);
         ReadedUserContract Authenticate(string username);
         IEnumerable<ReadedUserContract> GetAll();
+        IEnumerable<ReadedUserContract> GetFilteredForTech();
+        IEnumerable<ReadedUserContract> GetFilteredForHr();
         ReadedUserContract GetById(int id);
         ReadedUserRoleContract GetUserRole(string username);
     }

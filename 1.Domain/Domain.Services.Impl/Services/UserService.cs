@@ -4,6 +4,7 @@ using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
+using Domain.Model.Enum;
 using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,29 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedUserContract> GetAll()
         {
             var userQuery = _userRepository.QueryEager();
+
+            var users = userQuery.ToList();
+
+            return _mapper.Map<List<ReadedUserContract>>(users);
+        }
+
+        public IEnumerable<ReadedUserContract> GetFilteredForTech()
+        {
+            var role = Roles.TechnicalInterviewer;
+            var userQuery = _userRepository.QueryEager().Where(x => x.Role == role);
+
+            var users = userQuery.ToList();
+
+            return _mapper.Map<List<ReadedUserContract>>(users);
+        }
+
+        public IEnumerable<ReadedUserContract> GetFilteredForHr()
+        {
+            var userQuery = _userRepository.QueryEager()
+                .Where(x => 
+                x.Role == Roles.HRManagement
+                || x.Role == Roles.HRUser
+                || x.Role == Roles.Recruiter);
 
             var users = userQuery.ToList();
 

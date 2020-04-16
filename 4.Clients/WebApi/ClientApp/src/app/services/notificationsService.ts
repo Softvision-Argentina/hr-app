@@ -35,7 +35,7 @@ public readNotifications(id: number): Observable<any> {
   let noticall = this.http.put(notiurl, {
     headers: this.headersWithAuth
   }).pipe(
-    tap(_ => {}),
+    tap( _ => {}),
     catchError(this.handleErrors)
   );
 

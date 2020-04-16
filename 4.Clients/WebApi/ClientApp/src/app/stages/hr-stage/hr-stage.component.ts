@@ -44,7 +44,8 @@ export class HrStageComponent implements OnInit {
   statusList: any[] ;
   englishLevelList: any[];
   rejectionReasonsHRList: any[];
-
+  usersFiltered: User[];
+  
   @Input() hrStage: HrStage;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
@@ -57,6 +58,16 @@ export class HrStageComponent implements OnInit {
     this.changeFormStatus(false);
     if (this.hrStage) { this.fillForm(this.hrStage);
      }
+     this.getFilteredUsersForHr();
+  }
+
+  getFilteredUsersForHr() {
+    this.facade.userService.getFilteredForHr()
+    .subscribe(res => {
+      this.usersFiltered = res;
+    }, err => {
+      console.log(err);
+    });
   }
 
   getFormControl(name: string): AbstractControl {

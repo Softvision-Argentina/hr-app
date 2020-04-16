@@ -41,6 +41,38 @@ namespace ApiServer.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetFilteredForTech()
+        {
+            return ApiAction(() =>
+            {
+                var users = _userService.GetFilteredForTech();
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                return Accepted(users);
+            });
+        }
+
+        [HttpGet]
+        public IActionResult GetFilteredForHr()
+        {
+            return ApiAction(() =>
+            {
+                var users = _userService.GetFilteredForHr();
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                return Accepted(users);
+            });
+        }
+
+        [HttpGet]
         public IActionResult Get()
         {
             return ApiAction(() =>
