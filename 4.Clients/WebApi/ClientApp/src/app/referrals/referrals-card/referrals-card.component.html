@@ -20,8 +20,9 @@
         </p>
         <p class="card-text text-muted text-center mb-1">
 
-          <button type="button" name="button" id="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()">
-            <span class="fa fa-upload"></span> Upload
+          <button type="button" name="button" id="button" class="btn btn-success btn-s"
+          (click)="uploader.uploadAll()" [disabled]="!hasFile">
+          <span class="fa fa-upload"></span> Upload
           </button>
           <label for="button" class="text-center mb-1">Upload</label>
 
