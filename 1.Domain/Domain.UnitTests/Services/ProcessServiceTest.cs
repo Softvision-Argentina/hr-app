@@ -21,8 +21,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly ProcessService _service;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IProcessRepository> _mockRepositoryProcess;
-        private readonly Mock<IProcessStageRepository> _mockStageRepository;
-        private readonly Mock<IRepository<Consultant>> _mockRepositoryConsultant;
+        private readonly Mock<IProcessStageRepository> _mockStageRepository;        
         private readonly Mock<IRepository<Community>> _mockRepositoryCommunity;
         private readonly Mock<IRepository<CandidateProfile>> _mockRepositoryCandidateProfile;
         private readonly Mock<IRepository<Candidate>> _mockRepositoryCandidate;
@@ -40,8 +39,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             _mockMapper = new Mock<IMapper>();
             _mockRepositoryProcess = new Mock<IProcessRepository>();
-            _mockStageRepository = new Mock<IProcessStageRepository>();
-            _mockRepositoryConsultant = new Mock<IRepository<Consultant>>();
+            _mockStageRepository = new Mock<IProcessStageRepository>();            
             _mockRepositoryCommunity = new Mock<IRepository<Community>>();
             _mockRepositoryCandidateProfile = new Mock<IRepository<CandidateProfile>>();
             _mockRepositoryCandidate = new Mock<IRepository<Candidate>>();
@@ -56,7 +54,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockConfiguration = new Mock<IConfiguration>();
             _service = new ProcessService(
                 _mockMapper.Object,
-                _mockRepositoryConsultant.Object,
+                _mockRepoUser.Object,
                 _mockRepositoryCandidate.Object,
                 _mockRepositoryCandidateProfile.Object,
                 _mockRepositoryCommunity.Object,
@@ -69,8 +67,7 @@ namespace Domain.Services.Impl.UnitTests.Services
                 _mockRepoClientStage.Object,
                 _mockRepoOfferStage.Object,
                 MockUnitOfWork.Object,
-                _mockRepoINotification.Object,
-                _mockRepoUser.Object,
+                _mockRepoINotification.Object,                
                 _mockConfiguration.Object
             );
         }

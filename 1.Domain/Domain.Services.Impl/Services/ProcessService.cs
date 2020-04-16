@@ -49,8 +49,7 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
             IConfiguration config)
-        {
-            _consultantRepository = consultantRepository;
+        {            
             _candidateRepository = candidateRepository;
             _candidateProfileRepository = candidateProfileRepository;
             _communityRepository = communityRepository;

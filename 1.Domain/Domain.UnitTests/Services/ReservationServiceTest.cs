@@ -22,7 +22,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly ReservationService _service;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IRepository<Reservation>> _mockRepositoryReservation;
-        private readonly Mock<IRepository<Consultant>> _mockRepositoryConsultant;
+        private readonly Mock<IRepository<User>> _mockRepositoryUser;
         private readonly Mock<IRepository<Room>> _mockRepositoryRoom;
         private readonly Mock<ILog<ReservationService>> _mockLogReservationService;
         private readonly Mock<IGoogleCalendarService> _mockCalendarService;
@@ -33,7 +33,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             _mockMapper = new Mock<IMapper>();
             _mockRepositoryReservation = new Mock<IRepository<Reservation>>();
-            _mockRepositoryConsultant = new Mock<IRepository<Consultant>>();
+            _mockRepositoryUser = new Mock<IRepository<User>>();
             _mockRepositoryRoom = new Mock<IRepository<Room>>();
             _mockLogReservationService = new Mock<ILog<ReservationService>>();
             _mockCalendarService = new Mock<IGoogleCalendarService>();
@@ -42,7 +42,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _service = new ReservationService(
                 _mockMapper.Object,
                 _mockRepositoryReservation.Object,
-                _mockRepositoryConsultant.Object,
+                _mockRepositoryUser.Object,
                 _mockRepositoryRoom.Object,
                 MockUnitOfWork.Object,
                 _mockLogReservationService.Object,
