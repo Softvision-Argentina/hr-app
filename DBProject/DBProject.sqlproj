@@ -85,5 +85,6 @@
   <ItemGroup>
     <None Include="Compare_Local_To_Project.scmp" />
     <None Include="Scripts\001-seed.sql" />
+    <None Include="DB-Update.ps1" />
   </ItemGroup>
 </Project>
