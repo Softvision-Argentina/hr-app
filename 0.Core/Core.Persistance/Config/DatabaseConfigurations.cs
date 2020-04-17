@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// TODO: Change namespace to match folder/project structure
 namespace DependencyInjection.Config
 {
     public class DatabaseConfigurations
     {
         public bool InMemoryMode { get; }
-
         public bool RunMigrations { get; }
-
-        public string ConnectionString { get; }
-
         public bool RunSeed { get; }
+        public string ConnectionString { get; }
 
         public DatabaseConfigurations(bool inMemoryMode, bool runMigrations, bool runSeed,string connectionString)
         {

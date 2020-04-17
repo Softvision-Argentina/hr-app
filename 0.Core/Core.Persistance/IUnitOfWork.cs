@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Core.Persistance
+﻿namespace Core.Persistance
 {
     public interface IUnitOfWork
     {

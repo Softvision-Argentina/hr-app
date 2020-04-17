@@ -1,6 +1,4 @@
-﻿using Domain.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,19 +15,12 @@ namespace Core.Persistance
     public interface IRepository<TEntity> : IRepository where TEntity : IEntity
     {
         IQueryable<TEntity> Query();
-
         IQueryable<TEntity> QueryEager();
-
         TEntity Get<TKey>(TKey id) where TKey : IComparable, IFormattable;
-
         Task<TEntity> GetAsync<TKey>(TKey id) where TKey : IComparable, IFormattable;
-
         TEntity Create(TEntity entity);
-
         TEntity Update(TEntity entity);
-
         void Delete(TEntity entity);
-
         int Count();
     }
 }
