@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
-import { CandidateProfile} from 'src/entities/Candidate-Profile';
+import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Community } from 'src/entities/community';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-candidates-profile',
@@ -14,7 +15,7 @@ import { Community } from 'src/entities/community';
 export class CandidatesProfileComponent implements OnInit, OnChanges {
 
   @Input()
-  private _detailedCandidateProfile: CandidateProfile[] = [];
+  private _detailedCandidateProfile: CandidateProfile[];
   public get detailedCandidateProfile(): CandidateProfile[] {
     return this._detailedCandidateProfile;
   }
@@ -31,9 +32,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
     this._detailedCommunity = value;
   }
 
-  @Output() candidatesProfileChanged = new EventEmitter();
-
-  currentConsultant: User;
+  currentUser: User;
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
@@ -48,7 +47,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
   CommunitysForDetail: string[];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder, private settings: SettingsComponent) { }
 
   ngOnInit() {
     this.facade.appService.removeBgImage();
@@ -71,7 +70,6 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
     this.facade.communityService.get()
       .subscribe(res => {
         this.communitys = res;
-        this.facade.appService.stopLoading();
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -114,13 +112,9 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
             modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              if (this.validateForm.controls) {
-                this.validateForm.controls[i].markAsDirty();
-                this.validateForm.controls[i].updateValueAndValidity();
-                if ((!this.validateForm.controls[i].valid)) {
-                  isCompleted = false;
-                }
-              }
+              this.validateForm.controls[i].markAsDirty();
+              this.validateForm.controls[i].updateValueAndValidity();
+              if ((!this.validateForm.controls[i].valid)) { isCompleted = false; }
             }
             if (isCompleted) {
               const newCandidatesProfile: CandidateProfile = {
@@ -130,15 +124,15 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                 communityItems: []
               }
               this.facade.candidateProfileService.add(newCandidatesProfile)
-                .subscribe(() => {
-                  this.candidatesProfileChanged.emit();
+                .subscribe(res => {
+                  this.settings.getCandidatesProfile();
                   this.controlArray = [];
                   this.facade.toastrService.success('Candidate Profile was successfully created !');
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                });
+                })
             } else { modal.nzFooter[1].loading = false; }
           }
         }],
@@ -173,12 +167,10 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              if (this.validateForm.controls.hasOwnProperty(i)) {
+              if (this.validateForm.controls[i]) {
                 this.validateForm.controls[i].markAsDirty();
                 this.validateForm.controls[i].updateValueAndValidity();
-                if (!this.validateForm.controls[i].valid) {
-                  isCompleted = false;
-                }
+                if (!this.validateForm.controls[i].valid) { isCompleted = false; }
               }
             }
             if (isCompleted) {
@@ -187,10 +179,10 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 communityItems: []
-              };
+              }
               this.facade.candidateProfileService.update(id, editedCandidateProfile)
-                .subscribe(() => {
-                  this.candidatesProfileChanged.emit();
+                .subscribe(res => {
+                  this.settings.getCandidatesProfile();
                   this.facade.toastrService.success('Candidate was successfully edited !');
                   modal.destroy();
                 }, err => {
@@ -217,8 +209,8 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => this.facade.candidateProfileService.delete(CandidateProfileID)
-        .subscribe(() => {
-          this.candidatesProfileChanged.emit();
+        .subscribe(res => {
+          this.settings.getCandidatesProfile();
           this.facade.toastrService.success('Candidate was deleted !');
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
@@ -245,7 +237,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
   getColor(candidateCommunity: Community[], community: Community): string {
     const colors: string[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     let index: number = candidateCommunity.indexOf(community);
-    if (index > colors.length) { index = parseInt((index / colors.length).toString().split(',')[0]); }
+    if (index > colors.length) { index = parseInt((index / colors.length).toString().split(',')[0], 10); }
     return colors[index];
   }
 }

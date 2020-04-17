@@ -1,4 +1,5 @@
-import { NzSliderModule, NzLayoutModule } from 'ng-zorro-antd';
+import { NzSliderModule, } from 'ng-zorro-antd';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { SettingsRoutes } from './settings.routes';
 import { RouterModule } from '@angular/router';
 import { SettingsComponent } from './settings.component';
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
     RouterModule.forChild(SettingsRoutes),
     CommonModule,
     NzLayoutModule,
-    NzSliderModule
+    NzSliderModule,
   ],
   exports: [SettingsComponent]
 })

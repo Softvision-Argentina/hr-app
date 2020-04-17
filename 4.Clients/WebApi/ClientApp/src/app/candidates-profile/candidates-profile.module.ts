@@ -14,11 +14,12 @@ import {
 import { CandidatesProfileRoutes } from './candidates-profile.routes';
 import { RouterModule } from '@angular/router';
 import { CandidatesProfileComponent } from './candidates-profile.component';
+import { SettingsComponent } from './../settings/settings.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [CandidatesProfileComponent],
+  declarations: [CandidatesProfileComponent, SettingsComponent],
   imports: [
     RouterModule.forChild(CandidatesProfileRoutes),
     CommonModule,
@@ -35,6 +36,7 @@ import { CommonModule } from '@angular/common';
     NzButtonModule,
     PipesModule
   ],
+  providers: [SettingsComponent],
   exports: [CandidatesProfileComponent]
 })
 export class CandidatesProfileModule { }

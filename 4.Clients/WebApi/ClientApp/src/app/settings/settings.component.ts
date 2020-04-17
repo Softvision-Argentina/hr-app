@@ -1,6 +1,5 @@
-
 import { Component, OnInit } from '@angular/core';
-import { CandidateProfile} from 'src/entities/Candidate-Profile';
+import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { Community } from 'src/entities/community';
 import { FacadeService } from '../services/facade.service';
 import { Office } from 'src/entities/office';
@@ -41,8 +40,8 @@ export class SettingsComponent implements OnInit {
   getCandidatesProfile() {
     this.facade.candidateProfileService.get()
       .subscribe(res => {
-       this.emptyCandidateProfile = res;
-       this.listOfDisplayData = res;
+        this.emptyCandidateProfile = res;
+        this.listOfDisplayData = res;
       }, err => {
         console.log(err);
       });
@@ -60,12 +59,12 @@ export class SettingsComponent implements OnInit {
 
   getRooms() {
     this.facade.RoomService.get()
-    .subscribe(res => {
-      this.emptyRoom = res;
-      this.listOfDisplayDataRoom = res;
+      .subscribe(res => {
+        this.emptyRoom = res;
+        this.listOfDisplayDataRoom = res;
       }, err => {
-      console.log(err);
-    });
+        console.log(err);
+      });
   }
 
   getOffices() {
