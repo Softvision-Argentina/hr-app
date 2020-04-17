@@ -13,7 +13,7 @@
     <nz-tabset>
 
       <nz-tab nzTitle="MY PROCESSES" (nzClick)="searchOwnRecruiter()">
-        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayData"
+        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayOwnData"
           [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
           (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
           (userId)="showUserDetailsModal($event, userDetailModal)"

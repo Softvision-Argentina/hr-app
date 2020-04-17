@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -27,7 +27,7 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-processes',
   templateUrl: './processes.component.html',
@@ -35,7 +35,7 @@ import { DeclineReason } from 'src/entities/declineReason';
   providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 
-export class ProcessesComponent implements OnInit, AfterViewChecked {
+export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   slideConfig = {
     slidesToShow: 1,
     adaptiveHeight: true,
@@ -63,6 +63,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   searchValueCurrentStage = '';
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
+  listOfDisplayOwnData = [...this.filteredProcesses];
   currentUser: User;
   sortName = null;
   sortValue = null;
@@ -99,6 +100,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
   isOwnedProcesses = false;
   forms: FormGroup[] = [];
   isLoading = false;
+  searchSub: Subscription;
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent, ) {
@@ -117,6 +119,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
     this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
+    this.getSearchInfo();
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
     });
@@ -213,7 +216,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-
   }
 
   getUserProcesses() {
@@ -221,13 +223,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       .subscribe(res => {
         const result = [];
         for (let i = 0; i < res.length; i++) {
-          const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
-          if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
-            result.push(res[i]);
+          if (res[i].candidate.user !== null && typeof res[i].candidate.user !== 'undefined') {
+            const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
+            if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
+              result.push(res[i]);
+            }
           }
         }
-        this.filteredProcesses = result;
-        this.listOfDisplayData = result;
+        this.listOfDisplayOwnData = result;
         const newProc: Process = result[result.length - 1];
 
         if (newProc && newProc.candidate) {
@@ -237,7 +240,35 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
 
+      this.listOfDisplayData = this.filteredProcesses;
+      this.listOfDisplayOwnData = this.filteredProcesses;
+
+      const allProcesses = this.listOfDisplayData.filter(process => {
+        const fullName = process.candidate.name + process.candidate.lastName;
+        const value = data.toString().toUpperCase();
+        return fullName.toString().toUpperCase().indexOf(value) !== -1;
+      });
+      const ownProcesses = this.listOfDisplayOwnData.filter(process => {
+        const fullName = process.candidate.name + process.candidate.lastName;
+        const value = data.toString().toUpperCase();
+        return fullName.toString().toUpperCase().indexOf(value) !== -1;
+      });
+
+      this.listOfDisplayData = allProcesses;
+      this.listOfDisplayOwnData = ownProcesses.filter(res =>{
+          if (res.candidate.user !== null && typeof res.candidate.user !== 'undefined') {
+            const sessionConsultant = res.candidate.user.firstName + ' ' + res.candidate.user.lastName;
+            if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
+              return res;
+            }
+          }
+      });
+    });
+    
+  }
   showApproveProcessConfirm(processID: number): void {
     const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
     const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
@@ -422,7 +453,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
         (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
   }
@@ -997,5 +1028,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked {
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
+  }
+
+  ngOnDestroy() {
+    this.searchSub.unsubscribe();
   }
 }
