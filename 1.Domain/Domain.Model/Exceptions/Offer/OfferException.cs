@@ -21,10 +21,10 @@ namespace Domain.Model.Exceptions.Offer
         }
     }
 
-
     public class DeleteOfferNotFoundException : InvalidOfferException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.DeleteOfferNotFound;
+
         public DeleteOfferNotFoundException(int offerId)
             : base($"Offer not found for the offerId: {offerId}")
         {
@@ -37,6 +37,7 @@ namespace Domain.Model.Exceptions.Offer
     public class OfferDeletedException : InvalidOfferException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.OfferDeleted;
+
         public OfferDeletedException(int id, string name)
             : base($"The offer {name} was deleted")
         {
@@ -47,9 +48,11 @@ namespace Domain.Model.Exceptions.Offer
         public int OfferId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidOfferException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the offer.")
         {
@@ -59,6 +62,7 @@ namespace Domain.Model.Exceptions.Offer
     public class UpdateOfferNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.UpdateOfferNotFound;
+
         public UpdateOfferNotFoundException(int offerId, Guid clientSystemId)
             : base($"offer {offerId} and Client System Id {clientSystemId} was not found.")
         {
@@ -73,6 +77,7 @@ namespace Domain.Model.Exceptions.Offer
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int offerId, Guid clientSystemId, string name)
             : base($"Offer {name} has not changes.")
         {
@@ -87,6 +92,7 @@ namespace Domain.Model.Exceptions.Offer
     public class OfferNotFoundException : InvalidOfferException
     {
         protected override int SubErrorCode => (int)OfferErrorSubCodes.OfferNotFound;
+
         public OfferNotFoundException(int offerId) : base($"The offer {offerId} was not found.")
         {
             OfferId = offerId;
@@ -94,6 +100,4 @@ namespace Domain.Model.Exceptions.Offer
 
         public int OfferId { get; }
     }
-
 }
-

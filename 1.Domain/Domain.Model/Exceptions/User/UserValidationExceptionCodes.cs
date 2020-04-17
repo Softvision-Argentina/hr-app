@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Model.Exceptions.User
+﻿namespace Domain.Model.Exceptions.User
 {
     public enum UserValidationExceptionCodes
     {

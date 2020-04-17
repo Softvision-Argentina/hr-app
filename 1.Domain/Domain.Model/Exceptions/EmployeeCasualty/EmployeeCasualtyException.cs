@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.EmployeeCasualty
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
         }
     }
 
-
     public class DeleteEmployeeCasualtyNotFoundException : InvalidEmployeeCasualtyException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.DeleteEmployeeCasualtyNotFound;
+
         public DeleteEmployeeCasualtyNotFoundException(int employeeCasualtyId)
             : base($"Employee casualty not found for the EmployeeCasualtyId: {employeeCasualtyId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
     public class EmployeeCasualtyDeletedException : InvalidEmployeeCasualtyException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.EmployeeCasualtyDeleted;
+
         public EmployeeCasualtyDeletedException(int id, int month, int year)
             : base($"The employee casualty {year}-{month} was deleted")
         {
@@ -54,6 +53,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
     public class InvalidUpdateException : InvalidEmployeeCasualtyException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the employee casualty.")
         {
@@ -63,6 +63,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
     public class UpdateSkillNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.UpdateEmployeeCasualtyNotFound;
+
         public UpdateSkillNotFoundException(int employeeCasualtyId, Guid clientSystemId)
             : base($"skill {employeeCasualtyId} and Client System Id {clientSystemId} was not found.")
         {
@@ -77,6 +78,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, int month, int year)
             : base($"Employee casualty {year}-{month} has not changes.")
         {
@@ -91,6 +93,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
     public class EmployeeCasualtyNotFoundException : InvalidEmployeeCasualtyException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.EmployeeCasualtyNotFound;
+
         public EmployeeCasualtyNotFoundException(int employeeCasualtyId) : base($"The employee casualty {employeeCasualtyId} was not found.")
         {
             EmployeeCasualtyId = employeeCasualtyId;
@@ -98,6 +101,4 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
 
         public int EmployeeCasualtyId { get; }
     }
-
 }
-

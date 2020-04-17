@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.Employee
 {
@@ -26,6 +24,7 @@ namespace Domain.Model.Exceptions.Employee
     public class InvalidUpdateException : InvalidEmployeeException
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the employee.")
         {
@@ -35,6 +34,7 @@ namespace Domain.Model.Exceptions.Employee
     public class DeleteEmployeeNotFoundException : InvalidEmployeeException
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.DeleteEmployeeNotFound;
+
         public DeleteEmployeeNotFoundException(int employeeId)
             : base($"Employee not found for the UserId: {employeeId}")
         {
@@ -47,6 +47,7 @@ namespace Domain.Model.Exceptions.Employee
     public class EmployeeDeletedException : InvalidEmployeeException
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.EmployeeDeleted;
+
         public EmployeeDeletedException(int id, string name)
             : base($"The employee {name} was deleted")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.Employee
     public class UpdateEmployeeNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.UpdateEmployeeNotFound;
+
         public UpdateEmployeeNotFoundException(int employeeId, Guid clientSystemId)
             : base($"User {employeeId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +77,7 @@ namespace Domain.Model.Exceptions.Employee
     public class EmployeeNotFoundException : InvalidEmployeeException
     {
         protected override int SubErrorCode => (int)EmployeeErrorSubCodes.EmployeeNotFound;
+
         public EmployeeNotFoundException(int employeeId) : base($"The Employee {employeeId} was not found.")
         {
             EmployeeId = employeeId;
@@ -84,4 +87,3 @@ namespace Domain.Model.Exceptions.Employee
     }
 
 }
-

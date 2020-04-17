@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.CandidateProfile
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.CandidateProfile
         }
     }
 
-
     public class DeleteCandidateProfileNotFoundException : InvalidCandidateProfileException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.DeleteCandidateProfileNotFound;
+
         public DeleteCandidateProfileNotFoundException(int profileId)
             : base($"Profile not found for the Profile Id: {profileId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
     public class CandidateProfileDeletedException : InvalidCandidateProfileException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.CandidateProfileDeleted;
+
         public CandidateProfileDeletedException(int id, string name)
             : base($"The profile {name} was deleted")
         {
@@ -52,6 +51,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
     public class InvalidUpdateException : InvalidCandidateProfileException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the profile.")
         {
@@ -61,6 +61,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
     public class UpdateCandidateProfileNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.UpdateCandidateProfileNotFound;
+
         public UpdateCandidateProfileNotFoundException(int profileId, Guid clientSystemId)
             : base($"Profile {profileId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +76,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int profileId, Guid clientSystemId, string name)
             : base($"Profile {name} has not changes.")
         {
@@ -89,6 +91,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
     public class CandidateProfileNotFoundException : InvalidCandidateProfileException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.CandidateProfileNotFound;
+
         public CandidateProfileNotFoundException(int profileId) : base($"The Profile {profileId} was not found.")
         {
             ProfileId = profileId;
@@ -96,6 +99,5 @@ namespace Domain.Model.Exceptions.CandidateProfile
 
         public int ProfileId { get; }
     }
-
 }
 

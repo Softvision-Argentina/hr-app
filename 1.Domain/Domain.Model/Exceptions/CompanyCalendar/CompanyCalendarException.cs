@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.CompanyCalendar
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.CompanyCalendar
         }
     }
 
-
     public class DeleteCompanyCalendarNotFoundException : InvalidCompanyCalendarException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.DeleteCompanyCalendarNotFound;
+
         public DeleteCompanyCalendarNotFoundException(int companyCalendarId)
             : base($"Company calendar not found for the Company calendar Id: {companyCalendarId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.CompanyCalendar
     public class CompanyCalendarDeletedException : InvalidCompanyCalendarException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.CompanyCalendarDeleted;
+
         public CompanyCalendarDeletedException(int id, string name)
             : base($"The company calendar {name} was deleted")
         {
@@ -49,9 +48,11 @@ namespace Domain.Model.Exceptions.CompanyCalendar
         public int CompanyCalendarId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidCompanyCalendarException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the company calendar")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.CompanyCalendar
     public class UpdateCompanyCalendarNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.UpdateCompanyCalendarNotFound;
+
         public UpdateCompanyCalendarNotFoundException(int companyCalendarId, Guid clientSystemId)
             : base($"Profile {companyCalendarId} and Client System Id {clientSystemId} was not found.")
         {
@@ -89,6 +91,7 @@ namespace Domain.Model.Exceptions.CompanyCalendar
     public class CompanyCalendarNotFoundException : InvalidCompanyCalendarException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.CompanyCalendarNotFound;
+
         public CompanyCalendarNotFoundException(int companyCalendarId) : base($"The Profile {companyCalendarId} was not found.")
         {
             CompanyCalendarId = companyCalendarId;
@@ -96,6 +99,4 @@ namespace Domain.Model.Exceptions.CompanyCalendar
 
         public int CompanyCalendarId { get; }
     }
-
 }
-

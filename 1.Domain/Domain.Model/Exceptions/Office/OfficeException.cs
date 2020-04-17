@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.Office
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.Office
         }
     }
 
-
     public class DeleteOfficeNotFoundException : InvalidOfficeException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.DeleteOfficeNotFound;
+
         public DeleteOfficeNotFoundException(int officeId)
             : base($"Office not found for the Office Id: {officeId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.Office
     public class OfficeDeletedException : InvalidOfficeException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.OfficeDeleted;
+
         public OfficeDeletedException(int id, string name)
             : base($"The Office {name} was deleted")
         {
@@ -49,9 +48,11 @@ namespace Domain.Model.Exceptions.Office
         public int OfficeId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidOfficeException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the Office.")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.Office
     public class UpdateOfficeNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.UpdateOfficeNotFound;
+
         public UpdateOfficeNotFoundException(int officeId, Guid clientSystemId)
             : base($"Office {officeId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +77,7 @@ namespace Domain.Model.Exceptions.Office
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int officeId, Guid clientSystemId, string name)
             : base($"Office {name} has not changes.")
         {
@@ -89,6 +92,7 @@ namespace Domain.Model.Exceptions.Office
     public class OfficeNotFoundException : InvalidOfficeException
     {
         protected override int SubErrorCode => (int)OfficeErrorSubCodes.OfficeNotFound;
+
         public OfficeNotFoundException(int officeId) : base($"The Office {officeId} was not found.")
         {
             OfficeId = officeId;
@@ -96,6 +100,5 @@ namespace Domain.Model.Exceptions.Office
 
         public int OfficeId { get; }
     }
-
 }
 

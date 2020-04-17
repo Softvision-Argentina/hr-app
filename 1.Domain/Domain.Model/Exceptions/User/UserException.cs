@@ -24,6 +24,7 @@ namespace Domain.Model.Exceptions.User
     public class InvalidUpdateException : InvalidUserException
     {
         protected override int SubErrorCode => (int)UserErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the user.")
         {
@@ -33,6 +34,7 @@ namespace Domain.Model.Exceptions.User
     public class DeleteUserNotFoundException : InvalidUserException
     {
         protected override int SubErrorCode => (int)UserErrorSubCodes.DeleteUserNotFound;
+
         public DeleteUserNotFoundException(int userId)
             : base($"User not found for the UserId: {userId}")
         {
@@ -45,6 +47,7 @@ namespace Domain.Model.Exceptions.User
     public class UserDeletedException : InvalidUserException
     {
         protected override int SubErrorCode => (int)UserErrorSubCodes.UserDeleted;
+
         public UserDeletedException(int id, string name)
             : base($"The user {name} was deleted")
         {
@@ -59,6 +62,7 @@ namespace Domain.Model.Exceptions.User
     public class UpdateUserNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)UserErrorSubCodes.UpdateUserNotFound;
+
         public UpdateUserNotFoundException(int userId, Guid clientSystemId)
             : base($"User {userId} and Client System Id {clientSystemId} was not found.")
         {
@@ -73,6 +77,7 @@ namespace Domain.Model.Exceptions.User
     public class UserNotFoundException : InvalidUserException
     {
         protected override int SubErrorCode => (int)UserErrorSubCodes.UserNotFound;
+
         public UserNotFoundException(int userId) : base($"The User {userId} was not found.")
         {
             UserId = userId;
@@ -80,6 +85,5 @@ namespace Domain.Model.Exceptions.User
 
         public int UserId { get; }
     }
-
 }
 

@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.HireProjection
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.HireProjection
         }
     }
 
-
     public class DeleteHireProjectionNotFoundException : InvalidHireProjectionException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.DeleteHireProjectionNotFound;
+
         public DeleteHireProjectionNotFoundException(int hireProjectionId)
             : base($"Hire projection not found for the hireProjectionId: {hireProjectionId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.HireProjection
     public class HireProjectionDeletedException : InvalidHireProjectionException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.HireProjectionDeleted;
+
         public HireProjectionDeletedException(int id, int month, int year)
             : base($"The hire projection {year}-{month} was deleted")
         {
@@ -51,9 +50,11 @@ namespace Domain.Model.Exceptions.HireProjection
         public int Month { get; set; }
         public int Year { get; set; }
     }
+
     public class InvalidUpdateException : InvalidHireProjectionException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the hire projection.")
         {
@@ -77,6 +78,7 @@ namespace Domain.Model.Exceptions.HireProjection
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, int month, int year)
             : base($"Hire projection {year}-{month} has not changes.")
         {
@@ -91,6 +93,7 @@ namespace Domain.Model.Exceptions.HireProjection
     public class HireProjectionNotFoundException : InvalidHireProjectionException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.HireProjectionNotFound;
+
         public HireProjectionNotFoundException(int hireProjectionId) : base($"The hire projection {hireProjectionId} was not found.")
         {
             HireProjectionId = hireProjectionId;
@@ -98,6 +101,4 @@ namespace Domain.Model.Exceptions.HireProjection
 
         public int HireProjectionId { get; }
     }
-
 }
-

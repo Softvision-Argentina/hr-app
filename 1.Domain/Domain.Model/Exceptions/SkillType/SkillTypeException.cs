@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.SkillType
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.SkillType
         }
     }
 
-
     public class DeleteSkillTypeNotFoundException : InvalidSkillTypeException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.DeleteSkillTypeNotFound;
+
         public DeleteSkillTypeNotFoundException(int skillTypeId)
             : base($"Skill type not found for the skillTypeId: {skillTypeId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.SkillType
     public class SkillTypeDeletedException : InvalidSkillTypeException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.SkillTypeDeleted;
+
         public SkillTypeDeletedException(int id, string name)
             : base($"The skill type {name} was deleted")
         {
@@ -49,9 +48,11 @@ namespace Domain.Model.Exceptions.SkillType
         public int SkillTypeId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidSkillTypeException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the skill.")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.SkillType
     public class UpdateSkillNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.UpdateSkillTypeNotFound;
+
         public UpdateSkillNotFoundException(int skillTypeId, Guid clientSystemId)
             : base($"skill {skillTypeId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +77,7 @@ namespace Domain.Model.Exceptions.SkillType
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, string name)
             : base($"Skill type {name} has not changes.")
         {
@@ -89,6 +92,7 @@ namespace Domain.Model.Exceptions.SkillType
     public class SkillTypeNotFoundException : InvalidSkillTypeException
     {
         protected override int SubErrorCode => (int)SkillTypeErrorSubCodes.SkillTypeNotFound;
+
         public SkillTypeNotFoundException(int skillTypeId) : base($"The skill type {skillTypeId} was not found.")
         {
             SkillTypeId = skillTypeId;
@@ -96,6 +100,4 @@ namespace Domain.Model.Exceptions.SkillType
 
         public int SkillTypeId { get; }
     }
-
 }
-
