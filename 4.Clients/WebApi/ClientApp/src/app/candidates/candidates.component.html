@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let candidate of candidateTable.data | filter:searchDni:'dni' | personFilter:searchName">
+                <tr *ngFor="let candidate of candidateTable.data">
                     <td>{{ candidate.name }} {{ candidate.lastName }}</td>
                     <td>{{ candidate.dni }}</td>
                     <td>{{ candidate.emailAddress }}</td>

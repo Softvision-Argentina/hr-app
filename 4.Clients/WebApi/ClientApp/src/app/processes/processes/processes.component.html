@@ -4,7 +4,7 @@
   <div class="proximaNova">
     <div nz-row class="wrapper">
       <h1 class="headerFont">B.A Studio Processes</h1>
-      <button nz-button nzType="primary" (click)="showContactCandidatesModal(newCandidate)"
+      <button nz-button nzType="primary" (click)="newProcessStart(processStart, startModalButtons)"
         class="buttonStyle buttonFont">
         NEW CANDIDATE
       </button>
@@ -13,7 +13,7 @@
     <nz-tabset>
 
       <nz-tab nzTitle="MY PROCESSES" (nzClick)="searchOwnRecruiter()">
-        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayData"
+        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayOwnData"
           [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
           (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
           (userId)="showUserDetailsModal($event, userDetailModal)"
@@ -189,9 +189,5 @@
         [_processFooterModal]=startModalButtons></app-process-contact>
     </ng-template>
 
-    <ng-template #newCandidate>
-      <app-process-contact [_visible]=true [_candidateProfiles]=profiles [_communities]=communities
-        [_processModal]=processStart [_processFooterModal]=startModalButtons></app-process-contact>
-    </ng-template>
 
     <ng-template #indicatorTemplate><i nz-icon nzType="loading" style="font-size: 24px;color:white"></i> </ng-template>

@@ -1,10 +1,11 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from '../services/facade.service';
+import { SearchbarPlaceholderEnum } from '../../entities/enums/searchbar-placeholder-enum';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,12 +27,13 @@ export class NavMenuComponent implements OnInit {
   showUserSettings: boolean = false;
   url: string = '';
   search: string = '';
-
+  searchbarPlaceholder = 'Search...';
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.router.events.subscribe(data => {
       this.search = '';
     });
+    this.getPlaceholder();
   }
 
   logout() {
@@ -54,5 +56,41 @@ export class NavMenuComponent implements OnInit {
 
   changeUserSettings() {
     this.showUserSettings = !this.showUserSettings;
+  }
+
+  private getPlaceholder() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        switch (event.url) {
+          case '/dashboard':
+            this.searchbarPlaceholder = 'Search for a dashboard';
+            break;
+          case '/':
+            this.searchbarPlaceholder = 'Search for a Process using candidate\'s name';
+            break;
+          case '/people':
+            this.searchbarPlaceholder = 'Search for a candidate';
+            break;
+          case '/tasks':
+            this.searchbarPlaceholder = 'Search for a Task';
+            break;
+          case '/daysOff':
+            this.searchbarPlaceholder = 'Search for a candidate\'s daysoff using his/her Dni';
+            break;
+          case '/referrals':
+            this.searchbarPlaceholder = 'Search for your own referrals';
+            break;
+          case '/reports':
+            this.searchbarPlaceholder = 'Search for a report';
+            break;
+          case '/settings':
+            this.searchbarPlaceholder = 'Search for a setting';
+            break;
+          default:
+            this.searchbarPlaceholder = 'Search...';
+            break;
+          }
+      }
+    });
   }
 }

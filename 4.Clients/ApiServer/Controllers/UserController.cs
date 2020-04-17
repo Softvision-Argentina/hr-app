@@ -40,7 +40,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("GetFilteredForTech")]
         public IActionResult GetFilteredForTech()
         {
             return ApiAction(() =>
@@ -56,7 +56,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("GetFilteredForHr")]
         public IActionResult GetFilteredForHr()
         {
             return ApiAction(() =>

@@ -139,11 +139,18 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
       if (isNaN(Number(data))) {
-        this.searchName = data;
-        this.searchDni = '';
+        this.listOfDisplayData = this.filteredCandidates;
+        this.listOfDisplayData = this.listOfDisplayData.filter(candidate => {
+          const fullName = candidate.name + candidate.lastName;
+          const value = data.toString().toUpperCase();
+          return fullName.toString().toUpperCase().indexOf(value) !== -1;
+        });
       } else {
-        this.searchDni = data;
-        this.searchName = '';
+        this.listOfDisplayData = this.filteredCandidates;
+        this.listOfDisplayData = this.listOfDisplayData.filter(candidate => {
+          const value = data.toString().toUpperCase();
+          return candidate.dni.toString().toUpperCase().indexOf(value) !== -1;
+        });
       }
     });
   }
