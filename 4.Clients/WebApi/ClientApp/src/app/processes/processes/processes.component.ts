@@ -231,6 +231,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           }
         }
         this.listOfDisplayOwnData = result;
+        this.filteredProcesses = result;
         const newProc: Process = result[result.length - 1];
 
         if (newProc && newProc.candidate) {
@@ -267,8 +268,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           }
       });
     });
-    
   }
+
   showApproveProcessConfirm(processID: number): void {
     const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
     const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
