@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Seed.Exceptions
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Seed.Exceptions
         }
     }
 
-
     public class DeleteDummyNotFoundException : InvalidDummyException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.DeleteDummyNotFound;
+
         public DeleteDummyNotFoundException(Guid dummyId)
             : base($"Dummy not found for the DummyId: {dummyId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Seed.Exceptions
     public class DummyDeletedException : InvalidDummyException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.DummyDeleted;
+
         public DummyDeletedException(Guid id, string name)
             : base($"The dummy {name} was deleted")
         {
@@ -52,6 +51,7 @@ namespace Domain.Model.Seed.Exceptions
     public class InvalidUpdateException : InvalidDummyException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the dummy.")
         {
@@ -61,6 +61,7 @@ namespace Domain.Model.Seed.Exceptions
     public class UpdateDummyNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.UpdateDummyNotFound;
+
         public UpdateDummyNotFoundException(Guid dummyId, Guid clientSystemId)
             : base($"Dummy {dummyId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +76,7 @@ namespace Domain.Model.Seed.Exceptions
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(Guid dummyId, Guid clientSystemId, string name)
             : base($"Dummy {name} has not changes.")
         {
@@ -89,13 +91,13 @@ namespace Domain.Model.Seed.Exceptions
     public class DummyNotFoundException : InvalidDummyException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.DummyNotFound;
-        public DummyNotFoundException(Guid dummyId) : base($"The Dummy {dummyId} was not found.")
+
+        public DummyNotFoundException(Guid dummyId)
+            : base($"The Dummy {dummyId} was not found.")
         {
             DummyId = dummyId;
         }
 
         public Guid DummyId { get; }
     }
-
 }
-
