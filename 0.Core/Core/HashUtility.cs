@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core
 {
@@ -11,7 +9,9 @@ namespace Core
             try
             {
                 if (String.IsNullOrEmpty(text))
+                {
                     return String.Empty;
+                }
 
                 using (var sha = new System.Security.Cryptography.SHA256Managed())
                 {

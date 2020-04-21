@@ -53,7 +53,6 @@ namespace Core
     public abstract class DescriptiveEntity<TKey> : Entity<TKey> where TKey : IComparable, IFormattable
     {
         public string Name { get; set; }
-
         public string Description { get; set; }
     }
 }

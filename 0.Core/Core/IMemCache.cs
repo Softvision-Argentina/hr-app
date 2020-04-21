@@ -6,10 +6,8 @@ namespace Core
     {
         TItem Get<TItem>(CacheGroup group, object key);
         bool TryGetValue<TItem>(CacheGroup group, object key, out TItem value);
-
         void Set(CacheGroup group, object key, object value);
         void Set(CacheGroup group, object key, object value, ExpirationSettings settings);
-
         void Remove(CacheGroup group);
         void Remove(CacheGroup group, object key);
     }
