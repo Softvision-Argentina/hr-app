@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Core;
+﻿using Core;
 using Domain.Model.Enum;
+using System.Collections.Generic;
 
 namespace Domain.Model
 {

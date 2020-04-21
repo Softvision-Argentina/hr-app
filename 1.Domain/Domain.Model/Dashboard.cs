@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Core;
+﻿using Core;
+using System.Collections.Generic;
 
 namespace Domain.Model
 {
