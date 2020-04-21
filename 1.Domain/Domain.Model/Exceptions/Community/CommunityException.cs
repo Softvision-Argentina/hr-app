@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.Community
 {
@@ -13,8 +11,6 @@ namespace Domain.Model.Exceptions.Community
             : base(string.IsNullOrEmpty(message) ? "There is a Community related error" : message)
         {
         }
-
-        ////
     }
 
     public class InvalidCommunityException : CommunityException
@@ -25,10 +21,10 @@ namespace Domain.Model.Exceptions.Community
         }
     }
 
-
     public class DeleteCommunityNotFoundException : InvalidCommunityException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.DeleteCommunityNotFound;
+
         public DeleteCommunityNotFoundException(int communityId)
             : base($"Community not found for the CommunityId: {communityId}")
         {
@@ -41,6 +37,7 @@ namespace Domain.Model.Exceptions.Community
     public class CommunityDeletedException : InvalidCommunityException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.CommunityDeleted;
+
         public CommunityDeletedException(int id, string name)
             : base($"The Community {name} was deleted")
         {
@@ -51,9 +48,11 @@ namespace Domain.Model.Exceptions.Community
         public int CommunityId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidCommunityException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the Community.")
         {
@@ -63,6 +62,7 @@ namespace Domain.Model.Exceptions.Community
     public class UpdateCommunityNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.UpdateCommunityNotFound;
+
         public UpdateCommunityNotFoundException(int communityId, Guid clientSystemId)
             : base($"Community {communityId} and Client System Id {clientSystemId} was not found.")
         {
@@ -91,6 +91,7 @@ namespace Domain.Model.Exceptions.Community
     public class CommunityNotFoundException : InvalidCommunityException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.CommunityNotFound;
+
         public CommunityNotFoundException(int communityId) : base($"The Community {communityId} was not found.")
         {
             CommunityId = communityId;

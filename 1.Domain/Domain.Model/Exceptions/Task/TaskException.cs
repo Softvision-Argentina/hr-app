@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.Task
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.Task
         }
     }
 
-
     public class DeleteTaskNotFoundException : InvalidTaskException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.DeleteTaskNotFound;
+
         public DeleteTaskNotFoundException(int taskId)
             : base($"Task not found for the TaskId: {taskId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.Task
     public class TaskDeletedException : InvalidTaskException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.TaskDeleted;
+
         public TaskDeletedException(int id, string name)
             : base($"The task {name} was deleted")
         {
@@ -49,9 +48,11 @@ namespace Domain.Model.Exceptions.Task
         public int TaskId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidTaskException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the task.")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.Task
     public class UpdateTaskNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.UpdateTaskNotFound;
+
         public UpdateTaskNotFoundException(int taskId, Guid clientSystemId)
             : base($"Task {taskId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +77,7 @@ namespace Domain.Model.Exceptions.Task
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int taskId, Guid clientSystemId, string name)
             : base($"Task {name} has not changes.")
         {
@@ -89,6 +92,7 @@ namespace Domain.Model.Exceptions.Task
     public class TaskNotFoundException : InvalidTaskException
     {
         protected override int SubErrorCode => (int)TaskErrorSubCodes.TaskNotFound;
+
         public TaskNotFoundException(int taskId) : base($"The Task {taskId} was not found.")
         {
             TaskId = taskId;

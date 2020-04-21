@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions.Room
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions.Room
         }
     }
 
-
     public class DeleteRoomNotFoundException : InvalidRoomException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.DeleteRoomNotFound;
+
         public DeleteRoomNotFoundException(int roomId)
             : base($"Room not found for the Room Id: {roomId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions.Room
     public class RoomDeletedException : InvalidRoomException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.RoomDeleted;
+
         public RoomDeletedException(int id, string name)
             : base($"The room {name} was deleted")
         {
@@ -49,9 +48,11 @@ namespace Domain.Model.Exceptions.Room
         public int RoomId { get; set; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidRoomException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the room.")
         {
@@ -61,6 +62,7 @@ namespace Domain.Model.Exceptions.Room
     public class UpdateRoomNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.UpdateRoomNotFound;
+
         public UpdateRoomNotFoundException(int roomId, Guid clientSystemId)
             : base($"Room {roomId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +77,7 @@ namespace Domain.Model.Exceptions.Room
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int roomId, Guid clientSystemId, string name)
             : base($"Room {name} has not changes.")
         {
@@ -89,6 +92,7 @@ namespace Domain.Model.Exceptions.Room
     public class RoomNotFoundException : InvalidRoomException
     {
         protected override int SubErrorCode => (int)RoomErrorSubCodes.RoomNotFound;
+
         public RoomNotFoundException(int roomId) : base($"The Room {roomId} was not found.")
         {
             RoomId = roomId;
@@ -96,6 +100,4 @@ namespace Domain.Model.Exceptions.Room
 
         public int RoomId { get; }
     }
-
 }
-

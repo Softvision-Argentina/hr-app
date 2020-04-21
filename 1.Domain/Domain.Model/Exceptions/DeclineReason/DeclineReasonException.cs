@@ -1,7 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Model.Exceptions
 {
@@ -23,10 +21,10 @@ namespace Domain.Model.Exceptions
         }
     }
 
-
     public class DeleteDeclineReasonNotFoundException : InvalidDeclineReasonException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.DeleteDeclineReasonNotFound;
+
         public DeleteDeclineReasonNotFoundException(int skillTypeId)
             : base($"Skill type not found for the skillTypeId: {skillTypeId}")
         {
@@ -39,6 +37,7 @@ namespace Domain.Model.Exceptions
     public class DeclineReasonDeletedException : InvalidDeclineReasonException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.DeclineReasonDeleted;
+
         public DeclineReasonDeletedException(int id, string name)
             : base($"The skill type {name} was deleted")
         {
@@ -52,6 +51,7 @@ namespace Domain.Model.Exceptions
     public class InvalidUpdateException : InvalidDeclineReasonException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the skill.")
         {
@@ -61,6 +61,7 @@ namespace Domain.Model.Exceptions
     public class UpdateSkillNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.UpdateDeclineReasonNotFound;
+
         public UpdateSkillNotFoundException(int skillTypeId, Guid clientSystemId)
             : base($"skill {skillTypeId} and Client System Id {clientSystemId} was not found.")
         {
@@ -75,6 +76,7 @@ namespace Domain.Model.Exceptions
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, string name)
             : base($"Skill type {name} has not changes.")
         {
@@ -89,6 +91,7 @@ namespace Domain.Model.Exceptions
     public class DeclineReasonNotFoundException : InvalidDeclineReasonException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.DeclineReasonNotFound;
+
         public DeclineReasonNotFoundException(int skillTypeId) : base($"The skill type {skillTypeId} was not found.")
         {
             DeclineReasonId = skillTypeId;
@@ -96,6 +99,4 @@ namespace Domain.Model.Exceptions
 
         public int DeclineReasonId { get; }
     }
-
 }
-

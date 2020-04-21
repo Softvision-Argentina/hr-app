@@ -21,10 +21,10 @@ namespace Domain.Model.Exceptions.Stage
         }
     }
 
-
     public class DeleteStageNotFoundException : InvalidStageException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.DeleteStageNotFound;
+
         public DeleteStageNotFoundException(int stageId)
             : base($"Stage not found for the StageId: {stageId}")
         {
@@ -37,6 +37,7 @@ namespace Domain.Model.Exceptions.Stage
     public class StageDeletedException : InvalidStageException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.StageDeleted;
+
         public StageDeletedException(int stageId, string name)
             : base($"The stage {name} was deleted")
         {
@@ -47,9 +48,11 @@ namespace Domain.Model.Exceptions.Stage
         public int StageId { get; }
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidStageException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.InvalidUpdate;
+
         public InvalidUpdateException(string message)
             : base($"The update request is not valid for the stage.")
         {
@@ -59,6 +62,7 @@ namespace Domain.Model.Exceptions.Stage
     public class UpdateStageNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.UpdateStageNotFound;
+
         public UpdateStageNotFoundException(int stageId, Guid clientSystemId)
             : base($"Stage {stageId} and Client System Id {clientSystemId} was not found.")
         {
@@ -73,6 +77,7 @@ namespace Domain.Model.Exceptions.Stage
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int stageId, Guid clientSystemId, string name)
             : base($"Stage {name} has not changes.")
         {
@@ -87,6 +92,7 @@ namespace Domain.Model.Exceptions.Stage
     public class StageNotFoundException : InvalidStageException
     {
         protected override int SubErrorCode => (int)StageErrorSubCodes.UpdateStageNotFound;
+
         public StageNotFoundException(int stageId) : base($"The Stage {stageId} was not found.")
         {
             StageId = stageId;
@@ -94,6 +100,4 @@ namespace Domain.Model.Exceptions.Stage
 
         public int StageId { get; }
     }
-
 }
-
