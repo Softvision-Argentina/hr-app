@@ -1,14 +1,13 @@
-﻿using Core;
-using Domain.Model;
+﻿using Domain.Model;
 using Domain.Model.Enum;
 using Domain.Model.Seed;
-using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Services.Repositories.EF
 {
+    [ExcludeFromCodeCoverage]
     public class SeedMigrator : Migrator<DataBaseContext>
     {
         public SeedMigrator(DataBaseContext context) : base(context)
