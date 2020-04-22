@@ -1,9 +1,6 @@
 ﻿using ApiServer.Contracts.CandidateProfile;
-using Domain.Services.Contracts.CandidateProfile;
-using System.Collections.Generic;
-using System.Collections;
-using AutoMapper;
 using ApiServer.Profiles;
+using Domain.Services.Contracts.CandidateProfile;
 
 namespace ApiServer.CandidateProfiles
 {
@@ -17,19 +14,5 @@ namespace ApiServer.CandidateProfiles
             CreateMap<UpdateCandidateProfileViewModel, UpdateCandidateProfileContract>();
         }
 
-        //private static string ConverToString(System.Type propertyType, object propertyValue)
-        //{
-        //    var enumProperty = propertyValue as IEnumerable;
-        //    if (enumProperty != null && propertyType != typeof(string))
-        //    {
-        //        var stringValues = new List<string>();
-        //        foreach (var item in enumProperty)
-        //        {
-        //            stringValues.Add(item.ToString());
-        //        }
-        //        return string.Join(",", stringValues);
-        //    }
-        //    return propertyValue.ToString();
-        //}
     }
 }
