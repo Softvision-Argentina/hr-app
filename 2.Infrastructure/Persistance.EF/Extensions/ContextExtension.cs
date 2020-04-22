@@ -33,31 +33,31 @@ namespace Persistance.EF.Extensions
             context.Database.ExecuteSqlCommand(ContextExtension.EnableTablesConstraintsCommand);
         }
 
-        public static void SeedDatabaseWith<T>(this DbContextBase arLabContext, IEnumerable<T> entities) where T : Entity<int>
+        public static void SeedDatabaseWith<T>(this DbContextBase context, IEnumerable<T> entities) where T : Entity<int>
         {
             var entityList = new List<T>();
 
             foreach (var entity in entities)
             {
                 entity.WithPropertyValue("Id", default(int));
-                entityList.Add(entity as T);
+                entityList.Add((T) entity);
             }
 
-            arLabContext.Set<T>().AddRange(entityList);
-            arLabContext.SaveChanges();
+            context.Set<T>().AddRange(entityList);
+            context.SaveChanges();
             EntitiesSeeded = entityList;
         }
 
-        public static void SeedDatabaseWith<T>(this DbContextBase arLabContext, T entity) where T : Entity<int>
+        public static void SeedDatabaseWith<T>(this DbContextBase context, T entity) where T : Entity<int>
         {
             entity.WithPropertyValue("Id", default(int));
-            arLabContext.Set<T>().Add(entity);
-            arLabContext.SaveChanges();
+            context.Set<T>().Add(entity);
+            context.SaveChanges();
             EntitySeeded = entity;
-            arLabContext.Entry(entity).State = EntityState.Detached;
+            context.Entry(entity).State = EntityState.Detached;
         }
 
-        public static void SeedDatabaseWithDummy<T>(this DbContextBase arLabContext, int entityCount = 1) where T : Entity<int>
+        public static void SeedDatabaseWithDummy<T>(this DbContextBase context, int entityCount = 1) where T : Entity<int>
         {
             var entityList = new List<T>();
 
@@ -69,8 +69,8 @@ namespace Persistance.EF.Extensions
                 entityList.Add(dummyEntity as T);
             }
 
-            arLabContext.Set<T>().AddRange(entityList);
-            arLabContext.SaveChanges();
+            context.Set<T>().AddRange(entityList);
+            context.SaveChanges();
             EntitiesSeeded = entityList;
         }
     }
