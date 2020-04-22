@@ -216,6 +216,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+
   }
 
   getUserProcesses() {

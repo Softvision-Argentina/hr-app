@@ -41,6 +41,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   searchDni: string = '';
   searchName: string = '';
   searchSub: Subscription;
+  candidateSubscriptions: Subscription = new Subscription();
 
   // Modals
   skills: Skill[] = [];
@@ -102,21 +103,21 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   getProfiles() {
-    this.facade.candidateProfileService.get()
-    .subscribe(res => {
+    const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
       this.profiles = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
+    this.candidateSubscriptions.add(profilesSubscription);
   }
 
   getCommunities() {
-    this.facade.communityService.get()
-    .subscribe(res => {
+    const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
       this.communities = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
+    this.candidateSubscriptions.add(communitiesSubscription);
   }
 
   getSkills() {
@@ -129,12 +130,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   getOffices() {
-    this.facade.OfficeService.get()
-      .subscribe(res => {
-        this._offices = res;
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+    const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
+      this._offices = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.candidateSubscriptions.add(officesSubscription);
   }
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
@@ -153,6 +154,15 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.candidateSubscriptions.add(this.searchSub);
+  }
+
+  private handleCandidateResponse(res: Candidate[]) {
+    if (res) {
+      this.filteredCandidates = res;
+      this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
+      : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    }
   }
 
   resetForm() {
@@ -465,12 +475,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   getStatus(status: number): string {
-    const statusFilter = this.statusList.filter(st => st.id === status)
-    if(statusFilter.length !== 0){
+    const statusFilter = this.statusList.filter(st => st.id === status);
+    if (statusFilter.length !== 0) {
       return statusFilter[0].name;
     }
   }
   ngOnDestroy() {
-    this.searchSub.unsubscribe();
+    this.candidateSubscriptions.unsubscribe();
   }
 }

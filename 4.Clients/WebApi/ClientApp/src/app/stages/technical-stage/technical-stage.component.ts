@@ -22,7 +22,6 @@ export class TechnicalStageComponent implements OnInit {
 
   @Input()
   private _users: User[];
-
   public get users(): User[] {
     return this._users;
   }

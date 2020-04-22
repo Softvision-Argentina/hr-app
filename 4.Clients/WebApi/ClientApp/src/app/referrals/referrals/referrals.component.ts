@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -27,7 +27,7 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-
+import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-referrals',
   templateUrl: './referrals.component.html',
@@ -35,7 +35,7 @@ import { DeclineReason } from 'src/entities/declineReason';
   providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 
-export class ReferralsComponent implements OnInit, AfterViewChecked {
+export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   slideConfig = {
     slidesToShow: 1,
     adaptiveHeight: true, //la papa
@@ -58,7 +58,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
 
   filteredProcesses: Process[] = [];
-
   searchValue = '';
   searchRecruiterValue = '';
   searchValueStatus = '';
@@ -66,16 +65,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   currentUser: User;
-
   sortName = null;
   sortValue = null;
-
   processForm: FormGroup;
   rejectProcessForm: FormGroup;
   declineProcessForm: FormGroup;
   isDetailsVisible: boolean = false;
   emptyProcess: Process;
-
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
   candidateReferred: Candidate[] = [];
@@ -84,15 +80,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   profileSearch: number = 0;
   profileSearchName: string = 'ALL';
-
   communitySearch: number = 0;
   communitySearchName: string = 'ALL';
-
   profileList: any[];
-
   statusList: any[];
   currentStageList: any[];
-
   emptyCandidate: Candidate;
   emptyUser: User;
   currentCandidate: Candidate;
@@ -100,29 +92,23 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   isEdit: boolean = false;
   openFromEdit: boolean = false;
-
   currentComponent: string;
   lastComponent: string;
   times: number = 0;
-
   selectedSeniority: SeniorityEnum;
-
   offices: Office[] = [];
   communities: Community[] = [];
   profiles: CandidateProfile[] = [];
   stepIndex: number = 0;
-
   declineReasons: DeclineReason[] = [];
   isDeclineReasonOther: boolean = false;
-
   isOwnedProcesses: boolean = false;
-
   notis: Notification[] = [];
   notisCount: number;
   id: number;
-
   forms: FormGroup[] = [];
   visible: boolean;
+  referralsSubscriptions: Subscription = new Subscription();
   constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
     private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _appComponent: AppComponent) {
@@ -167,8 +153,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
 
   getCandidates() {
-    this.facade.candidateService.get()
-      .subscribe(res => {
+    const candidateSubscription = this.facade.candidateService.getData().subscribe(res => {
+      if (!!res) {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
         this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.firstName + ' ' + this.currentUser.lastName);
@@ -176,10 +162,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         this.facade.referralsService.updateList(this.candidateReferred);
         this.facade.referralsService.referrals.subscribe((referralList) => {
           this.candidateReferred = referralList;
-        }); 
-      }, err => {
-        console.log(err);
-      });
+        });
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   getNotifications() {
@@ -188,7 +175,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         this.notis = res;
         this.notisCount = res.length;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -224,12 +211,12 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   }
 
   getOffices() {
-    this.facade.OfficeService.get()
-      .subscribe(res => {
-        this.offices = res;
-      }, err => {
-        console.log(err);
-      });
+    const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
+      this.offices = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.referralsSubscriptions.add(officesSubscription);
   }
 
   getCommunity(community: number): string {
@@ -237,30 +224,30 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   }
 
   getCommunities() {
-    this.facade.communityService.get()
-      .subscribe(res => {
-        this.communities = res;
-      }, err => {
-        console.log(err);
-      });
+    const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
+      this.communities = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.referralsSubscriptions.add(communitiesSubscription);
   }
 
   getProfiles() {
-    this.facade.candidateProfileService.get()
-      .subscribe(res => {
-        this.profiles = res;
-      }, err => {
-        console.log(err);
-      });
+    const profileSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
+      this.profiles = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.referralsSubscriptions.add(profileSubscription);
   }
 
   getDeclineReasons() {
-    this.facade.declineReasonService.get("Named")
-      .subscribe(res => {
-        this.declineReasons = res;
-      }, err => {
-        console.log(err);
-      });
+    const declineReasons = this.facade.declineReasonService.getData().subscribe(res => {
+      this.declineReasons = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.referralsSubscriptions.add(declineReasons);
   }
 
   getProfile(profile: number): string {
@@ -268,29 +255,35 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
   }
 
   getProcesses() {
-    this.facade.processService.get()
-      .subscribe(res => {
-        this.filteredProcesses = res;
-        this.listOfDisplayData = res;
-        let newProc: Process = res[res.length - 1];
+    const processesSubscription = this.facade.processService.getData().subscribe(res => {
+      this.filteredProcesses = res;
+      this.listOfDisplayData = res;
+      if (!!res) {
+        const newProc: Process = res[res.length - 1];
         if (newProc && newProc.candidate) {
           this.candidatesFullList.push(newProc.candidate);
         }
-      }, err => {
-        console.log(err);
-      });
+      }
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.referralsSubscriptions.add(processesSubscription);
   }
+
   getProcessesByUser() {
-    this.facade.processService.get()
+    this.facade.processService.getData()
       .subscribe(res => {
-        this.filteredProcesses = res;
-        this.listOfDisplayData = res;
-        let newProc: Process = res[res.length - 1];
-        if (newProc && newProc.candidate) {
-          this.candidatesFullList.push(newProc.candidate);
+        if (!!res) {
+          this.filteredProcesses = res;
+          this.listOfDisplayData = res;
+          const newProc: Process = res[res.length - 1];
+          if (newProc && newProc.candidate) {
+            this.candidatesFullList.push(newProc.candidate);
+          }
         }
+
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -327,7 +320,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
         this.facade.toastrService.success('Process approved!');
       }, err => {
         this.app.hideLoading();
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -338,7 +331,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
 
   rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
     this.rejectProcessForm.reset();
-    let process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
+    const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
 
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
@@ -374,7 +367,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -390,7 +383,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
-      //added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
+      // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
       nzZIndex: 5,
       nzFooter: [
         {
@@ -426,7 +419,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked {
                 }, err => {
                   this.app.hideLoading();
                   this.facade.toastrService.error(err.message);
-                })
+                });
             }
             this.app.hideLoading();
           }
@@ -508,7 +501,7 @@ h
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
-        (item.status === this.searchValueStatus)
+        (item.status === this.searchValueStatus);
     };
     const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -572,7 +565,6 @@ h
       this.openFromEdit = true;
       this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
     }
-    else this.emptyProcess = undefined;
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: modalContent,
@@ -601,8 +593,8 @@ h
 
   // NOT BEING USED
   setCandidateNewStatus(processStatusId: string, candidateId: number): Candidate {
-    let processStatus: string = this.statusList[processStatusId].name;
-    let candidate: Candidate = this.candidatesFullList.filter(x => x.id === candidateId)[0];
+    const processStatus: string = this.statusList[processStatusId].name;
+    const candidate: Candidate = this.candidatesFullList.filter(x => x.id === candidateId)[0];
     if (processStatus !== 'NotStarted' && processStatus !== 'Wait') {
       switch (processStatus) {
         case 'Rejected':
@@ -673,24 +665,20 @@ h
 
   validateForms(): boolean {
     this.getForms();
-    let slide: number = this.onCheck();
+    const slide: number = this.onCheck();
     if (slide > -1) {
       this.processCarousel.goTo(slide);
       let elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
         : slide === 3 ? 'clientButton' : slide === 4 ? 'offerButton' : slide === 5 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
+    } else {
+      return true;
     }
-    else return true;
   }
 
   wishedStage(choosenStage: number, elementName: string) {
-    //this.processCarousel.goTo(choosenStage);
     this.stepIndex = choosenStage;
-    // if (choosenStage !== 0) {
-    //   var height = document.getElementById('hrStage').style.height;
-    //   document.getElementById('idProcessCarousel').style.height = height;
-    // }
     this.checkSlideIndex(elementName);
   }
 
@@ -734,7 +722,6 @@ h
       this.app.showLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
-
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
@@ -753,13 +740,12 @@ h
             this.app.hideLoading();
             this.facade.toastrService.error(err.message);
           });
-      }
-      else {
+      } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
-              let declineReason = newProcess.declineReason;
+              const declineReason = newProcess.declineReason;
               this.openDeclineModal(newProcess, declineProcessModal).afterClose
                 .subscribe(sel => {
                   if (declineReason !== newProcess.declineReason) {
@@ -773,7 +759,7 @@ h
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(res => {
+                .subscribe(() => {
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();
@@ -845,7 +831,9 @@ h
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
-      stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
+        stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) {
+          processStatus = ProcessStatusEnum.Declined; 
+    }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }
 
@@ -992,5 +980,9 @@ h
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
+  }
+
+  ngOnDestroy() {
+    this.referralsSubscriptions.unsubscribe();
   }
 }

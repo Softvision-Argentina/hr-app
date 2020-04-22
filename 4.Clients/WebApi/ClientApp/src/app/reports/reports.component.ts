@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { Skill } from 'src/entities/skill';
 import { Candidate } from 'src/entities/candidate';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -10,10 +10,10 @@ import { CandidateDetailsComponent } from '../candidates/details/candidate-detai
 import { Process } from 'src/entities/process';
 import { AppComponent } from '../app.component';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Community } from 'src/entities/community';
 import { Office } from 'src/entities/office';
-
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -23,9 +23,9 @@ import { Office } from 'src/entities/office';
   providers: [CandidateDetailsComponent, AppComponent]
 })
 
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
 
-  //Skill Chart Preferences
+  // Skill Chart Preferences
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
   public skillChartLabels: Label[] = [];
   public skillChartLegend = false;
@@ -66,11 +66,10 @@ export class ReportsComponent implements OnInit {
   ];
 
 
-  //CandidateFilter
+  // CandidateFilter
   @ViewChild('dropdown') nameDropdown;
   validateSkillsForm: FormGroup;
   listOfControl: Array<{ id: number; controlInstance: string[] }> = [];
-
   emptyCandidate: Candidate;
   skills: Skill[] = [];
   candidates: Candidate[] = [];
@@ -95,7 +94,7 @@ export class ReportsComponent implements OnInit {
     description: '',
     profileId: 0,
     profile: null
-  }
+  };
 
 
   numberOfWait: number = 0;
@@ -109,7 +108,7 @@ export class ReportsComponent implements OnInit {
 
   sortName = null;
   sortValue = null;
-
+  reportsSubscription: Subscription =  new Subscription();
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
     private app: AppComponent) { }
 
@@ -125,7 +124,7 @@ export class ReportsComponent implements OnInit {
       community: [this.defaultCommunity],
       preferredOffice: [this.defaultOffice]
     });
-    this.addField()
+    this.addField();
   }
   addField(e?: MouseEvent): void {
     if (e) {
@@ -162,77 +161,77 @@ export class ReportsComponent implements OnInit {
       .subscribe(res => {
         this.skills = res;
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       }, () => {
         this.isLoadingResults = false;
       });
   }
 
   getCandidates() {
-    this.facade.candidateService.get()
-      .subscribe(res => {
-        this.candidates = res;
-      }, err => {
-        console.log(err);
-      });
+    const candidateSubscription = this.facade.candidateService.getData().subscribe(res => {
+      res ? this.candidates = res : null;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.reportsSubscription.add(candidateSubscription);
   }
 
   getCommunities() {
-    this.facade.communityService.get()
-      .subscribe(res => {
-        this.communities.push(this.defaultCommunity)
-        this.communities.push(...res);
-      }, err => {
-        console.log(err);
-      });
+    const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
+      this.communities.push(this.defaultCommunity);
+      this.communities.push(...res);
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.reportsSubscription.add(communitiesSubscription);
   }
 
   getOffices() {
-    this.facade.OfficeService.get()
-      .subscribe(res => {
-        this._offices.push(this.defaultOffice)
-        this._offices.push(...res);
-      }, err => {
-        console.log(err);
-      });
+    const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
+      this._offices.push(this.defaultOffice);
+      this._offices.push(...res);
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.reportsSubscription.add(officesSubscription);
   }
 
   getProcesses() {
-    this.facade.processService.get()
-      .subscribe(res => {
+    const processesSubscription = this.facade.processService.getData().subscribe(res => {
+      if (!!res) {
         this.processes = res;
-        let labels: string[] = [];
-        let percentages: number[] = [];
-        let colors: string[] = [];
+        const labels: string[] = [];
+        const percentages: number[] = [];
+        const colors: string[] = [];
 
         this.numberOfInProcess = this.processes.filter(p => p.status === ProcessStatusEnum.Declined).length;
         if (this.numberOfInProcess > 0) {
           labels.push('DECLINED');
-          colors.push("#81FB15");
+          colors.push('#81FB15');
           percentages.push(this.numberOfInProcess);
         }
         this.numberOfError = this.processes.filter(p => p.status === ProcessStatusEnum.Rejected).length;
         if (this.numberOfError > 0) {
           labels.push('REJECTED');
-          colors.push("#E4363FDB");
+          colors.push('#E4363FDB');
           percentages.push(this.numberOfError);
         }
         this.numberOfWait = this.processes.filter(p => p.status === ProcessStatusEnum.InProgress).length;
         if (this.numberOfWait > 0) {
           labels.push('IN PROGRESS');
-          colors.push("#F6FB15");
+          colors.push('#F6FB15');
           percentages.push(this.numberOfWait);
         }
         this.numberOfFinish = this.processes.filter(p => p.status === ProcessStatusEnum.Hired).length;
         if (this.numberOfFinish > 0) {
           labels.push('HIRED');
-          colors.push("#36E4BDFC");
+          colors.push('#36E4BDFC');
           percentages.push(this.numberOfFinish);
         }
         this.numberOfNotStarted = this.processes.filter(p => p.status === ProcessStatusEnum.Recall).length;
         if (this.numberOfNotStarted > 0) {
           labels.push('RECALL');
-          colors.push("#6FC8CE");
+          colors.push('#6FC8CE');
           percentages.push(this.numberOfNotStarted);
         }
 
@@ -243,9 +242,11 @@ export class ReportsComponent implements OnInit {
             backgroundColor: colors
           }
         ];
-      }, err => {
-        console.log(err);
-      });
+      }
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.reportsSubscription.add(processesSubscription);
   }
 
   getCandidatesBySkill(): void {
@@ -256,26 +257,6 @@ export class ReportsComponent implements OnInit {
       this.validateSkillsForm.controls[i].updateValueAndValidity();
     }
 
-    /* this.filteredCandidates = [];
-    let selectedSkill: number = this.validateSkillsForm.get("skill0").value;
-    let selectedSkills: number[] = this.listOfControl.map(control => this.validateSkillsForm.get(control.controlInstance[1]).value);
-    
-    let rateRange: string[] = this.validateSkillsForm.get("rate0").value.toString().split(',');
-    let skilledCandidates: number = 0;
-    let totalCandidates: number = 0;
-    this.candidates.forEach(candidate => {
-      candidate.candidateSkills.forEach(cdSkill => {
-        if (cdSkill.skill.id.toString() === selectedSkill.toString()) {
-          totalCandidates = totalCandidates + 1;
-          if (cdSkill.rate >= 50) skilledCandidates = skilledCandidates + 1;
-          if ((cdSkill.rate >= parseInt(rateRange[0])) && (cdSkill.rate <= parseInt(rateRange[1]))) {
-            this.filteredCandidates.push(candidate);
-          }
-        }
-      })
-    }); */
-
-    //this.listOfDisplayData = this.filteredCandidates;
 
     let selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
       this.listOfControl.map(control => {
@@ -304,10 +285,9 @@ export class ReportsComponent implements OnInit {
     this.facade.candidateService.getCandidatesBySkills(filteredCandidateRequest)
       .subscribe(res => {
         this.listOfDisplayData = res;
-        let skilledCandidates: number = this.listOfDisplayData.filter(candidate => candidate.candidateSkills[0].rate >= 50).length;
-        let totalCandidates: number = this.listOfDisplayData.length;
-
-        //Cards de porcentajes
+        const skilledCandidates: number = this.listOfDisplayData.filter(candidate => candidate.candidateSkills[0].rate >= 50).length;
+        const totalCandidates: number = this.listOfDisplayData.length;
+        // Cards de porcentajes
         this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
         if (this.stadisticAbove === 100) this.stadisticBelow = 0;
         else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
@@ -316,7 +296,7 @@ export class ReportsComponent implements OnInit {
         if (this.stadisticBelow.toString() === 'NaN') this.stadisticBelow = 0;
         this.app.hideLoading();
       }, err => {
-        console.log(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -342,18 +322,21 @@ export class ReportsComponent implements OnInit {
   }
 
   isPieData(): boolean {
-    let total = this.numberOfInProcess + this.numberOfError + this.numberOfWait + this.numberOfFinish + this.numberOfNotStarted;
-    if (total > 0) return true;
-    else return false;
+    const total = this.numberOfInProcess + this.numberOfError + this.numberOfWait + this.numberOfFinish + this.numberOfNotStarted;
+    if (total > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getSkillsPercentage(): void {
     this.app.showLoading();
-    let skills: Skill[] = this.skills;
-    let candidates: Candidate[] = this.candidates;
-    let chartLabels: Label[] = [];
+    const skills: Skill[] = this.skills;
+    const candidates: Candidate[] = this.candidates;
+    const chartLabels: Label[] = [];
     let cantidad: number;
-    let skillRates: number[] = [];
+    const skillRates: number[] = [];
 
     skills.forEach(skill => {
       cantidad = 0;
@@ -375,7 +358,7 @@ export class ReportsComponent implements OnInit {
   }
 
 
-  //Processes
+  // Processes
   public pieChartOptions: ChartOptions = {
     responsive: true,
     plugins: {
@@ -405,6 +388,10 @@ export class ReportsComponent implements OnInit {
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
+  }
+
+  ngOnDestroy() {
+    this.reportsSubscription.unsubscribe();
   }
 }
 

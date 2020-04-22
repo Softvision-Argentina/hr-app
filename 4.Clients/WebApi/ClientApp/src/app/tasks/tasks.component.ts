@@ -33,6 +33,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   showAllTasks = true;
   currentUser: User;
   user: User;
+  tasksSubscription: Subscription = new Subscription();
 
   ngOnInit() {
     this.app.showLoading();
@@ -42,9 +43,10 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.resetForm();
     this.loading = false;
     this.app.hideLoading();
-     this.searchSub = this.search.searchChanged.subscribe(data => {
+    this.searchSub = this.search.searchChanged.subscribe(data => {
       this.searchTitle = data;
     });
+    this.tasksSubscription.add(this.searchSub);
   }
 
   constructor(
@@ -197,8 +199,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         }, err => {
           if (err && err.errorCode === 900) {
             this.facade.errorHandlerService.showErrorMessage(err);
-          }
-          else {
+          } else {
             this.facade.errorHandlerService.showErrorMessage(null, 'An error has ocurred. Please try again later');
           }
           input.value = '';
@@ -353,7 +354,7 @@ export class TasksComponent implements OnInit, OnDestroy {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                })
+                });
             }
           }
         }]
@@ -483,6 +484,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.searchSub.unsubscribe();
+    this.tasksSubscription.unsubscribe();
   }
 }

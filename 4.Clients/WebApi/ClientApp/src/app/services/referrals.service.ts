@@ -40,6 +40,16 @@ export class ReferralsService extends BaseService<Candidate> {
       );
   }
 
+  // Overrrides default method to prevent gettings referrals
+  public add(newCandidate: Candidate): Observable<Candidate> {
+    return this.http
+      .post<Candidate>(this.apiUrl, newCandidate, {
+        headers: this.headersWithAuth,
+      })
+      .pipe(
+        catchError(this.handleErrors));
+  }
+
   public addNew(newReferral: Candidate): void {
     this.currentReferralList = this.referralList.getValue();
     this.currentReferralList.push(newReferral);
