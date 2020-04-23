@@ -25,4 +25,10 @@ namespace Core
         public T ResponseEntity { get; set; }
         public ResponseError ResponseError { get; set; }
     }
+
+    public class LoginResultData
+    {
+        public string Token { get; set; }
+        public object User { get; set; }
+    }
 }

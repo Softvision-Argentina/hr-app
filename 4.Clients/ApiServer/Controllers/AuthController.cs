@@ -7,6 +7,7 @@ using System.Text;
 using ApiServer.Contracts.Login;
 using ApiServer.Contracts.User;
 using AutoMapper;
+using Core;
 using Domain.Services.ExternalServices.Config;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,11 @@ namespace ApiServer.Controllers
             if (userContract != null)
             {
                 GetToken(jwtSettings, userContract, out var userViewModel, out var tokenString);
-                return Ok(new { Token = tokenString, User = userViewModel });
+                return Ok(new LoginResultData
+                { 
+                    Token = tokenString, 
+                    User = userViewModel 
+                });
             }
             else
             {
@@ -82,7 +87,11 @@ namespace ApiServer.Controllers
                     if (userContract != null)
                     {
                         GetToken(jwtSettings, userContract, out var userViewModel, out var tokenString);
-                        return Ok(new { Token = tokenString, User = userViewModel });
+                        return Ok(new LoginResultData
+                        {
+                            Token = tokenString,
+                            User = userViewModel
+                        });
                     }
                 }
 
