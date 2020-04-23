@@ -119,14 +119,13 @@ namespace Domain.Services.Impl.Services
                 throw new UpdateDaysOffNotFoundException(id, new System.Guid());
             }
 
-            daysOff.Status = Model.Enum.DaysOffStatus.Accepted;
+            daysOff.Status = DaysOffStatus.Accepted;
             var updatedDaysOff = _daysOffRepository.Update(daysOff);
             var googleCalendarEventId = this.AddModelToGoogleCalendar(daysOff);
 
             updatedDaysOff.GoogleCalendarEventId = googleCalendarEventId;
 
             _unitOfWork.Complete();
-
         }
 
         public ReadedDaysOffContract Read(int id)
@@ -175,19 +174,6 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void ValidateExistence(int id)
-        {
-            try
-            {
-                DaysOff daysOff = _daysOffRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
-                if (daysOff == null) throw new InvalidDaysOffException("The Days Off already exists .");
-            }
-            catch (ValidationException ex)
-            {
-                throw new CreateContractInvalidException(ex.ToListOfMessages());
-            }
-        }
-
         public string AddModelToGoogleCalendar(DaysOff daysOff)
         {
             Event newEvent = new Event
@@ -204,8 +190,7 @@ namespace Domain.Services.Impl.Services
                 Attendees = new List<EventAttendee>()
             };
 
-            newEvent.Attendees.Add(new EventAttendee() { Email = daysOff.Employee.EmailAddress });
-            //newEvent.Attendees.Add(new EventAttendee() { Email = "matias.baldi@softvision.com" });
+            newEvent.Attendees.Add(new EventAttendee() { Email = daysOff.Employee.EmailAddress });            
 
             return _googleCalendarService.CreateEvent(newEvent);
         }

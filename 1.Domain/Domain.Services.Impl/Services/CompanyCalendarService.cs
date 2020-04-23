@@ -14,7 +14,7 @@ using System.Globalization;
 using System.Linq;
 
 namespace Domain.Services.Impl.Services
-{ // check in
+{
     public class CompanyCalendarService : ICompanyCalendarService
     {
         private readonly IMapper _mapper;
@@ -125,19 +125,6 @@ namespace Domain.Services.Impl.Services
             {
                 _updateCompanyCalendarContractValidator.ValidateAndThrow(contract,
                     $"{ValidatorConstants.RULESET_DEFAULT}");
-            }
-            catch (ValidationException ex)
-            {
-                throw new CreateContractInvalidException(ex.ToListOfMessages());
-            }
-        }
-
-        private void ValidateExistence(int id)
-        {
-            try
-            {
-                CompanyCalendar companyCalendar = _companyCalendarRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
-                if (companyCalendar == null) throw new InvalidCompanyCalendarException("The Company calendar already exists .");
             }
             catch (ValidationException ex)
             {

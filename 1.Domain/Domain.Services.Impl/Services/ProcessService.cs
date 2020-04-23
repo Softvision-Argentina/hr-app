@@ -32,7 +32,8 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _config;
 
-        public ProcessService(IMapper mapper,
+        public ProcessService(
+            IMapper mapper,
             IRepository<User> userRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<CandidateProfile> candidateProfileRepository,
@@ -48,8 +49,7 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
             IConfiguration config)
-        {
-            _userRepository = userRepository;
+        {            
             _candidateRepository = candidateRepository;
             _candidateProfileRepository = candidateProfileRepository;
             _communityRepository = communityRepository;
@@ -171,37 +171,8 @@ namespace Domain.Services.Impl.Services
             return mail;
         }
 
-        private void AddCandidateProfileToCandidate(Candidate candidate, int profileID)
-        {
-            var profile = _candidateProfileRepository.Query().Where(_ => _.Id == profileID).FirstOrDefault();
-            if (profile == null)
-                throw new Domain.Model.Exceptions.User.UserNotFoundException(profileID);
-
-            candidate.Profile = profile;
-        }
-
-        private void AddCommunityToCandidate(Candidate candidate, int communityID)
-        {
-            var community = _communityRepository.Query().Where(_ => _.Id == communityID).FirstOrDefault();
-            if (community == null)
-                throw new Domain.Model.Exceptions.User.UserNotFoundException(communityID);
-
-            candidate.Community = community;
-        }
-
-        private void AddUserToCandidate(Candidate candidate, int userID)
-        {
-
-            var user = _userRepository.Query().Where(_ => _.Id == userID).FirstOrDefault();
-            if (user == null)
-                throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
-
-            candidate.User = user;
-        }
-
         private void AddOfficeToCandidate(Candidate candidate, int officeId)
         {
-
             var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
             if (office == null)
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
@@ -242,7 +213,6 @@ namespace Domain.Services.Impl.Services
             }
 
             var updatedProcess = _processRepository.Update(process);
-
             var status = process.Status;
 
             if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
@@ -252,11 +222,8 @@ namespace Domain.Services.Impl.Services
                 {
                     Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
                 };
-
                 _notificationRepository.Create(notification, process.Candidate.Id);
-
                 SendEmailNotification(process, status);
-
             }
 
             _unitOfWork.Complete();
@@ -265,22 +232,16 @@ namespace Domain.Services.Impl.Services
         public void Approve(int processID)
         {
             _processRepository.Approve(processID);
-
             var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == processID);
-
             process.Candidate.Status = SetCandidateStatus(process.Status);
-
             _unitOfWork.Complete();
         }
-
+         
         public void Reject(int id, string rejectionReason)
         {
             _processRepository.Reject(id, rejectionReason);
-
             var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
-
             process.Candidate.Status = SetCandidateStatus(process.Status);
-
             var status = process.Status;
 
             if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected || process.Status == ProcessStatus.Declined)
@@ -289,11 +250,8 @@ namespace Domain.Services.Impl.Services
                 {
                     Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
                 };
-
                 _notificationRepository.Create(notification, process.Candidate.Id);
-
                 SendEmailNotification(process, status);
-
             }
 
             _unitOfWork.Complete();

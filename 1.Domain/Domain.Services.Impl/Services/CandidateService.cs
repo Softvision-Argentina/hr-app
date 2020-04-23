@@ -7,7 +7,6 @@ using Domain.Services.Contracts.Candidate;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Candidate;
 using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -27,8 +26,7 @@ namespace Domain.Services.Impl.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<CandidateService> _log;
         private readonly UpdateCandidateContractValidator _updateCandidateContractValidator;
-        private readonly CreateCandidateContractValidator _createCandidateContractValidator;
-        private readonly DataBaseContext _context;
+        private readonly CreateCandidateContractValidator _createCandidateContractValidator;        
 
         public CandidateService(IMapper mapper,
             IRepository<Candidate> candidateRepository,
@@ -40,8 +38,7 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<CandidateService> log,
             UpdateCandidateContractValidator updateCandidateContractValidator,
-            CreateCandidateContractValidator createCandidateContractValidator,
-             DataBaseContext context)
+            CreateCandidateContractValidator createCandidateContractValidator)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -53,8 +50,7 @@ namespace Domain.Services.Impl.Services
             _candidateProfileRepository = candidateProfileRepository;
             _log = log;
             _updateCandidateContractValidator = updateCandidateContractValidator;
-            _createCandidateContractValidator = createCandidateContractValidator;
-            _context = context;
+            _createCandidateContractValidator = createCandidateContractValidator;            
         }
 
         public CreatedCandidateContract Create(CreateCandidateContract contract)
@@ -175,10 +171,14 @@ namespace Domain.Services.Impl.Services
         }
 
         public Candidate GetCandidate(int id)
-        {
-            var users = _context.Candidates.Find(id);
+        {            
+            var candidateQuery = _candidateRepository
+                .QueryEager()
+                .Where(_ => _.Id == id);
 
-            return users;
+            var candidateResult = candidateQuery.SingleOrDefault();
+
+            return candidateResult;
         }
 
         private void ValidateContract(CreateCandidateContract contract)
