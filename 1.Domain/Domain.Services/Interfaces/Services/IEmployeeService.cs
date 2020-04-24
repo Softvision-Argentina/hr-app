@@ -12,9 +12,9 @@ namespace Domain.Services.Interfaces.Services
         void Delete(int id);
         CreatedEmployeeContract Create(CreateEmployeeContract contract);
         void UpdateEmployee(UpdateEmployeeContract contract);
-        Employee getById(int id);
+        Employee GetById(int id);
 
-        Employee getByDNI(int dni);
+        Employee GetByDNI(int dni);
         Employee GetByEmail(string email);
     }
 }

@@ -41,7 +41,7 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var employee = _employeeService.getById(id);
+                var employee = _employeeService.GetById(id);
                 return Accepted(_mapper.Map<ReadedEmployeeViewModel>(employee));
             });
         }
@@ -51,7 +51,7 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                var employee = _employeeService.getByDNI(dni);
+                var employee = _employeeService.GetByDNI(dni);
                 return Accepted(_mapper.Map<ReadedEmployeeViewModel>(employee));
             });
         }

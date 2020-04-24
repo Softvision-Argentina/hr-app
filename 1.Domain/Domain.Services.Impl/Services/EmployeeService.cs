@@ -67,7 +67,7 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
         }
 
-        public Employee getByDNI(int dni)
+        public Employee GetByDNI(int dni)
         {
             Employee employee = _employeeRepository.Query().Where(emp => emp.DNI == dni).FirstOrDefault();
             return _mapper.Map<Employee>(employee);
@@ -202,7 +202,7 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        public Employee getById(int id)
+        public Employee GetById(int id)
         {
             Employee employee = _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
             return _mapper.Map<Employee>(employee);

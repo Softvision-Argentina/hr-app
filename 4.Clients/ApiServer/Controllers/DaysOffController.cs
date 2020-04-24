@@ -5,6 +5,7 @@ using Domain.Services.Contracts.DaysOff;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ApiServer.Controllers
 {
@@ -58,7 +59,7 @@ namespace ApiServer.Controllers
             {
                 var daysOff = _daysOffService.ReadByDni(dni);
 
-                if (daysOff == null)
+                if ((daysOff == null) || (daysOff.Count() == 0))
                 {
                     return NotFound(dni);
                 }

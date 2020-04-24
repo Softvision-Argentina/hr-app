@@ -186,7 +186,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepositoryEmployee.Setup(mrt => mrt.Query()).Returns(Employees);
             _mockMapper.Setup(mm => mm.Map<Employee>(It.IsAny<Employee>())).Returns(new Employee());
 
-            var actualResult = _service.getById(1);
+            var actualResult = _service.GetById(1);
 
             Assert.NotNull(actualResult);
             _mockRepositoryEmployee.Verify(_ => _.Query(), Times.Once);
@@ -201,7 +201,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepositoryEmployee.Setup(mrt => mrt.Query()).Returns(Employees);
             _mockMapper.Setup(mm => mm.Map<Employee>(It.IsAny<Employee>())).Returns(new Employee());
 
-            var actualResult = _service.getByDNI(1);
+            var actualResult = _service.GetByDNI(1);
 
             Assert.NotNull(actualResult);
             _mockRepositoryEmployee.Verify(_ => _.Query(), Times.Once);
