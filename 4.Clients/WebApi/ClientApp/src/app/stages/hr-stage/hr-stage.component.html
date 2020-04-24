@@ -50,7 +50,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
 

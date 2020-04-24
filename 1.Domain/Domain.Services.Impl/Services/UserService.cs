@@ -67,7 +67,10 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedUserContract> GetFilteredForTech()
         {
             var role = Roles.TechnicalInterviewer;
-            var userQuery = _userRepository.QueryEager().Where(x => x.Role == role);
+            var userQuery = _userRepository.QueryEager().Where(x => x.Role == role
+            || x.Username == "mariana.castrofreyre@softvision.com"
+            || x.Username == "mauro.falduto@softvision.com"
+            || x.Username == "gonzalo.vazquez@softvision.com");
 
             var users = userQuery.ToList();
 
@@ -80,7 +83,8 @@ namespace Domain.Services.Impl.Services
                 .Where(x => 
                 x.Role == Roles.HRManagement
                 || x.Role == Roles.HRUser
-                || x.Role == Roles.Recruiter);
+                || x.Role == Roles.Recruiter
+                || x.Username == "mariana.castrofreyre@softvision.com");
 
             var users = userQuery.ToList();
 
