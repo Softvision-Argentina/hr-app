@@ -746,6 +746,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
+      // temp fix, we should check if englishlevel should be in Candidate table and HrStage table
+      newCandidate.englishLevel = newProcess.hrStage.englishLevel;
       newProcess.userOwnerId = newCandidate.user.id;
       newProcess.candidate = newCandidate;
       newProcess = this.generateProcess(newProcess, newCandidate);
@@ -787,6 +789,14 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             });
         }
       } else {
+        this.facade.candidateService.update(newCandidate.id, newCandidate)
+        .subscribe(() => {
+          this.isLoading = false;
+          this.getCandidates();
+        }, err => {
+          this.isLoading = false;
+          this.facade.errorHandlerService.showErrorMessage(err);
+        });
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
@@ -806,6 +816,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(() => {
+                  this.isLoading = false;
                   this.getProcesses();
                   this.getCandidates();
                   this.app.hideLoading();
@@ -814,6 +825,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
                   this.closeModal();
                 }, err => {
                   this.app.hideLoading();
+                  this.isLoading = false;
                   this.facade.toastrService.error(err.message);
                 });
             }

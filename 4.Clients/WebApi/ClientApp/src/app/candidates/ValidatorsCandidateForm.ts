@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 export function validateCandidateForm(form: FormGroup) {
     let isValid = true;
     if(form.get('isReferred')) {
@@ -27,3 +27,4 @@ export function validateCandidateForm(form: FormGroup) {
     }
     return isValid;
 }
+

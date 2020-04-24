@@ -13,6 +13,7 @@ import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
+import { dniValidator } from 'src/app/directives/dni.validator';
 
 @Component({
   selector: 'candidate-add',
@@ -75,7 +76,7 @@ export class CandidateAddComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [0],
+    dni: [0, [dniValidator]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
@@ -119,7 +120,6 @@ export class CandidateAddComponent implements OnInit {
     if (this.isEdit) {
       this.fillCandidate = this._candidate;
       this.fillCandidateForm(this._process.candidate);
-      this.candidateForm.controls['dni'].disable();
       this.candidateForm.controls['additionalInformation'].disable();
       this.candidateForm.controls['linkedin'].disable();
       this.candidateForm.controls['preferredOffice'].disable();
@@ -244,7 +244,7 @@ export class CandidateAddComponent implements OnInit {
       id: !this.isEdit ? this._candidate.id : this._process.candidate.id,
       name: this.candidateForm.controls['name'].value === null ? null : this.candidateForm.controls['name'].value.toString(),
       lastName: this.candidateForm.controls['lastName'].value === null ? null : this.candidateForm.controls['lastName'].value.toString(),
-      dni: this.candidateForm.controls['dni'].value === null ? null : this.candidateForm.controls['dni'].value,
+      dni: this.candidateForm.controls['dni'].value === null ? 0 : this.candidateForm.controls['dni'].value,
       emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
       phoneNumber: prefix + pn,
       linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
@@ -266,5 +266,6 @@ export class CandidateAddComponent implements OnInit {
     newCandidate.phoneNumber.toString();
     return newCandidate;
   }
+
 
 }

@@ -13,7 +13,7 @@ import { Office } from '../../entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
-import { validateCandidateForm } from './validateCandidateForm';
+import { validateCandidateForm } from './ValidatorsCandidateForm';
 import { Subscription } from 'rxjs';
 
 @Component({

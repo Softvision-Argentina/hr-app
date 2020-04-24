@@ -46,7 +46,15 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input id="'dni'"  type="number" nz-input placeholder="Please inpunt the dni"> 
+                    <input id="'dni'" formControlName="dni"  type="number" nz-input placeholder="Please input the dni">
+                    <nz-form-explain>
+                        <ng-container *ngIf="candidateForm.get('dni').hasError('dniTooLongError')">
+                            Dni is too long
+                        </ng-container>
+                        <ng-container *ngIf="candidateForm.get('dni').hasError('dniTooShortError')">
+                            Dni is too short
+                        </ng-container>
+                    </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
