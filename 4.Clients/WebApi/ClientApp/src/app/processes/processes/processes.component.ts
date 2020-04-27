@@ -603,7 +603,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzContent: modalContent,
       nzClosable: false,
       nzWidth: '90%',
-      nzFooter: footer
+      nzFooter: footer,
+      nzMaskClosable: false
     });
     this.app.hideLoading();
   }
