@@ -188,6 +188,7 @@ namespace Domain.Services.Impl.Services
 
             var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
             candidate.EnglishLevel = process.HrStage.EnglishLevel;
+            candidate.AdditionalInformation = process.Candidate.AdditionalInformation;
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
 

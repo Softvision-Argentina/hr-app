@@ -161,10 +161,10 @@
     <div nz-row>
         <div nz-col nzSpan="24">
             <nz-form-item>
-                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="additionalInformation">Additional Information
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="additionalInformation">Feedback
                 </nz-form-label>
                 <nz-form-control>
-                    <textarea rows="1" id="additionalInformation" style="width: 50%;" nz-input formControlName="additionalInformation" placeholder="Input any additional information if necessary" id="additionalInformation"></textarea>
+                    <textarea rows="3 " cols="35" id="additionalInformation" style="width: 50%;" nz-input formControlName="additionalInformation" placeholder="Input any additional information if necessary"></textarea>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d" *ngIf="candidateForm.get('additionalInformation').dirty && candidateForm.get('additionalInformation').errors">
                     <ng-container *ngIf="candidateForm.get('additionalInformation')?.hasError('trimBeginError')">

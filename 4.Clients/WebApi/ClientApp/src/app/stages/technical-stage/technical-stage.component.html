@@ -89,7 +89,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input nzAutosize formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d" *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">
                     <ng-container *ngIf="technicalForm.get('feedback')?.hasError('trimBeginError')">

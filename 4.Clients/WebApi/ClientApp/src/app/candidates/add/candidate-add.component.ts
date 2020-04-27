@@ -94,11 +94,8 @@ export class CandidateAddComponent implements OnInit {
     knownFrom: [null],
     referredBy: [null]
   });
-  isDniValid: boolean = true;
-  isDniLoading: boolean = true;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
-  skills: Skill[] = [];
-  private completeSkillList: Skill[] = [];
+  skills: Skill[] = [];  
   isEdit: boolean = false;
 
   statusList: any[];
@@ -120,9 +117,6 @@ export class CandidateAddComponent implements OnInit {
     if (this.isEdit) {
       this.fillCandidate = this._candidate;
       this.fillCandidateForm(this._process.candidate);
-      this.candidateForm.controls['additionalInformation'].disable();
-      this.candidateForm.controls['linkedin'].disable();
-      this.candidateForm.controls['preferredOffice'].disable();
       this.changeFormStatus(false);
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
@@ -157,11 +151,12 @@ export class CandidateAddComponent implements OnInit {
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
       if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni']) &&
-      (this.candidateForm.controls[i] != this.candidateForm.controls['additionalInformation']) &&
-      (this.candidateForm.controls[i] != this.candidateForm.controls['linkedin']) && 
-      (this.candidateForm.controls[i] != this.candidateForm.controls['preferredOffice'])) {
-        if (enable) { this.candidateForm.controls[i].enable(); }
-        else { this.candidateForm.controls[i].disable(); }
+      (this.candidateForm.controls[i] != this.candidateForm.controls['additionalInformation'])){
+        if (enable){ 
+          this.candidateForm.controls[i].enable(); 
+        }else{ 
+          this.candidateForm.controls[i].disable(); 
+        }
       }
     }
   }
@@ -266,6 +261,5 @@ export class CandidateAddComponent implements OnInit {
     newCandidate.phoneNumber.toString();
     return newCandidate;
   }
-
 
 }
