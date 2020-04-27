@@ -36,16 +36,16 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
             return ApiAction(() =>
             {
-                var office = _officeService.Read(Id);
+                var office = _officeService.Read(id);
 
                 if (office == null)
                 {
-                    return NotFound(Id);
+                    return NotFound(id);
                 }
 
                 return Accepted(_mapper.Map<ReadedOfficeViewModel>(office));
@@ -64,20 +64,20 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody]UpdateOfficeViewModel updateOfficeVm)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]UpdateOfficeViewModel updateOfficeVm)
         {
             return ApiAction(() =>
             {
                 var contract = _mapper.Map<UpdateOfficeContract>(updateOfficeVm);
-                contract.Id = Id;
+                contract.Id = id;
                 _officeService.Update(contract);
 
-                return Accepted(new { Id });
+                return Accepted(new { id });
             });
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             return ApiAction(() =>
