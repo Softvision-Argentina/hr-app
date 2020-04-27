@@ -9,8 +9,8 @@ export class HrStage {
     feedback: string;
     status: StageStatusEnum;
     processId: number;
-    actualSalary: number;
-    wantedSalary: number;
+    actualSalary?: number;
+    wantedSalary?: number;
     englishLevel: EnglishLevelEnum;
     rejectionReasonsHr?: RejectionReasonsHrEnum;
     userOwnerId?: number;

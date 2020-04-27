@@ -61,22 +61,17 @@
     <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">Actual Salary *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">Actual Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="actualSalary" id="actualSalary" placeholder="Please input the actual salary" pattern="[0-9]+([\.,][0-9]+)?">
-                    <nz-form-explain *ngIf="hrForm.get('actualSalary').dirty && hrForm.get('actualSalary').errors">
-                        Please input the salary</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Wanted Salary *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Wanted Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="wantedSalary" id="wantedSalary" placeholder="Please input the wanted salary" pattern="[0-9]+([\.,][0-9]+)?">
-                    <nz-form-explain *ngIf="hrForm.get('wantedSalary').dirty && hrForm.get('wantedSalary').errors">
-                        Please input the salary
-                    </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>

@@ -31,8 +31,8 @@ export class HrStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    actualSalary: [null, [Validators.required]],
-    wantedSalary: [null, [Validators.required]],
+    actualSalary: [null],
+    wantedSalary: [null],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
@@ -111,8 +111,8 @@ export class HrStageComponent implements OnInit {
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.processId = processId;
     hrStage.englishLevel = this.getControlValue(this.hrForm.controls.englishLevel);
-    hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary);
-    hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary);
+    hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.actualSalary);
+    hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.wantedSalary);    
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
