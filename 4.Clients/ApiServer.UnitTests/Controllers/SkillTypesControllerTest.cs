@@ -1,121 +1,172 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.SkillType;
+﻿using ApiServer.Contracts.SkillType;
 using ApiServer.Controllers;
 using AutoMapper;
 using Core;
 using Core.ExtensionHelpers;
+using Domain.Model;
 using Domain.Services.Contracts.SkillType;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ApiServer.UnitTests.Controllers
 {
     public class SkillTypesControllerTest
     {
-        private readonly SkillTypesController controller;
-        private readonly Mock<ISkillTypeService> mockService;
-        private readonly Mock<ILog<SkillTypesController>> mockLog;
-        private readonly Mock<IMapper> mockMapper;
+        private SkillTypesController controller;
+        private Mock<ILog<SkillTypesController>> mockLog;
+        private Mock<IMapper> mockMapper;
+        private Mock<ISkillTypeService> mockService;
 
         public SkillTypesControllerTest()
         {
-            mockService = new Mock<ISkillTypeService>();
             mockLog = new Mock<ILog<SkillTypesController>>();
             mockMapper = new Mock<IMapper>();
+            mockService = new Mock<ISkillTypeService>();
             controller = new SkillTypesController(mockService.Object, mockLog.Object, mockMapper.Object);
         }
 
-        [Fact(DisplayName = "Verify that get ActionResult")]
-        public void GivenDataStored_WhenGet_ThenActionResult()
+        [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
+        public void Should_Get_AllSkillTypes()
         {
             var expectedValue = new List<ReadedSkillTypeViewModel>();
-            mockService.Setup(_ => _.List()).Returns(new List<ReadedSkillTypeContract>());
-            mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<List<ReadedSkillTypeContract>>())).Returns(expectedValue);
+            expectedValue.Add(new ReadedSkillTypeViewModel
+            {
+                Id = 0,
+                Name = "test",
+                Description = "test"
+            });
+
+            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedSkillTypeContract() });
+            mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>())).Returns(expectedValue);
 
             var result = controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            Assert.Equal(expectedValue, (result as AcceptedResult).Value);
+
+            var resultData = (result as AcceptedResult).Value as List<ReadedSkillTypeViewModel>;
+            var resultDataAsJson = JsonConvert.SerializeObject(resultData);
+            var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
+
+            Assert.Equal(expectedValueAsJson, resultDataAsJson);
             mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<List<ReadedSkillTypeContract>>()), Times.Once);
+            mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that get NotFoundObjectResult when data is valid but cannot find ReadedSkillTypeContract")]
-        public void GivenNoDataAndAnId_WhenGet_ThenNotFoundObjectResult()
+        [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult")]
+        public void Should_Get_SkillTypeById_WhenDataIsValid()
         {
-            int id = 0;
+            var skillTypeId = 0;
+            var expectedValue = new ReadedSkillTypeViewModel
+            {
+                Id = 0,
+                Name = "test",
+                Description = "test"
+            };
 
-            var result = controller.Get(id);
-
-            Assert.NotNull(result);
-            Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal(id, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-        }
-
-        [Fact(DisplayName = "Verify that get ActionResult when data is valid and can find ReadedSkillTypeContract")]
-        public void GivenDataAndAnId_WhenGet_ThenActionResult()
-        {
-            int id = 0;
             mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedSkillTypeContract());
+            mockMapper.Setup(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>())).Returns(expectedValue);
 
-            var result = controller.Get(id);
+            var result = controller.Get(skillTypeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
+
+            var resultData = (result as AcceptedResult).Value as ReadedSkillTypeViewModel;
+            var resultDataAsJson = JsonConvert.SerializeObject(resultData);
+            var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
+
+            Assert.Equal(expectedValueAsJson, resultDataAsJson);
             mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
             mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that post with CreateSkillTypeViewModel returns CreatedResult when data is valid")]
-        public void GivenData_WhenPost_ThenCreateSkillTypeViewModel()
+        [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult")]
+        public void Should_Get_SkillTypeById_WhenDataIsInvalid()
         {
-            var task = new CreateSkillTypeViewModel();
+            var skillTypeId = 0;
+            var expectedValue = skillTypeId;
+
+            var result = controller.Get(skillTypeId);
+
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
+            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Never);
+        }
+
+        [Fact(DisplayName = "Verify that method 'Add' returns CreatedResult")]
+        public void Should_Post_SkillType()
+        {
+            var skillTypeVM = new CreateSkillTypeViewModel
+            {
+                Name = "test",
+                Description = "test"
+            };
+
+            var expectedValue = new CreatedSkillTypeViewModel
+            {
+                Id = 0
+            };
+
+            mockMapper.Setup(_ => _.Map<CreateSkillTypeContract>(It.IsAny<CreateSkillTypeViewModel>())).Returns(new CreateSkillTypeContract());
+            mockMapper.Setup(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>())).Returns(expectedValue);
             mockService.Setup(_ => _.Create(It.IsAny<CreateSkillTypeContract>())).Returns(new CreatedSkillTypeContract());
 
-            var result = controller.Post(task);
+            var result = controller.Post(skillTypeVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
-            Assert.Equal("Get", (result as CreatedResult).Location);
+
+            var resultData = (result as CreatedResult).Value as CreatedSkillTypeViewModel;
+            var resultAsJson = JsonConvert.SerializeObject(resultData);
+            var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
+
+            Assert.Equal(expectedValueAsJson, resultAsJson);
             mockService.Verify(_ => _.Create(It.IsAny<CreateSkillTypeContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreateSkillTypeContract>(It.IsAny<CreateSkillTypeViewModel>()), Times.Once);
             mockMapper.Verify(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that put with id and UpdateSkillTypeViewModel returns AcceptedResult when data is valid")]
-        public void GivenDataAndAnId_WhenPut_ThenAcceptedResult()
+        [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
+        public void Should_Put_SkillType()
         {
-            int id = 0;
-            var task = new UpdateSkillTypeViewModel();
-            mockMapper.Setup(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>())).Returns(new UpdateSkillTypeContract());
+            var skillTypeId = 0;
+            var expectedValue = new { id = skillTypeId };
+            var skillTypeToUpdate = new UpdateSkillTypeViewModel();
 
-            var result = controller.Put(id, task);
+            mockMapper.Setup(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>())).Returns(new UpdateSkillTypeContract());
+            mockService.Setup(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()));
+
+            var result = controller.Put(skillTypeId, skillTypeToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            Assert.Equal(new { id }.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
+            Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
             mockService.Verify(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()), Times.Once);
             mockMapper.Verify(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that delete with id returns AcceptedResult when data is valid")]
-        public void GivenAnId_WhenDelete_ThenAcceptedResult()
+        [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
+        public void Should_Delete_SkillType()
         {
-            int id = 0;
+            var skillTypeId = 0;
 
-            var result = controller.Delete(id);
+            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+
+            var result = controller.Delete(skillTypeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Verify that ping returns OkObjectResult")]
-        public void GivenNothing_WhenPing_ThenOkObjectResult()
+        [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
+        public void Should_Ping()
         {
             var result = controller.Ping();
 
