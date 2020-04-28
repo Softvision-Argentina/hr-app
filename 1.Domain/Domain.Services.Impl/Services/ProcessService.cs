@@ -230,10 +230,10 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
         }
 
-        public void Approve(int processID)
+        public void Approve(int processId)
         {
-            _processRepository.Approve(processID);
-            var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == processID);
+            _processRepository.Approve(processId);
+            var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
             process.Candidate.Status = SetCandidateStatus(process.Status);
             _unitOfWork.Complete();
         }

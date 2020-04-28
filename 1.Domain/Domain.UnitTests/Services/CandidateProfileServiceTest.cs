@@ -38,7 +38,6 @@ namespace Domain.Services.Impl.UnitTests.Services
             _service = new CandidateProfileService(
                 _mockMapper.Object, 
                 _mockRepositoryCandidateProfile.Object, 
-                _mockRepositoryModelCommunity.Object, 
                 MockUnitOfWork.Object, 
                 _mockLogCandidateProfileService.Object,
                 _mockUpdateCandidateProfileContractValidator.Object,

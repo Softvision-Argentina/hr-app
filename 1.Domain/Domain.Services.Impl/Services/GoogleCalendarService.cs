@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading;
-using Domain.Services.Interfaces.Services;
+﻿using Domain.Services.Interfaces.Services;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using System;
+using System.IO;
+using System.Threading;
 
 namespace Domain.Services.Impl.Services
-{//check in
+{
+    // TODO: Are those comments necessary? If not, delete.
+    // Also check out try-catch statements, they return values instead of throwing exceptions.
     public class GoogleCalendarService : IGoogleCalendarService
     {
         // If modifying these scopes, delete your previously saved credentials
@@ -48,6 +48,7 @@ namespace Domain.Services.Impl.Services
             }
             catch (Exception ex)
             {
+                // TODO: Shouldn't this throw 'ex'?
                 return null;
             }
         }
@@ -63,6 +64,7 @@ namespace Domain.Services.Impl.Services
             }
             catch (Exception ex)
             {
+                // TODO: Shouldn't this throw 'ex'?
                 return string.Empty;
             }
         }
@@ -76,6 +78,7 @@ namespace Domain.Services.Impl.Services
             }
             catch (Exception ex)
             {
+                // TODO: Shouldn't this throw 'ex'?
                 return false;
             }
         }

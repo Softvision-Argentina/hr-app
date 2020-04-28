@@ -197,9 +197,9 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private Process GetProcess(int processID)
+        private Process GetProcess(int processId)
         {
-            var process = this._processRepository.Query().Where(p => p.Id == processID).FirstOrDefault();
+            var process = this._processRepository.Query().Where(p => p.Id == processId).FirstOrDefault();
             if (process == null)
                 throw new ValidationException("Process was not found");
             return process;

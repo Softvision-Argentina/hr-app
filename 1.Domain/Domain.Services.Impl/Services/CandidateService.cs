@@ -233,29 +233,29 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void AddUserToCandidate(Candidate candidate, int userID)
+        private void AddUserToCandidate(Candidate candidate, int userId)
         {
-            var user = _userRepository.Query().Where(_ => _.Id == userID).FirstOrDefault();
+            var user = _userRepository.Query().Where(_ => _.Id == userId).FirstOrDefault();
             if (user == null)
-               throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
+               throw new Domain.Model.Exceptions.User.UserNotFoundException(userId);
 
             candidate.User = user;
         }
 
-        private void AddCommunityToCandidate(Candidate candidate, int communityID)
+        private void AddCommunityToCandidate(Candidate candidate, int communityId)
         {
-            var community = _communityRepository.Query().Where(_ => _.Id == communityID).FirstOrDefault();
+            var community = _communityRepository.Query().Where(_ => _.Id == communityId).FirstOrDefault();
             if (community == null)
-                throw new Domain.Model.Exceptions.Community.CommunityNotFoundException(communityID);
+                throw new Domain.Model.Exceptions.Community.CommunityNotFoundException(communityId);
 
             candidate.Community = community;
         }
 
-        private void AddCandidateProfileToCandidate(Candidate candidate, int profileID)
+        private void AddCandidateProfileToCandidate(Candidate candidate, int profileId)
         {
-            var profile = _candidateProfileRepository.Query().Where(_ => _.Id == profileID).FirstOrDefault();
+            var profile = _candidateProfileRepository.Query().Where(_ => _.Id == profileId).FirstOrDefault();
             if (profile == null)
-                throw new Domain.Model.Exceptions.CandidateProfile.CandidateProfileNotFoundException(profileID);
+                throw new Domain.Model.Exceptions.CandidateProfile.CandidateProfileNotFoundException(profileId);
 
             candidate.Profile = profile;
         }

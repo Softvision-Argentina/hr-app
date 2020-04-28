@@ -8,7 +8,6 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Task;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +17,6 @@ namespace Domain.Services.Impl.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Task> _taskRepository;
-        private readonly IRepository<TaskItem> _taskItemRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<TaskService> _log;
         private readonly UpdateTaskContractValidator _updateTaskContractValidator;
@@ -26,7 +24,6 @@ namespace Domain.Services.Impl.Services
 
         public TaskService(IMapper mapper,
             IRepository<Task> taskRepository,
-            IRepository<TaskItem> taskItemRepository,
             IUnitOfWork unitOfWork,
             ILog<TaskService> log,
             UpdateTaskContractValidator updateTaskContractValidator,
@@ -34,7 +31,6 @@ namespace Domain.Services.Impl.Services
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _taskItemRepository = taskItemRepository;
             _taskRepository = taskRepository;
             _log = log;
             _updateTaskContractValidator = updateTaskContractValidator;
@@ -126,8 +122,6 @@ namespace Domain.Services.Impl.Services
 
             return _mapper.Map<ReadedTaskContract>(taskResult);
         }
-
-
 
         public IEnumerable<ReadedTaskContract> List()
         {

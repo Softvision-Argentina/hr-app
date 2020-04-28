@@ -1,9 +1,9 @@
-﻿using Domain.Model;
+﻿using Core.Persistance;
+using Domain.Model;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
-using System.Collections.Generic;
-using Core.Persistance;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.Services.Impl.Services

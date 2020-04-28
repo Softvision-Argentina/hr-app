@@ -2,14 +2,14 @@ using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
-using Domain.Services.Contracts.Employee;
 using Domain.Model.Exceptions.Employee;
+using Domain.Services.Contracts.Employee;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Employee;
 using Domain.Services.Interfaces.Services;
+using FluentValidation;
 using System.Collections.Generic;
 using System.Linq;
-using FluentValidation;
 
 namespace Domain.Services.Impl.Services
 {
@@ -55,7 +55,7 @@ namespace Domain.Services.Impl.Services
         public void Delete(int id)
         {
             _logger.LogInformation($"Searching employee {id}");
-            Employee employee= _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
+            Employee employee = _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
 
             if (employee == null)
             {
@@ -122,27 +122,24 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
         }
 
-        private void AddUserToEmployee(Employee employee, int userID)
+        private void AddUserToEmployee(Employee employee, int userId)
         {
 
-            var user = _userRepository.Query().Where(usr => usr.Id == userID).FirstOrDefault();
-            //if user == null => throw
-            employee.User = user ?? throw new Domain.Model.Exceptions.User.UserNotFoundException(userID);
+            var user = _userRepository.Query().Where(usr => usr.Id == userId).FirstOrDefault();
+            employee.User = user ?? throw new Domain.Model.Exceptions.User.UserNotFoundException(userId);
         }
 
         private void AddRoleToEmployee(Employee employee, int roleId)
         {
 
             var role = _roleRepository.Query().Where(r => r.Id == roleId).FirstOrDefault();
-            //if user == null => throw
             employee.Role = role ?? throw new Domain.Model.Exceptions.Role.RoleNotFoundException(roleId);
         }
 
-        private void AddReviewerToEmployee(Employee employee, int? ReviewerId)
+        private void AddReviewerToEmployee(Employee employee, int? reviewerId)
         {
 
-            var Reviewer = _employeeRepository.Query().Where(e => e.Id == ReviewerId).FirstOrDefault();
-            //if recruiter == null => throw
+            var Reviewer = _employeeRepository.Query().Where(e => e.Id == reviewerId).FirstOrDefault();
             if (Reviewer != null)
             {
                 employee.Reviewer = Reviewer;

@@ -9,10 +9,8 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Skill;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -89,16 +87,16 @@ namespace Domain.Services.Impl.Services
 
             this.AddTypeToSkill(skill, contract.Type);
 
-            var updatedSkill = _skillRepository.Update(skill);
+            _skillRepository.Update(skill);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
         }
 
-        private void AddTypeToSkill(Skill skill, int typeID)
+        private void AddTypeToSkill(Skill skill, int typeId)
         {
-            var type = _skillTypesRepository.Query().Where(_ => _.Id == typeID).FirstOrDefault();
+            var type = _skillTypesRepository.Query().Where(_ => _.Id == typeId).FirstOrDefault();
             if (type == null)
-                throw new SkillTypeNotFoundException(typeID);
+                throw new SkillTypeNotFoundException(typeId);
 
             skill.Type = type;
         }

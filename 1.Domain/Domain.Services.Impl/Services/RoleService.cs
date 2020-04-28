@@ -78,9 +78,9 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedRoleContract>>(RoleList);
         }
 
-        public ReadedRoleContract Read(int Id)
+        public ReadedRoleContract Read(int id)
         {
-            var roleQuery = _roleRepository.QueryEager().Where(_ => _.Id == Id);
+            var roleQuery = _roleRepository.QueryEager().Where(_ => _.Id == id);
 
             var roleResult = roleQuery.SingleOrDefault();
 

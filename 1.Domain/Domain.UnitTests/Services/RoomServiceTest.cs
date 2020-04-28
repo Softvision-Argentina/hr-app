@@ -38,7 +38,6 @@ namespace Domain.Services.Impl.UnitTests.Services
             _service = new RoomService(
                 _mockMapper.Object,
                 _mockRepositoryRoom.Object,
-                _mockRepositoryReservation.Object,
                 _mockRepositoryOffice.Object,
                 MockUnitOfWork.Object,
                 _mockLogRoomService.Object,

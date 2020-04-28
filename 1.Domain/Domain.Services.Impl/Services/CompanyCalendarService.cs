@@ -10,7 +10,6 @@ using Domain.Services.Interfaces.Services;
 using FluentValidation;
 using Google.Apis.Calendar.v3.Data;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Domain.Services.Impl.Services
@@ -47,9 +46,7 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedCompanyCalendarContract> List()
         {
             var companyCalendarQuery = _companyCalendarRepository.QueryEager();
-
             var companyCalendars = companyCalendarQuery.ToList();
-
             return _mapper.Map<List<ReadedCompanyCalendarContract>>(companyCalendars);
         }
 
@@ -58,9 +55,7 @@ namespace Domain.Services.Impl.Services
             ValidateContract(contract);
 
             var companyCalendar = _mapper.Map<CompanyCalendar>(contract);
-
             var createdCompanyCalendar = _companyCalendarRepository.Create(companyCalendar);
-
             this.AddModelToGoogleCalendar(companyCalendar);
 
             _unitOfWork.Complete();
@@ -87,9 +82,7 @@ namespace Domain.Services.Impl.Services
             ValidateContract(contract);
 
             var companyCalendar = _mapper.Map<CompanyCalendar>(contract);
-
-            var updatedCompanyCalendar = _companyCalendarRepository.Update(companyCalendar);
-
+            _companyCalendarRepository.Update(companyCalendar);
             this.AddModelToGoogleCalendar(companyCalendar);
 
             _unitOfWork.Complete();

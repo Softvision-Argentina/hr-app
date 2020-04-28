@@ -1,17 +1,15 @@
 ﻿using Core;
-using Core.ExtensionHelpers;
 using FluentValidation;
 using FluentValidation.Validators;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Domain.Services.Impl.Validators
 {
     public class UniquePropertyValidator<T, TProperty> : PropertyValidator where T : IEntity
     {
-        private Func<IQueryable<T>> _collectionAccessorFunc;
+        private readonly Func<IQueryable<T>> _collectionAccessorFunc;
 
         public UniquePropertyValidator(Func<IQueryable<T>> collectionAccessorFunc)
             : base("The {PropertyName} must be unique.")

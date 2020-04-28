@@ -2,8 +2,8 @@
 using Core;
 using Core.Persistance;
 using Domain.Model;
-using Domain.Model.Exceptions.Skill;
 using Domain.Model.Exceptions;
+using Domain.Model.Exceptions.Skill;
 using Domain.Services.Contracts;
 using Domain.Services.Impl.Validators;
 using Domain.Services.Interfaces.Services;

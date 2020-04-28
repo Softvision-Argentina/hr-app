@@ -43,9 +43,9 @@ namespace Domain.Services.Impl.Services
         {
             var employeeCasualtyQuery = _employeeCasualtyRepository.QueryEager();
 
-            var employeeCasualtys = employeeCasualtyQuery.ToList();
+            var employeeCasualties = employeeCasualtyQuery.ToList();
 
-            return _mapper.Map<List<ReadedEmployeeCasualtyContract>>(employeeCasualtys);
+            return _mapper.Map<List<ReadedEmployeeCasualtyContract>>(employeeCasualties);
         }
 
         public CreatedEmployeeCasualtyContract Create(CreateEmployeeCasualtyContract contract)

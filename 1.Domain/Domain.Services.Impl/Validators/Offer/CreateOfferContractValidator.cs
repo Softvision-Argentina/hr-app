@@ -1,8 +1,5 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.Offer;
+﻿using Domain.Services.Contracts.Offer;
+using FluentValidation;
 
 namespace Domain.Services.Impl.Validators.Offer
 {

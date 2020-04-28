@@ -26,7 +26,6 @@ namespace Domain.Services.Impl.Services
         public CandidateProfileService(
             IMapper mapper,
             IRepository<CandidateProfile> candidateProfileRepository,
-            IRepository<Model.Community> communityItemRepository,
             IUnitOfWork unitOfWork,
             ILog<CandidateProfileService> log,
             UpdateCandidateProfileContractValidator updateCandidateProfileContractValidator,
@@ -57,16 +56,16 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<CreatedCandidateProfileContract>(createdCandidateProfile);
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            _log.LogInformation($"Searching Candidate Profile {Id}");
-            var candidateProfile = _candidateProfileRepository.Query().FirstOrDefault(_ => _.Id == Id);
+            _log.LogInformation($"Searching Candidate Profile {id}");
+            var candidateProfile = _candidateProfileRepository.Query().FirstOrDefault(_ => _.Id == id);
 
             if (candidateProfile == null)
             {
-                throw new DeleteCandidateProfileNotFoundException(Id);
+                throw new DeleteCandidateProfileNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Candidate Profile {Id}");
+            _log.LogInformation($"Deleting Candidate Profile {id}");
             _candidateProfileRepository.Delete(candidateProfile);
 
             _unitOfWork.Complete();
@@ -97,11 +96,11 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedCandidateProfileContract>>(candidateProfileResult);
         }
 
-        public ReadedCandidateProfileContract Read(int Id)
+        public ReadedCandidateProfileContract Read(int id)
         {
             var candidateProfileQuery = _candidateProfileRepository
                 .QueryEager()                
-                .Where(_ => _.Id == Id);
+                .Where(_ => _.Id == id);
 
             var candidateProfileResult = candidateProfileQuery.SingleOrDefault();
 
@@ -134,11 +133,11 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void ValidateExistence(int Id, string name)
+        private void ValidateExistence(int id, string name)
         {
             try
             {
-                var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name && _.Id != Id);
+                var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name && _.Id != id);
                 if (candidateProfile != null) throw new InvalidCandidateProfileException("The Profile already exists .");
             }
             catch (ValidationException ex)

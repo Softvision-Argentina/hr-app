@@ -57,17 +57,17 @@ namespace Domain.Services.Impl.Services
             ValidateContract(contract);
 
             _log.LogInformation($"Mapping contract {contract.Description}");
-            var Reservation = _mapper.Map<Reservation>(contract);
+            var reservation = _mapper.Map<Reservation>(contract);
 
-            ValidateSchedule(Reservation);
-            CheckOverlap(Reservation);
+            ValidateSchedule(reservation);
+            CheckOverlap(reservation);
 
-            Reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
-            Reservation.Room = _RoomRepository.Query().Where(x => x.Id == Reservation.RoomId).FirstOrDefault();
+            reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
+            reservation.Room = _RoomRepository.Query().Where(x => x.Id == reservation.RoomId).FirstOrDefault();
 
-            var createdReservation = _ReservationRepository.Create(Reservation);
+            var createdReservation = _ReservationRepository.Create(reservation);
 
-            AddModelToGoogleCalendar(Reservation);
+            AddModelToGoogleCalendar(reservation);
 
             _log.LogInformation($"Complete for {contract.Description}");
             _unitOfWork.Complete();
@@ -78,14 +78,14 @@ namespace Domain.Services.Impl.Services
         public void Delete(int id)
         {
             _log.LogInformation($"Searching Reservation {id}");
-            Reservation Reservation = _ReservationRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            Reservation reservation = _ReservationRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
-            if (Reservation == null)
+            if (reservation == null)
             {
                 throw new DeleteReservationNotFoundException(id);
             }
             _log.LogInformation($"Deleting Reservation {id}");
-            _ReservationRepository.Delete(Reservation);
+            _ReservationRepository.Delete(reservation);
 
             _unitOfWork.Complete();
         }
@@ -102,38 +102,38 @@ namespace Domain.Services.Impl.Services
             ValidateContract(contract);
 
             _log.LogInformation($"Mapping contract {contract.Description}");
-            var Reservation = _mapper.Map<Reservation>(contract);
+            var reservation = _mapper.Map<Reservation>(contract);
 
-            ValidateSchedule(Reservation);
-            CheckOverlap(Reservation);
-            Reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
+            ValidateSchedule(reservation);
+            CheckOverlap(reservation);
+            reservation.User = _userRepository.Query().Where(x => x.Id == contract.User).FirstOrDefault();
 
-            _ReservationRepository.Update(Reservation);
+            _ReservationRepository.Update(reservation);
             _log.LogInformation($"Complete for {contract.Description}");
             _unitOfWork.Complete();
         }
         
         public ReadedReservationContract Read(int id)
         {
-            var ReservationQuery = _ReservationRepository
+            var reservationQuery = _ReservationRepository
                 .Query()
                 .Where(_ => _.Id == id)
                 .OrderBy(_ => _.SinceReservation);
 
-            var ReservationResult = ReservationQuery.SingleOrDefault();
+            var reservationResult = reservationQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedReservationContract>(ReservationResult);
+            return _mapper.Map<ReadedReservationContract>(reservationResult);
         }
         
         public IEnumerable<ReadedReservationContract> List()
         {
-            var ReservationQuery = _ReservationRepository
+            var reservationQuery = _ReservationRepository
                 .Query()
                 .OrderBy(_ => _.SinceReservation);
 
-            var ReservationResult = ReservationQuery.ToList();
+            var reservationResult = reservationQuery.ToList();
 
-            return _mapper.Map<List<ReadedReservationContract>>(ReservationResult);
+            return _mapper.Map<List<ReadedReservationContract>>(reservationResult);
         }
 
         private void ValidateContract(CreateReservationContract contract)

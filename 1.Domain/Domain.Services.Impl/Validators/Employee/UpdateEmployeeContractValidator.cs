@@ -1,8 +1,5 @@
 ﻿using Domain.Services.Contracts.Employee;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Impl.Validators.Employee
 {
@@ -10,14 +7,14 @@ namespace Domain.Services.Impl.Validators.Employee
     {
         public UpdateEmployeeContractValidator()
         {
-            RuleFor(employee => employee.Name).NotEmpty();
-            RuleFor(employee => employee.LastName).NotEmpty();
-            RuleFor(employee => employee.EmailAddress).NotEmpty();
-            RuleFor(employee => employee.DNI).NotEmpty();
-            RuleFor(employee => employee.PhoneNumber).NotEmpty();
-            RuleFor(employee => employee.User).NotNull();
-            RuleFor(employee => employee.isReviewer).NotNull();
-            RuleFor(employee => employee.Role).NotNull();
+            RuleFor(_ => _.Name).NotEmpty();
+            RuleFor(_ => _.LastName).NotEmpty();
+            RuleFor(_ => _.EmailAddress).NotEmpty();
+            RuleFor(_ => _.DNI).NotEmpty();
+            RuleFor(_ => _.PhoneNumber).NotEmpty();
+            RuleFor(_ => _.User).NotNull();
+            RuleFor(_ => _.isReviewer).NotNull();
+            RuleFor(_ => _.Role).NotNull();
         }
     }
 }

@@ -49,25 +49,25 @@ namespace Domain.Services.Impl.Services
             ValidateExistence(0, contract.Name);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
-            var Office = _mapper.Map<Office>(contract);
+            var office = _mapper.Map<Office>(contract);
 
-            var createdOffice = _OfficeRepository.Create(Office);
+            var createdOffice = _OfficeRepository.Create(office);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
             return _mapper.Map<CreatedOfficeContract>(createdOffice);
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            _log.LogInformation($"Searching Candidate Profile {Id}");
-            Office Office = _OfficeRepository.Query().Where(_ => _.Id == Id).FirstOrDefault();
+            _log.LogInformation($"Searching Candidate Profile {id}");
+            Office Office = _OfficeRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (Office == null)
             {
-                throw new DeleteOfficeNotFoundException(Id);
+                throw new DeleteOfficeNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Candidate Profile {Id}");
+            _log.LogInformation($"Deleting Candidate Profile {id}");
             _OfficeRepository.Delete(Office);
 
             _unitOfWork.Complete();
@@ -99,11 +99,11 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<List<ReadedOfficeContract>>(OfficeResult);
         }
 
-        public ReadedOfficeContract Read(int Id)
+        public ReadedOfficeContract Read(int id)
         {
             var OfficeQuery = _OfficeRepository
                 .QueryEager()                
-                .Where(_ => _.Id == Id);
+                .Where(_ => _.Id == id);
 
             var OfficeResult = OfficeQuery.SingleOrDefault();
 
@@ -136,11 +136,11 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void ValidateExistence(int Id, string name)
+        private void ValidateExistence(int id, string name)
         {
             try
             {
-                Office Office = _OfficeRepository.Query().Where(_ => _.Name == name && _.Id != Id).FirstOrDefault();
+                Office Office = _OfficeRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
                 if (Office != null) throw new InvalidOfficeException("The Office already exists .");
             }
             catch (ValidationException ex)

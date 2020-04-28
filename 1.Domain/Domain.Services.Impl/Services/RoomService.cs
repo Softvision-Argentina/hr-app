@@ -16,9 +16,8 @@ namespace Domain.Services.Impl.Services
     public class RoomService : IRoomService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<Room> _RoomRepository;
-        private readonly IRepository<Office> _OfficeRepository;
-        private readonly IRepository<Reservation> _ReservationItemRepository;
+        private readonly IRepository<Room> _roomRepository;
+        private readonly IRepository<Office> _officeRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<RoomService> _log;
         private readonly UpdateRoomContractValidator _updateRoomContractValidator;
@@ -26,9 +25,8 @@ namespace Domain.Services.Impl.Services
 
         public RoomService(
             IMapper mapper,
-            IRepository<Room> RoomRepository,
-            IRepository<Reservation> ReservationItemRepository,
-            IRepository<Office> OfficeItemRepository,
+            IRepository<Room> roomRepository,
+            IRepository<Office> officeItemRepository,
             IUnitOfWork unitOfWork,
             ILog<RoomService> log,
             UpdateRoomContractValidator updateRoomContractValidator,
@@ -37,9 +35,8 @@ namespace Domain.Services.Impl.Services
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _RoomRepository = RoomRepository;
-            _ReservationItemRepository = ReservationItemRepository;
-            _OfficeRepository = OfficeItemRepository;
+            _roomRepository = roomRepository;
+            _officeRepository = officeItemRepository;
             _log = log;
             _updateRoomContractValidator = updateRoomContractValidator;
             _createRoomContractValidator = createRoomContractValidator;
@@ -52,28 +49,28 @@ namespace Domain.Services.Impl.Services
             ValidateExistence(0, contract.Name);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
-            var Room = _mapper.Map<Room>(contract);
+            var room = _mapper.Map<Room>(contract);
 
-            Room.Office = _OfficeRepository.Query().Where(x => x.Id == Room.OfficeId).FirstOrDefault();
+            room.Office = _officeRepository.Query().Where(x => x.Id == room.OfficeId).FirstOrDefault();
 
-            var createdRoom = _RoomRepository.Create(Room);
+            var createdRoom = _roomRepository.Create(room);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
             _log.LogInformation($"Return {contract.Name}");
             return _mapper.Map<CreatedRoomContract>(createdRoom);
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            _log.LogInformation($"Searching Candidate Profile {Id}");
-            Room Room = _RoomRepository.Query().Where(_ => _.Id == Id).FirstOrDefault();
+            _log.LogInformation($"Searching Candidate Profile {id}");
+            Room room = _roomRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
-            if (Room == null)
+            if (room == null)
             {
-                throw new DeleteRoomNotFoundException(Id);
+                throw new DeleteRoomNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Candidate Profile {Id}");
-            _RoomRepository.Delete(Room);
+            _log.LogInformation($"Deleting Candidate Profile {id}");
+            _roomRepository.Delete(room);
 
             _unitOfWork.Complete();
         }
@@ -87,8 +84,7 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Mapping contract {contract.Name}");
             var Room = _mapper.Map<Room>(contract);
 
-
-            var updatedRoom = _RoomRepository.Update(Room);
+            _roomRepository.Update(Room);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
         }
@@ -96,25 +92,23 @@ namespace Domain.Services.Impl.Services
 
         public IEnumerable<ReadedRoomContract> List()
         {
-            var RoomQuery = _RoomRepository
-                .QueryEager(); 
-                //.Query();
+            var roomQuery = _roomRepository
+                .QueryEager();
                 
-            var RoomResult = RoomQuery.ToList();
+            var roomResult = roomQuery.ToList();
 
-            return _mapper.Map<List<ReadedRoomContract>>(RoomResult);
+            return _mapper.Map<List<ReadedRoomContract>>(roomResult);
         }
 
-        public ReadedRoomContract Read(int Id)
+        public ReadedRoomContract Read(int id)
         {
-            var RoomQuery = _RoomRepository
+            var roomQuery = _roomRepository
                 .QueryEager()
-                // .Query()
-                .Where(_ => _.Id == Id);
+                .Where(_ => _.Id == id);
 
-            var RoomResult = RoomQuery.SingleOrDefault();
+            var roomResult = roomQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedRoomContract>(RoomResult);
+            return _mapper.Map<ReadedRoomContract>(roomResult);
         }
 
         private void ValidateContract(CreateRoomContract contract)
@@ -143,12 +137,12 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void ValidateExistence(int Id, string name)
+        private void ValidateExistence(int id, string name)
         {
             try
             {
-                Room Room = _RoomRepository.Query().Where(_ => _.Name == name && _.Id != Id).FirstOrDefault();
-                if (Room != null) throw new InvalidRoomException("The Room already exists .");
+                Room room = _roomRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
+                if (room != null) throw new InvalidRoomException("The Room already exists .");
             }
             catch (ValidationException ex)
             {

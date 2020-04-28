@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Core;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Services.Contracts.Dashboard;
 using Domain.Services.Interfaces.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain.Services.Impl.Services
 {

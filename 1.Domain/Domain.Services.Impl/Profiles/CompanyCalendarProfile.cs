@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using Domain.Services.Contracts.CompanyCalendar;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Domain.Model;
-
+using Domain.Services.Contracts.CompanyCalendar;
 
 namespace Domain.Services.Impl.Profiles
 {

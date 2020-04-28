@@ -9,10 +9,8 @@ using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.SkillType;
 using Domain.Services.Interfaces.Services;
 using FluentValidation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Impl.Services
 {
@@ -82,7 +80,7 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Mapping contract {contract.Name}");
             var skillType = _mapper.Map<SkillType>(contract);
 
-            var updatedSkill = _skillTypeRepository.Update(skillType);
+            _skillTypeRepository.Update(skillType);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
         }

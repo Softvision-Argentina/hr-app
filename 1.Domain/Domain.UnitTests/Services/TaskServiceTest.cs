@@ -34,7 +34,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockLogTaskService = new Mock<ILog<TaskService>>();
             _mockUpdateTaskContractValidator = new Mock<UpdateTaskContractValidator>();
             _mockCreateTaskContractValidator = new Mock<CreateTaskContractValidator>();
-            _service = new TaskService(_mockMapper.Object, _mockRepositoryTask.Object, _mockRepositoryTaskItem.Object, MockUnitOfWork.Object, _mockLogTaskService.Object, _mockUpdateTaskContractValidator.Object, _mockCreateTaskContractValidator.Object);
+            _service = new TaskService(_mockMapper.Object, _mockRepositoryTask.Object, MockUnitOfWork.Object, _mockLogTaskService.Object, _mockUpdateTaskContractValidator.Object, _mockCreateTaskContractValidator.Object);
         }
 
         [Fact(DisplayName = "Verify that create TaskService when data is valid")]

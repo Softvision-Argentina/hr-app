@@ -1,5 +1,4 @@
 ﻿using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.Stage;
 using FluentValidation;
 
 namespace Domain.Services.Impl.Validators.Stage
@@ -8,6 +7,7 @@ namespace Domain.Services.Impl.Validators.Stage
     {
         public ProcessStatusContractValidator()
         {
+            // TODO: Change messages to English.
             RuleFor(_ => _.Status).NotEmpty()
                                   .WithMessage("El estado del proceso es obligatorio");
             RuleFor(_ => _.Status).NotEqual(Model.Enum.ProcessStatus.Hired)

@@ -4,7 +4,7 @@ using Domain.Services.Contracts.TaskItem;
 
 namespace Domain.Services.Impl.Profiles
 {
-    public class TaskItemProfile: Profile
+    public class TaskItemProfile : Profile
     {
         public TaskItemProfile()
         {

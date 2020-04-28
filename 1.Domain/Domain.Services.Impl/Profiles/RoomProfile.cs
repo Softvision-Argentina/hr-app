@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Model;
 using Domain.Services.Contracts.Room;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 
 namespace Domain.Services.Impl.Profiles
 {
