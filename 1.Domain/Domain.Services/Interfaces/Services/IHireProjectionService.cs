@@ -1,7 +1,5 @@
 ﻿using Domain.Services.Contracts.HireProjection;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Interfaces.Services
 {

@@ -1,8 +1,6 @@
-﻿using Domain.Model.Seed;
-using Domain.Services.Contracts.Seed;
+﻿using Domain.Services.Contracts.Seed;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Interfaces.Services
 {

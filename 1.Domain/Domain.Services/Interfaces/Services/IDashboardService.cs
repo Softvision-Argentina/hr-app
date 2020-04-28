@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Domain.Services.Contracts.Dashboard;
+﻿using Domain.Services.Contracts.Dashboard;
+using System.Collections.Generic;
 
 namespace Domain.Services.Interfaces.Services
 {

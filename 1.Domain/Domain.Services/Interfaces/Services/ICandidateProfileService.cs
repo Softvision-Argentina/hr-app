@@ -1,7 +1,5 @@
 ﻿using Domain.Services.Contracts.CandidateProfile;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Interfaces.Services
 {
@@ -11,7 +9,6 @@ namespace Domain.Services.Interfaces.Services
         ReadedCandidateProfileContract Read(int Id);
         void Update(UpdateCandidateProfileContract contract);
         void Delete(int Id);
-
         IEnumerable<ReadedCandidateProfileContract> List();
     }
 }

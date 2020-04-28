@@ -1,8 +1,6 @@
 ﻿using Domain.Model;
 using Domain.Services.Contracts.Employee;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Interfaces.Services
 {
