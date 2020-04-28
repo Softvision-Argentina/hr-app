@@ -1,12 +1,10 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.CandidateSkill;
 using Domain.Services.Contracts.Community;
 using Domain.Services.Contracts.User;
-using Domain.Services.Contracts.CandidateProfile;
-using Domain.Services.Contracts.Office;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Contracts.Candidate
 {
@@ -28,7 +26,6 @@ namespace Domain.Services.Contracts.Candidate
         public bool IsReferred { get; set; }
         public int PreferredOfficeId { get; set; }
         public DateTime ContactDay { get; set; }
-
         public ICollection<ReadedCandidateSkillContract> CandidateSkills { get; set; }
         public string Cv { get; set; }
         public string KnownFrom { get; set; }

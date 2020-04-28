@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Services.Contracts.CompanyCalendar
+﻿namespace Domain.Services.Contracts.CompanyCalendar
 {
     public class CreatedCompanyCalendarContract
     {

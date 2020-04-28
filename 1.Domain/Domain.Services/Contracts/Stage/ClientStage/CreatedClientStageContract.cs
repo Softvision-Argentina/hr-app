@@ -3,6 +3,5 @@
     public class CreatedClientStageContract
     {
         public int Id { get; set; }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Services.Contracts.Offer
+﻿namespace Domain.Services.Contracts.Offer
 {
     public class CreatedOfferContract
     {

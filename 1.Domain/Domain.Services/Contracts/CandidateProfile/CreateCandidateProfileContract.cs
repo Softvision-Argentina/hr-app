@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Domain.Services.Contracts.Community;
 using System.Collections.Generic;
-using Domain.Services.Contracts.Community;
 
 namespace Domain.Services.Contracts.CandidateProfile
 {

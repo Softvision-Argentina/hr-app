@@ -2,11 +2,10 @@
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.CandidateSkill;
 using Domain.Services.Contracts.Community;
-using Domain.Services.Contracts.User;
 using Domain.Services.Contracts.Office;
+using Domain.Services.Contracts.User;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services.Contracts.Candidate
 {
@@ -28,7 +27,6 @@ namespace Domain.Services.Contracts.Candidate
         public bool IsReferred { get; set; }
         public ReadedOfficeContract PreferredOffice { get; set; }
         public DateTime ContactDay { get; set; }
-
         public ICollection<ReadedCandidateAppSkillContract> CandidateSkills { get; set; }
         public string Cv { get; set; }
         public string KnownFrom { get; set; }

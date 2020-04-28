@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Services.Contracts.EmployeeCasualty
-{ 
+﻿namespace Domain.Services.Contracts.EmployeeCasualty
+{
     public class UpdateEmployeeCasualtyContract
     {
         public int Id { get; set; }

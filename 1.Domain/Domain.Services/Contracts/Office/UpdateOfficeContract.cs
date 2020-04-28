@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Domain.Services.Contracts.Room;
 using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.Room;
 
 namespace Domain.Services.Contracts.Office
 {

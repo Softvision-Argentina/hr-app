@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Domain.Services.Contracts.UserDashboard;
 using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.UserDashboard;
 
 namespace Domain.Services.Contracts.Dashboard
 {
@@ -9,7 +7,6 @@ namespace Domain.Services.Contracts.Dashboard
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
         public ICollection<CreateUserDashboardContract> UserDashboards { get; set; }
     }
 }

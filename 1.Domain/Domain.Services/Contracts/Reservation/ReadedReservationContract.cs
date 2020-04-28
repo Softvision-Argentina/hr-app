@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Services.Contracts.Room;
+﻿using Domain.Services.Contracts.Room;
+using System;
 
 namespace Domain.Services.Contracts.Reservation
 {

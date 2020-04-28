@@ -1,6 +1,4 @@
-﻿using Domain.Services.Contracts.SkillType;
-
-namespace Domain.Services.Contracts.Skill
+﻿namespace Domain.Services.Contracts.Skill
 {
     public class CreateSkillContract
     {

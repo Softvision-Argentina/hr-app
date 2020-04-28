@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Domain.Services.Contracts.Employee
+﻿namespace Domain.Services.Contracts.Employee
 {
     public class CreatedEmployeeContract
     {

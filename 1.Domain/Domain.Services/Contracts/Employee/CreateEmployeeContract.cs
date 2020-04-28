@@ -1,10 +1,6 @@
 ﻿using Domain.Model.Enum;
-using Domain.Services.Contracts.CandidateSkill;
-using Domain.Services.Contracts.User;
 using Domain.Services.Contracts.Role;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Domain.Services.Contracts.User;
 
 namespace Domain.Services.Contracts.Employee
 {

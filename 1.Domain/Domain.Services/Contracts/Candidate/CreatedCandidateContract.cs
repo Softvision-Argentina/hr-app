@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Domain.Services.Contracts.Candidate
+﻿namespace Domain.Services.Contracts.Candidate
 {
     public class CreatedCandidateContract
     {

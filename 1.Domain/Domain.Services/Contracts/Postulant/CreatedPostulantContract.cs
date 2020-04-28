@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Services.Contracts.Postulant
+﻿namespace Domain.Services.Contracts.Postulant
 {
     public class CreatedPostulantContract
     {
