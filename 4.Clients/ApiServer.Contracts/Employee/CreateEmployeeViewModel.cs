@@ -1,9 +1,6 @@
-﻿using ApiServer.Contracts.User;
-using ApiServer.Contracts.Role;
+﻿using ApiServer.Contracts.Role;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApiServer.Contracts.Employee
 {

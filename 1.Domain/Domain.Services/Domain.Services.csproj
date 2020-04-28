@@ -13,8 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
-    <Folder Include="Interfaces\ExternalServices\" />
+    <Compile Remove="Exceptions\**" />
+    <Compile Remove="Interfaces\ExternalServices\**" />
+    <EmbeddedResource Remove="Exceptions\**" />
+    <EmbeddedResource Remove="Interfaces\ExternalServices\**" />
+    <None Remove="Exceptions\**" />
+    <None Remove="Interfaces\ExternalServices\**" />
   </ItemGroup>
 
   <ItemGroup>

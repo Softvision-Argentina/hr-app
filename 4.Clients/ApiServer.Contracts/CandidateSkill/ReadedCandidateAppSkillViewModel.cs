@@ -1,8 +1,5 @@
 ﻿using ApiServer.Contracts.Candidates;
 using ApiServer.Contracts.Skills;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApiServer.Contracts.CandidateSkill
 {

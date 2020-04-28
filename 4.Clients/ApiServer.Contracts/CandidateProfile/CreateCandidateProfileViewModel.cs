@@ -1,7 +1,5 @@
-﻿using System;
+﻿using ApiServer.Contracts.Community;
 using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.Community;
 
 namespace ApiServer.Contracts.CandidateProfile
 {

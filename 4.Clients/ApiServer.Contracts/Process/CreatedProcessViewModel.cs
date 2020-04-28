@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ApiServer.Contracts.Process
+﻿namespace ApiServer.Contracts.Process
 {
     public class CreatedProcessViewModel
     {

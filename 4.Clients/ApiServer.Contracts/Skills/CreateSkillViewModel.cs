@@ -1,9 +1,4 @@
-﻿using ApiServer.Contracts.SkillType;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ApiServer.Contracts.Skills
+﻿namespace ApiServer.Contracts.Skills
 {
     public class CreateSkillViewModel
     {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.UserDashboard;
+﻿using ApiServer.Contracts.UserDashboard;
+using System.Collections.Generic;
 
 namespace ApiServer.Contracts.Dashboard
 {

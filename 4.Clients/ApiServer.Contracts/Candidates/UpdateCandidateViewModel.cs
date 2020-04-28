@@ -1,12 +1,10 @@
-﻿using ApiServer.Contracts.CandidateSkill;
+﻿using ApiServer.Contracts.CandidateProfile;
+using ApiServer.Contracts.CandidateSkill;
 using ApiServer.Contracts.Community;
 using ApiServer.Contracts.User;
-using ApiServer.Contracts.CandidateProfile;
-using ApiServer.Contracts.Office;
 using Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ApiServer.Contracts.Candidates
 {

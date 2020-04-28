@@ -3,6 +3,5 @@
     public class CreatedOfferStageViewModel
     {
         public int Id { get; set; }
-
     }
 }

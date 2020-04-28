@@ -3,6 +3,5 @@
     public class CreatedClientStageViewModel
     {
         public int Id { get; set; }
-
     }
 }

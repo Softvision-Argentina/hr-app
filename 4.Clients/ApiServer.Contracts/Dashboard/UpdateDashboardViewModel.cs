@@ -1,7 +1,5 @@
-﻿using System;
+﻿using ApiServer.Contracts.UserDashboard;
 using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.UserDashboard;
 
 namespace ApiServer.Contracts.Dashboard
 {

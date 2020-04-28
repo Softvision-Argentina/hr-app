@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ApiServer.Contracts.TaskItem
+﻿namespace ApiServer.Contracts.TaskItem
 {
     public class CreatedTaskItemViewModel
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.CandidateProfile;
+﻿using ApiServer.Contracts.CandidateProfile;
 
 namespace ApiServer.Contracts.Community
 {

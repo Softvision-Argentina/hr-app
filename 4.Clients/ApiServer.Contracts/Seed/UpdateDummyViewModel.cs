@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ApiServer.Contracts.Seed
+﻿namespace ApiServer.Contracts.Seed
 {
     public class UpdateDummyViewModel
     {

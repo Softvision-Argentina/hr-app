@@ -1,8 +1,5 @@
-﻿using System;
+﻿using ApiServer.Contracts.Room;
 using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.Room;
-using ApiServer.Contracts.Office;
 
 namespace ApiServer.Contracts.Office
 {

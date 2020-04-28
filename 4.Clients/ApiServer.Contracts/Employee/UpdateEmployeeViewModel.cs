@@ -1,9 +1,6 @@
-﻿using ApiServer.Contracts.User;
-using ApiServer.Contracts.Role;
+﻿using ApiServer.Contracts.Role;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApiServer.Contracts.Employee
 {
@@ -22,6 +19,7 @@ namespace ApiServer.Contracts.Employee
         public CreateUserViewModel User { get; set; }
         public int RoleId { get; set; }
         public CreateRoleViewModel Role { get; set; }
+        // TODO: Rename.
         public bool isReviewer { get; set; }
         public int? ReviewerId { get; set; }
         public CreateEmployeeViewModel Reviewer { get; set; }

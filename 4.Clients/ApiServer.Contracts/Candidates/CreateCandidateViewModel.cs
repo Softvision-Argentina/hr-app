@@ -1,12 +1,10 @@
-﻿using ApiServer.Contracts.CandidateSkill;
+﻿using ApiServer.Contracts.CandidateProfile;
+using ApiServer.Contracts.CandidateSkill;
 using ApiServer.Contracts.Community;
-using ApiServer.Contracts.CandidateProfile;
-using ApiServer.Contracts.Office;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ApiServer.Contracts.User;
 
 namespace ApiServer.Contracts.Candidates
 {
@@ -26,7 +24,6 @@ namespace ApiServer.Contracts.Candidates
         public ReadedCandidateProfileViewModel Profile { get; set; }
         public bool IsReferred { get; set; }
         public DateTime ContactDay { get; set; }
-        //public int PreferredOfficeId { get; set; }
         public ICollection<CreateCandidateSkillViewModel> CandidateSkills { get; set; }
         public string Cv { get; set; }
         public string KnownFrom { get; set; }
