@@ -17,9 +17,6 @@ namespace ApiServer.Security.AuthenticationTest
             new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", TestUserName),
             new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", TestUserName),
             new Claim(SecurityClaims.CAN_LIST_DUMMY, "true")
-            //new Claim("http://schemas.microsoft.com/identity/claims/tenantid", TestUserName),
-            //new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", TestUserName),
-            //new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", TestUserName),
         }, TestUserName);
 
         public TestAuthenticationOptions()

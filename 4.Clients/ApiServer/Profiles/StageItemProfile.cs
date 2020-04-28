@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using Domain.Services.Contracts.Stage.StageItem;
 
 namespace ApiServer.Profiles
 {
+    // TODO: Delete if unused.
     public class StageItemProfile : Profile
     {
         public StageItemProfile()
         {
-            //CreateMap<CreateStageItemViewModel, CreateStageItemContract>();
-            //CreateMap<CreatedStageItemContract, CreatedStageItemViewModel>();
-            //CreateMap<UpdateStageItemViewModel, UpdateStageItemContract>();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using ApiServer.Contracts.TaskItem;
 using AutoMapper;
 using Domain.Services.Contracts.TaskItem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiServer.Profiles
 {

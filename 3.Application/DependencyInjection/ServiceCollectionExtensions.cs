@@ -8,18 +8,25 @@ using Domain.Services.Contracts.Process;
 using Domain.Services.Contracts.Stage.StageItem;
 using Domain.Services.ExternalServices;
 using Domain.Services.Impl.Services;
+using Domain.Services.Impl.Validators;
 using Domain.Services.Impl.Validators.Candidate;
+using Domain.Services.Impl.Validators.CandidateProfile;
+using Domain.Services.Impl.Validators.Community;
+using Domain.Services.Impl.Validators.CompanyCalendar;
+using Domain.Services.Impl.Validators.DaysOff;
+using Domain.Services.Impl.Validators.Employee;
+using Domain.Services.Impl.Validators.EmployeeCasualty;
 using Domain.Services.Impl.Validators.HireProjection;
+using Domain.Services.Impl.Validators.Offer;
+using Domain.Services.Impl.Validators.Office;
+using Domain.Services.Impl.Validators.Reservation;
+using Domain.Services.Impl.Validators.Role;
+using Domain.Services.Impl.Validators.Room;
 using Domain.Services.Impl.Validators.Seed;
 using Domain.Services.Impl.Validators.Skill;
 using Domain.Services.Impl.Validators.SkillType;
 using Domain.Services.Impl.Validators.Stage;
 using Domain.Services.Impl.Validators.Task;
-using Domain.Services.Impl.Validators.Community;
-using Domain.Services.Impl.Validators.CandidateProfile;
-using Domain.Services.Impl.Validators.Reservation;
-using Domain.Services.Impl.Validators.Room;
-using Domain.Services.Impl.Validators.Office;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
 using Domain.Services.Repositories.EF;
@@ -28,13 +35,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Persistance.EF;
-using Domain.Services.Impl.Validators.EmployeeCasualty;
-using Domain.Services.Impl.Validators.Employee;
-using Domain.Services.Impl.Validators.DaysOff;
-using Domain.Services.Impl.Validators.Role;
-using Domain.Services.Impl.Validators.CompanyCalendar;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Offer;
 
 namespace DependencyInjection
 {
@@ -68,16 +68,12 @@ namespace DependencyInjection
             services.AddScoped<UpdateSkillTypeContractValidator, UpdateSkillTypeContractValidator>();
             services.AddScoped<CreateDeclineReasonContractValidator, CreateDeclineReasonContractValidator>();
             services.AddScoped<UpdateDeclineReasonContractValidator, UpdateDeclineReasonContractValidator>();
-
-
             services.AddScoped<CreateTaskContractValidator, CreateTaskContractValidator>();
             services.AddScoped<UpdateTaskContractValidator, UpdateTaskContractValidator>();
-
             services.AddScoped<CreateHireProjectionContractValidator, CreateHireProjectionContractValidator>();
             services.AddScoped<UpdateHireProjectionContractValidator, UpdateHireProjectionContractValidator>();
             services.AddScoped<CreateEmployeeCasualtyContractValidator, CreateEmployeeCasualtyContractValidator>();
             services.AddScoped<UpdateEmployeeCasualtyContractValidator, UpdateEmployeeCasualtyContractValidator>();
-
             services.AddScoped<CreateCandidateProfileContractValidator, CreateCandidateProfileContractValidator>();
             services.AddScoped<UpdateCandidateProfileContractValidator, UpdateCandidateProfileContractValidator>();
             services.AddScoped<CreateCommunityContractValidator, CreateCommunityContractValidator>();
@@ -88,7 +84,6 @@ namespace DependencyInjection
             services.AddScoped<UpdateDaysOffContractValidator, UpdateDaysOffContractValidator>();
             services.AddScoped<CreateCompanyCalendarContractValidator, CreateCompanyCalendarContractValidator>();
             services.AddScoped<UpdateCompanyCalendarContractValidator, UpdateCompanyCalendarContractValidator>();
-
             services.AddScoped<CreateOfficeContractValidator, CreateOfficeContractValidator>();
             services.AddScoped<UpdateOfficeContractValidator, UpdateOfficeContractValidator>();
             services.AddScoped<CreateRoomContractValidator, CreateRoomContractValidator>();
@@ -99,7 +94,6 @@ namespace DependencyInjection
             services.AddScoped<UpdateRoleContractValidator, UpdateRoleContractValidator>();
             services.AddScoped<CreateOfferContractValidator, CreateOfferContractValidator>();
             services.AddScoped<UpdateOfferContractValidator, UpdateOfferContractValidator>();
-
             services.AddTransient<IDummyService, DummyService>();
             services.AddTransient<ISkillService, SkillService>();
             services.AddTransient<ICandidateService, CandidateService>();
@@ -127,7 +121,6 @@ namespace DependencyInjection
             services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
             services.AddTransient<ICvService, CvService>();
             services.AddTransient<INotificationService, NotificationService>();
-
         }
 
         private static void AddExternalServices(IServiceCollection services)
@@ -181,7 +174,6 @@ namespace DependencyInjection
             services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
             services.AddScoped<IRepository<Dashboard>, DashboardRepository>();
             services.AddScoped<IRepository<Offer>, OfferRepository>();
-
             services.AddScoped<IStageItemRepository, StageItemRepository>();
             services.AddScoped<IProcessStageRepository, ProcessStageRepository>();
             services.AddScoped<IProcessRepository, ProcessRepository>();
@@ -191,10 +183,8 @@ namespace DependencyInjection
             services.AddScoped<IOfferStageRepository, OfferStageRepository>();
             services.AddScoped<ICvRepository, CvRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
-
             services.AddScoped<IRepository<Community>, CommunityRepository>();
             services.AddScoped<IRepository<CandidateProfile>, CandidateProfileRepository>();
-
             services.AddTransient<IMigrator, SeedMigrator>();
         }
     }

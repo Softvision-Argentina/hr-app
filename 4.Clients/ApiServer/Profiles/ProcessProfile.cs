@@ -1,5 +1,4 @@
 ﻿using ApiServer.Contracts.Process;
-using ApiServer.Contracts.Stage;
 using AutoMapper;
 using Domain.Services.Contracts.Process;
 

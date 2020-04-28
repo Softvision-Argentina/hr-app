@@ -1,6 +1,6 @@
 ﻿using ApiServer.Contracts.UserDashboard;
-using Domain.Services.Contracts.UserDashboard;
 using AutoMapper;
+using Domain.Services.Contracts.UserDashboard;
 
 namespace ApiServer.Profiles
 {

@@ -1,9 +1,6 @@
 ﻿using ApiServer.Contracts.Room;
-using Domain.Services.Contracts.Room;
-using System.Collections.Generic;
-using System.Collections;
 using AutoMapper;
-using ApiServer.Profiles;
+using Domain.Services.Contracts.Room;
 
 namespace ApiServer.Profiles
 {

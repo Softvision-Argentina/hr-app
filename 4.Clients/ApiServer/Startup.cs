@@ -1,32 +1,25 @@
 ﻿using ApiServer.Security;
 using ApiServer.Security.AuthenticationTest;
-using Core;
 using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
-using Domain.Model;
-using Domain.Services;
 using Domain.Services.ExternalServices.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Persistance.EF;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ApiServer
 {
     public class Startup
     {
-        private IHostingEnvironment _env { get; }
         public IConfiguration Configuration { get; }
         public DatabaseConfigurations DatabaseConfigurations { get; set; }
 
@@ -35,7 +28,6 @@ namespace ApiServer
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            _env = env;
 
             DatabaseConfigurations = new DatabaseConfigurations(
                 Configuration.GetValue("InMemoryDatabase", true) && env.CanModifyScheme(),
@@ -67,7 +59,6 @@ namespace ApiServer
             }
             else
             {
-                #region original
                 services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = "JwtBearer";
@@ -91,7 +82,6 @@ namespace ApiServer
                         ClockSkew = TimeSpan.FromMinutes(jwtSettings.MinutesToExpiration)
                     };
                 });
-                #endregion
             }
 
             services.AddAuthorization(cfg =>
@@ -102,15 +92,6 @@ namespace ApiServer
                 cfg.AddPolicy(SecurityClaims.CAN_LIST_CANDIDATE, p =>
                     p.RequireClaim(SecurityClaims.CAN_LIST_CANDIDATE, "true"));
             });
-
-            //services.AddCors(options => {
-            //    options.AddPolicy("AllowAny", x =>
-            //    {
-            //        x.AllowAnyHeader();
-            //        x.AllowAnyMethod();
-            //        x.AllowAnyOrigin();
-            //    });
-            //});
 
             services.AddCors();
 
@@ -161,9 +142,6 @@ namespace ApiServer
                 app.UseDeveloperExceptionPage();
             }
 
-            //This is not working
-            //loggerFactory.AddFile(Configuration.GetSection("Logging"));
-
             app.Use(async (ctx, next) =>
             {
                 await next();
@@ -173,7 +151,6 @@ namespace ApiServer
                 }
             });
 
-            //app.UseCors("AllowAny");
             app.UseCors((option) =>
                 option.WithOrigins(Configuration["corsWhiteList"].Split(','))
                 .AllowAnyHeader()
