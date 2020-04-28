@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using Core.Persistance;
+﻿using Core.Persistance;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
+using System.Linq;
 
 namespace Domain.Services.Repositories.EF
 {

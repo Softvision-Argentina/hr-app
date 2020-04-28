@@ -9,12 +9,10 @@ namespace Persistance.EF
     public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     {
         protected TContext _dbContext { get; private set; }
-        private IDictionary<Type, IRepository> _repositories;
 
         public UnitOfWork(TContext dbContext)
         {
             _dbContext = dbContext;
-            _repositories = new Dictionary<Type, IRepository>();
         }
 
         public int Complete()

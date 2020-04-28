@@ -1,6 +1,5 @@
 ﻿using Core.Persistance;
 using Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
 using System.Linq;
 

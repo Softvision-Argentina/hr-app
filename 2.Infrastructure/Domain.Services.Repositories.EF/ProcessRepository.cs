@@ -17,8 +17,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Process> QueryEager()
         {
-            return Query()
-                //.Include(x => x.Stages)               
+            return Query()         
                 .Include(x => x.HrStage)
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
@@ -44,10 +43,6 @@ namespace Domain.Services.Repositories.EF
                 entity.Status = Model.Enum.ProcessStatus.InProgress;
                 entity.EndDate = DateTime.UtcNow;
                 entity.Candidate.Status = Model.Enum.CandidateStatus.InProgress;
-                //foreach (var stage in entity.Stages)
-                //{
-                //    stage.Status = Model.Enum.StageStatus.Accepted;
-                //}
                 entity.HrStage.Status = StageStatus.Accepted;
                 entity.TechnicalStage.Status = StageStatus.Accepted;
                 entity.ClientStage.Status = StageStatus.Accepted;
@@ -69,12 +64,6 @@ namespace Domain.Services.Repositories.EF
                 entity.Candidate.Status = Model.Enum.CandidateStatus.Rejected;
                 entity.RejectionReason = rejectionReason;
 
-                //foreach (var stage in entity.Stages)
-                //{
-                //    if (stage.Status != StageStatus.Accepted)
-                //        stage.Status = StageStatus.Rejected;
-                //}
-
                 entity.HrStage.Status = RejectStage(entity.HrStage.Status);
                 entity.TechnicalStage.Status = RejectStage(entity.TechnicalStage.Status);
                 entity.ClientStage.Status = RejectStage(entity.ClientStage.Status);
@@ -85,7 +74,6 @@ namespace Domain.Services.Repositories.EF
         public Process GetByIdFullProcess(int id)
         {
             return Query().Where(x => x.Id == id)
-                //.Include(x => x.Stages)
                 .Include(x => x.HrStage)
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)

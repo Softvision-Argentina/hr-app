@@ -1,7 +1,7 @@
 ﻿using Core.Persistance;
+using DependencyInjection.Config;
 using Microsoft.EntityFrameworkCore;
 using System;
-using DependencyInjection.Config;
 
 namespace Persistance.EF
 {
@@ -17,13 +17,14 @@ namespace Persistance.EF
         public void Migrate(DatabaseConfigurations dbConfig)
         {
             var isDatabaseModified = false;
+
             if (dbConfig.RunMigrations)
             {
-                //_context.Database.Migrate();
                 _context.Database.EnsureDeleted();
                 _context.Database.EnsureCreated();
                 isDatabaseModified = true;
             }
+
             if (dbConfig.RunSeed)
             {
                 SeedData(_context);

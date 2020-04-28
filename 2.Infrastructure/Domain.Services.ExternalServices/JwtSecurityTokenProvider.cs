@@ -11,7 +11,7 @@ namespace Domain.Services.ExternalServices
 {
     public class JwtSecurityTokenProvider : ISecurityTokenProvider
     {
-        readonly JwtSettings _settings;
+        private readonly JwtSettings _settings;
         public JwtSecurityTokenProvider(JwtSettings settings)
         {
             _settings = settings;

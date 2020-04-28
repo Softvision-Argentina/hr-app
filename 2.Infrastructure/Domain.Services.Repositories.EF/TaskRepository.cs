@@ -2,10 +2,7 @@
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Repositories.EF
 {
@@ -28,7 +25,7 @@ namespace Domain.Services.Repositories.EF
 
         public override Task Update(Task entity)
         {
-            //Remuevo previo set de items de la Task. El usuario puede haber creado, eliminado o editado existentes
+            //Remuevo previo set de items de la Task. El usuario puede haber creado, eliminado o editado existentes.
             var previousItems = _dbContext.TaskItems.Where(t => t.TaskId == entity.Id);
             _dbContext.TaskItems.RemoveRange(previousItems);
 

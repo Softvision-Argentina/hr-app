@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Core;
+using Core.ExtensionHelpers;
+using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Core;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
-using Core.ExtensionHelpers;
 
 namespace Domain.Services.ExternalServices
 {

@@ -23,21 +23,20 @@ namespace Domain.Services.Repositories.EF
             return Query().Include(employee => employee.User).Include(employee => employee.Role).Include(employee => employee.Reviewer);
         }
 
-        public override Employee Update(Employee emp)
+        public override Employee Update(Employee entity)
         {
-            if (_dbContext.Entry(emp).State == EntityState.Detached)
+            if (_dbContext.Entry(entity).State == EntityState.Detached)
             {
-                _dbContext.Set<Employee>().Attach(emp);
+                _dbContext.Set<Employee>().Attach(entity);
 
-                _dbContext.Entry(emp).State = EntityState.Modified;
+                _dbContext.Entry(entity).State = EntityState.Modified;
             }
 
-            var employee = Query().Include(x => x.Reviewer).Where(c => c.Id == emp.Id).FirstOrDefault();
+            var employee = Query().Include(x => x.Reviewer).Where(c => c.Id == entity.Id).FirstOrDefault();
 
-            _dbContext.Entry(employee).CurrentValues.SetValues(emp);
+            _dbContext.Entry(employee).CurrentValues.SetValues(entity);
 
             return employee;
         }
-
     }
 }

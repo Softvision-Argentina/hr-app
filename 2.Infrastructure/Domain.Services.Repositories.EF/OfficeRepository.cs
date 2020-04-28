@@ -1,11 +1,8 @@
 ﻿using Core.Persistance;
 using Domain.Model;
-using Persistance.EF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Persistance.EF;
+using System.Linq;
 
 namespace Domain.Services.Repositories.EF
 {
@@ -27,7 +24,7 @@ namespace Domain.Services.Repositories.EF
 
         public override Office Update(Office entity)
         {
-            //Remuevo previo set de items del Perfil. El usuario puede haber creado, eliminado o editado existentes
+            //Remuevo previo set de items del Perfil. El usuario puede haber creado, eliminado o editado existentes.
             var previousItems = _dbContext.Room.Where(t => t.OfficeId == entity.Id);
             _dbContext.Room.RemoveRange(previousItems);
 

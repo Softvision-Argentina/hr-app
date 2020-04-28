@@ -1,12 +1,12 @@
 ﻿using Core;
-using System;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Domain.Services.ExternalServices
 {
     public class MicrosoftLogger<T> : ILog<T>
     {
-        ILogger _logger;
+        private readonly ILogger _logger;
 
         public MicrosoftLogger(ILogger<T> logger)
         {

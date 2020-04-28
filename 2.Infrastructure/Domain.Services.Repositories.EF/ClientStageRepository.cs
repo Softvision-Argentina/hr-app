@@ -3,10 +3,7 @@ using Domain.Model;
 using Domain.Services.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Domain.Services.Repositories.EF
 {

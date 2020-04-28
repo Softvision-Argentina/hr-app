@@ -1,5 +1,4 @@
 ﻿using Core;
-using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -24,6 +23,7 @@ namespace Persistance.EF
         }
 
         public DbContextBase(DbContextOptions options) : base(options)
-        { }
+        {
+        }
     }
 }

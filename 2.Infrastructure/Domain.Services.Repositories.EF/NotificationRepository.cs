@@ -17,9 +17,9 @@ namespace Domain.Services.Repositories.EF
             _cand = cand;
         }
 
-        public void Create(Notification notification, int candId)
+        public void Create(Notification notification, int candidateId)
         {
-            var candList = GetReferralsList(candId);
+            var candList = GetReferralsList(candidateId);
             foreach (var cand in candList)
             {
                 notification.ApplicationUserId = cand.Id;
@@ -31,14 +31,14 @@ namespace Domain.Services.Repositories.EF
             }
         }
 
-        private List<Candidate> GetReferralsList(int candId)
+        private List<Candidate> GetReferralsList(int candidateId)
         {
-            return _context.Candidates.Where(w => w.Id == candId).ToList();
+            return _context.Candidates.Where(w => w.Id == candidateId).ToList();
         }
 
-        public List<Notification> GetUserNotifications(string userNotified)
+        public List<Notification> GetUserNotifications(string notifiedUser)
         {
-            return _context.Notifications.Where(u => u.ReferredBy.Equals(userNotified) && !u.IsRead).ToList();
+            return _context.Notifications.Where(u => u.ReferredBy.Equals(notifiedUser) && !u.IsRead).ToList();
         }
 
         public void ReadNotification(int notificationId, string userId)

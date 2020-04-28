@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Core;
 using Core.Persistance;
-using Core;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Persistance.EF

@@ -1,6 +1,6 @@
 ﻿using Core;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Persistance.EF.Extensions
 {
