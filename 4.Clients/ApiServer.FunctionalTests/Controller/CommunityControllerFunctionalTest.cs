@@ -1,22 +1,26 @@
 ﻿using ApiServer.Contracts.CandidateProfile;
 using ApiServer.Contracts.Community;
-using ApiServer.FunctionalTests.Core;
 using Core;
 using Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using Persistance.EF.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using ApiServer.FunctionalTests.Fixture;
+using Core.Persistance;
+using Core.Persistance.Testing;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ApiServer.FunctionalTests.Controller
 {
-    public class CommunityControllerFunctionalTest : BaseApiTest
+    [Collection(nameof(EnvironmentType.Functional))]
+    public class CommunityControllerFunctionalTest : IClassFixture<CommunityControllerFixture>
     {
-        public CommunityControllerFunctionalTest(ApiFixture apiFixture) : base(apiFixture)
+        private readonly CommunityControllerFixture _fixture;
+        public CommunityControllerFunctionalTest(CommunityControllerFixture fixture)
         {
-            ControllerName = "Community";
+            _fixture = fixture;
         }
 
         [Fact(DisplayName = "Verify api/Community [Get] is returning ok [200] and collection of entities when found in database")]
@@ -24,28 +28,28 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityGet_WhenThereAreEntitiesInDatabase_ShouldRetrieveCollectionAndAccepted202()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
             var community = new Community() { Name = "Test community", Profile = new CandidateProfile() { Name = "Candidate Profile" } };
-            Context.SeedDatabaseWith(community);
+            await _fixture.SeedAsync(community);
 
             //Act
-            var httpResultData = await HttpCallAsync<List<ReadedCommunityViewModel>>(HttpVerb.GET, $"{ControllerName}");
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCommunityViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}");
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Single(httpResultData.ResponseEntity);
             Assert.Equal(community.Id, httpResultData.ResponseEntity.Single().Id);
+
+            //Clean
+            await _fixture.DeleteAsync<CandidateProfile>();
+            await _fixture.DeleteAsync<Community>();
         }
 
-        [Fact(DisplayName = "Verify api/Community [Get] is returning ok [200] and empty collection when there are no entities in database")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCommunityGet_WhenThereAreNotEntitiesInDatabase_ShouldReturnEmptyCollectionAndAccepted202()
+        [Fact(DisplayName = "verify api/community [get] is returning ok [200] and empty collection when there are no entities in database")]
+        [Trait("category", "functional-test")]
+        public async System.Threading.Tasks.Task GivenCommunityGet_WhenThereAreNoEntitiesInDB_ShouldReturnEmptyCollectionAndAccepted202()
         {
-            //Arrange
-            Context.SetupDatabaseForTesting();
-
             //Act
-            var httpResultData = await HttpCallAsync<List<ReadedCommunityViewModel>>(HttpVerb.GET, $"{ControllerName}");
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCommunityViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}");
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
@@ -57,16 +61,19 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityGetId_WhenThereIsAMatchingEntityInDatabase_ShouldRetrieveItAndReturnAccepted202()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
             var community = new Community() { Name = "Test community", Profile = new CandidateProfile() { Name = "Candidate Profile" } };
-            Context.SeedDatabaseWith(community);
+            await _fixture.SeedAsync(community);
 
             //Act
-            var httpResultData = await HttpCallAsync<ReadedCommunityViewModel>(HttpVerb.GET, $"{ControllerName}/{community.Id}");
+            var httpResultData = await _fixture.HttpCallAsync<ReadedCommunityViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{community.Id}");
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(community.Id, httpResultData.ResponseEntity.Id);
+
+            //Clean
+            await _fixture.DeleteAsync<CandidateProfile>();
+            await _fixture.DeleteAsync<Community>();
         }
 
         [Fact(DisplayName = "Verify api/Community [Get/{Id}] is returning Not Found [404] and entity Id when entity is not found")]
@@ -74,11 +81,10 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityGetId_WhenThereIsNotAMatchingEntityInDatabase_ShouldReturnNotFound404()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
             int invalidId = 999;
 
             //Act
-            var httpResultData = await HttpCallAsync<ReadedCommunityViewModel>(HttpVerb.GET, $"{ControllerName}/{invalidId}");
+            var httpResultData = await _fixture.HttpCallAsync<ReadedCommunityViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{invalidId}");
 
             //Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResultData.Response.StatusCode);
@@ -90,9 +96,8 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityPost_WhenViewmodelPostedIsValid_ShouldReturnEntityAndCreated201()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
             var profile = new CandidateProfile() { Name = "Testing" };
-            Context.SeedDatabaseWith(profile);
+            await _fixture.SeedAsync(profile);
             var profileVm = new CreateCandidateProfileViewModel() { Name = "Rodrigo" };
             var model = new CreateCommunityViewModel()
             {
@@ -103,12 +108,16 @@ namespace ApiServer.FunctionalTests.Controller
             };
 
             //Act
-            var httpResultData = await HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{ControllerName}", model);
+            var httpResultData = await _fixture.HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{_fixture.ControllerName}", model);
 
             //Assert
             Assert.Equal(HttpStatusCode.Created, httpResultData.Response.StatusCode);
             Assert.True(httpResultData.ResponseEntity.Id > 0);
+
+            //Clean
+            await _fixture.DeleteAsync<CandidateProfile>();
         }
+
 
         [Theory(DisplayName = "Verify api/Community [Post] is returning error when viewmodel posted is not valid")]
         [Trait("Category", "Functional-Test")]
@@ -117,7 +126,6 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityPost_WhenViewmodelPostedIsInvalid_ShouldReturnErrorBadRequest400(string propertyName)
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
             var profileVm = new CreateCandidateProfileViewModel() { Name = "Rodrigo" };
             var model = new CreateCommunityViewModel()
             {
@@ -130,7 +138,7 @@ namespace ApiServer.FunctionalTests.Controller
             model.WithPropertyValue(propertyName, default);
 
             //Act
-            var httpResultData = await HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{ControllerName}", model);
+            var httpResultData = await _fixture.HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{_fixture.ControllerName}", model);
 
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
@@ -143,14 +151,12 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityPut_WhenViewModelPutIsValid_ShouldReturnIdAndAccepted202()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
-
             var profile = new CandidateProfile() { Name = "Testing" };
+            await _fixture.SeedAsync(profile);
             var wrongCommunity = new Community() { Name = "Outdated wrong community name, should be updated", Description = "Outdated wrong description name, should be updated", Profile = profile };
             var rightCommunity = new Community() { Name = "Valid community name, should not change on update", Description = "Valid community description, should not change on update", Profile = profile };
-            
-            Context.SeedDatabaseWith(new List<Community> { wrongCommunity, rightCommunity });
-
+            var communityList = new List<Community> { wrongCommunity, rightCommunity };
+            await _fixture.SeedAsync(communityList);
             var model = new UpdateCommunityViewModel()
             {
                 Name = "New Community Name",
@@ -160,13 +166,16 @@ namespace ApiServer.FunctionalTests.Controller
             };
 
             //Act
-            var httpResultData = await HttpCallAsync<object>(HttpVerb.PUT, $"{ControllerName}", model, wrongCommunity.Id);
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, wrongCommunity.Id);
 
             //Assert
-            var communityFromDatabase = Context.Community.AsNoTracking().Where(_ => _.Id == wrongCommunity.Id).First();
+            var communityFromDatabase = await _fixture.GetAsync<Community>(wrongCommunity.Id);
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(model.Name, communityFromDatabase.Name);
             Assert.Equal(model.Description, communityFromDatabase.Description);
+
+            //Clean
+            await _fixture.DeleteAsync<CandidateProfile>();
         }
 
         [Theory(DisplayName = "Verify api/Community [Put] is returning error Bad Request 400 when viewmodel is not valid")]
@@ -176,8 +185,6 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityPut_WhenViewModelPutIsNotValid_ShouldReturnErrorBadRequest400(string propertyName)
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
-
             var model = new UpdateCommunityViewModel()
             {
                 Name = "Test",
@@ -188,7 +195,7 @@ namespace ApiServer.FunctionalTests.Controller
             model.WithPropertyValue(propertyName, default);
 
             //Act
-            var httpResultData = await HttpCallAsync<object>(HttpVerb.PUT, $"{ControllerName}", model, 1);
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, 1);
 
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
@@ -200,22 +207,23 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityDelete_WhenIdMatchesEntityInDatabase_ShouldDeleteItAndReturnAccepted202()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
-
             var profile = new CandidateProfile() { Name = "Testing" };
             var wrongCommunity = new Community() { Name = "Wrong community should be deleted", Description = "Wrong community should be deleted", Profile = profile };
-            Context.SeedDatabaseWith(wrongCommunity);
-            int beforeDeleteCommunityCount = GetCommunityCount();
+            await _fixture.SeedAsync(wrongCommunity);
+            int beforeDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
 
             //Act
-            var httpResultData = await HttpCallAsync<object>(HttpVerb.DELETE, $"{ControllerName}", null, wrongCommunity.Id);
-            int afterDeleteCommunityCount = GetCommunityCount();
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, wrongCommunity.Id);
+            int afterDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(1, beforeDeleteCommunityCount);
             Assert.Equal(0, afterDeleteCommunityCount);
             Assert.NotEqual(afterDeleteCommunityCount, beforeDeleteCommunityCount);
+
+            //Clean
+            _fixture.Context.DeleteAllEntities();
         }
 
         [Fact(DisplayName = "Verify api/login [Delete] is returning not found when there is no valid Id")]
@@ -223,13 +231,12 @@ namespace ApiServer.FunctionalTests.Controller
         public async System.Threading.Tasks.Task GivenCommunityDelete_WhenIdDoesNotMatchesEntityInDatabase_ShouldReturnException()
         {
             //Arrange
-            Context.SetupDatabaseForTesting();
-            int invalidId = 999;
+            var invalidId = 999;
 
             //Act
-            int beforeDeleteCommunityCount = GetCommunityCount();
-            var httpResultData = await HttpCallAsync<object>(HttpVerb.DELETE, $"{ControllerName}", null, invalidId);
-            int afterDeleteCommunityCount = GetCommunityCount();
+            var beforeDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidId);
+            var afterDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
@@ -241,20 +248,12 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCommunityPing_WhenIsValidCall_ShouldReturnOk200()
         {
-            //Arrange
-            Context.SetupDatabaseForTesting();
-
             //Act
-            var httpResultData = await HttpCallAsync<object>(HttpVerb.GET, $"{ControllerName}/ping");
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.GET, $"{_fixture.ControllerName}/ping");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
-        }
-
-        private int GetCommunityCount()
-        {
-            return Context.Community.AsNoTracking().Count();
         }
     }
 }

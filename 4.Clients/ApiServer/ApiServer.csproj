@@ -51,6 +51,9 @@
     <Content Update="appsettings.IntegrationTest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="appsettings.FunctionalTest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <!--<ItemGroup>
     <Content Remove="appsettings.Development.json" Condition="'$(Configuration)' != 'Development' And '$(Configuration)' != 'Debug'" />

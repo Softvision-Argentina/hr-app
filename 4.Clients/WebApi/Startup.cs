@@ -89,7 +89,10 @@ namespace WebApi
     {
         public static bool CanModifyScheme(this IHostingEnvironment env)
         {
-            return env.IsDevelopment() || env.IsEnvironment("INT") || env.IsEnvironment("IntegrationTest");
+            return env.IsDevelopment() ||
+                   env.IsEnvironment("INT") ||
+                   env.IsEnvironment("IntegrationTest") ||
+                   env.IsEnvironment("FunctionalTest");
         }
     }
 }

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\1.Domain\Domain.Services\Domain.Services.csproj" />
     <ProjectReference Include="..\Domain.Services.Repositories.EF\Domain.Services.Repositories.EF.csproj" />
   </ItemGroup>
 

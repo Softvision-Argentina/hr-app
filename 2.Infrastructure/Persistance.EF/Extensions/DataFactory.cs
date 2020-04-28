@@ -25,6 +25,8 @@ namespace Persistance.EF.Extensions
                     DataManipulator.FillObjectPropertiesWithData(typeCode, prop, ref obj);
                 }
 
+                obj.WithPropertyValue("Id", null);
+
                 return (T)Convert.ChangeType(obj, typeof(T));
             }
 

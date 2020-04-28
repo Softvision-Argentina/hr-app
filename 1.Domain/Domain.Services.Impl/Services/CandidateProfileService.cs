@@ -59,7 +59,7 @@ namespace Domain.Services.Impl.Services
         public void Delete(int id)
         {
             _log.LogInformation($"Searching Candidate Profile {id}");
-            var candidateProfile = _candidateProfileRepository.Query().FirstOrDefault(_ => _.Id == id);
+            var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Id == id);
 
             if (candidateProfile == null)
             {

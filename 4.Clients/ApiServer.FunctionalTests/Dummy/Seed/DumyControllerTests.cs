@@ -1,23 +1,24 @@
 ﻿using ApiServer.Contracts.Seed;
-using ApiServer.FunctionalTests.Core;
 using ApiServer.FunctionalTests.Dummy.Seed.Builder;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ApiServer.FunctionalTests.Core;
+using Core.Persistance;
 using Xunit;
 
 namespace ApiServer.FunctionalTests.Dummy.Seed
 {
-    [Collection("Api collection")]
-    public class DumyControllerTests : BaseApiTest
+    [Collection(nameof(EnvironmentType.Functional))]
+    public class DumyControllerTests : BaseFunctionalTestFixture
     {
-        public DumyControllerTests(ApiFixture apiFixture) : base(apiFixture)
+        public DumyControllerTests()
         {
             ControllerName = "Dummies";
         }
-        
+
         [Fact(DisplayName = "Verify [Post] is working when data is valid")]
         [Trait("Category", "API-Tasks")]
         public async Task When_CreateIsCalled_ShouldReturnSuccess()
@@ -41,7 +42,7 @@ namespace ApiServer.FunctionalTests.Dummy.Seed
         {
             //Arrange
             var createVm = new CreateDummyViewModelBuilder().Build();
-            var model = await CreateAsync<CreateDummyViewModel, CreatedDummyViewModel>(createVm);
+            var model = await CreateAsync<CreateDummyViewModel, CreatedDummyViewModel>(createVm, ControllerName);
 
             //Act
             var response = await Client.GetAsync($"/api/{ControllerName}/{model.Id}");
