@@ -18,5 +18,5 @@ foreach ($Env in $EnvArray){
     update-database $Migration
 }
 
-$env:ASPNETCORE_ENVIRONMENT = $DevelopmentEnvironment
+$env:ASPNETCORE_ENVIRONMENT = ""
 Write-Host "End: Updated databases, ASPNETCORE_ENVIRONMENT is $env:ASPNETCORE_ENVIRONMENT" `n -ForegroundColor green
