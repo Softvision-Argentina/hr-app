@@ -6,9 +6,9 @@ namespace Domain.Services.Interfaces.Services
     public interface ICandidateProfileService
     {
         CreatedCandidateProfileContract Create(CreateCandidateProfileContract contract);
-        ReadedCandidateProfileContract Read(int Id);
+        ReadedCandidateProfileContract Read(int id);
         void Update(UpdateCandidateProfileContract contract);
-        void Delete(int Id);
+        void Delete(int id);
         IEnumerable<ReadedCandidateProfileContract> List();
     }
 }
