@@ -48,9 +48,17 @@ export class ProcessService extends BaseService<Process> {
           tap(data => { }),
           catchError(this.handleErrors)
         );
-    } else {
-      return this.get();
+    }      
+    if (currentUser.role === "Interviewer") {
+      return this.http.get(`${this.apiUrl}/owner/${currentUser.id}`,
+        { headers: this.headersWithAuth, observe: "body" })
+        .pipe(
+          tap(data => { }),
+          catchError(this.handleErrors)
+        );
     }
+    return this.get();
+    
   }
   public approve(processID: number): Observable<any> {
     return this.http.post(this.apiUrl + '/Approve', processID, {

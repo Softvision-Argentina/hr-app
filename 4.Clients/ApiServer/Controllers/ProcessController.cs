@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Domain.Services.Contracts.Process;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Services.Interfaces.Repositories;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -62,6 +63,17 @@ namespace ApiServer.Controllers
                 var process = _processService.GetProcessesByCommunity(community);
 
                 return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(process));
+            });
+        }
+
+        [HttpGet("owner/{id}")]
+        public IActionResult GetProcessesForOwner(int id)
+        {
+            return ApiAction(() =>
+            {
+                var processes = _processService.List().ToList().Where(process => process.UserDelegateId == id || process.UserOwnerId == id);
+
+                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(processes));
             });
         }
 

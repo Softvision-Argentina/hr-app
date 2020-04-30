@@ -220,17 +220,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getUserProcesses() {
-    this.facade.processService.get()
+    this.facade.processService.getProcessByUserRole(this.currentUser)
       .subscribe(res => {
-        const result = [];
-        for (let i = 0; i < res.length; i++) {
-          if (res[i].candidate.user !== null && typeof res[i].candidate.user !== 'undefined') {
-            const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
-            if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
-              result.push(res[i]);
-            }
-          }
-        }
+        const result = res.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
         this.listOfDisplayOwnData = result;
         this.filteredProcesses = result;
         const newProc: Process = result[result.length - 1];
@@ -450,11 +442,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   searchRecruiter(): void {
-    const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
-    };
-    const data = this.filteredProcesses.filter(item => filterFunc(item));
+    const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
     this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.communitySearchName = 'ALL';
     this.profileSearchName = 'ALL';
@@ -469,18 +457,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   searchAllProcess() {
     this.getProcesses();
     this.isOwnedProcesses = false;
-  }
-
-  showOwnProcessesFirst(): void {
-    const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
-    };
-    const data = this.filteredProcesses.filter(item => filterFunc(item));
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.communitySearchName = 'ALL';
-    this.profileSearchName = 'ALL';
-    this.nameDropdown.nzVisible = false;
   }
 
   triggerSearchStatus(id) {
