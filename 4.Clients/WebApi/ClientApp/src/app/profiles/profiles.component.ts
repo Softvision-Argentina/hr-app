@@ -30,7 +30,7 @@ export class ProfilesComponent implements OnInit {
   }
 
   getCandidatesProfile() {
-    this.facade.candidateProfileService.get()
+    this.facade.candidateProfileService.getData()
       .subscribe(res => {
        this.emptyCandidateProfile = res;
        this.listOfDisplayData = res;
@@ -40,7 +40,7 @@ export class ProfilesComponent implements OnInit {
   }
   
   getCommunities() {
-    this.facade.communityService.get()
+    this.facade.communityService.getData()
       .subscribe(res => {
         this.emptyCommunity = res;
         this.listOfDisplayDataCommunity = res;

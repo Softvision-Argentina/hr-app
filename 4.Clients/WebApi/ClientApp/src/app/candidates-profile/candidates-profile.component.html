@@ -39,7 +39,7 @@
         <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyCandidateProfile.name}}</nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Descripción: </strong> {{emptyCandidateProfile.description}}
         </nz-list-item>
-        <nz-list-item *ngIf="emptyCandidateProfile.communityItems"><strong style="margin-right: 1%;">Communitys: </strong>
+        <nz-list-item *ngIf="emptyCandidateProfile.communityItems"><strong style="margin-right: 1%;">Communities: </strong>
             <div>
                 <nz-tag nz-popover nzContent="{{community.description}} " style="margin: 1%;" [nzColor]="getColor(emptyCandidateProfile.communityItems, community)" *ngFor="let community of emptyCandidateProfile.communityItems">{{ community.name}}</nz-tag>
             </div>

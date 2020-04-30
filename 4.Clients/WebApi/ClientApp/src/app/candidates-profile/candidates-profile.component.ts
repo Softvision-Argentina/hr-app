@@ -6,7 +6,6 @@ import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Community } from 'src/entities/community';
-import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-candidates-profile',
@@ -48,7 +47,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
   CommunitysForDetail: string[];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
 
   ngOnInit() {
     this.app.removeBgImage();
@@ -126,9 +125,9 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
               }
               this.facade.candidateProfileService.add(newCandidatesProfile)
                 .subscribe(res => {
-                  this.settings.getCandidatesProfile();
                   this.controlArray = [];
                   this.facade.toastrService.success('Candidate Profile was successfully created !');
+                  this.getCommunity();
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
@@ -181,8 +180,8 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
               }
               this.facade.candidateProfileService.update(id, editedCandidateProfile)
                 .subscribe(res => {
-                  this.settings.getCandidatesProfile();
                   this.facade.toastrService.success('Candidate was successfully edited !');
+                  this.getCommunity();
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
@@ -209,8 +208,8 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzCancelText: 'No',
       nzOnOk: () => this.facade.candidateProfileService.delete(CandidateProfileID)
         .subscribe(res => {
-          this.settings.getCandidatesProfile();
           this.facade.toastrService.success('Candidate was deleted !');
+          this.getCommunity();
         }, err => {
           this,this.facade.errorHandlerService.showErrorMessage(err);
         })

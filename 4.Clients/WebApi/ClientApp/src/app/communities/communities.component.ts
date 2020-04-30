@@ -6,7 +6,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-communities',
@@ -42,7 +41,7 @@ export class CommunitiesComponent implements OnInit {
   candidateprofiles: CandidateProfile[] = [];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent, private settings: SettingsComponent) {
+  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) {
       this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
@@ -126,7 +125,6 @@ export class CommunitiesComponent implements OnInit {
               }
               this.facade.communityService.add(newCommunity)
                 .subscribe(res => {
-                  this.settings.refresh();
                   this.controlArray = [];
                   this.facade.toastrService.success('Community was successfully created !');
                   modal.destroy();
@@ -184,8 +182,8 @@ export class CommunitiesComponent implements OnInit {
               }
               this.facade.communityService.update(id, editedCommunity)
                 .subscribe(res => {
-                  this.settings.getCommunities();
                   this.facade.toastrService.success('Community was successfully edited !');
+                  this.getCandidateProfiles();
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
@@ -208,8 +206,8 @@ export class CommunitiesComponent implements OnInit {
       nzCancelText: 'No',
       nzOnOk: () => this.facade.communityService.delete(communityID)
         .subscribe(res => {
-          this.settings.getCommunities();
           this.facade.toastrService.success('Community was deleted !');
+          this.getCandidateProfiles();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
         })
@@ -220,6 +218,6 @@ export class CommunitiesComponent implements OnInit {
     this.validateForm.controls['name'].setValue(community.name);
     this.validateForm.controls['description'].setValue(community.description);
     if (this.candidateprofiles.length > 0)
-      this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);
+      this.validateForm.controls['profileId'].setValue(community.profileId);
   }
 }
