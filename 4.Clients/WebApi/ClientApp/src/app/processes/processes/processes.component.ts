@@ -751,7 +751,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       newCandidate.englishLevel = newProcess.hrStage.englishLevel;
       newProcess.userOwnerId = newCandidate.user.id;
       newProcess.candidate = newCandidate;
-      newProcess = this.generateProcess(newProcess, newCandidate);
+      newProcess.offerStage.userOwnerId = newCandidate.user.id;
       if (!this.isEdit) {
         if (!newCandidate.id) {
           this.facade.candidateService.add(newCandidate).subscribe(res => {
@@ -1011,21 +1011,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         preocupationalDoneDate: new Date()
       },
     };
-  }
-  generateProcess(process: Process, candidate: Candidate) {
-    const userId = candidate.user.id;
-    process.candidateId = candidate.id;
-    process.candidate = candidate;
-    process.userOwnerId = userId;
-    process.userOwner = candidate.user;
-    process.hrStage.userOwnerId = userId;
-    process.hrStage.userDelegateId = userId;
-    process.technicalStage.userOwnerId = userId;
-    process.technicalStage.userDelegateId = userId;
-    process.clientStage.userOwnerId = userId;
-    process.clientStage.userDelegateId = userId;
-    process.offerStage.userOwnerId = userId;
-    return process;
   }
 
   isDeclined(process: Process): Boolean {
