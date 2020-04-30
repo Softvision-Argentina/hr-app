@@ -70,7 +70,7 @@ export class ReservationsComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.fillUsers = res;
+        this.fillUsers = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -87,7 +87,7 @@ export class ReservationsComponent implements OnInit {
     this.facade.RoomService.get()
       .subscribe(res => {
         this.room = res;
-        this.filteredRoom = this.room.filter(c => c.officeId === this.reservationForm.controls['office'].value);
+        this.filteredRoom = this.room.filter(c => c.officeId === this.reservationForm.controls['office'].value).sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -96,7 +96,7 @@ export class ReservationsComponent implements OnInit {
   getOffices() {
     this.facade.OfficeService.get()
       .subscribe(res => {
-        this.offices = res;
+        this.offices = res.sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

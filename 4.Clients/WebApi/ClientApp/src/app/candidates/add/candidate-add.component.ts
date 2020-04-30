@@ -110,8 +110,12 @@ export class CandidateAddComponent implements OnInit {
 
   ngOnInit() {
     this.fillUsers = this._users;
+    this.fillUsers.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)))
+    this._offices.sort((a,b) => (a.name.localeCompare(b.name)))
     this.comms = this._communities;
+    this.comms.sort((a,b) => (a.name.localeCompare(b.name)));
     this.profiles = this._candidateProfiles;
+    this.profiles.sort((a,b) => (a.name.localeCompare(b.name)));
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {

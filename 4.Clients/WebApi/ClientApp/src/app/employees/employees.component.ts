@@ -82,7 +82,7 @@ export class EmployeesComponent implements OnInit {
       .subscribe(res => {
         this.listOfDisplayData = res.filter(e => e.id !== 1);
         this.employees = res;
-        this.reviewers = res.filter(e => e.isReviewer);
+        this.reviewers = res.filter(e => e.isReviewer).sort((a,b) => ((a.name + " " + a.lastName).localeCompare(b.name + " " + b.lastName)));
         this.filteredReviewersNames = this.reviewers.map(r => r.name + ' ' + r.lastName);
         this.reviewersFullNameAndId = [];
         for (let reviewer of this.reviewers) {
@@ -104,7 +104,7 @@ export class EmployeesComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       })
@@ -113,7 +113,7 @@ export class EmployeesComponent implements OnInit {
   getRoles() {
     this.facade.RoleService.get()
       .subscribe(res => {
-        this.activeRoles = res.filter(role => role.isActive);
+        this.activeRoles = res.filter(role => role.isActive).sort((a,b) => (a.name).localeCompare(b.name));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       })

@@ -62,7 +62,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
         this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.username, this.user.username))[0];
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);

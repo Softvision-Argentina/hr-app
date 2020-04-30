@@ -131,10 +131,10 @@ export class ProcessContactComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fillUsers = this._users;
+    this.fillUsers = this._users.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
     this.comms = this._communities;
-    this.filteredCommunity = this._communities;
-    this.profiles = this._candidateProfiles;
+    this.filteredCommunity = this._communities.sort((a,b) => (a.name.localeCompare(b.name)));
+    this.profiles = this._candidateProfiles.sort((a,b) => (a.name.localeCompare(b.name)));
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getUsers();

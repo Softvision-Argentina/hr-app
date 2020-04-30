@@ -159,7 +159,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.skills = res;
+        this.skills = res.sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       }, () => {
@@ -179,7 +179,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
       this.communities.push(this.defaultCommunity);
-      this.communities.push(...res);
+      this.communities.push(...res.sort((a,b) => (a.name.localeCompare(b.name))));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -189,7 +189,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   getOffices() {
     const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
       this._offices.push(this.defaultOffice);
-      this._offices.push(...res);
+      this._offices.push(...res.sort((a,b) => (a.name.localeCompare(b.name))));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });

@@ -65,8 +65,8 @@ export class SkillsComponent implements OnInit {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.filteredSkills = res;
-        this.listOfDisplayData = res;
+        this.filteredSkills = res.sort((a,b) => (a.name.localeCompare(b.name)));
+        this.listOfDisplayData = res.sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

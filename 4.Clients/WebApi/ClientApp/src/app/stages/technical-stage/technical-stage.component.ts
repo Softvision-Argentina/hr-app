@@ -84,7 +84,7 @@ export class TechnicalStageComponent implements OnInit {
   getFilteredUsersForTech() {
     this.facade.userService.getFilteredForTech()
     .subscribe(res => {
-      this.usersFiltered = res;
+      this.usersFiltered = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
     }, err => {
       console.log(err);
     });
@@ -316,7 +316,7 @@ export class TechnicalStageComponent implements OnInit {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.skills = res;
+        this.skills = res.sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         console.log(err);
       });

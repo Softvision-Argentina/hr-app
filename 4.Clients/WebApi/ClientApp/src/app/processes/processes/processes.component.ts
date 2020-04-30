@@ -194,7 +194,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   getDeclineReasons() {
     this.facade.declineReasonService.get('Named')
       .subscribe(res => {
-        this.declineReasons = res;
+        this.declineReasons = res.sort((a,b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });

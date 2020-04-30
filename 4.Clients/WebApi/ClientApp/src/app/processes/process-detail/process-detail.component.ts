@@ -103,7 +103,7 @@ export class ProcessDetailComponent implements OnInit {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {
         console.log(err);
       });

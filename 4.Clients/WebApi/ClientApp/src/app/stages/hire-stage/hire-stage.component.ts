@@ -26,7 +26,7 @@ export class HireStageComponent implements OnInit {
     @Input()
     private _users: User[];
     public get users(): User[] {
-        return this._users;
+        return this._users.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
     }
     public set users(value: User[]) {
         this._users = value;

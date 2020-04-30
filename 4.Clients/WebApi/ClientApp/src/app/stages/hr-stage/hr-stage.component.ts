@@ -51,7 +51,7 @@ export class HrStageComponent implements OnInit {
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
     this.englishLevelList = globals.englishLevelList;
-    this.rejectionReasonsHRList = globals.rejectionReasonsHRList;
+    this.rejectionReasonsHRList = globals.rejectionReasonsHRList.sort((a,b) => (a.name.localeCompare(b.name)));
    }
 
   ngOnInit() {
@@ -64,7 +64,7 @@ export class HrStageComponent implements OnInit {
   getFilteredUsersForHr() {
     this.facade.userService.getFilteredForHr()
     .subscribe(res => {
-      this.usersFiltered = res;
+      this.usersFiltered = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
     }, err => {
       console.log(err);
     });

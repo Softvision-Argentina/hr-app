@@ -48,7 +48,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
     private daysOffService: DaysOffService,
     private employeeService: EmployeeService,
     private globals: Globals) {
-    this.reasons = globals.daysOffTypeList;
+    this.reasons = globals.daysOffTypeList.sort((a,b) => (a.name).localeCompare(b.name));
     this.statusList = globals.daysOffStatusList;
   }
 

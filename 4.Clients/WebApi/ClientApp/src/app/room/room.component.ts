@@ -56,7 +56,7 @@ export class RoomComponent implements OnInit {
   getOffices() {
     this.facade.OfficeService.get()
     .subscribe(res => {
-      this.offices = res;
+      this.offices = res.sort((a,b) => (a.name.localeCompare(b.name)));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });

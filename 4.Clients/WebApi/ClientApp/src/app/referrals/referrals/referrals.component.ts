@@ -243,7 +243,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   getDeclineReasons() {
     const declineReasons = this.facade.declineReasonService.getData().subscribe(res => {
-      this.declineReasons = res;
+      this.declineReasons = res.sort((a,b) => (a.name.localeCompare(b.name)));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });

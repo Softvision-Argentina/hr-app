@@ -96,7 +96,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res;
+        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -104,7 +104,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getProfiles() {
     const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
-      this.profiles = res;
+      this.profiles = res.sort((a,b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -113,7 +113,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
-      this.communities = res;
+      this.communities = res.sort((a,b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -123,7 +123,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.skills = res;
+        this.skills = res.sort((a,b) => (a.name).localeCompare(b.name));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -131,7 +131,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getOffices() {
     const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
-      this._offices = res;
+      this._offices = res.sort((a,b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });

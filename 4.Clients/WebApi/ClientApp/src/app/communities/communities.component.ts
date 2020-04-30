@@ -69,7 +69,7 @@ export class CommunitiesComponent implements OnInit {
   getCandidateProfiles() {
     this.facade.candidateProfileService.get()
     .subscribe(res => {
-      this.candidateprofiles = res;
+      this.candidateprofiles = res.sort((a,b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
