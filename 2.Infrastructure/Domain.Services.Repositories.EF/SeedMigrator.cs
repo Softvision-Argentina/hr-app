@@ -125,6 +125,8 @@ namespace Domain.Services.Repositories.EF
             #region Office
             var Office1 = new Office { Name = "Almagro", Description = "Almagro" };
             var Office2 = new Office { Name = "Vte Lopez", Description = "Vicente Lopez" };
+            var Office3 = new Office { Name = "Indistinto", Description = "Indistinto" };
+            context.Office.Add(Office3);
             context.Office.Add(Office1);
             context.Office.Add(Office2);
             context.SaveChanges();
