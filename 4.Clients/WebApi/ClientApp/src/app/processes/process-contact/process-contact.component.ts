@@ -167,7 +167,7 @@ export class ProcessContactComponent implements OnInit {
 
   searchedCandidateModal(modalContent: TemplateRef<{}>): void {
     const modal: NzModalRef = this.modalService.create({
-      nzTitle: 'Candidate founded',
+      nzTitle: 'Candidate found',
       nzContent: modalContent,
       nzFooter: [
         {
