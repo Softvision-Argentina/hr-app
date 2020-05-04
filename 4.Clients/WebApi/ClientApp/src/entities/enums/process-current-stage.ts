@@ -4,5 +4,6 @@ export enum ProcessCurrentStageEnum {
     TechnicalStage = 2,
     ClientStage = 3,
     OfferStage = 4,
-    Finished = 5
+    Finished = 5,
+    Pipeline = 6
 }

@@ -22,11 +22,11 @@ export class Globals {
   ];
 
   processStatusList: any[] = [
+    { id: ProcessStatusEnum.NA, name: 'N/A' },
     { id: ProcessStatusEnum.InProgress, name: 'In Progress' }, { id: ProcessStatusEnum.Recall, name: 'Recall' },
     { id: ProcessStatusEnum.Declined, name: 'Declined' },
     { id: ProcessStatusEnum.Hired, name: 'Hired' }, { id: ProcessStatusEnum.Rejected, name: 'Rejected' },
     { id: ProcessStatusEnum.OfferAccepted, name: 'Offer Accepted' },
-    { id: ProcessStatusEnum.Pipeline, name: 'Pipeline' },
   ];
 
   processCurrentStageList: any[] = [
@@ -35,10 +35,12 @@ export class Globals {
     { id: ProcessCurrentStageEnum.TechnicalStage, name: 'Technical Stage' },
     { id: ProcessCurrentStageEnum.ClientStage, name: 'Client Stage' },
     { id: ProcessCurrentStageEnum.OfferStage, name: 'Offer Stage' },
-    { id: ProcessCurrentStageEnum.Finished, name: 'Finished' }
+    { id: ProcessCurrentStageEnum.Finished, name: 'Finished' },
+    { id: ProcessCurrentStageEnum.Pipeline, name: 'Pipeline' }
   ];
 
   stageStatusList: any[] = [
+    { id: StageStatusEnum.NA, name: 'N/A' },
     { id: StageStatusEnum.InProgress, name: 'In Progress', value: 'InProgress' },
     { id: StageStatusEnum.Accepted, name: 'Accepted', value: 'Accepted' },
     { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
