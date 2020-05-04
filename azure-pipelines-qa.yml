@@ -32,12 +32,18 @@ steps:
   inputs:
     checkLatest: true
 
+- task: AzurePowerShell@5
+  inputs:
+    ScriptType: 'InlineScript'
+    Inline: '[Environment]::SetEnvironmentVariable("NODE_OPTIONS", "--max_old_space_size=16384", "Machine")'
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/t:Rebuild /p:Configuration=Release /p:Platform="any cpu"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
 
 #- task: VSTest@2
 #  inputs:
