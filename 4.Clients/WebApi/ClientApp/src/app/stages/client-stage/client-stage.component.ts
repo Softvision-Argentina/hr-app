@@ -27,9 +27,9 @@ export class ClientStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    userOwnerId: [null, [Validators.required]],
+    userOwnerId: [null],
     interviewer: [null],
-    userDelegateId:  [null, [Validators.required]],
+    userDelegateId:  [null],
     feedback: [null],
     delegateName: [null],
     rejectionReason: [null, [Validators.required]]
