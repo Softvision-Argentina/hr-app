@@ -16,19 +16,6 @@
     margin-right: 8px;
 }
 
-
-/* Hide HTML5 Up and Down arrows. */
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
  ::ng-deep .vertical-center-modal {
     display: flex;
     align-items: center;
