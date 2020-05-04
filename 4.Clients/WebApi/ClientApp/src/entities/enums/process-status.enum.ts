@@ -1,9 +1,9 @@
 export enum ProcessStatusEnum {
-    NA = 0,
-    InProgress = 1,
-    Recall = 2,
-    Hired = 3,
-    Rejected = 4,
-    Declined = 5,
-    OfferAccepted = 6
+    InProgress = 0,
+    Recall = 1,
+    Hired = 2,
+    Rejected = 3,
+    Declined = 4,
+    OfferAccepted = 5,
+    Pipeline = 6,
 }
