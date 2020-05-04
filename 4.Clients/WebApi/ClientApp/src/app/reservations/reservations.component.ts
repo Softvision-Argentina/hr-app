@@ -74,6 +74,7 @@ export class ReservationsComponent implements OnInit {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.facade.appService.stopLoading();
   }
 
   async getReservations() {

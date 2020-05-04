@@ -3,8 +3,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from '../directives/trim.validator';
-import { dniValidator } from "../directives/dni.validator";
-import { AppComponent } from '../app.component';
+import { dniValidator } from '../directives/dni.validator';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
@@ -24,31 +23,30 @@ export class DaysOffComponent implements OnInit, OnDestroy {
 
   validateForm: FormGroup = null;
   listOfDaysOff: DaysOff[] = [];
-  employee:any = null;
-  searchValue:string = '';
-  searchValueType:string = '';
-  searchValueStatus:string = '';
+  employee: any = null;
+  searchValue = '';
+  searchValueType = '';
+  searchValueStatus = '';
   listOfSearch: any[] = [];
   listOfDisplayData: DaysOff[] = [...this.listOfDaysOff];
-  sortDni:any = null;
-  sortValue:string = null;
-  sortName:any = null;
+  sortDni: any = null;
+  sortValue: string = null;
+  sortName: any = null;
   reasons: any[] = null;
-  showCalendarSelected: boolean = false;
+  showCalendarSelected = false;
   isHr: boolean = null;
   today: Date = new Date();
   currentUser: User = null;
   statusList: any[] = [];
   searchSub: Subscription = null;
-  searchDni:string = '';
+  searchDni = '';
 
   constructor(private facade: FacadeService,
     private fb: FormBuilder,
-    private app: AppComponent,
     private daysOffService: DaysOffService,
     private employeeService: EmployeeService,
     private globals: Globals) {
-    this.reasons = globals.daysOffTypeList.sort((a,b) => (a.name).localeCompare(b.name));
+    this.reasons = globals.daysOffTypeList.sort((a, b) => (a.name).localeCompare(b.name));
     this.statusList = globals.daysOffStatusList;
   }
 
@@ -80,6 +78,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           this.listOfDisplayData = res.body;
         });
     }
+    this.facade.appService.stopLoading();
   }
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
@@ -110,7 +109,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  };
+  }
 
   disabledDateTime = (): object => {
     return {
@@ -118,7 +117,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzDisabledMinutes: () => this.range(30, 60),
       nzDisabledSeconds: () => [55, 56]
     };
-  };
+  }
 
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.resetForm();
@@ -132,30 +131,31 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {
             if (this.compareTwoDates()) {
-              this.app.showLoading();
+              this.facade.appService.startLoading();
               if (this.validateForm.controls.DNI.valid === false) {
                 this.facade.toastrService.error('Please input a valid DNI.');
-                this.app.hideLoading();
-              }
-              else {
+                this.facade.appService.stopLoading();
+              } else {
                 const dni: number = this.validateForm.controls.DNI.value === null || this.validateForm.controls.DNI.value === undefined ? 0
                   : this.validateForm.controls.DNI.value;
                 this.employeeService.GetByDNI(dni)
                   .subscribe(res => {
-                    this.app.hideLoading();
+                    this.facade.appService.stopLoading();
                     this.employee = res.body;
                     if (!this.employee || this.employee === null) {
                       this.facade.toastrService.error('There is no employee with that DNI.');
                     } else {
-                      let isCompleted: boolean = true;
+                      let isCompleted = true;
                       for (const i in this.validateForm.controls) {
-                        this.validateForm.controls[i].markAsDirty();
-                        this.validateForm.controls[i].updateValueAndValidity();
-                        if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                        if (this.validateForm.controls[i]) {
+                          this.validateForm.controls[i].markAsDirty();
+                          this.validateForm.controls[i].updateValueAndValidity();
+                          if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
+                        }
                       }
-                      let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview
+                      const newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
                       if (isCompleted) {
-                        let newDayOff: DaysOff = {
+                        const newDayOff: DaysOff = {
                           id: 0,
                           date: this.validateForm.controls['date'].value.toISOString(),
                           endDate: this.validateForm.controls['endDate'].value.toISOString(),
@@ -166,18 +166,18 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                         };
                         this.facade.daysOffService.add(newDayOff)
                           .subscribe(res => {
-                            this.app.hideLoading()
+                            this.facade.appService.stopLoading();
                             this.getDaysOff();
-                            this.facade.toastrService.success("Day off was successfuly created !");
+                            this.facade.toastrService.success('Day off was successfuly created !');
                             modal.destroy();
                           }, err => {
-                            this.app.hideLoading();
+                            this.facade.appService.stopLoading();
                             this.facade.errorHandlerService.showErrorMessage(err);
-                          })
+                          });
                       }
                     }
-                  })
-              };
+                  });
+              }
             }
           }
         }],
@@ -185,7 +185,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    //Edit User Modal
+    // Edit User Modal
     this.resetForm();
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
     this.fillForm(editedDayOff);
@@ -205,27 +205,29 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           loading: false,
           onClick: () => {
             // modal.nzFooter[1].loading = true;
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             this.employeeService.GetByDNI(this.validateForm.controls.DNI.value)
               .subscribe(res => {
                 this.employee = res.body;
-                this.app.hideLoading();
+                this.facade.appService.stopLoading();
                 if (!this.employee || this.employee == null) {
-                  this.facade.toastrService.error("There is no employee with that DNI.");
+                  this.facade.toastrService.error('There is no employee with that DNI.');
                 }
-              })
+              });
             if (this.employee) {
-              let isCompleted: boolean = true;
+              let isCompleted = true;
               for (const i in this.validateForm.controls) {
-                this.validateForm.controls[i].markAsDirty();
-                this.validateForm.controls[i].updateValueAndValidity();
-                if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) isCompleted = false;
+                if (this.validateForm.controls[i]) {
+                  this.validateForm.controls[i].markAsDirty();
+                  this.validateForm.controls[i].updateValueAndValidity();
+                  if ((this.validateForm.controls[i].status !== 'DISABLED' && !this.validateForm.controls[i].valid)) { isCompleted = false; }
+                }
               }
 
               let newDate; let newEndDate;
-              newDate = editedDayOff.date == this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
-              newEndDate = editedDayOff.endDate == this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
-              let newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
+              newDate = editedDayOff.date === this.validateForm.controls['date'].value ? this.validateForm.controls['date'].value : new Date(this.validateForm.controls['date'].value).toISOString();
+              newEndDate = editedDayOff.endDate === this.validateForm.controls.endDate.value ? this.validateForm.controls['endDate'].value : new Date(this.validateForm.controls['endDate'].value).toISOString();
+              const newStatus = this.isHr ? this.validateForm.controls['status'].value : DaysOffStatusEnum.InReview;
               if (isCompleted) {
                 editedDayOff = {
                   id: 0,
@@ -243,7 +245,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
                     modal.destroy();
                   }, err => {
                     this.facade.errorHandlerService.showErrorMessage(err);
-                  })
+                  });
               }
             }
           }
@@ -252,7 +254,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   }
 
   showDeleteConfirm(dayOffId: number): void {
-    let dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id === dayOffId);
+    const dayOff: DaysOff = this.listOfDaysOff.find(_ => _.id === dayOffId);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure to delete ?',
       nzContent: 'This action will delete the day off',
@@ -270,7 +272,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    let dni = this.isHr ? null : this.employee.dni;
+    const dni = this.isHr ? null : this.employee.dni;
 
     this.validateForm = this.fb.group({
       DNI: [dni, [Validators.required, trimValidator, dniValidator]],
@@ -295,7 +297,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
         this.facade.toastrService.success('Petition was succesfully accepted !');
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
-      })
+      });
   }
 
   fillForm(daysOff: DaysOff) {
@@ -326,7 +328,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   searchType(): void {
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.type === p) : true) &&
-        (item.type === this.searchValueType)
+        (item.type === this.searchValueType);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -343,7 +345,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearch.length ? this.listOfSearch.some(p => item.status === p) : true) &&
-        (item.status === this.searchValueStatus)
+        (item.status === this.searchValueStatus);
     };
     const data = this.listOfDaysOff.filter(item => filterFunc(item));
     this.listOfDaysOff = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));

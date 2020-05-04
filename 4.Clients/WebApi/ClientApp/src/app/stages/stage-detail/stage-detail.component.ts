@@ -12,7 +12,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 
 export class StageDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private api: FacadeService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private facade: FacadeService, private router: Router) { }
 
   stage: Stage = null;
   processId: number;
@@ -22,7 +22,7 @@ export class StageDetailComponent implements OnInit {
   }
 
   getStageByID(id) {
-    this.api.stageService.getByID(id)
+    this.facade.stageService.getByID(id)
         .subscribe(res => {
           this.stage = res;
           this.processId = this.stage.processId;
@@ -30,6 +30,7 @@ export class StageDetailComponent implements OnInit {
         // TODO: change this log for a message or delete it
         err => {
           console.log(err);
-        });
+          });
+    this.facade.appService.stopLoading();
   }
 }

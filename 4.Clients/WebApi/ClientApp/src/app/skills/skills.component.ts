@@ -9,7 +9,6 @@ import { AppComponent } from '../app.component';
   selector: 'app-skills',
   templateUrl: './skills.component.html',
   styleUrls: ['./skills.component.css'],
-  providers: [AppComponent]
 })
 export class SkillsComponent implements OnInit {
 
@@ -32,11 +31,11 @@ export class SkillsComponent implements OnInit {
   emptySkill: Skill;
   skillTypeForDetail: string;
 
-  constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent) { }
+  constructor(private facade: FacadeService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getSkills();
     this.getSkillTypes();
 
@@ -45,7 +44,7 @@ export class SkillsComponent implements OnInit {
       description: [null, [Validators.required, trimValidator]],
       type: [null, [Validators.required]],
     });
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   getSkillTypeNameByID(id: number) {
@@ -122,7 +121,7 @@ export class SkillsComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.skillForm.controls) {
@@ -146,17 +145,17 @@ export class SkillsComponent implements OnInit {
               this.facade.skillService.add(newSkill)
                 .subscribe(() => {
                   this.getSkills();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('Skill was successfully created !');
                   modal.destroy();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else {
               modal.nzFooter[1].loading = false;
-              this.app.hideLoading();
+              this.facade.appService.stopLoading();
             }
           }
         }],
@@ -191,7 +190,7 @@ export class SkillsComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.skillForm.controls) {
@@ -216,11 +215,11 @@ export class SkillsComponent implements OnInit {
               this.facade.skillService.update(id, editedSkill)
                 .subscribe(() => {
                   this.getSkills();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('Skill was successfully created !');
                   modal.destroy();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
@@ -228,7 +227,7 @@ export class SkillsComponent implements OnInit {
               modal.nzFooter[1].loading = false;
             }
 
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }],
     });

@@ -28,6 +28,7 @@ import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs/Subscription';
+
 @Component({
   selector: 'app-referrals',
   templateUrl: './referrals.component.html',
@@ -38,7 +39,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   slideConfig = {
     slidesToShow: 1,
-    adaptiveHeight: true, //la papa
+    adaptiveHeight: true,
     arrows: true,
     infinite: false,
     draggable: false
@@ -70,7 +71,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   processForm: FormGroup;
   rejectProcessForm: FormGroup;
   declineProcessForm: FormGroup;
-  isDetailsVisible: boolean = false;
+  isDetailsVisible = false;
   emptyProcess: Process;
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
@@ -78,10 +79,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   users: User[] = [];
 
-  profileSearch: number = 0;
-  profileSearchName: string = 'ALL';
-  communitySearch: number = 0;
-  communitySearchName: string = 'ALL';
+  profileSearch = 0;
+  profileSearchName = 'ALL';
+  communitySearch = 0;
+  communitySearchName = 'ALL';
   profileList: any[];
   statusList: any[];
   currentStageList: any[];
@@ -90,28 +91,29 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   currentCandidate: Candidate;
 
 
-  isEdit: boolean = false;
-  openFromEdit: boolean = false;
+  isEdit = false;
+  openFromEdit = false;
   currentComponent: string;
   lastComponent: string;
-  times: number = 0;
+  times = 0;
   selectedSeniority: SeniorityEnum;
   offices: Office[] = [];
   communities: Community[] = [];
   profiles: CandidateProfile[] = [];
-  stepIndex: number = 0;
+  stepIndex = 0;
   declineReasons: DeclineReason[] = [];
-  isDeclineReasonOther: boolean = false;
-  isOwnedProcesses: boolean = false;
+  isDeclineReasonOther = false;
+  isOwnedProcesses = false;
   notis: Notification[] = [];
   notisCount: number;
   id: number;
   forms: FormGroup[] = [];
   visible: boolean;
+
   referralsSubscriptions: Subscription = new Subscription();
-  constructor(private facade: FacadeService, private formBuilder: FormBuilder, private app: AppComponent,
+  constructor(private facade: FacadeService, private formBuilder: FormBuilder,
     private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
-    private globals: Globals, private _appComponent: AppComponent) {
+    private globals: Globals) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -119,7 +121,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.app.removeBgImage();
+    this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getCandidates();
     this.getUsers();
@@ -147,18 +149,16 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   isUserRole(roles: string[]): boolean {
-    return this._appComponent.isUserRole(roles);
+    return this.facade.appService.isUserRole(roles);
   }
-
-
 
   getCandidates() {
     const candidateSubscription = this.facade.candidateService.getData().subscribe(res => {
       if (!!res) {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.firstName + ' ' + this.currentUser.lastName);
- 
+        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.lastName + ' ' + this.currentUser.firstName);
+
         this.facade.referralsService.updateList(this.candidateReferred);
         this.facade.referralsService.referrals.subscribe((referralList) => {
           this.candidateReferred = referralList;
@@ -296,9 +296,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   showApproveProcessConfirm(processID: number): void {
-    let procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
-    // let processText = procesToApprove.candidate ? procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName) : procesToApprove.profile;
-    let processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
+    const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
+    const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
 
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to approve the process for ' + processText + '? This will approve all stages associated with the process',
@@ -311,15 +310,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   approveProcess(processID: number) {
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     this.facade.processService.approve(processID)
       .subscribe(res => {
         this.getProcesses();
         this.getCandidates();
-        this.app.hideLoading();
+        this.facade.appService.stopLoading();
         this.facade.toastrService.success('Process approved!');
       }, err => {
-        this.app.hideLoading();
+        this.facade.appService.stopLoading();
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
@@ -346,30 +345,34 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
           label: 'Submit',
           type: 'danger',
           onClick: () => {
-            this.app.showLoading();
-            let isCompleted: boolean = true;
+            this.facade.appService.startLoading();
+            let isCompleted = true;
             for (const i in this.rejectProcessForm.controls) {
-              this.rejectProcessForm.controls[i].markAsDirty();
-              this.rejectProcessForm.controls[i].updateValueAndValidity();
-              if ((!this.rejectProcessForm.controls[i].valid)) isCompleted = false;
+              if (this.rejectProcessForm.controls[i]) {
+                this.rejectProcessForm.controls[i].markAsDirty();
+                this.rejectProcessForm.controls[i].updateValueAndValidity();
+                if ((!this.rejectProcessForm.controls[i].valid)) {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
 
-              let rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+              const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
 
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
                   this.getProcesses();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.destroy();
                   this.facade.toastrService.success('Process and associated candidate were rejected');
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.error(err.message);
                 });
             }
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }
       ]
@@ -395,33 +398,35 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
           label: 'Submit',
           type: 'primary',
           onClick: () => {
-            this.app.showLoading();
-            let isCompleted: boolean = true;
+            this.facade.appService.startLoading();
+            let isCompleted = true;
             for (const i in this.declineProcessForm.controls) {
-              this.declineProcessForm.controls[i].markAsDirty();
-              this.declineProcessForm.controls[i].updateValueAndValidity();
-              if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
-                isCompleted = false;
+              if (this.declineProcessForm.controls[i]) {
+                this.declineProcessForm.controls[i].markAsDirty();
+                this.declineProcessForm.controls[i].updateValueAndValidity();
+                if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
+                  isCompleted = false;
+                }
               }
             }
             if (isCompleted) {
-              let declineReason: DeclineReason = {
+              const declineReason: DeclineReason = {
                 id: this.declineProcessForm.controls['declineReasonName'].value,
-                name: "",
-                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ""
-              }
+                name: '',
+                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
+              };
               process.declineReason = declineReason;
               this.facade.processService.update(process.id, process)
                 .subscribe(res => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.destroy();
                   this.facade.toastrService.success('Process and associated candidate were declined');
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.error(err.message);
                 });
             }
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }
       ]
@@ -451,8 +456,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   search(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + " " + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.name.toString() + " " + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.name.toString() + ' ' + item.candidate.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -460,11 +465,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.profileSearchName = 'ALL';
     this.nameDropdown.nzVisible = false;
   }
-h
   searchRecruiter(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
     // const data = this.filteredProcesses;
@@ -475,7 +479,7 @@ h
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue= this.currentUser.lastName + ' ' + this.currentUser.firstName;
+    this.searchRecruiterValue = this.currentUser.lastName + ' ' + this.currentUser.firstName;
     this.searchRecruiter();
     this.isOwnedProcesses = true;
   }
@@ -487,8 +491,8 @@ h
 
   showOwnProcessesFirst(): void {
     const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.firstName.toString() + " " + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
+        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
     };
     const data = this.filteredProcesses.filter(item => filterFunc(item));
 
@@ -512,7 +516,7 @@ h
   searchCurrentStage(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
-        (item.currentStage === this.searchValueCurrentStage)
+        (item.currentStage === this.searchValueCurrentStage);
     };
     const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
@@ -527,8 +531,7 @@ h
     if (this.profileSearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
-    }
-    else {
+    } else {
       this.profileSearchName = (this.profiles.find(p => p.id === this.profileSearch)).name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.profile.id === searchedProfile);
       this.communitySearchName = 'ALL';
@@ -542,8 +545,7 @@ h
     if (this.communitySearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.communitySearchName = 'ALL';
-    }
-    else {
+    } else {
       this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
       this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id === searchedCommunity);
@@ -558,7 +560,7 @@ h
   }
 
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
@@ -572,11 +574,11 @@ h
       nzWidth: '90%',
       nzFooter: footer
     });
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate: Candidate): void {
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     this.createEmptyProcess(candidate);
 
     this.currentCandidate = candidate;
@@ -588,7 +590,7 @@ h
       nzWidth: '90%',
       nzFooter: footer
     });
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   // NOT BEING USED
@@ -617,15 +619,13 @@ h
   }
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyUser = this.users.filter(user => user.id == userID)[0];
+    this.emptyUser = this.users.filter(user => user.id === userID)[0];
     this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 
   showDeleteConfirm(processID: number): void {
-    let procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
-    let processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
-    // let processText = procesDelete.candidate ? procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName) : procesDelete.profile;
-
+    const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
+    const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
       nzContent: '',
@@ -643,8 +643,8 @@ h
   }
 
   onCheck(): number {
-    let i: number = 0;
-    let carouselSlide: number = -1;
+    let i = 0;
+    let carouselSlide = -1;
     this.forms.forEach(form => {
       form = this.checkForm(form);
       if (form.invalid) {
@@ -657,8 +657,10 @@ h
 
   checkForm(form: FormGroup): FormGroup {
     for (const i in form.controls) {
-      form.controls[i].markAsDirty();
-      form.controls[i].updateValueAndValidity();
+      if (form.controls[i]) {
+        form.controls[i].markAsDirty();
+        form.controls[i].updateValueAndValidity();
+      }
     }
     return form;
   }
@@ -668,7 +670,7 @@ h
     const slide: number = this.onCheck();
     if (slide > -1) {
       this.processCarousel.goTo(slide);
-      let elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
+      const elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
         : slide === 3 ? 'clientButton' : slide === 4 ? 'offerButton' : slide === 5 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
@@ -719,7 +721,7 @@ h
 
   saveProcess(declineProcessModal: TemplateRef<{}>) {
     if (this.validateForms()) {
-      this.app.showLoading();
+      this.facade.appService.startLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
       newCandidate = this.candidateAdd.getFormData();
@@ -732,12 +734,12 @@ h
         this.facade.processService.add(newProcess)
           .subscribe(res => {
             this.getProcesses();
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
             this.facade.toastrService.success('The process was successfully saved !');
             this.createEmptyProcess(newCandidate);
             this.closeModal();
           }, err => {
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
             this.facade.toastrService.error(err.message);
           });
       } else {
@@ -751,7 +753,7 @@ h
                   if (declineReason !== newProcess.declineReason) {
                     this.getCandidates();
                     this.getProcesses();
-                    this.app.hideLoading();
+                    this.facade.appService.stopLoading();
                     this.facade.toastrService.success('The process was successfully saved!');
                     this.createEmptyProcess(newCandidate);
                     this.closeModal();
@@ -762,17 +764,17 @@ h
                 .subscribe(() => {
                   this.getProcesses();
                   this.getCandidates();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('The process was successfully saved !');
                   this.createEmptyProcess(newCandidate);
                   this.closeModal();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.error(err.message);
                 });
             }
           }, err => {
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
             this.facade.toastrService.error(err.message);
           });
       }
@@ -822,7 +824,7 @@ h
   }
 
   getProcessStatus(stages: Stage[]): number {
-    let processStatus: number = 0;
+    let processStatus = 0;
     stages.forEach(stage => {
       if (stage.status === StageStatusEnum.InProgress) { processStatus = ProcessStatusEnum.InProgress; }
       if (stage.status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.InProgress; }
@@ -831,8 +833,8 @@ h
     if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
-        stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) {
-          processStatus = ProcessStatusEnum.Declined; 
+      stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) {
+      processStatus = ProcessStatusEnum.Declined;
     }
 
     if (stages[4].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Hired; }
@@ -843,7 +845,7 @@ h
 
 
   getStatusColor(status: number): string {
-    let statusName = this.statusList.filter(s => s.id === status)[0].name;
+    const statusName = this.statusList.filter(s => s.id === status)[0].name;
     switch (statusName) {
       case 'Hired': return 'success';
       case 'Rejected': return 'error';
@@ -951,8 +953,8 @@ h
         feedback: '',
         userOwnerId: candidate.user.id,
         userDelegateId: null,
-        processId: 0,        
-        seniority: SeniorityEnum.NA,        
+        processId: 0,
+        seniority: SeniorityEnum.NA,
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),

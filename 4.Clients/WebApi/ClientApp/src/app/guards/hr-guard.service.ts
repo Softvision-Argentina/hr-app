@@ -1,33 +1,55 @@
 import { JwtHelper } from 'angular2-jwt';
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanLoad, Route } from '@angular/router';
 import { User } from 'src/entities/user';
 import { AppConfig } from '../app-config/app.config';
 
 @Injectable()
-export class HRGuard implements CanActivate {
+export class HRGuard implements CanActivate, CanLoad {
 
   previousUrl: string;
   currentUrl: string;
   currentUser: User;
   roles: string[];
 
-  constructor(private jwtHelper: JwtHelper, private router: Router, config: AppConfig) {
-    this.roles = config.getConfig("roles");
+  private _allowedRoles = [
+    'Admin',
+    'HRManagement',
+    'HRUser',
+    'Interviewer',
+    'CommunityManager',
+    'Recruiter'
+  ];
+
+  constructor(private jwtHelper: JwtHelper, private router: Router,  config: AppConfig) {
+    this.roles = config.getConfig('roles');
+  }
+  canLoad(route: Route): boolean {
+    return this.isUserAllowed(route.path);
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    return this.isUserAllowed(state.url);
+  }
 
-    if (this.currentUser && !this.jwtHelper.isTokenExpired(this.currentUser.token)) {
-      if (this.roles.indexOf(this.currentUser.role) != -1
-        && (this.currentUser.role == "Admin" || this.currentUser.role == "HRManagement" || this.currentUser.role == "HRUser") || this.currentUser.role == "Interviewer" || this.currentUser.role == "CommunityManager" || this.currentUser.role == "Recruiter" ) return true;
-      else {
-        this.router.navigate(["unauthorized"], { queryParams: { returnUrl: state.url } });
-        return false;
-      }
+  isUserAllowed(returnUrl: string): boolean {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    if (!this.currentUser || this.jwtHelper.isTokenExpired(this.currentUser.token)) {
+      this.router.navigate(['login'], { queryParams: { returnUrl } });
+      return false;
     }
-    this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
+
+    if (this.hasRole(this.roles, this.currentUser.role)
+      && this.hasRole(this._allowedRoles, this.currentUser.role)) {
+      return true;
+    }
+
+    this.router.navigate(['unauthorized'], { queryParams: { returnUrl } });
     return false;
+  }
+
+  hasRole(roles: string[], userRole: string): boolean {
+    return roles.some(r => r === userRole);
   }
 }

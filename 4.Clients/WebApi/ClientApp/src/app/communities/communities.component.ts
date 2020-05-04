@@ -3,9 +3,9 @@ import { Community } from 'src/entities/community';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-communities',
@@ -15,7 +15,7 @@ import { CandidateProfile } from 'src/entities/Candidate-Profile';
 export class CommunitiesComponent implements OnInit {
 
   @Input()
-  private _detailedCommunity: Community[];
+  private _detailedCommunity: Community[] = [];
   public get detailedCommunity(): Community[] {
     return this._detailedCommunity;
   }
@@ -24,7 +24,7 @@ export class CommunitiesComponent implements OnInit {
   }
 
   @Input()
-  private _detailedCandidateProfile: CandidateProfile[];
+  private _detailedCandidateProfile: CandidateProfile[] = [];
   public get detailedCandidateProfile(): CandidateProfile[] {
     return this._detailedCandidateProfile;
   }
@@ -36,17 +36,17 @@ export class CommunitiesComponent implements OnInit {
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit: boolean = false;
-  editingCommunityId: number = 0;
+  isEdit = false;
+  editingCommunityId = 0;
   candidateprofiles: CandidateProfile[] = [];
 
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) {
-      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  constructor(private facade: FacadeService, private fb: FormBuilder, private settings: SettingsComponent) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
-    this.app.removeBgImage();
+    this.facade.appService.removeBgImage();
     this.resetForm();
     this.getCandidateProfiles();
   }
@@ -57,22 +57,23 @@ export class CommunitiesComponent implements OnInit {
   }
 
   getCProfileNameByID(id: number) {
-    let CProfile = this.candidateprofiles.find(c => c.id === id);
+    const CProfile = this.candidateprofiles.find(c => c.id === id);
     return CProfile !== undefined ? CProfile.name : '';
   }
 
   getProfileById(id: number) {
-    let CProfile = this.candidateprofiles.find(c => c.id === id);
+    const CProfile = this.candidateprofiles.find(c => c.id === id);
     return CProfile;
   }
 
   getCandidateProfiles() {
     this.facade.candidateProfileService.get()
-    .subscribe(res => {
-      this.candidateprofiles = res.sort((a,b) => (a.name).localeCompare(b.name));
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });
+      .subscribe(res => {
+        this.candidateprofiles = res.sort((a, b) => (a.name).localeCompare(b.name));
+        this.facade.appService.stopLoading();
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
   resetForm() {
@@ -89,8 +90,9 @@ export class CommunitiesComponent implements OnInit {
     this.controlEditArray = [];
     this.resetForm();
 
-    if (this.candidateprofiles.length > 0)
+    if (this.candidateprofiles.length > 0) {
       this.validateForm.controls['profileId'].setValue(this.candidateprofiles[0].id);
+    }
 
     const modal = this.facade.modalService.create({
       nzTitle: 'Add New Community',
@@ -108,21 +110,23 @@ export class CommunitiesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true; //el boton de guardar cambios cambia a true
-            let isCompleted: boolean = true;
+            modal.nzFooter[1].loading = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if ((!this.validateForm.controls[i].valid)) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
-              let newCommunity: Community = {
+              const newCommunity: Community = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
                 description: this.validateForm.controls['description'].value.toString(),
                 profileId: this.validateForm.controls['profileId'].value.toString(),
                 profile: null
-              }
+              };
               this.facade.communityService.add(newCommunity)
                 .subscribe(res => {
                   this.controlArray = [];
@@ -131,9 +135,8 @@ export class CommunitiesComponent implements OnInit {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
@@ -166,11 +169,13 @@ export class CommunitiesComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if (!this.validateForm.controls[i].valid) isCompleted = false;
+              if (this.validateForm.controls[i]) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if (!this.validateForm.controls[i].valid) { isCompleted = false; }
+              }
             }
             if (isCompleted) {
               editedCommunity = {
@@ -179,7 +184,7 @@ export class CommunitiesComponent implements OnInit {
                 description: this.validateForm.controls['description'].value.toString(),
                 profileId: this.validateForm.controls['profileId'].value.toString(),
                 profile: null
-              }
+              };
               this.facade.communityService.update(id, editedCommunity)
                 .subscribe(res => {
                   this.facade.toastrService.success('Community was successfully edited !');
@@ -188,16 +193,15 @@ export class CommunitiesComponent implements OnInit {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                })
-            }
-            else modal.nzFooter[1].loading = false;
+                });
+            } else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
   }
 
   showDeleteConfirm(communityID: number): void {
-    let communityDelete: Community = this._detailedCommunity.filter(c => c.id === communityID)[0];
+    const communityDelete: Community = this._detailedCommunity.filter(c => c.id === communityID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + communityDelete.name + ' ?',
       nzContent: '',
@@ -217,7 +221,8 @@ export class CommunitiesComponent implements OnInit {
   fillCommunityForm(community: Community) {
     this.validateForm.controls['name'].setValue(community.name);
     this.validateForm.controls['description'].setValue(community.description);
-    if (this.candidateprofiles.length > 0)
+    if (this.candidateprofiles.length > 0) {
       this.validateForm.controls['profileId'].setValue(community.profileId);
+    }
   }
 }

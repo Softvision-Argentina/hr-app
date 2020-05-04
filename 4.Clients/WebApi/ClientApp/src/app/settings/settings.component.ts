@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppComponent } from '../app.component';
 import { CandidateProfile} from 'src/entities/Candidate-Profile';
 import { Community } from 'src/entities/community';
 import { FacadeService } from '../services/facade.service';
@@ -14,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
 
-  constructor(private facade: FacadeService, private app: AppComponent) { }
+  constructor(private facade: FacadeService) { }
 
   emptyCandidateProfile: CandidateProfile[] = [];
   listOfDisplayData = [...this.emptyCandidateProfile];
@@ -25,8 +24,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   emptyOffice: Office[] = [];
   listOfDisplayDataOffice = [...this.emptyOffice];
   settingsSubscription: Subscription = new Subscription();
+
   ngOnInit() {
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
+    this.facade.appService.stopLoading();
     this.getOffices();
     this.getRooms();
     this.getCandidatesProfile();
@@ -60,9 +62,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   getRooms() {
     this.facade.RoomService.get()
-    .subscribe(res => {
-      this.emptyRoom = res;
-      this.listOfDisplayDataRoom = res;
+      .subscribe(res => {
+        this.emptyRoom = res;
+        this.listOfDisplayDataRoom = res;
       }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });

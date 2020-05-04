@@ -17,7 +17,7 @@
         <nz-form-control [style.width.%]="90" style="text-align: left;">
           <nz-form-label nzFor="officeSelector">Preferred Office</nz-form-label>
           <nz-select formControlName="preferredOffice" nzShowSearch nzAllowClear [nzAllowClear]="false"
-            nzPlaceHolder="Select a preferred office" >
+            nzPlaceHolder="Select a preferred office">
             <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o">{{ o.name }}</nz-option>
           </nz-select>
         </nz-form-control>
@@ -40,7 +40,7 @@
         </nz-form-item>
         <nz-form-item [style.width.%]="20">
           <nz-form-control [style.width.%]="90" style="text-align: center;">
-          <br>
+            <br>
             <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
           </nz-form-control>
         </nz-form-item>
@@ -133,15 +133,9 @@
     <div *ngIf="skills.length > 0 && candidates.length > 0">
       <div>
         <div style="display: block">
-          <canvas baseChart
-            [datasets]="skillsPercentage"
-            [labels]="skillChartLabels"
-            [options]="skillChartOptions"
-            [plugins]="skillChartPlugins"
-            [legend]="skillChartLegend"
-            [chartType]="skillChartType"
-            (chartHover)="chartHovered($event)"
-            [colors]="skillsChartColors">
+          <canvas baseChart [datasets]="skillsPercentage" [labels]="skillChartLabels" [options]="skillChartOptions"
+            [plugins]="skillChartPlugins" [legend]="skillChartLegend" [chartType]="skillChartType"
+            (chartHover)="chartHovered($event)" [colors]="skillsChartColors">
           </canvas>
         </div>
       </div>

@@ -30,17 +30,15 @@ export class ProcessStepsComponent implements OnInit {
 
   getProcessByID(id) {
     this.facade.processService.getByID(id)
-            .subscribe(res => {
-              this.process = res;
-              console.log(res);
-              //this.checkStatusOfProcess();
-            }, err => {
-              console.log(err);
-            })
+      .subscribe(res => {
+        this.process = res;
+      }, err => {
+        console.log(err);
+      });
+    this.facade.appService.stopLoading();
   }
 
   getStatusColor(status: string) {
-    console.log(status);
     switch(status.toLowerCase()) {
       case "finish":
         return 'green';

@@ -65,6 +65,29 @@ export class ReportsComponent implements OnInit, OnDestroy {
     },
   ];
 
+  // Processes
+  public pieChartOptions: ChartOptions = {
+    responsive: true,
+    plugins: {
+      datalabels: {
+        formatter: (value, ctx) => {
+          const label = ctx.chart.data.labels[ctx.dataIndex];
+          return label;
+        },
+      },
+    }
+  };
+  public pieChartLabels: Label[] = ['REJECTED', 'IN PROCESS', 'FINISH', 'WAIT', 'NOT STARTED'];
+  public pieChartData: SingleDataSet = [0, 0, 0, 0, 0];
+  public pieChartType: ChartType = 'pie';
+  public pieChartLegend = true;
+  public pieChartPlugins = [pluginDataLabels];
+  public pieChartColors: Array<any> = [
+    {
+      backgroundColor: ['#E4363FDB', '#81FB15', '#36E4BDFC', '#F6FB15', '#6FC8CE']
+    }
+  ];
+
 
   // CandidateFilter
   @ViewChild('dropdown') nameDropdown;
@@ -87,7 +110,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
     name: 'NA',
     description: '',
     roomItems: []
-  }
+  };
   defaultCommunity: Community = {
     id: null,
     name: 'NA',
@@ -97,24 +120,24 @@ export class ReportsComponent implements OnInit, OnDestroy {
   };
 
 
-  numberOfWait: number = 0;
-  numberOfError: number = 0;
-  numberOfFinish: number = 0;
-  numberOfInProcess: number = 0;
-  numberOfNotStarted: number = 0;
+  numberOfWait = 0;
+  numberOfError = 0;
+  numberOfFinish = 0;
+  numberOfInProcess = 0;
+  numberOfNotStarted = 0;
 
-  stadisticAbove: number = 0;
-  stadisticBelow: number = 0;
+  stadisticAbove = 0;
+  stadisticBelow = 0;
 
   sortName = null;
   sortValue = null;
-  reportsSubscription: Subscription =  new Subscription();
-  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
-    private app: AppComponent) { }
+
+  reportsSubscription: Subscription = new Subscription();
+  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent) { }
 
   ngOnInit() {
     this.isLoadingResults = true;
-    this.app.removeBgImage();
+    this.facade.appService.removeBgImage();
     this.getSkills();
     this.getCandidates();
     this.getProcesses();
@@ -153,7 +176,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
     this.emptyCandidate = this.listOfDisplayData.filter(candidate => candidate.id === candidateID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   getSkills() {
@@ -165,6 +188,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       }, () => {
         this.isLoadingResults = false;
       });
+    this.facade.appService.stopLoading();
   }
 
   getCandidates() {
@@ -251,20 +275,22 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   getCandidatesBySkill(): void {
 
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     for (const i in this.validateSkillsForm.controls) {
-      this.validateSkillsForm.controls[i].markAsDirty();
-      this.validateSkillsForm.controls[i].updateValueAndValidity();
+      if (this.validateSkillsForm.controls[i]) {
+        this.validateSkillsForm.controls[i].markAsDirty();
+        this.validateSkillsForm.controls[i].updateValueAndValidity();
+      }
     }
 
 
-    let selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
+    const selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }> =
       this.listOfControl.map(control => {
         const result = {
-          skillId: parseInt(this.validateSkillsForm.get(control.controlInstance[0]).value),
+          skillId: parseInt(this.validateSkillsForm.get(control.controlInstance[0]).value, 10),
           minRate: this.validateSkillsForm.get(control.controlInstance[1]).value[0],
           maxRate: this.validateSkillsForm.get(control.controlInstance[1]).value[1]
-        }
+        };
 
         return result;
       });
@@ -273,12 +299,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
       community: number
       , preferredOffice: number
       , selectedSkills: Array<{ skillId: number; minRate: number; maxRate: number }>
-    } =
-    {
-      community: parseInt(this.validateSkillsForm.get('community').value.id),
-      preferredOffice: parseInt(this.validateSkillsForm.get('preferredOffice').value.id),
+    } = {
+      community: parseInt(this.validateSkillsForm.get('community').value.id, 10),
+      preferredOffice: parseInt(this.validateSkillsForm.get('preferredOffice').value.id, 10),
       selectedSkills: selectedSkills
-    }
+    };
 
 
 
@@ -289,12 +314,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
         const totalCandidates: number = this.listOfDisplayData.length;
         // Cards de porcentajes
         this.stadisticAbove = (skilledCandidates * 100) / totalCandidates;
-        if (this.stadisticAbove === 100) this.stadisticBelow = 0;
-        else this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates;
-        if (this.stadisticBelow === 100) this.stadisticAbove = 0;
-        if (this.stadisticAbove.toString() === 'NaN') this.stadisticAbove = 0;
-        if (this.stadisticBelow.toString() === 'NaN') this.stadisticBelow = 0;
-        this.app.hideLoading();
+        if (this.stadisticAbove === 100) { this.stadisticBelow = 0; }
+        else { this.stadisticBelow = ((totalCandidates - skilledCandidates) * 100) / totalCandidates; }
+        if (this.stadisticBelow === 100) { this.stadisticAbove = 0; }
+        if (this.stadisticAbove.toString() === 'NaN') { this.stadisticAbove = 0; }
+        if (this.stadisticBelow.toString() === 'NaN') { this.stadisticBelow = 0; }
+        this.facade.appService.stopLoading();
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -331,7 +356,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   getSkillsPercentage(): void {
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     const skills: Skill[] = this.skills;
     const candidates: Candidate[] = this.candidates;
     const chartLabels: Label[] = [];
@@ -354,32 +379,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
     });
     this.skillsPercentage = [{ data: skillRates, label: 'Number of candidates ' }];
     this.skillChartLabels = chartLabels;
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
-
-
-  // Processes
-  public pieChartOptions: ChartOptions = {
-    responsive: true,
-    plugins: {
-      datalabels: {
-        formatter: (value, ctx) => {
-          const label = ctx.chart.data.labels[ctx.dataIndex];
-          return label;
-        },
-      },
-    }
-  };
-  public pieChartLabels: Label[] = ['REJECTED', 'IN PROCESS', 'FINISH', 'WAIT', 'NOT STARTED'];
-  public pieChartData: SingleDataSet = [0, 0, 0, 0, 0];
-  public pieChartType: ChartType = 'pie';
-  public pieChartLegend = true;
-  public pieChartPlugins = [pluginDataLabels];
-  public pieChartColors: Array<any> = [
-    {
-      backgroundColor: ["#E4363FDB", "#81FB15", "#36E4BDFC", "#F6FB15", "#6FC8CE"]
-    }
-  ];
 
   // events
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
@@ -394,5 +395,3 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.reportsSubscription.unsubscribe();
   }
 }
-
-

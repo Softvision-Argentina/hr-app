@@ -10,7 +10,7 @@
             </div>
             <div nz-col nzSpan="3" nzOffset="10">
                 <span class="showing" *ngIf="canAssign()">Showing: </span>
-                <nz-switch *ngIf="canAssign()" [(ngModel)]="showAllTasks" (click)="filterTasks()">
+                <nz-switch *ngIf="canAssign()" [(ngModel)]="showAllTasks" ngDefaultControl (click)="filterTasks()">
                 </nz-switch>
             </div>
             <div class="div-dropdown" nz-col nzSpan="2">
@@ -75,14 +75,14 @@
 
                 <nz-skeleton [nzActive]="true" [nzLoading]="loading">
                     <div *ngFor="let item of toDo.taskItems">
-                        <label id="{{item.id}}" (mouseenter)="mouseHovering($event)" (mouseleave)="mouseLeft($event)" nz-checkbox *ngIf="!item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked">
+                        <label id="{{item.id}}" (mouseenter)="mouseHovering($event)" (mouseleave)="mouseLeft($event)" nz-checkbox *ngIf="!item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked" ngDefaultControl>
                             <span class="card-item" id="span_{{item.id}}">{{item.text}}<i id="icon_{{item.id}}" class="icon-right"
                                     nz-icon nzType="close" nzTheme="outline" (click)="removeItem(toDo.id, item)"></i></span>
                             </label>
                     </div>
                     <nz-divider nzText="Done"></nz-divider>
                     <div *ngFor="let item of toDo.taskItems">
-                        <label nz-checkbox *ngIf="item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked">
+                        <label nz-checkbox *ngIf="item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked" ngDefaultControl> 
                             <span class="span-decoration">{{item.text}}</span>
                         </label>
                     </div>

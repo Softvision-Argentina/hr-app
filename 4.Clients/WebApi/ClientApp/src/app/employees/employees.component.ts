@@ -42,7 +42,7 @@ export class EmployeesComponent implements OnInit {
   showReviewerNotFoundMessage: boolean;
 
   constructor(private facade: FacadeService, private fb: FormBuilder,
-    private app: AppComponent, private detailsModal: EmployeeDetailsComponent) {
+    private detailsModal: EmployeeDetailsComponent) {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
@@ -99,6 +99,7 @@ export class EmployeesComponent implements OnInit {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.facade.appService.stopLoading();
   }
 
   getUsers() {
@@ -157,7 +158,7 @@ export class EmployeesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             let isCompleted: boolean;
             isCompleted = this.validateEmployeeFields();
@@ -185,18 +186,18 @@ export class EmployeesComponent implements OnInit {
               this.facade.employeeService.add(newEmployee)
                 .subscribe(res => {
                   this.getEmployees();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success("Employee successfully created!");
                   modal.destroy();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else {
               modal.nzFooter[1].loading = false;
-              this.app.hideLoading();
+              this.facade.appService.stopLoading();
             }
           }
         }],
@@ -248,16 +249,16 @@ export class EmployeesComponent implements OnInit {
                 }, err => {
                   this.facade.errorHandlerService.showErrorMessage(err);
                   modal.nzFooter[1].loading = false;
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                 });
             }
             else modal.nzFooter[1].loading = false;
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }
       ]
     });
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   showDetailsModal(employeeId: number, modalContent: TemplateRef<{}>): void {

@@ -7,7 +7,6 @@ import { Task } from 'src/entities/task';
 import { TaskItem } from 'src/entities/taskItem';
 import { AppConfig } from '../app-config/app.config';
 import { dateValidator } from '../directives/date.validator';
-import { AppComponent } from '../app.component';
 import { SearchbarService } from '../services/searchbar.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -15,12 +14,11 @@ import { Subscription } from 'rxjs/Subscription';
   selector: 'tasks',
   templateUrl: 'tasks.component.html',
   styleUrls: ['tasks.component.css'],
-  providers: [AppComponent]
 })
 export class TasksComponent implements OnInit, OnDestroy {
 
-  showCloseIcon: boolean = false;
-  searchTitle: string = '';
+  showCloseIcon = false;
+  searchTitle = '';
   users: User[] = [];
   validateForm: FormGroup;
   controlArray: Array<{ id: number, controlInstance: string }> = [];
@@ -36,13 +34,13 @@ export class TasksComponent implements OnInit, OnDestroy {
   tasksSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getUsers();
     this.getTasks();
     this.resetForm();
     this.loading = false;
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
     this.searchSub = this.search.searchChanged.subscribe(data => {
       this.searchTitle = data;
     });
@@ -53,8 +51,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     private search: SearchbarService,
     private facade: FacadeService,
     private fb: FormBuilder,
-    private config: AppConfig,
-    private app: AppComponent
+    private config: AppConfig
   ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
@@ -70,7 +67,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   getTasks() {
-    if (this.app.isUserRole(['HRManagement', 'Admin', 'Recruiter'])) {
+    if (this.facade.appService.isUserRole(['HRManagement', 'Admin', 'Recruiter'])) {
       this.facade.taskService.get()
         .subscribe(res => {
           this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
@@ -94,7 +91,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     const index = this.toDoList.indexOf(updateTask);
     const displayIndex = this.toDoListDisplay.indexOf(updateTask);
 
-    this.app.showLoading();
+    this.facade.appService.startLoading();
     this.facade.taskService.approve(id).subscribe(res => {
       updateTask.taskItems.forEach(item => {
         item.checked = true;
@@ -104,9 +101,9 @@ export class TasksComponent implements OnInit, OnDestroy {
 
       this.toDoList[index] = updateTask;
       this.toDoListDisplay[displayIndex] = updateTask;
-      this.app.hideLoading();
+      this.facade.appService.stopLoading();
     }, err => {
-      this.app.hideLoading();
+      this.facade.appService.stopLoading();
       this.facade.toastrService.error('An error has ocurred. Please try again later');
     });
   }
@@ -241,7 +238,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoList
-                                    .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
+            .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
@@ -251,7 +248,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
         if (!this.showAllTasks) {
           this.toDoListDisplay = this.toDoListDisplay
-                                    .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
+            .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
@@ -260,15 +257,15 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.toDoListDisplay = this.toDoList.filter(task => task.isApprove);
 
         if (!this.showAllTasks) {
-          this.toDoListDisplay =  this.toDoListDisplay
-                                      .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
+          this.toDoListDisplay = this.toDoListDisplay
+            .filter(task => this.isSameTextInLowerCase(task.user.username, currentUserEmail));
         }
 
         break;
     }
   }
 
-  isSameTextInLowerCase(textA: string, textB: string ) {
+  isSameTextInLowerCase(textA: string, textB: string) {
     return textA.toLowerCase() === textB.toLowerCase();
   }
 
@@ -295,7 +292,7 @@ export class TasksComponent implements OnInit, OnDestroy {
             let isCompleted = true;
             const items: any[] = [];
 
-            if (!this.app.isUserRole(['HRManagement', 'Admin'])) {
+            if (!this.facade.appService.isUserRole(['HRManagement', 'Admin'])) {
               this.validateForm.controls['user'].setValue(this.currentUser.id.toString());
             }
 
@@ -436,7 +433,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   canAssign(): boolean {
-    return this.currentUser && this.app.isUserRole(['HRManagement', 'Admin']);
+    return this.currentUser && this.facade.appService.isUserRole(['HRManagement', 'Admin']);
   }
 
   assignToMe() {

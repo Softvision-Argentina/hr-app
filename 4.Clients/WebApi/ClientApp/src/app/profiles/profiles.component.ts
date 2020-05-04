@@ -3,8 +3,6 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FacadeService } from '../services/facade.service';
-import { AppComponent } from '../app.component';
-
 @Component({
   selector: 'app-profiles.component',
   templateUrl: './profiles.component.html',
@@ -14,31 +12,31 @@ export class ProfilesComponent implements OnInit {
   tab: string;
   emptyCandidateProfile: CandidateProfile[] = [];
   listOfDisplayData = [...this.emptyCandidateProfile];
-  
+
   emptyCommunity: Community[] = [];
   listOfDisplayDataCommunity = [...this.emptyCommunity];
 
-  constructor(private route: ActivatedRoute, private facade: FacadeService, private app: AppComponent) {}
+  constructor(private route: ActivatedRoute, private facade: FacadeService) { }
 
   ngOnInit() {
     this.getCandidatesProfile();
     this.getCommunities();
-    this.tab=this.route.snapshot.params['tab'];
-    this.route.params.subscribe((params: Params)=>{
-      this.tab=this.route.snapshot.params['tab'];
+    this.tab = this.route.snapshot.params['tab'];
+    this.route.params.subscribe(() => {
+      this.tab = this.route.snapshot.params['tab'];
     });
   }
 
   getCandidatesProfile() {
     this.facade.candidateProfileService.getData()
       .subscribe(res => {
-       this.emptyCandidateProfile = res;
-       this.listOfDisplayData = res;
+        this.emptyCandidateProfile = res;
+        this.listOfDisplayData = res;
       }, err => {
         console.log(err);
       });
   }
-  
+
   getCommunities() {
     this.facade.communityService.getData()
       .subscribe(res => {
@@ -49,3 +47,4 @@ export class ProfilesComponent implements OnInit {
       });
   }
 }
+

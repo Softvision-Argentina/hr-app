@@ -28,18 +28,18 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   filteredCandidates: Candidate[] = [];
-  isLoadingResults: boolean = false;
-  searchValue: string = '';
+  isLoadingResults = false;
+  searchValue = '';
   listOfSearchCandidates: any[] = [];
   listOfDisplayData: Candidate[] = [...this.filteredCandidates];
-  sortName: string = 'name';
-  sortValue: string = 'ascend';
+  sortName = 'name';
+  sortValue = 'ascend';
   users: User[] = [];
   profiles: CandidateProfile[] = [];
   communities: Community[] = [];
   _offices: Office[] = [];
-  searchDni: string = '';
-  searchName: string = '';
+  searchDni = '';
+  searchName = '';
   searchSub: Subscription;
   candidateSubscriptions: Subscription = new Subscription();
 
@@ -47,30 +47,29 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   skills: Skill[] = [];
   private completeSkillList: Skill[] = [];
   validateForm: FormGroup;
-  isAddVisible: boolean = false;
-  isAddOkLoading: boolean = false;
+  isAddVisible = false;
+  isAddOkLoading = false;
   emptyCandidate: Candidate;
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
-  isEdit: boolean = false;
-  editingCandidateId: number = 0;
-  isDniLoading: boolean = false;
-  isDniValid: boolean = false;
+  isEdit = false;
+  editingCandidateId = 0;
+  isDniLoading = false;
+  isDniValid = false;
   currentUser: User;
-  searchValueStatus: string = '';
+  searchValueStatus = '';
   statusList: any[];
   englishLevelList: any[];
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent,
-    private app: AppComponent, private globals: Globals) {
+  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals) {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       this.statusList = globals.candidateStatusList;
       this.englishLevelList = globals.englishLevelList;
   }
 
   ngOnInit() {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getCandidates();
     this.getUsers();
     this.getProfiles();
@@ -79,7 +78,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.getSkills();
     this.resetForm();
     this.getSearchInfo();
-    this.app.hideLoading();
+    this.facade.appService.stopLoading();
   }
 
   getCandidates() {
@@ -251,7 +250,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           type: 'primary',
           loading: false,
           onClick: () => {
-            this.app.showLoading();
+            this.facade.appService.startLoading();
             modal.nzFooter[1].loading = true;
             if (validateCandidateForm(this.validateForm)) {
               const candidateSkills: CandidateSkill[] = [];
@@ -314,16 +313,16 @@ export class CandidatesComponent implements OnInit, OnDestroy {
               this.facade.candidateService.update(id, editedCandidate)
                 .subscribe(res => {
                   this.getCandidates();
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('Candidate was successfully edited !');
                   modal.destroy();
                 }, err => {
-                  this.app.hideLoading();
+                  this.facade.appService.stopLoading();
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else { modal.nzFooter[1].loading = false; }
-            this.app.hideLoading();
+            this.facade.appService.stopLoading();
           }
         }],
     });

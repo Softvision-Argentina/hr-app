@@ -1,14 +1,14 @@
+import { FacadeService } from 'src/app/services/facade.service';
 import { Component, OnInit } from '@angular/core';
 import { GoogleSigninComponent } from './google-signin.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AppComponent } from '../app.component';
 import { CSoftComponent } from '../login/csoft-signin.component';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [GoogleSigninComponent, AppComponent, CSoftComponent]
+  providers: [GoogleSigninComponent, CSoftComponent]
 })
 export class LoginComponent implements OnInit {
 
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
     private google: GoogleSigninComponent,
     private csSoft: CSoftComponent,
     private route: ActivatedRoute,
-    private router: Router, private app: AppComponent
+    private router: Router,
+    private facade: FacadeService
   ) {
 
   }
@@ -28,9 +29,9 @@ export class LoginComponent implements OnInit {
 
     if (this.google.isUserAuthenticated() || this.csSoft.isUserAuthenticated()) {
       this.router.navigateByUrl(this.returnUrl);
-    }
-    else {
-      this.app.renderBgImage();
+    } else {
+      this.facade.appService.stopLoading();
+      this.facade.appService.showBgImage();
     }
   }
 

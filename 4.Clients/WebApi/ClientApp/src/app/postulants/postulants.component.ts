@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Community } from 'src/entities/community';
-import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { ActivatedRoute, Params } from '@angular/router';
 import { FacadeService } from '../services/facade.service';
-import { AppComponent } from '../app.component';
-import { PostulantsService } from '../services/postulants.service';
 import { Postulant } from 'src/entities/postulant';
 import { FormBuilder } from '@angular/forms';
 
@@ -16,17 +11,18 @@ import { FormBuilder } from '@angular/forms';
 export class PostulantsComponent implements OnInit {
 
   listOfDisplayData: Postulant [] = [];
-  constructor(private facade: FacadeService, private fb: FormBuilder, private app: AppComponent) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.app.showLoading();
-    this.app.removeBgImage();
+    this.facade.appService.startLoading();
+    this.facade.appService.removeBgImage();
     this.getPostulants();
   }
 
   getPostulants(){
     this.facade.postulantService.get().subscribe(res => {
       this.listOfDisplayData = res;
+      this.facade.appService.stopLoading();
       console.log(res);
     }, err => {
       console.log(err);

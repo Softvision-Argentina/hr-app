@@ -1,10 +1,8 @@
 import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { CompanyCalendar } from 'src/entities/Company-Calendar';
+import { CompanyCalendar} from 'src/entities/Company-Calendar';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SettingsComponent } from '../settings/settings.component';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
 
 @Component({
@@ -18,12 +16,9 @@ export class CompanyCalendarComponent implements OnInit {
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   listOfCompanyCalendar: CompanyCalendar[] = [];
   today = new Date();
-  showCalendarSelected: boolean = false;
+  showCalendarSelected = false;
 
-  constructor(private facade: FacadeService,
-    private fb: FormBuilder,
-    private app: AppComponent,
-    private settings: SettingsComponent) { }
+  constructor(private facade: FacadeService, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.getCompanyCalendar();
@@ -81,7 +76,7 @@ export class CompanyCalendarComponent implements OnInit {
   disabledDate = (current: Date): boolean => {
     // Can not select days before today and today
     return differenceInCalendarDays(current, this.today) < 0;
-  };
+  }
 
 
   showAddModal(modalContent: TemplateRef<{}>): void {
@@ -106,21 +101,25 @@ export class CompanyCalendarComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if ((!this.validateForm.controls[i].valid)) { isCompleted = false; }
+              if (this.validateForm.controls.hasOwnProperty(i)) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+                if ((!this.validateForm.controls[i].valid)) {
+                  isCompleted = false;
+                }
+              }
             }
             if (isCompleted) {
-              let newCompanyCalendar: CompanyCalendar = {
+              const newCompanyCalendar: CompanyCalendar = {
                 id: 0,
                 type: this.validateForm.controls['type'].value.toString(),
                 date: this.validateForm.controls['date'].value.toISOString(),
                 comments: this.validateForm.controls['comments'].value.toString()
               }
               this.facade.companyCalendarService.add(newCompanyCalendar)
-                .subscribe(res => {
+                .subscribe(() => {
                   this.getCompanyCalendar();
                   this.controlArray = [];
                   this.facade.toastrService.success('festivity/reminder day was successfully created !');
@@ -130,8 +129,9 @@ export class CompanyCalendarComponent implements OnInit {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
+            } else {
+              modal.nzFooter[1].loading = false;
             }
-            else { modal.nzFooter[1].loading = false; }
           }
         }],
     });
@@ -161,24 +161,32 @@ export class CompanyCalendarComponent implements OnInit {
           loading: false,
           onClick: () => {
             modal.nzFooter[1].loading = true;
-            let isCompleted: boolean = true;
+            let isCompleted = true;
             for (const i in this.validateForm.controls) {
-              this.validateForm.controls[i].markAsDirty();
-              this.validateForm.controls[i].updateValueAndValidity();
-              if (!this.validateForm.controls[i].valid) { isCompleted = false; }
+              if (this.validateForm.controls.hasOwnProperty(i)) {
+                this.validateForm.controls[i].markAsDirty();
+                this.validateForm.controls[i].updateValueAndValidity();
+
+                if (!this.validateForm.controls[i].valid) {
+                  isCompleted = false;
+                }
+              }
             }
-            let newDate;
-            newDate = editedCompanyCalendar.date === this.validateForm.controls['date'].value ?
-              this.validateForm.controls['date'].value :
-              this.validateForm.controls['date'].value.toISOString();
+            let newDate: string;
+            if (editedCompanyCalendar.date === this.validateForm.controls['date'].value) {
+              newDate = this.validateForm.controls['date'].value;
+            } else {
+              newDate = this.validateForm.controls['date'].value.toISOString();
+            }
 
             if (isCompleted) {
               editedCompanyCalendar = {
                 id: 0,
                 type: this.validateForm.controls['type'].value.toString(),
-                date: newDate,
+                date: new Date(newDate),
                 comments: this.validateForm.controls['comments'].value.toString()
-              }
+              };
+
               this.facade.companyCalendarService.update(id, editedCompanyCalendar)
                 .subscribe(res => {
                   this.getCompanyCalendar();
@@ -188,9 +196,10 @@ export class CompanyCalendarComponent implements OnInit {
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                })
+                });
+            } else {
+              modal.nzFooter[1].loading = false;
             }
-            else { modal.nzFooter[1].loading = false; }
           }
         }],
     });

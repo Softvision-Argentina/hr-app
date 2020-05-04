@@ -1,9 +1,11 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2, OnInit, OnDestroy } from '@angular/core';
 import { GoogleSigninComponent } from './login/google-signin.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from './services/facade.service';
 import { AppConfig } from './app-config/app.config';
 import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
+import { Subscription } from 'rxjs/Subscription';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,7 @@ import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
 export class AppComponent   {
   title = 'app';
   showSpinner = true;
+  showBigImage = true;
   loadingConfig: INg2LoadingSpinnerConfig = {
     animationType: ANIMATION_TYPES.scalingBars,
     backdropColor: 'rgba(0, 0, 0, 0.7)',
@@ -22,17 +25,37 @@ export class AppComponent   {
     backdropBorderRadius: '0px',
     spinnerSize: 'xl'
   };
+  loadingSubscription: Subscription;
+  showBigImageSubscription: Subscription;
 
   constructor(
     private renderer: Renderer2,
     private google: GoogleSigninComponent,
     private facade: FacadeService,
-    private config: AppConfig) {
-    setTimeout(() => {
-      this.showSpinner = false;
-    }, 1500);
+    private config: AppConfig
+  ) { }
+
+  ngOnInit(): void {
+    this.changeBg();
+    this.loadingSubscription = this.facade.appService.loadingStatus.pipe(
+      debounceTime(200)
+    ).subscribe((value) => {
+      this.showSpinner = value;
+    });
+    this.showBigImageSubscription = this.facade.appService.showBigImageStatus.pipe(
+      debounceTime(200)
+    ).subscribe((value) => {
+      this.showBigImage = value;
+    });
   }
 
+  changeBg() {
+    if (this.google.isUserAuthenticated()) {
+      this.removeBgImage();
+    } else {
+      this.renderBgImage();
+    }
+  }
 
   isUserRole(roles: string[]): boolean {
     const currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
@@ -42,25 +65,19 @@ export class AppComponent   {
   }
 
   renderBgImage() {
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', '100% 100%');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-position', 'top center');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-repeat', 'no-repeat');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-size', 'cover');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'width', '100%');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'height', '100%');
+    this.facade.appService.showBgImage();
   }
 
   removeBgImage() {
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'background-image', 'none');
-    this.renderer.setStyle(document.querySelector('app-root').firstElementChild, 'margin-top', '0%');
+    this.facade.appService.removeBgImage();
   }
 
   showLoading() {
-    this.showSpinner = true;
+    this.facade.appService.startLoading();
   }
 
   hideLoading() {
-    this.showSpinner = false;
+    this.facade.appService.stopLoading();
   }
 
   isAuthenticated() {

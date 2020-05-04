@@ -5,80 +5,85 @@ import { Globals } from '../../app-globals/globals';
 
 
 @Component({
-    selector: 'candidate-details',
-    templateUrl: './candidate-details.component.html',
-    styleUrls: ['./candidate-details.component.css']
-  })
+  selector: 'candidate-details',
+  templateUrl: './candidate-details.component.html',
+  styleUrls: ['./candidate-details.component.css']
+})
 
 
-  export class CandidateDetailsComponent implements OnInit {
+export class CandidateDetailsComponent implements OnInit {
 
-    @Input()
-    private _detailedCandidate: Candidate;
-    public get detailedCandidate(): Candidate {
-        return this._detailedCandidate;
-    }
-    public set detailedCandidate(value: Candidate) {
-        this._detailedCandidate = value;
-    }
+  @Input() _detailedCandidate: Candidate;
+  public get detailedCandidate(): Candidate {
+    return this._detailedCandidate;
+  }
+  public set detailedCandidate(value: Candidate) {
+    this._detailedCandidate = value;
+  }
 
-    userName: string = '';
-    profileName: string = '';
-    communityName: string = '';
-    englishLevelList: any[] = [];
-    statusList: any[] = [];
+  userName: string = '';
+  profileName: string = '';
+  communityName: string = '';
+  englishLevelList: any[] = [];
+  statusList: any[] = [];
 
-    constructor(private facade: FacadeService, private globals: Globals) {
-      this.englishLevelList = globals.englishLevelList;
-      this.statusList = globals.candidateStatusList;
-     }
+  constructor(private facade: FacadeService, private globals: Globals) {
+    this.englishLevelList = globals.englishLevelList;
+    this.statusList = globals.candidateStatusList;
+  }
 
-    ngOnInit(){
-        this.getRecruiterName();
-        this.getProfileName();
-        this.getCommunityName();
-    }
+  ngOnInit() {
+    this.getRecruiterName();
+    this.getProfileName();
+    this.getCommunityName();
+  }
 
-    getRecruiterName(){
-        this.facade.userService.get()
-        .subscribe(res => {
-          this.userName = res.filter(x => x.id === this._detailedCandidate.user.id)[0].firstName + ' ' +
-                                    res.filter(x => x.id === this._detailedCandidate.user.id)[0].lastName;
-        }, err => {
-          console.log(err);
-        });
-      }
+  getRecruiterName() {
+    this.facade.userService.get()
+      .subscribe(res => {
+        if (this._detailedCandidate) {
+          this.userName = res.filter(candidate => candidate.id === this._detailedCandidate.user.id)[0].firstName + ' ' +
+            res.filter(candidate => candidate.id === this._detailedCandidate.user.id)[0].lastName;
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
+  }
 
-      getCommunityName(){
-        this.facade.communityService.get()
-        .subscribe(res => {
-          this.communityName = res.filter(x => x.id === this._detailedCandidate.community.id)[0].name;
-        }, err => {
-          console.log(err);
-        });
-      }
+  getCommunityName() {
+    this.facade.communityService.get()
+      .subscribe(res => {
+        if (this._detailedCandidate) {
+          this.communityName = res.filter(community => community.id === this._detailedCandidate.community.id)[0].name;
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
+  }
 
-      getProfileName(){
-        this.facade.candidateProfileService.get()
-        .subscribe(res => {
-          this.profileName = res.filter(x => x.id === this._detailedCandidate.profile.id)[0].name;
-        }, err => {
-          console.log(err);
-        });
-      }
+  getProfileName() {
+    this.facade.candidateProfileService.get()
+      .subscribe(res => {
+        if (this._detailedCandidate) {
+          this.profileName = res.filter(profile => profile.id === this._detailedCandidate.profile.id)[0].name;
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
+  }
 
-    showModal(modalContent: TemplateRef <{}>, fullName: string){
-        fullName = fullName + '\'s details';
-        this.facade.modalService.create({
-            nzTitle: fullName,
-            nzContent: modalContent,
-            nzClosable: true,
-            nzWrapClassName: 'vertical-center-modal',
-            nzFooter: null
-        })
-    }
+  showModal(modalContent: TemplateRef<{}>, fullName: string) {
+    const nameAndLastName = `${fullName}'s details`;
+    this.facade.modalService.create({
+      nzTitle: nameAndLastName,
+      nzContent: modalContent,
+      nzClosable: true,
+      nzWrapClassName: 'vertical-center-modal',
+      nzFooter: null
+    });
+  }
 
-    getCandidateStatus(): string {
-      return this.statusList.filter(x => x.id === this._detailedCandidate.status)[0].name;
-    }
+  getCandidateStatus(): string {
+    return this.statusList.filter(status => status.id === this._detailedCandidate.status)[0].name;
+  }
 }
