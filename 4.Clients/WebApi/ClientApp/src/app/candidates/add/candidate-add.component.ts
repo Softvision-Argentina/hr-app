@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -15,6 +15,15 @@ import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 import { dniValidator } from 'src/app/directives/dni.validator';
 
+export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
+  if(c.get('email').value === null && c.get('phoneNumber').value === null) {
+      return {
+          'emailAndPhoneValidator': true
+      };
+  };
+
+  return null;
+}
 @Component({
   selector: 'candidate-add',
   templateUrl: './candidate-add.component.html',
@@ -93,7 +102,8 @@ export class CandidateAddComponent implements OnInit {
     cv: [null],
     knownFrom: [null],
     referredBy: [null]
-  });
+  }, { validator: checkIfEmailAndPhoneNulll });
+
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];  
   isEdit: boolean = false;

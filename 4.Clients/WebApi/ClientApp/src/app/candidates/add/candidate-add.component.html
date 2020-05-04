@@ -59,11 +59,16 @@
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-            <nz-form-item>
+            <nz-form-item >
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email">E-mail </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
-                    <nz-form-explain *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
+                    <nz-form-explain>
+                        <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('email').dirty 
+                        && candidateForm.hasError('emailAndPhoneValidator')">
+                            The input is a valid E-mail!
+                        </nz-form-explain>
+                    </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -98,8 +103,10 @@
                         </ng-template>
                         <input formControlName="phoneNumber" id="'phoneNumber'" type="number" nz-input placeholder="Please input a phone number">
                     </nz-input-group>
-                    <nz-form-explain *ngIf="candidateForm.get('phoneNumber').dirty && candidateForm.get('phoneNumber').errors">
-                        Please input your phone number!</nz-form-explain>
+                    <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('phoneNumber').dirty 
+                    && candidateForm.hasError('emailAndPhoneValidator')">
+                        Please input a phone number!
+                    </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
