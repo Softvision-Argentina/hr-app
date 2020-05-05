@@ -14,8 +14,9 @@ import { CommunitiesComponent } from './communities/communities.component';
 import { CandidatesProfileComponent } from './candidates-profile/candidates-profile.component';
 import { PipesModule } from './pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FileSelectDirective } from 'ng2-file-upload';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { FileUploadModule } from 'ng2-file-upload';
+import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
         FormsModule,
         ReactiveFormsModule,
         PipesModule,
-        NgZorroAntdModule
+        NgZorroAntdModule,
+        FileUploadModule
     ],
     declarations: [
         CandidateDetailsComponent,
@@ -38,7 +40,7 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
         ProcessContactComponent,
         CommunitiesComponent,
         CandidatesProfileComponent,
-        FileSelectDirective
+        ReferralsContactComponent
     ],
     exports: [
         CandidateDetailsComponent,
@@ -53,8 +55,9 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
         ProcessContactComponent,
         CommunitiesComponent,
         CandidatesProfileComponent,
-        FileSelectDirective
+        ReferralsContactComponent,
+        FileUploadModule
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US } ]
+    providers: [ { provide: NZ_I18N, useValue: en_US }]
 })
 export class SharedModule { }

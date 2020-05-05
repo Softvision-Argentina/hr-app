@@ -3,7 +3,6 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
-import { AppComponent } from 'src/app/app.component';
 import { User } from 'src/entities/user';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
@@ -12,7 +11,7 @@ import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.en
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
-import { replaceAccent } from 'src/app/helpers/string-helpers'
+import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ReferralsComponent } from '../referrals/referrals.component';
 
 @Component({
@@ -109,9 +108,9 @@ export class ReferralsContactComponent implements OnInit {
     knownFrom: [null],
     referredBy: [null]
   });
-  visible: boolean = false;
-  isNewCandidate: boolean = false;
-  isEditCandidate: boolean = false;
+  visible = false;
+  isNewCandidate = false;
+  isEditCandidate = false;
   candidates: Candidate[] = [];
 
   searchValue = '';
@@ -123,19 +122,19 @@ export class ReferralsContactComponent implements OnInit {
   emptyCandidate: Candidate;
   emptyUser: User;
 
-  editingCandidateId: number = 0;
+  editingCandidateId = 0;
   // candidateForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent, private detailsModal: CandidateDetailsComponent,
+  constructor(private fb: FormBuilder, private facade: FacadeService, private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService, private process: ReferralsComponent) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
-    this.fillUsers = this._users.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
+    this.fillUsers = this._users.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
     this.comms = this._communities;
-    this.filteredCommunity = this._communities.sort((a,b) => (a.name.localeCompare(b.name)));
-    this.profiles = this._candidateProfiles.sort((a,b) => (a.name.localeCompare(b.name)));
+    this.filteredCommunity = this._communities.sort((a, b) => (a.name.localeCompare(b.name)));
+    this.profiles = this._candidateProfiles.sort((a, b) => (a.name.localeCompare(b.name)));
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getUsers();
@@ -144,7 +143,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
   }
-  profileChanges(profileId){
+  profileChanges(profileId) {
     this.candidateForm.controls['community'].reset();
     this.filteredCommunity = this.comms.filter(c => c.profileId === profileId);
   }
@@ -156,7 +155,7 @@ export class ReferralsContactComponent implements OnInit {
         this.candidates = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
-      })
+      });
   }
 
   getUsers() {
@@ -205,13 +204,13 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = true;
     this.isNewCandidate = false;
     this.editingCandidateId = id;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id === id)[0];
+    const editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     this.modalService.openModals[1].close(); // el 1 es un numero magico, despues habria que remplazarlo por un length
   }
 
   showDeleteConfirm(CandidateID: number): void {
-    let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
+    const CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
@@ -229,31 +228,31 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   showDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id == candidateID)[0];
-    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + " " + this.emptyCandidate.lastName);
+    this.emptyCandidate = this.filteredCandidate.filter(candidate => candidate.id === candidateID)[0];
+    this.detailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   searchCandidate(searchString: string, modalContent: TemplateRef<{}>) {
-    let candidate = this.candidates.filter(s => { return (replaceAccent(s.name).toLowerCase() + " " + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1 });
+    const candidate = this.candidates.filter(s => (replaceAccent(s.name).toLowerCase() + ' ' + replaceAccent(s.lastName).toLowerCase()).indexOf(replaceAccent(searchString).toLowerCase()) !== -1);
     this.filteredCandidate = candidate;
     this.searchedCandidateModal(modalContent);
   }
 
-  fillCandidateForm(Candidate: Candidate) {
-    this.candidateForm.controls['firstName'].setValue(Candidate.name);
-    this.candidateForm.controls['lastName'].setValue(Candidate.lastName);
-    this.candidateForm.controls['phoneNumberPrefix'].setValue(Candidate.phoneNumber.substring(1, Candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(Candidate.phoneNumber.split(')')[1]);
-    this.candidateForm.controls['email'].setValue(Candidate.emailAddress);
-    this.candidateForm.controls['user'].setValue(Candidate.user);
-    this.candidateForm.controls['id'].setValue(Candidate.id);
-    this.candidateForm.controls['contactDay'].setValue(new Date(Candidate.contactDay));
-    this.candidateForm.controls['profile'].setValue(Candidate.profile.id);
-    this.candidateForm.controls['community'].setValue(Candidate.community.id);
-    this.candidateForm.controls['isReferred'].setValue(Candidate.isReferred);
-    this.candidateForm.controls['referredBy'].setValue(Candidate.referredBy);
-    this.candidateForm.controls['cv'].setValue(Candidate.cv);
-    this.candidateForm.controls['knownFrom'].setValue(Candidate.knownFrom);
+  fillCandidateForm(candidate: Candidate) {
+    this.candidateForm.controls['firstName'].setValue(candidate.name);
+    this.candidateForm.controls['lastName'].setValue(candidate.lastName);
+    this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
+    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
+    this.candidateForm.controls['email'].setValue(candidate.emailAddress);
+    this.candidateForm.controls['user'].setValue(candidate.user);
+    this.candidateForm.controls['id'].setValue(candidate.id);
+    this.candidateForm.controls['contactDay'].setValue(new Date(candidate.contactDay));
+    this.candidateForm.controls['profile'].setValue(candidate.profile.id);
+    this.candidateForm.controls['community'].setValue(candidate.community.id);
+    this.candidateForm.controls['isReferred'].setValue(candidate.isReferred);
+    this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
+    this.candidateForm.controls['cv'].setValue(candidate.cv);
+    this.candidateForm.controls['knownFrom'].setValue(candidate.knownFrom);
   }
 
   resetForm() {
@@ -278,9 +277,9 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   saveEdit(idCandidate: number) {
-    let isCompleted: boolean = true;
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
-   if (isCompleted) {
+    const isCompleted = true;
+    let editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === idCandidate)[0];
+    if (isCompleted) {
       editedCandidate = {
         id: idCandidate,
         name: this.candidateForm.controls['firstName'].value.toString(),
@@ -302,7 +301,7 @@ export class ReferralsContactComponent implements OnInit {
         cv: editedCandidate.cv,
         knownFrom: editedCandidate.knownFrom,
         referredBy: editedCandidate.referredBy,
-      }
+      };
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
@@ -312,14 +311,14 @@ export class ReferralsContactComponent implements OnInit {
           this.facade.toastrService.success('Candidate was successfully edited !');
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
-        })
+        });
     }
     this.isEditCandidate = false;
     this.visible = false;
   }
 
   Recontact(idCandidate: number) {
-    let editedCandidate: Candidate = this.candidates.filter(Candidate => Candidate.id == idCandidate)[0];
+    let editedCandidate: Candidate = this.candidates.filter(candidate => candidate.id === idCandidate)[0];
     editedCandidate = {
       id: idCandidate,
       name: editedCandidate.name,
@@ -341,7 +340,7 @@ export class ReferralsContactComponent implements OnInit {
       cv: editedCandidate.cv,
       knownFrom: editedCandidate.knownFrom,
       referredBy: editedCandidate.referredBy
-    }
+    };
 
     this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
@@ -349,21 +348,23 @@ export class ReferralsContactComponent implements OnInit {
         this.facade.toastrService.success('Candidate was successfully edited !');
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
-      })
+      });
   }
 
   createNewCandidate() {
-    this.app.showLoading;
-    let isCompleted: boolean = true;
+    this.facade.appService.startLoading();
+    let isCompleted = true;
 
     for (const i in this.candidateForm.controls) {
-      this.candidateForm.controls[i].markAsDirty();
-      this.candidateForm.controls[i].updateValueAndValidity();
-      if (!this.candidateForm.controls[i].valid) isCompleted = false;
+      if (this.candidateForm.controls[i]) {
+        this.candidateForm.controls[i].markAsDirty();
+        this.candidateForm.controls[i].updateValueAndValidity();
+        if (!this.candidateForm.controls[i].valid) { isCompleted = false; }
+      }
     }
 
     if (isCompleted) {
-      let newCandidate: Candidate = {
+      const newCandidate: Candidate = {
         id: 0,
         name: this.candidateForm.controls['firstName'].value.toString(),
         lastName: this.candidateForm.controls['lastName'].value.toString(),
@@ -372,7 +373,6 @@ export class ReferralsContactComponent implements OnInit {
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         user: new User(this.candidateForm.controls['user'].value, null),
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        //linkedInProfile: this.candidateForm.controls['linkedInProfile'].value.toString(),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
         additionalInformation: '',
@@ -385,7 +385,7 @@ export class ReferralsContactComponent implements OnInit {
         cv: null,
         knownFrom: null,
         referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
-      }
+      };
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
@@ -394,13 +394,13 @@ export class ReferralsContactComponent implements OnInit {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;
           this.visible = false;
-          this.app.hideLoading();
+          this.facade.appService.stopLoading();
           this.facade.referralsService.addNew(newCandidate);
           this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
-          this.app.hideLoading;
-        })
+          this.facade.appService.stopLoading();
+        });
     }
   }
 }

@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { ProcessDetailComponent } from './process-detail.component';
-import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
 import { RouterModule } from '@angular/router';
 import { ProcessDetailRoutes } from './processes-detail.routes';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared.module';
-import {
-    NzDividerModule,
-    NzButtonModule,
-    NzFormModule
-} from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
     declarations: [ProcessDetailComponent],
@@ -18,13 +14,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         RouterModule.forChild(ProcessDetailRoutes),
         CommonModule,
         SharedModule,
-        NzDividerModule,
-        NzButtonModule,
         FormsModule,
         ReactiveFormsModule,
-        NzFormModule
+        NgZorroAntdModule,
+        PipesModule
     ],
-    exports: [ProcessDetailComponent]
+    exports: [ProcessDetailComponent],
+    providers: [ { provide: NZ_I18N, useValue: en_US }]
 })
 
 export class ProcessDetailModule { }

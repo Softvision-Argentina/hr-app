@@ -15,7 +15,6 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
     declarations: [
         ReferralsComponent,
         ReferralsCardComponent,
-        ReferralsContactComponent
     ],
     imports: [
         RouterModule.forChild(ReferralsRoutes),
@@ -29,8 +28,7 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
     ],
     exports: [
         ReferralsComponent,
-        ReferralsCardComponent,
-        ReferralsContactComponent
+        ReferralsCardComponent
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US } ]
 })
