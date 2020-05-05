@@ -328,57 +328,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.isDetailsVisible = true;
   }
 
-  rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
-    this.rejectProcessForm.reset();
-    const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
-
-    const modal = this.facade.modalService.create({
-      nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
-      nzContent: modalContent,
-      nzFooter: [
-        {
-          label: 'Cancel',
-          shape: 'default',
-          onClick: () => modal.destroy()
-        },
-        {
-          label: 'Submit',
-          type: 'danger',
-          onClick: () => {
-            this.facade.appService.startLoading();
-            let isCompleted = true;
-            for (const i in this.rejectProcessForm.controls) {
-              if (this.rejectProcessForm.controls[i]) {
-                this.rejectProcessForm.controls[i].markAsDirty();
-                this.rejectProcessForm.controls[i].updateValueAndValidity();
-                if ((!this.rejectProcessForm.controls[i].valid)) {
-                  isCompleted = false;
-                }
-              }
-            }
-            if (isCompleted) {
-
-              const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
-
-              this.facade.processService.reject(processID, rejectionReason)
-                .subscribe(res => {
-                  this.getCandidates();
-                  this.getProcesses();
-                  this.facade.appService.stopLoading();
-                  modal.destroy();
-                  this.facade.toastrService.success('Process and associated candidate were rejected');
-                }, err => {
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err.message);
-                });
-            }
-            this.facade.appService.stopLoading();
-          }
-        }
-      ]
-    });
-  }
-
   /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
   openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
     this.declineProcessForm.reset();
