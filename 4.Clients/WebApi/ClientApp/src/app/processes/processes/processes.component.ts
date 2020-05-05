@@ -27,6 +27,7 @@ import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-processes',
@@ -105,6 +106,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     private facade: FacadeService,
     private formBuilder: FormBuilder,
     private candidateDetailsModal: CandidateDetailsComponent,
+    private app: AppComponent,
     private userDetailsModal: UserDetailsComponent,
     private globals: Globals) {
     this.profileList = globals.profileList;
@@ -764,7 +766,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.closeModal();
             }, err => {
               this.isLoading = false;
-              this.facade.appService.stopLoading();
+              this.app.hideLoading();
               this.facade.toastrService.error(err);
             });
         }
