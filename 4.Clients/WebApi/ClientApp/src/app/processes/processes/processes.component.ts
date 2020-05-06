@@ -604,7 +604,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
     const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete the process for ' + processText + ' ?',
+      nzTitle: 'Are you sure you want to delete the process for ' + processText + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

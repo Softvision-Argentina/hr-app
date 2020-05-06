@@ -336,7 +336,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   showDeleteConfirm(candidateID: number): void {
     const candidateDelete: Candidate = this.filteredCandidates.filter(candidate => candidate.id === candidateID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + candidateDelete.lastName + ', ' + candidateDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + candidateDelete.lastName + ', ' + candidateDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

@@ -207,7 +207,7 @@ export class CompanyCalendarComponent implements OnInit {
 
   showDeleteConfirm(CompanyCalendarID: number): void {
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete?',
+      nzTitle: 'Are you sure you want to delete?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

@@ -206,7 +206,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
   showDeleteConfirm(CandidateProfileID: number): void {
     const CandidateProfileDelete: CandidateProfile = this._detailedCandidateProfile.filter(c => c.id === CandidateProfileID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + CandidateProfileDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + CandidateProfileDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

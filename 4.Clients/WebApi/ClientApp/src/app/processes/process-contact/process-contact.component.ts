@@ -210,7 +210,7 @@ export class ProcessContactComponent implements OnInit {
   showDeleteConfirm(CandidateID: number): void {
     let CandidateDelete: Candidate = this.candidates.filter(c => c.id === CandidateID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + CandidateDelete.name + ' ' + CandidateDelete.lastName + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

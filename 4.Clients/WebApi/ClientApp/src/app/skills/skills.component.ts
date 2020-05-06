@@ -236,7 +236,7 @@ export class SkillsComponent implements OnInit {
   showDeleteConfirm(skillID: number): void {
     const skillDelete: Skill = this.filteredSkills.find(skill => skill.id === skillID);
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + skillDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + skillDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

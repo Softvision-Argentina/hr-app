@@ -182,7 +182,7 @@ export class RoomComponent implements OnInit, OnChanges {
   showDeleteConfirm(RoomID: number): void {
   const RoomDelete: Room = this._detailedRoom.filter(c => c.id === RoomID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + RoomDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + RoomDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

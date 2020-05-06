@@ -110,7 +110,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   deleteTask(id: number) {
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete this task?',
+      nzTitle: 'Are you sure you want to delete this task?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',

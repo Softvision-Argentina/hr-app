@@ -203,7 +203,7 @@ export class CommunitiesComponent implements OnInit {
   showDeleteConfirm(communityID: number): void {
     const communityDelete: Community = this._detailedCommunity.filter(c => c.id === communityID)[0];
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure delete ' + communityDelete.name + ' ?',
+      nzTitle: 'Are you sure you want to delete ' + communityDelete.name + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
