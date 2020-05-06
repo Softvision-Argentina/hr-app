@@ -5,7 +5,25 @@
 
         </nz-form-control>
 
-    </nz-form-item>
+    </nz-form-item>    
+    <div nz-row>
+        <div nz-col nzSpan="24">
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24 " nzFor="feedback">Feedback</nz-form-label>
+                <nz-form-control>
+                    <textarea rows="3 " cols="35" id="feedback" style="width: 50%;" nz-input formControlName="feedback" placeholder="Input any additional information if necessary"></textarea>
+                </nz-form-control>
+                <nz-form-explain style="color: #f5222d " *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">
+                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimBeginError') ">
+                        The input has leading whitespace!
+                    </ng-container>
+                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimEndError') ">
+                        The input has trailing whitespace!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-item>
+        </div>               
+    </div>
     <div nz-row>
         <div nz-col nzSpan="12" >
             <nz-form-item>
@@ -76,23 +94,25 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
+    <div nz-row>       
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="feedback">Additional Information</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="additionalInformation">Additional Information</nz-form-label>
+                <nz-form-control>
+                    <textarea rows="1" id="additionalInformation" style="width: 50%;" nz-input formControlName="additionalInformation" placeholder="Input any additional information if necessary"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">
-                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimBeginError') ">
+                <nz-form-explain style="color: #f5222d" *ngIf="hrForm.get('additionalInformation').dirty && hrForm.get('additionalInformation').errors">
+                    <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimBeginError')">
                         The input has leading whitespace!
                     </ng-container>
-                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimEndError') ">
+                    <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimEndError')">
                         The input has trailing whitespace!
                     </ng-container>
                 </nz-form-explain>
             </nz-form-item>
-        </div>
+        </div>    
+    </div>
+    <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
@@ -110,8 +130,6 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-    </div>
-    <div nz-row>
         <div nz-col nzSpan="24">
             <nz-form-item>
                 <nz-form-control>
@@ -122,6 +140,5 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-    </div>
-
+    </div>    
 </form>

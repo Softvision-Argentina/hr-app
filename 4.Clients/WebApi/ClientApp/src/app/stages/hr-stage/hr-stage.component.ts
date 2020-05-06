@@ -36,6 +36,7 @@ export class HrStageComponent implements OnInit {
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
+    additionalInformation: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null, [Validators.required]],
     rejectionReasonsHr: [0, [Validators.required]]
@@ -56,8 +57,7 @@ export class HrStageComponent implements OnInit {
 
   ngOnInit() {
     this.changeFormStatus(false);
-    if (this.hrStage) { this.fillForm(this.hrStage);
-     }
+    if (this.hrStage) { this.fillForm(this.hrStage) }
      this.getFilteredUsersForHr();
   }
 
@@ -113,6 +113,7 @@ export class HrStageComponent implements OnInit {
     hrStage.englishLevel = this.getControlValue(this.hrForm.controls.englishLevel);
     hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.actualSalary);
     hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.wantedSalary);    
+    hrStage.additionalInformation = this.getControlValue(this.hrForm.controls.additionalInformation);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
@@ -159,6 +160,10 @@ export class HrStageComponent implements OnInit {
 
     if (hrStage.wantedSalary !== null) {
       this.hrForm.controls['wantedSalary'].setValue(hrStage.wantedSalary);
+    }
+
+    if (hrStage.additionalInformation !== null) {
+      this.hrForm.controls['additionalInformation'].setValue(hrStage.additionalInformation);
     }
 
     if (hrStage.englishLevel) {

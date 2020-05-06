@@ -89,8 +89,7 @@ export class CandidateAddComponent implements OnInit {
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
-    linkedin: [null, [trimValidator]],
-    additionalInformation: [null, [trimValidator]],
+    linkedin: [null, [trimValidator]],    
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
@@ -164,8 +163,7 @@ export class CandidateAddComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
-      if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni']) &&
-      (this.candidateForm.controls[i] != this.candidateForm.controls['additionalInformation'])){
+      if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni'])){
         if (enable){ 
           this.candidateForm.controls[i].enable(); 
         }else{ 
@@ -208,8 +206,7 @@ export class CandidateAddComponent implements OnInit {
     this.candidateForm.controls['email'].setValue(candidate.emailAddress);
     this.candidateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]); //(54),1123445678
-    this.candidateForm.controls['additionalInformation'].setValue(candidate.additionalInformation);
+    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]); //(54),1123445678    
     this.candidateForm.controls['user'].setValue(candidate.user.id);
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
@@ -257,8 +254,7 @@ export class CandidateAddComponent implements OnInit {
       emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
       phoneNumber: prefix + pn,
       linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
-      candidateSkills: null,
-      additionalInformation: this.candidateForm.controls['additionalInformation'].value === null ? null : this.candidateForm.controls['additionalInformation'].value.toString(),
+      candidateSkills: null,      
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
       user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),

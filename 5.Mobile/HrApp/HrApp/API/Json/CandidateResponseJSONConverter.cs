@@ -37,8 +37,7 @@ namespace HrApp.API.Json
             res.DNI = (int)jObject["dni"];
             res.EmailAddress = (string)jObject["emailAddress"];
             res.PhoneNumber = (string)jObject["phoneNumber"];            
-            res.LinkedInProfile = (string)jObject["linkedInProfile"];
-            res.AdditionalInformation = (string)jObject["additionalInformation"];
+            res.LinkedInProfile = (string)jObject["linkedInProfile"];            
             res.EnglishLevel = (EnglishLevel)(int)jObject["englishLevel"];
             res.Status = (CandidateStatus)(int)jObject["status"];
             res.ContactDay = DateTime.Parse((string)jObject["contactDay"]);

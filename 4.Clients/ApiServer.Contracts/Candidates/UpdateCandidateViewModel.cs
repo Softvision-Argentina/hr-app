@@ -19,7 +19,6 @@ namespace ApiServer.Contracts.Candidates
         public string LinkedInProfile { get; set; }
         public EnglishLevel EnglishLevel { get; set; }
         public CandidateStatus Status { get; set; }
-        public string AdditionalInformation { get; set; }
         public ReadedUserViewModel User { get; set; }
         public DateTime ContactDay { get; set; }
         public int PreferredOfficeId { get; set; }

@@ -266,22 +266,6 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="additionalInformation">Additional Information</nz-form-label>
-                    <nz-form-control>
-                        <textarea rows="1" id="additionalInformation" style="width: 50%;" nz-input formControlName="additionalInformation" placeholder="Input any additional information if necessary" id="additionalInformation"></textarea>
-                    </nz-form-control>
-                    <nz-form-explain style="color: #f5222d" *ngIf="validateForm.get('additionalInformation').dirty && validateForm.get('additionalInformation').errors">
-                        <ng-container *ngIf="validateForm.get('additionalInformation')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="validateForm.get('additionalInformation')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </nz-form-explain>
-                </nz-form-item>
-            </div>
         </div>
         <div nz-row>
             <div nz-col nzSpan="24">

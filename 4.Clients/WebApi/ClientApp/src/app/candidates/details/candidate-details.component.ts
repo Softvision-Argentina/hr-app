@@ -3,7 +3,6 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
 import { Globals } from '../../app-globals/globals';
 
-
 @Component({
   selector: 'candidate-details',
   templateUrl: './candidate-details.component.html',

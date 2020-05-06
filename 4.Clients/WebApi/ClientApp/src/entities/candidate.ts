@@ -11,7 +11,6 @@ export class Candidate {
   lastName: string;
   emailAddress: string;
   phoneNumber: string;
-  additionalInformation: string;
   englishLevel: EnglishLevelEnum;
   status: CandidateStatusEnum;
   candidateSkills: CandidateSkill[];

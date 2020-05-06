@@ -187,8 +187,7 @@ namespace Domain.Services.Impl.Services
             process.CurrentStage = SetProcessCurrentStage(process);
 
             var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
-            candidate.EnglishLevel = process.HrStage.EnglishLevel;
-            candidate.AdditionalInformation = process.Candidate.AdditionalInformation;
+            candidate.EnglishLevel = process.HrStage.EnglishLevel;            
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
 

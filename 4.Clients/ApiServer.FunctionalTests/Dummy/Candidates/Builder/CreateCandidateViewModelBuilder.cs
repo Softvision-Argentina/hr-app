@@ -42,8 +42,7 @@ namespace ApiServer.FunctionalTests.Dummy.Candidates.Builder
         {
             return new CreateCandidateViewModel
             {
-                Name = name,
-                AdditionalInformation = additionalInformation,
+                Name = name,                
                 LastName = lastName,
                 DNI = dni,
                 EmailAddress = emailAddress,

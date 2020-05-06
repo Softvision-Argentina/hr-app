@@ -172,8 +172,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null],
-      linkedin: [null, [trimValidator]],
-      additionalInformation: [null, [trimValidator]],
+      linkedin: [null, [trimValidator]],      
       user: [null, [Validators.required]],
       englishLevel: 'none',
       status: null,
@@ -292,9 +291,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')',
                 linkedInProfile: this.validateForm.controls['linkedin'].value === null
                   ? null : this.validateForm.controls['linkedin'].value.toString(),
-                candidateSkills: candidateSkills,
-                additionalInformation: this.validateForm.controls['additionalInformation'].value === null
-                  ? null : this.validateForm.controls['additionalInformation'].value.toString(),
+                candidateSkills: candidateSkills,                
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
@@ -433,8 +430,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['email'].setValue(candidate.emailAddress);
     this.validateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
-    this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
-    this.validateForm.controls['additionalInformation'].setValue(candidate.additionalInformation);
+    this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);    
     this.validateForm.controls['user'].setValue(candidate.user.id);
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);

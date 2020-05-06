@@ -15,8 +15,7 @@ namespace ApiServer.Contracts.Candidates
         public int DNI { get; set; }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
-        public string LinkedInProfile { get; set; }
-        public string AdditionalInformation { get; set; }
+        public string LinkedInProfile { get; set; }        
         public EnglishLevel EnglishLevel { get; set; }
         public CandidateStatus Status { get; set; }
         public ReadedUserViewModel User { get; set; }

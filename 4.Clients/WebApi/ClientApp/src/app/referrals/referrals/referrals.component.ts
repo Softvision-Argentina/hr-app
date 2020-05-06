@@ -868,6 +868,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         processId: 0,
         actualSalary: 0,
         wantedSalary: 0,
+        additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
         rejectionReasonsHr: null
 

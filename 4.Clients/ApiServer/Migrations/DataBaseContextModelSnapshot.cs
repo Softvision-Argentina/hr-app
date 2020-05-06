@@ -25,8 +25,6 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdditionalInformation");
-
                     b.Property<int?>("CommunityId");
 
                     b.Property<DateTime>("ContactDay");
@@ -454,6 +452,8 @@ namespace ApiServer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<float>("ActualSalary");
+
+                    b.Property<string>("AdditionalInformation");
 
                     b.Property<string>("CreatedBy");
 

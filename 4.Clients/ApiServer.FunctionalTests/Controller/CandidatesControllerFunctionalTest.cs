@@ -396,8 +396,7 @@ namespace ApiServer.FunctionalTests.Controller
             {
                 Name = "Testing with TYPO",
                 LastName = "Testerino with TYPO",
-                LinkedInProfile = "/TestingTestirino99 with TYPO",
-                AdditionalInformation = "Additional Info with TYPO",
+                LinkedInProfile = "/TestingTestirino99 with TYPO",                
                 EmailAddress = "Email Address with TYPO",
                 User = wrongUserInDb,
                 Community = wrongCommunityInDb,
@@ -420,8 +419,7 @@ namespace ApiServer.FunctionalTests.Controller
             {
                 Name = "Testing",
                 LastName = "Testerino",
-                LinkedInProfile = "/TestingTestirino99",
-                AdditionalInformation = "Additional Info",
+                LinkedInProfile = "/TestingTestirino99",                
                 EmailAddress = "Email Address",
                 User = new ReadedUserViewModel() { Id = rightUserInDb.Id },
                 Community = new ReadedCommunityViewModel() { Id = rightCommunityInDb.Id },

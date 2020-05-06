@@ -22,8 +22,7 @@ namespace HrApp.Views
             this.candidate = candidate;
             Name.Text = candidate.Name+" "+ candidate.LastName;
             DNI.Text = candidate.DNI.ToString();
-            PhoneNumber.Text = candidate.PhoneNumber;
-            AdditionalInformation.Text = (candidate.AdditionalInformation == null)? "Empty" :  candidate.AdditionalInformation.ToString();
+            PhoneNumber.Text = candidate.PhoneNumber;            
             EnglishLevel.Text =  candidate.EnglishLevel.ToString();
             ContactDay.Text =candidate.ContactDay.ToString() ;
             Status.Text = candidate.Status.ToString();
