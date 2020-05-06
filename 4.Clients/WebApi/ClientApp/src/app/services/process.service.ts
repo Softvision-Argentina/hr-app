@@ -65,7 +65,7 @@ export class ProcessService extends BaseService<Process> {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(data => { }),
+        tap(() => this.get().subscribe()),
         catchError(this.handleErrors)
       );
   }
@@ -79,7 +79,7 @@ export class ProcessService extends BaseService<Process> {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(
-        tap(entities => { }),
+        tap(() => this.get().subscribe()),
         catchError(this.handleErrors)
       );
   }
@@ -91,7 +91,7 @@ export class ProcessService extends BaseService<Process> {
     const processCall = this.http.put(processUrl, process, {
       headers: this.headersWithAuth
     }).pipe(
-      tap(_ => { }),
+      tap(() => this.get().subscribe()),
       catchError(this.handleErrors)
     );
 

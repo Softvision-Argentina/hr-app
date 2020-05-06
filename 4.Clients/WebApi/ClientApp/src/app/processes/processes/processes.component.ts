@@ -103,6 +103,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   isLoading = false;
 
   searchSub: Subscription =  new Subscription();
+  processesSubscription: Subscription = new Subscription();
   constructor(
     private facade: FacadeService,
     private formBuilder: FormBuilder,
@@ -148,31 +149,37 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getCandidates() {
-    this.facade.candidateService.get()
+     const candidatesSubscription = this.facade.candidateService.getData()
       .subscribe(res => {
-        this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
-        this.candidatesFullList = res;
+        if (!!res) {
+          this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
+          this.candidatesFullList = res;
+        }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+      this.processesSubscription.add(candidatesSubscription);
   }
 
   getUsers() {
-    this.facade.userService.get()
+    const userSubscription = this.facade.userService.getData()
       .subscribe(res => {
         this.users = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    
+    this.processesSubscription.add(userSubscription);
   }
 
   getOffices() {
-    this.facade.OfficeService.get()
+    const officeSubscription = this.facade.OfficeService.getData()
       .subscribe(res => {
         this.offices = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.processesSubscription.add(officeSubscription);
   }
 
   getCommunity(community: number): string {
@@ -180,12 +187,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getCommunities() {
-    this.facade.communityService.get()
+    const communitiesSubscription = this.facade.communityService.getData()
       .subscribe(res => {
         this.communities = res;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.processesSubscription.add(communitiesSubscription);
   }
 
   getProfiles() {
@@ -207,34 +215,55 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getProcesses() {
-    this.facade.processService.getProcessByUserRole(this.currentUser)
+    const processesSubscription = this.facade.processService.getData()
       .subscribe(res => {
-        this.filteredProcesses = res;
-        this.listOfDisplayData = res;
-        const newProc: Process = res[res.length - 1];
-        if (newProc && newProc.candidate) {
-          this.candidatesFullList.push(newProc.candidate);
+        let processes: Process[] = [];
+        if (!!res) {
+          if (this.currentUser.role === 'CommunityManager') {
+            const processesByUserRole = res.filter(process => process.candidate.community.id === this.currentUser.community.id);
+            processes = res;
+          } else {
+            processes = res;
+          }
+          this.filteredProcesses = processes;
+          this.listOfDisplayData = processes;
+          const newProc: Process = processes[processes.length - 1];
+          if (newProc && newProc.candidate) {
+            this.candidatesFullList.push(newProc.candidate);
+          }
         }
+
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-
+    this.processesSubscription.add(processesSubscription);
   }
 
   getUserProcesses() {
-    this.facade.processService.getProcessByUserRole(this.currentUser)
+    const userProcessesSubscription = this.facade.processService.getData()
       .subscribe(res => {
-        const result = res.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
-        this.listOfDisplayOwnData = result;
-        this.filteredOwnProcesses = result;
-        const newProc: Process = result[result.length - 1];
+        const result = [];
+        if (!!res) {
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].candidate.user !== null && typeof res[i].candidate.user !== 'undefined') {
+              const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
+              if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
+                result.push(res[i]);
+              }
+            }
+          }
+          this.listOfDisplayOwnData = result;
+          this.filteredProcesses = result;
+          const newProc: Process = result[result.length - 1];
 
-        if (newProc && newProc.candidate) {
-          this.candidatesFullList.push(newProc.candidate);
+          if (newProc && newProc.candidate) {
+            this.candidatesFullList.push(newProc.candidate);
+          }
         }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.processesSubscription.add(userProcessesSubscription);
   }
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
@@ -263,6 +292,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           }
       });
     });
+    this.processesSubscription.add(this.searchSub);
   }
 
   showApproveProcessConfirm(processID: number): void {
@@ -808,7 +838,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             this.facade.processService.add(newProcess)
               .subscribe(() => {
                 this.isLoading = false;
-                this.getProcesses();
                 this.facade.appService.stopLoading();
                 this.facade.toastrService.success('The process was successfully saved !');
                 this.createEmptyProcess(newCandidate);
@@ -827,7 +856,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             .subscribe(res => {
               newCandidate.status = CandidateStatusEnum.InProgress;
               this.isLoading = false;
-              this.getProcesses();
               this.facade.appService.stopLoading();
               this.facade.toastrService.success('The process was successfully saved !');
               this.createEmptyProcess(newCandidate);
@@ -842,7 +870,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.facade.candidateService.update(newCandidate.id, newCandidate)
         .subscribe(() => {
           this.isLoading = false;
-          this.getCandidates();
         }, err => {
           this.isLoading = false;
           this.facade.errorHandlerService.showErrorMessage(err);
@@ -855,8 +882,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.openDeclineModal(newProcess, declineProcessModal).afterClose
                 .subscribe(sel => {
                   if (declineReason !== newProcess.declineReason) {
-                    this.getCandidates();
-                    this.getProcesses();
                     this.facade.appService.stopLoading();
                     this.facade.toastrService.success('The process was successfully saved!');
                     this.createEmptyProcess(newCandidate);
@@ -867,8 +892,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(() => {
                   this.isLoading = false;
-                  this.getProcesses();
-                  this.getCandidates();
                   this.facade.appService.stopLoading();
                   this.facade.toastrService.success('The process was successfully saved !');
                   this.createEmptyProcess(newCandidate);
@@ -1080,6 +1103,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.searchSub.unsubscribe();
+    this.processesSubscription.unsubscribe();
   }
 }
