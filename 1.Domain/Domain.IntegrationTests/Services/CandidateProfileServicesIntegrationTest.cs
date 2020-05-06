@@ -93,13 +93,14 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var candidateProfile = new CandidateProfile() { Name = "Testing" };
             _fixture.Seed(candidateProfile);
             var candidateProfileCountBeforeDelete = _fixture.GetCount<CandidateProfile>();
+            var candidateExpectedAfterDelete = candidateProfileCountBeforeDelete - 1;
 
             //Act
             _candidateProfileService.Delete(candidateProfile.Id);
             var candidateProfileCountAfterDelete = _fixture.GetCount<CandidateProfile>();
 
             //Assert
-            Assert.Equal(candidateProfileCountBeforeDelete - 1, candidateProfileCountAfterDelete);
+            Assert.Equal(candidateExpectedAfterDelete, candidateProfileCountAfterDelete);
             Assert.NotEqual(candidateProfileCountBeforeDelete, candidateProfileCountAfterDelete);
 
             //Clean
