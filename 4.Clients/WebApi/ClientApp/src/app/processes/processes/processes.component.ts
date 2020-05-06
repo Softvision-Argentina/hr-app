@@ -57,17 +57,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
 
   filteredProcesses: Process[] = [];
+  filteredOwnProcesses: Process[] = [];
+
   searchValue = '';
   searchRecruiterValue = '';
   searchValueStatus = '';
   searchValueCurrentStage = '';
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
-  listOfDisplayOwnData = [...this.filteredProcesses];
+  listOfDisplayOwnData = [...this.filteredOwnProcesses];
   currentUser: User;
   sortName = null;
   sortValue = null;
-  processForm: FormGroup;
   rejectProcessForm: FormGroup;
   declineProcessForm: FormGroup;
   isDetailsVisible = false;
@@ -205,10 +206,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
-  getProfile(profile: number): string {
-    return this.profiles.filter(x => x.id === profile)[0].name;
-  }
-
   getProcesses() {
     this.facade.processService.getProcessByUserRole(this.currentUser)
       .subscribe(res => {
@@ -229,7 +226,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(res => {
         const result = res.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
         this.listOfDisplayOwnData = result;
-        this.filteredProcesses = result;
+        this.filteredOwnProcesses = result;
         const newProc: Process = result[result.length - 1];
 
         if (newProc && newProc.candidate) {
@@ -243,7 +240,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
 
       this.listOfDisplayData = this.filteredProcesses;
-      this.listOfDisplayOwnData = this.filteredProcesses;
+      this.listOfDisplayOwnData = this.filteredOwnProcesses;
 
       const allProcesses = this.listOfDisplayData.filter(process => {
         const fullName = process.candidate.name + process.candidate.lastName;
@@ -414,15 +411,17 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.searchRecruiterValue = '';
     this.searchRecruiter();
   }
-
+  
   resetStatus(): void {
     this.searchValueStatus = '';
     this.searchStatus();
+    this.searchOwnStatus();
   }
 
   resetCurrentStage(): void {
     this.searchValueCurrentStage = '';
     this.searchCurrentStage();
+    this.searchOwnCurrentStage();
   }
 
   triggerSearch(val) {
@@ -447,28 +446,39 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   searchRecruiter(): void {
-    const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
-    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.communitySearchName = 'ALL';
-    this.profileSearchName = 'ALL';
+// tslint:disable-next-line:max-line-length
+  const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
+  this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+  this.communitySearchName = 'ALL';
+  this.profileSearchName = 'ALL';
   }
 
+// This function is called when user clicks MY PROCESSES tab, it fetch processes that are created by the user.
   searchOwnRecruiter(): void {
     this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
-    this.searchRecruiter();
+    this.getUserProcesses();
     this.isOwnedProcesses = true;
   }
 
+// This function is called when user clicks BA STUDIO tab, it fetch all processes.
   searchAllProcess() {
     this.getProcesses();
-    this.isOwnedProcesses = false;
+    this.isOwnedProcesses = false
   }
 
+// This function is called when user clicks BA STUDIO status filter.
   triggerSearchStatus(id) {
     this.searchValueStatus = id;
     this.searchStatus();
   }
 
+  // This function is called when user clicks MY PROCESSES status filter.
+  triggerSearchOwnStatus(id) {
+    this.searchValueStatus = id;
+    this.searchOwnStatus();
+  }
+
+  // This function search by status in all the processes.
   searchStatus(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
@@ -479,11 +489,30 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.searchValueStatus = '';
   }
 
+  // This function searches by status in processes made by the user.
+  searchOwnStatus(): void {
+    const filterFunc = (item) => {
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
+        (item.status === this.searchValueStatus);
+    };
+    const data = this.searchValueStatus !== '' ? this.filteredOwnProcesses.filter(item => filterFunc(item)) : this.filteredOwnProcesses;
+    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.searchValueStatus = '';
+  }
+
+  // This function searches by stage in BA STUDIO tab
   triggerSearchCurrentStage(id) {
     this.searchValueCurrentStage = id;
     this.searchCurrentStage();
   }
 
+  // This function search by stage in MY PROCESSES tab
+  triggerSearchOwnCurrentStage(id) {
+  this.searchValueCurrentStage = id;
+  this.searchOwnCurrentStage();
+}
+
+  // This function search by current stage in all the processes.
   searchCurrentStage(): void {
     const filterFunc = (item) => {
       return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
@@ -494,18 +523,46 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.searchValueCurrentStage = '';
   }
 
+  // This function search by current stage only in processes made by the user.
+  searchOwnCurrentStage(): void {
+    const filterFunc = (item) => {
+      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
+        (item.currentStage === this.searchValueCurrentStage);
+    };
+    const data = this.searchValueCurrentStage !== '' ? this.filteredOwnProcesses.filter(item => filterFunc(item)) : this.filteredOwnProcesses;
+    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.searchValueStatus = '';
+  }
+
+  // This function search by profile all processes.
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
     if (this.profileSearch === 0) {
       this.listOfDisplayData = this.filteredProcesses;
       this.profileSearchName = 'ALL';
     } else {
+      this.getUserProcesses();
+
       this.profileSearchName = (this.profiles.find(p => p.id === this.profileSearch)).name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.profile.id === searchedProfile);
       this.communitySearchName = 'ALL';
     }
   }
 
+  // This function search by profile only in processes made by the user.
+  searchOwnProfile(searchedProfile: number) {
+    this.profileSearch = searchedProfile;
+    if (this.profileSearch === 0) {
+      this.listOfDisplayOwnData = this.filteredOwnProcesses;
+      this.profileSearchName = 'ALL';
+    } else {
+      this.profileSearchName = (this.profiles.find(p => p.id === this.profileSearch)).name;
+      this.listOfDisplayOwnData = this.filteredOwnProcesses.filter(p => p.candidate.profile.id === searchedProfile);
+      this.communitySearchName = 'ALL';
+    }
+  }
+
+  // This function search by community in all processes.
   searchCommunity(searchedCommunity: number) {
     this.communitySearch = searchedCommunity;
     if (this.communitySearch === 0) {
@@ -513,8 +570,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.communitySearchName = 'ALL';
     } else {
       this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
-      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
       this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id === searchedCommunity);
+      this.profileSearchName = 'ALL';
+    }
+  }
+
+  // This function search by community only in processes made by the user.
+  searchOwnCommunity(searchedCommunity: number) {
+    this.communitySearch = searchedCommunity;
+    if (this.communitySearch === 0) {
+      this.listOfDisplayOwnData = this.filteredOwnProcesses;
+      this.communitySearchName = 'ALL';
+    } else {
+      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
+      this.listOfDisplayOwnData = this.filteredOwnProcesses.filter(p => p.candidate.community.id === searchedCommunity);
       this.profileSearchName = 'ALL';
     }
   }
@@ -669,7 +738,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.slickModal.slickGoTo(2);
         this.stepIndex = 2;
         return 'clientButton';
-      case 4:
+        case 4:
         this.slickModal.slickGoTo(3);
         this.stepIndex = 3;
         return 'clientButton';

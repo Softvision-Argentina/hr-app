@@ -16,13 +16,13 @@
         <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayOwnData"
           [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
           (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
-          (userId)="showUserDetailsModal($event, userDetailModal)" (searchProfile)="searchProfile($event)"
-          (searchCommunity)="searchCommunity($event)"
+          (userId)="showUserDetailsModal($event, userDetailModal)"
+          (searchProfile)="searchOwnProfile($event)" (searchCommunity)="searchOwnCommunity($event)"
           (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
           (showDeleteConfirm)="showDeleteConfirm($event)"
           (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
           (rejectProcess)="rejectProcess($event, rejectProcessModal)"
-          (searchValueCurrentStage)="triggerSearchCurrentStage($event)" (status)="triggerSearchStatus($event)"
+          (searchValueCurrentStage)="triggerSearchOwnCurrentStage($event)" (status)="triggerSearchOwnStatus($event)"
           (recruiterValue)="triggerSearchRecruiter($event)" (resetRecruiter)="resetRecruiter()"
           (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()" (resetStatus)="resetStatus()"
           (resetCurrentStage)="resetCurrentStage()">
@@ -40,8 +40,7 @@
           (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
           (rejectProcess)="rejectProcess($event, rejectProcessModal)"
           (searchValueCurrentStage)="triggerSearchCurrentStage($event)" (status)="triggerSearchStatus($event)"
-          (recruiterValue)="triggerSearchRecruiter($event)" (resetRecruiter)="resetRecruiter()"
-          (candidateValue)="triggerSearch($event)" (resetCandidate)="reset()" (resetStatus)="resetStatus()"
+          (resetStatus)="resetStatus()"
           (resetCurrentStage)="resetCurrentStage()">
         </app-processes-table>
       </nz-tab>
