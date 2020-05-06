@@ -225,8 +225,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReferred">Is Referred
-                    </nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReferred">Is Referred</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <label nz-checkbox  formControlName="isReferred"></label>
                     </nz-form-control>
@@ -236,7 +235,7 @@
         <div nz-row *ngIf="validateForm.controls['isReferred'].value">
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" > Referred By: </nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" >Referred By: </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" >
                         <input type="text"  nz-input formControlName="referredBy" id="referredBy" required>
                         <nz-form-explain *ngIf="validateForm.get('referredBy').dirty && validateForm.get('referredBy').invalid">
@@ -288,8 +287,7 @@
             <div nz-col nzSpan="24">
                 <div>
                     <nz-form-item *ngFor="let control of controlEditArray;let i = index">
-                        <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]">Skills
-                        </nz-form-label>
+                        <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]">Skills</nz-form-label>
                         <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0?0:4">
                             <div nz-row>
                                 <div nz-col nzSpan="4">

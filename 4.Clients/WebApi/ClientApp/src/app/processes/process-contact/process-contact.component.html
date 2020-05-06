@@ -85,8 +85,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone Number
-                </nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone Number</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible">
                     <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                         <ng-template #addOnBeforeTemplate>
@@ -159,8 +158,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile" [hidden]="!visible">LinkedIn Profile
-                </nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile" [hidden]="!visible">LinkedIn Profile</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                     <input nz-input formControlName="linkedInProfile" id="linkedInProfile" placeholder="Please input the LinkedIn's profile URL">
                     <nz-form-explain *ngIf="candidateForm.get('linkedInProfile').dirty && candidateForm.get('linkedInProfile').errors">
