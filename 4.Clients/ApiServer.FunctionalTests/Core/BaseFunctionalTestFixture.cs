@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Core;
 using Core.Persistance;
-using Core.Persistance.Testing;
 using Domain.Services.Repositories.EF;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Xml;
 using Newtonsoft.Json;
 using Persistance.EF.Extensions;
 using Xunit;

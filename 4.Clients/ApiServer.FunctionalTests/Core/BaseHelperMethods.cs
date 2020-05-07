@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Core;
 using Core.Persistance.Testing;
 using Microsoft.EntityFrameworkCore;
-using Persistance.EF.Extensions;
 
 namespace ApiServer.FunctionalTests.Core
 {
@@ -37,10 +35,6 @@ namespace ApiServer.FunctionalTests.Core
         {
             var list = await Context.Set<T>().AsNoTracking().ToListAsync();
             return list.Count;
-        }
-        public virtual Task DeleteEagerAsync()
-        {
-            throw new NotImplementedException();
         }
         public virtual Task<object> GetEagerAsync(int id)
         {

@@ -26,7 +26,6 @@ namespace Core.Persistance.Testing
 
             return builder;
         }
-
         public static TestServer GetTestServer<T>(string environment, IConfigurationBuilder builder) where T : class
         {
             var server = new TestServer(WebHost.CreateDefaultBuilder()
@@ -36,12 +35,9 @@ namespace Core.Persistance.Testing
 
             return server;
         }
-
         public static string JsonizeModel<T>(T model) where T: class
         {
             return JsonConvert.SerializeObject(model);   
         }
-
-
     }
 }

@@ -6,11 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Persistance.EF.Extensions;
 using System.Linq;
 using Core.Persistance;
-using Core.Persistance.Testing;
 using Domain.Services.Impl.IntegrationTests.Fixtures;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
 {

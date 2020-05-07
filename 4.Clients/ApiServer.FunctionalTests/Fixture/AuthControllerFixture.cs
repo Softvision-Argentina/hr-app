@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using ApiServer.FunctionalTests.Core;
-using Persistance.EF.Extensions;
 using ApiServer.Contracts.Login;
 using Domain.Services.ExternalServices;
 using Domain.Services.ExternalServices.Config;
-using Xunit;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Task = System.Threading.Tasks.Task;
 
 namespace ApiServer.FunctionalTests.Fixture
 {

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Linq;
 using Core;
 using Xunit;
@@ -12,9 +11,6 @@ using ApiServer.Contracts.User;
 using ApiServer.Contracts.CandidateProfile;
 using ApiServer.FunctionalTests.Fixture;
 using Core.Persistance;
-using Core.Persistance.Testing;
-using Domain.Model.Exceptions.User;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiServer.FunctionalTests.Controller

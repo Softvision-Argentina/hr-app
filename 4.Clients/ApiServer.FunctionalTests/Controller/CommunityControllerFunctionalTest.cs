@@ -8,9 +8,7 @@ using System.Linq;
 using System.Net;
 using ApiServer.FunctionalTests.Fixture;
 using Core.Persistance;
-using Core.Persistance.Testing;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ApiServer.FunctionalTests.Controller
 {
@@ -117,7 +115,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Clean
             await _fixture.DeleteAsync<CandidateProfile>();
         }
-
 
         [Theory(DisplayName = "Verify api/Community [Post] is returning error when viewmodel posted is not valid")]
         [Trait("Category", "Functional-Test")]

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.Persistance.Testing
@@ -12,7 +10,6 @@ namespace Core.Persistance.Testing
         Task DeleteAsync<T>() where T : class;
         Task<T> GetAsync<T>(int id) where T : Entity<int>;
         Task<int> GetCountAsync<T>() where T : class;
-        Task DeleteEagerAsync();
         Task<object> GetEagerAsync(int id);
     }
 }

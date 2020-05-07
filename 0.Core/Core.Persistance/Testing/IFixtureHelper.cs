@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Core.Persistance.Testing
 {
@@ -12,7 +9,6 @@ namespace Core.Persistance.Testing
         void Delete<T>() where T : class;
         T Get<T>(int id) where T : Entity<int>;
         int GetCount<T>() where T : class;
-        void DeleteEager();
         T GetEager<T>(int id) where T : class;
     }
 }

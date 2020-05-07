@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ApiServer.Contracts.Candidates;
 using ApiServer.Contracts.CandidateSkill;
 using ApiServer.FunctionalTests.Core;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using Persistance.EF.Extensions;
-using Xunit;
-using Task = System.Threading.Tasks.Task;
 
 namespace ApiServer.FunctionalTests.Fixture
 {
@@ -20,24 +15,6 @@ namespace ApiServer.FunctionalTests.Fixture
             ControllerName = "Candidates";
             //SeedCandidate();
         }
-
-        public override async Task DeleteEagerAsync()
-        {
-            Context.DetachAllEntities();
-
-            var list = Context
-                .Candidates
-                .Include(_ => _.Community)
-                .Include(_ => _.PreferredOffice)
-                .Include(_ => _.CandidateSkills);
-
-            var model = await list.ToListAsync();
-
-            model.ForEach((entity) => { Context.Remove(entity); });
-
-            await Context.SaveChangesAsync();
-        }
-
         public enum FilterType
         {
             Match, //will match an entity

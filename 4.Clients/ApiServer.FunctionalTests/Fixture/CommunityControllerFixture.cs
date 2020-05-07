@@ -1,7 +1,4 @@
 ﻿using ApiServer.FunctionalTests.Core;
-using Persistance.EF.Extensions;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace ApiServer.FunctionalTests.Fixture
 {

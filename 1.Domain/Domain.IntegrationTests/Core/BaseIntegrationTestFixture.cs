@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ApiServer;
 using Core;
 using Core.Persistance;
@@ -49,10 +47,6 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         public int GetCount<T>() where T : class
         {
             return Context.Set<T>().AsNoTracking().ToList().Count;
-        }
-        public virtual void DeleteEager()
-        {
-            throw new NotImplementedException();
         }
         public virtual T GetEager<T>(int id) where T : class
         {

@@ -1,9 +1,6 @@
-﻿using Core;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Persistance.EF.Extensions
 {
@@ -17,9 +14,6 @@ namespace Persistance.EF.Extensions
 
     public static class TestDatabaseHelper
     {
-        public static IEnumerable<Entity<int>> EntitiesSeeded;
-        public static Entity<int> EntitySeeded;
-
         public static void ResetAllIdentitiesId(this DbContext context)
         {
             context.Database.EnsureCreated();
