@@ -19,6 +19,7 @@ namespace Domain.Services.Impl.IntegrationTests.Core
         public BaseIntegrationTestFixture() : base(EnvironmentType.Integration)
         {
             Context = (DataBaseContext) Server.Host.Services.GetService(typeof(DataBaseContext));
+            Context.Database.EnsureCreated();
             Context.DeleteAllEntities();
             Context.ResetAllIdentitiesId();
         }
