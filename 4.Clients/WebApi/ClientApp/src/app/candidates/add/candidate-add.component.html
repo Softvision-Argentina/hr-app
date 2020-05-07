@@ -4,7 +4,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="name">First Name *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="name" [ngClass]="{'requiredFieldLabel': isRequiredField('name')}">
+                    First Name
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
                     <nz-form-explain *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
@@ -23,7 +25,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="lastName">Last Name *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="lastName" [ngClass]="{'requiredFieldLabel': isRequiredField('lastName')}">
+                    Last Name
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="lastName" id="lastName" placeholder="Please input the last name">
                     <nz-form-explain *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
@@ -44,7 +48,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni" [ngClass]="{'requiredFieldLabel': isRequiredField('dni')}">
+                    DNI
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input id="'dni'" formControlName="dni"  type="number" nz-input placeholder="Please input the dni">
                     <nz-form-explain>
@@ -60,7 +66,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email" [ngClass]="{'requiredFieldLabel': isRequiredField('email')}">E-mail</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                     <nz-form-explain>
@@ -76,7 +82,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="linkedin" [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
+                    LinkedIn
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="linkedin" id="linkedin" placeholder="Please input the LinkedIn URL">
                     <nz-form-explain *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
@@ -92,7 +100,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber">Phone Number *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber" [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
+                    Phone Number
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']">
                     <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                         <ng-template #addOnBeforeTemplate>
@@ -114,7 +124,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Recruiter *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('user')}">
+                    Recruiter
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="user">
                         <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
@@ -126,7 +138,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('preferredOffice')}">
+                    Preferred Office
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="preferredOffice" [(ngModel)]="selectedValue">
                         <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
@@ -141,7 +155,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile">Profile *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile" [ngClass]="{'requiredFieldLabel': isRequiredField('profile')}">
+                    Profile
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="profile">
                         <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
@@ -154,7 +170,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community">Community *</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community" [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
+                    Community
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="community">
                         <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">

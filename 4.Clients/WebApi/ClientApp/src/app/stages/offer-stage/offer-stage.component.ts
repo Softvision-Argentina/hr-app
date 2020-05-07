@@ -6,6 +6,7 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
 import { ProcessService } from '../../services/process.service';
 import { OfferHistory } from '../offer-history/offer-history.component';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 @Component({
   selector: 'offer-stage',
@@ -226,5 +227,9 @@ export class OfferStageComponent implements OnInit {
     }
     this.offerForm.controls['rejectionReason'].disable();
     return false;
+  }
+
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.offerForm)
   }
 }

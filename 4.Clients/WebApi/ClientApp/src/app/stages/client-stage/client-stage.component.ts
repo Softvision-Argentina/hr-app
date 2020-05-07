@@ -6,6 +6,7 @@ import { Process } from 'src/entities/process';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 @Component({
   selector: 'client-stage',
@@ -142,4 +143,7 @@ export class ClientStageComponent implements OnInit {
     return false;
   }
 
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.clientForm)
+  }
 }

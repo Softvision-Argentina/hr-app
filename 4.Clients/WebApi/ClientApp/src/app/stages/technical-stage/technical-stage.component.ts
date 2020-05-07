@@ -12,6 +12,7 @@ import { Skill } from 'src/entities/skill';
 import { Candidate } from 'src/entities/candidate';
 import { CandidateSkill } from 'src/entities/candidateSkill';
 import { ProcessService } from '../../services/process.service';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 @Component({
   selector: 'technical-stage',
@@ -322,6 +323,8 @@ export class TechnicalStageComponent implements OnInit {
       });
   }
 
-
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.technicalForm)
+  }
 
 }

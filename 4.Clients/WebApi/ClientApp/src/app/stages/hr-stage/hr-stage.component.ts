@@ -8,6 +8,7 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { HrStage } from '../../../entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { AppComponent } from 'src/app/app.component';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 @Component({
   selector: 'hr-stage',
@@ -194,4 +195,7 @@ export class HrStageComponent implements OnInit {
     return this._appComponent.isUserRole(roles);
   }
 
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.hrForm)
+  }
 }

@@ -77,3 +77,6 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+nz-form-label.requiredFieldLabel::before {
+  content: "* ";
+}

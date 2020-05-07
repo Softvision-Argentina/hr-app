@@ -14,6 +14,7 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 import { dniValidator } from 'src/app/directives/dni.validator';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
   if(c.get('email').value === null && c.get('phoneNumber').value === null) {
@@ -272,4 +273,7 @@ export class CandidateAddComponent implements OnInit {
     return newCandidate;
   }
 
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.candidateForm)
+  }
 }

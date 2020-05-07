@@ -9,7 +9,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Status</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
+                    Status
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
@@ -22,7 +24,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date">Date</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
+                    Date
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
                     <nz-form-explain *ngIf="offerForm.get('date').dirty && offerForm.get('date').errors">
@@ -35,7 +39,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type">Responsible</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
+                    Responsible
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
@@ -47,7 +53,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
+                    Delegate
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
@@ -61,7 +69,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority">Seniority</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority" [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
+                    Seniority
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select #seniority formControlName="seniority"
                         (ngModelChange)="updateSeniority(seniority.value)">
@@ -82,7 +92,9 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="hireDate">Hire Date</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="hireDate" [ngClass]="{'requiredFieldLabel': isRequiredField('hireDate')}">
+                    Hire Date
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="hireDate"></nz-date-picker>
                     <nz-form-explain *ngIf="offerForm.get('hireDate').dirty && offerForm.get('hireDate').errors">
@@ -93,7 +105,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
+                    Feedback
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1" id="feedback" nz-input formControlName="feedback"
                         placeholder="Input any additional information if necessary" id="feedback"></textarea>
@@ -122,7 +136,9 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate">Done Date</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate" [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDoneDate')}">
+                    Done Date
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="backgroundCheckDoneDate"></nz-date-picker>
                     <nz-form-explain
@@ -144,7 +160,9 @@
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate">Done Date</nz-form-label>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate" [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
+                Done Date
+            </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
                 <nz-form-explain
@@ -157,7 +175,9 @@
     <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason">Rejection Reason</nz-form-label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                    Rejection Reason
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
                         placeholder="Input the rejection reason"></textarea>
