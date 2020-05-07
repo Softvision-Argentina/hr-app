@@ -150,8 +150,6 @@ export class CandidateAddComponent implements OnInit {
     const currentRecruiter = this.fillUsers.find(user => user.username === this.currentUser.username);
     if(!!currentRecruiter) {
       this.candidateForm.controls['user'].setValue(currentRecruiter.id);
-    } else {
-      this.candidateForm.controls['user'].setValue(1);
     }
   }
   checkForm() {
