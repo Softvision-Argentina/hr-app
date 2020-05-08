@@ -36,7 +36,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/t:Rebuild /p:Configuration=Release /p:Platform="any cpu"'
+    msbuildArgs: '/t:Rebuild /p:Configuration=Release /p:Platform="any cpu" 4.Clients/ApiServer/ApiServer.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
