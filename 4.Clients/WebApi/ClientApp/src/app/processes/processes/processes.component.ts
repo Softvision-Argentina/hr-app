@@ -741,7 +741,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   validateForms(): boolean {
-    this.getForms(this.stepIndex);
+    this.getForms();
     const formNumber: number = this.onCheck();
     if (formNumber > -1) {
       this.checkSlideIndex(this.getInvalidFormSlide(formNumber));
@@ -750,6 +750,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       return true;
     }
   }
+
   getInvalidFormSlide(slide: number) {
     switch (slide) {
       case 0:
@@ -771,7 +772,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         case 4:
         this.slickModal.slickGoTo(3);
         this.stepIndex = 3;
-        return 'clientButton';
+        return 'offerButton';
       default:
         return 'hireButton';
     }
@@ -788,15 +789,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.stepIndex = 0;
   }
 
-  getForms(slide: number) {
-    const allForms = [];
-    const currentSlideForm = slide + 2;
-    allForms.push(this.candidateAdd.candidateForm);
-    allForms.push(this.hrStage.hrForm);
-    allForms.push(this.technicalStage.technicalForm);
-    allForms.push(this.clientStage.clientForm);
-    allForms.push(this.offerStage.offerForm);
-    this.forms = [...allForms.slice(0, currentSlideForm)];
+  getForms() {
+    this.forms.push(this.candidateAdd.candidateForm);
+    this.forms.push(this.hrStage.hrForm);
+    this.forms.push(this.technicalStage.technicalForm);
+    this.forms.push(this.clientStage.clientForm);
+    this.forms.push(this.offerStage.offerForm);
   }
 
   checkSlideIndex(elementName: string) {
