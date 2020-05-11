@@ -193,6 +193,6 @@ export class HrStageComponent implements OnInit {
   }
 
   isRequiredField(field: string) {
-    setTimeout(() => formFieldHasRequiredValidator(field, this.hrForm));
+    return formFieldHasRequiredValidator(field, this.hrForm)
   }
 }
