@@ -18,6 +18,10 @@ variables:
 
 steps:
 
+- task: CmdLine@2
+  inputs:
+    script: 'pwd'
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
