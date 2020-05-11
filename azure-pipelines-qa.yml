@@ -20,8 +20,9 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'pwd; ls -la'
-
+    script: |
+      pwd
+      ls -la
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
