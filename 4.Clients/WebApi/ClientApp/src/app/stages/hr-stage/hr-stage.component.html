@@ -106,7 +106,7 @@
     </div>
     <div nz-row>       
         <div nz-col nzSpan="12">
-            <nz-form-item>
+            <nz-form-item hidden>
                 <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1" id="feedback" nz-input formControlName="feedback" style="width: 50%;" placeholder="Input any additional information if necessary" id="feedback"></textarea>

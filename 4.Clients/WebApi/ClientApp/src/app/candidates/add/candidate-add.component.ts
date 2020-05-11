@@ -90,7 +90,7 @@ export class CandidateAddComponent implements OnInit {
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
-    linkedin: [null, [trimValidator]],    
+    linkedin: [null, [trimValidator]],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
