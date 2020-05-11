@@ -1,5 +1,6 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
+import {Validators} from "@angular/forms";
 
 export class OfferStage {
     id: number;
@@ -12,6 +13,10 @@ export class OfferStage {
     rejectionReason?: string;
     hireDate: Date;
     seniority: SeniorityEnum;
+    remunerationOffer: number;
+    vacationDays: number;
+    firstDay: Date;
+    bonus: string;
     backgroundCheckDone: boolean;
     backgroundCheckDoneDate: Date;
     preocupationalDone: boolean;

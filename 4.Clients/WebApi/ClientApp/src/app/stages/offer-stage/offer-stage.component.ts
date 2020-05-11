@@ -33,6 +33,10 @@ export class OfferStageComponent implements OnInit {
     userDelegateId: [null],
     feedback: '',
     seniority: [0, [Validators.required]],
+    remunerationOffer: [null, [Validators.required]],
+    vacationDays: [null, [Validators.required]],
+    firstDay: [new Date(), [Validators.required]],
+    bonus: '',
     hireDate: [new Date(), [Validators.required]],
     backgroundCheckDone: false,
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
@@ -123,6 +127,10 @@ export class OfferStageComponent implements OnInit {
     stage.processId = processId;
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority);
+    stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
+    stage.vacationDays = this.getControlValue(form.controls.vacationDays);
+    stage.firstDay = this.getControlValue(form.controls.firstDay);
+    stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
     stage.backgroundCheckDoneDate = stage.backgroundCheckDone ? this.getControlValue(form.controls.backgroundCheckDoneDate) : null;
@@ -167,6 +175,22 @@ export class OfferStageComponent implements OnInit {
 
     if (offerStage.feedback) {
       this.offerForm.controls['feedback'].setValue(offerStage.feedback);
+    }
+
+    if (offerStage.remunerationOffer) {
+      this.offerForm.controls['remunerationOffer'].setValue(offerStage.remunerationOffer);
+    }
+
+    if (offerStage.vacationDays) {
+      this.offerForm.controls['vacationDays'].setValue(offerStage.vacationDays);
+    }
+
+    if (offerStage.firstDay) {
+      this.offerForm.controls['firstDay'].setValue(offerStage.firstDay);
+    }
+
+    if (offerStage.bonus) {
+      this.offerForm.controls['bonus'].setValue(offerStage.bonus);
     }
 
     if (offerStage.backgroundCheckDone) {

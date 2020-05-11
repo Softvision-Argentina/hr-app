@@ -561,6 +561,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime?>("BackgroundCheckDoneDate");
 
+                    b.Property<string>("Bonus");
+
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
@@ -568,6 +570,8 @@ namespace ApiServer.Migrations
                     b.Property<DateTime?>("Date");
 
                     b.Property<string>("Feedback");
+
+                    b.Property<DateTime>("Firstday");
 
                     b.Property<DateTime>("HireDate");
 
@@ -583,6 +587,8 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("RejectionReason");
 
+                    b.Property<int>("RemunerationOffer");
+
                     b.Property<int>("Seniority");
 
                     b.Property<int>("Status");
@@ -592,6 +598,8 @@ namespace ApiServer.Migrations
                     b.Property<int?>("UserDelegateId");
 
                     b.Property<int?>("UserOwnerId");
+
+                    b.Property<int>("VacationDays");
 
                     b.Property<long>("Version");
 

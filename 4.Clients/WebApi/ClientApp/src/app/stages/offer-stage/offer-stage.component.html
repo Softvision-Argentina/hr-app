@@ -124,6 +124,65 @@
             </nz-form-item>
         </div>
     </div>
+  <div nz-row>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer">Final Gross Remuneration Offer *</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer" placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
+        </nz-form-control>
+        <nz-form-explain *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
+          Please input a final gross remuneration offer
+        </nz-form-explain>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
+        </nz-form-control>
+        <nz-form-explain *ngIf="offerForm.get('vacationDays').dirty && offerForm.get('vacationDays').errors">
+          Please input vacations days
+        </nz-form-explain>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstDay">First Day</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-date-picker style="width: 100%;" formControlName="firstDay"></nz-date-picker>
+          <nz-form-explain *ngIf="offerForm.get('firstDay').dirty && offerForm.get('firstDay').errors">
+            Please input a first day
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="bonus">Bonus</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <textarea rows="1" id="bonus" nz-input formControlName="bonus"
+                              placeholder="Input any additional information if necessary" id="bonus"></textarea>
+        </nz-form-control>
+        <nz-form-explain style="color: #f5222d"
+                         *ngIf="offerForm.get('feedback').dirty && offerForm.get('feedback').errors">
+          <ng-container *ngIf="offerForm.get('feedback')?.hasError('trimBeginError')">
+            The input has leading whitespace!
+          </ng-container>
+          <ng-container *ngIf="offerForm.get('feedback')?.hasError('trimEndError')">
+            The input has trailing whitespace!
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-item>
+    </div>
+
+
+
+
+  </div>
     <div nz-row>
         <div nz-col nzSpan="8" nzOffset="4">
             <nz-form-item>
