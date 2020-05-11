@@ -8,7 +8,7 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { HrStage } from '../../../entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { AppComponent } from 'src/app/app.component';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 
 @Component({
   selector: 'hr-stage',
@@ -19,14 +19,14 @@ export class HrStageComponent implements OnInit {
 
   disabled = false;
 
-    @Input()
-    private _users: User[];
-    public get users(): User[] {
-        return this._users;
-    }
-    public set users(value: User[]) {
-        this._users = value;
-    }
+  @Input()
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
+  }
+  public set users(value: User[]) {
+    this._users = value;
+  }
 
   hrForm: FormGroup = this.fb.group({
     id: [0],
@@ -43,32 +43,32 @@ export class HrStageComponent implements OnInit {
     rejectionReasonsHr: [0, [Validators.required]]
   });
 
-  statusList: any[] ;
+  statusList: any[];
   englishLevelList: any[];
   rejectionReasonsHRList: any[];
   usersFiltered: User[];
-  
+
   @Input() hrStage: HrStage;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
     this.englishLevelList = globals.englishLevelList;
-    this.rejectionReasonsHRList = globals.rejectionReasonsHRList.sort((a,b) => (a.name.localeCompare(b.name)));
-   }
+    this.rejectionReasonsHRList = globals.rejectionReasonsHRList.sort((a, b) => (a.name.localeCompare(b.name)));
+  }
 
   ngOnInit() {
     this.changeFormStatus(false);
-    if (this.hrStage) { this.fillForm(this.hrStage) }
-     this.getFilteredUsersForHr();
+    if (this.hrStage) { this.fillForm(this.hrStage); }
+    this.getFilteredUsersForHr();
   }
 
   getFilteredUsersForHr() {
     this.facade.userService.getFilteredForHr()
-    .subscribe(res => {
-      this.usersFiltered = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
+      }, err => {
+        console.log(err);
+      });
   }
 
   getFormControl(name: string): AbstractControl {
@@ -80,8 +80,8 @@ export class HrStageComponent implements OnInit {
       if (this.hrForm.controls[i] !== this.hrForm.controls['status']) {
         if (enable) {
           this.hrForm.controls[i].enable();
-           if (this.hrForm.controls[i] === this.hrForm.controls['englishLevel']) {
-             this.disabled = false;
+          if (this.hrForm.controls[i] === this.hrForm.controls['englishLevel']) {
+            this.disabled = false;
           }
         } else {
           this.hrForm.controls[i].disable();
@@ -113,7 +113,7 @@ export class HrStageComponent implements OnInit {
     hrStage.processId = processId;
     hrStage.englishLevel = this.getControlValue(this.hrForm.controls.englishLevel);
     hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.actualSalary);
-    hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.wantedSalary);    
+    hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.wantedSalary);
     hrStage.additionalInformation = this.getControlValue(this.hrForm.controls.additionalInformation);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
@@ -143,7 +143,7 @@ export class HrStageComponent implements OnInit {
     if (hrStage.userOwnerId) {
       this.hrForm.controls['userOwnerId'].setValue(hrStage.userOwnerId);
     }
-    
+
     if (hrStage.userDelegateId) {
       this.hrForm.controls['userDelegateId'].setValue(hrStage.userDelegateId);
     }
@@ -193,6 +193,6 @@ export class HrStageComponent implements OnInit {
   }
 
   isRequiredField(field: string) {
-    return formFieldHasRequiredValidator(field, this.hrForm)
+    setTimeout(() => formFieldHasRequiredValidator(field, this.hrForm));
   }
 }
