@@ -81,7 +81,6 @@ const antDesignIcons = AllIcons as {
 };
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
-
 @NgModule({
   declarations: [
     NumbersOnlyDirective,

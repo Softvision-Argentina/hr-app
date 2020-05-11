@@ -17,7 +17,8 @@
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="technicalForm.get('status').dirty && technicalForm.get('status').errors">Please select a status</nz-form-explain>
+                    <nz-form-explain *ngIf="technicalForm.get('status').dirty && technicalForm.get('status').errors">
+                        Please select a status</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -46,7 +47,9 @@
                         <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="technicalForm.get('userOwnerId').dirty && technicalForm.get('userOwnerId').errors">Please input the user</nz-form-explain>
+                    <nz-form-explain
+                        *ngIf="technicalForm.get('userOwnerId').dirty && technicalForm.get('userOwnerId').errors">Please
+                        input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -60,7 +63,8 @@
                         <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="technicalForm.get('userDelegateId').dirty && technicalForm.get('userDelegateId').errors">
+                    <nz-form-explain
+                        *ngIf="technicalForm.get('userDelegateId').dirty && technicalForm.get('userDelegateId').errors">
                         Please input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
@@ -73,12 +77,17 @@
                     Seniority
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select #seniority formControlName="seniority" (ngModelChange)="updateSeniority(seniority.value)">
-                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
+                    <nz-select #seniority formControlName="seniority"
+                        (ngModelChange)="updateSeniority(seniority.value)">
+                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}"
+                            [nzValue]="seniority.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="technicalForm.get('seniority').dirty && technicalForm.get('seniority').errors">Please select a seniority</nz-form-explain>
+                    <nz-form-explain
+                        *ngIf="technicalForm.get('seniority').dirty && technicalForm.get('seniority').errors">Please
+                        select a seniority</nz-form-explain>
                 </nz-form-control>
+
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
@@ -87,11 +96,25 @@
                     Alternative Seniority
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select #alternativeSeniority formControlName="alternativeSeniority" (ngModelChange)="updateAlternativeSeniority(alternativeSeniority.value)">
-                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
-                        </nz-option>
+                    <nz-select #alternativeSeniority formControlName="alternativeSeniority"
+                        (ngModelChange)="updateAlternativeSeniority(alternativeSeniority.value)">
+                        <span *ngFor="let seniority of seniorityList">
+                            <nz-option *ngIf="chosenSeniority === 0 && seniority.id === 1
+                                ; else anotherChosenSeniority" nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
+                            </nz-option>
+
+                            <ng-template #anotherChosenSeniority>
+                                <nz-option
+                                    *ngIf="chosenSeniority && seniority.id === chosenSeniority + 1 || seniority.id === chosenSeniority - 1; else noChosenSeniority"
+                                    nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
+                                </nz-option>
+                            </ng-template>
+                        </span>
+
                     </nz-select>
-                    <nz-form-explain *ngIf="technicalForm.get('seniority').dirty && technicalForm.get('seniority').errors">Please select a seniority</nz-form-explain>
+                    <nz-form-explain
+                        *ngIf="technicalForm.get('seniority').dirty && technicalForm.get('seniority').errors">Please
+                        select a seniority</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -103,9 +126,11 @@
                     Feedback
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <textarea rows="1" id="feedback" nz-input formControlName="feedback"
+                        placeholder="Input any additional information if necessary" id="feedback"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d" *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">
+                <nz-form-explain style="color: #f5222d"
+                    *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">
                     <ng-container *ngIf="technicalForm.get('feedback')?.hasError('trimBeginError')">
                         The input has leading whitespace!
                     </ng-container>
@@ -121,7 +146,8 @@
                     Client
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input nz-input id="client" formControlName="client" placeholder="Input the client that best suits" />
+                    <input nz-input id="client" formControlName="client"
+                        placeholder="Input the client that best suits" />
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -133,10 +159,13 @@
                     Rejection Reason
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Input the rejection reason"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && technicalForm.get('rejectionReason').dirty && technicalForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="technicalForm.get('rejectionReason')?.dirty && technicalForm.get('rejectionReason')?.errors ">
+                <nz-form-explain style="color: #f5222d "
+                    *ngIf="showRejectionReason() && technicalForm.get('rejectionReason').dirty && technicalForm.get('rejectionReason').errors ">
+                    <ng-container
+                        *ngIf="technicalForm.get('rejectionReason')?.dirty && technicalForm.get('rejectionReason')?.errors ">
                         Please input rejection reason!
                     </ng-container>
                 </nz-form-explain>
@@ -153,38 +182,50 @@
                 <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0 ? 0 : 4">
                     <div nz-row>
                         <div nz-col nzSpan="4">
-                            <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;" [formControlName]="control.controlInstance[0]" [attr.id]="control.id" id="control.id" nzShowSearch nzAllowClear [nzAllowClear]="false" nzPlaceHolder="Select a skill">
-                                <nz-option *ngFor="let skill of skills;" nzLabel="{{skill.name}}" nzValue="{{skill.id}}">
+                            <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
+                                [formControlName]="control.controlInstance[0]" [attr.id]="control.id" id="control.id"
+                                nzShowSearch nzAllowClear [nzAllowClear]="false" nzPlaceHolder="Select a skill">
+                                <nz-option *ngFor="let skill of skills;" nzLabel="{{skill.name}}"
+                                    nzValue="{{skill.id}}">
                                 </nz-option>
                             </nz-select>
-                            <nz-form-explain *ngIf="getFormControl(control.controlInstance[0])?.dirty&&getFormControl(control.controlInstance[0])?.hasError('required')">
+                            <nz-form-explain
+                                *ngIf="getFormControl(control.controlInstance[0])?.dirty&&getFormControl(control.controlInstance[0])?.hasError('required')">
                                 Please input candidate's skill or delete this field.
                             </nz-form-explain>
                         </div>
                         <div nz-col nzSpan="7">
                             <nz-form-control style="text-align: center; margin-left: 10%;">
-                                <nz-slider [nzDisabled]="disable" formControlName="{{control.controlInstance[1]}}" id="control.controlInstance[1]">
+                                <nz-slider [nzDisabled]="disable" formControlName="{{control.controlInstance[1]}}"
+                                    id="control.controlInstance[1]">
                                 </nz-slider>
                             </nz-form-control>
                         </div>
                         <div nz-col nzSpan="9">
                             <nz-form-control [nzSm]="14" [nzXs]="24" style="margin-left: 10%; width: 85%;">
-                                <input type="text" nz-input formControlName="{{control.controlInstance[2]}}" style="width: 100%;" id="control.controlInstance[2]" placeholder="Please input a comment">
-                                <nz-form-explain *ngIf="technicalForm.get(control.controlInstance[2]).dirty && technicalForm.get(control.controlInstance[2]).errors">
-                                    <ng-container *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimBeginError')">
+                                <input type="text" nz-input formControlName="{{control.controlInstance[2]}}"
+                                    style="width: 100%;" id="control.controlInstance[2]"
+                                    placeholder="Please input a comment">
+                                <nz-form-explain
+                                    *ngIf="technicalForm.get(control.controlInstance[2]).dirty && technicalForm.get(control.controlInstance[2]).errors">
+                                    <ng-container
+                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimBeginError')">
                                         The input has leading whitespace!
                                     </ng-container>
-                                    <ng-container *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimEndError')">
+                                    <ng-container
+                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimEndError')">
                                         The input has trailing whitespace!
                                     </ng-container>
-                                    <ng-container *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
+                                    <ng-container
+                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
                                         Please input a comment!
                                     </ng-container>
                                 </nz-form-explain>
                             </nz-form-control>
                         </div>
                         <div nz-col nzSpan="1">
-                            <i nz-icon type="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control,$event)"></i>
+                            <i nz-icon type="minus-circle-o" class="dynamic-delete-button"
+                                (click)="removeField(control,$event)"></i>
                         </div>
                     </div>
                 </nz-form-control>

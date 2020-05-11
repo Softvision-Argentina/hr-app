@@ -5,7 +5,6 @@ import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
 import { Globals } from '../../app-globals/globals';
-import { SeniorityEnum } from '../../../entities/enums/seniority.enum';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { TechnicalStage } from 'src/entities/technical-stage';
 import { Skill } from 'src/entities/skill';
@@ -39,6 +38,10 @@ export class TechnicalStageComponent implements OnInit {
     this._process = value;
   }
 
+  @Input() technicalStage: TechnicalStage;
+
+  @Output() selectedSeniority = new EventEmitter();
+
   technicalForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -64,9 +67,8 @@ export class TechnicalStageComponent implements OnInit {
   selectedSeniorities: any[2];
   usersFiltered: User[];
 
-  @Input() technicalStage: TechnicalStage;
-
-  @Output() selectedSeniority = new EventEmitter();
+  disabledSeniority = false;
+  chosenSeniority: number;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
@@ -75,7 +77,6 @@ export class TechnicalStageComponent implements OnInit {
 
   ngOnInit() {
     this.processService.selectedSeniorities.subscribe(sr => this.selectedSeniorities = sr);
-
     this.getSkills();
     this.changeFormStatus(false);
     if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
@@ -84,14 +85,15 @@ export class TechnicalStageComponent implements OnInit {
 
   getFilteredUsersForTech() {
     this.facade.userService.getFilteredForTech()
-    .subscribe(res => {
-      this.usersFiltered = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
-    }, err => {
-      console.log(err);
-    });
+      .subscribe(res => {
+        this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
+      }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
   updateSeniority(seniorityId) {
+    this.chosenSeniority = seniorityId;
     this.selectedSeniority.emit(seniorityId);
     this.selectedSeniorities = [];
     if (seniorityId !== this.seniorityList.find(
@@ -239,7 +241,6 @@ export class TechnicalStageComponent implements OnInit {
         this.seniorityList.find(s => s.id === technicalStage.seniority)];
     }
 
-
     this.processService.changeSeniority(this.selectedSeniorities);
 
     if (candidate.candidateSkills.length > 0) {
@@ -317,9 +318,9 @@ export class TechnicalStageComponent implements OnInit {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.skills = res.sort((a,b) => (a.name.localeCompare(b.name)));
+        this.skills = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }, err => {
-        console.log(err);
+          this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
