@@ -163,8 +163,6 @@
                         <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('profile').dirty && candidateForm.get('profile').errors">
-                        Please input the profile</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>

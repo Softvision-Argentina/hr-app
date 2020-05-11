@@ -97,7 +97,7 @@ export class CandidateAddComponent implements OnInit {
     englishLevel: 'none',
     status: CandidateStatusEnum.New,
     contacDay : [null],
-    profile: [null, [Validators.required]],
+    profile: [4],
     community: [null, [Validators.required]],
     isReferred: [null],
     cv: [null],

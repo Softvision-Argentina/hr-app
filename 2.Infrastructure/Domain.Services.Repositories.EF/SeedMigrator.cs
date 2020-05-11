@@ -25,9 +25,11 @@ namespace Domain.Services.Repositories.EF
             var Profile1 = new CandidateProfile { Name = "Devs", Description = "Developers" };
             var Profile2 = new CandidateProfile { Name = "RRHH", Description = "Recursos Humanos" };
             var Profile3 = new CandidateProfile { Name = "MKT", Description = "Marketing" };
+            var Profile4 = new CandidateProfile { Name = "N/A", Description = "Not Applicable" };
             context.Profiles.Add(Profile1);
             context.Profiles.Add(Profile2);
             context.Profiles.Add(Profile3);
+            context.Profiles.Add(Profile4);
             context.SaveChanges();
             #endregion
 
