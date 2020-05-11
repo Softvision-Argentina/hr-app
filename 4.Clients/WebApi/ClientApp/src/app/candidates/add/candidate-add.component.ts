@@ -17,7 +17,8 @@ import { dniValidator } from 'src/app/directives/dni.validator';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
-  if(c.get('email').value === null && c.get('phoneNumber').value === null) {
+  if((c.get('email').value === null || c.get('email').value.length === 0) 
+      && (c.get('phoneNumber').value === null || c.get('phoneNumber').value.length === 0)){
       return {
           'emailAndPhoneValidator': true
       };
@@ -87,7 +88,7 @@ export class CandidateAddComponent implements OnInit {
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
     dni: [0, [dniValidator]],
-    email: [null, [Validators.email]],
+    email: [null, [Validators.email, trimValidator]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
     linkedin: [null, [trimValidator]],
