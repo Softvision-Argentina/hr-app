@@ -34,7 +34,7 @@ export class HrStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     actualSalary: [null],
     wantedSalary: [null],
-    userOwnerId: [null, [Validators.required]],
+    userOwnerId: [],
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
     additionalInformation: [null, [trimValidator]],

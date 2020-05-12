@@ -54,21 +54,27 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
+    <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
-                    Interviewer
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary" [ngClass]="{'requiredFieldLabel': isRequiredField('actualSalary')}">
+                    Actual Salary
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">Please input the user</nz-form-explain>
+                    <input type="number" nz-input formControlName="actualSalary" id="actualSalary" placeholder="Please input the actual salary" pattern="[0-9]+([\.,][0-9]+)?">
                 </nz-form-control>
             </nz-form-item>
         </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary" [ngClass]="{'requiredFieldLabel': isRequiredField('wantedSalary')}">Expected Salary</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="number" nz-input formControlName="wantedSalary" id="wantedSalary" placeholder="Please input the expected salary" pattern="[0-9]+([\.,][0-9]+)?">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
@@ -83,26 +89,20 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-    </div>
-    <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">
-                    Actual Salary
+            <nz-form-item hidden>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
+                    Interviewer
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="number" nz-input formControlName="actualSalary" id="actualSalary" placeholder="Please input the actual salary" pattern="[0-9]+([\.,][0-9]+)?">
+                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+                    <nz-form-explain *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">Please input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Expected Salary</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="number" nz-input formControlName="wantedSalary" id="wantedSalary" placeholder="Please input the expected salary" pattern="[0-9]+([\.,][0-9]+)?">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+        </div>   
     </div>
     <div nz-row>       
         <div nz-col nzSpan="12">
@@ -120,7 +120,7 @@
                     </ng-container>
                 </nz-form-explain>
             </nz-form-item>
-        </div>    
+        </div>
     </div>
     <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">

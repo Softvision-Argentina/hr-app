@@ -5,7 +5,9 @@ using Domain.Model.Enum;
 using Domain.Services.Contracts.Process;
 using Domain.Services.Interfaces.Repositories;
 using Domain.Services.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -31,6 +33,7 @@ namespace Domain.Services.Impl.Services
         private readonly INotificationRepository _notificationRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContext;
 
         public ProcessService(
             IMapper mapper,
@@ -48,7 +51,9 @@ namespace Domain.Services.Impl.Services
             IOfferStageRepository offerStageRepository,
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
-            IConfiguration config)
+            IConfiguration config,
+            IHttpContextAccessor httpContext)
+            
         {            
             _candidateRepository = candidateRepository;
             _candidateProfileRepository = candidateProfileRepository;
@@ -66,6 +71,7 @@ namespace Domain.Services.Impl.Services
             _notificationRepository = notificationRepository;
             _userRepository = userRepository;
             _config = config;
+            _httpContext = httpContext;
         }
 
         public ReadedProcessContract Read(int id)
@@ -126,6 +132,10 @@ namespace Domain.Services.Impl.Services
 
             process.CurrentStage = SetProcessCurrentStage(process);
 
+            var userId = GetUser();
+
+            process.UserOwnerId = userId;
+
             var createdProcess = _processRepository.Create(process);
 
             _unitOfWork.Complete();
@@ -147,6 +157,13 @@ namespace Domain.Services.Impl.Services
             }
 
             return createdProcessContract;
+        }
+
+        private int GetUser()
+        {
+            var getUser = _httpContext.HttpContext.User.Identity.Name;
+            var userId = int.Parse(getUser);
+            return userId;
         }
 
         private void SendEmailNotification(Process process, ProcessStatus status)
