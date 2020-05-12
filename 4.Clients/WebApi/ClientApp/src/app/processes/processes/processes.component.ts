@@ -847,6 +847,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               });
           }, err => {
             this.isLoading = false;
+            this.facade.appService.stopLoading();
             this.facade.errorHandlerService.showErrorMessage(err);
           });
         } else {
@@ -860,7 +861,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.closeModal();
             }, err => {
               this.isLoading = false;
-              this.app.hideLoading();
+              this.facade.appService.stopLoading();
               this.facade.toastrService.error(err);
             });
         }
@@ -870,6 +871,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.isLoading = false;
         }, err => {
           this.isLoading = false;
+          this.facade.appService.stopLoading();
           this.facade.errorHandlerService.showErrorMessage(err);
         });
         this.facade.processService.getByID(newProcess.id)

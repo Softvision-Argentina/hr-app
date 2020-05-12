@@ -108,7 +108,31 @@ export class BaseService<T> {
     return errorMessage;
   }
 
- public handleErrors = (err) => {
-    return throwError(err);
+ public handleErrors = (error) => {
+
+    // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
+    if (error.error && error.status !== 400) {
+      return throwError(error.error as ErrorResponse);
+    }
+
+    else if (error.status === 400) {
+      const errMessage = this.getErrorMessage(error);
+
+      const err: ErrorResponse = {
+        additionalData: {},
+        errorCode: error.status,
+        message: errMessage
+      }
+      return throwError(err);
+    }
+
+    else {
+      const err: ErrorResponse = {
+        additionalData: {},
+        errorCode: error.status,
+        message: error.message
+      }
+      return throwError(err);
+    }
   };
 }

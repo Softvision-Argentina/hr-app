@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorResponse } from 'src/entities/ErrorResponse';
 @Injectable({
     providedIn: 'root'
 })
 export class ErrorHandlerService {
 
     constructor(private toastrService: ToastrService) {}
+
     showErrorMessage(err, defaultMessage?: string) {
         if (Boolean(err.message)) {
             this.toastrService.error(err.message);
