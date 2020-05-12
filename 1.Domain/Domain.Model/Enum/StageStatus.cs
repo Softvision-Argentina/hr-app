@@ -7,6 +7,7 @@
         Accepted,
         Declined,
         Rejected,
-        Hired
+        Hired,
+        Pipeline
     }
 }
