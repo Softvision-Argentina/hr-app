@@ -57,6 +57,7 @@ export class TechnicalStageComponent implements OnInit {
 
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
+  usedSkills: Skill[] = [];
   private completeSkillList: Skill[] = [];
 
   statusList: any[];
@@ -284,12 +285,37 @@ export class TechnicalStageComponent implements OnInit {
       this.skills = this.skills.filter(
         s => !this.controlArray.some(
           cai => s.id === this.technicalForm.controls[cai.controlInstance[0]].value));
+
+      for (let i = 0; i < this.controlArray.length; i++) {
+        this.skills.forEach(skill => {
+          const skillInForm: Number = +this.technicalForm.controls[this.controlArray[i].controlInstance[0]].value;
+          if (skill.id === skillInForm) {
+            this.usedSkills.push(skill);
+          }
+        });
+      }
     }
 
-    const index = this.controlArray.push(control);
+    const index = this.controlArray.push(control); 
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, Validators.required));
+  }
+
+  updateSkills(skillControl){
+    const skillForm = this.technicalForm.controls[skillControl.controlInstance[0]];
+
+    skillForm.valueChanges
+    .subscribe(selectedValue => {
+      // Remove previous skill selected from usedSkills
+      this.usedSkills = this.usedSkills.filter(skill => skill.id !== +selectedValue);
+      // Add skill selected to usedSkills
+      this.usedSkills.push(this.skills.filter(skill => skill.id === +selectedValue)[0]);
+    });
+  }
+
+  isAvailable(selectedSkill: Skill){
+    return !this.usedSkills.some(usedSkill => usedSkill.id === selectedSkill.id);
   }
 
   removeField(i: { id: number, controlInstance: string[] }, e: MouseEvent): void {
@@ -307,6 +333,7 @@ export class TechnicalStageComponent implements OnInit {
           this.skills.push(singleSkill);
           this.skills.sort((a, b) => (a.id > b.id ? 1 : -1));
         }
+        this.usedSkills = this.usedSkills.filter(usedSkill => usedSkill.id !== +this.technicalForm.controls[i.controlInstance[0]].value);
       }
       let j = 0;
       const index = this.controlArray.indexOf(i);
