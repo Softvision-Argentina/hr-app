@@ -8,6 +8,7 @@ using Domain.Services.Contracts.Process;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.UnitTests.Dummy;
 using Domain.Services.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<INotificationRepository> _mockRepoINotification;
         private readonly Mock<IRepository<User>> _mockRepoUser;
         private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Mock<IHttpContextAccessor> _mockhttpContext;
 
         public ProcessServiceTest()
         {
@@ -52,6 +54,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepoINotification = new Mock<INotificationRepository>();
             _mockRepoUser = new Mock<IRepository<User>>();
             _mockConfiguration = new Mock<IConfiguration>();
+            _mockhttpContext = new Mock<IHttpContextAccessor>();
             _service = new ProcessService(
                 _mockMapper.Object,
                 _mockRepoUser.Object,
@@ -68,7 +71,8 @@ namespace Domain.Services.Impl.UnitTests.Services
                 _mockRepoOfferStage.Object,
                 MockUnitOfWork.Object,
                 _mockRepoINotification.Object,                
-                _mockConfiguration.Object
+                _mockConfiguration.Object,
+                _mockhttpContext.Object
             );
         }
 
