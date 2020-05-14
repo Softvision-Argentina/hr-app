@@ -18,6 +18,7 @@ namespace Domain.Services.Repositories.EF
         public DbSet<HrStage> HrStages { get; set; }
         public DbSet<TechnicalStage> TechnicalStages { get; set; }
         public DbSet<ClientStage> ClientStages { get; set; }
+        public DbSet<Interview> Interview { get; set; }
         public DbSet<OfferStage> OfferStages { get; set; }
         public DbSet<StageItem> StageItems { get; set; }
         public DbSet<User> Users { get; set; }
@@ -62,6 +63,11 @@ namespace Domain.Services.Repositories.EF
             modelBuilder.Entity<SkillType>()
                 .HasMany(st => st.Skills)
                 .WithOne(s => s.Type)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClientStage>()
+                .HasMany(cs => cs.Interviews)
+                .WithOne(cs => cs.ClientStage)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Task>()

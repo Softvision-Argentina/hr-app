@@ -1,5 +1,7 @@
-﻿using Domain.Model.Enum;
+﻿using ApiServer.Contracts.Interview;
+using Domain.Model.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace ApiServer.Contracts.Stage
 {
@@ -15,5 +17,6 @@ namespace ApiServer.Contracts.Stage
         public string RejectionReason { get; set; }
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
+        public IList<CreateInterviewViewModel> Interviews { get; set; }
     }
 }

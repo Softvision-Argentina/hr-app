@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
-import { Process } from 'src/entities/process';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { Interview } from 'src/entities/interview';
 
 @Component({
   selector: 'client-stage',
@@ -33,13 +33,22 @@ export class ClientStageComponent implements OnInit {
     userDelegateId:  [null],
     feedback: [null],
     delegateName: [null],
-    rejectionReason: [null, [Validators.required]]
+    rejectionReason: [null, [Validators.required]],
+    interviews: [null]
   });
 
-  statusList: any[];
+  interviewForm: FormGroup = this.fb.group({
+    interviewDate: [new Date(), [Validators.required]],
+    interviewClient: [null, [Validators.required]],
+    clientInterviewer: [null],
+    project: [null],
+    interviewFeedback: [null, [Validators.required]]
+  });
+
+  statusList : any[];
+  interviews : Interview[] = []
 
   @Input() clientStage: ClientStage;
-
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
    }
@@ -88,6 +97,7 @@ export class ClientStageComponent implements OnInit {
     stage.delegateName = this.getControlValue(form.controls.delegateName);
     stage.processId = processId;
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
+    stage.interviews = this.interviews;
     return stage;
   }
 
@@ -101,7 +111,7 @@ export class ClientStageComponent implements OnInit {
       this.changeFormStatus(true);
     }
     this.clientForm.controls['status'].setValue(status);
-
+    
     if (clientStage.id) {
       this.clientForm.controls['id'].setValue(clientStage.id);
     }
@@ -132,6 +142,9 @@ export class ClientStageComponent implements OnInit {
     if (clientStage.rejectionReason) {
       this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);
     }
+    if (clientStage.interviews) {
+      this.interviews = clientStage.interviews;
+    }
   }
 
   showRejectionReason() {
@@ -145,5 +158,32 @@ export class ClientStageComponent implements OnInit {
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.clientForm)
+  }
+  addInterview() {
+    if (this.validateInterviewForm()) {
+      let interview : Interview = {
+        id: 0,
+        client: this.getControlValue(this.interviewForm.controls.interviewClient),
+        clientInterviewer: this.getControlValue(this.interviewForm.controls.clientInterviewer),
+        interviewDate: this.getControlValue(this.interviewForm.controls.interviewDate),
+        feedback: this.getControlValue(this.interviewForm.controls.interviewFeedback),
+        project: this.getControlValue(this.interviewForm.controls.project),
+      };
+      
+      this.interviews.push(interview); 
+      this.interviews = [...this.interviews];
+      
+    }
+  }
+
+  private validateInterviewForm() {
+    for (const i in this.interviewForm.controls) {
+      this.interviewForm.controls[i].markAsDirty();
+      this.interviewForm.controls[i].updateValueAndValidity();
+    }
+    if (this.interviewForm.invalid) {
+      return false
+    }
+    return true
   }
 }

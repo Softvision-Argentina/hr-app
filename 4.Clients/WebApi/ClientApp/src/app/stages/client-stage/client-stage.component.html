@@ -93,3 +93,93 @@
         </div>
     </div>
 </form>
+<form nz-form [formGroup]="interviewForm" [nzLayout]="'horizontal'">
+    <div nz-row>
+        <nz-divider nzText="INTERVIEWS"></nz-divider>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-date-picker style="width: 100%;" formControlName="interviewDate"></nz-date-picker>
+                    <nz-form-explain *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
+                        Field required
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="text" nz-input formControlName="interviewClient" id="interviewClient" placeholder="Enter the client's name">
+                    <nz-form-explain *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
+                        Field required
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="text" nz-input formControlName="clientInterviewer" id="clientInterviewer" placeholder="Enter the interviewer's full name">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="text" nz-input formControlName="project" id="project" placeholder="Enter the project's name">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <textarea rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
+                    <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">
+                        Field required
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <button nz-button nzType="primary" (click)="addInterview()">Add Interview<nz-spin *ngIf="isLoading"
+                    nzSimple style="display: inline-block!important;" [nzIndicator]="indicatorTemplate" [nzSize]="'small'"></nz-spin></button>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <nz-table #interviewTable [nzData]="interviews" [nzShowPagination]="false" [nzPageSize]="interviews.length" [nzScroll]="{ y: '200px' }" >
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Client</th>
+              <th>Feedback</th>
+              <th>Interviewer</th>
+              <th>Project</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let interview of interviewTable.data.reverse()">
+              <td>{{interview.interviewDate | date  : 'shortDate' }}</td>
+              <td>{{interview.client}}</td>
+              <td>{{interview.feedback}}</td>
+              <td>{{interview.clientInterviewer}}</td>
+              <td>{{interview.project}}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+    </div>
+</form>

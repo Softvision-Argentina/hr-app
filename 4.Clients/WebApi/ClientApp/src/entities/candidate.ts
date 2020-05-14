@@ -1,4 +1,4 @@
-  import { CandidateSkill } from './candidateSkill';
+import { CandidateSkill } from './candidateSkill';
 import { CandidateStatusEnum } from './enums/candidate-status.enum';
 import { EnglishLevelEnum } from './enums/english-level.enum';
 import { User } from './user';

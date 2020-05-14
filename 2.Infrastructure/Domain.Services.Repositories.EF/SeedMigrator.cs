@@ -3,6 +3,7 @@ using Domain.Model.Enum;
 using Domain.Model.Seed;
 using Persistance.EF;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Services.Repositories.EF
@@ -480,7 +481,20 @@ namespace Domain.Services.Repositories.EF
                 CurrentStage = ProcessCurrentStage.ClientStage,
                 HrStage = new HrStage { ProcessId = 1, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14), EnglishLevel = EnglishLevel.HighIntermediate, WantedSalary = 10000, ActualSalary = 5000 },
                 TechnicalStage = new TechnicalStage { ProcessId = 1, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Seniority = Seniority.SemiSenior2, Client = "EY" },
-                ClientStage = new ClientStage { ProcessId = 1, UserDelegateId = 2, Interviewer = "", UserOwnerId = 1, DelegateName = "", Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
+                ClientStage = new ClientStage { 
+                    ProcessId = 1, 
+                    UserDelegateId = 2, 
+                    Interviewer = "", 
+                    UserOwnerId = 1, 
+                    DelegateName = "", 
+                    Status = StageStatus.InProgress, 
+                    Date = DateTime.Today.AddDays(-12),
+                    Interviews = new List<Interview>()
+                    {
+                        new Interview{  Project= "GY", Client = "GY",ClientInterviewer = "Vero" , Feedback = "Grate"}
+                    }
+                   
+                },
                 OfferStage = new OfferStage { ProcessId = 1, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-12), Seniority = Seniority.Senior1 }
             };
 

@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.Interview;
 using Domain.Services.Contracts.Stage.StageItem;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace Domain.Services.Contracts.Stage
         public string RejectionReason { get; set; }
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
+        public IList<UpdateInterviewContract> Interviews { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace ApiServer.Controllers
     /// Controller that manages processes
     /// Contains action method for approve or disapprove
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProcessController : BaseController<ProcessController>

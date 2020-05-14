@@ -18,7 +18,8 @@ namespace Domain.Services.Repositories.EF
         {
             return Query()
                 .Include(x => x.UserDelegate)
-                .Include(x => x.UserOwner);
+                .Include(x => x.UserOwner)
+                .Include(x => x.Interviews);
         }
 
         public void UpdateClientStage(ClientStage newStage, ClientStage existingStage)

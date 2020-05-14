@@ -21,6 +21,7 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.HrStage)
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
+                .ThenInclude(x => x.Interviews)
                 .Include(x => x.OfferStage)
                 .Include(x => x.UserOwner)
                 .Include(x => x.UserDelegate)

@@ -1,6 +1,7 @@
 ﻿using Core;
 using Domain.Model.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Model
 {
@@ -19,5 +20,6 @@ namespace Domain.Model
         public string RejectionReason { get; set; }
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
+        public IList<Interview> Interviews { get; set; }
     }
 }

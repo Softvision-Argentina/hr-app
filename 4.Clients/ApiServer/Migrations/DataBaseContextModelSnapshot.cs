@@ -499,6 +499,41 @@ namespace ApiServer.Migrations
                     b.ToTable("HrStages");
                 });
 
+            modelBuilder.Entity("Domain.Model.Interview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Client");
+
+                    b.Property<string>("ClientInterviewer");
+
+                    b.Property<int>("ClientStageId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Feedback");
+
+                    b.Property<DateTime>("InterviewDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Project");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientStageId");
+
+                    b.ToTable("Interview");
+                });
+
             modelBuilder.Entity("Domain.Model.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -1222,6 +1257,14 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.User", "UserOwner")
                         .WithMany()
                         .HasForeignKey("UserOwnerId");
+                });
+
+            modelBuilder.Entity("Domain.Model.Interview", b =>
+                {
+                    b.HasOne("Domain.Model.ClientStage", "ClientStage")
+                        .WithMany("Interviews")
+                        .HasForeignKey("ClientStageId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.Model.Notification", b =>
