@@ -79,29 +79,33 @@ namespace Domain.Services.Impl.UnitTests.Services
         [Fact(DisplayName = "Verify that create ProcessService when data is valid")]
         public void GivenCreate_WhenDataIsValid_CreateProcessService()
         {
-            var contract = new CreateProcessContract 
-                { Candidate = new UpdateCandidateContract { PreferredOfficeId = 1 } };
+            var contract = new CreateProcessContract
+            { Candidate = new UpdateCandidateContract { PreferredOfficeId = 1 } };
             var expectedProcess = new CreatedProcessContract();
             var officeList = new List<Office> { new Office { Id = 1 } }.AsQueryable();
-            var process = new Process { 
-                Candidate = new Candidate { ReferredBy = "Name LastName" } , 
-                HrStage = new HrStage { Status = StageStatus.NA }                
-            };            
+            var process = new Process
+            {
+                Candidate = new Candidate { ReferredBy = "Name LastName" },
+                HrStage = new HrStage { Status = StageStatus.NA }
+            };
+            var userIdString = "1";
 
             _mockMapper.Setup(mm => mm.Map<Process>(It.IsAny<CreateProcessContract>())).Returns(process);
             _mockRepositoryOffice.Setup(x => x.Query()).Returns(officeList);
             _mockRepositoryProcess.Setup(repoCom => repoCom.Create(It.IsAny<Process>())).Returns(new Process());
             _mockMapper.Setup(mm => mm.Map<CreatedProcessContract>(It.IsAny<Process>())).Returns(expectedProcess);
+            _mockhttpContext.Setup(x => x.HttpContext.User.Identity.Name).Returns(userIdString);
 
             var createdProcess = _service.Create(contract);
 
             Assert.NotNull(createdProcess);
-            Assert.Equal(expectedProcess, createdProcess);            
+            Assert.Equal(expectedProcess, createdProcess);
             _mockMapper.Verify(x => x.Map<Process>(It.IsAny<CreateProcessContract>()), Times.Once);
             _mockMapper.Verify(x => x.Map<CreatedProcessContract>(It.IsAny<Process>()), Times.Once);
             _mockRepositoryProcess.Verify(x => x.Create(It.IsAny<Process>()), Times.Once);
-            MockUnitOfWork.Verify(x => x.Complete(), Times.Once);            
+            MockUnitOfWork.Verify(x => x.Complete(), Times.Once);
             _mockRepositoryOffice.Verify(x => x.Query(), Times.Once);
+            _mockhttpContext.Verify(x => x.HttpContext.User.Identity.Name, Times.Once);
         }
 
         [Fact(DisplayName = "Verify that create throws error when data for creation is invalid")]
