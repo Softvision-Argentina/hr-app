@@ -460,9 +460,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   getDaysLeft(endDate: Date) {
-    const today: Date = new Date;
-    const dueDate: Date = new Date(endDate);
-    const dateDiff = (dueDate.getDate() - today.getDate());
+    const today= Date.UTC(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())
+    const dueDate = Date.UTC(new Date(endDate).getFullYear(),new Date(endDate).getMonth(), new Date(endDate).getDate())    
+    var dateDiff = Math.floor((dueDate-today) / (1000 * 3600 * 24));
     return dateDiff;
   }
 
