@@ -86,11 +86,15 @@
                             <span class="span-decoration">{{item.text}}</span>
                         </label>
                     </div>
-                    <nz-divider nzDashed [nzText]="text">
-                        <ng-template #text><i class="add-item plus" nz-icon type="plus"></i><span class="add-item">Add
-                                Item</span> </ng-template>
-                    </nz-divider>
-                    <div>
+                    <div *ngIf="!toDo.isApprove">
+                        <nz-divider nzDashed [nzText]="text">
+                            <ng-template #text><i class="add-item plus" nz-icon type="plus">                            
+                                </i>
+                                    <span class="add-item">
+                                        Add Item
+                                    </span> 
+                            </ng-template>
+                        </nz-divider>                    
                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
                             <input class="input" id="newItem_{{toDo.id}}" type="text" nz-input
                                 placeholder="Input a new item" />

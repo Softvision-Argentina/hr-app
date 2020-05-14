@@ -49,35 +49,8 @@
     <br>
     <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm"
       (click)="addNewItem()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item</button>
-    <div formArrayName="stageItems">
-      <!-- TODO: controls does not exist in stageItems it should be deleted or should be add controls as a property? -->
-      <!-- <div style="margin-top:5px; margin-bottom:5px;"
-        *ngFor="let stageRow of stageForm.get('stageItems').controls; let i=index">
-        <fieldset>
-          <div [formGroupName]="i">
-            <div class="form-inline">
-              <div class="form-group">
-
-                <input type="number" class="form-control" id="itemId" name="type"
-                formControlName="itemId" style="margin-right:5px;" required>
-
-
-                <input type="text" class="form-control" id="itemDescription" placeholder="Description" name="type"
-                formControlName="itemDescription" style="margin-right:5px;" required>
-
-                <input type="text" class="form-control" id="associatedContent" placeholder="Content"
-                name="type" formControlName="associatedContent" style="margin-right:5px;" required>
-
-                <button style="margin-left:35px;" type="button" class="btn btn-danger" (click)="deleteItem(i)">Remove
-                 Item</button>
-
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </div> -->
+    <div formArrayName="stageItems">      
     </div>
-
     <hr>
     <button type="submit" [disabled]="!stageForm.valid" class="btn btn-primary">Cargar</button>
   </form>
