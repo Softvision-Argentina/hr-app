@@ -27,6 +27,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
+  @ViewChild('focusInput') inputFocus;
   filteredCandidates: Candidate[] = [];
   isLoadingResults = false;
   searchValue = '';
@@ -62,9 +63,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   englishLevelList: any[];
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals) {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      this.statusList = globals.candidateStatusList;
-      this.englishLevelList = globals.englishLevelList;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.statusList = globals.candidateStatusList;
+    this.englishLevelList = globals.englishLevelList;
   }
 
   ngOnInit() {
@@ -81,6 +82,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.facade.appService.stopLoading();
   }
 
+  setFocusTrue() {
+    setTimeout(() => {
+      this.inputFocus.nativeElement.focus();
+    }, 100);
+  }
+
   getCandidates() {
     this.facade.candidateService.get()
       .subscribe(res => {
@@ -95,7 +102,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
+        this.users = res.sort((a, b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -103,7 +110,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getProfiles() {
     const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
-      this.profiles = res.sort((a,b) => (a.name).localeCompare(b.name));
+      this.profiles = res.sort((a, b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -112,7 +119,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
-      this.communities = res.sort((a,b) => (a.name).localeCompare(b.name));
+      this.communities = res.sort((a, b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -122,7 +129,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getSkills() {
     this.facade.skillService.get()
       .subscribe(res => {
-        this.skills = res.sort((a,b) => (a.name).localeCompare(b.name));
+        this.skills = res.sort((a, b) => (a.name).localeCompare(b.name));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -130,7 +137,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getOffices() {
     const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
-      this._offices = res.sort((a,b) => (a.name).localeCompare(b.name));
+      this._offices = res.sort((a, b) => (a.name).localeCompare(b.name));
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -160,7 +167,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     if (res) {
       this.filteredCandidates = res;
       this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
-      : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+        : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     }
   }
 

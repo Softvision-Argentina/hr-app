@@ -5,9 +5,11 @@
                 <tr>
                     <th nzCustomFilter>Name
                         <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
-                            <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                            <i nz-icon nzType="search" class="ant-table-filter-icon"
+                                [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown (click)="setFocusTrue()">
+                            </i>
                             <div class="search-box">
-                                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                <input #focusInput type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
                                 <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
                                 <button nz-button nzSize="small" (click)="reset()">Reset</button>
                             </div>
