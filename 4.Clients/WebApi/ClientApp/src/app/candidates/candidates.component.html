@@ -63,9 +63,9 @@
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
         <div nz-row>
             <div nz-col nzSpan="24">
-                <nz-form-item *ngIf="isEdit" style="margin-left: 10%;">
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" style="padding-left: 5%;">
+                <nz-form-item *ngIf="isEdit">
+                    <nz-form-control>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="status">Status</nz-form-label>
                         <nz-radio-group formControlName="status">
                             <label *ngFor="let status of statusList" nz-radio-button [nzValue]="status.id"><span>{{ status.name }}</span></label>
                         </nz-radio-group>
@@ -76,7 +76,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">DNI</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email">DNI</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input formControlName="dni" id="'dni'" (change)="dniChanged()" type="number" nz-input placeholder="Please input a DNI">
                         <nz-form-explain *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">The input is not valid DNI!</nz-form-explain>
@@ -87,7 +87,7 @@
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">First Name</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="name">First Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
                         <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
@@ -108,7 +108,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input type="text" nz-input formControlName="lastName" id="lastName" placeholder="Please input the last name">
                         <nz-form-explain *ngIf="validateForm.get('lastName').dirty && validateForm.get('lastName').errors">
@@ -127,7 +127,7 @@
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                         <nz-form-explain *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
@@ -138,7 +138,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input nz-input formControlName="linkedin" id="linkedin" placeholder="Please input the LinkedIn URL">
                         <nz-form-explain *ngIf="validateForm.get('linkedin').dirty && validateForm.get('linkedin').errors">
@@ -154,7 +154,7 @@
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber']">
                         <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                             <ng-template #addOnBeforeTemplate>
@@ -174,7 +174,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">Recruiter</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="user">Recruiter</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="user">
                             <nz-option *ngFor="let user of users" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
@@ -186,7 +186,7 @@
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="preferredOffice">
                             <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
@@ -200,7 +200,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="profile">Profile</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="profile">Profile</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="profile">
                             <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
@@ -213,7 +213,7 @@
             </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="community">Community</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community">Community</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="community">
                             <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" [nzValue]="c.id">
@@ -227,7 +227,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReferred">Is Referred</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="isReferred">Is Referred</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <label nz-checkbox  formControlName="isReferred"></label>
                     </nz-form-control>
