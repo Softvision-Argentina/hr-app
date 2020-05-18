@@ -39,62 +39,89 @@
         </div>
     </div>
     <div *ngFor="let toDo of toDoListDisplay | filter:searchTitle:'title'">
-        <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1" [nzNotFoundImage]="'../../assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
+        <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1"
+            [nzNotFoundImage]="'../../assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
     </div>
     <div *ngIf="toDoListDisplay && toDoListDisplay.length != 0" nz-row nzType="flex" nzAlign="top" [nzGutter]="16">
         <div class="task-boxes" *ngFor="let toDo of toDoListDisplay | filter : searchTitle:'title' | sort">
-            <nz-card class="card-style" [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate" [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
+            <nz-card class="card-style" [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate"
+                [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
 
                 <ng-template #titleTemplate>
-                    <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span> <br />
-                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner: {{toDo.user.firstName}} {{toDo.user.lastName}}</span>
+                    <span class="card-title" nz-popover [nzContent]="toDo.title" nzPlacement="top">{{toDo.title}}</span>
+                    <br />
+                    <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner:
+                        {{toDo.user.firstName}} {{toDo.user.lastName}}</span>
                     <span style="font-size: small;" *ngIf="canAssign() && isCurrentUser(toDo)">Owner: You</span>
                 </ng-template>
 
                 <ng-template #extraTemplate>
-                    <i *ngIf="shouldShowDeadlineIcon(toDo) && !toDo.isApprove" nz-icon [nzType]="'fire'"  class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'" [nzTwotoneColor]="'red'" nz-popover [nzContent]="datesTemplate" nzPlacement="topLeft"></i>
-                    <i *ngIf="!shouldShowDeadlineIcon(toDo) && shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon [nzType]="'alert'"  class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'" [nzTwotoneColor]="'green'" nz-popover [nzContent]="datesTemplate"
+                    <i *ngIf="shouldShowDeadlineIcon(toDo) && !toDo.isApprove" nz-icon [nzType]="'fire'"
+                        class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'"
+                        [nzTwotoneColor]="'red'" nz-popover [nzContent]="datesTemplate" nzPlacement="topLeft"></i>
+                    <i *ngIf="!shouldShowDeadlineIcon(toDo) && shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon
+                        [nzType]="'alert'" class="ant-scroll-number-custom-component font-size-large"
+                        [nzTheme]="'twotone'" [nzTwotoneColor]="'green'" nz-popover [nzContent]="datesTemplate"
                         nzPlacement="topLeft"></i>
-                    <i *ngIf="!shouldShowDeadlineIcon(toDo) && !shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon [nzType]="'info-circle'"  class="ant-scroll-number-custom-component font-size-large primary" [nzTheme]="'outline'" nz-popover [nzContent]="datesTemplate"
-                        nzPlacement="topLeft"></i>
-                    <i *ngIf="toDo.isApprove" nz-icon [nzType]="'check'" class="ant-scroll-number-custom-component font-size-large success" [nzTheme]="'outline'"  nz-popover [nzContent]="datesTemplate" nzPlacement="topLeft"></i>
+                    <i *ngIf="!shouldShowDeadlineIcon(toDo) && !shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon
+                        [nzType]="'info-circle'" class="ant-scroll-number-custom-component font-size-large primary"
+                        [nzTheme]="'outline'" nz-popover [nzContent]="datesTemplate" nzPlacement="topLeft"></i>
+                    <i *ngIf="toDo.isApprove" nz-icon [nzType]="'check'"
+                        class="ant-scroll-number-custom-component font-size-large success" [nzTheme]="'outline'"
+                        nz-popover [nzContent]="datesTemplate" nzPlacement="topLeft"></i>
                 </ng-template>
 
                 <ng-template #datesTemplate>
                     <div>
                         <p><strong>Creation Date: </strong>{{toDo.creationDate | date: 'MMM d, y'}}</p>
                         <p><strong>Due Date: </strong>{{toDo.endDate | date: 'MMM d, y'}}</p>
-                        <p *ngIf="getDaysLeft(toDo.endDate) == 1 && !toDo.isApprove"><strong class="dates-template success">( {{getDaysLeft(toDo.endDate)}} day left)</strong></p>
-                        <p *ngIf="getDaysLeft(toDo.endDate) > 1 && !toDo.isApprove"><strong class="dates-template success">( {{getDaysLeft(toDo.endDate)}} days left)</strong></p>
-                        <p *ngIf="getDaysLeft(toDo.endDate) == 0 && !toDo.isApprove"><strong class="dates-template danger">( For today )</strong></p>
-                        <p *ngIf="getDaysLeft(toDo.endDate) == -1 && !toDo.isApprove"><strong class="dates-template danger">( {{getDaysLeft(toDo.endDate).toString().substring(1)}} day overdue)</strong></p>
-                        <p *ngIf="getDaysLeft(toDo.endDate) < -1 && !toDo.isApprove"><strong class="dates-template danger">( {{getDaysLeft(toDo.endDate).toString().substring(1)}} days overdue)</strong></p>
-                        <p *ngIf="toDo.isApprove"><strong class="dates-template primary" >Task completed!</strong></p>
+                        <p *ngIf="getDaysLeft(toDo.endDate) == 1 && !toDo.isApprove"><strong
+                                class="dates-template success">( {{getDaysLeft(toDo.endDate)}} day left)</strong></p>
+                        <p *ngIf="getDaysLeft(toDo.endDate) > 1 && !toDo.isApprove"><strong
+                                class="dates-template success">( {{getDaysLeft(toDo.endDate)}} days left)</strong></p>
+                        <p *ngIf="getDaysLeft(toDo.endDate) == 0 && !toDo.isApprove"><strong
+                                class="dates-template danger">( For today )</strong></p>
+                        <p *ngIf="getDaysLeft(toDo.endDate) == -1 && !toDo.isApprove"><strong
+                                class="dates-template danger">( {{getDaysLeft(toDo.endDate).toString().substring(1)}}
+                                day overdue)</strong></p>
+                        <p *ngIf="getDaysLeft(toDo.endDate) < -1 && !toDo.isApprove"><strong
+                                class="dates-template danger">( {{getDaysLeft(toDo.endDate).toString().substring(1)}}
+                                days overdue)</strong></p>
+                        <p *ngIf="toDo.isApprove"><strong class="dates-template primary">Task completed!</strong></p>
                     </div>
                 </ng-template>
 
                 <nz-skeleton [nzActive]="true" [nzLoading]="loading">
                     <div *ngFor="let item of toDo.taskItems">
-                        <label id="{{item.id}}" (mouseenter)="mouseHovering($event)" (mouseleave)="mouseLeft($event)" nz-checkbox *ngIf="!item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked" ngDefaultControl>
-                            <span class="card-item" id="span_{{item.id}}">{{item.text}}<i id="icon_{{item.id}}" class="icon-right"
-                                    nz-icon nzType="close" nzTheme="outline" (click)="removeItem(toDo.id, item)"></i></span>
-                            </label>
+                        <nz-checkbox-wrapper>
+                                <label id="{{item.id}}"
+                                    (mouseenter)="mouseHovering($event)" (mouseleave)="mouseLeft($event)" nz-checkbox
+                                    *ngIf="!item.checked" (ngModelChange)="changeStatus(toDo.id, item)"
+                                    [ngModel]="item.checked" ngDefaultControl>
+                                    <span class="card-item"
+                                        id="span_{{item.id}}">{{item.text}}<i id="icon_{{item.id}}" class="icon-right"
+                                            nz-icon nzType="close" nzTheme="outline"
+                                            (click)="removeItem(toDo.id, item)"></i></span>
+                                </label>
+                     
+                        </nz-checkbox-wrapper>
                     </div>
                     <nz-divider nzText="Done"></nz-divider>
                     <div *ngFor="let item of toDo.taskItems">
-                        <label nz-checkbox *ngIf="item.checked" (ngModelChange)="changeStatus(toDo.id, item)" [ngModel]="item.checked" ngDefaultControl> 
+                        <label nz-checkbox *ngIf="item.checked" (ngModelChange)="changeStatus(toDo.id, item)"
+                            [ngModel]="item.checked" ngDefaultControl>
                             <span class="span-decoration">{{item.text}}</span>
                         </label>
                     </div>
                     <div *ngIf="!toDo.isApprove">
                         <nz-divider nzDashed [nzText]="text">
-                            <ng-template #text><i class="add-item plus" nz-icon type="plus">                            
+                            <ng-template #text><i class="add-item plus" nz-icon type="plus">
                                 </i>
-                                    <span class="add-item">
-                                        Add Item
-                                    </span> 
+                                <span class="add-item">
+                                    Add Item
+                                </span>
                             </ng-template>
-                        </nz-divider>                    
+                        </nz-divider>
                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
                             <input class="input" id="newItem_{{toDo.id}}" type="text" nz-input
                                 placeholder="Input a new item" />
@@ -153,15 +180,18 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">User</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <div class="display-flex">
-                            <nz-select  formControlName="user" [attr.id]="user" id="user" nzShowSearch nzAllowClear nzPlaceHolder="Select a user">
-                                <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}" nzValue="{{user.id}}">
+                            <nz-select formControlName="user" [attr.id]="user" id="user" nzShowSearch nzAllowClear
+                                nzPlaceHolder="Select a user">
+                                <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}"
+                                    nzValue="{{user.id}}">
                                 </nz-option>
                             </nz-select>
                             <button nz-button nzType="primary" nz-tooltip nzTitle="Assign to me" (click)="assignToMe()">
                                 <i nz-iconnzType="user" nzTheme="outline"></i>
                             </button>
                         </div>
-                        <nz-form-explain *ngIf="validateForm.get('user')?.dirty && validateForm.get('user')?.hasError('required')">
+                        <nz-form-explain
+                            *ngIf="validateForm.get('user')?.dirty && validateForm.get('user')?.hasError('required')">
                             Please select a user
                         </nz-form-explain>
                     </nz-form-control>
@@ -196,9 +226,12 @@
                         Items
                     </nz-form-label>
                     <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i == 0 ? 0 : 4">
-                        <input nz-input style="width: 85%; margin-right:8px;" placeholder="Input your task items here" [attr.id]="control.id" [formControlName]="control.controlInstance" />
-                        <i nz-icon type="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
-                        <nz-form-explain *ngIf="getFormControl(control.controlInstance)?.dirty && getFormControl(control.controlInstance)?.hasError('required')">
+                        <input nz-input style="width: 85%; margin-right:8px;" placeholder="Input your task items here"
+                            [attr.id]="control.id" [formControlName]="control.controlInstance" />
+                        <i nz-icon type="minus-circle-o" class="dynamic-delete-button"
+                            (click)="removeField(control, $event)"></i>
+                        <nz-form-explain
+                            *ngIf="getFormControl(control.controlInstance)?.dirty && getFormControl(control.controlInstance)?.hasError('required')">
                             Please input any text or delete this field.
                         </nz-form-explain>
                     </nz-form-control>
@@ -218,14 +251,15 @@
 </ng-template>
 
 <ng-template #deadlineIconTemplate>
-    <i nz-icon [nzType]="'fire'"  class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'" [nzTwotoneColor]="'red'"></i>
+    <i nz-icon [nzType]="'fire'" class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'"
+        [nzTwotoneColor]="'red'"></i>
 </ng-template>
 
 <ng-template #newIconTemplate>
-    <i nz-icon [nzType]="'alert'"  class="ant-scroll-number-custom-component" [nzTheme]="'twotone'" [nzTwotoneColor]="'green'"></i>
+    <i nz-icon [nzType]="'alert'" class="ant-scroll-number-custom-component" [nzTheme]="'twotone'"
+        [nzTwotoneColor]="'green'"></i>
 </ng-template>
 
 <ng-template #noContent>
-    <span class="primary" > There is no data to show. </span>
+    <span class="primary"> There is no data to show. </span>
 </ng-template>
-

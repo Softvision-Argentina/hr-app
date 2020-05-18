@@ -18,7 +18,8 @@ import {
   NzInputModule,
   NzFormModule,
   NzSelectModule,
-  NzDatePickerModule
+  NzDatePickerModule,
+  NzCheckboxModule
 } from 'ng-zorro-antd';
 import { PipesModule } from '../pipes/pipes.module';
 
@@ -43,7 +44,8 @@ import { PipesModule } from '../pipes/pipes.module';
     NzInputModule,
     NzFormModule,
     NzSelectModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzCheckboxModule
   ],
   exports: [TasksComponent]
 })

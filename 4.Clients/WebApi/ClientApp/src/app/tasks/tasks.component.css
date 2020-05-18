@@ -54,6 +54,10 @@ nz-button-group {
   letter-spacing: normal;
 }
 
+label {
+  display: flex;
+}
+
 .card-item {
   display: inline-flex;
   font-size: 14px;
