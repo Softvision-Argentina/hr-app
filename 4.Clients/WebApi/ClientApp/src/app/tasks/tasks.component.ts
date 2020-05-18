@@ -59,7 +59,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   getUsers() {
     this.facade.userService.get()
       .subscribe(res => {
-        this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
+        this.users = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
         this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.username, this.user.username))[0];
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
@@ -314,7 +314,7 @@ export class TasksComponent implements OnInit, OnDestroy {
             if (isCompleted) {
               const newId: number = this.toDoList.length > 0 ? this.toDoList[this.toDoList.length - 1].id + 1 : 0;
               const taskItems: TaskItem[] = [];
-              const userID: number = this.validateForm.controls['user'].value;
+              const userID = this.validateForm.controls['user'].value;
               const newTask: Task = {
                 id: newId,
                 title: this.validateForm.controls['title'].value,
@@ -322,7 +322,7 @@ export class TasksComponent implements OnInit, OnDestroy {
                 creationDate: new Date(),
                 endDate: this.validateForm.controls['endDate'].value.toISOString(),
                 userId: userID,
-                user: this.users.filter(user => user.id === userID)[0],
+                user: this.users.filter(user => user.id === parseInt(userID, 10))[0],
                 isNew: true,
                 taskItems: taskItems
               };
@@ -462,9 +462,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   getDaysLeft(endDate: Date) {
-    const today= Date.UTC(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())
-    const dueDate = Date.UTC(new Date(endDate).getFullYear(),new Date(endDate).getMonth(), new Date(endDate).getDate())    
-    var dateDiff = Math.floor((dueDate-today) / (1000 * 3600 * 24));
+    const today = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    const dueDate = Date.UTC(new Date(endDate).getFullYear(), new Date(endDate).getMonth(), new Date(endDate).getDate());
+    var dateDiff = Math.floor((dueDate - today) / (1000 * 3600 * 24));
     return dateDiff;
   }
 
