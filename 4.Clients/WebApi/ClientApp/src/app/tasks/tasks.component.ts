@@ -346,12 +346,14 @@ export class TasksComponent implements OnInit, OnDestroy {
                 .subscribe(res => {
                   newTask.id = res.id;
                   this.toDoList.push(newTask);
-                  this.facade.toastrService.success('Task was successfully created !');
+                  this.facade.toastrService.success('Task was successfully created !');                  
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                });
+                });                
+            }else{
+              modal.nzFooter[1].loading = false;
             }
           }
         }]
