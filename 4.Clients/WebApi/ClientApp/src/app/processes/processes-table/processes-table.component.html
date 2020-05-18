@@ -70,7 +70,7 @@
         </thead>
         
         <tbody>
-          <tr *ngFor="let process of listOfDisplayData">
+          <tr *ngFor="let process of processTable.data">
             <td scope="row">
               <a *ngIf="process.candidate" class="nameStyle" (click)="emitCandidateId(process.candidate.id)">
                 {{ process.candidate.name }} {{ process.candidate.lastName }}
