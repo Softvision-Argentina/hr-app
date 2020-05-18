@@ -55,3 +55,8 @@
     padding-left: 16px;
   }
  }
+
+.filterList {
+  max-height: 400px; 
+  overflow: auto;
+}
