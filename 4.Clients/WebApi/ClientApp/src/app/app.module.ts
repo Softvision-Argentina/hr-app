@@ -74,6 +74,7 @@ import { OfferService } from './services/offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReferralsService } from './services/referrals.service';
+import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 
 registerLocaleData(en);
 
@@ -165,6 +166,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     OfferService,
     InterviewService,
     { provide: NZ_I18N, useValue: en_US },
+    {provide : LocationStrategy , useClass: HashLocationStrategy},
   ],
   bootstrap: [AppComponent],
 })
