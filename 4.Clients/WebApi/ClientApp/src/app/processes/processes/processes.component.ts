@@ -253,6 +253,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             }
           }
           this.listOfDisplayOwnData = result;
+          this.listOfDisplayData = result;
           this.filteredOwnProcesses = result;
           const newProc: Process = result[result.length - 1];
 
