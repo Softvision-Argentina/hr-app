@@ -5,5 +5,6 @@ export enum StageStatusEnum {
     Declined = 3,
     Rejected = 4,
     Hired = 5,
-    Pipeline = 6
+    Pipeline = 6,
+    PendingReply = 7
 }

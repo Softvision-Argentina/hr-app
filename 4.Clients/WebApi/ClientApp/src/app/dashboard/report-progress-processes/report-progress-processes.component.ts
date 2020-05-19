@@ -38,7 +38,7 @@ export class ReportProgressProcessesComponent implements OnInit {
 
   complete(process: Process[]) {
     this.processInProgress = process.filter(process => process.status === ProcessStatusEnum.InProgress ||
-      process.status === ProcessStatusEnum.OfferAccepted || process.status === ProcessStatusEnum.Recall).length;
+      process.status === ProcessStatusEnum.Accepted || process.status === ProcessStatusEnum.Recall).length;
     this.processNotStarted = process.filter(process => process.status === ProcessStatusEnum.Declined ||
       process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
   }

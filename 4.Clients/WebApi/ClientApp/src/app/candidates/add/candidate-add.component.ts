@@ -87,7 +87,8 @@ export class CandidateAddComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
-    dni: [0, [dniValidator]],
+    dni: [0],
+    // dni: [0, [dniValidator]],
     email: [null, [Validators.email, trimValidator]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],

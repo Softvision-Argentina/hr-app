@@ -30,6 +30,7 @@ namespace Domain.Model
         public HrStage HrStage { get; set; }
         public TechnicalStage TechnicalStage { get; set; }
         public ClientStage ClientStage { get; set; }
+        public PreOfferStage PreOfferStage { get; set; }
         public OfferStage OfferStage { get; set; }
     }
 }

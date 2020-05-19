@@ -22,6 +22,7 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
                 .ThenInclude(x => x.Interviews)
+                .Include(x => x.PreOfferStage)
                 .Include(x => x.OfferStage)
                 .Include(x => x.UserOwner)
                 .Include(x => x.UserDelegate)
@@ -47,6 +48,7 @@ namespace Domain.Services.Repositories.EF
                 entity.HrStage.Status = StageStatus.Accepted;
                 entity.TechnicalStage.Status = StageStatus.Accepted;
                 entity.ClientStage.Status = StageStatus.Accepted;
+                entity.PreOfferStage.Status = StageStatus.Accepted;
                 entity.OfferStage.Status = StageStatus.InProgress;
             }
         }
@@ -68,6 +70,7 @@ namespace Domain.Services.Repositories.EF
                 entity.HrStage.Status = RejectStage(entity.HrStage.Status);
                 entity.TechnicalStage.Status = RejectStage(entity.TechnicalStage.Status);
                 entity.ClientStage.Status = RejectStage(entity.ClientStage.Status);
+                entity.PreOfferStage.Status = RejectStage(entity.PreOfferStage.Status);
                 entity.OfferStage.Status = RejectStage(entity.OfferStage.Status);
             }
         }
@@ -78,6 +81,7 @@ namespace Domain.Services.Repositories.EF
                 .Include(x => x.HrStage)
                 .Include(x => x.TechnicalStage)
                 .Include(x => x.ClientStage)
+                .Include(x => x.PreOfferStage)
                 .Include(x => x.OfferStage)
                 .Include(x => x.UserOwner)
                 .Include(x => x.UserDelegate).FirstOrDefault();

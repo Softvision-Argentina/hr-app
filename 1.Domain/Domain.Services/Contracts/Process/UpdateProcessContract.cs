@@ -31,6 +31,7 @@ namespace Domain.Services.Contracts.Process
         public UpdateHrStageContract HrStage { get; set; }
         public UpdateTechnicalStageContract TechnicalStage { get; set; }
         public UpdateClientStageContract ClientStage { get; set; }
+        public UpdatePreOfferStageContract PreOfferStage { get; set; }
         public UpdateOfferStageContract OfferStage { get; set; }
     }
 }

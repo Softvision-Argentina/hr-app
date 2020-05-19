@@ -704,6 +704,68 @@ namespace ApiServer.Migrations
                     b.ToTable("Postulants");
                 });
 
+            modelBuilder.Entity("Domain.Model.PreOfferStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("BackgroundCheckDone");
+
+                    b.Property<DateTime?>("BackgroundCheckDoneDate");
+
+                    b.Property<string>("Bonus");
+
+                    b.Property<DateTime?>("BornDate");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("DNI");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<DateTime>("Firstday");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<bool>("PreocupationalDone");
+
+                    b.Property<DateTime?>("PreocupationalDoneDate");
+
+                    b.Property<int>("ProcessId");
+
+                    b.Property<string>("RejectionReason");
+
+                    b.Property<int>("RemunerationOffer");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("Type");
+
+                    b.Property<int?>("UserDelegateId");
+
+                    b.Property<int?>("UserOwnerId");
+
+                    b.Property<int>("VacationDays");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessId")
+                        .IsUnique();
+
+                    b.HasIndex("UserDelegateId");
+
+                    b.HasIndex("UserOwnerId");
+
+                    b.ToTable("PreOfferStages");
+                });
+
             modelBuilder.Entity("Domain.Model.Process", b =>
                 {
                     b.Property<int>("Id")
@@ -1280,6 +1342,22 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Process", "Process")
                         .WithOne("OfferStage")
                         .HasForeignKey("Domain.Model.OfferStage", "ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.User", "UserDelegate")
+                        .WithMany()
+                        .HasForeignKey("UserDelegateId");
+
+                    b.HasOne("Domain.Model.User", "UserOwner")
+                        .WithMany()
+                        .HasForeignKey("UserOwnerId");
+                });
+
+            modelBuilder.Entity("Domain.Model.PreOfferStage", b =>
+                {
+                    b.HasOne("Domain.Model.Process", "Process")
+                        .WithOne("PreOfferStage")
+                        .HasForeignKey("Domain.Model.PreOfferStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Model.User", "UserDelegate")

@@ -31,6 +31,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<IHrStageRepository> _mockRepoHrStage;
         private readonly Mock<ITechnicalStageRepository> _mockRepoTechnicalStage;
         private readonly Mock<IClientStageRepository> _mockRepoClientStage;
+        private readonly Mock<IPreOfferStageRepository> _mockRepoPreOfferStage;
         private readonly Mock<IOfferStageRepository> _mockRepoOfferStage;
         private readonly Mock<INotificationRepository> _mockRepoINotification;
         private readonly Mock<IRepository<User>> _mockRepoUser;
@@ -50,6 +51,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepoHrStage = new Mock<IHrStageRepository>();
             _mockRepoTechnicalStage = new Mock<ITechnicalStageRepository>();
             _mockRepoClientStage = new Mock<IClientStageRepository>();
+            _mockRepoPreOfferStage = new Mock<IPreOfferStageRepository>();
             _mockRepoOfferStage = new Mock<IOfferStageRepository>();
             _mockRepoINotification = new Mock<INotificationRepository>();
             _mockRepoUser = new Mock<IRepository<User>>();
@@ -72,7 +74,8 @@ namespace Domain.Services.Impl.UnitTests.Services
                 MockUnitOfWork.Object,
                 _mockRepoINotification.Object,                
                 _mockConfiguration.Object,
-                _mockhttpContext.Object
+                _mockhttpContext.Object,
+                _mockRepoPreOfferStage.Object
             );
         }
 
@@ -86,7 +89,11 @@ namespace Domain.Services.Impl.UnitTests.Services
             var process = new Process
             {
                 Candidate = new Candidate { ReferredBy = "Name LastName" },
-                HrStage = new HrStage { Status = StageStatus.NA }
+                HrStage = new HrStage { Status = StageStatus.NA },
+                OfferStage = new OfferStage { Status = StageStatus.NA },
+                PreOfferStage = new PreOfferStage { Status = StageStatus.NA },
+                ClientStage = new ClientStage { Status = StageStatus.NA },
+                TechnicalStage = new TechnicalStage { Status = StageStatus.NA }
             };
             var userIdString = "1";
 
@@ -128,6 +135,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             var contract = new UpdateProcessContract { DeclineReason = new DeclineReason { Description = "Test" } };
             var process = new Process {
                 OfferStage = new OfferStage { Status = StageStatus.NA },
+                PreOfferStage = new PreOfferStage { Status = StageStatus.NA},
                 ClientStage = new ClientStage { Status = StageStatus.NA },
                 TechnicalStage = new TechnicalStage { Status = StageStatus.NA },
                 HrStage = new HrStage { Status = StageStatus.NA },
@@ -270,98 +278,6 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepositoryProcess.Verify(_ => _.QueryEager(), Times.Once);
             _mockRepositoryProcess.Verify(_ => _.Reject(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
             MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
-        }
-        
-        [Theory(DisplayName = "Verify SetProcessStatus return a ProcessStatus")]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.NA)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.InProgress, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.Accepted, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.Declined, ProcessStatus.Declined)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.Rejected, ProcessStatus.Rejected)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.Hired, ProcessStatus.Hired)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.InProgress, StageStatus.NA, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.Accepted, StageStatus.NA, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.Declined, StageStatus.NA, ProcessStatus.Declined)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.Rejected, StageStatus.NA, ProcessStatus.Rejected)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.Hired, StageStatus.NA, ProcessStatus.Hired)]
-        [InlineData(StageStatus.NA, StageStatus.InProgress, StageStatus.NA, StageStatus.NA, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.Accepted, StageStatus.NA, StageStatus.NA, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.NA, StageStatus.Declined, StageStatus.NA, StageStatus.NA, ProcessStatus.Declined)]
-        [InlineData(StageStatus.NA, StageStatus.Rejected, StageStatus.NA, StageStatus.NA, ProcessStatus.Rejected)]
-        [InlineData(StageStatus.InProgress, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.InProgress)]
-        [InlineData(StageStatus.Accepted, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.OfferAccepted)]
-        [InlineData(StageStatus.Declined, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.Declined)]
-        [InlineData(StageStatus.Rejected, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.Rejected)]
-        [InlineData(StageStatus.Hired, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessStatus.Hired)]
-        public void GivenSetProcessStatus_WhenStatusAsParameter_ReturnsProcessStatus(
-            StageStatus offerStgStatus,
-            StageStatus clientStgStatus,
-            StageStatus technicalStgStatus,
-            StageStatus hrStgStatus,
-            ProcessStatus statusExpected)
-        {
-            var process = new Process {
-                OfferStage = new OfferStage { Status = offerStgStatus },
-                ClientStage = new ClientStage { Status = clientStgStatus },
-                TechnicalStage = new TechnicalStage { Status = technicalStgStatus },
-                HrStage = new HrStage { Status = hrStgStatus }
-            };            
-
-            var actualResult = _service.SetProcessStatus(process);
-
-            Assert.Equal(statusExpected, actualResult);
-        }
-
-        [Theory(DisplayName = "Verify SetCandidateStatus return a Candidate Status")]
-        [InlineData(ProcessStatus.NA, CandidateStatus.New)]
-        [InlineData(ProcessStatus.InProgress, CandidateStatus.InProgress)]
-        [InlineData(ProcessStatus.Recall, CandidateStatus.Recall)]
-        [InlineData(ProcessStatus.Hired, CandidateStatus.Hired)]
-        [InlineData(ProcessStatus.Rejected, CandidateStatus.Rejected)]
-        [InlineData(ProcessStatus.Declined, CandidateStatus.Rejected)]
-        [InlineData(ProcessStatus.OfferAccepted, CandidateStatus.InProgress)]        
-        public void GivenSetCandidateStatus_WhenStatusAsParameter_ReturnsCandidateStatus(
-            ProcessStatus processStatus,
-            CandidateStatus statusExpected)
-        {
-
-            var actualResult = _service.SetCandidateStatus(processStatus);
-
-            Assert.Equal(statusExpected, actualResult);
-        }
-
-        [Theory(DisplayName = "Verify SetProcessCurrentStage return a ProcessCurrentStage")]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.Accepted, StageStatus.NA, ProcessCurrentStage.OfferStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.Accepted, StageStatus.InProgress, ProcessCurrentStage.OfferStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.Accepted, StageStatus.Accepted, ProcessCurrentStage.OfferStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.Accepted, StageStatus.Hired, ProcessCurrentStage.Finished)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.ClientStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.InProgress, StageStatus.NA, ProcessCurrentStage.ClientStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Accepted, StageStatus.Hired, StageStatus.NA, ProcessCurrentStage.Finished)]
-        [InlineData(StageStatus.Accepted, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.TechnicalStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.InProgress, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.TechnicalStage)]
-        [InlineData(StageStatus.Accepted, StageStatus.Hired, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.Finished)]
-        [InlineData(StageStatus.NA, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.NA)]
-        [InlineData(StageStatus.InProgress, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.HrStage)]
-        [InlineData(StageStatus.Hired, StageStatus.NA, StageStatus.NA, StageStatus.NA, ProcessCurrentStage.Finished)]
-        public void GivenSetProcessCurrentStage_WhenStatusAsParameter_ReturnsProcessCurrentStage(
-            StageStatus hrStgStatus,
-            StageStatus technicalStgStatus,
-            StageStatus clientStgStatus,
-            StageStatus offerStgStatus,
-            ProcessCurrentStage statusExpected)
-        {
-            var process = new Process
-            {
-                OfferStage = new OfferStage { Status = offerStgStatus },
-                ClientStage = new ClientStage { Status = clientStgStatus },
-                TechnicalStage = new TechnicalStage { Status = technicalStgStatus },
-                HrStage = new HrStage { Status = hrStgStatus }
-            };
-
-            var actualResult = _service.SetProcessCurrentStage(process);
-
-            Assert.Equal(statusExpected, actualResult);
         }
     }
 }

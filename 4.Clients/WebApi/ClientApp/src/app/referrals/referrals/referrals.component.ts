@@ -10,6 +10,7 @@ import { Stage } from 'src/entities/stage';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
 import { HrStageComponent } from 'src/app/stages/hr-stage/hr-stage.component';
 import { ClientStageComponent } from 'src/app/stages/client-stage/client-stage.component';
+import { PreOfferStageComponent } from 'src/app/stages/pre-offer-stage/pre-offer-stage.component';
 import { OfferStageComponent } from 'src/app/stages/offer-stage/offer-stage.component';
 import { HireStageComponent } from 'src/app/stages/hire-stage/hire-stage.component';
 import { TechnicalStageComponent } from 'src/app/stages/technical-stage/technical-stage.component';
@@ -55,6 +56,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
   @ViewChild(TechnicalStageComponent) technicalStage: TechnicalStageComponent;
   @ViewChild(ClientStageComponent) clientStage: ClientStageComponent;
+  @ViewChild(PreOfferStageComponent) preOfferStage: PreOfferStageComponent;
   @ViewChild(OfferStageComponent) offerStage: OfferStageComponent;
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
 
@@ -620,7 +622,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (slide > -1) {
       this.processCarousel.goTo(slide);
       const elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
-        : slide === 3 ? 'clientButton' : slide === 4 ? 'offerButton' : slide === 5 ? 'hireButton' : 'none';
+        : slide === 3 ? 'clientButton' : slide === 4 ? 'preOfferButton' : slide === 5 ?'offerButton' : slide === 6 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
     } else {
@@ -646,6 +648,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.forms.push(this.hrStage.hrForm);
     this.forms.push(this.technicalStage.technicalForm);
     this.forms.push(this.clientStage.clientForm);
+    this.forms.push(this.preOfferStage.preOfferForm);
     this.forms.push(this.offerStage.offerForm);
   }
 
@@ -754,12 +757,14 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       hrStage: null,
       technicalStage: null,
       clientStage: null,
+      preOfferStage: null,
       offerStage: null
     };
 
     process.hrStage = this.hrStage.getFormData(process.id);
     process.technicalStage = this.technicalStage.getFormData(process.id);
     process.clientStage = this.clientStage.getFormData(process.id);
+    process.preOfferStage = this.preOfferStage.getFormData(process.id);
     process.offerStage = this.offerStage.getFormData(process.id);
 
     // Seniority is now handled global between technical stage and offer stage. The process uses the last updated value.
@@ -779,7 +784,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       if (stage.status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.InProgress; }
       if (stage.status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
     });
-    if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
+    if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Accepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) {
@@ -896,6 +901,25 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         interviewer: '',
         delegateName: ''
       },
+      preOfferStage: {
+        id: 0,
+        date: new Date(),
+        dni: 0,
+        status: StageStatusEnum.NA,
+        feedback: '',
+        userOwnerId: candidate.user.id,
+        userDelegateId: null,
+        processId: 0,
+        seniority: SeniorityEnum.NA,
+        remunerationOffer: 0,
+        vacationDays: 0,
+        firstDay: new Date(),
+        bonus: '',        hireDate: new Date(),
+        backgroundCheckDone: false,
+        backgroundCheckDoneDate: new Date(),
+        preocupationalDone: false,
+        preocupationalDoneDate: new Date()
+      },
       offerStage: {
         id: 0,
         date: new Date(),
@@ -905,8 +929,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         userDelegateId: null,
         processId: 0,
         seniority: SeniorityEnum.NA,
-        remunerationOffer: null,
-        vacationDays: null,
+        remunerationOffer: 0,
+        vacationDays: 0,
         firstDay: new Date(),
         bonus: '',
         hireDate: new Date(),

@@ -19,6 +19,7 @@ namespace Domain.Services.Repositories.EF
         public DbSet<TechnicalStage> TechnicalStages { get; set; }
         public DbSet<ClientStage> ClientStages { get; set; }
         public DbSet<Interview> Interview { get; set; }
+        public DbSet<PreOfferStage> PreOfferStages { get; set; }
         public DbSet<OfferStage> OfferStages { get; set; }
         public DbSet<StageItem> StageItems { get; set; }
         public DbSet<User> Users { get; set; }

@@ -29,7 +29,7 @@ export class OfferStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    userOwnerId: 0,
+    userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
     seniority: [0, [Validators.required]],

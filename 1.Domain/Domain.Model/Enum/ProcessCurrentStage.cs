@@ -6,6 +6,7 @@
         HrStage,
         TechnicalStage,
         ClientStage,
+        PreOfferStage,
         OfferStage,
         Finished
     }

@@ -103,7 +103,7 @@ export class ReportCompletedProcessesComponent implements OnInit {
     this.processCompleted = this._processes.filter(process => process => process.status === ProcessStatusEnum.Declined ||
       process.status === ProcessStatusEnum.Hired || process.status === ProcessStatusEnum.Rejected).length;
     this.processFinishedSuccess = this._processes.filter(process => process.status === ProcessStatusEnum.Hired).length;
-    this.processInProgress = this._processes.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.OfferAccepted).length;
+    this.processInProgress = this._processes.filter(process => process.status === ProcessStatusEnum.InProgress || process.status === ProcessStatusEnum.Recall || process.status === ProcessStatusEnum.Accepted).length;
     this.processNotStarted = this._processes.filter(process => process.status === ProcessStatusEnum.Declined || process.status === ProcessStatusEnum.Rejected).length;
     this.getProgressPercentage();
   }

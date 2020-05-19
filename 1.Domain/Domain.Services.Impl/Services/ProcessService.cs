@@ -30,6 +30,7 @@ namespace Domain.Services.Impl.Services
         private readonly ITechnicalStageRepository _technicalStageRepository;
         private readonly IClientStageRepository _clientStageRepository;
         private readonly IOfferStageRepository _offerStageRepository;
+        private readonly IPreOfferStageRepository _preOfferStageRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _config;
@@ -52,7 +53,8 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             INotificationRepository notificationRepository,
             IConfiguration config,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IPreOfferStageRepository preOfferStageRepository)
             
         {            
             _candidateRepository = candidateRepository;
@@ -72,6 +74,7 @@ namespace Domain.Services.Impl.Services
             _userRepository = userRepository;
             _config = config;
             _httpContext = httpContext;
+            _preOfferStageRepository = preOfferStageRepository;
         }
 
         public ReadedProcessContract Read(int id)
@@ -105,7 +108,7 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedProcessContract> List()
         {
             var candidateQuery = _processRepository
-                .QueryEager();
+                .QueryEager().ToList();
 
             var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
 
@@ -115,7 +118,7 @@ namespace Domain.Services.Impl.Services
         public IEnumerable<ReadedProcessContract> GetActiveByCandidateId(int candidateId)
         {
             var process = _processRepository
-                .QueryEager().Where(_ => _.CandidateId == candidateId && (_.Status == ProcessStatus.InProgress || _.Status == ProcessStatus.OfferAccepted || _.Status == ProcessStatus.Recall ));
+                .QueryEager().Where(_ => _.CandidateId == candidateId && (_.Status == ProcessStatus.InProgress || _.Status == ProcessStatus.Accepted || _.Status == ProcessStatus.Recall ));
 
             return _mapper.Map<IEnumerable<ReadedProcessContract>>(process);
         }
@@ -137,6 +140,12 @@ namespace Domain.Services.Impl.Services
             process.UserOwnerId = userId;
 
             var createdProcess = _processRepository.Create(process);
+
+            process.HrStage.UserOwnerId = process.UserOwnerId;
+            process.TechnicalStage.UserOwnerId = process.UserOwnerId;
+            process.ClientStage.UserOwnerId = process.UserOwnerId;
+            process.PreOfferStage.UserOwnerId = process.UserOwnerId;
+            process.OfferStage.UserOwnerId = process.UserOwnerId;
 
             _unitOfWork.Complete();
 
@@ -207,11 +216,20 @@ namespace Domain.Services.Impl.Services
             candidate.EnglishLevel = process.HrStage.EnglishLevel;            
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
+            candidate.DNI = process.PreOfferStage.DNI;
+            process.HrStage.UserOwnerId = process.UserOwnerId;
+            process.TechnicalStage.UserOwnerId = process.UserOwnerId;
+            process.ClientStage.UserOwnerId = process.UserOwnerId;
+            process.PreOfferStage.UserOwnerId = process.UserOwnerId;
+            process.OfferStage.UserOwnerId = process.UserOwnerId;
 
+            _candidateRepository.Update(candidate);
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);
             _clientStageRepository.Update(process.ClientStage);
+            _preOfferStageRepository.Update(process.PreOfferStage);
             _offerStageRepository.Update(process.OfferStage);
+
             if(process.DeclineReasonId != null)
             {
                 if (process.DeclineReason.Id == -1)
@@ -233,7 +251,7 @@ namespace Domain.Services.Impl.Services
             var status = process.Status;
 
             if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
-                || process.Status == ProcessStatus.OfferAccepted || process.Status == ProcessStatus.Recall))
+                || process.Status == ProcessStatus.Accepted || process.Status == ProcessStatus.Recall))
             {
                 var notification = new Notification
                 {
@@ -274,140 +292,53 @@ namespace Domain.Services.Impl.Services
             _unitOfWork.Complete();
         }
 
-        public ProcessStatus SetProcessStatus(Process process)
+        private ProcessStatus SetProcessStatus(Process process)
         {
-            switch (process.OfferStage.Status)
+            if (process.OfferStage.Status != StageStatus.NA)
             {
-                case StageStatus.NA:
-                    switch (process.ClientStage.Status)
-                    {
-                        case StageStatus.NA:
-                            switch (process.TechnicalStage.Status)
-                            {
-                                case StageStatus.NA:
-                                    switch (process.HrStage.Status)
-                                    {
-                                        case StageStatus.NA:
-                                            return ProcessStatus.NA;
-                                        case StageStatus.InProgress:
-                                            return ProcessStatus.InProgress;
-                                        case StageStatus.Accepted:
-                                            return ProcessStatus.InProgress;
-                                        case StageStatus.Declined:
-                                            return ProcessStatus.Declined;
-                                        case StageStatus.Rejected:
-                                            return ProcessStatus.Rejected;
-                                        case StageStatus.Hired:
-                                            return ProcessStatus.Hired;
-                                        default:
-                                            return ProcessStatus.NA;
-                                    }
-                                case StageStatus.InProgress:
-                                    return ProcessStatus.InProgress;
-                                case StageStatus.Accepted:
-                                    return ProcessStatus.InProgress;
-                                case StageStatus.Declined:
-                                    return ProcessStatus.Declined;
-                                case StageStatus.Rejected:
-                                    return ProcessStatus.Rejected;
-                                case StageStatus.Hired:
-                                    return ProcessStatus.Hired;
-                                default:
-                                    return ProcessStatus.NA;
-                            }
-                        case StageStatus.InProgress:
-                            return ProcessStatus.InProgress;
-                        case StageStatus.Accepted:
-                            return ProcessStatus.InProgress;
-                        case StageStatus.Declined:
-                            return ProcessStatus.Declined;
-                        case StageStatus.Rejected:
-                            return ProcessStatus.Rejected;
-                        default:
-                            return ProcessStatus.NA;
-                    }
-                case StageStatus.InProgress:
-                    return ProcessStatus.InProgress;
-                case StageStatus.Accepted:
-                    return ProcessStatus.OfferAccepted;
-                case StageStatus.Declined:
-                    return ProcessStatus.Declined;
-                case StageStatus.Rejected:
-                    return ProcessStatus.Rejected;
-                case StageStatus.Hired:
-                    return ProcessStatus.Hired;
-                default:
-                    return ProcessStatus.NA;
+                return (ProcessStatus)process.OfferStage.Status;
             }
+            else if (process.PreOfferStage.Status != StageStatus.NA)
+            {
+                return (ProcessStatus)process.PreOfferStage.Status;
+            }
+            else if (process.ClientStage.Status != StageStatus.NA)
+            {
+                return (ProcessStatus)process.ClientStage.Status;
+            }
+            else if (process.TechnicalStage.Status != StageStatus.NA)
+            {
+                return (ProcessStatus)process.TechnicalStage.Status;
+            }
+
+            return (ProcessStatus)process.HrStage.Status;
         }
 
-        public CandidateStatus SetCandidateStatus(ProcessStatus processStatus)
+        private CandidateStatus SetCandidateStatus(ProcessStatus processStatus)
         {
-            switch (processStatus)
-            {
-                case ProcessStatus.NA:
-                    return CandidateStatus.New;
-                case ProcessStatus.InProgress:
-                    return CandidateStatus.InProgress;
-                case ProcessStatus.Recall:
-                    return CandidateStatus.Recall;
-                case ProcessStatus.Hired:
-                    return CandidateStatus.Hired;
-                case ProcessStatus.Rejected:
-                    return CandidateStatus.Rejected;
-                case ProcessStatus.Declined:
-                    return CandidateStatus.Rejected;
-                case ProcessStatus.OfferAccepted:
-                    return CandidateStatus.InProgress;
-                default:
-                    return CandidateStatus.New;
-            }
+            return (CandidateStatus)processStatus;
         }
 
-        public ProcessCurrentStage SetProcessCurrentStage(Process process)
+        private ProcessCurrentStage SetProcessCurrentStage(Process process)
         {
-            switch (process.HrStage.Status)
+            if (process.OfferStage.Status != StageStatus.NA && process.OfferStage.Status != StageStatus.Declined && process.OfferStage.Status != StageStatus.Rejected)
             {
-                case StageStatus.NA:
-                    return ProcessCurrentStage.NA;
-                case StageStatus.InProgress:
-                    return ProcessCurrentStage.HrStage;
-                case StageStatus.Accepted:
-                    switch (process.TechnicalStage.Status)
-                    {
-                        case StageStatus.NA:
-                            return ProcessCurrentStage.TechnicalStage;
-                        case StageStatus.InProgress:
-                            return ProcessCurrentStage.TechnicalStage;
-                        case StageStatus.Accepted:
-                            switch (process.ClientStage.Status)
-                            {
-                                case StageStatus.NA:
-                                    return ProcessCurrentStage.ClientStage;
-                                case StageStatus.InProgress:
-                                    return ProcessCurrentStage.ClientStage;
-                                case StageStatus.Accepted:
-                                    switch (process.OfferStage.Status)
-                                    {
-                                        case StageStatus.NA:
-                                            return ProcessCurrentStage.OfferStage;
-                                        case StageStatus.InProgress:
-                                            return ProcessCurrentStage.OfferStage;
-                                        case StageStatus.Accepted:
-                                            return ProcessCurrentStage.OfferStage;
-                                        default:
-                                            return ProcessCurrentStage.Finished;
-                                    }
-                                default:
-                                    return ProcessCurrentStage.Finished;
-                            }
-                        default:
-                            return ProcessCurrentStage.Finished;
-                    }
-                default:
-                    return ProcessCurrentStage.Finished;
+                return ProcessCurrentStage.OfferStage;
             }
-        }
+            else if (process.PreOfferStage.Status != StageStatus.NA && process.PreOfferStage.Status != StageStatus.Declined && process.PreOfferStage.Status != StageStatus.Rejected)
+            {
+                return ProcessCurrentStage.PreOfferStage;
+            }
+            else if (process.ClientStage.Status != StageStatus.NA && process.ClientStage.Status != StageStatus.Declined && process.ClientStage.Status != StageStatus.Rejected)
+            {
+                return ProcessCurrentStage.ClientStage;
+            }
+            else if (process.TechnicalStage.Status != StageStatus.NA && process.TechnicalStage.Status != StageStatus.Declined && process.TechnicalStage.Status != StageStatus.Rejected)
+            {
+                return ProcessCurrentStage.TechnicalStage;
+            }
 
+            return ProcessCurrentStage.HrStage;
+        }
     }
 }

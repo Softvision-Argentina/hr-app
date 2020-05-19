@@ -7,6 +7,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Offer } from 'src/entities/offer';
+import { PreOffer } from 'src/entities/pre-offer';
 
 @Component({
   selector: 'app-report-timetofill1',
@@ -24,6 +25,7 @@ export class ReportTimetofill1Component implements OnInit {
   month: Date = new Date();
   hasProjections: boolean = false;
   offers: Offer[] = [];
+  preOffers: PreOffer[] = [];
   auxDate: Date = new Date();
 
   isChartComplete: boolean = false;
@@ -31,6 +33,7 @@ export class ReportTimetofill1Component implements OnInit {
   ngOnInit() {
     this.app.showLoading();
     this.getOffers();
+    this.getPreOffers();
     this.getProjectionReport();
     this.app.hideLoading();
   }
@@ -53,6 +56,16 @@ export class ReportTimetofill1Component implements OnInit {
         console.log(err);
       });
   }
+
+  getPreOffers() {
+    this.facade.preOfferService.get()
+      .subscribe(res => {
+        this.preOffers = res;
+      }, err => {
+        console.log(err);
+      });
+  }
+
 
   complete() {
     this.processes = this._processes;
@@ -113,7 +126,7 @@ export class ReportTimetofill1Component implements OnInit {
     let date = new Date(this.month);
     let days: number[] = [];
     let dayChartLabels: Label[] = []
-    let validArray: Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1 && proc.status === ProcessStatusEnum.OfferAccepted && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
+    let validArray: Process[] = this.processes.filter(proc => new Date(proc.hrStage.date).getMonth() + 1 === date.getMonth() + 1 && proc.status === ProcessStatusEnum.Accepted && new Date(proc.hrStage.date).getFullYear() === date.getFullYear());
     if (validArray.length > 0) {
       validArray.forEach(va => {
         averageDays += Math.ceil((Math.abs(new Date(this.getLastOffer(va.offerStage.processId)).getTime() - new Date(va.hrStage.date).getTime())) / (1000 * 3600 * 24));

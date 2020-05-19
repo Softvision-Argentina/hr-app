@@ -9,6 +9,7 @@ import { EnglishLevelEnum } from '../../entities/enums/english-level.enum';
 import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.enum';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { OfferStatusEnum } from 'src/entities/enums/offer-status.enum';
+import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
 
 @Injectable()
 export class Globals {
@@ -23,10 +24,12 @@ export class Globals {
 
   processStatusList: any[] = [
     { id: ProcessStatusEnum.NA, name: 'N/A' },
-    { id: ProcessStatusEnum.InProgress, name: 'In Progress' }, { id: ProcessStatusEnum.Recall, name: 'Recall' },
+    { id: ProcessStatusEnum.InProgress, name: 'In Progress' }, 
+    { id: ProcessStatusEnum.Accepted, name: 'Offer Accepted' },
+    { id: ProcessStatusEnum.Rejected, name: 'Rejected' },
     { id: ProcessStatusEnum.Declined, name: 'Declined' },
-    { id: ProcessStatusEnum.Hired, name: 'Hired' }, { id: ProcessStatusEnum.Rejected, name: 'Rejected' },
-    { id: ProcessStatusEnum.OfferAccepted, name: 'Offer Accepted' },
+    { id: ProcessStatusEnum.Hired, name: 'Hired' }, 
+    { id: ProcessStatusEnum.Recall, name: 'Recall' }
   ];
 
   processCurrentStageList: any[] = [
@@ -34,6 +37,7 @@ export class Globals {
     { id: ProcessCurrentStageEnum.HrStage, name: 'Hr Stage' },
     { id: ProcessCurrentStageEnum.TechnicalStage, name: 'Technical Stage' },
     { id: ProcessCurrentStageEnum.ClientStage, name: 'Client Stage' },
+    { id: ProcessCurrentStageEnum.PreOfferStage, name: 'Pre Offer Stage' },
     { id: ProcessCurrentStageEnum.OfferStage, name: 'Offer Stage' },
     { id: ProcessCurrentStageEnum.Finished, name: 'Finished' },
     { id: ProcessCurrentStageEnum.Pipeline, name: 'Pipeline' }
@@ -47,6 +51,7 @@ export class Globals {
     { id: StageStatusEnum.Rejected, name: 'Rejected', value: 'Rejected' },
     { id: StageStatusEnum.Hired, name: 'Hired', value: 'Hired' },
     { id: StageStatusEnum.Pipeline, name: 'Pipeline', value: 'Pipeline' },
+    { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' }
   ];
 
   candidateStatusList: any[] = [
@@ -85,6 +90,12 @@ export class Globals {
     { id: RejectionReasonsHrEnum.EnglishLevel, name: 'English Level' },
     { id: RejectionReasonsHrEnum.Residence, name: 'Residence' },
     { id: RejectionReasonsHrEnum.Other, name: 'Other' }
+  ];
+
+  preOfferStatusList: any[] = [
+    { id: preOfferStatusEnum.Declined, name: 'Declined' },
+    { id: preOfferStatusEnum.Accepted, name: 'Accepted' },
+    { id: preOfferStatusEnum.Pending, name: 'Pending' }
   ];
 
   offerStatusList: any[] = [

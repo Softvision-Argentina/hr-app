@@ -5,7 +5,7 @@
 
         </nz-form-control>
 
-    </nz-form-item>    
+    </nz-form-item>
     <div nz-row>
         <div nz-col nzSpan="24">
             <nz-form-item>
@@ -22,7 +22,7 @@
                     </ng-container>
                 </nz-form-explain>
             </nz-form-item>
-        </div>               
+        </div>
     </div>
     <div nz-row>
         <div nz-col nzSpan="12" >
@@ -82,7 +82,7 @@
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
 
@@ -104,7 +104,7 @@
             </nz-form-item>
         </div>   
     </div>
-    <div nz-row>       
+    <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item hidden>
                 <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information</nz-form-label>

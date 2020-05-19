@@ -46,7 +46,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+      <!--  <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni" [ngClass]="{'requiredFieldLabel': isRequiredField('dni')}">
                     DNI
@@ -63,14 +63,14 @@
                     </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
-        </div>
+        </div>-->
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email" [ngClass]="{'requiredFieldLabel': isRequiredField('email')}">E-mail</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                     <nz-form-explain>
-                        <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('email').dirty 
+                        <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('email').dirty
                         && candidateForm.hasError('emailAndPhoneValidator')">
                         Please input a valid Email
                         </nz-form-explain>
@@ -113,7 +113,7 @@
                         </ng-template>
                         <input formControlName="phoneNumber" id="'phoneNumber'" type="number" nz-input placeholder="Please input a phone number">
                     </nz-input-group>
-                    <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('phoneNumber').dirty 
+                    <nz-form-explain class="Error"  Id="Error"  Name="Error" *ngIf="candidateForm.get('phoneNumber').dirty
                     && candidateForm.hasError('emailAndPhoneValidator')">
                         Please input a phone number!
                     </nz-form-explain>
@@ -147,7 +147,7 @@
                         </nz-option>
                     </nz-select>
                     <nz-form-explain *ngIf="candidateForm.get('preferredOffice').dirty && candidateForm.get('preferredOffice').errors">
-                        Please input the preferred office</nz-form-explain>                  
+                        Please input the preferred office</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>

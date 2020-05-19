@@ -25,11 +25,13 @@ import { PostulantsService } from './postulants.service';
 import { DeclineReasonService } from './decline-reason.service';
 import { DashboardService } from './dashboard.service';
 import { OfferService } from './offer.service';
+import { PreOfferService } from './pre-offer.service';
 import { NotificationService } from './notificationsService';
 import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
 import { AppService } from './app.service';
 import { ReferralsService } from './referrals.service';
+import { from } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -98,6 +100,14 @@ export class FacadeService {
       this._offerService = this.injector.get(OfferService);
     }
     return this._offerService;
+  }
+
+  private _preOfferService: PreOfferService;
+  public get preOfferService(): PreOfferService {
+    if (!this._preOfferService) {
+      this._preOfferService = this.injector.get(PreOfferService);
+    }
+    return this._preOfferService;
   }
 
   private _candidateService: CandidateService;

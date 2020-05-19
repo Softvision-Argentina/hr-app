@@ -10,6 +10,7 @@ import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.comp
 import { HrStageComponent } from 'src/app/stages/hr-stage/hr-stage.component';
 import { ClientStageComponent } from 'src/app/stages/client-stage/client-stage.component';
 import { OfferStageComponent } from 'src/app/stages/offer-stage/offer-stage.component';
+import { PreOfferStageComponent } from 'src/app/stages/pre-offer-stage/pre-offer-stage.component';
 import { HireStageComponent } from 'src/app/stages/hire-stage/hire-stage.component';
 import { TechnicalStageComponent } from 'src/app/stages/technical-stage/technical-stage.component';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
@@ -53,6 +54,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
   @ViewChild(TechnicalStageComponent) technicalStage: TechnicalStageComponent;
   @ViewChild(ClientStageComponent) clientStage: ClientStageComponent;
+  @ViewChild(PreOfferStageComponent) preOfferStage: PreOfferStageComponent;
   @ViewChild(OfferStageComponent) offerStage: OfferStageComponent;
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
 
@@ -168,7 +170,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-    
+
     this.processesSubscription.add(userSubscription);
   }
 
@@ -442,7 +444,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.searchRecruiterValue = '';
     this.searchRecruiter();
   }
-  
+
   resetStatus(): void {
     this.searchValueStatus = '';
     this.searchStatus();
@@ -658,7 +660,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         lastName: '',
         dni: 0,
         emailAddress: '',
-        phoneNumber: null,        
+        phoneNumber: null,
         englishLevel: null,
         status: null,
         candidateSkills: [],
@@ -867,6 +869,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             });
         }
       } else {
+
         this.facade.candidateService.update(newCandidate.id, newCandidate)
         .subscribe(() => {
           this.isLoading = false;
@@ -927,12 +930,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       rejectionReason: null,
       declineReason: null,
       actualSalary: 0,
-      wantedSalary: 0,      
+      wantedSalary: 0,
       englishLevel: EnglishLevelEnum.None,
       seniority: 0,
       hrStage: null,
       technicalStage: null,
       clientStage: null,
+      preOfferStage: null,
       offerStage: null,
       createdDate: new Date()
     };
@@ -940,6 +944,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     process.hrStage = this.hrStage.getFormData(process.id);
     process.technicalStage = this.technicalStage.getFormData(process.id);
     process.clientStage = this.clientStage.getFormData(process.id);
+    process.preOfferStage = this.preOfferStage.getFormData(process.id);
     process.offerStage = this.offerStage.getFormData(process.id);
     // Seniority is now handled global between technical stage and offer stage. The process uses the last updated value.
     process.seniority = this.selectedSeniority ? this.selectedSeniority :
@@ -957,7 +962,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       if (stage.status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.InProgress; }
       if (stage.status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
     });
-    if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.OfferAccepted; }
+    if (stages[3].status === StageStatusEnum.Accepted) { processStatus = ProcessStatusEnum.Accepted; }
 
     if (stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.InProgress ||
       stages[3].status === StageStatusEnum.Accepted && stages[4].status === StageStatusEnum.Declined) { processStatus = ProcessStatusEnum.Declined; }
@@ -1068,6 +1073,26 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         interviewer: '',
         delegateName: ''
       },
+      preOfferStage: {
+        id: 0,
+        date: new Date(),
+        dni: 0,
+        status: StageStatusEnum.NA,
+        feedback: '',
+        userOwnerId: null,
+        userDelegateId: null,
+        processId: 0,
+        seniority: SeniorityEnum.NA,
+        remunerationOffer: 0,
+        vacationDays: 0,
+        firstDay: new Date(),
+        bonus: '',
+        hireDate: new Date(),
+        backgroundCheckDone: false,
+        backgroundCheckDoneDate: new Date(),
+        preocupationalDone: false,
+        preocupationalDoneDate: new Date()
+      },
       offerStage: {
         id: 0,
         date: new Date(),
@@ -1078,8 +1103,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         processId: 0,
         seniority: SeniorityEnum.NA,
         hireDate: new Date(),
-        remunerationOffer: null,
-        vacationDays: null,
+        remunerationOffer: 0,
+        vacationDays: 0,
         firstDay: new Date(),
         bonus: '',
         backgroundCheckDone: false,

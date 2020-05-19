@@ -4,10 +4,10 @@
     {
         NA,
         InProgress,
-        Recall,
-        Hired,
-        Rejected,
+        Accepted,
         Declined,
-        OfferAccepted
+        Rejected,
+        Hired,
+        Recall
     }
 }

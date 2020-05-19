@@ -32,6 +32,7 @@ namespace Domain.Services.Contracts.Process
         public ReadedHrStageContract HrStage { get; set; }
         public ReadedTechnicalStageContract TechnicalStage { get; set; }
         public ReadedClientStageContract ClientStage { get; set; }
+        public ReadedPreOfferStageContract PreOfferStage { get; set; }
         public ReadedOfferStageContract OfferStage { get; set; }
     }
 }

@@ -114,10 +114,10 @@ namespace HrApp.Views
                     ValueLabel = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Declined).ToString(),
                     Color = SKColor.Parse("#ff6666")
                 },
-                new Microcharts.Entry(res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.OfferAccepted))
+                new Microcharts.Entry(res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Accepted))
                 {
                     Label = "Offer Accepted",
-                    ValueLabel = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.OfferAccepted).ToString(),
+                    ValueLabel = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Accepted).ToString(),
                     Color = SKColor.Parse("#FFA500")
                 }
             };
@@ -128,7 +128,7 @@ namespace HrApp.Views
         public void ProcessSucceededChartBuild()
         {
             var res = _container.GetProcesses();
-            var sp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Hired || r.Status == Domain.Model.Enum.ProcessStatus.OfferAccepted);
+            var sp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Hired || r.Status == Domain.Model.Enum.ProcessStatus.Accepted);
             var fp = res.Count(r => r.Status == Domain.Model.Enum.ProcessStatus.Rejected || r.Status == Domain.Model.Enum.ProcessStatus.Declined);
 
             var chartEntries = new[]

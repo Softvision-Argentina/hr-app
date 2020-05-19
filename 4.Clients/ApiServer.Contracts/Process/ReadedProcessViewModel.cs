@@ -33,6 +33,7 @@ namespace ApiServer.Contracts.Process
         public ReadedHrStageViewModel HrStage { get; set; }
         public ReadedTechnicalStageViewModel TechnicalStage { get; set; }
         public ReadedClientStageViewModel ClientStage { get; set; }
+        public ReadedPreOfferStageViewModel PreOfferStage { get; set; }
         public ReadedOfferStageViewModel OfferStage { get; set; }
     }
 }

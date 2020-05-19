@@ -6,6 +6,7 @@ import { SeniorityEnum } from './enums/seniority.enum';
 import { HrStage } from './hr-stage';
 import { TechnicalStage } from './technical-stage';
 import { ClientStage } from './client-stage';
+import { preOfferStage } from './pre-offer-stage'
 import { OfferStage } from './offer-stage';
 import { EnglishLevelEnum } from './enums/english-level.enum';
 import { ProcessCurrentStageEnum } from './enums/process-current-stage';
@@ -26,7 +27,8 @@ export class Process {
     hrStage: HrStage;
     technicalStage: TechnicalStage;
     clientStage: ClientStage;
-    offerStage: OfferStage;
+    offerStage: OfferStage
+    preOfferStage: preOfferStage;
     createdDate: Date;
     startDate?: Date;
     endDate?: Date;

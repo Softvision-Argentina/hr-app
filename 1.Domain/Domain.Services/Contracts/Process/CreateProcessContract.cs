@@ -27,6 +27,7 @@ namespace Domain.Services.Contracts.Process
         public CreateHrStageContract HrStage { get; set; }
         public CreateTechnicalStageContract TechnicalStage { get; set; }
         public CreateClientStageContract ClientStage { get; set; }
+        public CreatePreOfferStageContract PreOfferStage { get; set; }
         public CreateOfferStageContract OfferStage { get; set; }
     }
 }

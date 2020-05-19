@@ -4,8 +4,10 @@
     {
         New,
         InProgress,
-        Recall,
+        Accepted,
+        Declined,
+        Rejected,
         Hired,
-        Rejected
+        Recall
     }
 }

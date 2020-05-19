@@ -7,8 +7,10 @@ import { HrStageComponent } from './stages/hr-stage/hr-stage.component';
 import { HireStageComponent } from './stages/hire-stage/hire-stage.component';
 import { TechnicalStageComponent } from './stages/technical-stage/technical-stage.component';
 import { ClientStageComponent } from './stages/client-stage/client-stage.component';
+import { PreOfferHistory } from './stages/pre-offer-history/pre-offer-history.component';
 import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferStageComponent } from './stages/offer-stage/offer-stage.component';
+import { PreOfferStageComponent } from './stages/pre-offer-stage/pre-offer-stage.component';
 import { ProcessContactComponent } from './processes/process-contact/process-contact.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { CandidatesProfileComponent } from './candidates-profile/candidates-profile.component';
@@ -35,7 +37,9 @@ import { ReferralsContactComponent } from './referrals/referrals-contact/referra
         HireStageComponent,
         TechnicalStageComponent,
         ClientStageComponent,
+        PreOfferHistory,
         OfferHistory,
+        PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,
         CommunitiesComponent,
@@ -50,7 +54,9 @@ import { ReferralsContactComponent } from './referrals/referrals-contact/referra
         HireStageComponent,
         TechnicalStageComponent,
         ClientStageComponent,
+        PreOfferHistory,
         OfferHistory,
+        PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,
         CommunitiesComponent,

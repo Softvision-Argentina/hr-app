@@ -1,0 +1,5 @@
+export enum preOfferStatusEnum {
+    Declined = 0,
+    Accepted = 1,
+    Pending = 2
+}

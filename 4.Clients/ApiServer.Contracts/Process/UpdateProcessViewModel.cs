@@ -26,6 +26,7 @@ namespace ApiServer.Contracts.Process
         public UpdateHrStageViewModel HrStage { get; set; }
         public UpdateTechnicalStageViewModel TechnicalStage { get; set; }
         public UpdateClientStageViewModel ClientStage { get; set; }
+        public UpdatePreOfferStageViewModel PreOfferStage { get; set; }
         public UpdateOfferStageViewModel OfferStage { get; set; }
     }
 }
