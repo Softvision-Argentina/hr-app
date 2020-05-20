@@ -121,6 +121,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.facade.appService.removeBgImage();
+    this.getProcesses();
     this.getUserProcesses();
     this.getCandidates();
     this.getUsers();
@@ -255,7 +256,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             }
           }
           this.listOfDisplayOwnData = result;
-          this.listOfDisplayData = result;
           this.filteredOwnProcesses = result;
           const newProc: Process = result[result.length - 1];
 
