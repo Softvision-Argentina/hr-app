@@ -133,6 +133,7 @@ namespace Domain.Services.Impl.Services
 
             _candidateRepository.Update(process.Candidate);
 
+            process.Status = SetProcessStatus(process);
             process.CurrentStage = SetProcessCurrentStage(process);
 
             var userId = GetUser();

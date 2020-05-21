@@ -10,6 +10,6 @@
         Hired,
         Recall,
         Pipeline,
-        PedingReply
+        PendingReply
     }
 }

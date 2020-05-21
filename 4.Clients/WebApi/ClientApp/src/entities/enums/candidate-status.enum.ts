@@ -5,5 +5,7 @@ export enum CandidateStatusEnum {
     Declined = 3,
     Rejected = 4,
     Hired = 5,
-    Recall = 6
+    Recall = 6,
+    Pipeline = 7,
+    PendingReply = 8
 }

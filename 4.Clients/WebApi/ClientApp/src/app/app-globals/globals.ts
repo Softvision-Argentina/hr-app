@@ -29,7 +29,10 @@ export class Globals {
     { id: ProcessStatusEnum.Rejected, name: 'Rejected' },
     { id: ProcessStatusEnum.Declined, name: 'Declined' },
     { id: ProcessStatusEnum.Hired, name: 'Hired' },
-    { id: ProcessStatusEnum.Recall, name: 'Recall' }
+    { id: ProcessStatusEnum.Recall, name: 'Recall' },
+    { id: ProcessStatusEnum.Pipeline, name: 'Pipeline' },
+    { id: ProcessStatusEnum.PendingReply, name: 'Pending Reply' }
+
   ];
 
   processCurrentStageList: any[] = [
@@ -50,6 +53,7 @@ export class Globals {
     { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
     { id: StageStatusEnum.Rejected, name: 'Rejected', value: 'Rejected' },
     { id: StageStatusEnum.Hired, name: 'Hired', value: 'Hired' },
+    { id: StageStatusEnum.Recall, name: 'Recall', value: 'Recall' },
     { id: StageStatusEnum.Pipeline, name: 'Pipeline', value: 'Pipeline' },
     { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' }
   ];
@@ -103,6 +107,12 @@ export class Globals {
   offerStatusList: any[] = [
     { id: OfferStatusEnum.Declined, name: 'Declined' },
     { id: OfferStatusEnum.Accepted, name: 'Accepted' },
-    { id: OfferStatusEnum.Pending, name: 'Pending' }
+    { id: OfferStatusEnum.NA, name: 'Pending' },
+    { id: OfferStatusEnum.Hired, name: 'Pending' },
+    { id: OfferStatusEnum.InProgress, name: 'Pending' },
+    { id: OfferStatusEnum.PendingReply, name: 'Pending' },
+    { id: OfferStatusEnum.Pipeline, name: 'Pending' },
+    { id: OfferStatusEnum.Recall, name: 'Pending' },
+    { id: OfferStatusEnum.Rejected, name: 'Pending' }
   ];
 }

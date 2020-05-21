@@ -1,5 +1,11 @@
 export enum preOfferStatusEnum {
-    Declined = 0,
-    Accepted = 1,
-    Pending = 2
+    NA = 0,
+    InProgress = 1,
+    Accepted = 2,
+    Declined = 3,
+    Rejected = 4,
+    Hired = 5,
+    Recall = 6,
+    Pipeline = 7,
+    PendingReply = 8
 }
