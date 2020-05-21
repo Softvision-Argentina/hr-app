@@ -8,6 +8,8 @@
         Declined,
         Rejected,
         Hired,
-        Recall
+        Recall,
+        Pipeline,
+        PedingReply
     }
 }

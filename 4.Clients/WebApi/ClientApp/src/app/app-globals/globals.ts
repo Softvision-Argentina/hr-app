@@ -24,11 +24,11 @@ export class Globals {
 
   processStatusList: any[] = [
     { id: ProcessStatusEnum.NA, name: 'N/A' },
-    { id: ProcessStatusEnum.InProgress, name: 'In Progress' }, 
+    { id: ProcessStatusEnum.InProgress, name: 'In Progress' },
     { id: ProcessStatusEnum.Accepted, name: 'Offer Accepted' },
     { id: ProcessStatusEnum.Rejected, name: 'Rejected' },
     { id: ProcessStatusEnum.Declined, name: 'Declined' },
-    { id: ProcessStatusEnum.Hired, name: 'Hired' }, 
+    { id: ProcessStatusEnum.Hired, name: 'Hired' },
     { id: ProcessStatusEnum.Recall, name: 'Recall' }
   ];
 
@@ -93,9 +93,11 @@ export class Globals {
   ];
 
   preOfferStatusList: any[] = [
-    { id: preOfferStatusEnum.Declined, name: 'Declined' },
-    { id: preOfferStatusEnum.Accepted, name: 'Accepted' },
-    { id: preOfferStatusEnum.Pending, name: 'Pending' }
+    { id: StageStatusEnum.NA, name: 'N/A' },
+    { id: StageStatusEnum.InProgress, name: 'In Progress', value: 'InProgress' },
+    { id: StageStatusEnum.Accepted, name: 'Accepted', value: 'Accepted' },
+    { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
+    { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' }
   ];
 
   offerStatusList: any[] = [

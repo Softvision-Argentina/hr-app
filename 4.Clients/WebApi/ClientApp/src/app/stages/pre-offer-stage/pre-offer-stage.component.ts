@@ -66,7 +66,7 @@ export class PreOfferStageComponent implements OnInit {
     private processService: ProcessService,
     public prehistoryOfferModal: PreOfferHistory) {
 
-    this.statusList = globals.stageStatusList;
+    this.statusList = globals.preOfferStatusList;
   }
 
   showPreOfferHistoryModal(modalContent: TemplateRef<{}>) {
