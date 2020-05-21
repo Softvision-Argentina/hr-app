@@ -1,8 +1,14 @@
 @import '~ngx-toastr/toastr.css';
 /* You can add global styles to this file, and also import other style files */
 @import url("assets/fonts/proximaNova.css");
+
+.loginForm{
+    display: flex;
+    flex-direction: column;
+}
+
 #toast-container > div {
-  opacity:1;
+  opacity: 1;
 }
 
 .loader {
@@ -22,6 +28,7 @@
   0% {
     -webkit-transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
   }
@@ -31,6 +38,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -44,24 +52,6 @@ button.ant-modal-close.ng-star-inserted {
 
 button > i {
   vertical-align: unset !important;
-}
-@media screen and (max-width: 1443px) and (min-width: 1135px){
-  nz-modal > div > div.ant-modal-wrap > div.ant-modal
-  {
-    width: 70vw !important;
-  }
-}
-@media screen and (max-width: 1134px) and (min-width: 676px){
-  nz-modal > div > div.ant-modal-wrap > div.ant-modal
-  {
-    width: 555px !important;
-  }
-}
-
-@media screen and (max-width: 675px) {
-  #cdk-overlay-2 > nz-modal > div > div.ant-modal-wrap > div.ant-modal > div{
-    width: 558px;
-  }
 }
 
 .ant-col-12 {
@@ -85,4 +75,25 @@ nz-form-label.requiredFieldLabel::before {
   margin-bottom: -20px !important;
   padding-bottom: 20px !important;
   overflow: auto;
+}
+}
+
+@media screen and (max-width : 779px) {
+
+}
+
+@media only screen and (min-device-width : 780px) and (max-device-width : 1280px) {
+
+}
+
+@media only screen and (min-width : 1281px) and (max-device-width : 1600px) {
+
+}
+
+@media only screen and (min-width : 1601px) and (max-device-width : 1920px) {
+
+}
+
+@media only screen and (min-width : 1921px) {
+
 }

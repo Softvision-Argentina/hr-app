@@ -1,7 +1,13 @@
+:host {
+  height: 50%;
+  display: inline-block;
+  min-width: 100%;
+}
+
 #googleBtn {
     display: inline-block;
     background: white;
-    width: 60%;
+    min-width: 100%;
     border: 3px solid #C800A1;
     white-space: nowrap;
   }

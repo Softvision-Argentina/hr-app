@@ -1,117 +1,167 @@
-.background {
+.login-container {
   background-image: url("./../../assets/images/image-header-min.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  padding: 5%;
+  display: flex;
+  flex-direction: row;
 }
 
-.welcome {
-    margin: 50px 0 0px 60px;
-
+.login-form {
+  height: 100%;
 }
 
-.title {
+.login-form-title {
+  max-width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.login-form-title {
+  max-width: 50%;
+}
+
+  .login-form-title > h1 {
+    margin: 0;
+    font-size: 5vh;
+    color: white;
+  }
+
+.login-intro-container {
+  max-width: 50%;
+  width: 50%;
+  height: 100%;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5%;
+  background-image: url("./../../assets/images/pattern-waves.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.login-intro {
+  min-height: 50%;
+  min-width: 50%;
+}
+
+
+.login-form-container {
+  max-width: 50%;
+  width: 50%;
+  height: 100%;
+  float: right;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5%;
+}
+
+.login-form-title {
+  text-align: center;
+  min-width: 100%;
+  height: 20%;
+  color: white;
+  font-size: 2vw;
+}
+
+.login-form-inputs {
+  height: 80%;
+}
+
+.login-intro-title {
   color: white;
   font-weight: 900;
-  font-size: 100px;
-  margin-bottom: -40px;
+  font-size: 2vw;
 }
 
-.subtitle {
-    color: white;
-    font-weight: 300;
-    font-size: 24px;
-    margin-top: 40px;
-}
-
-.loginForm {
-  background-color: #e4dfdf54;
-  height: 100%;
-
-}
-
-.loginForm div div {
-  padding-bottom: 40px;
-}
-
-.loginForm div h2 {
-  font-size: 40px;;
-}
-
-.logo {
-  width: 88%;
-}
-
-.recru-container {
-  width: 23%;
-}
-
-.recru {
-  font-size: 75px;
-  margin-bottom: 0px;
-  font-weight: bold;
+.login-intro-subtitle {
   color: white;
+  font-weight: 300;
+  font-size: 2vw;
 }
 
-.recru-logo {
-  width: 100%;
+.login-intro-separator {
+  height: 10%;
+}
+
+  .login-intro-separator > img {
+    min-width: 100%;
+    height: 5%;
+  }
+
+.login-intro-title {
+  text-align: center;
+}
+
+.login-intro-subtitle {
+  text-align: center;
 }
 
 .login-background-image {
-  background-image: url('./../../assets/images/pattern-waves.png'); 
-  padding-bottom: 19%; 
+  background-image: url('./../../assets/images/pattern-waves.png');
 }
 
-@media screen and (max-width: 1920px) and (min-width: 1801px){
-  .login-background-image {
-    padding-bottom: 12%; 
-  }
-
-  .title {
-    font-size: 120px;
-  }
+.recru-logo {
+  max-width: 100%;
 }
 
-@media screen and (max-width: 1800px) and (min-width: 1381px){
-  .login-background-image {
-    padding-bottom: 6%; 
-  }
-
-  .title {
-    font-size: 90px;
-  }
+.container-fluid {
+  height: 100%;
 }
 
-@media screen and (max-width: 1380px) and (min-width: 1290px){
-  .recru-container {
-    width: 27%;
+@media screen and (max-width: 700px) {
+
+  .login-container {
+    flex-direction: column;
+    height: 150vh;
   }
 
-  .logo {
-    width: 100%;
+  .ant-form-item-control {
+    min-height: 100%;
+    min-width: 100%;
+    position: absolute;
   }
 
-  .login-background-image {
-    padding-bottom: 11%; 
+  .ant-form-item-control {
+    min-height: 100%;
+    min-width: 100%;
+    position: absolute;
   }
 
-  .title {
-    font-size: 80px;
-  }
-}
-@media screen and (max-width: 1289px) and (min-width: 1024px){
-  .login-background-image {
-    padding-bottom: 8%; 
+  .login-intro-container {
+    min-width: 100%;
   }
 
-  .title {
-    font-size: 80px;
+  .login-form-container {
+    min-width: 100%;
+  }
+
+  .login-intro-title {
+    font-size: 5vh;
+  }
+
+  .login-intro-subtitle {
+    font-size: 5vh;
   }
 }
 
- @media screen and (max-width: 1200px) and (min-width: 1024px){
-  .title {
-    font-size: 80px;
-  }
-} 
+
+@media screen and (max-width: 1920px) and (min-width: 1801px) {
+}
+
+@media screen and (max-width: 1800px) and (min-width: 1381px) {
+}
+
+@media screen and (max-width: 1380px) and (min-width: 1290px) {
+}
+
+@media screen and (max-width: 1289px) and (min-width: 1024px) {
+}
+
+@media screen and (max-width: 1200px) and (min-width: 1024px) {
+}

@@ -8,7 +8,7 @@
 >
   <app-nav-menu *ngIf="isAuthenticated()"></app-nav-menu>
   <app-side-menu *ngIf="isAuthenticated()"></app-side-menu>
-  <div class="container-fluid padding" [ngClass]="{'authenticated': isAuthenticated()}">
+  <div class="container-fluid padding main" [ngClass]="{'authenticated': isAuthenticated()}">
     <router-outlet></router-outlet>
   </div>
 </div>

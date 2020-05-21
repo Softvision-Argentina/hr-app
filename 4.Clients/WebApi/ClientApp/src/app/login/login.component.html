@@ -1,94 +1,60 @@
 <ng-template #contentTemplate>
-    <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
-        <nz-card-meta nzTitle="{{currentUser.firstName}}" nzDescription="{{currentUser.username}}">
-        </nz-card-meta>
-        <br />
-        <ul class="ant-card-actions">
-            <li [style.width.%]="100" nzTitle="Logout">
-                <span (click)="logout()" style="cursor: pointer;"><i nz-icon nzType="logout"
-            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout</span>
-            </li>
-        </ul>
-    </nz-card>
+  <nz-card [nzBordered]="false" [nzCover]="coverTemplate">
+    <nz-card-meta nzTitle="{{currentUser.firstName}}" nzDescription="{{currentUser.username}}">
+    </nz-card-meta>
+    <br />
+    <ul class="ant-card-actions">
+      <li [style.width.%]="100" nzTitle="Logout">
+        <span (click)="logout()" style="cursor: pointer;">
+          <i nz-icon nzType="logout"
+             style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout
+        </span>
+      </li>
+    </ul>
+  </nz-card>
 </ng-template>
 
 <ng-template #coverTemplate>
-    <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
+  <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
 </ng-template>
 
 <ng-template #loginModal>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <csoft-login></csoft-login>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <nz-divider nzText="OR"></nz-divider>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <br />
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
-            <google-signin></google-signin>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
+  <csoft-login></csoft-login>
+  <google-signin></google-signin>
 </ng-template>
-<div  nz-row  style="height: 100%">
-    <div class="background" nz-col nzSpan="16">
-        <div>
-            <div class="welcome">
-                <div nz-row>
-                    <div nz-col nzSpan="18">
-                        <div class="recru-container" nz-col nzSpan="5">
-                            <div nz-row nzType="flex" nzJustify="end">
-                                <img class="recru-logo" src="../../assets/images/recru-logo.png">
-                            </div>
-                            </div>
 
-                        <div nz-col nzSpan="17"></div>
-                    </div>
-                </div>
+<div class="login-container">
 
-                <div class="login-background-image" nz-row>
-                    <div style="margin-top: 10%" nz-row>
-                        <div nz-col nzSpan="18">
-                            <div nz-row class="title">EMPOWERING</div>
-                            <div nz-row class="title">OUR BEST</div>
-                            <div nz-row class="title">TALENT</div>
-                        </div>
-                    </div>
-                    <div nz-row>
-                        <div nz-col nzSpan="18">
-                            <h5 class="subtitle">The Cognizant Softvision app for users</h5>
-                        </div>
-                    </div>
-                    <img style="margin-top: 90px" src="../../assets/images/rectangle.png">
-                </div>
-            </div>
-            
-        </div>
+  <div class="login-intro-container">
+    <div class="login-intro">
+      <div class="login-intro-image">
+        <img class="recru-logo" src="../../assets/images/recru-logo.png">
+      </div>
+      <div class="login-intro-separator">
+        <img src="../../assets/images/rectangle.png">
+      </div>
+      <div class="login-intro-title">
+        EMPOWERING OUR BEST TALENT
+      </div>
+      <div class="login-intro-subtitle">
+        The Cognizant Softvision app for users
+      </div>
     </div>
-    <div class="loginForm" nz-col nzSpan="8">
-        <div style="padding: 200px 95px 0px 50px" nz-row>
-            <h2 style="padding-bottom: 40px" ><b>Login</b></h2>
+  </div>
 
-            <div>
-                <csoft-login></csoft-login>
-            </div>
-            <google-signin></google-signin>
-
-        </div>
-        <br />
-        <div nz-row>
-            <div nz-col nzSpan="20">
-            </div>
-        </div>
+  <div class="login-form-container">
+    <div class="login-form">
+      <div class="login-form-title">
+        <h1>
+          Login
+        </h1>
+      </div>
+      <div class="login-form-inputs">
+        <csoft-login></csoft-login>
+        <google-signin></google-signin>
+      </div>
     </div>
+  </div>
+
 </div>
+
