@@ -122,7 +122,7 @@
           <technical-stage [_process]="emptyProcess" [_users]="users" [technicalStage]="emptyProcess.technicalStage"
             (selectedSeniority)="updateSeniority($event)"></technical-stage>
         </div>
-        <div ngxSlickItem class="slide">
+        <div ngxSlickItem class="slide" style="overflow-y: auto; height: 550px">
           <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"></client-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">

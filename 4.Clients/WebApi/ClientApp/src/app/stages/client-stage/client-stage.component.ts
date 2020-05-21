@@ -42,7 +42,7 @@ export class ClientStageComponent implements OnInit {
     interviewClient: [null, [Validators.required]],
     clientInterviewer: [null],
     project: [null],
-    interviewFeedback: [null, [Validators.required]]
+    interviewFeedback: [null, [Validators.required, Validators.maxLength(300)]]
   });
 
   statusList : any[];

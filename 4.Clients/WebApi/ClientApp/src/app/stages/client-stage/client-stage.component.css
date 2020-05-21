@@ -1,3 +1,8 @@
 nz-table {
     padding: 50px;
 }
+
+::ng-deep .ant-table-tbody > tr > td, .ant-table-thead > tr > th
+{ 
+    padding: 26px; 
+}

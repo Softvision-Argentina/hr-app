@@ -145,40 +145,45 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
-                    <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">
-                        Field required
-                    </nz-form-explain>
+                    <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
+                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
+                            Field required
+                        </ng-container>
+                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
+                            The maximun length is 300
+                        </ng-container>
+                    </nz-form-explain>                    
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="12" nzOffset="6">
             <nz-form-item>
                 <button nz-button nzType="primary" (click)="addInterview()">Add Interview</button>
-            </nz-form-item>
+            </nz-form-item>            
         </div>
     </div>
-    <div nz-row>
-        <nz-table #interviewTable [nzData]="interviews" [nzShowPagination]="false" [nzPageSize]="interviews.length" >
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Client</th>
-              <th>Feedback</th>
-              <th>Interviewer</th>
-              <th>Project</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let interview of interviewTable.data.reverse()">
-              <td>{{interview.interviewDate | date  : 'shortDate' }}</td>
-              <td>{{interview.client}}</td>
-              <td>{{interview.feedback}}</td>
-              <td>{{interview.clientInterviewer}}</td>
-              <td>{{interview.project}}</td>
-            </tr>
-          </tbody>
+    <div nz-row> 
+        <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false" [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
+            <thead>
+                <tr>
+                    <th nzWidth="200px">Date</th>
+                    <th nzWidth="200px">Client</th>
+                    <th nzWidth="200px">Feedback</th>
+                    <th nzWidth="200px">Interviewer</th>
+                    <th nzWidth="200px">Project</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let interview of interviewTable.data">
+                    <td nzWidth="240px">{{interview.interviewDate | date  : 'shortDate' }}</td>
+                    <td nzWidth="240px">{{interview.client}}</td>
+                    <td nzWidth="240px"word-break: break-all>{{interview.feedback}}</td>
+                    <td nzWidth="240px">{{interview.clientInterviewer}}</td>
+                    <td nzWidth="240px">{{interview.project}}</td>
+                </tr>
+            </tbody>
         </nz-table>
     </div>
 </form>

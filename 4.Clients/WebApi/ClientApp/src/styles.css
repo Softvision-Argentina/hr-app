@@ -80,3 +80,9 @@ input[type="number"] {
 nz-form-label.requiredFieldLabel::before {
   content: "* ";
 }
+
+#interviewTable .ant-table-header {
+  margin-bottom: -20px !important;
+  padding-bottom: 20px !important;
+  overflow: auto;
+}
