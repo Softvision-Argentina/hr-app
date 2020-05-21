@@ -94,12 +94,18 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   updateSeniority(seniorityId) {
+    if (this.chosenSeniority) {
+      if (this.chosenSeniority !== seniorityId + 1 && this.chosenSeniority !== seniorityId - 1) {
+        this.technicalForm.controls['alternativeSeniority'].setValue(0);
+      }
+    }
     this.chosenSeniority = seniorityId;
     this.selectedSeniority.emit(seniorityId);
     this.selectedSeniorities = [];
     if (seniorityId !== this.seniorityList.find(
       s => s.id === this.technicalForm.controls['alternativeSeniority'].value).id) {
       this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
+      // N/A should be shown in offer stage?
       this.selectedSeniorities[1] = this.seniorityList.find(s => s.id === this.technicalForm.controls['alternativeSeniority'].value);
     } else {
       this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
@@ -113,6 +119,7 @@ export class TechnicalStageComponent implements OnInit {
     if (seniorityId !== this.seniorityList.find(
       s => s.id === this.technicalForm.controls['seniority'].value).id) {
       this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === this.technicalForm.controls['seniority'].value);
+      // N/A should be shown in offer stage?
       this.selectedSeniorities[1] = this.seniorityList.find(s => s.id === seniorityId);
     } else {
       this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
@@ -219,6 +226,7 @@ export class TechnicalStageComponent implements OnInit {
 
     if (technicalStage.seniority) {
       this.technicalForm.controls['seniority'].setValue(technicalStage.seniority);
+      this.chosenSeniority = technicalStage.seniority;
     }
 
     if (technicalStage.alternativeSeniority) {

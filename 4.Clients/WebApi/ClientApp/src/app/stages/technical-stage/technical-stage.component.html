@@ -110,7 +110,9 @@
                                 </nz-option>
                             </ng-template>
                         </span>
-
+                        <ng-template #noChosenSeniority>
+                            <nz-option *ngIf="seniority.id === 0" nzLabel="{{seniority.name}}" [nzValue]="seniority.id"></nz-option>
+                        </ng-template>
                     </nz-select>
                     <nz-form-explain
                         *ngIf="technicalForm.get('seniority').dirty && technicalForm.get('seniority').errors">Please

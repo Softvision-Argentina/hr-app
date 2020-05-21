@@ -218,12 +218,10 @@ namespace Domain.Services.Impl.Services
             process.Candidate = candidate;
             candidate.DNI = process.PreOfferStage.DNI;
             process.HrStage.UserOwnerId = process.UserOwnerId;
-            process.TechnicalStage.UserOwnerId = process.UserOwnerId;
             process.ClientStage.UserOwnerId = process.UserOwnerId;
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
 
-            _candidateRepository.Update(candidate);
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);
             _clientStageRepository.Update(process.ClientStage);
