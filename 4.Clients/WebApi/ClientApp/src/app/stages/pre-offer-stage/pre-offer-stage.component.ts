@@ -37,7 +37,7 @@ export class PreOfferStageComponent implements OnInit {
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
     vacationDays: [0, [Validators.required]],
-    firstDay: [new Date(), [Validators.required]],
+    firstday: [new Date(), [Validators.required]],
     bonus: '',
     hireDate: [new Date(), [Validators.required]],
     backgroundCheckDone: false,
@@ -134,7 +134,7 @@ export class PreOfferStageComponent implements OnInit {
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
     stage.vacationDays = this.getControlValue(form.controls.vacationDays);
-    stage.firstDay = this.getControlValue(form.controls.firstDay);
+    stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
@@ -191,6 +191,14 @@ export class PreOfferStageComponent implements OnInit {
 
     if (preOfferStage.feedback) {
       this.preOfferForm.controls['feedback'].setValue(preOfferStage.feedback);
+    }
+
+    if (preOfferStage.bonus) {
+      this.preOfferForm.controls['bonus'].setValue(preOfferStage.bonus);
+    }
+
+    if (preOfferStage.firstday) {
+      this.preOfferForm.controls['firstday'].setValue(preOfferStage.firstday);
     }
 
     if (preOfferStage.backgroundCheckDone) {

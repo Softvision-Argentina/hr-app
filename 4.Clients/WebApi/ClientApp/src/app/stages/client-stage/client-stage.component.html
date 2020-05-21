@@ -177,11 +177,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let interview of interviewTable.data">
-                    <td nzWidth="240px">{{interview.interviewDate | date  : 'shortDate' }}</td>
-                    <td nzWidth="240px">{{interview.client}}</td>
-                    <td nzWidth="240px"word-break: break-all>{{interview.feedback}}</td>
-                    <td nzWidth="240px">{{interview.clientInterviewer}}</td>
-                    <td nzWidth="240px">{{interview.project}}</td>
+                    <td nzWidth="200px">{{interview.interviewDate | date  : 'shortDate' }}</td>
+                    <td nzWidth="200px">{{interview.client}}</td>
+                    <td nzWidth="200px" word-break: break-all>{{interview.feedback}}</td>
+                    <td nzWidth="200px">{{interview.clientInterviewer}}</td>
+                    <td nzWidth="200px">{{interview.project}}</td>
                 </tr>
             </tbody>
         </nz-table>

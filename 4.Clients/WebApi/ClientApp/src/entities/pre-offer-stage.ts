@@ -13,7 +13,7 @@ export class preOfferStage {
   rejectionReason?: string;
   remunerationOffer: number;
   vacationDays: number;
-  firstDay: Date;
+  firstday: Date;
   bonus: string;
   hireDate: Date;
   seniority: SeniorityEnum;

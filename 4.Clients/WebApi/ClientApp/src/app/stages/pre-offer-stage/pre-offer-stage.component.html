@@ -114,15 +114,17 @@
       </div>
       <div nz-row>
         <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstDay">First Day</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-              <nz-date-picker style="width: 100%;" formControlName="firstDay"></nz-date-picker>
-              <nz-form-explain *ngIf="preOfferForm.get('firstDay').dirty && preOfferForm.get('firstDay').errors">
-                Please input a first day
-              </nz-form-explain>
-            </nz-form-control>
-          </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday" [ngClass]="{'requiredFieldLabel': isRequiredField('firstday')}">
+                    First Day
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
+                    <nz-form-explain *ngIf="preOfferForm.get('firstday').dirty && preOfferForm.get('firstday').errors">
+                        Please input a date
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
@@ -132,11 +134,11 @@
                                   placeholder="Input any additional information if necessary" id="bonus"></textarea>
             </nz-form-control>
             <nz-form-explain style="color: #f5222d"
-                             *ngIf="preOfferForm.get('feedback').dirty && preOfferForm.get('feedback').errors">
-              <ng-container *ngIf="preOfferForm.get('feedback')?.hasError('trimBeginError')">
+                             *ngIf="preOfferForm.get('bonus').dirty && preOfferForm.get('bonus').errors">
+              <ng-container *ngIf="preOfferForm.get('bonus')?.hasError('trimBeginError')">
                 The input has leading whitespace!
               </ng-container>
-              <ng-container *ngIf="preOfferForm.get('feedback')?.hasError('trimEndError')">
+              <ng-container *ngIf="preOfferForm.get('bonus')?.hasError('trimEndError')">
                 The input has trailing whitespace!
               </ng-container>
             </nz-form-explain>

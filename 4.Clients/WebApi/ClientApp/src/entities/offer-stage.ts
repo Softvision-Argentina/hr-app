@@ -15,7 +15,7 @@ export class OfferStage {
     seniority: SeniorityEnum;
     remunerationOffer: number;
     vacationDays: number;
-    firstDay: Date;
+  firstday: Date;
     bonus: string;
     backgroundCheckDone: boolean;
     backgroundCheckDoneDate: Date;
