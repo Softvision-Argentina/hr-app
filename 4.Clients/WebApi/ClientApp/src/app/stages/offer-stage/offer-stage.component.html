@@ -94,19 +94,16 @@
     </div>
   <div nz-row>
     <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday">First Day</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
-          <nz-form-explain *ngIf="offerForm.get('firstday').dirty && offerForm.get('firstday').errors">
-            Please input a first day
+        <nz-form-item>
+          <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer" [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}" >Final Gross Salary</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer" placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
+          </nz-form-control>
+          <nz-form-explain *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
+            Please input a final gross remuneration offer
           </nz-form-explain>
-        </nz-form-control>
-        <nz-form-explain *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
-          Please input a final gross salary offer
-        </nz-form-explain>
-      </nz-form-item>
-    </div>
+        </nz-form-item>
+      </div>
     <div nz-col nzSpan="12">
       <nz-form-item>
         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>

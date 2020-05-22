@@ -110,7 +110,7 @@ export class PreOfferStageComponent implements OnInit {
   }
 
   statusChanged() {
-    if (this.preOfferForm.controls['status'].value === StageStatusEnum.InProgress) {
+    if (this.preOfferForm.controls['status'].value === StageStatusEnum.InProgress || this.preOfferForm.controls['status'].value === StageStatusEnum.PendingReply) {
        this.changeFormStatus(true);
        this.preOfferForm.markAsTouched();
     } else {
@@ -152,7 +152,7 @@ export class PreOfferStageComponent implements OnInit {
   fillForm(preOfferStage: preOfferStage) {
     const status: number = this.statusList.filter(s => s.id === preOfferStage.status)[0].id;
 
-    if (status === StageStatusEnum.InProgress) {
+    if (status === StageStatusEnum.InProgress || status === StageStatusEnum.PendingReply ) {
       this.changeFormStatus(true);
     }
 

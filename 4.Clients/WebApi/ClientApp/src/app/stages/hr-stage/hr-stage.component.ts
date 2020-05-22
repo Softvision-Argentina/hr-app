@@ -51,7 +51,7 @@ export class HrStageComponent implements OnInit {
   @Input() hrStage: HrStage;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
-    this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
+    this.statusList = globals.hrStageStatusList;
     this.englishLevelList = globals.englishLevelList;
     this.rejectionReasonsHRList = globals.rejectionReasonsHRList.sort((a, b) => (a.name.localeCompare(b.name)));
   }

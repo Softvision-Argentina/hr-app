@@ -95,17 +95,27 @@ export class Globals {
     { id: RejectionReasonsHrEnum.Other, name: 'Other' }
   ];
 
-  preOfferStatusList: any[] = [
+  hrStageStatusList: any[] = [
     { id: StageStatusEnum.NA, name: 'N/A' },
     { id: StageStatusEnum.InProgress, name: 'In Progress', value: 'In Progress' },
     { id: StageStatusEnum.Accepted, name: 'Accepted', value: 'Accepted' },
     { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
+    { id: StageStatusEnum.Rejected, name: 'Rejected', value: 'Rejected' },
+    { id: StageStatusEnum.Recall, name: 'Recall', value: 'Recall' },
+    { id: StageStatusEnum.Pipeline, name: 'Pipeline', value: 'Pipeline' },
     { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' }
+  ];
+
+  preOfferStatusList: any[] = [
+    { id: StageStatusEnum.NA, name: 'N/A' },
+    { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' },
+    { id: StageStatusEnum.Accepted, name: 'Accepted', value: 'Accepted' },
+    { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
   ];
 
   offerStatusList: any[] = [
     { id: OfferStatusEnum.NA, name: 'N/A' },
-    { id: OfferStatusEnum.InProgress, name: 'In Porgress' },
+    { id: OfferStatusEnum.InProgress, name: 'In Progress' },
     { id: OfferStatusEnum.Rejected, name: 'Rejected' },
     { id: OfferStatusEnum.Declined, name: 'Declined' },
     { id: OfferStatusEnum.Hired, name: 'Hired' }
