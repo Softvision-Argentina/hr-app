@@ -22,21 +22,8 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Date
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
-                    <nz-form-explain *ngIf="offerForm.get('date').dirty && offerForm.get('date').errors">
-                        Please input a date
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
     </div>
-    <div nz-row>
+    <div nz-row [ngStyle]="{'display': 'none'}">
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
@@ -66,24 +53,7 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority" [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
-                    Seniority
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select #seniority formControlName="seniority"
-                        (ngModelChange)="updateSeniority(seniority.value)">
-                        <nz-option *ngFor="let seniority of seniorityList" nzLabel="{{seniority.name}}"
-                            [nzValue]="seniority.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('seniority').dirty && offerForm.get('seniority').errors">
-                        Please select a seniority</nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+    <div nz-row [ngStyle]="{'display': 'none'}">
         <div nz-col nzSpan="6" nzOffset="6">
             <button nz-button [disabled]="offerForm.get('status').value !== 1" nzType="primary"
                 (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
@@ -103,63 +73,6 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
-                    Feedback
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback"
-                        placeholder="Input any additional information if necessary" id="feedback"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d"
-                    *ngIf="offerForm.get('feedback').dirty && offerForm.get('feedback').errors">
-                    <ng-container *ngIf="offerForm.get('feedback')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="offerForm.get('feedback')?.hasError('trimEndError')">
-                        The input has trailing whitespace!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div>
-    </div>
-  <div nz-row>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer">Final Gross Remuneration *</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24">
-          <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer" placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
-        </nz-form-control>
-        <nz-form-explain *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
-          Please input a final gross remuneration offer
-        </nz-form-explain>
-      </nz-form-item>
-    </div>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24">
-          <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
-        </nz-form-control>
-        <nz-form-explain *ngIf="offerForm.get('vacationDays').dirty && offerForm.get('vacationDays').errors">
-          Please input vacations days
-        </nz-form-explain>
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday">First Day</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
-          <nz-form-explain *ngIf="offerForm.get('firstday').dirty && offerForm.get('firstday').errors">
-            Please input a first day
-          </nz-form-explain>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
     <div nz-col nzSpan="12">
       <nz-form-item>
         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="bonus">Bonus</nz-form-label>
@@ -172,65 +85,46 @@
           <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimBeginError')">
             The input has leading whitespace!
           </ng-container>
+          <ng-container *ngIf="offerForm.get('bonus')?.hasError('bonus')">
+            The input has trailing whitespace!
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-item>
+    </div>
+    </div>
+  <div nz-row>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday">First Day</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
+          <nz-form-explain *ngIf="offerForm.get('firstday').dirty && offerForm.get('firstday').errors">
+            Please input a first day
+          </nz-form-explain>
+        </nz-form-control>
+        <nz-form-explain *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
+          Please input a final gross salary offer
+        </nz-form-explain>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
+        </nz-form-control>
+        <nz-form-explain style="color: #f5222d"
+                         *ngIf="offerForm.get('bonus').dirty && offerForm.get('bonus').errors">
+          <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimBeginError')">
+            The input has leading whitespace!
+          </ng-container>
           <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimEndError')">
             The input has trailing whitespace!
           </ng-container>
         </nz-form-explain>
       </nz-form-item>
     </div>
-
-
-
-
   </div>
-    <div nz-row>
-        <div nz-col nzSpan="8" nzOffset="4">
-            <nz-form-item>
-                <nz-form-control [nzSm]="12" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!backCheckEnabled" (change)="toggleBackgroundCheck()"
-                        (click)="toggleBackgroundCheck()" formControlName="backgroundCheckDone"
-                        nzFor="backgroundCheckDone">Background Check</label>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate" [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDoneDate')}">
-                    Done Date
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="backgroundCheckDoneDate"></nz-date-picker>
-                    <nz-form-explain
-                        *ngIf="offerForm.get('backgroundCheckDoneDate').dirty && offerForm.get('backgroundCheckDoneDate').errors">
-                        Please input a date
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="8" nzOffset="4">
-            <nz-form-item>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!preocupationalCheckEnabled" (click)="togglePreocupationalCheck()"
-                        (change)="togglePreocupationalCheck()" formControlName="preocupationalDone"
-                        nzFor="preocupationalDone">Pre-Ocupational Check</label>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate" [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
-                Done Date
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
-                <nz-form-explain
-                    *ngIf="offerForm.get('preocupationalDoneDate').dirty && offerForm.get('preocupationalDoneDate').errors">
-                    Please input a date
-                </nz-form-explain>
-            </nz-form-control>
-        </div>
-    </div>
     <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>

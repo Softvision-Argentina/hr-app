@@ -15,6 +15,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
   styleUrls: ['./pre-offer-stage.component.css'],
   providers: [PreOfferHistory]
 })
+
 export class PreOfferStageComponent implements OnInit {
 
   @Input()
@@ -29,8 +30,8 @@ export class PreOfferStageComponent implements OnInit {
   preOfferForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
-    date: [new Date(), [Validators.required]],
-    dni: [0, [dniValidator]],
+    date: [new Date()],
+    dni: [0, [Validators.required, dniValidator]],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
@@ -41,9 +42,9 @@ export class PreOfferStageComponent implements OnInit {
     bonus: '',
     hireDate: [new Date(), [Validators.required]],
     backgroundCheckDone: false,
-    backgroundCheckDoneDate: [new Date(), [Validators.required]],
+    backgroundCheckDoneDate: [new Date()],
     preocupationalDone: false,
-    preocupationalDoneDate: [new Date(), [Validators.required]],
+    preocupationalDoneDate: [new Date()],
     rejectionReason: [null, [Validators.required]],
   });
 
@@ -55,7 +56,10 @@ export class PreOfferStageComponent implements OnInit {
   preocupationalDateEnabled: boolean;
   isDniLoading = false;
   isDniValid = false;
-
+  acceptedDeclined: any[] = [
+    { label: 'Declined', value: true},
+    { label: 'Accepted', value: false}
+  ];
   @Input() preOfferStage: preOfferStage;
   @ViewChild(PreOfferHistory) prehistoryOffer: PreOfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
@@ -92,9 +96,7 @@ export class PreOfferStageComponent implements OnInit {
 
   changeFormStatus(enable: boolean) {
     for (const i in this.preOfferForm.controls) {
-      if (this.preOfferForm.controls[i] !== this.preOfferForm.controls['status'] &&
-      this.preOfferForm.controls[i] !== this.preOfferForm.controls.backgroundCheckDoneDate &&
-      this.preOfferForm.controls[i] !== this.preOfferForm.controls.preocupationalDoneDate) {
+      if (this.preOfferForm.controls[i] !== this.preOfferForm.controls['status']) {
         if (enable) {
           this.preOfferForm.controls[i].enable();
         } else {
@@ -105,8 +107,6 @@ export class PreOfferStageComponent implements OnInit {
 
     this.backCheckEnabled = enable;
     this.preocupationalCheckEnabled = enable;
-    this.enableBackDate();
-    this.enablePreocupationalDate();
   }
 
   statusChanged() {
@@ -203,8 +203,6 @@ export class PreOfferStageComponent implements OnInit {
 
     if (preOfferStage.backgroundCheckDone) {
       this.preOfferForm.controls['backgroundCheckDone'].setValue(preOfferStage.backgroundCheckDone);
-      this.backDateEnabled = preOfferStage.backgroundCheckDone;
-      this.enableBackDate();
     }
 
     if (preOfferStage.backgroundCheckDoneDate) {
@@ -213,8 +211,6 @@ export class PreOfferStageComponent implements OnInit {
 
     if (preOfferStage.preocupationalDone) {
       this.preOfferForm.controls['preocupationalDone'].setValue(preOfferStage.preocupationalDone);
-      this.preocupationalDateEnabled = preOfferStage.preocupationalDone;
-      this.enablePreocupationalDate();
     }
 
     if (preOfferStage.preocupationalDoneDate) {
@@ -228,28 +224,10 @@ export class PreOfferStageComponent implements OnInit {
 
   toggleBackgroundCheck() {
     this.backDateEnabled = !this.backDateEnabled;
-    this.enableBackDate();
   }
 
   togglePreocupationalCheck() {
     this.preocupationalDateEnabled = !this.preocupationalDateEnabled;
-    this.enablePreocupationalDate();
-  }
-
-  enableBackDate() {
-    if (this.backCheckEnabled && this.backDateEnabled) {
-      this.preOfferForm.controls.backgroundCheckDoneDate.enable();
-    } else {
-      this.preOfferForm.controls.backgroundCheckDoneDate.disable();
-    }
-  }
-
-  enablePreocupationalDate() {
-    if (this.preocupationalCheckEnabled && this.preocupationalDateEnabled) {
-      this.preOfferForm.controls.preocupationalDoneDate.enable();
-    } else {
-      this.preOfferForm.controls.preocupationalDoneDate.disable();
-    }
   }
 
   dniChanged() {

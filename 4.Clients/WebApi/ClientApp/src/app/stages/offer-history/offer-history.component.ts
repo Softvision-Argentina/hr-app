@@ -94,7 +94,7 @@ export class OfferHistory implements OnInit {
               toAdd.offerDate = this.editForm.controls['offerDate'].value;
               toAdd.salary = this.editForm.controls['salaryOffer'].value;
               toAdd.rejectionReason = '';
-              toAdd.status = OfferStatusEnum.Pending;
+              toAdd.status = OfferStatusEnum.PendingReply;
               toAdd.processId = this.processId;
               this.facade.offerService.add(toAdd)
                 .subscribe(() => {

@@ -22,7 +22,7 @@
                         select a status</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
-        </div> 
+        </div>
     </div>
 
     <div nz-row>
@@ -47,7 +47,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Date
+                    Born Date
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
@@ -60,38 +60,8 @@
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
-                    Responsible
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain *ngIf="preOfferForm.get('userOwnerId').dirty && preOfferForm.get('userOwnerId').errors">Please input the user</nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
-                    Delegate
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer">Final Gross Remuneration *</nz-form-label>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer" [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}" >Gross Salary</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
               <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer" placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
             </nz-form-control>
@@ -102,7 +72,7 @@
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays" [ngClass]="{'requiredFieldLabel': isRequiredField('vacationDays')}" >Vacation days</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
               <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
             </nz-form-control>
@@ -116,7 +86,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday" [ngClass]="{'requiredFieldLabel': isRequiredField('firstday')}">
-                    First Day
+                    Tentative Start Date
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
@@ -146,18 +116,22 @@
         </div>
       </div>
     <div nz-row>
-        <div nz-col nzSpan="8" nzOffset="4">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-control [nzSm]="12" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!backCheckEnabled" (change)="toggleBackgroundCheck()"
-                        (click)="toggleBackgroundCheck()" formControlName="backgroundCheckDone"
-                        nzFor="backgroundCheckDone">Background Check</label>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDone')}">
+                    Background Check
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="backgroundCheckDone">
+                        <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
+                        <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate" [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDoneDate')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate">
                     Done Date
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -171,26 +145,31 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="8" nzOffset="4">
+        <div nz-col nzSpan="12">
             <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDone')}">
+                    Medical Check
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <label nz-checkbox [nzDisabled]="!preocupationalCheckEnabled" (click)="togglePreocupationalCheck()"
-                        (change)="togglePreocupationalCheck()" formControlName="preocupationalDone"
-                        nzFor="preocupationalDone">Pre-Ocupational Check</label>
+                    <nz-select formControlName="backgroundCheckDone">
+                        <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
+                        <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate" [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
-                Done Date
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
-                <nz-form-explain
-                    *ngIf="preOfferForm.get('preocupationalDoneDate').dirty && preOfferForm.get('preocupationalDoneDate').errors">
-                    Please input a date
-                </nz-form-explain>
-            </nz-form-control>
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate" [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
+                    Done Date 
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
+                    <nz-form-explain *ngIf="preOfferForm.get('preocupationalDoneDate').dirty && preOfferForm.get('preocupationalDoneDate').errors">
+                        Please input a Preocupational Done Date
+                    </nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
         </div>
     </div>
     <div nz-row>

@@ -62,7 +62,7 @@ export class OfferStageComponent implements OnInit {
     private processService: ProcessService,
     private historyOfferModal: OfferHistory) {
 
-    this.statusList = globals.stageStatusList;
+    this.statusList = globals.offerStatusList;
   }
 
   showOfferHistoryModal(modalContent: TemplateRef<{}>) {
