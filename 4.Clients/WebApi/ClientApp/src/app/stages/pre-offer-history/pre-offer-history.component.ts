@@ -95,7 +95,7 @@ export class PreOfferHistory implements OnInit {
               toAdd.offerDate = this.editForm.controls['offerDate'].value;
               toAdd.salary = this.editForm.controls['salaryOffer'].value;
               toAdd.rejectionReason = '';
-              toAdd.status = preOfferStatusEnum.PendingReply; 
+              toAdd.status = preOfferStatusEnum.PendingReply;
               toAdd.processId = this.processId;
               this.facade.preOfferService.add(toAdd)
                 .subscribe(() => {
