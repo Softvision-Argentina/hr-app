@@ -58,9 +58,15 @@ export class Globals {
   ];
 
   candidateStatusList: any[] = [
-    { id: CandidateStatusEnum.New, name: 'New' }, { id: CandidateStatusEnum.InProgress, name: 'In Progress' },
-    { id: CandidateStatusEnum.Recall, name: 'Recall' }, { id: CandidateStatusEnum.Hired, name: 'Hired' },
-    { id: CandidateStatusEnum.Rejected, name: 'Rejected' }
+    { id: CandidateStatusEnum.New, name: 'New' },
+    { id: CandidateStatusEnum.InProgress, name: 'In Progress' },
+    { id: CandidateStatusEnum.Recall, name: 'Recall' },
+    { id: CandidateStatusEnum.Hired, name: 'Hired' },
+    { id: CandidateStatusEnum.Rejected, name: 'Rejected' },
+    { id: CandidateStatusEnum.Accepted, name: 'Accepted' },
+    { id: CandidateStatusEnum.Declined, name: 'Declined' },
+    { id: CandidateStatusEnum.PendingReply, name: 'Pending Reply' },
+    { id: CandidateStatusEnum.Pipeline, name: 'Pipeline' }
   ];
 
   profileList: any[] = [
