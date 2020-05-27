@@ -2,7 +2,7 @@
   <div id="logo">
     <img width="103px" height="40px" src="../../assets/images/recru-logo-black.png" />
   </div>
-  <div [routerLink]="['/dashboard']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin','Recruiter']">
+  <div [routerLink]="['/dashboard']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin']">
       <div class="gradient-border"></div>
       <div class="item">
         <i nz-icon nzType="dashboard" nzTheme="outline"></i>
@@ -30,7 +30,7 @@
         <p>Tasks</p>
       </div>
   </div>
-  <div [routerLink]="['/daysOff']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin','Recruiter']">
+  <div [routerLink]="['/daysOff']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin']">
       <div class="gradient-border"></div>
       <div class="item">
         <i nz-icon nzType="calendar" nzTheme="outline"></i>
@@ -44,14 +44,14 @@
         <p>Referrals</p>
       </div>
   </div>
-  <div [routerLink]="['/reports']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin','Recruiter']">
+  <div [routerLink]="['/reports']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin']">
     <div class="gradient-border"></div>
     <div class="item">
       <i nz-icon nzType="line-chart" nzTheme="outline"></i>
       <p>Reports</p>
     </div>
   </div>
-  <div [routerLink]="['/settings']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin']">
+  <div [routerLink]="['/settings']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin', 'Recruiter']">
     <div class="gradient-border"></div>
     <div class="item">
       <i nz-icon nzType="setting" nzTheme="outline"></i>
