@@ -9,7 +9,8 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -17,13 +18,15 @@
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="clientForm.get('status').dirty && clientForm.get('status').errors">Please select a status</nz-form-explain>
+                    <nz-form-explain *ngIf="clientForm.get('status').dirty && clientForm.get('status').errors">Please
+                        select a status</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
                     Date
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -37,36 +40,42 @@
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
-        <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
                     Interviewer
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <input type="text" nz-input formControlName="interviewer" id="interviewer" placeholder="Please input the interviewer's name">
-                    </nz-form-control>
-        </nz-form-item>
+                    <input type="text" nz-input formControlName="interviewer" id="interviewer"
+                        placeholder="Please input the interviewer's name">
+                </nz-form-control>
+            </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-        <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName" [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
-                Delegate
-            </nz-form-label>
-               <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="delegateName" id="delegateName" placeholder="Please input the delegate name">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
+                    Delegate
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="text" nz-input formControlName="delegateName" id="delegateName"
+                        placeholder="Please input the delegate name">
                 </nz-form-control>
-        </nz-form-item>
+            </nz-form-item>
         </div>
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d" *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
+                <nz-form-explain style="color: #f5222d"
+                    *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
                     <ng-container *ngIf="clientForm.get('feedback')?.hasError('trimBeginError')">
                         The input has leading whitespace!
                     </ng-container>
@@ -78,14 +87,18 @@
         </div>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
                     Rejection Reason
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Input the rejection reason"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && clientForm.get('rejectionReason').dirty && clientForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
+                <nz-form-explain style="color: #f5222d "
+                    *ngIf="showRejectionReason() && clientForm.get('rejectionReason').dirty && clientForm.get('rejectionReason').errors ">
+                    <ng-container
+                        *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
                         Please input rejection reason!
                     </ng-container>
                 </nz-form-explain>
@@ -103,7 +116,8 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="interviewDate"></nz-date-picker>
-                    <nz-form-explain *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
+                    <nz-form-explain
+                        *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
                         Field required
                     </nz-form-explain>
                 </nz-form-control>
@@ -113,8 +127,10 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="interviewClient" id="interviewClient" placeholder="Enter the client's name">
-                    <nz-form-explain *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
+                    <input type="text" nz-input formControlName="interviewClient" id="interviewClient"
+                        placeholder="Enter the client's name">
+                    <nz-form-explain
+                        *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
                         Field required
                     </nz-form-explain>
                 </nz-form-control>
@@ -126,7 +142,8 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="clientInterviewer" id="clientInterviewer" placeholder="Enter the interviewer's full name">
+                    <input type="text" nz-input formControlName="clientInterviewer" id="clientInterviewer"
+                        placeholder="Enter the interviewer's full name">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -134,7 +151,8 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="project" id="project" placeholder="Enter the project's name">
+                    <input type="text" nz-input formControlName="project" id="project"
+                        placeholder="Enter the project's name">
                 </nz-form-control>
             </nz-form-item>
         </div>

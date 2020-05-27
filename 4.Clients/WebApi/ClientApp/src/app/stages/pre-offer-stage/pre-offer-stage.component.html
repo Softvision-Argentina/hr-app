@@ -32,7 +32,7 @@
                     DNI
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input id="'dni'" formControlName="dni"  type="number" nz-input placeholder="Please input the dni">
+                    <input id="'dni'" formControlName="dni"  type="number" nz-input placeholder="Please input a DNI number">
                     <nz-form-explain>
                         <ng-container *ngIf="preOfferForm.get('dni').hasError('dniTooLongError')">
                             Dni is too long
@@ -74,7 +74,7 @@
           <nz-form-item>
             <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays" [ngClass]="{'requiredFieldLabel': isRequiredField('vacationDays')}" >Vacation days</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
-              <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
+              <input type="number" nz-input formControlName="vacationDays" id="vacationDays" placeholder="Please input vacation days" pattern="[0-9]+([\.,][0-9]+)?">
             </nz-form-control>
             <nz-form-explain *ngIf="preOfferForm.get('vacationDays').dirty && preOfferForm.get('vacationDays').errors">
               Please input vacations days

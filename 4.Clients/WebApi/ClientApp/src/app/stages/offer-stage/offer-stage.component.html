@@ -34,7 +34,7 @@
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">Please input the user</nz-form-explain>
+                    <nz-form-explain *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">Please input a user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>

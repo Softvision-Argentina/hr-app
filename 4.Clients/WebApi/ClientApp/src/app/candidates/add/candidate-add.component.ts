@@ -81,6 +81,7 @@ export class CandidateAddComponent implements OnInit {
   fillCandidate: Candidate;
   fillUsers: User[] = [];
   comms: Community[] =[];
+  isInputSelected = false;
   profiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
   currentUser: User;
@@ -113,6 +114,7 @@ export class CandidateAddComponent implements OnInit {
   statusList: any[];
 
   selectedValue = 1;
+  selectedId= '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
               private globals: Globals) {
