@@ -51,25 +51,6 @@
         </div>
     </div>
     <div nz-row>
-        <!--  <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('dni')}">
-                    DNI
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input id="'dni'" formControlName="dni" type="number" nz-input placeholder="Please input the dni">
-                    <nz-form-explain>
-                        <ng-container *ngIf="candidateForm.get('dni').hasError('dniTooLongError')">
-                            Dni is too long
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('dni').hasError('dniTooShortError')">
-                            Dni is too short
-                        </ng-container>
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>-->
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email"
@@ -85,33 +66,9 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-    </div>
-    <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="linkedin"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
-                    LinkedIn
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input nz-input formControlName="linkedin" id="linkedin"
-                        placeholder="Please input a LinkedIn URL">
-                    <nz-form-explain
-                        *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
-                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber" [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
                     Phone Number
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']">
@@ -136,18 +93,19 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('user')}">
-                    Recruiter
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="linkedin" [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
+                    LinkedIn
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="user">
-                        <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}"
-                            [nzValue]="user.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please
-                        input the user</nz-form-explain>
+                    <input nz-input formControlName="linkedin" id="linkedin" placeholder="Please input the LinkedIn URL">
+                    <nz-form-explain *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
+                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimBeginError')">
+                            The input has leading whitespace!
+                        </ng-container>
+                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimEndError')">
+                            The input has trailing whitespace!
+                        </ng-container>
+                    </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -172,8 +130,21 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('profile')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community" [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
+                    Community
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="community">
+                        <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+                    <nz-form-explain *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">Please input the community</nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile" [ngClass]="{'requiredFieldLabel': isRequiredField('profile')}">
                     Profile
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -184,22 +155,17 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
-                    Community
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="community">
-                        <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain
-                        *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">Please
-                        input the community</nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+        <nz-form-item hidden>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('user')}">
+                Recruiter
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-select formControlName="user">
+                    <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
+                    </nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>     
     </div>
 </form>

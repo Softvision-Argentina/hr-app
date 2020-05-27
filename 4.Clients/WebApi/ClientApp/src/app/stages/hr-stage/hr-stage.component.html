@@ -84,34 +84,29 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
-                    Delegate
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}"
-                            [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item hidden>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
                     Interviewer
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}} "
-                            [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}} " [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">
-                        Please input a user</nz-form-explain>
+                    <nz-form-explain *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">Please input the user</nz-form-explain>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
+                    Delegate
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+
                 </nz-form-control>
             </nz-form-item>
         </div>
