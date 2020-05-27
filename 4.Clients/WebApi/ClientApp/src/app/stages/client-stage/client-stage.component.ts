@@ -199,7 +199,7 @@ export class ClientStageComponent implements OnInit {
         name: 'Add New Interview',
         arrow: false
       };
-
+    this.facade.toastrService.success('Interview added!');
       this.resetInterviewDate = new Date();
       this.interviewClient.nativeElement.value = '';
       this.interviewClient.nativeElement.value = '';
