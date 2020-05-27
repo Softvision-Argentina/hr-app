@@ -383,6 +383,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
   openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
+    this.facade.appService.stopLoading();
     this.declineProcessForm.reset();
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
