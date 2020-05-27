@@ -15,5 +15,11 @@ namespace Domain.Services.Repositories.EF
         {
             return base.Query();
         }
+
+        public override IQueryable<Interview> QueryEager()
+        {
+
+            return Query();
+        }
     }
 }

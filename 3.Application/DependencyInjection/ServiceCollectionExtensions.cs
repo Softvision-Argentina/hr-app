@@ -120,6 +120,7 @@ namespace DependencyInjection
             services.AddTransient<IOfferService, OfferService>();
             services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
             services.AddTransient<ICvService, CvService>();
+            services.AddTransient<IInterviewService,InterviewService>();
             services.AddTransient<INotificationService, NotificationService>();
         }
 
@@ -183,6 +184,7 @@ namespace DependencyInjection
             services.AddScoped<IOfferStageRepository, OfferStageRepository>();
             services.AddScoped<IPreOfferStageRepository, PreOfferStageRepository>();
             services.AddScoped<ICvRepository, CvRepository>();
+            services.AddScoped<IRepository<Interview>, InterviewRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IRepository<Community>, CommunityRepository>();
             services.AddScoped<IRepository<CandidateProfile>, CandidateProfileRepository>();

@@ -110,54 +110,58 @@
     <div nz-row>
         <nz-divider nzText="INTERVIEWS"></nz-divider>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="interviewDate"></nz-date-picker>
-                    <nz-form-explain
-                        *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
-                        Field required
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="interviewClient" id="interviewClient"
-                        placeholder="Enter the client's name">
-                    <nz-form-explain
-                        *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
-                        Field required
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="clientInterviewer" id="clientInterviewer"
-                        placeholder="Enter the interviewer's full name">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="project" id="project"
-                        placeholder="Enter the project's name">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
+    <nz-collapse>
+        <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.acitve"
+            [nzShowArrow]="panelControl.arrow">
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-date-picker [(ngModel)]="resetInterviewDate" style="width: 100%;"
+                                formControlName="interviewDate"></nz-date-picker>
+                            <nz-form-explain
+                                *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
+                                Field required
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #interviewClient type="text" nz-input formControlName="interviewClient"
+                                id="interviewClient" placeholder="Enter the client's name">
+                            <nz-form-explain
+                                *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
+                                Field required
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #clientInterviewer type="text" nz-input formControlName="clientInterviewer"
+                                id="clientInterviewer" placeholder="Enter the interviewer's full name">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #project type="text" nz-input formControlName="project" id="project"
+                                placeholder="Enter the project's name">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
@@ -175,33 +179,61 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12" nzOffset="6">
-            <nz-form-item>
-                <button nz-button nzType="primary" (click)="addInterview()">Add Interview</button>
-            </nz-form-item>            
-        </div>
-    </div>
-    <div nz-row> 
-        <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false" [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
-            <thead>
-                <tr>
-                    <th nzWidth="200px">Date</th>
-                    <th nzWidth="200px">Client</th>
-                    <th nzWidth="200px">Feedback</th>
-                    <th nzWidth="200px">Interviewer</th>
-                    <th nzWidth="200px">Project</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let interview of interviewTable.data">
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <button nz-button nzType="primary" (click)="addInterview()">Add Interview</button>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-collapse-panel>
+    </nz-collapse>
+</form>
+<div nz-row>
+    <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
+        [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
+        <thead>
+            <tr>
+                <th nzWidth="200px">Date</th>
+                <th nzWidth="200px">Client</th>
+                <th nzWidth="200px">Feedback</th>
+                <th nzWidth="200px">Interviewer</th>
+                <th nzWidth="200px">Project</th>
+                <th nzWidth="200px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let interview of interviewTable.data">
+                <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
                     <td nzWidth="200px">{{interview.interviewDate | date  : 'shortDate' }}</td>
                     <td nzWidth="200px">{{interview.client}}</td>
                     <td nzWidth="200px" word-break: break-all>{{interview.feedback}}</td>
                     <td nzWidth="200px">{{interview.clientInterviewer}}</td>
                     <td nzWidth="200px">{{interview.project}}</td>
-                </tr>
-            </tbody>
-        </nz-table>
-    </div>
-</form>
+                    <td><a (click)="startEdit(interview.id)" style="margin-right: 15px;">
+                            <i nzTitle="Edit" style="cursor: pointer;" nz-tooltip nz-icon type="edit"
+                                theme="outline"></i>
+                        </a>
+                        <a nz-popconfirm (nzOnConfirm)="deleteInterview(interview.id)">
+                            <i nzTitle="Delete" style="cursor: pointer;" nz-tooltip nz-icon type="delete"
+                                theme="outline"></i>
+                        </a>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                    <td>
+                        <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
+                    </td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.feedback" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
+                    <td>
+                        <a (click)="saveEdit(interview.id)" class="save" style="margin-right: 8px;">Save</a>
+                        <a (click)="cancelEdit(interview.id)">Cancel</a>
+                    </td>
+                </ng-template>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

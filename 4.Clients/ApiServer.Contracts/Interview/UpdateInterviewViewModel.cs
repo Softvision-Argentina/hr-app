@@ -1,4 +1,5 @@
 ﻿using System;
+using ApiServer.Contracts.Stage;
 
 namespace ApiServer.Contracts.Interview
 {
@@ -10,5 +11,7 @@ namespace ApiServer.Contracts.Interview
         public DateTime InterviewDate { get; set; }
         public String Feedback { get; set; }
         public String Project { get; set; }
+        public UpdateClientStageViewModel ClientStage { get; set; }
+        public int ClientStageId { get; set; }
     }
 }

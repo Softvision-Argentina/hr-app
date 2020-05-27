@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -7,6 +7,7 @@ import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 import { Interview } from 'src/entities/interview';
+import { getLocaleDateTimeFormat } from '@angular/common';
 
 @Component({
   selector: 'client-stage',
@@ -15,14 +16,19 @@ import { Interview } from 'src/entities/interview';
 })
 export class ClientStageComponent implements OnInit {
 
-    @Input()
-    private _users: User[];
-    public get users(): User[] {
-        return this._users;
-    }
-    public set users(value: User[]) {
-        this._users = value;
-    }
+  @ViewChild('interviewClient') interviewClient;
+  @ViewChild('clientInterviewer') clientInterviewer;
+  @ViewChild('project') project;
+  @ViewChild('interviewFeedback') interviewFeedback;
+
+  @Input()
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
+  }
+  public set users(value: User[]) {
+    this._users = value;
+  }
 
   clientForm: FormGroup = this.fb.group({
     id: [0],
@@ -30,7 +36,7 @@ export class ClientStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     userOwnerId: [null],
     interviewer: [null],
-    userDelegateId:  [null],
+    userDelegateId: [null],
     feedback: [null],
     delegateName: [null],
     rejectionReason: [null, [Validators.required]],
@@ -46,16 +52,25 @@ export class ClientStageComponent implements OnInit {
   });
   feedbackContent:string = "";
 
-  statusList : any[];
-  interviews : Interview[] = []
+  statusList: any[];
+  interviews: Interview[] = []
+  panelControl: any = {
+    active: false,
+    name: 'Add New Interview',
+    arrow: false
+  }
+  editCache: { [key: number]: { edit: boolean; data: Interview } } = {};
 
   @Input() clientStage: ClientStage;
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
-   }
+  }
+
+  resetInterviewDate;
 
   ngOnInit() {
     this.changeFormStatus(false);
+    this.getInterviews();
     if (this.clientStage) { this.fillForm(this.clientStage); }
   }
 
@@ -81,10 +96,10 @@ export class ClientStageComponent implements OnInit {
 
   statusChanged() {
     if (this.clientForm.controls['status'].value === 1) {
-       this.changeFormStatus(true);
-       this.clientForm.markAsTouched();
+      this.changeFormStatus(true);
+      this.clientForm.markAsTouched();
     } else {
-       this.changeFormStatus(false);
+      this.changeFormStatus(false);
     }
   }
 
@@ -116,7 +131,7 @@ export class ClientStageComponent implements OnInit {
       this.changeFormStatus(true);
     }
     this.clientForm.controls['status'].setValue(status);
-    
+
     if (clientStage.id) {
       this.clientForm.controls['id'].setValue(clientStage.id);
     }
@@ -147,9 +162,6 @@ export class ClientStageComponent implements OnInit {
     if (clientStage.rejectionReason) {
       this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);
     }
-    if (clientStage.interviews) {
-      this.interviews = clientStage.interviews;
-    }
   }
 
   showRejectionReason() {
@@ -166,19 +178,54 @@ export class ClientStageComponent implements OnInit {
   }
   addInterview() {
     if (this.validateInterviewForm()) {
-      let interview : Interview = {
+      let interview: Interview = {
         id: 0,
         client: this.getControlValue(this.interviewForm.controls.interviewClient),
         clientInterviewer: this.getControlValue(this.interviewForm.controls.clientInterviewer),
         interviewDate: this.getControlValue(this.interviewForm.controls.interviewDate),
         feedback: this.getControlValue(this.interviewForm.controls.interviewFeedback),
         project: this.getControlValue(this.interviewForm.controls.project),
+        clientStageId: this.clientStage.id
       };
-      
-      this.interviews.push(interview); 
-      this.interviews = [...this.interviews];
-      
+
+      this.interviews.push(interview);
+      this.facade.InterviewSevice.add(interview)
+        .subscribe(res => {
+          this.interviews = [...this.interviews];
+          this.updateEditCache();
+        })
+      this.panelControl = {
+        active: true,
+        name: 'Add New Interview',
+        arrow: false
+      };
+
+      this.resetInterviewDate = new Date();
+      this.interviewClient.nativeElement.value = '';
+      this.interviewClient.nativeElement.value = '';
+      this.clientInterviewer.nativeElement.value = '';
+      this.project.nativeElement.value = '';
+      this.interviewFeedback.nativeElement.value = '';
     }
+  }
+
+  getInterviews() {
+    this.facade.InterviewSevice.get()
+      .subscribe(res => {
+        this.interviews = res.filter(i => i.clientStageId === this.clientStage.id)
+        this.updateEditCache();
+      })
+  }
+
+  deleteInterview(interviewId: number) {
+
+    this.facade.InterviewSevice.delete(interviewId)
+      .subscribe(res => {
+        this.getInterviews();
+      }, err => {
+        console.log(err);
+
+      })
   }
 
   private validateInterviewForm() {
@@ -190,5 +237,32 @@ export class ClientStageComponent implements OnInit {
       return false
     }
     return true
+  }
+  startEdit(id: string): void {
+    this.editCache[id].edit = true;
+  }
+
+  cancelEdit(id: number): void {
+    const index = this.interviews.findIndex(item => item.id === id);
+    this.editCache[id] = {
+      data: { ...this.interviews[index] },
+      edit: false
+    };
+  }
+  saveEdit(id: number): void {
+    this.facade.InterviewSevice.update(id, this.editCache[id].data)
+      .subscribe(res => {
+        this.getInterviews()
+        this.editCache[id].edit = false;
+      })
+  }
+  updateEditCache(): void {
+    this.interviews.forEach(item => {
+      this.editCache[item.id] = {
+        edit: false,
+        data: { ...item }
+      };
+    });
+
   }
 }

@@ -31,6 +31,7 @@ import { SearchbarService } from './searchbar.service';
 import { ErrorHandlerService } from './error-handler.service';
 import { AppService } from './app.service';
 import { ReferralsService } from './referrals.service';
+import { InterviewService } from './interview.service'
 import { from } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -124,6 +125,14 @@ export class FacadeService {
       this._referralsService = this.injector.get(ReferralsService);
     }
     return this._referralsService;
+  }
+
+  private _interviewService: InterviewService;
+  public get InterviewSevice(): InterviewService {
+    if (!this._interviewService) {
+      this._interviewService = this.injector.get(InterviewService);
+    }
+    return this._interviewService;
   }
 
   private _notificationsService: NotificationService;
