@@ -44,6 +44,7 @@ export class ClientStageComponent implements OnInit {
     project: [null],
     interviewFeedback: [null, [Validators.required, Validators.maxLength(300)]]
   });
+  feedbackContent:string = "";
 
   statusList : any[];
   interviews : Interview[] = []
@@ -60,6 +61,10 @@ export class ClientStageComponent implements OnInit {
 
   getFormControl(name: string): AbstractControl {
     return this.clientForm.controls[name];
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   changeFormStatus(enable: boolean) {
@@ -89,7 +94,7 @@ export class ClientStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.getControlValue(form.controls.feedback);
+    stage.feedback = this.feedbackContent;
     stage.interviewer = this.getControlValue(form.controls.interviewer);
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
@@ -137,7 +142,7 @@ export class ClientStageComponent implements OnInit {
     }
 
     if (clientStage.feedback) {
-      this.clientForm.controls['feedback'].setValue(clientStage.feedback);
+      this.feedbackContent = clientStage.feedback;
     }
     if (clientStage.rejectionReason) {
       this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);

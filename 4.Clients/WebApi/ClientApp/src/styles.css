@@ -45,22 +45,37 @@ button.ant-modal-close.ng-star-inserted {
 button > i {
   vertical-align: unset !important;
 }
+
 @media screen and (max-width: 1443px) and (min-width: 1135px){
   nz-modal > div > div.ant-modal-wrap > div.ant-modal
   {
     width: 70vw !important;
   }
+
+  nz-modal > div > div.ant-modal-wrap > div.ant-modal.create-link-modal {
+    width: 300px !important;
+  }
 }
+
 @media screen and (max-width: 1134px) and (min-width: 676px){
   nz-modal > div > div.ant-modal-wrap > div.ant-modal
   {
     width: 555px !important;
+  }
+  nz-modal > div > div.ant-modal-wrap > div.ant-modal.create-link-modal {
+    width: 250px !important;
   }
 }
 
 @media screen and (max-width: 675px) {
   #cdk-overlay-2 > nz-modal > div > div.ant-modal-wrap > div.ant-modal > div{
     width: 558px;
+  }
+
+  #cdk-overlay-2 > nz-modal > div > div.ant-modal-wrap > div.ant-modal.create-link-modal > div {
+    width: 220px !important;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

@@ -45,6 +45,8 @@ export class OfferStageComponent implements OnInit {
     rejectionReason: [null, [Validators.required]],
   });
 
+  feedbackContent:string = "";
+
   statusList: any[];
   seniorityList: any[];
   backCheckEnabled = false;
@@ -86,6 +88,10 @@ export class OfferStageComponent implements OnInit {
     return this.offerForm.controls[name];
   }
 
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
+  }
+
   changeFormStatus(enable: boolean) {
     for (const i in this.offerForm.controls) {
       if (this.offerForm.controls[i] !== this.offerForm.controls['status'] &&
@@ -120,7 +126,7 @@ export class OfferStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.getControlValue(form.controls.feedback);
+    stage.feedback = this.feedbackContent;
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
@@ -174,7 +180,7 @@ export class OfferStageComponent implements OnInit {
     }
 
     if (offerStage.feedback) {
-      this.offerForm.controls['feedback'].setValue(offerStage.feedback);
+      this.feedbackContent = offerStage.feedback;
     }
 
     if (offerStage.remunerationOffer) {

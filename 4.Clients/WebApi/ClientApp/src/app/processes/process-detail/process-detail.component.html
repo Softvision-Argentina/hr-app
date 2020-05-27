@@ -186,8 +186,7 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
 
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <textarea rows="5" id="feedback" nz-input formControlName="feedback" placeholder="Input feedback for the stage">
-            </textarea>
+                        <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                         <nz-form-explain *ngIf="stageForm.get('feedback').dirty && stageForm.get('feedback').errors">
                             Please input the feedback for the stage
                         </nz-form-explain>

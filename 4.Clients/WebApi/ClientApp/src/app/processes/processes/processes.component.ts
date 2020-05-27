@@ -42,7 +42,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     adaptiveHeight: true,
     arrows: true,
     infinite: false,
-    draggable: false
+    draggable: false,
+    accessibility: false
   };
 
   @ViewChild('slickModal') slickModal: SlickComponent;

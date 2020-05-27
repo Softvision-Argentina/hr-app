@@ -64,7 +64,7 @@
                     Feedback
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d" *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
                     <ng-container *ngIf="clientForm.get('feedback')?.hasError('trimBeginError')">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -43,7 +43,9 @@ export class HrStageComponent implements OnInit {
     rejectionReasonsHr: [0, [Validators.required]]
   });
 
-  statusList: any[];
+  feedbackContent:string = "";
+
+  statusList: any[] ;
   englishLevelList: any[];
   rejectionReasonsHRList: any[];
   usersFiltered: User[];
@@ -106,7 +108,7 @@ export class HrStageComponent implements OnInit {
 
     hrStage.id = this.getControlValue(this.hrForm.controls.id);
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
-    hrStage.feedback = this.getControlValue(this.hrForm.controls.feedback);
+    hrStage.feedback =  this.feedbackContent; //this.getControlValue(this.hrForm.controls.feedback);
     hrStage.status = this.getControlValue(this.hrForm.controls.status);
     hrStage.userOwnerId = this.getControlValue(this.hrForm.controls.userOwnerId);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
@@ -119,6 +121,10 @@ export class HrStageComponent implements OnInit {
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
     return hrStage;
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   getControlValue(control: any): any {
@@ -149,7 +155,7 @@ export class HrStageComponent implements OnInit {
     }
 
     if (hrStage.feedback) {
-      this.hrForm.controls['feedback'].setValue(hrStage.feedback);
+      this.feedbackContent = hrStage.feedback;
     }
 
     if (hrStage.actualSalary !== null) {

@@ -55,6 +55,8 @@ export class TechnicalStageComponent implements OnInit {
     rejectionReason: [null, [Validators.required]]
   });
 
+  feedbackContent:string = "";
+
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   usedSkills: Skill[] = [];
@@ -82,6 +84,10 @@ export class TechnicalStageComponent implements OnInit {
     this.changeFormStatus(false);
     if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
     this.getFilteredUsersForTech();
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   getFilteredUsersForTech() {
@@ -161,7 +167,7 @@ export class TechnicalStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.getControlValue(form.controls.feedback);
+    stage.feedback = this.feedbackContent;
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
@@ -221,7 +227,7 @@ export class TechnicalStageComponent implements OnInit {
     }
 
     if (technicalStage.feedback) {
-      this.technicalForm.controls['feedback'].setValue(technicalStage.feedback);
+      this.feedbackContent = technicalStage.feedback;
     }
 
     if (technicalStage.seniority) {
