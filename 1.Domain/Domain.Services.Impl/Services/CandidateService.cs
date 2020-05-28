@@ -57,7 +57,7 @@ namespace Domain.Services.Impl.Services
         {
             _log.LogInformation($"Validating contract {contract.Name}");
             ValidateContract(contract);
-            ValidateExistence(0, contract.EmailAddress, contract.LinkedInProfile);
+            ValidateExistence(contract.EmailAddress, contract.PhoneNumber);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
             var candidate = _mapper.Map<Candidate>(contract);
@@ -78,7 +78,7 @@ namespace Domain.Services.Impl.Services
         public void Delete(int id)
         {
             _log.LogInformation($"Searching candidate {id}");
-            Candidate candidate = _candidateRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            var candidate = _candidateRepository.Query().FirstOrDefault(_ => _.Id == id);
 
             if (candidate == null)
             {
@@ -194,25 +194,34 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        private void ValidateExistence(int id, string email, string linkedInProfile)
+        private void ValidateExistence(string email, string phoneNumber)
         {
-            try
+            Candidate candidate;
+
+            void ExistEmail()
             {
-                Candidate candidate = _candidateRepository.Query().Where(_ => !string.IsNullOrEmpty(email) && _.EmailAddress == email && _.Id != id).FirstOrDefault();
-                if (candidate != null) throw new InvalidCandidateException("The Email already exists .");
+                candidate = _candidateRepository.Query()
+                    .Where(_ => email != null)
+                    .FirstOrDefault(_ => _.EmailAddress == email);
+                
+                if (candidate != null)
+                    throw new InvalidCandidateException("Email address already exists");
             }
-            catch (ValidationException ex)
+
+            void ExistPhoneNumber()
             {
-                throw new CreateContractInvalidException(ex.ToListOfMessages());
+                candidate = _candidateRepository.Query()
+                    .Where(_ => phoneNumber != null)
+                    .FirstOrDefault(_ => _.PhoneNumber == phoneNumber);
+                
+                if (candidate != null)
+                    throw new InvalidCandidateException("Phone number already exists");
             }
 
             try
             {
-                if (linkedInProfile != null)
-                {
-                    Candidate candidate = _candidateRepository.Query().Where(_ => linkedInProfile != "N/A" && _.LinkedInProfile == linkedInProfile && _.Id != id).FirstOrDefault();
-                    if (candidate != null) throw new InvalidCandidateException("The LinkedIn Profile already exists in our database.");
-                }
+                ExistEmail();
+                ExistPhoneNumber();
             }
             catch (ValidationException ex)
             {

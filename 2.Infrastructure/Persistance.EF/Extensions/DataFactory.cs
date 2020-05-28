@@ -5,6 +5,11 @@ namespace Persistance.EF.Extensions
 {
     public static class DataFactory
     {
+        public static bool HasProperty(this Type obj, string propertyName)
+        {
+            return obj.GetProperty(propertyName) != null;
+        }
+
         private static readonly Random rnd = new Random();
 
         /// <summary>
@@ -25,7 +30,8 @@ namespace Persistance.EF.Extensions
                     DataManipulator.FillObjectPropertiesWithData(typeCode, prop, ref obj);
                 }
 
-                obj.WithPropertyValue("Id", null);
+                if ((obj.GetType()).HasProperty("Id"))
+                    obj.WithPropertyValue("Id", null);
 
                 return (T)Convert.ChangeType(obj, typeof(T));
             }
@@ -53,8 +59,10 @@ namespace Persistance.EF.Extensions
                     throw new ArgumentException("propertyName cannot be null, empty, or white spaces");
                 }
 
-                PropertyInfo prop = obj.GetType().GetProperty(propertyName);
-                prop.SetValue(obj, propertyValue);
+                var prop = obj.GetType().GetProperty(propertyName);
+                if (prop != null)
+                    prop.SetValue(obj, propertyValue);
+
                 return obj;
             }
             catch (Exception)

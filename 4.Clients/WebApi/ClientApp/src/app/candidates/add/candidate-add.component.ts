@@ -209,7 +209,7 @@ export class CandidateAddComponent implements OnInit {
     this.candidateForm.controls['email'].setValue(candidate.emailAddress);
     this.candidateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]); //(54),1123445678    
+    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.candidateForm.controls['user'].setValue(candidate.user.id);
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
@@ -240,10 +240,8 @@ export class CandidateAddComponent implements OnInit {
     return this.candidateForm.controls[name];
   }
    
-  getFormData(): Candidate {
-    let pn = this.candidateForm.controls['phoneNumber'].value == undefined
-    || this.candidateForm.controls['phoneNumber'].value == null ? ''
-    : this.candidateForm.controls['phoneNumber'].value.toString();
+  getFormData(): Candidate {    
+    let pn = this.candidateForm.controls['phoneNumber'].value;
 
     let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined 
     || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
@@ -255,7 +253,7 @@ export class CandidateAddComponent implements OnInit {
       lastName: this.candidateForm.controls['lastName'].value === null ? null : this.candidateForm.controls['lastName'].value.toString(),
       dni: this.candidateForm.controls['dni'].value === null ? 0 : this.candidateForm.controls['dni'].value,
       emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
-      phoneNumber: prefix + pn,
+      phoneNumber: pn == null || pn == '' ? null : prefix + pn,
       linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
       candidateSkills: null,      
       englishLevel: EnglishLevelEnum.None,
@@ -265,13 +263,11 @@ export class CandidateAddComponent implements OnInit {
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
-      // contactDay: this.candidateForm.controls['contactDay'].value
+      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,      
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
       referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
-    }
-    newCandidate.phoneNumber.toString();
+    }    
     return newCandidate;
   }
 
