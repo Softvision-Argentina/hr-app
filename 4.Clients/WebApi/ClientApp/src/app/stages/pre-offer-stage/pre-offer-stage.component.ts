@@ -6,8 +6,9 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { preOfferStage } from 'src/entities/pre-offer-stage';
 import { ProcessService } from '../../services/process.service';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
-import { dniValidator } from 'src/app/directives/dni.validator';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { dniValidator, UniqueDniValidator } from 'src/app/directives/dni.validator';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { FacadeService } from 'src/app/services/facade.service';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
@@ -32,7 +33,7 @@ export class PreOfferStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date()],
-    dni: [0, [Validators.required, dniValidator]],
+    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.get())],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
@@ -71,6 +72,7 @@ export class PreOfferStageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private globals: Globals,
+    private facade: FacadeService,
     private processService: ProcessService,
     public prehistoryOfferModal: PreOfferHistory) {
 

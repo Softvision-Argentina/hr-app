@@ -62,6 +62,9 @@
                         && candidateForm.hasError('emailAndPhoneValidator')">
                             Please input a valid Email
                         </nz-form-explain>
+                        <nz-form-explain *ngIf="candidateForm.get('email').hasError('emailExists')">
+                            The email already exists
+                        </nz-form-explain>
                     </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>

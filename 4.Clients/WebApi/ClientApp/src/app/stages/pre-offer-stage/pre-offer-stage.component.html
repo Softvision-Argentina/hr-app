@@ -40,6 +40,9 @@
                         <ng-container *ngIf="preOfferForm.get('dni').hasError('dniTooShortError')">
                             Dni is too short
                         </ng-container>
+                        <ng-container *ngIf="preOfferForm.get('dni').hasError('dniExists')">
+                            The Dni already exists
+                        </ng-container>
                     </nz-form-explain>
                 </nz-form-control>
             </nz-form-item>

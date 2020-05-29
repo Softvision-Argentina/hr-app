@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
@@ -13,8 +13,9 @@ import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
-import { dniValidator } from 'src/app/directives/dni.validator';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { Subscription} from 'rxjs';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { UniqueEmailValidator } from '../ValidatorsCandidateForm';
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
   if((c.get('email').value === null || c.get('email').value.length === 0) 
@@ -31,8 +32,8 @@ export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors 
   templateUrl: './candidate-add.component.html',
   styleUrls: ['./candidate-add.component.css']
 })
-export class CandidateAddComponent implements OnInit {
-
+export class CandidateAddComponent implements OnInit, OnDestroy {
+ 
   @Input()
     private _process: Process;
     public get process(): Process {
@@ -90,7 +91,7 @@ export class CandidateAddComponent implements OnInit {
     lastName: [null, [Validators.required, trimValidator]],
     dni: [0],
     // dni: [0, [dniValidator]],
-    email: [null, [Validators.email, trimValidator]],
+    email: [null, [Validators.email, trimValidator],  UniqueEmailValidator(this.facade.candidateService.get())],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
     linkedin: [null, [trimValidator]],
@@ -108,18 +109,20 @@ export class CandidateAddComponent implements OnInit {
   }, { validator: checkIfEmailAndPhoneNulll });
 
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
-  skills: Skill[] = [];  
+  skills: Skill[] = [];
   isEdit: boolean = false;
 
   statusList: any[];
-
+  candidates: Candidate[] = [];
+  candidateSubscription: Subscription;
   selectedValue = 1;
-  selectedId= '';
+  selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
               private globals: Globals) {
                 this.statusList = globals.candidateStatusList;
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                this.getCandidates();
   }
 
   ngOnInit() {
@@ -163,6 +166,14 @@ export class CandidateAddComponent implements OnInit {
     }
   }
 
+  getCandidates(){
+    this.candidateSubscription = this.facade.candidateService.getData()
+    .subscribe(res => {
+      this.candidates = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+  }
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
@@ -273,5 +284,9 @@ export class CandidateAddComponent implements OnInit {
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.candidateForm)
+  }
+  
+  ngOnDestroy(){
+    this.candidateSubscription.unsubscribe();
   }
 }
