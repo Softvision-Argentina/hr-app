@@ -608,11 +608,15 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("Firstday");
 
+                    b.Property<int>("HealthInsurance");
+
                     b.Property<DateTime>("HireDate");
 
                     b.Property<string>("LastModifiedBy");
 
                     b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Notes");
 
                     b.Property<bool>("PreocupationalDone");
 
@@ -728,9 +732,13 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime>("Firstday");
 
+                    b.Property<int>("HealthInsurance");
+
                     b.Property<string>("LastModifiedBy");
 
                     b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Notes");
 
                     b.Property<bool>("PreocupationalDone");
 

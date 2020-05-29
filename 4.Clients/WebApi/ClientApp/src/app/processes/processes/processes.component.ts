@@ -29,6 +29,7 @@ import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'app-processes',
@@ -1087,6 +1088,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',
         hireDate: new Date(),
@@ -1107,6 +1110,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         hireDate: new Date(),
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',
         backgroundCheckDone: false,

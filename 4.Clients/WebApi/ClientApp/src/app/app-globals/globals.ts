@@ -10,6 +10,7 @@ import { RejectionReasonsHrEnum } from 'src/entities/enums/rejection-reasons-hr.
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { OfferStatusEnum } from 'src/entities/enums/offer-status.enum';
 import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Injectable()
 export class Globals {
@@ -125,5 +126,14 @@ export class Globals {
     { id: OfferStatusEnum.Rejected, name: 'Rejected' },
     { id: OfferStatusEnum.Declined, name: 'Declined' },
     { id: OfferStatusEnum.Hired, name: 'Hired' }
+  ];
+
+  healthInsuranceList: any[] = [
+    { id: HealthInsuranceEnum.NA, name: 'N/A'},
+    { id: HealthInsuranceEnum.OSDE210, name: 'OSDE 21O'},
+    { id: HealthInsuranceEnum.OSDE310, name: 'OSDE 310'},
+    { id: HealthInsuranceEnum.OSDE410, name: 'OSDE 41O'},
+    { id: HealthInsuranceEnum.ContinuesWithCurrentone, name: 'Continues With Current One'},
+    { id: HealthInsuranceEnum.Other, name: 'Other'}
   ];
 }

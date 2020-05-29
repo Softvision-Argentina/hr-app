@@ -8,6 +8,7 @@ import { ProcessService } from '../../services/process.service';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
 import { dniValidator } from 'src/app/directives/dni.validator';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'pre-offer-stage',
@@ -38,6 +39,8 @@ export class PreOfferStageComponent implements OnInit {
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
     vacationDays: [0, [Validators.required]],
+    healthInsurance: [0, [Validators.required]],
+    notes: '',
     firstday: [new Date(), [Validators.required]],
     bonus: '',
     hireDate: [new Date(), [Validators.required]],
@@ -50,6 +53,7 @@ export class PreOfferStageComponent implements OnInit {
 
   statusList: any[];
   seniorityList: any[];
+  healthInsuranceList: any[];
   backCheckEnabled = false;
   backDateEnabled: boolean;
   preocupationalCheckEnabled = false;
@@ -70,7 +74,8 @@ export class PreOfferStageComponent implements OnInit {
     private processService: ProcessService,
     public prehistoryOfferModal: PreOfferHistory) {
 
-    this.statusList = globals.preOfferStatusList;
+    this.statusList = globals.preOfferStatusList;  
+    this.healthInsuranceList = globals.healthInsuranceList;
   }
 
   showPreOfferHistoryModal(modalContent: TemplateRef<{}>) {
@@ -134,6 +139,8 @@ export class PreOfferStageComponent implements OnInit {
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
     stage.vacationDays = this.getControlValue(form.controls.vacationDays);
+    stage.healthInsurance = this.getControlValue(form.controls.healthInsurance);
+    stage.notes = this.getControlValue(form.controls.notes);
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
@@ -169,8 +176,17 @@ export class PreOfferStageComponent implements OnInit {
     if (preOfferStage.vacationDays) {
       this.preOfferForm.controls['vacationDays'].setValue(preOfferStage.vacationDays);
     }
+
     if (preOfferStage.remunerationOffer) {
       this.preOfferForm.controls['remunerationOffer'].setValue(preOfferStage.remunerationOffer);
+    }
+
+    if (preOfferStage.healthInsurance) {
+      this.preOfferForm.controls['healthInsurance'].setValue(preOfferStage.healthInsurance);
+    }
+    
+    if (preOfferStage.notes) {
+      this.preOfferForm.controls['notes'].setValue(preOfferStage.notes);
     }
 
     if (preOfferStage.date) {

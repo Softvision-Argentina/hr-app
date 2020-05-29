@@ -1,5 +1,6 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
+import { HealthInsuranceEnum } from './enums/health-insurance.enum';
 
 export class preOfferStage {
   id: number;
@@ -13,6 +14,8 @@ export class preOfferStage {
   rejectionReason?: string;
   remunerationOffer: number;
   vacationDays: number;
+  healthInsurance: HealthInsuranceEnum
+  notes: string;
   firstday: Date;
   bonus: string;
   hireDate: Date;

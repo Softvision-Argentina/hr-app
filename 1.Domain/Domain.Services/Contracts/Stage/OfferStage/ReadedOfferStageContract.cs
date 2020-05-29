@@ -26,5 +26,7 @@ namespace Domain.Services.Contracts.Stage
         public int VacationDays { get; set; }
         public DateTime Firstday { get; set; }
         public string Bonus { get; set; }
+        public string Notes { get; set; }
+        public HealthInsuranceEnum HealthInsurance { get; set; }
     }
 }

@@ -29,6 +29,7 @@ import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs/Subscription';
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'app-referrals',
@@ -913,6 +914,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',        
         hireDate: new Date(),
@@ -932,6 +935,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',
         hireDate: new Date(),

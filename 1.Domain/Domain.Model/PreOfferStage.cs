@@ -26,5 +26,7 @@ namespace Domain.Model
         public int VacationDays { get; set; }
         public DateTime Firstday { get; set; }
         public string Bonus { get; set; }
+        public HealthInsuranceEnum HealthInsurance { get; set; }
+        public string Notes { get; set; }
     }
 }

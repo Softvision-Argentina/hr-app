@@ -7,6 +7,7 @@ import { OfferStage } from 'src/entities/offer-stage';
 import { ProcessService } from '../../services/process.service';
 import { OfferHistory } from '../offer-history/offer-history.component';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'offer-stage',
@@ -35,6 +36,8 @@ export class OfferStageComponent implements OnInit {
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
     vacationDays: [0, [Validators.required]],
+    healthInsurance: [0, [Validators.required]],
+    notes: '',
     firstday: [new Date(), [Validators.required]],
     bonus: '',
     hireDate: [new Date(), [Validators.required]],
@@ -49,6 +52,7 @@ export class OfferStageComponent implements OnInit {
 
   statusList: any[];
   seniorityList: any[];
+  healthInsuranceList: any[];
   backCheckEnabled = false;
   backDateEnabled: boolean;
   preocupationalCheckEnabled = false;
@@ -65,6 +69,7 @@ export class OfferStageComponent implements OnInit {
     private historyOfferModal: OfferHistory) {
 
     this.statusList = globals.offerStatusList;
+    this.healthInsuranceList = globals.healthInsuranceList;
   }
 
   showOfferHistoryModal(modalContent: TemplateRef<{}>) {
@@ -135,6 +140,8 @@ export class OfferStageComponent implements OnInit {
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
     stage.vacationDays = this.getControlValue(form.controls.vacationDays);
+    stage.healthInsurance = this.getControlValue(form.controls.healthInsurance);
+    stage.notes = this.getControlValue(form.controls.notes);
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
@@ -189,6 +196,14 @@ export class OfferStageComponent implements OnInit {
 
     if (offerStage.vacationDays) {
       this.offerForm.controls['vacationDays'].setValue(offerStage.vacationDays);
+    }
+
+    if (offerStage.healthInsurance) {
+      this.offerForm.controls['healthInsurance'].setValue(offerStage.healthInsurance);
+    }
+    
+    if (offerStage.notes) {
+      this.offerForm.controls['notes'].setValue(offerStage.notes);
     }
 
     if (offerStage.firstday) {
