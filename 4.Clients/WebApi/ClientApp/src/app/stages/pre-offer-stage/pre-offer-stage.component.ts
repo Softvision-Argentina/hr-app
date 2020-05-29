@@ -131,7 +131,7 @@ export class PreOfferStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.dni = this.getControlValue(form.controls.dni);
+    stage.dni = this.getControlValue(form.controls.dni) || 0;
     stage.feedback = this.getControlValue(form.controls.feedback);
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
@@ -264,5 +264,17 @@ export class PreOfferStageComponent implements OnInit {
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.preOfferForm);
+  }
+
+  checkLength(field) {
+    let fieldName = field.attributes.id.nodeValue,
+        maxLength = Number(field.attributes.maxlength.nodeValue) || 8,
+        inputValue = this.preOfferForm.controls[fieldName].value;
+
+    if (inputValue == null) { return } 
+    
+    if (inputValue.toString().length > maxLength) {
+      this.preOfferForm.controls[fieldName].setValue(inputValue.toString().replace(".", "").substring(0, maxLength));
+    }
   }
 }

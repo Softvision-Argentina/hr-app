@@ -800,6 +800,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.forms.push(this.hrStage.hrForm);
     this.forms.push(this.technicalStage.technicalForm);
     this.forms.push(this.clientStage.clientForm);
+    this.forms.push(this.preOfferStage.preOfferForm);
     this.forms.push(this.offerStage.offerForm);
   }
 

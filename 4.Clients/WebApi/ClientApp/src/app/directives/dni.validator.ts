@@ -2,19 +2,27 @@ import { ValidatorFn, FormControl, AbstractControl, ValidationErrors, AsyncValid
 import { Observable } from 'rxjs';
 import { Candidate } from 'src/entities/candidate';
 import { map } from 'rxjs/operators';
-export const dniValidator: ValidatorFn = (control: FormControl) =>{
-    if (control.value!=null) {
-        if (control.value>99999999) {
-            return {
-                'dniTooLongError': true
-            };
-        }
-        if (control.value<0) {
-            return {
-                'dniTooShortError': true
-            };
-        }
+
+export const dniValidator: ValidatorFn = (control: FormControl): { [key: string]: any } | null => {
+    let shortNumber = /^\d{1,7}$/,
+        firstDigit0 = /^[0]{1}/;
+
+    if (control.value == null) {
+        return {
+            'emptyInputError': true
+        };
     }
+    if (firstDigit0.test(control.value)) {
+        return {
+            'dniFirstDigitError': true
+        };
+    }
+    if (shortNumber.test(control.value)) {
+        return {
+            'dniTooShortError': true
+        };
+    }
+
     return null;
 };
 

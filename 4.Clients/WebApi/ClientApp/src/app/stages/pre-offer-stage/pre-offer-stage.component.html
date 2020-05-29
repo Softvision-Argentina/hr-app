@@ -32,13 +32,16 @@
                     DNI
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input id="'dni'" formControlName="dni"  type="number" nz-input placeholder="Please input a DNI number">
-                    <nz-form-explain>
-                        <ng-container *ngIf="preOfferForm.get('dni').hasError('dniTooLongError')">
-                            Dni is too long
-                        </ng-container>
+                    <input id="dni" formControlName="dni" (keyup)="checkLength($event.target)" maxlength="8" type="number" nz-input placeholder="Please input a DNI number">
+                    <nz-form-explain *ngIf="preOfferForm.get('dni').dirty && preOfferForm.get('dni').errors">
                         <ng-container *ngIf="preOfferForm.get('dni').hasError('dniTooShortError')">
-                            Dni is too short
+                            DNI is too short
+                        </ng-container>
+                        <ng-container *ngIf="preOfferForm.get('dni').hasError('emptyInputError')">
+                            DNI is empty
+                        </ng-container>
+                        <ng-container *ngIf="preOfferForm.get('dni').hasError('dniFirstDigitError')">
+                            DNI shouldn't be 0
                         </ng-container>
                         <ng-container *ngIf="preOfferForm.get('dni').hasError('dniExists')">
                             The Dni already exists
