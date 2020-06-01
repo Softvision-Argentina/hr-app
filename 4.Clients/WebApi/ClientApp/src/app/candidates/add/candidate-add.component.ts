@@ -252,7 +252,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   }
    
   getFormData(): Candidate {    
-    let pn = this.candidateForm.controls['phoneNumber'].value;
+    let pn = this.candidateForm.controls['phoneNumber'].value == undefined
+    || this.candidateForm.controls['phoneNumber'].value == null ? ''
+    : this.candidateForm.controls['phoneNumber'].value.toString();
+
 
     let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined 
     || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
@@ -264,7 +267,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       lastName: this.candidateForm.controls['lastName'].value === null ? null : this.candidateForm.controls['lastName'].value.toString(),
       dni: this.candidateForm.controls['dni'].value === null ? 0 : this.candidateForm.controls['dni'].value,
       emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
-      phoneNumber: pn == null || pn == '' ? null : prefix + pn,
+      phoneNumber: prefix + pn,
       linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
       candidateSkills: null,      
       englishLevel: EnglishLevelEnum.None,

@@ -214,7 +214,7 @@ namespace Domain.Services.Impl.Services
                     .Where(_ => phoneNumber != null)
                     .FirstOrDefault(_ => _.PhoneNumber == phoneNumber);
                 
-                if (candidate != null)
+                if (candidate != null && candidate.PhoneNumber != "(+54)")
                     throw new InvalidCandidateException("Phone number already exists");
             }
 
