@@ -38,7 +38,7 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
+    <div nz-row hidden>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="12" hidden>
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
