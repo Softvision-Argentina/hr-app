@@ -1,40 +1,49 @@
-.search-box {
-    padding: 8px;
-  }
+::ng-deep .vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .search-box input {
-    width: 188px;
-    margin-bottom: 8px;
-    display: block;
-  }
+::ng-deep .vertical-center-modal .ant-modal {
+  top: 0;
+}
 
-  .search-box button {
-    width: 90px;
-  }
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
 
-  .search-button {
-    margin-right: 8px;
-  }
+.dynamic-delete-button:hover {
+  color: #777;
+}
 
-  ::ng-deep .vertical-center-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.prefix-number{
+  width: 70%;
+}
 
-  ::ng-deep .vertical-center-modal .ant-modal {
-    top: 0;
-  }
+.search-select{
+  width: 100%;
+  margin-bottom: 2%;
+}
 
-  .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all .3s;
-  }
+.icon-action{  
+  cursor: pointer;
+}
 
-  .dynamic-delete-button:hover {
-    color: #777;
-  }
+.skill-slider{
+  text-align: center;
+  margin-left: 10%;
+}
+
+.control-errors{
+  margin-left: 10%; 
+  width: 85%;
+}
+
+.button-skill{
+  width: 82%;
+}

@@ -55,8 +55,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   isEdit = false;
   editingCandidateId = 0;
-  isDniLoading = false;
-  isDniValid = false;
+  isDniLoading = false;  
   currentUser: User;
   searchValueStatus = '';
   statusList: any[];
@@ -463,8 +462,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  dniChanged() {
-    this.isDniValid = false;
+  dniChanged() {    
     this.changeFormStatus(false);
   }
 
