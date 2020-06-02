@@ -142,7 +142,7 @@
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
-                        [formControlName]="rejectionReasonsHr" [nzDisabled]="disabled" nzShowSearch nzAllowClear
+                        formControlName="rejectionReasonsHr" [nzDisabled]="disabled" nzShowSearch nzAllowClear
                         [nzAllowClear]="false" nzPlaceHolder="Select a reason">
                         <nz-option *ngFor="let reason of rejectionReasonsHRList" nzLabel="{{reason.name}}"
                             nzValue="{{reason.id}}">
