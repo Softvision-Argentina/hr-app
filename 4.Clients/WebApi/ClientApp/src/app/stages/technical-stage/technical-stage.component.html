@@ -236,7 +236,7 @@
             </nz-form-item>
             <nz-form-item>
                 <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:4}">
-                    <button nz-button nzType="dashed" style="width:82%" (click)="addField($event)"><i nz-icon
+                    <button nz-button nzType="dashed" style="width:82%" (click)="addField($event)" [hidden]="hideAddSkillButton()"><i nz-icon
                             type="plus"></i>
                         Add Skill</button>
                 </nz-form-control>

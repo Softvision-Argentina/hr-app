@@ -365,7 +365,7 @@ export class TechnicalStageComponent implements OnInit {
       });
   }
 
-  isRequiredField(field: string) {
+  isRequiredField(field: string): boolean {
     return formFieldHasRequiredValidator(field, this.technicalForm)
   }
 
@@ -373,4 +373,7 @@ export class TechnicalStageComponent implements OnInit {
     return control.id === this.controlArray[0].id;
   }
 
+  hideAddSkillButton(): boolean {
+    return !(this.technicalForm.controls.status.value === StageStatusEnum.InProgress);
+  }
 }
