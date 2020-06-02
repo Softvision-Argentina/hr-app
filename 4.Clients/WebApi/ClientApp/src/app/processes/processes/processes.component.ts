@@ -631,6 +631,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
+    // Update candidates so it can be used when checking unique values
+    this.facade.candidateService.get().subscribe();
     this.facade.appService.startLoading();
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
@@ -655,6 +657,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate?: Candidate): void {
+    // Update candidates so it can be used when checking unique values
+    this.facade.candidateService.get().subscribe();
     this.facade.appService.startLoading();
     if (!candidate) {
       const newCandidate: Candidate = {

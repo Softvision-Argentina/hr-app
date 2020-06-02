@@ -33,7 +33,7 @@ export class PreOfferStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date()],
-    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.get())],
+    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.data.value)],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
@@ -277,4 +277,5 @@ export class PreOfferStageComponent implements OnInit {
       this.preOfferForm.controls[fieldName].setValue(inputValue.toString().replace(".", "").substring(0, maxLength));
     }
   }
+
 }

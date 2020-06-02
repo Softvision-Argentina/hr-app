@@ -91,7 +91,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     lastName: [null, [Validators.required, trimValidator]],
     dni: [0],
     // dni: [0, [dniValidator]],
-    email: [null, [Validators.email, trimValidator],  UniqueEmailValidator(this.facade.candidateService.get())],
+    email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null],
     linkedin: [null, [trimValidator]],
@@ -111,7 +111,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   isEdit: boolean = false;
-
+  
   statusList: any[];
   candidates: Candidate[] = [];
   candidateSubscription: Subscription;
@@ -281,15 +281,16 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
       referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
-    }    
+    }
     return newCandidate;
   }
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.candidateForm)
   }
-  
-  ngOnDestroy(){
+
+  ngOnDestroy() {
     this.candidateSubscription.unsubscribe();
   }
+
 }

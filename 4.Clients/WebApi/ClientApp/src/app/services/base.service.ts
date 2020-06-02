@@ -14,7 +14,7 @@ export class BaseService<T> {
   public headersWithAuth: HttpHeaders;
   public token: string;
   public apiUrl: string;
-  private data: BehaviorSubject<T[]> = new BehaviorSubject<T[]>(null);
+  public data: BehaviorSubject<T[]> = new BehaviorSubject<T[]>(null);
 
   constructor(private router: Router, private config: AppConfig, public http: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
