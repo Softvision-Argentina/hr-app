@@ -9,8 +9,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -25,8 +24,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
                     Date
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -41,13 +39,12 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
                     Interviewer
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
                     <nz-form-explain
@@ -58,8 +55,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
                     Delegate
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -69,7 +65,7 @@
                     </nz-select>
                     <nz-form-explain
                         *ngIf="technicalForm.get('userDelegateId').dirty && technicalForm.get('userDelegateId').errors">
-                        Please input a user</nz-form-explain>
+                        Please input the user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -77,8 +73,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority" [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
                     Seniority
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -97,8 +92,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="alternativeSeniority"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('alternativeSeniority')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="alternativeSeniority" [ngClass]="{'requiredFieldLabel': isRequiredField('alternativeSeniority')}">
                     Alternative Seniority
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -130,8 +124,7 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -150,8 +143,7 @@
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="client"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('client')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="client" [ngClass]="{'requiredFieldLabel': isRequiredField('client')}">
                     Client
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -164,8 +156,7 @@
     <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
                     Rejection Reason
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -186,59 +177,59 @@
     <div nz-row>
         <div nz-col nzSpan="24">
             <nz-form-item *ngFor="let control of controlArray;let i = index">
-                <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]">
+                <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]" style="margin-left: 20px;">
                     Skills
                 </nz-form-label>
                 <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0 ? 0 : 4">
-                    <div nz-row>
-                        <div nz-col nzSpan="4">
-                            <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
-                                (ngModelChange)="updateSkills(control)" [formControlName]="control.controlInstance[0]"
-                                [attr.id]="control.id" id="control.id" nzShowSearch nzAllowClear [nzAllowClear]="false"
-                                nzPlaceHolder="Select a skill">
-                                <ng-container *ngFor="let skill of skills">
-                                    <nz-option *ngIf="isAvailable(skill)" nzLabel="{{skill.name}}"
-                                        nzValue="{{skill.id}}">
-                                    </nz-option>
-                                </ng-container>
-                            </nz-select>
-                            <nz-form-explain
-                                *ngIf="getFormControl(control.controlInstance[0])?.dirty&&getFormControl(control.controlInstance[0])?.hasError('required')">
-                                Please input candidate's skill or delete this field.
-                            </nz-form-explain>
-                        </div>
-                        <div nz-col nzSpan="7">
-                            <nz-form-control style="text-align: center; margin-left: 10%;">
-                                <nz-slider [nzDisabled]="disable" formControlName="{{control.controlInstance[1]}}"
-                                    id="control.controlInstance[1]">
-                                </nz-slider>
-                            </nz-form-control>
-                        </div>
-                        <div nz-col nzSpan="9">
-                            <nz-form-control [nzSm]="14" [nzXs]="24" style="margin-left: 10%; width: 85%;">
-                                <input type="text" nz-input formControlName="{{control.controlInstance[2]}}"
-                                    style="width: 100%;" id="control.controlInstance[2]"
-                                    placeholder="Please input a comment">
+                    <div nz-col nzSpan="24" [ngClass]="{ highlightedSkill: isFirstSkillControl(control) }">
+                        <div class="skill-control" style="margin-left: 10px;">
+                            <div class="item">
+                                <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
+                                    (ngModelChange)="updateSkills(control)" [formControlName]="control.controlInstance[0]" [attr.id]="control.id"
+                                    id="control.id" nzShowSearch nzAllowClear [nzAllowClear]="false" nzPlaceHolder="Select a skill">
+                                    <ng-container *ngFor="let skill of skills">
+                                        <nz-option *ngIf="isAvailable(skill)"  nzLabel="{{skill.name}}" nzValue="{{skill.id}}">
+                                        </nz-option>
+                                    </ng-container>
+                                </nz-select>
                                 <nz-form-explain
-                                    *ngIf="technicalForm.get(control.controlInstance[2]).dirty && technicalForm.get(control.controlInstance[2]).errors">
-                                    <ng-container
-                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimBeginError')">
-                                        The input has leading whitespace!
-                                    </ng-container>
-                                    <ng-container
-                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimEndError')">
-                                        The input has trailing whitespace!
-                                    </ng-container>
-                                    <ng-container
-                                        *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
-                                        Please input a comment!
-                                    </ng-container>
+                                    *ngIf="getFormControl(control.controlInstance[0])?.dirty&&getFormControl(control.controlInstance[0])?.hasError('required')">
+                                    Please input candidate's skill or delete this field.
                                 </nz-form-explain>
-                            </nz-form-control>
-                        </div>
-                        <div nz-col nzSpan="1">
-                            <i nz-icon type="minus-circle-o" class="dynamic-delete-button"
-                                (click)="removeField(control,$event)"></i>
+                            </div>
+                            <div class="item">
+                                <nz-form-control style="text-align: center; margin-left: 10%;">
+                                    <nz-slider [nzDisabled]="disable" formControlName="{{control.controlInstance[1]}}"
+                                        id="control.controlInstance[1]">
+                                    </nz-slider>
+                                </nz-form-control>
+                            </div>
+                            <div class="item">
+                                <nz-form-control [nzSm]="14" [nzXs]="24" style="margin-left: 10%; width: 85%;">
+                                    <input type="text" nz-input formControlName="{{control.controlInstance[2]}}"
+                                        style="width: 100%;" id="control.controlInstance[2]"
+                                        placeholder="Please input a comment">
+                                    <nz-form-explain
+                                        *ngIf="technicalForm.get(control.controlInstance[2]).dirty && technicalForm.get(control.controlInstance[2]).errors">
+                                        <ng-container
+                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimBeginError')">
+                                            The input has leading whitespace!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimEndError')">
+                                            The input has trailing whitespace!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
+                                            Please input a comment!
+                                        </ng-container>
+                                    </nz-form-explain>
+                                </nz-form-control>
+                            </div>
+                            <div class="icon">
+                                <i nz-icon type="minus-circle-o" class="dynamic-delete-button"
+                                    (click)="removeField(control,$event)"></i>
+                            </div>
                         </div>
                     </div>
                 </nz-form-control>

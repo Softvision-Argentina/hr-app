@@ -101,3 +101,27 @@ nz-form-label.requiredFieldLabel::before {
   padding-bottom: 20px !important;
   overflow: auto;
 }
+
+.highlightedSkill {
+  width: 101%;
+  margin-left: 167px;
+  box-sizing: border-box;
+  background: #fff;
+  background-clip: padding-box;
+  border: solid 5px transparent;
+  border-radius: 1em;
+}
+
+.highlightedSkill:before {
+  /*Do not edit this. This sets the highlight border*/
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -5px;
+  border-radius: inherit;
+  background: linear-gradient(to top, #f4633a, #c800a1);
+}

@@ -369,4 +369,8 @@ export class TechnicalStageComponent implements OnInit {
     return formFieldHasRequiredValidator(field, this.technicalForm)
   }
 
+  isFirstSkillControl(control: { id: number, controlInstance: string[] }) : boolean {
+    return control.id === this.controlArray[0].id;
+  }
+
 }
