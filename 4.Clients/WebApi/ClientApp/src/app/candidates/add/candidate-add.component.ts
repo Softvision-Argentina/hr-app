@@ -13,7 +13,7 @@ import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
-import { Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 import { UniqueEmailValidator } from '../ValidatorsCandidateForm';
 
@@ -78,7 +78,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     public set candidateProfiles(value: CandidateProfile[]) {
       this.profiles = value;
     }
-    
   fillCandidate: Candidate;
   fillUsers: User[] = [];
   comms: Community[] =[];
@@ -93,7 +92,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     // dni: [0, [dniValidator]],
     email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null],
+    phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
     linkedin: [null, [trimValidator]],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],

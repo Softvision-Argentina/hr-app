@@ -76,7 +76,7 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email">DNI</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input formControlName="dni" id="'dni'" (change)="dniChanged()" type="number" nz-input placeholder="Please input a DNI">
                         <nz-form-explain *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">The input is not valid DNI!</nz-form-explain>                        
@@ -161,7 +161,7 @@
                                     <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                                 </nz-select>
                             </ng-template>
-                            <input pattern="[0-9]*" formControlName="phoneNumber" id="'phoneNumber'" type="number" nz-input placeholder="Please input a phone number">
+                            <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9 -]+$" nz-input placeholder="Please input a phone number">
                         </nz-input-group>
                         <nz-form-explain *ngIf="validateForm.get('phoneNumber').dirty && validateForm.get('phoneNumber').errors">
                             Please input your phone number!</nz-form-explain>
