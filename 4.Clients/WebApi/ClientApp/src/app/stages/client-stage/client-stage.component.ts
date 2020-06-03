@@ -7,7 +7,7 @@ import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 import { Interview } from 'src/entities/interview';
-import { getLocaleDateTimeFormat } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'client-stage',
@@ -30,6 +30,10 @@ export class ClientStageComponent implements OnInit {
     this._users = value;
   }
 
+
+  @Input()
+  processSaveEvent: Observable<number>;
+
   clientForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -50,7 +54,7 @@ export class ClientStageComponent implements OnInit {
     project: [null],
     interviewFeedback: [null, [Validators.required, Validators.maxLength(300)]]
   });
-  feedbackContent:string = "";
+  feedbackContent: string = "";
 
   statusList: any[];
   interviews: Interview[] = []
@@ -60,6 +64,9 @@ export class ClientStageComponent implements OnInit {
     arrow: false
   }
   editCache: { [key: number]: { edit: boolean; data: Interview } } = {};
+  interviewOperations: { operation: string; data: Interview }[];
+  editInterviewCounter: number;
+  processSaveSubscription: Subscription;
 
   @Input() clientStage: ClientStage;
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
@@ -69,9 +76,48 @@ export class ClientStageComponent implements OnInit {
   resetInterviewDate;
 
   ngOnInit() {
+    this.processSaveSubscription = this.processSaveEvent.subscribe((res) => this.saveChangesToInterviewListInDatabase(res))
+    this.interviewOperations = [];
     this.changeFormStatus(false);
     this.getInterviews();
     if (this.clientStage) { this.fillForm(this.clientStage); }
+  }
+
+  saveChangesToInterviewListInDatabase(processId: number): void {
+
+    this.facade.processService.getByID(processId)
+      .subscribe(res => {
+        this.interviewOperations.forEach(o => {
+          let interviewToSave = o.data;
+          interviewToSave.clientStageId = res.clientStage.id;
+
+          if (o.operation === "add") {
+            this.facade.InterviewSevice.add(interviewToSave)
+              .subscribe(res => {
+              }, err => {
+                console.log(err);
+              })
+          }
+
+          if (o.operation === "delete") {
+            this.facade.InterviewSevice.delete(interviewToSave.id)
+              .subscribe(res => {
+              }, err => {
+                console.log(err);
+              })
+          }
+          if (o.operation === "edit") {
+            this.facade.InterviewSevice.update(interviewToSave.id, interviewToSave)
+              .subscribe(res => {
+              }, err => {
+                console.log(err);
+              })
+          }
+        })
+        this.processSaveSubscription.unsubscribe();
+
+
+      })
   }
 
   getFormControl(name: string): AbstractControl {
@@ -117,7 +163,6 @@ export class ClientStageComponent implements OnInit {
     stage.delegateName = this.getControlValue(form.controls.delegateName);
     stage.processId = processId;
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
-    stage.interviews = this.interviews;
     return stage;
   }
 
@@ -179,7 +224,7 @@ export class ClientStageComponent implements OnInit {
   addInterview() {
     if (this.validateInterviewForm()) {
       let interview: Interview = {
-        id: 0,
+        id: this.editInterviewCounter,
         client: this.getControlValue(this.interviewForm.controls.interviewClient),
         clientInterviewer: this.getControlValue(this.interviewForm.controls.clientInterviewer),
         interviewDate: this.getControlValue(this.interviewForm.controls.interviewDate),
@@ -188,45 +233,62 @@ export class ClientStageComponent implements OnInit {
         clientStageId: this.clientStage.id
       };
 
-      this.interviews.push(interview);
-      this.facade.InterviewSevice.add(interview)
-        .subscribe(res => {
-          this.interviews = [...this.interviews];
-          this.updateEditCache();
-        })
+      this.editInterviewCounter++
       this.panelControl = {
         active: true,
         name: 'Add New Interview',
         arrow: false
       };
-    this.facade.toastrService.success('Interview added!');
+
+      this.interviews.push(interview);
+      this.interviews = [...this.interviews];
+
+
+      this.interviewOperations.push(
+        {
+          operation: "add",
+          data: interview,
+        }
+      )
+
+      this.facade.toastrService.success('Interview added!');
       this.resetInterviewDate = new Date();
-      this.interviewClient.nativeElement.value = '';
       this.interviewClient.nativeElement.value = '';
       this.clientInterviewer.nativeElement.value = '';
       this.project.nativeElement.value = '';
       this.interviewFeedback.nativeElement.value = '';
+
+      this.updateEditCache();
     }
   }
 
   getInterviews() {
     this.facade.InterviewSevice.get()
       .subscribe(res => {
+        this.editInterviewCounter = this.interviews.length
         this.interviews = res.filter(i => i.clientStageId === this.clientStage.id)
         this.updateEditCache();
       })
   }
-
   deleteInterview(interviewId: number) {
 
-    this.facade.InterviewSevice.delete(interviewId)
-      .subscribe(res => {
-        this.getInterviews();
-      }, err => {
-        console.log(err);
+    let operation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
 
-      })
+    if (operation) {
+      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
+    } else {
+      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
+
+      this.interviewOperations.push(
+        {
+          operation: "delete",
+          data: this.interviews.find(interview => interview.id === interviewId)
+        }
+      )
+    }
+    this.interviews = [...this.interviews.filter(interview => interview.id !== interviewId)];
   }
+
 
   private validateInterviewForm() {
     for (const i in this.interviewForm.controls) {
@@ -250,12 +312,33 @@ export class ClientStageComponent implements OnInit {
     };
   }
   saveEdit(id: number): void {
-    this.facade.InterviewSevice.update(id, this.editCache[id].data)
-      .subscribe(res => {
-        this.getInterviews()
-        this.editCache[id].edit = false;
-      })
+
+    let operation = this.interviewOperations.find(o => o.data.id === id && o.operation === "add");
+    const index = this.interviews.findIndex(item => item.id === id);
+    if (operation) {
+
+      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
+      this.interviewOperations.push(
+        {
+          operation: "add",
+          data: this.interviews[index],
+        }
+      )
+    } else {
+
+      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
+      this.interviewOperations.push(
+        {
+          operation: "edit",
+          data: this.interviews[index],
+        }
+      )
+
+    }
+    Object.assign(this.interviews[index], this.editCache[id].data);
+    this.editCache[id].edit = false;
   }
+
   updateEditCache(): void {
     this.interviews.forEach(item => {
       this.editCache[item.id] = {

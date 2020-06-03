@@ -138,7 +138,7 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("{candidateId}")]
+        [HttpGet("candidate/{candidateId}")]
         public IActionResult GetActiveProcessByCandidate(int candidateId)
         {
             return ApiAction(() =>

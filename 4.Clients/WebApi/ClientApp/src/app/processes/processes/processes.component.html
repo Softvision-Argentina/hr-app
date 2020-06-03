@@ -123,7 +123,7 @@
             (selectedSeniority)="updateSeniority($event)"></technical-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 550px">
-          <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"></client-stage>
+          <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage" [processSaveEvent]="saveEventSubject.asObservable()"></client-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
           <pre-offer-stage [_users]="users" [preOfferStage]="emptyProcess.preOfferStage"
