@@ -126,8 +126,10 @@ namespace Domain.Services.Impl.Services
         public CreatedProcessContract Create(CreateProcessContract createProcessContract)
         {
             var process = _mapper.Map<Process>(createProcessContract);
-
-            this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+            
+            ValidateDniExistance(process);
+            
+            AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
             process.Candidate.Status = CandidateStatus.InProgress;
 
@@ -167,6 +169,18 @@ namespace Domain.Services.Impl.Services
             }
 
             return createdProcessContract;
+        }
+
+        private void ValidateDniExistance(Process process)
+        {
+            PreOfferStage preOfferStage;
+
+            preOfferStage = _preOfferStageRepository.QueryEager().FirstOrDefault(x => x.DNI == process.PreOfferStage.DNI);
+
+            if (preOfferStage != null && preOfferStage.DNI != 0)
+            {
+                throw new Exception("DNI number already exists");
+            }
         }
 
         private int GetUser()
@@ -210,6 +224,9 @@ namespace Domain.Services.Impl.Services
         public void Update(UpdateProcessContract updateProcessContract)
         {
             var process = _mapper.Map<Process>(updateProcessContract);
+            
+            ValidateDniExistance(process);
+
             process.Status = SetProcessStatus(process);
             process.CurrentStage = SetProcessCurrentStage(process);
 
