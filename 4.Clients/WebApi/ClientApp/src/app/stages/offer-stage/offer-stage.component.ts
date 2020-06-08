@@ -5,14 +5,13 @@ import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
 import { ProcessService } from '../../services/process.service';
-import { OfferHistory } from '../offer-history/offer-history.component';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'offer-stage',
   templateUrl: './offer-stage.component.html',
-  styleUrls: ['./offer-stage.component.css'],
-  providers: [OfferHistory]
+  styleUrls: ['./offer-stage.component.scss']
 })
 export class OfferStageComponent implements OnInit {
 
@@ -35,6 +34,8 @@ export class OfferStageComponent implements OnInit {
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
     vacationDays: [0, [Validators.required]],
+    healthInsurance: [0, [Validators.required]],
+    notes: '',
     firstday: [new Date(), [Validators.required]],
     bonus: '',
     hireDate: [new Date(), [Validators.required]],
@@ -45,28 +46,26 @@ export class OfferStageComponent implements OnInit {
     rejectionReason: [null, [Validators.required]],
   });
 
+  feedbackContent:string = "";
+
   statusList: any[];
   seniorityList: any[];
+  healthInsuranceList: any[];
   backCheckEnabled = false;
   backDateEnabled: boolean;
   preocupationalCheckEnabled = false;
   preocupationalDateEnabled: boolean;
 
   @Input() offerStage: OfferStage;
-  @ViewChild(OfferHistory) historyOffer: OfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
     private globals: Globals,
-    private processService: ProcessService,
-    private historyOfferModal: OfferHistory) {
+    private processService: ProcessService) {
 
     this.statusList = globals.offerStatusList;
-  }
-
-  showOfferHistoryModal(modalContent: TemplateRef<{}>) {
-    this.historyOfferModal.showModal(modalContent);
+    this.healthInsuranceList = globals.healthInsuranceList;
   }
 
   ngOnInit() {
@@ -84,6 +83,10 @@ export class OfferStageComponent implements OnInit {
 
   getFormControl(name: string): AbstractControl {
     return this.offerForm.controls[name];
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   changeFormStatus(enable: boolean) {
@@ -120,7 +123,7 @@ export class OfferStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.getControlValue(form.controls.feedback);
+    stage.feedback = this.feedbackContent;
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
@@ -129,6 +132,8 @@ export class OfferStageComponent implements OnInit {
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
     stage.vacationDays = this.getControlValue(form.controls.vacationDays);
+    stage.healthInsurance = this.getControlValue(form.controls.healthInsurance);
+    stage.notes = this.getControlValue(form.controls.notes);
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
@@ -174,7 +179,7 @@ export class OfferStageComponent implements OnInit {
     }
 
     if (offerStage.feedback) {
-      this.offerForm.controls['feedback'].setValue(offerStage.feedback);
+      this.feedbackContent = offerStage.feedback;
     }
 
     if (offerStage.remunerationOffer) {
@@ -183,6 +188,14 @@ export class OfferStageComponent implements OnInit {
 
     if (offerStage.vacationDays) {
       this.offerForm.controls['vacationDays'].setValue(offerStage.vacationDays);
+    }
+
+    if (offerStage.healthInsurance) {
+      this.offerForm.controls['healthInsurance'].setValue(offerStage.healthInsurance);
+    }
+    
+    if (offerStage.notes) {
+      this.offerForm.controls['notes'].setValue(offerStage.notes);
     }
 
     if (offerStage.firstday) {

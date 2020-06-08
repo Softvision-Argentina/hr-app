@@ -34,7 +34,7 @@
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">Please input the user</nz-form-explain>
+                    <nz-form-explain *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">Please input a user</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -51,12 +51,6 @@
 
                 </nz-form-control>
             </nz-form-item>
-        </div>
-    </div>
-    <div nz-row [ngStyle]="{'display': 'none'}">
-        <div nz-col nzSpan="6" nzOffset="6">
-            <button nz-button [disabled]="offerForm.get('status').value !== 1" nzType="primary"
-                (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
         </div>
     </div>
     <div nz-row>
@@ -122,6 +116,34 @@
       </nz-form-item>
     </div>
   </div>
+  <div nz-row>
+    <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="healthInsurance" [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}" >
+                Health insurance
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-select formControlName="healthInsurance">
+                    <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}" [nzValue]="insurance.id">
+                    </nz-option>
+                </nz-select>            
+                <nz-form-explain *ngIf="offerForm.get('healthInsurance').dirty && offerForm.get('healthInsurance').errors">
+                Please input the health insurance
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="notes" [ngClass]="{'requiredFieldLabel': isRequiredField('notes')}" >
+                Notes
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input type="text" nz-input formControlName="notes" id="notes" placeholder="Please input the notes">
+            </nz-form-control>                
+        </nz-form-item>
+    </div>
+</div>
     <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
@@ -143,7 +165,3 @@
         </div>
     </div>
 </form>
-
-<ng-template #historyOfferModal>
-    <offer-history [_processId]=offerStage.processId (backdrop)="static" keyboard="false"></offer-history>
-</ng-template>

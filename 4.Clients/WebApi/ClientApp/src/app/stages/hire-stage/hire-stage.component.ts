@@ -10,7 +10,7 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 @Component({
   selector: 'hire-stage',
   templateUrl: './hire-stage.component.html',
-  styleUrls: ['./hire-stage.component.css']
+  styleUrls: ['./hire-stage.component.scss']
 })
 export class HireStageComponent implements OnInit {
 
@@ -41,6 +41,8 @@ export class HireStageComponent implements OnInit {
     feedback: [null, [trimValidator]]
   });
 
+  feedbackContent:string = "";
+
   statusList: any[];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
@@ -55,6 +57,10 @@ export class HireStageComponent implements OnInit {
     return this.hireForm.controls[name];
   }
 
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
+  }
+  
   changeFormStatus(enable: boolean) {
     for (const i in this.hireForm.controls) {
       if (this.hireForm.controls[i] !== this.hireForm.controls['status']) {

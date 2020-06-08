@@ -40,13 +40,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: CmdLine@2
-  inputs:
-    script: |
-      pwd
-      ls -la
-
-
 #- task: VSTest@2
 #  inputs:
 #    platform: '$(buildPlatform)'

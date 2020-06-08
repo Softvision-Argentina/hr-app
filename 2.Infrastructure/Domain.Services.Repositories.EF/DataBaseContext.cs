@@ -37,7 +37,7 @@ namespace Domain.Services.Repositories.EF
         public DbSet<Role> Roles { get; set; }
         public DbSet<CompanyCalendar> CompanyCalendar { get; set; }
         public DbSet<DeclineReason> DeclineReasons { get; set; }
-        public DbSet<Offer> Offer { get; set; }
+        public DbSet<PreOffer> PreOffer { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
         public DbSet<Cv> Cv { get; set; }
         public DbSet<UserDashboard> UserDashboards { get; set; }

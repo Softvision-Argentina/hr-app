@@ -12,7 +12,7 @@ import { PreOffer } from 'src/entities/pre-offer';
 @Component({
   selector: 'app-report-timetofill1',
   templateUrl: './report-timetofill1.component.html',
-  styleUrls: ['./report-timetofill1.component.css']
+  styleUrls: ['./report-timetofill1.component.scss']
 })
 export class ReportTimetofill1Component implements OnInit {
 

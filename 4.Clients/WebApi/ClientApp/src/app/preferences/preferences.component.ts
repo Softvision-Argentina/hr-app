@@ -6,7 +6,7 @@ import { UserDashboard } from 'src/entities/userDashboard';
 @Component({
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',
-  styleUrls: ['./preferences.component.css']
+  styleUrls: ['./preferences.component.scss']
 })
 export class PreferencesComponent implements OnInit {
   dashboards: Dashboard[] = [];

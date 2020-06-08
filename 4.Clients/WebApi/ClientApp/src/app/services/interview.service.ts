@@ -9,6 +9,6 @@ import { Interview } from 'src/entities/interview';
 export class InterviewService extends BaseService<Interview> {
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
-    this.apiUrl += 'Interview';
+    this.apiUrl += 'Interviews';
   }
 }

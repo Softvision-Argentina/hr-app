@@ -1,0 +1,14 @@
+.skill-control{
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+}
+
+.skill-control .item{
+    width: 30%;
+}
+
+.skill-control .icon{
+    width: 5%;
+    vertical-align: center;
+}

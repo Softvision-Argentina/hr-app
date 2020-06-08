@@ -9,7 +9,8 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -17,14 +18,16 @@
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="clientForm.get('status').dirty && clientForm.get('status').errors">Please select a status</nz-form-explain>
+                    <nz-form-explain *ngIf="clientForm.get('status').dirty && clientForm.get('status').errors">Please
+                        select a status</nz-form-explain>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Date
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
+                    Date of Presentation
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
@@ -35,38 +38,44 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
+    <div nz-row hidden>
         <div nz-col nzSpan="12">
-        <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
                     Interviewer
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <input type="text" nz-input formControlName="interviewer" id="interviewer" placeholder="Please input the interviewer's name">
-                    </nz-form-control>
-        </nz-form-item>
+                    <input type="text" nz-input formControlName="interviewer" id="interviewer"
+                        placeholder="Please input the interviewer's name">
+                </nz-form-control>
+            </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-        <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName" [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
-                Delegate
-            </nz-form-label>
-               <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="delegateName" id="delegateName" placeholder="Please input the delegate name">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
+                    Delegate
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <input type="text" nz-input formControlName="delegateName" id="delegateName"
+                        placeholder="Please input the delegate name">
                 </nz-form-control>
-        </nz-form-item>
+            </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="12" hidden>
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d" *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
+                <nz-form-explain style="color: #f5222d"
+                    *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
                     <ng-container *ngIf="clientForm.get('feedback')?.hasError('trimBeginError')">
                         The input has leading whitespace!
                     </ng-container>
@@ -78,14 +87,18 @@
         </div>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
                     Rejection Reason
                 </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason" placeholder="Input the rejection reason"></textarea>
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Input the rejection reason"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d " *ngIf="showRejectionReason() && clientForm.get('rejectionReason').dirty && clientForm.get('rejectionReason').errors ">
-                    <ng-container *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
+                <nz-form-explain style="color: #f5222d "
+                    *ngIf="showRejectionReason() && clientForm.get('rejectionReason').dirty && clientForm.get('rejectionReason').errors ">
+                    <ng-container
+                        *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
                         Please input rejection reason!
                     </ng-container>
                 </nz-form-explain>
@@ -97,54 +110,63 @@
     <div nz-row>
         <nz-divider nzText="INTERVIEWS"></nz-divider>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="interviewDate"></nz-date-picker>
-                    <nz-form-explain *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
-                        Field required
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="interviewClient" id="interviewClient" placeholder="Enter the client's name">
-                    <nz-form-explain *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
-                        Field required
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="clientInterviewer" id="clientInterviewer" placeholder="Enter the interviewer's full name">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="project" id="project" placeholder="Enter the project's name">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
+    <nz-collapse>
+        <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.acitve"
+            [nzShowArrow]="panelControl.arrow">
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-date-picker [(ngModel)]="resetInterviewDate" style="width: 100%;"
+                                formControlName="interviewDate"></nz-date-picker>
+                            <nz-form-explain
+                                *ngIf="interviewForm.get('interviewDate').dirty && interviewForm.get('interviewDate').errors">
+                                Field required
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #interviewClient type="text" nz-input formControlName="interviewClient"
+                                id="interviewClient" placeholder="Enter the client's name">
+                            <nz-form-explain
+                                *ngIf="interviewForm.get('interviewClient').dirty && interviewForm.get('interviewClient').errors">
+                                Field required
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #clientInterviewer type="text" nz-input formControlName="clientInterviewer"
+                                id="clientInterviewer" placeholder="Enter the interviewer's full name">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input #project type="text" nz-input formControlName="project" id="project"
+                                placeholder="Enter the project's name">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
+                    <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
                     <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
                         <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
                             Field required
@@ -157,33 +179,61 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12" nzOffset="6">
-            <nz-form-item>
-                <button nz-button nzType="primary" (click)="addInterview()">Add Interview</button>
-            </nz-form-item>            
-        </div>
-    </div>
-    <div nz-row> 
-        <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false" [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
-            <thead>
-                <tr>
-                    <th nzWidth="200px">Date</th>
-                    <th nzWidth="200px">Client</th>
-                    <th nzWidth="200px">Feedback</th>
-                    <th nzWidth="200px">Interviewer</th>
-                    <th nzWidth="200px">Project</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let interview of interviewTable.data">
+            <div nz-row>
+                <div nz-col nzSpan="6" nzOffset="11">
+                    <nz-form-item>
+                        <button nz-button nzType="primary" (click)="addInterview()">Add Interview</button>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-collapse-panel>
+    </nz-collapse>
+</form>
+<div nz-row>
+    <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
+        [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
+        <thead>
+            <tr>
+                <th nzWidth="200px">Date</th>
+                <th nzWidth="200px">Client</th>
+                <th nzWidth="200px">Feedback</th>
+                <th nzWidth="200px">Interviewer</th>
+                <th nzWidth="200px">Project</th>
+                <th nzWidth="200px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let interview of interviewTable.data">
+                <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
                     <td nzWidth="200px">{{interview.interviewDate | date  : 'shortDate' }}</td>
                     <td nzWidth="200px">{{interview.client}}</td>
                     <td nzWidth="200px" word-break: break-all>{{interview.feedback}}</td>
                     <td nzWidth="200px">{{interview.clientInterviewer}}</td>
                     <td nzWidth="200px">{{interview.project}}</td>
-                </tr>
-            </tbody>
-        </nz-table>
-    </div>
-</form>
+                    <td><a (click)="startEdit(interview.id)" style="margin-right: 15px;">
+                            <i nzTitle="Edit" style="cursor: pointer;" nz-tooltip nz-icon type="edit"
+                                theme="outline"></i>
+                        </a>
+                        <a nz-popconfirm (nzOnConfirm)="deleteInterview(interview.id)">
+                            <i nzTitle="Delete" style="cursor: pointer;" nz-tooltip nz-icon type="delete"
+                                theme="outline"></i>
+                        </a>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                    <td>
+                        <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
+                    </td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.feedback" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer" /></td>
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
+                    <td>
+                        <a (click)="saveEdit(interview.id)" class="save" style="margin-right: 8px;">Save</a>
+                        <a (click)="cancelEdit(interview.id)">Cancel</a>
+                    </td>
+                </ng-template>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

@@ -17,7 +17,7 @@ import { ReferralsComponent } from '../referrals/referrals.component';
 @Component({
   selector: 'app-referrals-contact',
   templateUrl: './referrals-contact.component.html',
-  styleUrls: ['./referrals-contact.component.css']
+  styleUrls: ['./referrals-contact.component.scss']
 })
 
 export class ReferralsContactComponent implements OnInit {
@@ -96,7 +96,7 @@ export class ReferralsContactComponent implements OnInit {
     lastName: [null, [Validators.required, trimValidator]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, trimValidator],
+    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9 -]+$/)]],
     user: [null, [Validators.required]],
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
@@ -261,7 +261,7 @@ export class ReferralsContactComponent implements OnInit {
       lastName: [null, [Validators.required, trimValidator]],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null],
+      phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
       user: [null, [Validators.required]],
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],

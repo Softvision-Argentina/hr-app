@@ -5,4 +5,5 @@ export class Interview {
     interviewDate: Date;
     feedback: string;
     project: string;
+    clientStageId: number;
 }

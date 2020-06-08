@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core
 @Component({
     selector: 'app-processes-table',
     templateUrl: './processes-table.component.html',
-    styleUrls: ['./processes-table.component.css']
+    styleUrls: ['./processes-table.component.scss']
 })
 
 export class ProcessTableComponent {

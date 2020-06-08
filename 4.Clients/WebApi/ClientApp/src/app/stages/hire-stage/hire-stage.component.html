@@ -63,7 +63,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="feedback" nz-input formControlName="feedback" placeholder="Input any additional information if necessary" id="feedback"></textarea>
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d" *ngIf="hireForm.get('feedback').dirty && hireForm.get('feedback').errors">
                     <ng-container *ngIf="hireForm.get('feedback')?.hasError('trimBeginError')">

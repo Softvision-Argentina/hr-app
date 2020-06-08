@@ -13,7 +13,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-report-hire-casualties',
   templateUrl: './report-hire-casualties.component.html',
-  styleUrls: ['./report-hire-casualties.component.css']
+  styleUrls: ['./report-hire-casualties.component.scss']
 })
 export class ReportHireCasualtiesComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
@@ -13,8 +13,9 @@ import { Office } from 'src/entities/office';
 import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
-import { dniValidator } from 'src/app/directives/dni.validator';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { Subscription } from 'rxjs';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { UniqueEmailValidator } from '../ValidatorsCandidateForm';
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
   if((c.get('email').value === null || c.get('email').value.length === 0) 
@@ -29,10 +30,10 @@ export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors 
 @Component({
   selector: 'candidate-add',
   templateUrl: './candidate-add.component.html',
-  styleUrls: ['./candidate-add.component.css']
+  styleUrls: ['./candidate-add.component.scss']
 })
-export class CandidateAddComponent implements OnInit {
-
+export class CandidateAddComponent implements OnInit, OnDestroy {
+ 
   @Input()
     private _process: Process;
     public get process(): Process {
@@ -77,10 +78,10 @@ export class CandidateAddComponent implements OnInit {
     public set candidateProfiles(value: CandidateProfile[]) {
       this.profiles = value;
     }
-    
   fillCandidate: Candidate;
   fillUsers: User[] = [];
   comms: Community[] =[];
+  isInputSelected = false;
   profiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
   currentUser: User;
@@ -89,9 +90,9 @@ export class CandidateAddComponent implements OnInit {
     lastName: [null, [Validators.required, trimValidator]],
     dni: [0],
     // dni: [0, [dniValidator]],
-    email: [null, [Validators.email, trimValidator]],
+    email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null],
+    phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
     linkedin: [null, [trimValidator]],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
@@ -107,17 +108,20 @@ export class CandidateAddComponent implements OnInit {
   }, { validator: checkIfEmailAndPhoneNulll });
 
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
-  skills: Skill[] = [];  
+  skills: Skill[] = [];
   isEdit: boolean = false;
-
+  
   statusList: any[];
-
+  candidates: Candidate[] = [];
+  candidateSubscription: Subscription;
   selectedValue = 1;
+  selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
               private globals: Globals) {
                 this.statusList = globals.candidateStatusList;
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                this.getCandidates();
   }
 
   ngOnInit() {
@@ -161,6 +165,14 @@ export class CandidateAddComponent implements OnInit {
     }
   }
 
+  getCandidates(){
+    this.candidateSubscription = this.facade.candidateService.getData()
+    .subscribe(res => {
+      this.candidates = res;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+  }
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
@@ -207,7 +219,7 @@ export class CandidateAddComponent implements OnInit {
     this.candidateForm.controls['email'].setValue(candidate.emailAddress);
     this.candidateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
-    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]); //(54),1123445678    
+    this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.candidateForm.controls['user'].setValue(candidate.user.id);
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
@@ -238,10 +250,11 @@ export class CandidateAddComponent implements OnInit {
     return this.candidateForm.controls[name];
   }
    
-  getFormData(): Candidate {
+  getFormData(): Candidate {    
     let pn = this.candidateForm.controls['phoneNumber'].value == undefined
     || this.candidateForm.controls['phoneNumber'].value == null ? ''
     : this.candidateForm.controls['phoneNumber'].value.toString();
+
 
     let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined 
     || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
@@ -263,17 +276,20 @@ export class CandidateAddComponent implements OnInit {
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
-      // contactDay: this.candidateForm.controls['contactDay'].value
+      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,      
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
       referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
     }
-    newCandidate.phoneNumber.toString();
     return newCandidate;
   }
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.candidateForm)
   }
+
+  ngOnDestroy() {
+    this.candidateSubscription.unsubscribe();
+  }
+
 }

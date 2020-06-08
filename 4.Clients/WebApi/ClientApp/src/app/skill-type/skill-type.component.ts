@@ -7,7 +7,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 @Component({
   selector: 'app-skill-type',
   templateUrl: './skill-type.component.html',
-  styleUrls: ['./skill-type.component.css'],
+  styleUrls: ['./skill-type.component.scss'],
 })
 export class SkillTypeComponent implements OnInit {
 

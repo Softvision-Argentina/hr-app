@@ -13,21 +13,27 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.ClientInterviewer, opt => opt.MapFrom(r => r.ClientInterviewer))
                 .ForMember(x => x.Client, opt => opt.MapFrom(r => r.Client))
                 .ForMember(x => x.Project, opt => opt.MapFrom(r => r.Project))
-                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate));
+                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate))
+                .ForMember(x => x.ClientStage, opt => opt.MapFrom(r => r.ClientStage))
+                .ForMember(x => x.ClientStageId, opt => opt.MapFrom(r => r.ClientStageId));
 
             CreateMap<CreateInterviewContract, Interview>()
                 .ForMember(x => x.Feedback, opt => opt.MapFrom(r => r.Feedback))
                 .ForMember(x => x.ClientInterviewer, opt => opt.MapFrom(r => r.ClientInterviewer))
                 .ForMember(x => x.Client, opt => opt.MapFrom(r => r.Client))
                 .ForMember(x => x.Project, opt => opt.MapFrom(r => r.Project))
-                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate));
+                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate))
+                .ForMember(x => x.ClientStage, opt => opt.MapFrom(r => r.ClientStage))
+                .ForMember(x => x.ClientStageId, opt => opt.MapFrom(r => r.ClientStageId));
 
             CreateMap<Interview, CreateInterviewContract>()
                 .ForMember(x => x.Feedback, opt => opt.MapFrom(r => r.Feedback))
                 .ForMember(x => x.ClientInterviewer, opt => opt.MapFrom(r => r.ClientInterviewer))
                 .ForMember(x => x.Client, opt => opt.MapFrom(r => r.Client))
                 .ForMember(x => x.Project, opt => opt.MapFrom(r => r.Project))
-                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate));
+                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate))
+                .ForMember(x => x.ClientStage, opt => opt.MapFrom(r => r.ClientStage))
+                .ForMember(x => x.ClientStageId, opt => opt.MapFrom(r => r.ClientStageId));
 
             CreateMap<Interview, CreatedInterviewContract>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(r => r.Id));
@@ -44,7 +50,9 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.ClientInterviewer, opt => opt.MapFrom(r => r.ClientInterviewer))
                 .ForMember(x => x.Client, opt => opt.MapFrom(r => r.Client))
                 .ForMember(x => x.Project, opt => opt.MapFrom(r => r.Project))
-                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate));
+                .ForMember(x => x.InterviewDate, opt => opt.MapFrom(r => r.InterviewDate))
+                .ForMember(x => x.ClientStage, opt => opt.MapFrom(r => r.ClientStage))
+                .ForMember(x => x.ClientStageId, opt => opt.MapFrom(r => r.ClientStageId));
         }
     }
 }

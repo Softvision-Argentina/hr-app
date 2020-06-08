@@ -14,7 +14,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-process-detail',
   templateUrl: './process-detail.component.html',
-  styleUrls: ['./process-detail.component.css'],
+  styleUrls: ['./process-detail.component.scss'],
   providers: [CandidateDetailsComponent, UserDetailsComponent]
 })
 export class ProcessDetailComponent implements OnInit {
@@ -59,6 +59,8 @@ export class ProcessDetailComponent implements OnInit {
   userOwner: User;
   userDelegate: User;
 
+  feedbackContent:string = "";
+
   dropStage(event: CdkDragDrop<string[]>) {
     console.log("Drop method in table");
     console.log(event);
@@ -80,6 +82,10 @@ export class ProcessDetailComponent implements OnInit {
       userOwnerId: [null, [Validators.required]],
       userDelegateId: [null, [Validators.required]]
     });
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   getCandidates() {
@@ -164,7 +170,7 @@ export class ProcessDetailComponent implements OnInit {
               const newStage: Stage = {
                 id: 0,
                 date: new Date,
-                feedback: this.stageForm.controls['feedback'].value.toString(),
+                feedback: this.feedbackContent,
                 status: this.stageForm.controls['status'].value.toString(),
                 userOwnerId: this.stageForm.controls['userOwnerId'].value.toString(),
                 userDelegateId: this.stageForm.controls['userDelegateId'].value.toString(),

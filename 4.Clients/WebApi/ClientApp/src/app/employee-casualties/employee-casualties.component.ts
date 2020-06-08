@@ -7,7 +7,7 @@ import { AppComponent } from '../app.component';
 @Component({
   selector: 'app-employee-casualties',
   templateUrl: './employee-casualties.component.html',
-  styleUrls: ['./employee-casualties.component.css']
+  styleUrls: ['./employee-casualties.component.scss']
 })
 export class EmployeeCasualtiesComponent implements OnInit {
 

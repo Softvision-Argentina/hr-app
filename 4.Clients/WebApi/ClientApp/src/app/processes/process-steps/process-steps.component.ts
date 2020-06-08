@@ -9,7 +9,7 @@ const PROCESS_STATUS = 'process';
 @Component({
   selector: 'app-process-steps',
   templateUrl: './process-steps.component.html',
-  styleUrls: ['./process-steps.component.css']
+  styleUrls: ['./process-steps.component.scss']
 })
 export class ProcessStepsComponent implements OnInit {
   

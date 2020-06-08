@@ -195,14 +195,13 @@ namespace Domain.Services.Repositories.EF
             var skillType1 = new SkillType { Name = ".NET", Description = ".NET Framework, .NET Core, .NET languages" };
             var skillType2 = new SkillType { Name = "Java platform", Description = "Programming language and related frameworks and tools" };
             var skillType3 = new SkillType { Name = "Databases", Description = "Knowledge of databases" };
-            var skillType4 = new SkillType { Name = "English", Description = "Level of english" };
-            var skillType5 = new SkillType { Name = "Spanish", Description = "Level of spanish" };
-            var skillType6 = new SkillType { Name = "Soft skills", Description = "Leadership, communication, teamwork..." };
-            var skillType7 = new SkillType { Name = "Front-end", Description = "Javascript, HTML, HTTP" };
-            var skillType8 = new SkillType { Name = "Back-end", Description = "Programming languages, frameworks, tools" };
-            var skillType9 = new SkillType { Name = "DevOps", Description = "SysAdmin, Containers, Azure..." };
-            var skillType10 = new SkillType { Name = "Project management", Description = "Project management" };
-            var skillType11 = new SkillType { Name = "Mobile", Description = "Knowledge of mobile development" };
+            var skillType4 = new SkillType { Name = "English", Description = "Level of english" };            
+            var skillType5 = new SkillType { Name = "Soft skills", Description = "Leadership, communication, teamwork..." };
+            var skillType6 = new SkillType { Name = "Front-end", Description = "Javascript, HTML, HTTP" };
+            var skillType7 = new SkillType { Name = "Back-end", Description = "Programming languages, frameworks, tools" };
+            var skillType8 = new SkillType { Name = "DevOps", Description = "SysAdmin, Containers, Azure..." };
+            var skillType9 = new SkillType { Name = "Project management", Description = "Project management" };
+            var skillType10 = new SkillType { Name = "Mobile", Description = "Knowledge of mobile development" };
             context.SkillTypes.Add(skillType1);
             context.SkillTypes.Add(skillType2);
             context.SkillTypes.Add(skillType3);
@@ -230,31 +229,25 @@ namespace Domain.Services.Repositories.EF
             var skill4b = new Skill { Name = "Writing", Type = skillType4, Description = "Level of writing" };
             var skill4c = new Skill { Name = "Speaking", Type = skillType4, Description = "Level of speaking" };
             var skill4d = new Skill { Name = "Listening", Type = skillType4, Description = "Level of listening" };
+            
+            var skill5a = new Skill { Name = "Leadership", Type = skillType5, Description = "Leadership" };
+            var skill5b = new Skill { Name = "Problem Solving", Type = skillType5, Description = "Problem Solving Skills" };
+            var skill5c = new Skill { Name = "Teamwork", Type = skillType5, Description = "Teamwork" };
+            var skill5d = new Skill { Name = "Work Ethic", Type = skillType5, Description = "Work Ethic" };
 
-            var skill5a = new Skill { Name = "Reading", Type = skillType5, Description = "Level of reading" };
-            var skill5b = new Skill { Name = "Writing", Type = skillType5, Description = "Level of writing" };
-            var skill5c = new Skill { Name = "Speaking", Type = skillType5, Description = "Level of speaking" };
-            var skill5d = new Skill { Name = "Listening", Type = skillType5, Description = "Level of listening" };
+            var skill6a = new Skill { Name = "Javascript", Type = skillType6, Description = "Javascript" };
+            var skill6b = new Skill { Name = "HTTP", Type = skillType6, Description = "HTTP" };
+            var skill6c = new Skill { Name = "HTML5", Type = skillType6, Description = "Markup language" };
 
-            var skill6a = new Skill { Name = "Leadership", Type = skillType6, Description = "Leadership" };
-            var skill6b = new Skill { Name = "Problem Solving", Type = skillType6, Description = "Problem Solving Skills" };
-            var skill6c = new Skill { Name = "Teamwork", Type = skillType6, Description = "Teamwork" };
-            var skill6d = new Skill { Name = "Work Ethic", Type = skillType6, Description = "Work Ethic" };
+            var skill7a = new Skill { Name = "Entity framework", Type = skillType7, Description = "EF y EF Core" };
+            var skill7b = new Skill { Name = "Async programming", Type = skillType7, Description = "Async" };
+            var skill7c = new Skill { Name = "LINQ", Type = skillType7, Description = "LINQ" };
 
-            var skill7a = new Skill { Name = "Javascript", Type = skillType7, Description = "Javascript" };
-            var skill7b = new Skill { Name = "HTTP", Type = skillType7, Description = "HTTP" };
-            var skill7c = new Skill { Name = "HTML5", Type = skillType7, Description = "Markup language" };
+            var skill8a = new Skill { Name = "Azure", Type = skillType8, Description = "Microsoft's clould computing service" };
+            
+            var skill9b = new Skill { Name = "Team managment", Type = skillType9, Description = "PM skill" };
 
-            var skill8a = new Skill { Name = "Entity framework", Type = skillType8, Description = "EF y EF Core" };
-            var skill8b = new Skill { Name = "Async programming", Type = skillType8, Description = "Async" };
-            var skill8c = new Skill { Name = "LINQ", Type = skillType8, Description = "LINQ" };
-
-            var skill9a = new Skill { Name = "Azure", Type = skillType9, Description = "Microsoft's clould computing service" };
-
-            var skill10a = new Skill { Name = "Leadership", Type = skillType10, Description = "PM skill" };
-            var skill10b = new Skill { Name = "Team managment", Type = skillType10, Description = "PM skill" };
-
-            var skill11a = new Skill { Name = "Xamarin", Type = skillType11, Description = "Multiplatform mobile development" };
+            var skill10a = new Skill { Name = "Xamarin", Type = skillType10, Description = "Multiplatform mobile development" };
 
             context.Skills.Add(skill1a);
             context.Skills.Add(skill1b);
@@ -278,22 +271,16 @@ namespace Domain.Services.Repositories.EF
             context.Skills.Add(skill6a);
             context.Skills.Add(skill6b);
             context.Skills.Add(skill6c);
-            context.Skills.Add(skill6d);
 
             context.Skills.Add(skill7a);
             context.Skills.Add(skill7b);
             context.Skills.Add(skill7c);
 
             context.Skills.Add(skill8a);
-            context.Skills.Add(skill8b);
-            context.Skills.Add(skill8c);
-
-            context.Skills.Add(skill9a);
+            
+            context.Skills.Add(skill9b);
 
             context.Skills.Add(skill10a);
-            context.Skills.Add(skill10b);
-
-            context.Skills.Add(skill11a);
             context.SaveChanges();
             #endregion
 
@@ -307,8 +294,7 @@ namespace Domain.Services.Repositories.EF
             var cs7 = new CandidateSkill { CandidateId = 1, SkillId = 7, Rate = 85, Comment = "Knows a lot" };
             var cs8 = new CandidateSkill { CandidateId = 1, SkillId = 8, Rate = 100, Comment = "Knows everything" };
             var cs9 = new CandidateSkill { CandidateId = 1, SkillId = 9, Rate = 45, Comment = "Knows a little" };
-            var cs10 = new CandidateSkill { CandidateId = 1, SkillId = 10, Rate = 40, Comment = "Knows a little" };
-            var cs11 = new CandidateSkill { CandidateId = 1, SkillId = 11, Rate = 90, Comment = "Knows everything" };
+            var cs10 = new CandidateSkill { CandidateId = 1, SkillId = 10, Rate = 40, Comment = "Knows a little" };            
 
             var cs1b = new CandidateSkill { CandidateId = 2, SkillId = 1, Rate = 85, Comment = "Knows a lot" };
             var cs2b = new CandidateSkill { CandidateId = 2, SkillId = 2, Rate = 100, Comment = "Knows everything" };
@@ -319,8 +305,7 @@ namespace Domain.Services.Repositories.EF
             var cs7b = new CandidateSkill { CandidateId = 2, SkillId = 7, Rate = 85, Comment = "Knows a lot" };
             var cs8b = new CandidateSkill { CandidateId = 2, SkillId = 8, Rate = 100, Comment = "Knows everything" };
             var cs9b = new CandidateSkill { CandidateId = 2, SkillId = 9, Rate = 45, Comment = "Knows a little" };
-            var cs10b = new CandidateSkill { CandidateId = 2, SkillId = 10, Rate = 40, Comment = "Knows a little" };
-            var cs11b = new CandidateSkill { CandidateId = 2, SkillId = 11, Rate = 90, Comment = "Knows everything" };
+            var cs10b = new CandidateSkill { CandidateId = 2, SkillId = 10, Rate = 40, Comment = "Knows a little" };            
 
             var cs1c = new CandidateSkill { CandidateId = 3, SkillId = 11, Rate = 85, Comment = "Knows a lot" };
             var cs2c = new CandidateSkill { CandidateId = 3, SkillId = 12, Rate = 100, Comment = "Knows everything" };
@@ -331,8 +316,7 @@ namespace Domain.Services.Repositories.EF
             var cs7c = new CandidateSkill { CandidateId = 3, SkillId = 17, Rate = 85, Comment = "Knows a lot" };
             var cs8c = new CandidateSkill { CandidateId = 3, SkillId = 18, Rate = 100, Comment = "Knows everything" };
             var cs9c = new CandidateSkill { CandidateId = 3, SkillId = 19, Rate = 45, Comment = "Knows a little" };
-            var cs10c = new CandidateSkill { CandidateId = 3, SkillId = 20, Rate = 40, Comment = "Knows a little" };
-            var cs11c = new CandidateSkill { CandidateId = 3, SkillId = 21, Rate = 90, Comment = "Knows everything" };
+            var cs10c = new CandidateSkill { CandidateId = 3, SkillId = 20, Rate = 40, Comment = "Knows a little" };            
 
             var cs1d = new CandidateSkill { CandidateId = 4, SkillId = 1, Rate = 85, Comment = "Knows a lot" };
             var cs2d = new CandidateSkill { CandidateId = 4, SkillId = 3, Rate = 100, Comment = "Knows everything" };
@@ -343,8 +327,7 @@ namespace Domain.Services.Repositories.EF
             var cs7d = new CandidateSkill { CandidateId = 4, SkillId = 12, Rate = 85, Comment = "Knows a lot" };
             var cs8d = new CandidateSkill { CandidateId = 4, SkillId = 14, Rate = 100, Comment = "Knows everything" };
             var cs9d = new CandidateSkill { CandidateId = 4, SkillId = 16, Rate = 45, Comment = "Knows a little" };
-            var cs10d = new CandidateSkill { CandidateId = 4, SkillId = 18, Rate = 40, Comment = "Knows a little" };
-            var cs11d = new CandidateSkill { CandidateId = 4, SkillId = 20, Rate = 90, Comment = "Knows everything" };
+            var cs10d = new CandidateSkill { CandidateId = 4, SkillId = 18, Rate = 40, Comment = "Knows a little" };            
 
             var cs1g = new CandidateSkill { CandidateId = 7, SkillId = 1, Rate = 85, Comment = "Knows a lot" };
             var cs2g = new CandidateSkill { CandidateId = 7, SkillId = 3, Rate = 100, Comment = "Knows everything" };
@@ -356,7 +339,6 @@ namespace Domain.Services.Repositories.EF
             var cs8g = new CandidateSkill { CandidateId = 7, SkillId = 14, Rate = 100, Comment = "Knows everything" };
             var cs9g = new CandidateSkill { CandidateId = 7, SkillId = 16, Rate = 45, Comment = "Knows a little" };
             var cs10g = new CandidateSkill { CandidateId = 7, SkillId = 18, Rate = 40, Comment = "Knows a little" };
-            var cs11g = new CandidateSkill { CandidateId = 7, SkillId = 20, Rate = 90, Comment = "Knows everything" };
 
             var cs1e = new CandidateSkill { CandidateId = 8, SkillId = 1, Rate = 85, Comment = "Knows a lot" };
             var cs2e = new CandidateSkill { CandidateId = 8, SkillId = 3, Rate = 100, Comment = "Knows everything" };
@@ -368,7 +350,6 @@ namespace Domain.Services.Repositories.EF
             var cs8e = new CandidateSkill { CandidateId = 8, SkillId = 14, Rate = 100, Comment = "Knows everything" };
             var cs9e = new CandidateSkill { CandidateId = 8, SkillId = 16, Rate = 45, Comment = "Knows a little" };
             var cs10e = new CandidateSkill { CandidateId = 8, SkillId = 18, Rate = 40, Comment = "Knows a little" };
-            var cs11e = new CandidateSkill { CandidateId = 8, SkillId = 20, Rate = 90, Comment = "Knows everything" };
 
             var cs1f = new CandidateSkill { CandidateId = 9, SkillId = 8, Rate = 85, Comment = "Knows a lot" };
             var cs2f = new CandidateSkill { CandidateId = 9, SkillId = 10, Rate = 100, Comment = "Knows everything" };
@@ -377,11 +358,7 @@ namespace Domain.Services.Repositories.EF
             var cs5f = new CandidateSkill { CandidateId = 9, SkillId = 16, Rate = 100, Comment = "Knows everything" };
             var cs6f = new CandidateSkill { CandidateId = 9, SkillId = 18, Rate = 45, Comment = "Knows a little" };
             var cs7f = new CandidateSkill { CandidateId = 9, SkillId = 20, Rate = 85, Comment = "Knows a lot" };
-            var cs8f = new CandidateSkill { CandidateId = 9, SkillId = 22, Rate = 100, Comment = "Knows everything" };
-            var cs9f = new CandidateSkill { CandidateId = 9, SkillId = 24, Rate = 45, Comment = "Knows a little" };
-            var cs10f = new CandidateSkill { CandidateId = 9, SkillId = 26, Rate = 40, Comment = "Knows a little" };
-            var cs11f = new CandidateSkill { CandidateId = 9, SkillId = 27, Rate = 90, Comment = "Knows everything" };
-
+            var cs8f = new CandidateSkill { CandidateId = 9, SkillId = 22, Rate = 100, Comment = "Knows everything" };   
 
             context.CandidateSkills.Add(cs1);
             context.CandidateSkills.Add(cs2);
@@ -392,8 +369,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs7);
             context.CandidateSkills.Add(cs8);
             context.CandidateSkills.Add(cs9);
-            context.CandidateSkills.Add(cs10);
-            context.CandidateSkills.Add(cs11);
+            context.CandidateSkills.Add(cs10);            
 
             context.CandidateSkills.Add(cs1b);
             context.CandidateSkills.Add(cs2b);
@@ -404,8 +380,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs7b);
             context.CandidateSkills.Add(cs8b);
             context.CandidateSkills.Add(cs9b);
-            context.CandidateSkills.Add(cs10b);
-            context.CandidateSkills.Add(cs11b);
+            context.CandidateSkills.Add(cs10b);            
 
             context.CandidateSkills.Add(cs1c);
             context.CandidateSkills.Add(cs2c);
@@ -416,8 +391,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs7c);
             context.CandidateSkills.Add(cs8c);
             context.CandidateSkills.Add(cs9c);
-            context.CandidateSkills.Add(cs10c);
-            context.CandidateSkills.Add(cs11c);
+            context.CandidateSkills.Add(cs10c);            
 
             context.CandidateSkills.Add(cs1d);
             context.CandidateSkills.Add(cs2d);
@@ -428,8 +402,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs7d);
             context.CandidateSkills.Add(cs8d);
             context.CandidateSkills.Add(cs9d);
-            context.CandidateSkills.Add(cs10d);
-            context.CandidateSkills.Add(cs11d);
+            context.CandidateSkills.Add(cs10d);            
 
             context.CandidateSkills.Add(cs1e);
             context.CandidateSkills.Add(cs2e);
@@ -440,8 +413,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs7e);
             context.CandidateSkills.Add(cs8e);
             context.CandidateSkills.Add(cs9e);
-            context.CandidateSkills.Add(cs10e);
-            context.CandidateSkills.Add(cs11e);
+            context.CandidateSkills.Add(cs10e);            
 
             context.CandidateSkills.Add(cs1f);
             context.CandidateSkills.Add(cs2f);
@@ -450,10 +422,7 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs5f);
             context.CandidateSkills.Add(cs6f);
             context.CandidateSkills.Add(cs7f);
-            context.CandidateSkills.Add(cs8f);
-            context.CandidateSkills.Add(cs9f);
-            context.CandidateSkills.Add(cs10f);
-            context.CandidateSkills.Add(cs11f);
+            context.CandidateSkills.Add(cs8f);      
 
             context.CandidateSkills.Add(cs1g);
             context.CandidateSkills.Add(cs2g);
@@ -465,7 +434,6 @@ namespace Domain.Services.Repositories.EF
             context.CandidateSkills.Add(cs8g);
             context.CandidateSkills.Add(cs9g);
             context.CandidateSkills.Add(cs10g);
-            context.CandidateSkills.Add(cs11g);
 
             context.SaveChanges();
             #endregion

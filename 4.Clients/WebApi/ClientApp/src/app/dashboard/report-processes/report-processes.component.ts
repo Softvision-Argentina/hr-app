@@ -10,7 +10,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-report-processes',
   templateUrl: './report-processes.component.html',
-  styleUrls: ['./report-processes.component.css'],
+  styleUrls: ['./report-processes.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 

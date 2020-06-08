@@ -7,7 +7,7 @@ import { BaseService } from 'src/app/services/base.service';
 @Component({
   selector: 'app-referrals-card',
   templateUrl: './referrals-card.component.html',
-  styleUrls: ['./referrals-card.component.css']
+  styleUrls: ['./referrals-card.component.scss']
 })
 export class ReferralsCardComponent implements OnInit {
   @Input()

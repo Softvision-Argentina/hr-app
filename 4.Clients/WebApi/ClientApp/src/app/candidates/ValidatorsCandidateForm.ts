@@ -1,4 +1,7 @@
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { FormGroup, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { Candidate } from 'src/entities/candidate';
+import { delay } from 'rxjs/operators';
 export function validateCandidateForm(form: FormGroup) {
     let isValid = true;
     if(form.get('isReferred')) {
@@ -26,5 +29,20 @@ export function validateCandidateForm(form: FormGroup) {
         }
     }
     return isValid;
+}
+
+export function UniqueEmailValidator(candidates: Candidate[]): AsyncValidatorFn {
+
+    return({value}: AbstractControl): Observable<ValidationErrors | null> => {
+        const emailUsed = candidates.find(candidate => candidate.emailAddress === value && value && value.length > 0);
+        return new Observable(subscriber =>{
+            if(emailUsed) {
+                subscriber.next({emailExists: true})
+            } else{
+                subscriber.next(null);
+            }
+            subscriber.complete();
+        });
+    };
 }
 

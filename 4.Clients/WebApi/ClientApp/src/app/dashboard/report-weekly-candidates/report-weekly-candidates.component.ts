@@ -11,7 +11,7 @@ import * as addWeeks from 'date-fns/add_weeks';
 @Component({
   selector: 'app-report-weekly-candidates',
   templateUrl: './report-weekly-candidates.component.html',
-  styleUrls: ['./report-weekly-candidates.component.css']
+  styleUrls: ['./report-weekly-candidates.component.scss']
 })
 export class ReportWeeklyCandidatesComponent implements OnInit {
 

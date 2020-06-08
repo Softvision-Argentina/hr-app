@@ -7,7 +7,7 @@ import { CSoftComponent } from '../login/csoft-signin.component';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   providers: [GoogleSigninComponent, CSoftComponent]
 })
 export class LoginComponent implements OnInit {

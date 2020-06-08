@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-candidates',
   templateUrl: './candidates.component.html',
-  styleUrls: ['./candidates.component.css'],
+  styleUrls: ['./candidates.component.scss'],
   providers: [CandidateDetailsComponent, AppComponent]
 })
 
@@ -55,8 +55,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   isEdit = false;
   editingCandidateId = 0;
-  isDniLoading = false;
-  isDniValid = false;
+  isDniLoading = false;  
   currentUser: User;
   searchValueStatus = '';
   statusList: any[];
@@ -178,7 +177,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       dni: [null],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null],
+      phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
       linkedin: [null, [trimValidator]],      
       user: [null, [Validators.required]],
       englishLevel: 'none',
@@ -463,8 +462,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  dniChanged() {
-    this.isDniValid = false;
+  dniChanged() {    
     this.changeFormStatus(false);
   }
 

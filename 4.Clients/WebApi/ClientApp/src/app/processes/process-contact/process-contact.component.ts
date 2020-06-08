@@ -20,7 +20,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-process-contact',
   templateUrl: './process-contact.component.html',
-  styleUrls: ['./process-contact.component.css']
+  styleUrls: ['./process-contact.component.scss']
 })
 
 export class ProcessContactComponent implements OnInit {
@@ -96,7 +96,7 @@ export class ProcessContactComponent implements OnInit {
     lastName: [null, [Validators.required, trimValidator]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, trimValidator],
+    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9 -]+$/)]],
     user: [null, [Validators.required]],
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
@@ -260,7 +260,7 @@ export class ProcessContactComponent implements OnInit {
       lastName: [null, [Validators.required, trimValidator]],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null],
+      phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
       user: [null, [Validators.required]],
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],

@@ -8,7 +8,7 @@ import { FacadeService } from '../services/facade.service';
 @Component({
   selector: 'app-office',
   templateUrl: './office.component.html',
-  styleUrls: ['./office.component.css']
+  styleUrls: ['./office.component.scss']
 })
 export class OfficeComponent implements OnInit {
   @Input()

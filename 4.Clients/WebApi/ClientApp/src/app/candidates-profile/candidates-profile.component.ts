@@ -10,7 +10,7 @@ import { SettingsComponent } from '../settings/settings.component';
 @Component({
   selector: 'app-candidates-profile',
   templateUrl: './candidates-profile.component.html',
-  styleUrls: ['./candidates-profile.component.css']
+  styleUrls: ['./candidates-profile.component.scss']
 })
 export class CandidatesProfileComponent implements OnInit, OnChanges {
 

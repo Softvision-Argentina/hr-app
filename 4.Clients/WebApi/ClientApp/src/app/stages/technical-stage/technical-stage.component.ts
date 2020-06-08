@@ -16,7 +16,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 @Component({
   selector: 'technical-stage',
   templateUrl: './technical-stage.component.html',
-  styleUrls: ['./technical-stage.component.css']
+  styleUrls: ['./technical-stage.component.scss']
 })
 export class TechnicalStageComponent implements OnInit {
 
@@ -55,6 +55,8 @@ export class TechnicalStageComponent implements OnInit {
     rejectionReason: [null, [Validators.required]]
   });
 
+  feedbackContent:string = "";
+
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   usedSkills: Skill[] = [];
@@ -82,6 +84,10 @@ export class TechnicalStageComponent implements OnInit {
     this.changeFormStatus(false);
     if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
     this.getFilteredUsersForTech();
+  }
+
+  getFeedbackContent(content: string): void {
+    this.feedbackContent = content;
   }
 
   getFilteredUsersForTech() {
@@ -161,7 +167,7 @@ export class TechnicalStageComponent implements OnInit {
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.getControlValue(form.controls.feedback);
+    stage.feedback = this.feedbackContent;
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
@@ -221,7 +227,7 @@ export class TechnicalStageComponent implements OnInit {
     }
 
     if (technicalStage.feedback) {
-      this.technicalForm.controls['feedback'].setValue(technicalStage.feedback);
+      this.feedbackContent = technicalStage.feedback;
     }
 
     if (technicalStage.seniority) {
@@ -359,8 +365,15 @@ export class TechnicalStageComponent implements OnInit {
       });
   }
 
-  isRequiredField(field: string) {
+  isRequiredField(field: string): boolean {
     return formFieldHasRequiredValidator(field, this.technicalForm)
   }
 
+  isFirstSkillControl(control: { id: number, controlInstance: string[] }) : boolean {
+    return control.id === this.controlArray[0].id;
+  }
+
+  hideAddSkillButton(): boolean {
+    return !(this.technicalForm.controls.status.value === StageStatusEnum.InProgress);
+  }
 }

@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-days-off',
   templateUrl: './days-off.component.html',
-  styleUrls: ['./days-off.component.css']
+  styleUrls: ['./days-off.component.scss']
 })
 export class DaysOffComponent implements OnInit, OnDestroy {
 

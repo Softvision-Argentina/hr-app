@@ -6,7 +6,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-report-progress-processes',
   templateUrl: './report-progress-processes.component.html',
-  styleUrls: ['./report-progress-processes.component.css'],
+  styleUrls: ['./report-progress-processes.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 

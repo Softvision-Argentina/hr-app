@@ -27,13 +27,14 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { User } from 'src/entities/user';
 import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'app-processes',
   templateUrl: './processes.component.html',
-  styleUrls: ['./processes.component.css'],
+  styleUrls: ['./processes.component.scss'],
 })
 
 export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
@@ -42,7 +43,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     adaptiveHeight: true,
     arrows: true,
     infinite: false,
-    draggable: false
+    draggable: false,
+    accessibility: false
   };
 
   @ViewChild('slickModal') slickModal: SlickComponent;
@@ -103,9 +105,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   isOwnedProcesses = false;
   forms: FormGroup[] = [];
   isLoading = false;
+  processId: number;
 
-  searchSub: Subscription =  new Subscription();
+  searchSub: Subscription = new Subscription();
   processesSubscription: Subscription = new Subscription();
+  saveEventSubject: Subject<number> = new Subject<number>();
+
   constructor(
     private facade: FacadeService,
     private formBuilder: FormBuilder,
@@ -152,7 +157,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getCandidates() {
-     const candidatesSubscription = this.facade.candidateService.getData()
+    const candidatesSubscription = this.facade.candidateService.getData()
       .subscribe(res => {
         if (!!res) {
           this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
@@ -161,7 +166,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-      this.processesSubscription.add(candidatesSubscription);
+    this.processesSubscription.add(candidatesSubscription);
   }
 
   getUsers() {
@@ -211,7 +216,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   getDeclineReasons() {
     this.facade.declineReasonService.get('Named')
       .subscribe(res => {
-        this.declineReasons = res.sort((a,b) => (a.name.localeCompare(b.name)));
+        this.declineReasons = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -287,12 +292,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
       this.listOfDisplayData = allProcesses;
       this.listOfDisplayOwnData = ownProcesses.filter(res => {
-          if (res.candidate.user !== null && typeof res.candidate.user !== 'undefined') {
-            const sessionConsultant = res.candidate.user.firstName + ' ' + res.candidate.user.lastName;
-            if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
-              return res;
-            }
+        if (res.candidate.user !== null && typeof res.candidate.user !== 'undefined') {
+          const sessionConsultant = res.candidate.user.firstName + ' ' + res.candidate.user.lastName;
+          if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
+            return res;
           }
+        }
       });
     });
     this.processesSubscription.add(this.searchSub);
@@ -382,6 +387,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
   openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
+    this.facade.appService.stopLoading();
     this.declineProcessForm.reset();
     const modal = this.facade.modalService.create({
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
@@ -479,27 +485,27 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   searchRecruiter(): void {
-// tslint:disable-next-line:max-line-length
-  const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id );
-  this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-  this.communitySearchName = 'ALL';
-  this.profileSearchName = 'ALL';
+    // tslint:disable-next-line:max-line-length
+    const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id);
+    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+    this.communitySearchName = 'ALL';
+    this.profileSearchName = 'ALL';
   }
 
-// This function is called when user clicks MY PROCESSES tab, it fetch processes that are created by the user.
+  // This function is called when user clicks MY PROCESSES tab, it fetch processes that are created by the user.
   searchOwnRecruiter(): void {
     this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
     this.getUserProcesses();
     this.isOwnedProcesses = true;
   }
 
-// This function is called when user clicks BA STUDIO tab, it fetch all processes.
+  // This function is called when user clicks BA STUDIO tab, it fetch all processes.
   searchAllProcess() {
     this.getProcesses();
     this.isOwnedProcesses = false
   }
 
-// This function is called when user clicks BA STUDIO status filter.
+  // This function is called when user clicks BA STUDIO status filter.
   triggerSearchStatus(id) {
     this.searchValueStatus = id;
     this.searchStatus();
@@ -541,9 +547,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   // This function search by stage in MY PROCESSES tab
   triggerSearchOwnCurrentStage(id) {
-  this.searchValueCurrentStage = id;
-  this.searchOwnCurrentStage();
-}
+    this.searchValueCurrentStage = id;
+    this.searchOwnCurrentStage();
+  }
 
   // This function search by current stage in all the processes.
   searchCurrentStage(): void {
@@ -628,7 +634,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
+    // Update candidates so it can be used when checking unique values
+    this.facade.candidateService.get().subscribe();
     this.facade.appService.startLoading();
+    this.processId = processId;
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
@@ -652,6 +661,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate?: Candidate): void {
+    // Update candidates so it can be used when checking unique values
+    this.facade.candidateService.get().subscribe();
     this.facade.appService.startLoading();
     if (!candidate) {
       const newCandidate: Candidate = {
@@ -684,7 +695,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
+      nzWidth: '80%',
       nzFooter: footer,
       nzMaskClosable: false
     });
@@ -772,7 +783,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.slickModal.slickGoTo(2);
         this.stepIndex = 2;
         return 'clientButton';
-        case 4:
+      case 4:
         this.slickModal.slickGoTo(3);
         this.stepIndex = 3;
         return 'offerButton';
@@ -797,6 +808,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.forms.push(this.hrStage.hrForm);
     this.forms.push(this.technicalStage.technicalForm);
     this.forms.push(this.clientStage.clientForm);
+    this.forms.push(this.preOfferStage.preOfferForm);
     this.forms.push(this.offerStage.offerForm);
   }
 
@@ -837,7 +849,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.facade.candidateService.add(newCandidate).subscribe(res => {
             newProcess.candidate.id = res.id;
             this.facade.processService.add(newProcess)
-              .subscribe(() => {
+              .subscribe( res => {
+                this.saveEventSubject.next(res.id);
                 this.isLoading = false;
                 this.facade.appService.stopLoading();
                 this.facade.toastrService.success('The process was successfully saved !');
@@ -857,6 +870,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.facade.processService.add(newProcess)
             .subscribe(res => {
               newCandidate.status = CandidateStatusEnum.InProgress;
+              this.saveEventSubject.next(res.id);
               this.isLoading = false;
               this.facade.appService.stopLoading();
               this.facade.toastrService.success('The process was successfully saved !');
@@ -871,13 +885,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       } else {
 
         this.facade.candidateService.update(newCandidate.id, newCandidate)
-        .subscribe(() => {
-          this.isLoading = false;
-        }, err => {
-          this.isLoading = false;
-          this.facade.appService.stopLoading();
-          this.facade.errorHandlerService.showErrorMessage(err);
-        });
+          .subscribe(() => {
+            this.isLoading = false;
+          }, err => {
+            this.isLoading = false;
+            this.facade.appService.stopLoading();
+            this.facade.errorHandlerService.showErrorMessage(err);
+          });
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
             if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
@@ -894,8 +908,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
                 });
             } else {
               this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(() => {
+                .subscribe(res => {
                   this.isLoading = false;
+                  this.saveEventSubject.next(newProcess.id);
                   this.facade.appService.stopLoading();
                   this.facade.toastrService.success('The process was successfully saved !');
                   this.createEmptyProcess(newCandidate);
@@ -911,6 +926,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           });
       }
     }
+
   }
 
   getProcessFormData(): Process {
@@ -1085,6 +1101,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',
         hireDate: new Date(),
@@ -1105,6 +1123,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         hireDate: new Date(),
         remunerationOffer: 0,
         vacationDays: 0,
+        healthInsurance: HealthInsuranceEnum.NA,
+        notes: '',
         firstday: new Date(),
         bonus: '',
         backgroundCheckDone: false,

@@ -9,7 +9,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 @Component({
   selector: 'app-stage-edit',
   templateUrl: './stage-edit.component.html',
-  styleUrls: ['./stage-edit.component.css']
+  styleUrls: ['./stage-edit.component.scss']
 })
 export class StageEditComponent implements OnInit {
 

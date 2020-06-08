@@ -1,0 +1,126 @@
+.text-editor {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+.recruEdit-wrapper {
+  display: flex;
+  flex: 1;
+  flex-basis: auto;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid #d9d9d9;
+  transition: all 0.3s;
+}
+
+.recruEdit-editor {
+  border-bottom: 0.5px solid #eee;
+  padding: 4px 11px;
+  height: 100px;
+  overflow-y: auto;
+}
+
+.recruEdit-editor:focus {
+  outline: 0;
+}
+
+.recruEdit-wrapper.focus {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.recruEdit-wrapper.focus,
+.recruEdit-wrapper.hover {
+  border-color: #40a9ff;
+  border-right-width: 1px !important;
+}
+
+.recruEdit-toolbar {
+  line-height: 2.5;
+}
+
+.recruEdit-toolbar i {
+  pointer-events: none;
+  padding-bottom: 10px;
+}
+
+.recruEdit-toolbar button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 16.666%;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.recruEdit-toolbar button:hover {
+  background-color: rgba(24, 144, 255, 0.2);
+}
+
+.recruEdit-toolbar button:active {
+  background-color: rgba(24, 144, 255, 0.4);
+}
+
+.recruEdit-color-container {
+  position: absolute;
+  top: 90px;
+  left: 132px;
+  z-index: 100;
+}
+
+.recruEdit-color-list {
+  margin: 0;
+  padding: 4px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  column-gap: 4px;
+  row-gap: 4px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+.recruEdit-color-item {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  overflow: hidden;
+  border: 1px solid #d9d9d9;
+}
+
+.recruEdit-color-item:hover {
+  transform: scale(1.1);
+}
+
+.recruEdit-color {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+.field-container {
+  margin-bottom: 10px;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+}
+
+[name="Remove link"]::after{
+  content: '✛';
+  color: red;
+  font-size: smaller;
+  font-weight: bolder;
+  position: absolute;
+  bottom: calc(-2%);
+  right: calc(50% - 10px);
+  transform: rotate(45deg);
+}
+

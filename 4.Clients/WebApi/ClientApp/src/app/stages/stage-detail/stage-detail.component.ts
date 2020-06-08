@@ -7,7 +7,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 @Component({
   selector: 'app-stage-detail',
   templateUrl: './stage-detail.component.html',
-  styleUrls: ['./stage-detail.component.css']
+  styleUrls: ['./stage-detail.component.scss']
 })
 
 export class StageDetailComponent implements OnInit {

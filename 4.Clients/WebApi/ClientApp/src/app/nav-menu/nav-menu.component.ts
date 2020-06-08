@@ -10,7 +10,7 @@ import { SearchbarPlaceholderEnum } from '../../entities/enums/searchbar-placeho
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css'],
+  styleUrls: ['./nav-menu.component.scss'],
   providers: [GoogleSigninComponent]
 })
 export class NavMenuComponent implements OnInit {

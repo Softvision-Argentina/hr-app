@@ -126,8 +126,10 @@ namespace Domain.Services.Impl.Services
         public CreatedProcessContract Create(CreateProcessContract createProcessContract)
         {
             var process = _mapper.Map<Process>(createProcessContract);
-
-            this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+            
+            ValidateDniExistance(process);
+            
+            AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
             process.Candidate.Status = CandidateStatus.InProgress;
 
@@ -167,6 +169,12 @@ namespace Domain.Services.Impl.Services
             }
 
             return createdProcessContract;
+        }
+
+        private void ValidateDniExistance(Process process)
+        {
+            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
+            if (DNIExists) throw new Exception("DNI number already exists");
         }
 
         private int GetUser()
@@ -210,6 +218,9 @@ namespace Domain.Services.Impl.Services
         public void Update(UpdateProcessContract updateProcessContract)
         {
             var process = _mapper.Map<Process>(updateProcessContract);
+            
+            ValidateDniExistance(process);
+
             process.Status = SetProcessStatus(process);
             process.CurrentStage = SetProcessCurrentStage(process);
 
@@ -320,19 +331,19 @@ namespace Domain.Services.Impl.Services
 
         private ProcessCurrentStage SetProcessCurrentStage(Process process)
         {
-            if (process.OfferStage.Status != StageStatus.NA && process.OfferStage.Status != StageStatus.Declined && process.OfferStage.Status != StageStatus.Rejected)
+            if (process.OfferStage.Status != StageStatus.NA)
             {
                 return ProcessCurrentStage.OfferStage;
             }
-            else if (process.PreOfferStage.Status != StageStatus.NA && process.PreOfferStage.Status != StageStatus.Declined && process.PreOfferStage.Status != StageStatus.Rejected)
+            else if (process.PreOfferStage.Status != StageStatus.NA)
             {
                 return ProcessCurrentStage.PreOfferStage;
             }
-            else if (process.ClientStage.Status != StageStatus.NA && process.ClientStage.Status != StageStatus.Declined && process.ClientStage.Status != StageStatus.Rejected)
+            else if (process.ClientStage.Status != StageStatus.NA)
             {
                 return ProcessCurrentStage.ClientStage;
             }
-            else if (process.TechnicalStage.Status != StageStatus.NA && process.TechnicalStage.Status != StageStatus.Declined && process.TechnicalStage.Status != StageStatus.Rejected)
+            else if (process.TechnicalStage.Status != StageStatus.NA)
             {
                 return ProcessCurrentStage.TechnicalStage;
             }

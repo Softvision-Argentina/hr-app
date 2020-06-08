@@ -24,6 +24,45 @@ namespace ApiServer.FunctionalTests.Controller
             _fixture = fixture;
         }
 
+        [Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
+        public async System.Threading.Tasks.Task GivenCandidatePost_WhenCandidatePhoneNumberAlreadyExistOnDatabase_ShouldThrowAnException()
+        {
+            //Arrange
+            var phoneNumber = "011155122200";
+            var candidateInDb = new Candidate() { Name = "Test", PhoneNumber = phoneNumber };
+            var userInDb = new User() { Username = "Test" };
+            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
+
+            await _fixture.SeedAsync(candidateInDb);
+            await _fixture.SeedAsync(userInDb);
+            await _fixture.SeedAsync(communityInDb);
+
+            var model = new CreateCandidateViewModel()
+            {
+                DNI = 36501240,
+                Name = "Rodrigo",
+                LastName = "Ramirez",
+                User = new ReadedUserViewModel() { Id = userInDb.Id },
+                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
+                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
+                PhoneNumber = phoneNumber //Key
+            };
+
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+            Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
+            Assert.Equal("Phone number already exists", httpResultData.ResponseError.Message);
+
+            //Clean
+            await _fixture.DeleteAsync<Candidate>();
+            await _fixture.DeleteAsync<User>();
+            await _fixture.DeleteAsync<CandidateProfile>();
+            await _fixture.DeleteAsync<Community>();
+        }
+
         [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
@@ -323,7 +362,7 @@ namespace ApiServer.FunctionalTests.Controller
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal("The Email already exists .", httpResultData.ResponseError.Message);
+            Assert.Equal("Email address already exists", httpResultData.ResponseError.Message);
             Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
 
             //Clean
@@ -333,46 +372,6 @@ namespace ApiServer.FunctionalTests.Controller
             await _fixture.DeleteAsync<Community>();
         }
 
-        
-        [Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when Linkedin profile is already in database")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnLinkedinProfile_ShouldReturnInternalServerError500()
-        {
-            //Arrange
-            var candidateInDb = new Candidate() { Name = "Test", EmailAddress = "test@gmail.com", LinkedInProfile = "/test" };
-            var userInDb = new User() { Username = "Test" };
-            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
-            
-            await _fixture.SeedAsync(candidateInDb);
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(communityInDb);
-
-            var model = new CreateCandidateViewModel()
-            {
-                DNI = 36501240,
-                Name = "Rodrigo",
-                LastName = "Ramirez",
-                User = new ReadedUserViewModel() { Id = userInDb.Id },
-                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
-                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-                LinkedInProfile = candidateInDb.LinkedInProfile /*wrong data, already exists in database*/
-            };
-
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
-
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal("The LinkedIn Profile already exists in our database.", httpResultData.ResponseError.Message);
-            Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
-
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
-        }
-
-        
         [Fact(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPut_WhenModelIsValid_ShouldUpdateEntityAndReturnAccepted202()
