@@ -1,32 +1,65 @@
-:host {
-  height: 50%;
-  display: inline-block;
-  min-width: 100%;
+.csoft-login-form ::ng-deep .ng-trigger {
+  padding: 5px;
+  font-size: 12px;
 }
 
-.csoft-login-form {
+.login-button {
+  width: 100%;
+  background-image: linear-gradient(to right, #f4633a, #c900a1);
+  border: none;
+  border-radius: 0;
+  color: #fff;
+  font-weight: 700;
+  height: 2.5rem;
+}
+
+.login-input-container {
+  margin-bottom: 1.25rem;
+}
+
+.login-input-group {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  position: relative;
+  flex: 1 0 0;
+  padding: 0;
+  height: 2.5rem;
+  align-items: center;
+}
+
+.login-input-group input {
   height: 100%;
 }
 
-.csoft-login-input-container {
-  height: 33.33%;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.login-input-group span {
+  position: absolute;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 100;
+  left: 12px;
+  color: #bebebe;
+  line-height: normal;
+  font-size: 16px;
+  padding: 0 5px;
 }
 
-.csoft-login-input-control {
-  min-width: 100%;
-  min-height: 100%;
+.login-input-group input:focus + span {
+  color: #c800a1;
 }
 
-.csoft-login-button {
-  min-width: calc(100%);
-  min-height: 100%;
-  margin-top: 1%;
-  margin-bottom: 1%;
+.login-input-group input:focus + span,
+.login-input-group input:valid + span {
+  transform: scale(0.83333) translateY(-25px) translateX(-6px);
+  background: white;
+}
+
+.login-input-group input:focus,
+.login-input-group input:valid {
+  padding: 0px 18px;
+  font-size: 14px;
 }
