@@ -20,7 +20,8 @@
 .recruEdit-editor {
   border-bottom: 0.5px solid #eee;
   padding: 4px 11px;
-  min-height: 50px;
+  height: 100px;
+  overflow-y: auto;
 }
 
 .recruEdit-editor:focus {
