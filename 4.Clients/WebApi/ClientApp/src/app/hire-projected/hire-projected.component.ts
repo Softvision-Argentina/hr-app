@@ -7,7 +7,7 @@ import { AppComponent } from '../app.component';
 @Component({
   selector: 'app-hire-projected',
   templateUrl: './hire-projected.component.html',
-  styleUrls: ['./hire-projected.component.css']
+  styleUrls: ['./hire-projected.component.scss']
 })
 export class HireProjectedComponent implements OnInit {
 

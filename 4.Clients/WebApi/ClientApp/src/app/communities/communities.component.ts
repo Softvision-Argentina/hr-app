@@ -10,7 +10,7 @@ import { SettingsComponent } from '../settings/settings.component';
 @Component({
   selector: 'app-communities',
   templateUrl: './communities.component.html',
-  styleUrls: ['./communities.component.css'],
+  styleUrls: ['./communities.component.scss'],
 })
 export class CommunitiesComponent implements OnInit {
 

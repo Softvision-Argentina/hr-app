@@ -14,7 +14,7 @@ import { EmployeeAux } from 'src/entities/employeeAux';
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
-  styleUrls: ['./employees.component.css'],
+  styleUrls: ['./employees.component.scss'],
   providers: [AppComponent, EmployeeDetailsComponent]
 })
 export class EmployeesComponent implements OnInit {

@@ -20,7 +20,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-process-contact',
   templateUrl: './process-contact.component.html',
-  styleUrls: ['./process-contact.component.css']
+  styleUrls: ['./process-contact.component.scss']
 })
 
 export class ProcessContactComponent implements OnInit {

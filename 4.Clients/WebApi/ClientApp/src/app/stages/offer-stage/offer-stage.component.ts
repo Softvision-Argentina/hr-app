@@ -11,7 +11,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 @Component({
   selector: 'offer-stage',
   templateUrl: './offer-stage.component.html',
-  styleUrls: ['./offer-stage.component.css']
+  styleUrls: ['./offer-stage.component.scss']
 })
 export class OfferStageComponent implements OnInit {
 

@@ -8,7 +8,7 @@ import { AppComponent } from '../app.component';
 @Component({
   selector: 'app-decline-reasons',
   templateUrl: './decline-reasons.component.html',
-  styleUrls: ['./decline-reasons.component.css'],
+  styleUrls: ['./decline-reasons.component.scss'],
   providers: [AppComponent]
 })
 export class DeclineReasonComponent implements OnInit {

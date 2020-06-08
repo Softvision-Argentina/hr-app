@@ -30,7 +30,7 @@ export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors 
 @Component({
   selector: 'candidate-add',
   templateUrl: './candidate-add.component.html',
-  styleUrls: ['./candidate-add.component.css']
+  styleUrls: ['./candidate-add.component.scss']
 })
 export class CandidateAddComponent implements OnInit, OnDestroy {
  

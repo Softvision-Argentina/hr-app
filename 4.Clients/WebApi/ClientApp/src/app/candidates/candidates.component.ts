@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-candidates',
   templateUrl: './candidates.component.html',
-  styleUrls: ['./candidates.component.css'],
+  styleUrls: ['./candidates.component.scss'],
   providers: [CandidateDetailsComponent, AppComponent]
 })
 

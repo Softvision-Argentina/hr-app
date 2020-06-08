@@ -34,7 +34,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 @Component({
   selector: 'app-referrals',
   templateUrl: './referrals.component.html',
-  styleUrls: ['./referrals.component.css'],
+  styleUrls: ['./referrals.component.scss'],
   providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
 })
 

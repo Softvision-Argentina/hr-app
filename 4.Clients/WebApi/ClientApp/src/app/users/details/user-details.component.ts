@@ -5,7 +5,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 @Component({
   selector: 'user-details',
   templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.css']
+  styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
 

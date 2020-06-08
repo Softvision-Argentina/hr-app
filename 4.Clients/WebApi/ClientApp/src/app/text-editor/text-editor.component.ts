@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter }
 @Component({
   selector: 'app-text-editor',
   templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.css']
+  styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent implements OnInit {
   @ViewChild('url') url: ElementRef;

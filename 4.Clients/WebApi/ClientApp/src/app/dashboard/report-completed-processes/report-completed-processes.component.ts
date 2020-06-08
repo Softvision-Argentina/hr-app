@@ -7,7 +7,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-report-completed-processes',
   templateUrl: './report-completed-processes.component.html',
-  styleUrls: ['./report-completed-processes.component.css']
+  styleUrls: ['./report-completed-processes.component.scss']
 })
 export class ReportCompletedProcessesComponent implements OnInit {
 

@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-locations',
   templateUrl: './locations.component.html',
-  styleUrls: ['./locations.component.css']
+  styleUrls: ['./locations.component.scss']
 })
 export class LocationsComponent implements OnInit {
   tab: string;

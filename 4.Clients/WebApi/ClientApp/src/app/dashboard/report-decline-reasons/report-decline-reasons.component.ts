@@ -11,7 +11,7 @@ import { DeclineReason } from 'src/entities/declineReason';
 @Component({
   selector: 'app-report-decline-reasons',
   templateUrl: './report-decline-reasons.component.html',
-  styleUrls: ['./report-decline-reasons.component.css']
+  styleUrls: ['./report-decline-reasons.component.scss']
 })
 export class ReportDeclineReasonsComponent implements OnInit {
 

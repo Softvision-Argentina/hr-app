@@ -12,7 +12,7 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'client-stage',
   templateUrl: './client-stage.component.html',
-  styleUrls: ['./client-stage.component.css']
+  styleUrls: ['./client-stage.component.scss']
 })
 export class ClientStageComponent implements OnInit {
 

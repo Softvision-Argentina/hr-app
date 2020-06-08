@@ -7,7 +7,7 @@ import { Candidate } from 'src/entities/candidate';
 @Component({
   selector: 'app-report-skills',
   templateUrl: './report-skills.component.html',
-  styleUrls: ['./report-skills.component.css']
+  styleUrls: ['./report-skills.component.scss']
 })
 export class ReportSkillsComponent implements OnInit {
 

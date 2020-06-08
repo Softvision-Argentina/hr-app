@@ -17,7 +17,7 @@ import { ReferralsComponent } from '../referrals/referrals.component';
 @Component({
   selector: 'app-referrals-contact',
   templateUrl: './referrals-contact.component.html',
-  styleUrls: ['./referrals-contact.component.css']
+  styleUrls: ['./referrals-contact.component.scss']
 })
 
 export class ReferralsContactComponent implements OnInit {

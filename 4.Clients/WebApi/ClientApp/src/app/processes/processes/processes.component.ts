@@ -34,7 +34,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 @Component({
   selector: 'app-processes',
   templateUrl: './processes.component.html',
-  styleUrls: ['./processes.component.css'],
+  styleUrls: ['./processes.component.scss'],
 })
 
 export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {

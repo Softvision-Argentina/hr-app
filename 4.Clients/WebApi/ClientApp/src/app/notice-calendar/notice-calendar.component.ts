@@ -5,7 +5,7 @@ import { FacadeService } from '../services/facade.service';
 @Component({
   selector: 'app-notice-calendar',
   templateUrl: './notice-calendar.component.html',
-  styleUrls: ['./notice-calendar.component.css']
+  styleUrls: ['./notice-calendar.component.scss']
 })
 export class NoticeCalendarComponent implements OnInit {
 

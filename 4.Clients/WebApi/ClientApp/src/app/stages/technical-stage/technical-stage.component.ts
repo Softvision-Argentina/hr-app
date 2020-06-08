@@ -16,7 +16,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 @Component({
   selector: 'technical-stage',
   templateUrl: './technical-stage.component.html',
-  styleUrls: ['./technical-stage.component.css']
+  styleUrls: ['./technical-stage.component.scss']
 })
 export class TechnicalStageComponent implements OnInit {
 

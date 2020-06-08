@@ -11,7 +11,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 @Component({
   selector: 'pre-offer-history',
   templateUrl: './pre-offer-history.component.html',
-  styleUrls: ['./pre-offer-history.component.css']
+  styleUrls: ['./pre-offer-history.component.scss']
 })
 // tslint:disable-next-line:component-class-suffix
 export class PreOfferHistory implements OnInit {

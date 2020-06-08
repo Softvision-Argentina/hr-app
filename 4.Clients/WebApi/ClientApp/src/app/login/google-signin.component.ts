@@ -9,7 +9,7 @@ declare const gapi: any;
 @Component({
   selector: 'google-signin',
   templateUrl: './google-signin.component.html',
-  styleUrls: ['./google-signin.component.css']
+  styleUrls: ['./google-signin.component.scss']
 })
 export class GoogleSigninComponent implements AfterViewInit {
 

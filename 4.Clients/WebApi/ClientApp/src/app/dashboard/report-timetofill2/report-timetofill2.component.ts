@@ -9,7 +9,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-report-timetofill2',
   templateUrl: './report-timetofill2.component.html',
-  styleUrls: ['./report-timetofill2.component.css']
+  styleUrls: ['./report-timetofill2.component.scss']
 })
 export class ReportTimetofill2Component implements OnInit {
 

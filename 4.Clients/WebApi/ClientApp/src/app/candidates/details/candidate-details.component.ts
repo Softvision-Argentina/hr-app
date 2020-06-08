@@ -6,7 +6,7 @@ import { Globals } from '../../app-globals/globals';
 @Component({
   selector: 'candidate-details',
   templateUrl: './candidate-details.component.html',
-  styleUrls: ['./candidate-details.component.css']
+  styleUrls: ['./candidate-details.component.scss']
 })
 
 

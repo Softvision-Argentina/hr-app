@@ -14,7 +14,7 @@ import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 @Component({
   selector: 'app-process-detail',
   templateUrl: './process-detail.component.html',
-  styleUrls: ['./process-detail.component.css'],
+  styleUrls: ['./process-detail.component.scss'],
   providers: [CandidateDetailsComponent, UserDetailsComponent]
 })
 export class ProcessDetailComponent implements OnInit {

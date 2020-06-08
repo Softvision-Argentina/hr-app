@@ -13,7 +13,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 @Component({
   selector: 'hr-stage',
   templateUrl: './hr-stage.component.html',
-  styleUrls: ['./hr-stage.component.css']
+  styleUrls: ['./hr-stage.component.scss']
 })
 export class HrStageComponent implements OnInit {
 

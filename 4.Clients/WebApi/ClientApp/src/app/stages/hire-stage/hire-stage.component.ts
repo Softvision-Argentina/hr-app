@@ -10,7 +10,7 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 @Component({
   selector: 'hire-stage',
   templateUrl: './hire-stage.component.html',
-  styleUrls: ['./hire-stage.component.css']
+  styleUrls: ['./hire-stage.component.scss']
 })
 export class HireStageComponent implements OnInit {
 

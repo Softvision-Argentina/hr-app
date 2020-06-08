@@ -8,7 +8,7 @@ import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days
 @Component({
   selector: 'app-company-calendar',
   templateUrl: './company-calendar.component.html',
-  styleUrls: ['./company-calendar.component.css']
+  styleUrls: ['./company-calendar.component.scss']
 })
 export class CompanyCalendarComponent implements OnInit {
   validateForm: FormGroup;

@@ -8,7 +8,7 @@ import { User } from '../../entities/user';
 @Component({
   selector: 'csoft-login',
   templateUrl: './csoft-signin.component.html',
-  styleUrls: ['./csoft-signin.component.css']
+  styleUrls: ['./csoft-signin.component.scss']
 })
 export class CSoftComponent {
 

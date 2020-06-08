@@ -6,7 +6,7 @@ import { FacadeService } from '../services/facade.service';
 @Component({
   selector: 'app-profiles.component',
   templateUrl: './profiles.component.html',
-  styleUrls: ['./profiles.component.css']
+  styleUrls: ['./profiles.component.scss']
 })
 export class ProfilesComponent implements OnInit {
   tab: string;

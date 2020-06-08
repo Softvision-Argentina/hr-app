@@ -13,7 +13,7 @@ import { FacadeService } from 'src/app/services/facade.service';
 @Component({
   selector: 'pre-offer-stage',
   templateUrl: './pre-offer-stage.component.html',
-  styleUrls: ['./pre-offer-stage.component.css'],
+  styleUrls: ['./pre-offer-stage.component.scss'],
   providers: [PreOfferHistory]
 })
 
