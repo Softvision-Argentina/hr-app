@@ -1,3 +1,5 @@
+@import "../../styles/abstracts/variables";
+
 @media screen and (min-width: 0px) {
   .section-container {
     height: 100%;
@@ -9,7 +11,7 @@
 
   .main-container {
     padding: 2rem 1.5rem;
-    background-color: #f4f4f4;
+    background-color: $login-main-container;
   }
 
   .login-container {
@@ -17,8 +19,8 @@
     margin: 0 auto;
     max-width: 450px;
     padding: 2rem 1rem;
-    border: 1px solid #c7c7c7;
-    background-color: white;
+    border: 1px solid $dark-border;
+    background-color: $light-color;
     border-radius: 5px;
     position: relative;
     top: calc(50% - 24rem);
@@ -39,7 +41,7 @@
   }
 
   .header-text__title {
-    color: black;
+    color: $dark-color;
     padding-top: 2.5rem;
     padding-bottom: 0rem;
     width: 100%;
@@ -48,34 +50,38 @@
     font-family: "ProximaNova-Extrabold";
     line-height: 1;
     letter-spacing: -1px;
-  }
 
-  .header-text__title::before {
-    content: "";
-    width: 2.5rem;
-    height: 5px;
-    position: absolute;
-    left: calc(50% - 1.25rem);
-    top: 0;
-    background-color: #000;
+    &::before {
+      content: "";
+      width: 2.5rem;
+      height: 5px;
+      position: absolute;
+      left: calc(50% - 1.25rem);
+      top: 0;
+      background-color: $dark-color;
+    }
   }
 
   .header-text__subtitle {
-    color: black;
+    color: $dark-color;
     font-size: 1rem;
     position: relative;
     font-family: "ProximaNova-Regular";
     padding-bottom: 0.85rem;
-  }
 
-  .header-text__subtitle::after {
-    content: "";
-    width: 5rem;
-    height: 8px;
-    position: absolute;
-    left: calc(50% - 2.5rem);
-    bottom: 0;
-    background-image: linear-gradient(to right, #f4633a, #c800a1);
+    &::after {
+      content: "";
+      width: 5rem;
+      height: 8px;
+      position: absolute;
+      left: calc(50% - 2.5rem);
+      bottom: 0;
+      background-image: linear-gradient(
+        to right,
+        $secondary-color,
+        $primary-color
+      );
+    }
   }
 
   .form-item {
@@ -101,7 +107,7 @@
 
   .login-hero {
     display: flex;
-    background-image: url("./../../assets/images/image-header-min.jpg");
+    background-image: url($login-hero-image);
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
@@ -110,7 +116,7 @@
   }
 
   .login-hero__waves {
-    background-image: url("./../../assets/images/pattern-waves.png");
+    background-image: url($login-waves-image);
     background-repeat: no-repeat;
     background-size: cover;
     pointer-events: none;
@@ -134,7 +140,7 @@
   }
 
   .hero-text__title {
-    color: white;
+    color: $light-color;
     padding-top: 6rem;
     padding-bottom: 2rem;
     width: 55%;
@@ -152,7 +158,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-color: #fff;
+    background-color: $light-color;
   }
 
   .hero-text__subtitle::after {
@@ -162,11 +168,15 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    background-image: linear-gradient(to right, #f4633a, #c800a1);
+    background-image: linear-gradient(
+      to right,
+      $secondary-color,
+      $primary-color
+    );
   }
 
   .hero-text__subtitle {
-    color: white;
+    color: $light-color;
     font-size: 1.5rem;
     position: relative;
     font-family: "ProximaNova-Regular";
@@ -190,5 +200,7 @@
 }
 
 @media screen and (min-width: 1025px) {
-  
+  .login-container {
+    max-width: 350px;
+  }
 }

@@ -1,3 +1,5 @@
+@import "../../styles/abstracts/variables";
+
 #googleBtn {
   background-image: url("./../../assets/images/g-200px.png");
   background-size: 60%;
@@ -7,8 +9,9 @@
   width: 2.5rem;
   height: 2.5rem;
   outline: none;
-  border: 1px solid #c7c7c7;
+  border: 1px solid $dark-border;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .google-signin {
