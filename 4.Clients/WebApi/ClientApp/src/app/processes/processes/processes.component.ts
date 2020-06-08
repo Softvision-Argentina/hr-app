@@ -105,6 +105,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   isOwnedProcesses = false;
   forms: FormGroup[] = [];
   isLoading = false;
+  processId: number;
 
   searchSub: Subscription = new Subscription();
   processesSubscription: Subscription = new Subscription();
@@ -636,6 +637,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     // Update candidates so it can be used when checking unique values
     this.facade.candidateService.get().subscribe();
     this.facade.appService.startLoading();
+    this.processId = processId;
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
@@ -693,7 +695,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
+      nzWidth: '80%',
       nzFooter: footer,
       nzMaskClosable: false
     });

@@ -9,7 +9,6 @@ import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.componen
 import { dniValidator, UniqueDniValidator } from 'src/app/directives/dni.validator';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 import { FacadeService } from 'src/app/services/facade.service';
-import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'pre-offer-stage',
@@ -28,19 +27,17 @@ export class PreOfferStageComponent implements OnInit {
   public set users(value: User[]) {
       this._users = value;
   }
-
+  @Input() processId;
   preOfferForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date()],
-    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.data.value)],
+    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.data.value, this.processId)],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
-    vacationDays: [0, [Validators.required]],
-    healthInsurance: [0, [Validators.required]],
     notes: '',
     firstday: [new Date(), [Validators.required]],
     bonus: '',
@@ -54,7 +51,6 @@ export class PreOfferStageComponent implements OnInit {
 
   statusList: any[];
   seniorityList: any[];
-  healthInsuranceList: any[];
   backCheckEnabled = false;
   backDateEnabled: boolean;
   preocupationalCheckEnabled = false;
@@ -65,25 +61,23 @@ export class PreOfferStageComponent implements OnInit {
     { label: 'Declined', value: true},
     { label: 'Accepted', value: false}
   ];
-  @Input() preOfferStage: preOfferStage;
-  @ViewChild(PreOfferHistory) prehistoryOffer: PreOfferHistory ;
-  @Output() selectedSeniority = new EventEmitter();
 
+  @Input() preOfferStage: preOfferStage;
+  @ViewChild(PreOfferHistory) preOfferHistory: PreOfferHistory ;
+  @Output() selectedSeniority = new EventEmitter();
   constructor(
     private fb: FormBuilder,
     private globals: Globals,
     private facade: FacadeService,
     private processService: ProcessService,
-    public prehistoryOfferModal: PreOfferHistory) {
+    public preOfferHistoryModal: PreOfferHistory) {
 
     this.statusList = globals.preOfferStatusList;  
-    this.healthInsuranceList = globals.healthInsuranceList;
   }
 
   showPreOfferHistoryModal(modalContent: TemplateRef<{}>) {
-    this.prehistoryOffer.showModal(modalContent);
+    this.preOfferHistoryModal.showModal(modalContent);
   }
-
   ngOnInit() {
     this.processService.selectedSeniorities.subscribe(sr => {
       this.seniorityList = sr;
@@ -140,8 +134,6 @@ export class PreOfferStageComponent implements OnInit {
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority);
     stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
-    stage.vacationDays = this.getControlValue(form.controls.vacationDays);
-    stage.healthInsurance = this.getControlValue(form.controls.healthInsurance);
     stage.notes = this.getControlValue(form.controls.notes);
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
@@ -174,17 +166,9 @@ export class PreOfferStageComponent implements OnInit {
     if (preOfferStage.dni !== 0) {
       this.preOfferForm.controls['dni'].setValue(preOfferStage.dni);
     }
-
-    if (preOfferStage.vacationDays) {
-      this.preOfferForm.controls['vacationDays'].setValue(preOfferStage.vacationDays);
-    }
-
+    
     if (preOfferStage.remunerationOffer) {
       this.preOfferForm.controls['remunerationOffer'].setValue(preOfferStage.remunerationOffer);
-    }
-
-    if (preOfferStage.healthInsurance) {
-      this.preOfferForm.controls['healthInsurance'].setValue(preOfferStage.healthInsurance);
     }
     
     if (preOfferStage.notes) {

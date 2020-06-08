@@ -4,6 +4,8 @@ import { PreOffer } from 'src/entities/pre-offer';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
 import { Globals } from 'src/app/app-globals/globals';
+import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
+import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 
 
 @Component({
@@ -15,19 +17,39 @@ import { Globals } from 'src/app/app-globals/globals';
 export class PreOfferHistory implements OnInit {
   @Input()
   private _processId: number;
-  public get processId():  number {
+  public get processId(): number {
     return this._processId;
   }
   public set processId(value: number) {
-      this._processId = value;
+    this._processId = value;
   }
 
-  editForm: FormGroup;
+  editForm: FormGroup = this.fb.group({
+    preOfferDate: [new Date()],
+    salaryPreOffer: [0, [Validators.required]],
+    vacationDays: [0, [Validators.required]],
+    healthInsurance: [0, [Validators.required]]
+  });
+
+  addPreOfferButton = {
+    enabled: false,
+    processInvalid: false,
+    preOfferNotConcluded: false
+  }
+
+  panelControl: any = {
+    active: false,
+    name: 'Add New Pre-Offer',
+    arrow: false
+  }
+
+  healthInsuranceList: any[];
   preOfferStatusList: any[];
   preOffers: PreOffer[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.preOfferStatusList = globals.preOfferStatusList;
+    this.healthInsuranceList = globals.healthInsuranceList;
   }
 
   ngOnInit() {
@@ -38,79 +60,66 @@ export class PreOfferHistory implements OnInit {
     this.facade.preOfferService.get()
       .subscribe(res => {
         this.preOffers = res.filter(x => x.processId === this.processId);
+        this.validateAddPreOffers();
+        this.getHealthInsuranceNames();
       },
-      err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+        err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+        });
   }
 
-  showModal(modalContent: TemplateRef <{}>) {
-    const modal = this.facade.modalService.create({
-        nzTitle: 'Pre-Offer history',
-        nzContent: modalContent,
-        nzClosable: false,
-        nzWrapClassName: 'vertical-center-modal',
-        nzWidth: 1000,
-        nzFooter: null,
-        nzMaskClosable: false,
-        nzKeyboard: false
-    });
+  getHealthInsuranceNames(){
+    this.preOffers.forEach((preOffer, index) => {
+      preOffer.healthInsuranceText = HealthInsuranceEnum[preOffer.healthInsurance];
+    })
   }
 
-  addPreOffer(modalContent: TemplateRef<{}>) {
-    this.resetEditForm();
+  showModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzTitle: 'Add Offer',
+      nzTitle: 'Pre-Offer history',
       nzContent: modalContent,
-      nzClosable: true,
-      nzWidth: '50%',
-      nzFooter: [
-        {
-          label: 'Cancel',
-          shape: 'default',
-          onClick: () => modal.destroy()
-        },
-        {
-          label: 'Save',
-          type: 'primary',
-          loading: false,
-          onClick: () => {
-            modal.nzFooter[1].loading = true;
-            let isCompleted = true;
-
-            for (const i in this.editForm.controls) {
-              if (this.editForm.controls.hasOwnProperty(i)) {
-                this.editForm.controls[i].markAsDirty();
-                this.editForm.controls[i].updateValueAndValidity();
-
-                if (!this.editForm.controls[i].valid) {
-                  isCompleted = false;
-                }
-              }
-            }
-
-            if (isCompleted) {
-              const toAdd: PreOffer = new PreOffer();
-              toAdd.id = 0;
-              toAdd.offerDate = this.editForm.controls['offerDate'].value;
-              toAdd.salary = this.editForm.controls['salaryOffer'].value;
-              toAdd.rejectionReason = '';
-              toAdd.status = preOfferStatusEnum.PendingReply;
-              toAdd.processId = this.processId;
-              this.facade.preOfferService.add(toAdd)
-                .subscribe(() => {
-                  this.getPreOffers();
-                  this.facade.toastrService.success('Pre-Offer was successfuly created!');
-                  modal.destroy();
-                }, err => {
-                  this.facade.errorHandlerService.showErrorMessage(err);
-              });
-            } else {
-              modal.nzFooter[1].loading = false;
-            }
-          }
-        }],
+      nzClosable: false,
+      nzWrapClassName: 'vertical-center-modal',
+      nzWidth: '60%',
+      nzFooter: null
     });
+  }
+
+  private validateEditForm() {
+    for (const i in this.editForm.controls) {
+      if (this.editForm.controls.hasOwnProperty(i)) {
+        this.editForm.controls[i].markAsDirty();
+        this.editForm.controls[i].updateValueAndValidity();
+        
+        if (this.editForm.controls[i].invalid) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  addPreOffer() {
+    if (this.validateEditForm()) {
+      const editForm: PreOffer = new PreOffer();
+      editForm.id = 0;
+      editForm.preOfferDate = this.editForm.controls['preOfferDate'].value;
+      editForm.salary = this.editForm.controls['salaryPreOffer'].value;
+      editForm.vacationDays = this.editForm.controls['vacationDays'].value;
+      editForm.healthInsurance = this.editForm.controls['healthInsurance'].value;
+      editForm.status = preOfferStatusEnum.PendingReply;
+      editForm.processId = this.processId;
+      console.log({ editForm: editForm });
+
+      this.facade.preOfferService.add(editForm)
+        .subscribe(() => {
+          this.getPreOffers();
+          this.facade.toastrService.success('Pre-Offer was successfuly created!');
+        }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+        });
+      this.resetEditForm();
+    }
   }
 
   editStatus(status: string, id: number): void {
@@ -129,25 +138,13 @@ export class PreOfferHistory implements OnInit {
           editedPreOffer.status = preOfferStatusEnum.Accepted;
         }
         this.facade.preOfferService.update(id, editedPreOffer)
-        .subscribe(() => {
-          this.getPreOffers();
-          this.facade.toastrService.success('Offer was successfully edited !');
-        }, err => {
-          this.facade.errorHandlerService.showErrorMessage(err);
-        });
+          .subscribe(() => {
+            this.getPreOffers();
+            this.facade.toastrService.success('Offer was successfully edited !');
+          }, err => {
+            this.facade.errorHandlerService.showErrorMessage(err);
+          });
       }
-    });
-  }
-
-  editRejectionReason(id: number, reason: string) {
-    const editedPreOffer: PreOffer = this.preOffers.filter(offer => offer.id === id)[0];
-    editedPreOffer.rejectionReason = reason;
-    this.facade.preOfferService.update(id, editedPreOffer)
-    .subscribe(() => {
-      this.getPreOffers();
-      this.facade.toastrService.success('Pre-Offer was successfully edited!');
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
     });
   }
 
@@ -164,44 +161,52 @@ export class PreOfferHistory implements OnInit {
       nzCancelText: 'No',
       nzWidth: '50%',
       nzOnOk: () => this.facade.preOfferService.delete(id)
-      .subscribe(() => {
-        this.getPreOffers();
-        this.facade.toastrService.success('Pre-Offer was deleted!');
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      })
+        .subscribe(() => {
+          this.getPreOffers();
+          this.facade.toastrService.success('Pre-Offer was deleted!');
+        }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+        })
     });
   }
 
   resetEditForm() {
     this.editForm = this.fb.group({
       preOfferDate: [new Date(), [Validators.required]],
-      salaryOffer: [null, [Validators.required]],
+      salaryPreOffer: [null, [Validators.required]],
+      vacationDays: [null, [Validators.required]],
+      healthInsurance: [0, [Validators.required]]
     });
-  }
-
-  preOfferConcluded(): boolean {
-    if (this.preOffers.length === 0) {
-      return false;
-    } else {
-      return !(this.preOffers[this.preOffers.length - 1].status === preOfferStatusEnum.Declined);
-    }
   }
 
   getStatusColor(status: number): string {
     const statusName = this.getStatusName(status);
     switch (statusName) {
-      case 'Declined': return 'error';
+      case 'Pending Reply': return 'processing';
       case 'Accepted': return 'success';
-      case 'Pending': return 'processing';
+      case 'Declined': return 'error';
     }
   }
 
   validateReasons() {
-    if (this.preOffers.length === 0) {
-      this.facade.modalService.openModals[1].destroy();
-    } else if ((this.preOffers.filter(x => x.rejectionReason === '' && x.status === preOfferStatusEnum.Declined)).length === 0) {
-      this.facade.modalService.openModals[1].destroy();
-    }
+    this.facade.modalService.openModals[1].destroy();
   }
+
+  validateAddPreOffers() {
+    if (this.preOffers.length > 0) {
+      var isLastPreOfferDeclined = this.preOffers[this.preOffers.length - 1].status === preOfferStatusEnum.Declined;
+      this.addPreOfferButton.preOfferNotConcluded = !isLastPreOfferDeclined;
+    } else {
+      this.addPreOfferButton.preOfferNotConcluded = false;
+    }
+
+    this.addPreOfferButton.processInvalid = this.processId === 0;
+    this.addPreOfferButton.enabled = !this.addPreOfferButton.processInvalid && (this.preOffers.length === 0 || !this.addPreOfferButton.preOfferNotConcluded);
+  }
+
+
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.editForm);
+  }
+
 }

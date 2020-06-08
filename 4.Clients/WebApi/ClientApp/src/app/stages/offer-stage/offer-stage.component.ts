@@ -5,15 +5,13 @@ import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { OfferStage } from 'src/entities/offer-stage';
 import { ProcessService } from '../../services/process.service';
-import { OfferHistory } from '../offer-history/offer-history.component';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 
 @Component({
   selector: 'offer-stage',
   templateUrl: './offer-stage.component.html',
-  styleUrls: ['./offer-stage.component.css'],
-  providers: [OfferHistory]
+  styleUrls: ['./offer-stage.component.css']
 })
 export class OfferStageComponent implements OnInit {
 
@@ -59,21 +57,15 @@ export class OfferStageComponent implements OnInit {
   preocupationalDateEnabled: boolean;
 
   @Input() offerStage: OfferStage;
-  @ViewChild(OfferHistory) historyOffer: OfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
     private globals: Globals,
-    private processService: ProcessService,
-    private historyOfferModal: OfferHistory) {
+    private processService: ProcessService) {
 
     this.statusList = globals.offerStatusList;
     this.healthInsuranceList = globals.healthInsuranceList;
-  }
-
-  showOfferHistoryModal(modalContent: TemplateRef<{}>) {
-    this.historyOfferModal.showModal(modalContent);
   }
 
   ngOnInit() {

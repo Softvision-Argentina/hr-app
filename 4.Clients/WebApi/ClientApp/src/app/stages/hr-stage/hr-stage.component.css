@@ -1,10 +1,7 @@
 ::ng-deep .ant-modal-content {
     align-items: center;
-    width: 1100px;
     position: relative;
-    left: 20%;
 }
-
 
 ::ng-deep .ant-modal-body {
     font-family: ProximaNova;
@@ -15,7 +12,6 @@
     background-color: #f4633a;
     border-color: #f4633a;
 }
-
 
 /* save button */
 ::ng-deep .ant-modal-footer button+button {
@@ -142,26 +138,7 @@
     width: 71.5%;
 }
 
-@media screen and (max-width: 1850px) and (min-width: 1751px){
-    ::ng-deep .ant-modal-content {
-        left: 350px;
-    }
-
-  }
-
-
-  @media screen and (max-width: 1750px) and (min-width: 1441px){
-    ::ng-deep .ant-modal-content {
-        left: 220px;
-    }
-
-  }
-
   @media screen and (max-width: 1440px) and (min-width: 1280px){
-    ::ng-deep .ant-modal-content {
-        width: 1000px;
-        left: 0;
-    }
 
     #feedbackLabel {
         margin-left: 100px;

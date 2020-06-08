@@ -17,6 +17,14 @@
     <None Remove="Helpers\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Migrations\20200528192707_TestingNewPreOffer.cs" />
+    <Compile Remove="Migrations\20200528192707_TestingNewPreOffer.Designer.cs" />
+    <Compile Remove="Migrations\20200529173242_tenth.cs" />
+    <Compile Remove="Migrations\20200529173242_tenth.Designer.cs" />
+    <Compile Remove="Migrations\20200529174830_Tenth.cs" />
+    <Compile Remove="Migrations\20200529174830_Tenth.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Google.Apis" Version="1.43.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.43.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.40.2.1643" />

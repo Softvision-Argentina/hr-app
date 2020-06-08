@@ -1,11 +1,14 @@
 import { preOfferStatusEnum } from './enums/pre-offer-status.enum';
+import { HealthInsuranceEnum } from './enums/health-insurance.enum';
 
 
 export class PreOffer {
     id: number;
-    offerDate: Date;
+    preOfferDate: Date;
     salary: number;
-    rejectionReason: string;
+    vacationDays: number;
+    healthInsurance: HealthInsuranceEnum;
+    healthInsuranceText: string;
     status: preOfferStatusEnum;
     processId: number;
 }

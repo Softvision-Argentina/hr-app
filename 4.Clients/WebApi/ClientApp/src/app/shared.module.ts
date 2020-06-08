@@ -8,7 +8,6 @@ import { HireStageComponent } from './stages/hire-stage/hire-stage.component';
 import { TechnicalStageComponent } from './stages/technical-stage/technical-stage.component';
 import { ClientStageComponent } from './stages/client-stage/client-stage.component';
 import { PreOfferHistory } from './stages/pre-offer-history/pre-offer-history.component';
-import { OfferHistory } from './stages/offer-history/offer-history.component';
 import { OfferStageComponent } from './stages/offer-stage/offer-stage.component';
 import { PreOfferStageComponent } from './stages/pre-offer-stage/pre-offer-stage.component';
 import { ProcessContactComponent } from './processes/process-contact/process-contact.component';
@@ -39,7 +38,6 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
         TechnicalStageComponent,
         ClientStageComponent,
         PreOfferHistory,
-        OfferHistory,
         PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,
@@ -57,7 +55,6 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
         TechnicalStageComponent,
         ClientStageComponent,
         PreOfferHistory,
-        OfferHistory,
         PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,

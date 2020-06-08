@@ -555,37 +555,6 @@ namespace ApiServer.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Model.Offer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("LastModifiedBy");
-
-                    b.Property<DateTime>("LastModifiedDate");
-
-                    b.Property<DateTime?>("OfferDate");
-
-                    b.Property<int>("ProcessId");
-
-                    b.Property<string>("RejectionReason");
-
-                    b.Property<float>("Salary");
-
-                    b.Property<int>("Status");
-
-                    b.Property<long>("Version");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Offer");
-                });
-
             modelBuilder.Entity("Domain.Model.OfferStage", b =>
                 {
                     b.Property<int>("Id")
@@ -706,6 +675,39 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Postulants");
+                });
+
+            modelBuilder.Entity("Domain.Model.PreOffer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("HealthInsurance");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<DateTime?>("PreOfferDate");
+
+                    b.Property<int>("ProcessId");
+
+                    b.Property<float>("Salary");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("VacationDays");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PreOffer");
                 });
 
             modelBuilder.Entity("Domain.Model.PreOfferStage", b =>

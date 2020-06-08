@@ -70,7 +70,7 @@ import { DeclineReasonService } from './services/decline-reason.service';
 import { InterviewService } from './services/interview.service';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
-import { OfferService } from './services/offer.service';
+import { PreOfferService } from './services/pre-offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReferralsService } from './services/referrals.service';
@@ -163,7 +163,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CompanyCalendarService,
     PostulantsService,
     DeclineReasonService,
-    OfferService,
+    PreOfferService,
     InterviewService,
     { provide: NZ_I18N, useValue: en_US },
     {provide : LocationStrategy , useClass: HashLocationStrategy},

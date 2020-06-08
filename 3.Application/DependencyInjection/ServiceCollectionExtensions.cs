@@ -17,7 +17,7 @@ using Domain.Services.Impl.Validators.DaysOff;
 using Domain.Services.Impl.Validators.Employee;
 using Domain.Services.Impl.Validators.EmployeeCasualty;
 using Domain.Services.Impl.Validators.HireProjection;
-using Domain.Services.Impl.Validators.Offer;
+using Domain.Services.Impl.Validators.PreOffer;
 using Domain.Services.Impl.Validators.Office;
 using Domain.Services.Impl.Validators.Reservation;
 using Domain.Services.Impl.Validators.Role;
@@ -92,8 +92,8 @@ namespace DependencyInjection
             services.AddScoped<UpdateReservationContractValidator, UpdateReservationContractValidator>();
             services.AddScoped<CreateRoleContractValidator, CreateRoleContractValidator>();
             services.AddScoped<UpdateRoleContractValidator, UpdateRoleContractValidator>();
-            services.AddScoped<CreateOfferContractValidator, CreateOfferContractValidator>();
-            services.AddScoped<UpdateOfferContractValidator, UpdateOfferContractValidator>();
+            services.AddScoped<CreatePreOfferContractValidator, CreatePreOfferContractValidator>();
+            services.AddScoped<UpdatePreOfferContractValidator, UpdatePreOfferContractValidator>();
             services.AddTransient<IDummyService, DummyService>();
             services.AddTransient<ISkillService, SkillService>();
             services.AddTransient<ICandidateService, CandidateService>();
@@ -117,7 +117,7 @@ namespace DependencyInjection
             services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
             services.AddTransient<IDashboardService, DashboardService>();
-            services.AddTransient<IOfferService, OfferService>();
+            services.AddTransient<IPreOfferService, PreOfferService>();
             services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
             services.AddTransient<ICvService, CvService>();
             services.AddTransient<IInterviewService,InterviewService>();
@@ -174,7 +174,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<Role>, RoleRepository>();
             services.AddScoped<IRepository<DeclineReason>, DeclineReasonRepository>();
             services.AddScoped<IRepository<Dashboard>, DashboardRepository>();
-            services.AddScoped<IRepository<Offer>, OfferRepository>();
+            services.AddScoped<IRepository<PreOffer>, PreOfferRepository>();
             services.AddScoped<IStageItemRepository, StageItemRepository>();
             services.AddScoped<IProcessStageRepository, ProcessStageRepository>();
             services.AddScoped<IProcessRepository, ProcessRepository>();

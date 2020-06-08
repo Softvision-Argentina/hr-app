@@ -1,90 +1,132 @@
-<div nz-row>
-  <div nz-col nzSpan="24">
-    <button nz-button nzType='primary' (click)="addPreOffer(editModal)" [disabled]="preOfferConcluded()">Add offer</button>
+<div nz-row nzType="flex" nzJustify="center" class="addPreOffer">
+  <div nz-col nzSpan="20">
+    <nz-collapse>
+      <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.acitve"
+        [nzShowArrow]="panelControl.arrow">
+        <form nz-form class="editForm" [formGroup]="editForm" [nzLayout]="'horizontal'">
+          <div nz-row nzType="flex" nzJustify="center">
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="preOfferDate">Pre Offer Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                  <nz-date-picker style="width: 100%;" formControlName="preOfferDate"></nz-date-picker>
+                  <nz-form-explain *ngIf="editForm.get('preOfferDate').dirty && editForm.get('preOfferDate').errors">
+                    Please input a pre-offer date
+                  </nz-form-explain>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                  <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="healthInsurance"
+                      [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}">
+                      Health insurance
+                  </nz-form-label>
+                  <nz-form-control [nzSm]="14" [nzXs]="24">
+                      <nz-select formControlName="healthInsurance">
+                          <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
+                              [nzValue]="insurance.id">
+                          </nz-option>
+                      </nz-select>
+                      <nz-form-explain
+                          *ngIf="editForm.get('healthInsurance').dirty && editForm.get('healthInsurance').errors">
+                          Please input the health insurance
+                      </nz-form-explain>
+                  </nz-form-control>
+              </nz-form-item>
+          </div>
+          </div>
+          <div nz-row nzType="flex" nzJustify="center">
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="salaryPreOffer">Salary pre-offer</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                  <input type="number" nz-input formControlName="salaryPreOffer" id="salaryPreOffer"
+                    placeholder="Please input the salary pre-offer" pattern="[0-9]+([\.,][0-9]+)?">
+                  <nz-form-explain
+                    *ngIf="editForm.get('salaryPreOffer').dirty && editForm.get('salaryPreOffer').errors">
+                    Please input the salary pre-offer
+                  </nz-form-explain>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                  <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="vacationDays"
+                      [ngClass]="{'requiredFieldLabel': isRequiredField('vacationDays')}">Vacation days</nz-form-label>
+                  <nz-form-control [nzSm]="14" [nzXs]="24">
+                      <input type="number" nz-input formControlName="vacationDays" id="vacationDays"
+                          placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
+                      <nz-form-explain
+                          *ngIf="editForm.get('vacationDays').dirty && editForm.get('vacationDays').errors">
+                          Please input vacations days
+                      </nz-form-explain>
+                  </nz-form-control>
+              </nz-form-item>
+          </div>
+          </div>
+          <div nz-row nzType="flex" nzJustify="center">
+            <div nz-col nzSpan="6" class="center-col">
+              <button nz-button nzType='primary' (click)="addPreOffer()" [disabled]="!addPreOfferButton.enabled">
+                Add pre-offer
+              </button>
+              <nz-form-explain class="text-danger" *ngIf="addPreOfferButton.processInvalid">
+                Please save this current process before adding a pre-offer
+              </nz-form-explain>
+              <nz-form-explain class="text-danger" *ngIf="addPreOfferButton.preOfferNotConcluded">
+                Can't add an pre-offer if the last one is pending or accepted
+              </nz-form-explain>
+            </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
   </div>
-  <nz-form-explain class="text-danger" *ngIf="preOfferConcluded()">
-    Can't add an offer if the last one is pending or accepted
-  </nz-form-explain>
 </div>
-<br>
-<nz-table nzBordered [nzData]="preOffers" [nzPageSize]="10">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>PreOffer</th>
-      <th>Status</th>
-      <th>Rejection reason</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let preOffer of preOffers;let i = index">
-      <td scope="row">
-        {{ preOffer.offerDate | date: 'dd/MM/yyyy' }}
-      </td>
-      <td scope="row">
-        ${{ preOffer.salary }}
-      </td>
-      <td scope="row">
-        <nz-badge [nzStatus]="getStatusColor(offer.status)" style="margin-right: 3%; margin-top: -2%;"></nz-badge>
-        {{ getStatusName(preOffer.status) }}
-      </td>
-      <td scope="row">
-        <input [ngModel]="preOffer.rejectionReason" #reasonInput="ngModel"
-          (focusout)="editRejectionReason(preOffer.id, reasonInput.value)" type="text" nz-input
-          [disabled]="preOffer.status !== 0" [readonly]="preOffer.status !== 0" value="{{ preOffer.rejectionReason }}"
-          pattern="[0-9]+([\.,][0-9]+)?">
-        <div>
-          <span class="text-danger" *ngIf="reasonInput.value === '' && !reasonInput.disabled">
-            Please input the rejection reason
-          </span>
-        </div>
-      </td>
-      <td [style.text-align]="'center'">
-        <i *ngIf="preOffer.status === 2" nzTitle="Decline" (click)="editStatus('Declined', preOffer.id)"
-          style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
-        <nz-divider *ngIf="preOffer.status === 2" nzType="vertical"></nz-divider>
-        <i *ngIf="preOffer.status === 2" nzTitle="Accept" (click)="editStatus('Accepted', preOffer.id)"
-          style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
-        <nz-divider *ngIf="preOffer.status === 2" nzType="vertical"></nz-divider>
-        <i nzTitle="Delete" (click)="showDeleteConfirm(preOffer.id)" style="cursor: pointer;" nz-tooltip nz-icon
-          type="delete" theme="outline"></i>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
-<br>
-<button nz-button nzType='primary' (click)="validateReasons()">Back to stages</button>
 
-
-<ng-template #editModal>
-  <form nz-form [formGroup]="editForm" [nzLayout]="'horizontal'">
-    <div nz-row>
-      <div nz-col nzSpan="24">
-        <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="preOfferDate">Pre Offer Date</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-date-picker style="width: 100%;" formControlName="preOfferDate"></nz-date-picker>
-            <nz-form-explain *ngIf="editForm.get('offerDate').dirty && editForm.get('offerDate').errors">
-              Please input a pre-offer date
-            </nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-    <div nz-row>
-      <div nz-col nzSpan="24">
-        <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="salaryPreOffer">Salary offer</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-            <input type="number" nz-input formControlName="salaryPreOffer" id="salaryPreOffer"
-              placeholder="Please input the salary offer" pattern="[0-9]+([\.,][0-9]+)?">
-            <nz-form-explain *ngIf="editForm.get('salaryPreOffer').dirty && editForm.get('salaryPreOffer').errors">
-              Please input the salary offer
-            </nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-  </form>
-</ng-template>
+<div nz-row nzType="flex" nzJustify="center">
+  <div nz-col nzSpan="20">
+    <nz-table nzBordered [nzData]="preOffers" [nzPageSize]="10">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>PreOffer</th>
+          <th>Vacation days</th>
+          <th>Health Insurance</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let preOffer of preOffers;let i = index">
+          <td scope="row">
+            {{ preOffer.preOfferDate | date: 'dd/MM/yyyy' }}
+          </td>
+          <td scope="row">
+            {{ preOffer.salary | currency:'ARS':'symbol-narrow':'1.2-2' }}
+          </td>
+          <td scope="row">
+            {{ preOffer.vacationDays }}
+          </td>
+          <td scope="row">
+            {{ preOffer.healthInsuranceText }}
+          </td>
+          <td scope="row">
+            <nz-badge [nzStatus]="getStatusColor(preOffer.status)"></nz-badge>
+            {{ getStatusName(preOffer.status) }}
+          </td>
+          <td [style.text-align]="'center'">
+            <i *ngIf="preOffer.status === 8" nzTitle="Decline" (click)="editStatus('Declined', preOffer.id)"
+              style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
+            <nz-divider *ngIf="preOffer.status === 8" nzType="vertical"></nz-divider>
+            <i *ngIf="preOffer.status === 8" nzTitle="Accept" (click)="editStatus('Accepted', preOffer.id)"
+              style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
+            <nz-divider *ngIf="preOffer.status === 8" nzType="vertical"></nz-divider>
+            <i nzTitle="Delete" (click)="showDeleteConfirm(preOffer.id)" style="cursor: pointer;" nz-tooltip nz-icon
+              type="delete" theme="outline"></i>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

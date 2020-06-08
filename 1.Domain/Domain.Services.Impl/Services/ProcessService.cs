@@ -173,14 +173,8 @@ namespace Domain.Services.Impl.Services
 
         private void ValidateDniExistance(Process process)
         {
-            PreOfferStage preOfferStage;
-
-            preOfferStage = _preOfferStageRepository.QueryEager().FirstOrDefault(x => x.DNI == process.PreOfferStage.DNI);
-
-            if (preOfferStage != null && preOfferStage.DNI != 0)
-            {
-                throw new Exception("DNI number already exists");
-            }
+            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
+            if (DNIExists) throw new Exception("DNI number already exists");
         }
 
         private int GetUser()

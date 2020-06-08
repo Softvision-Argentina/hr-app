@@ -53,12 +53,6 @@
             </nz-form-item>
         </div>
     </div>
-    <div nz-row [ngStyle]="{'display': 'none'}">
-        <div nz-col nzSpan="6" nzOffset="6">
-            <button nz-button [disabled]="offerForm.get('status').value !== 1" nzType="primary"
-                (click)="showOfferHistoryModal(historyOfferModal)" nzShape="square">History offers</button>
-        </div>
-    </div>
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
@@ -171,7 +165,3 @@
         </div>
     </div>
 </form>
-
-<ng-template #historyOfferModal>
-    <offer-history [_processId]=offerStage.processId (backdrop)="static" keyboard="false"></offer-history>
-</ng-template>

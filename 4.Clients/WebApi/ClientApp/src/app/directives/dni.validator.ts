@@ -1,7 +1,7 @@
 import { ValidatorFn, FormControl, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Candidate } from 'src/entities/candidate';
-import { delay } from 'rxjs/operators';
+import { Process } from 'src/entities/process';
 
 export const dniValidator: ValidatorFn = (control: FormControl): { [key: string]: any } | null => {
     let shortNumber = /^\d{1,7}$/,
@@ -26,12 +26,12 @@ export const dniValidator: ValidatorFn = (control: FormControl): { [key: string]
     return null;
 };
 
-export function UniqueDniValidator(candidates: Candidate[]): AsyncValidatorFn {
-
+export function UniqueDniValidator(candidates: Candidate[], processId: number): AsyncValidatorFn {
     return({value}: AbstractControl): Observable<ValidationErrors | null> => {
-        const dniUsed = candidates.find(candidate => candidate.dni === value && value && value !== 0);
+        //const candidateUsed = candidates.find(candidate => candidate.dni === value && value && value !== 0 && candidate.id != processId);
+        const candidateUsed = false;
         return new Observable(subscriber => {
-            if (dniUsed) {
+            if (!!candidateUsed) {
                 subscriber.next({dniExists: true});
             } else {
                 subscriber.next(null);
