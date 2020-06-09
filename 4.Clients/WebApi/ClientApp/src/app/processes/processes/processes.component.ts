@@ -1064,7 +1064,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         wantedSalary: null,
         additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
-        rejectionReasonsHr: null
+        rejectionReasonsHr: null,
+        sentEmail: false
       },
       technicalStage: {
         id: 0,
@@ -1076,7 +1077,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
-        client: ''
+        client: '',
+        sentEmail: false
       },
       clientStage: {
         id: 0,

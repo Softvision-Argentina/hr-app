@@ -18,5 +18,6 @@ namespace ApiServer.Contracts.Stage
         public string AdditionalInformation { get; set; }
         public EnglishLevel EnglishLevel { get; set; }
         public RejectionReasonsHr? RejectionReasonsHr { get; set; }
+        public bool SentEmail { get; set; }
     }
 }

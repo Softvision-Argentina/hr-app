@@ -35,14 +35,31 @@ namespace Domain.Services.Repositories.EF
             #endregion
 
             #region Community
-            var Community1 = new Community { Name = ".NET", Description = "Comunidad de .Net", ProfileId = 1, Profile = Profile1 };
-            var Community2 = new Community { Name = "Devs", Description = "Comunidad de Developers", ProfileId = 1, Profile = Profile1 };
-            var Community3 = new Community { Name = "RRHH", Description = "Comunidad de Recursos Humanos", ProfileId = 2, Profile = Profile2 };
-            var Community4 = new Community { Name = "Marketing", Description = "Comunidad de Marketing", ProfileId = 3, Profile = Profile3 };
+            var Community1 = new Community { Name = "Enterprise .NET", Description = "Comunidad de .Net", ProfileId = 1, Profile = Profile1 };
+            var Community2 = new Community { Name = "Enterprise Coffee", Description = "Comunidad de Java", ProfileId = 1, Profile = Profile1 };
+            var Community3 = new Community { Name = "Design & UX", Description = "Comunidad de UX", ProfileId = 2, Profile = Profile2 };
+            var Community4 = new Community { Name = "Quality Engineering", Description = "Comunidad de QA/QC", ProfileId = 3, Profile = Profile3 };
+            var Community5 = new Community { Name = "Web", Description = "Comunidad de .Net", ProfileId = 1, Profile = Profile1 };
+            var Community6 = new Community { Name = "DevOps", Description = "Comunidad de Dev Ops", ProfileId = 1, Profile = Profile1 };
+            var Community7 = new Community { Name = "Human Resources", Description = "Comunidad de Recursos Humanos", ProfileId = 2, Profile = Profile2 };
+            var Community8 = new Community { Name = "Product Delivery", Description = "Comunidad de Product Delivery", ProfileId = 3, Profile = Profile3 };
+            var Community9 = new Community { Name = "Mobile", Description = "Comunidad de Mobile", ProfileId = 1, Profile = Profile1 };
+            var Community10 = new Community { Name = "Marketing", Description = "Comunidad de Marketing", ProfileId = 1, Profile = Profile1 };
+            var Community11 = new Community { Name = "Administration", Description = "Comunidad de Administracion", ProfileId = 2, Profile = Profile2 };
+            var Community12 = new Community { Name = "IT & Support", Description = "Comunidad de IT", ProfileId = 3, Profile = Profile3 };
+
             context.Community.Add(Community1);
             context.Community.Add(Community2);
             context.Community.Add(Community3);
             context.Community.Add(Community4);
+            context.Community.Add(Community5);
+            context.Community.Add(Community6);
+            context.Community.Add(Community7);
+            context.Community.Add(Community8);
+            context.Community.Add(Community9);
+            context.Community.Add(Community10);
+            context.Community.Add(Community11);
+            context.Community.Add(Community12);
             context.SaveChanges();
             #endregion
 

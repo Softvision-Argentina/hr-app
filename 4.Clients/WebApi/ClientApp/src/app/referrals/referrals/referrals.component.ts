@@ -876,8 +876,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         wantedSalary: 0,
         additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
-        rejectionReasonsHr: null
-
+        rejectionReasonsHr: null,
+        sentEmail: false
       },
       technicalStage: {
         id: 0,
@@ -889,7 +889,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
-        client: ''
+        client: '',
+        sentEmail: false
       },
       clientStage: {
         id: 0,

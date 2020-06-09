@@ -14,4 +14,5 @@ export class TechnicalStage {
     userDelegateId?: number;
     rejectionReason?: string;
     date?: Date;
+    sentEmail: boolean;
 }

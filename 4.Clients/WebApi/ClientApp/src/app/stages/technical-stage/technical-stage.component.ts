@@ -52,7 +52,8 @@ export class TechnicalStageComponent implements OnInit {
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
     client: [null],
-    rejectionReason: [null, [Validators.required]]
+    rejectionReason: [null, [Validators.required]],
+    sentEmail: [false]
   });
 
   feedbackContent:string = "";
@@ -177,6 +178,7 @@ export class TechnicalStageComponent implements OnInit {
     stage.alternativeSeniority = this.getControlValue(form.controls.alternativeSeniority);
     stage.client = this.getControlValue(form.controls.client);
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
+    stage.sentEmail = this.getControlValue(form.controls.sentEmail);
     return stage;
   }
 
@@ -272,6 +274,9 @@ export class TechnicalStageComponent implements OnInit {
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, Validators.required));
       });
+    }
+    if (technicalStage.sentEmail) {
+      this.technicalForm.controls['sentEmail'].setValue(technicalStage.sentEmail);
     }
   }
 

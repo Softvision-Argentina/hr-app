@@ -171,50 +171,6 @@ namespace Domain.Services.Impl.Services
             return createdProcessContract;
         }
 
-        private void ValidateDniExistance(Process process)
-        {
-            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
-            if (DNIExists) throw new Exception("DNI number already exists");
-        }
-
-        private int GetUser()
-        {
-            var getUser = _httpContext.HttpContext.User.Identity.Name;
-            var userId = int.Parse(getUser);
-            return userId;
-        }
-
-        private void SendEmailNotification(Process process, ProcessStatus status)
-        {
-            var email = GetUserMail(process.Candidate.ReferredBy);
-
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
-            {
-                client.EnableSsl = true;
-                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
-                client.Send(message);
-            }
-        }
-
-        private string GetUserMail(string referredBy)
-        {
-            var referred = referredBy.Split(" ");
-            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
-            var mail = userName.Username;
-
-            return mail;
-        }
-
-        private void AddOfficeToCandidate(Candidate candidate, int officeId)
-        {
-            var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
-            if (office == null)
-                throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
-
-            candidate.PreferredOffice = office;
-        }
-
         public void Update(UpdateProcessContract updateProcessContract)
         {
             var process = _mapper.Map<Process>(updateProcessContract);
@@ -229,10 +185,32 @@ namespace Domain.Services.Impl.Services
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
             candidate.DNI = process.PreOfferStage.DNI;
-            process.HrStage.UserOwnerId = process.UserOwnerId;
             process.ClientStage.UserOwnerId = process.UserOwnerId;
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
+
+            var flag = _config.GetValue<bool>("MailSending");
+
+            if (flag != false)
+            {
+                if (!process.HrStage.SentEmail)
+                {
+                    if (process.HrStage.Status == StageStatus.Accepted)
+                    {
+                        SendHrStageEmailNotification(process);
+                        process.HrStage.SentEmail = true;
+                    }
+                }
+
+                if (!process.TechnicalStage.SentEmail)
+                {
+                    if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                    {
+                        SendTechnicalStageEmailNotification(process);
+                        process.TechnicalStage.SentEmail = true;
+                    }
+                }
+            }
 
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);
@@ -300,6 +278,97 @@ namespace Domain.Services.Impl.Services
             }
 
             _unitOfWork.Complete();
+        }
+
+        private int GetUser()
+        {
+            var getUser = _httpContext.HttpContext.User.Identity.Name;
+            var userId = int.Parse(getUser);
+            return userId;
+        }
+
+        private void ValidateDniExistance(Process process)
+        {
+            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
+            if (DNIExists) throw new Exception("DNI number already exists");
+        }
+
+        private void SendEmailNotification(Process process, ProcessStatus status)
+        {
+            var email = GetUserMail(process.Candidate.ReferredBy);
+
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
+                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
+                client.Send(message);
+            }
+        }
+
+        private void SendHrStageEmailNotification(Process process)
+        {
+            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
+                var message = new MailMessage(_config.GetValue<string>("email"), email, "RECRU - New candidate for Interview!",
+                    $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
+                    $"{process.Candidate.Name} {process.Candidate.LastName}, A new { process.Candidate.Profile.Name } candidate has been submitted for { process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                    $"Please reach out to {process.Candidate.User.FirstName} {process.Candidate.User.LastName} with Interviewer name / s and availability. <br />" +
+                    "Thank you.");
+                message.IsBodyHtml = true;
+                client.Send(message);
+            }
+        }
+
+        private void SendTechnicalStageEmailNotification(Process process)
+        {
+            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+            var interviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
+            var delegateInterviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
+            var skills = process.Candidate.CandidateSkills;
+            var skillsListed = skills.ToList();
+
+            if (process.Candidate.Community.Name == "Product Delivery")
+            {
+                email = (process.Candidate.Profile.Name == "Project Manager") ?
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Manager") :
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
+            }
+
+            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
+                var message = new MailMessage(_config.GetValue<string>("email"), email, $"RECRU - Feedback of {process.Candidate.Name} {process.Candidate.LastName} is now available!",
+                    $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
+                    $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} and {delegateInterviewer.FirstName} {delegateInterviewer.LastName} on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                    $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
+                    $"Thank you");
+                message.IsBodyHtml = true;
+                client.Send(message);
+            }
+        }
+
+        private string GetUserMail(string referredBy)
+        {
+            var referred = referredBy.Split(" ");
+            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
+            var mail = userName.Username;
+
+            return mail;
+        }
+
+        private void AddOfficeToCandidate(Candidate candidate, int officeId)
+        {
+            var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
+            if (office == null)
+                throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
+
+            candidate.PreferredOffice = office;
         }
 
         private ProcessStatus SetProcessStatus(Process process)
