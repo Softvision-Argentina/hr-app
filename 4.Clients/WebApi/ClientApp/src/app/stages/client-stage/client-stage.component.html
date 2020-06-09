@@ -210,13 +210,15 @@
                     <td nzWidth="200px" word-break: break-all>{{interview.feedback}}</td>
                     <td nzWidth="200px">{{interview.clientInterviewer}}</td>
                     <td nzWidth="200px">{{interview.project}}</td>
-                    <td><a (click)="startEdit(interview.id)" style="margin-right: 15px;">
-                            <i nzTitle="Edit" style="cursor: pointer;" nz-tooltip nz-icon type="edit"
-                                theme="outline"></i>
+                    <td>
+                        <a class="action-btn" (click)="startEdit(interview.id)">
+                            <i nz-tooltip nz-icon nzTitle="Edit" type="edit"
+                            theme="outline"></i>
                         </a>
-                        <a nz-popconfirm (nzOnConfirm)="deleteInterview(interview.id)">
-                            <i nzTitle="Delete" style="cursor: pointer;" nz-tooltip nz-icon type="delete"
-                                theme="outline"></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a class="action-btn" (click)="showDeleteConfirmDialog(interview.id)">
+                            <i nz-tooltip nz-icon nzTitle="Delete"
+                            type="delete" theme="outline"></i>    
                         </a>
                     </td>
                 </ng-container>

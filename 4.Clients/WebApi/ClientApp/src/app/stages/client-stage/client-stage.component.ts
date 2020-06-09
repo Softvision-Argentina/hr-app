@@ -270,6 +270,18 @@ export class ClientStageComponent implements OnInit {
         this.updateEditCache();
       })
   }
+
+  showDeleteConfirmDialog(interviewId: number) {
+    this.facade.modalService.confirm({
+      nzTitle: 'Are you sure you want to delete this interview?',
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzCancelText: 'No',
+      nzOnOk: () => this.deleteInterview(interviewId)
+    });
+  }
+
   deleteInterview(interviewId: number) {
 
     let operation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
