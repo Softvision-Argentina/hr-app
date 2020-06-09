@@ -164,7 +164,13 @@ export class TextEditorComponent implements OnInit {
 
     this.selectPreviousRange();
 
-    let newAnchorTag = `<a href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${this.customSelection.range.toString()}</a> `;
+    let newAnchorTag: string;
+    if (this.customSelection.range.toString() == ''){
+      newAnchorTag = `<a href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${fullURL}</a> `;
+    }else{
+      newAnchorTag = `<a href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${this.customSelection.range.toString()}</a> `;
+    }        
+    
     document.execCommand('insertHTML', false, newAnchorTag);
 
     this.followLinkHandler();
@@ -189,7 +195,7 @@ export class TextEditorComponent implements OnInit {
 
     let isCtrlPressed: boolean = false;
     document.addEventListener('keydown', (e: KeyboardEvent) => {
-      isCtrlPressed = e.code == 'ControlLeft';
+      isCtrlPressed = e.code == 'ControlLeft' || e.code == 'ControlRight';
     });
 
     document.addEventListener('keyup', (e: KeyboardEvent) => {
