@@ -310,6 +310,13 @@ namespace Domain.Services.Impl.Services
         {
             var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
 
+            if (process.Candidate.Community.Name == "Product Delivery")
+            {
+                email = (process.Candidate.Profile.Name == "Project Manager") ?
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Project Manager") :
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
+            }
+
             using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
                 client.EnableSsl = true;
@@ -331,13 +338,6 @@ namespace Domain.Services.Impl.Services
             var delegateInterviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
             var skills = process.Candidate.CandidateSkills;
             var skillsListed = skills.ToList();
-
-            if (process.Candidate.Community.Name == "Product Delivery")
-            {
-                email = (process.Candidate.Profile.Name == "Project Manager") ?
-                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Manager") :
-                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
-            }
 
             using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
