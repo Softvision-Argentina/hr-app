@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="clientForm" [nzLayout]="'horizontal'">
+<form  nz-form [formGroup]="clientForm" [nzLayout]="'horizontal'">
     <nz-divider nzText="CLIENT STAGE"></nz-divider>
     <br />
     <nz-form-item>
@@ -183,8 +183,8 @@
         </nz-collapse-panel>
     </nz-collapse>
 </form>
-<div nz-row>
-    <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
+<div class="client-stage" nz-row>
+    <nz-table  #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
         [nzPageSize]="interviews.length" nzTableLayout="fixed" [nzScroll]="{ y: '250px' }">
         <thead>
             <tr>
@@ -197,7 +197,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let interview of interviewTable.data">
+            <tr class="client-table__row" *ngFor="let interview of interviewTable.data">
                 <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
                     <td nzWidth="200px">{{interview.interviewDate | date  : 'shortDate' }}</td>
                     <td nzWidth="200px">{{interview.client}}</td>
