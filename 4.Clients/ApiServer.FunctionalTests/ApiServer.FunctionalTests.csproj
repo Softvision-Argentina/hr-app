@@ -33,8 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiServer.Contracts\ApiServer.Contracts.csproj" />
-    <ProjectReference Include="..\ApiServer\ApiServer.csproj" />
+    <ProjectReference Include="..\..\0.Core\Core.Testing\Core.Testing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

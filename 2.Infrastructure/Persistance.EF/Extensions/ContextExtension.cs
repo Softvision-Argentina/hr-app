@@ -20,12 +20,6 @@ namespace Persistance.EF.Extensions
             context.Database.ExecuteSqlCommand(ContextExtension.ResetAllIds);
         }
 
-        public static async Task ResetAllIdentitiesIdAsync(this DbContext context)
-        {
-            await context.Database.EnsureCreatedAsync();
-            await context.Database.ExecuteSqlCommandAsync(ContextExtension.ResetAllIds);
-        }
-
         public static void DeleteAllEntities(this DbContext context)
         {
             context.Database.ExecuteSqlCommand(ContextExtension.DisableTablesConstraintsCommand);

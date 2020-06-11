@@ -5,13 +5,12 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using ApiServer.FunctionalTests.Core;
-using Core.Persistance;
+using Core.Testing.Platform;
 using Xunit;
 
 namespace ApiServer.FunctionalTests.Dummy.Seed
 {
-    [Collection(nameof(EnvironmentType.Functional))]
+    [Collection(nameof(TestType.Functional))]
     public class DumyControllerTests : BaseFunctionalTestFixture
     {
         public DumyControllerTests()

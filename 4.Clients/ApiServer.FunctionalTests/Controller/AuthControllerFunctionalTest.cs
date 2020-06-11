@@ -1,23 +1,22 @@
-﻿using ApiServer.Contracts.Login;
-using Core;
-using System.Net;
+﻿using System.Net;
 using Xunit;
-using ApiServer.Contracts.User;
 using ApiServer.FunctionalTests.Fixture;
-using Core.Persistance;
-using Domain.Model;
+using Core.Testing.Platform;
 using Newtonsoft.Json;
-using static ApiServer.FunctionalTests.Fixture.AuthControllerFixture;
+using ApiServer.Contracts.Login;
+using Domain.Model;
+using ApiServer.Contracts.User;
 
 namespace ApiServer.FunctionalTests.Controller
 {
-    [Collection(nameof(EnvironmentType.Functional))]
+    [Collection(nameof(TestType.Functional))]
     public class AuthControllerFunctionalTest : IClassFixture<AuthControllerFixture>
     {
         private readonly AuthControllerFixture _fixture;
         public AuthControllerFunctionalTest(AuthControllerFixture fixture)
         {
             _fixture = fixture;
+            _fixture.CleanTestingDatabase();
         }
 
         [Fact(DisplayName = "Verify api/login [Post] is returning ok [200] when data is valid")]
@@ -26,7 +25,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            await _fixture.SeedAsync(user);
+            _fixture.Seed(user);
             var model = new LoginViewModel() { UserName = user.Username, Password = "1234" /*unhashed test password*/ };
 
             //Act
@@ -36,9 +35,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
             Assert.NotEmpty(httpResultData.ResponseString);
-
-            //Clean
-            await _fixture.DeleteAsync<User>();
         }
 
         [Fact(DisplayName = "Verify api/login [Post] is returning unauthorized [401] when data is invalid")]
@@ -77,10 +73,10 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            await _fixture.SeedAsync(user);
+            _fixture.Seed(user);
             const string expectedUsername = "rodrigo.ramirez@softvision.com";
             const string expectedRole = "Admin";
-            var token = _fixture.GetTestToken(TokenType.Valid);
+            var token = _fixture.GetTestToken(AuthControllerFixture.TokenType.Valid);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/loginExternal", token);
@@ -92,9 +88,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
             Assert.NotEmpty(httpResultData.ResponseString);
-
-            //Clean
-            await _fixture.DeleteAsync<User>();
         }
 
         [Fact(DisplayName = "Verify api/loginExternal [Post] is returning Unauthorized [401] when token expired")]
@@ -103,8 +96,8 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            await _fixture.SeedAsync(user);
-            TokenViewModel token = _fixture.GetTestToken(TokenType.Expired);
+            _fixture.Seed(user);
+            TokenViewModel token = _fixture.GetTestToken(AuthControllerFixture.TokenType.Expired);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/loginExternal", token);
@@ -112,9 +105,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
-
-            //Clean
-            await _fixture.DeleteAsync<User>();
         }
 
         [Fact(DisplayName = "Verify api/ping [Get] is returning ok [200]")]

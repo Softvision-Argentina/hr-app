@@ -1,29 +1,24 @@
 ﻿using Domain.Model;
-using Domain.Model.Exceptions.CandidateProfile;
 using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Interfaces.Services;
-using Microsoft.EntityFrameworkCore;
 using Persistance.EF.Extensions;
-using System.Linq;
-using Core.Persistance;
 using Domain.Services.Impl.IntegrationTests.Fixtures;
 using Xunit;
+using Domain.Model.Exceptions.CandidateProfile;
+using Core.Testing.Platform;
 
 namespace Domain.Services.Impl.IntegrationTests.Services
 {
-    [Collection(nameof(EnvironmentType.Integration))]
+    [Collection(nameof(TestType.Integration))]
     public class CandidateProfileServicesIntegrationTest : IClassFixture<CandidateProfileFixture>
     {
         private readonly CandidateProfileFixture _fixture;
-        private readonly ICandidateProfileService _candidateProfileService;
         public CandidateProfileServicesIntegrationTest(CandidateProfileFixture fixture)
         {
             _fixture = fixture;
-            _candidateProfileService =
-                (ICandidateProfileService)fixture.Services.GetService(typeof(ICandidateProfileService));
+            _fixture.CleanTestingDatabase();
         }
 
-        
         [Fact(DisplayName = "Verify that given a valid model, should add to the database")]
         public void GivenCandidateProfileServiceCreate_WhenSendingValidData_ShouldAppendModelToDatabase()
         {
@@ -31,17 +26,20 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var recordCountBeforeCreate = _fixture.GetCount<CandidateProfile>();
             var validCreateCandidateProfileContract = DataFactory.CreateInstance<CreateCandidateProfileContract>();
 
-            //Act
-            var result = _candidateProfileService.Create(validCreateCandidateProfileContract);
+            CreatedCandidateProfileContract result = null;
+
+            _fixture.UseService<ICandidateProfileService>((service) =>
+            {
+                result = service.Create(validCreateCandidateProfileContract);
+            });
+
             var recordCountAfterCreate = _fixture.GetCount<CandidateProfile>();
 
             //Assert
             Assert.NotNull(result);
             Assert.NotEqual(recordCountBeforeCreate, recordCountAfterCreate);
             Assert.Equal(recordCountBeforeCreate + 1, recordCountAfterCreate);
-
-            //Clean
-            _fixture.Delete<CandidateProfile>();
+            Assert.True(result.Id > 0);
         }
 
         [Theory(DisplayName = "Verify that given a invalid model, should throw an exception")]
@@ -54,7 +52,13 @@ namespace Domain.Services.Impl.IntegrationTests.Services
                 .WithPropertyValue(propertyName, null);
 
             //Act
-            var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
+            var ex = Assert.Throws<CreateContractInvalidException>(() =>
+            {
+                _fixture.UseService<ICandidateProfileService>((service) =>
+                {
+                    service.Create(invalidCreateCandidateProfileContract);
+                });
+            });
 
             //Assert
             Assert.IsType<CreateContractInvalidException>(ex);
@@ -66,21 +70,24 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         public void GivenCandidateProfileServiceCreate_WhenHavingSameDataInDatabase_ShouldValidateExistanceAndThrowException()
         {
             //Arrange
-            var candidateProfile = new CandidateProfile() {Name = "Testing"};
+            var candidateProfile = new CandidateProfile() { Name = "Testing" };
             _fixture.Seed(candidateProfile);
             var invalidCreateCandidateProfileContract = DataFactory.CreateInstance<CreateCandidateProfileContract>()
                 .WithPropertyValue("Name", _fixture.Get<CandidateProfile>(candidateProfile.Id).Name);
 
             //Act
-            var ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Create(invalidCreateCandidateProfileContract));
+            var ex = Assert.Throws<InvalidCandidateProfileException>(() =>
+            {
+                _fixture.UseService<ICandidateProfileService>((service) =>
+                {
+                    service.Create(invalidCreateCandidateProfileContract);
+                });
+            });
 
             //Assert
             Assert.IsType<InvalidCandidateProfileException>(ex);
             Assert.NotNull(ex);
             Assert.Equal($"The Profile already exists .", ex.Message);
-
-            //Clean
-            _fixture.Delete<CandidateProfile>();
         }
 
         [Fact(DisplayName = "Verify that given a valid Id, should delete the entity in database")]
@@ -93,15 +100,16 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var candidateExpectedAfterDelete = candidateProfileCountBeforeDelete - 1;
 
             //Act
-            _candidateProfileService.Delete(candidateProfile.Id);
+            _fixture.UseService<ICandidateProfileService>((service) =>
+            {
+                service.Delete(candidateProfile.Id);
+            });
+
             var candidateProfileCountAfterDelete = _fixture.GetCount<CandidateProfile>();
 
             //Assert
             Assert.Equal(candidateExpectedAfterDelete, candidateProfileCountAfterDelete);
             Assert.NotEqual(candidateProfileCountBeforeDelete, candidateProfileCountAfterDelete);
-
-            //Clean
-            _fixture.Delete<CandidateProfile>();
         }
 
         [Fact(DisplayName = "Verify that given a invalid Id, delete method should throw a exception")]
@@ -111,7 +119,13 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var candidateProfile = DataFactory.CreateInstance<CandidateProfile>();
 
             //Act
-            var ex = Assert.Throws<DeleteCandidateProfileNotFoundException>(() => _candidateProfileService.Delete(candidateProfile.Id));
+            var ex = Assert.Throws<DeleteCandidateProfileNotFoundException>(() =>
+            {
+                _fixture.UseService<ICandidateProfileService>((service) =>
+                {
+                    service.Delete(candidateProfile.Id);
+                });
+            });
 
             //Assert
             Assert.IsType<DeleteCandidateProfileNotFoundException>(ex);
@@ -134,14 +148,14 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             };
 
             //Act
-            _candidateProfileService.Update(updateCandidateProfile);
+            _fixture.UseService<ICandidateProfileService>((service) =>
+            {
+                service.Update(updateCandidateProfile);
+            });
 
             //Assert
-            var candidateProfileUpdated = _fixture.Context.Profiles.AsNoTracking().First(profile => profile.Id == candidateProfile.Id);
+            var candidateProfileUpdated = _fixture.Get<CandidateProfile>(candidateProfile.Id);
             Assert.Equal(newDescription, candidateProfileUpdated.Description);
-
-            //Clean
-            _fixture.Delete<CandidateProfile>();
         }
 
         [Theory(DisplayName = "Verify that given invalid properties values, should throw exceptions")]
@@ -155,7 +169,14 @@ namespace Domain.Services.Impl.IntegrationTests.Services
                 .WithPropertyValue(property, default(string));
 
             //Act
-            var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Update(candidateProfile));
+
+            var ex = Assert.Throws<CreateContractInvalidException>(() =>
+            {
+                _fixture.UseService<ICandidateProfileService>((service) =>
+                {
+                    service.Update(candidateProfile);
+                });
+            });
 
             //Assert
             Assert.IsType<CreateContractInvalidException>(ex);
@@ -173,15 +194,18 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             var updateCandidateProfile = new UpdateCandidateProfileContract { Id = 999, Name = candidateProfileFromDatabase.Name, Description = "Description" };
 
             //Act
-            var ex = Assert.Throws<InvalidCandidateProfileException>(() => _candidateProfileService.Update(updateCandidateProfile));
+            var ex = Assert.Throws<InvalidCandidateProfileException>(() =>
+            {
+                _fixture.UseService<ICandidateProfileService>((service) =>
+                {
+                    service.Update(updateCandidateProfile);
+                });
+            });
 
             //Assert
             Assert.Equal("The Profile already exists .", ex.Message);
             Assert.IsType<InvalidCandidateProfileException>(ex);
             Assert.NotNull(ex);
-                
-            //Clean
-            _fixture.Delete<CandidateProfile>();
         }
     }
 }

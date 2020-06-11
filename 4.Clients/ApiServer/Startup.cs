@@ -22,7 +22,6 @@ namespace ApiServer
     {
         public IConfiguration Configuration { get; }
         public DatabaseConfigurations DatabaseConfigurations { get; set; }
-
         public bool UseTestingAuthentication { get; set; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
@@ -30,9 +29,9 @@ namespace ApiServer
             Configuration = configuration;
 
             DatabaseConfigurations = new DatabaseConfigurations(
-                Configuration.GetValue("InMemoryDatabase", true) && env.CanModifyScheme(),
-                Configuration.GetValue("RunMigrations", false) && env.CanModifyScheme(),
-                Configuration.GetValue("RunSeed", false) && env.CanModifyScheme(),
+                Configuration.GetValue("InMemoryDatabase", false),
+                Configuration.GetValue("RunMigrations", false),
+                Configuration.GetValue("RunSeed", false),
                 Configuration.GetConnectionString("SeedDB")
             );
 
@@ -40,7 +39,7 @@ namespace ApiServer
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             var jwtSettings = new JwtSettings
             {
@@ -135,7 +134,7 @@ namespace ApiServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -178,17 +177,6 @@ namespace ApiServer
             app.UseAuthentication();
 
             app.UseMvc();
-        }
-    }
-
-    public static class HostingExtensions
-    {
-        public static bool CanModifyScheme(this IHostingEnvironment env)
-        {
-            return env.IsDevelopment() ||
-                   env.IsEnvironment("INT") ||
-                   env.IsEnvironment("IntegrationTest") ||
-                   env.IsEnvironment("FunctionalTest");
         }
     }
 }

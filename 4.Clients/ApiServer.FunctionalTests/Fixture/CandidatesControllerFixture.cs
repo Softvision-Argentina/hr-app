@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ApiServer.Contracts.Candidates;
 using ApiServer.Contracts.CandidateSkill;
-using ApiServer.FunctionalTests.Core;
+using Core.Testing.Platform;
 using Domain.Model;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiServer.FunctionalTests.Fixture
@@ -19,6 +21,24 @@ namespace ApiServer.FunctionalTests.Fixture
         {
             Match, //will match an entity
             DontMatch //will not match any entity
+        }
+
+        public Candidate GetEager(int id)
+        {
+            Candidate candidate = null;
+
+            ContextAction((context) =>
+            {
+                candidate = context.Candidates
+                    .AsNoTracking()
+                    .Include(_ => _.User)
+                    .Include(_ => _.Community)
+                    .Include(_ => _.Profile)
+                    .Include(_ => _.PreferredOffice)
+                    .FirstOrDefault(_ => _.Id == id);
+            });
+
+            return candidate;
         }
 
         public List<Candidate> GetCandidateList()
@@ -99,21 +119,43 @@ namespace ApiServer.FunctionalTests.Fixture
 
         private FilterCandidateViewModel GetValidModel()
         {
+            int skillId = 0;
+            int communityId = 0;
+            int prefferedOfficeId = 0;
+
+            ContextAction((context) =>
+            {
+                skillId = context.
+                        Skills.
+                        AsNoTracking().
+                        First(_ => _.Name == "Entity Framework").Id;
+
+            });
+
+            ContextAction((context) =>
+            {
+                communityId = context.Community.First(_ => _.Name == "Net").Id;
+            });
+
+            ContextAction((context) =>
+            {
+                prefferedOfficeId = context.Office.First(_ => _.Name == "Almagro").Id;
+            });
+
             var validFilterCandidateSkillViewModel = new List<FilterCandidateSkillViewModel>()
             {
                 new FilterCandidateSkillViewModel()
                 {
-                    SkillId = Context.
-                        Skills.
-                        AsNoTracking().
-                        First(_ => _.Name == "Entity Framework").Id, MinRate = 5, MaxRate = 10
+                    SkillId = skillId,
+                    MinRate = 5,
+                    MaxRate = 10
                 }
             };
 
             var validModel = new FilterCandidateViewModel()
             {
-                Community = Context.Community.First(_ => _.Name == "Net").Id,
-                PreferredOffice = Context.Office.First(_ => _.Name == "Almagro").Id,
+                Community = communityId,
+                PreferredOffice = prefferedOfficeId,
                 SelectedSkills = validFilterCandidateSkillViewModel
             };
 
@@ -144,7 +186,6 @@ namespace ApiServer.FunctionalTests.Fixture
 
         public void Dispose()
         {
-            Context.Dispose();
             Client.Dispose();
             Server.Dispose();
         }

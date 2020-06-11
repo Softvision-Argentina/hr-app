@@ -1,28 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Core;
-using Core.Persistance;
+using Core.Testing.Interfaces;
 using Domain.Services.Repositories.EF;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Persistance.EF.Extensions;
 using Xunit;
 
-namespace ApiServer.FunctionalTests.Core
+namespace Core.Testing.Platform
 {
     public partial class BaseFunctionalTestFixture : WebAppFactory
     {
         public string ControllerName { get; set; }
-        public DataBaseContext Context { get; }
-        public BaseFunctionalTestFixture() : base(EnvironmentType.Functional)
+        public BaseFunctionalTestFixture()
         {
-            Context = (DataBaseContext)Server.Host.Services.GetService(typeof(DataBaseContext));
-            Context.Database.EnsureCreated();
-            Context.DeleteAllEntities();
-            Context.ResetAllIdentitiesId();
+            ContextAction((context) =>
+            {
+                context.ResetAllIdentitiesId();
+            });
         }
 
+        //Functional helper methods
         public async Task<HttpResultData<T>> HttpCallAsync<T>(string httpVerb, string endPoint, object model = null, int id = default(int)) where T : class
         {
             HttpResultData<T> result;
