@@ -179,7 +179,7 @@ namespace Domain.Services.Impl.Services
                         if (process.HrStage.Status == StageStatus.Accepted)
                         {
                             SendHrStageEmailNotification(process);
-                            process.HrStag.SentEmail = true;
+                            process.HrStage.SentEmail = true;
                         }
                     }
 
