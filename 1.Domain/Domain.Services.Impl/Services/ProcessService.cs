@@ -156,7 +156,7 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            var flag = _config.GetValue<bool>("MailSending");
+            var mailSendingEnabled = _config.GetValue<bool>("MailSending");
 
             if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.InProgress)
             {
@@ -172,7 +172,7 @@ namespace Domain.Services.Impl.Services
 
             try
             {
-                if (flag != false)
+                if (mailSendingEnabled)
                 {
                     if (!process.HrStage.SentEmail)
                     {
