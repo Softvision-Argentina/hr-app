@@ -21,8 +21,6 @@ namespace ApiServer.FunctionalTests.Dummy.Candidates.Builder
         public DateTime contactDay { get; set; }
         private ICollection<CreateCandidateSkillViewModel> candidateSkills { get; set; }
 
-        private readonly string _createdBy = "SomeTestUser";
-
         public CreateCandidateViewModelBuilder()
         {
             name = $"test {Guid.NewGuid()}";

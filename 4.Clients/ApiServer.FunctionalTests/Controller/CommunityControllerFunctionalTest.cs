@@ -132,7 +132,7 @@ namespace ApiServer.FunctionalTests.Controller
                 ProfileId = 1
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{_fixture.ControllerName}", model);
@@ -140,7 +140,7 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.Equal("Bad Request", httpResultData.Response.ReasonPhrase);
-            Assert.True(httpResultData.ResponseEntity.Id == default);
+            Assert.True(httpResultData.ResponseEntity.Id == 0);
         }
 
         [Fact(DisplayName = "Verify api/Community [Put] is returning Accepted [202] and return updated id")]
@@ -189,7 +189,7 @@ namespace ApiServer.FunctionalTests.Controller
                 ProfileId = 1
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, 1);

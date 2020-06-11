@@ -46,9 +46,8 @@ namespace Domain.Services.Impl.Services
                     ApplicationName = ApplicationName,
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // TODO: Shouldn't this throw 'ex'?
                 return null;
             }
         }
@@ -62,9 +61,8 @@ namespace Domain.Services.Impl.Services
                 return e.Id;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // TODO: Shouldn't this throw 'ex'?
                 return string.Empty;
             }
         }
@@ -76,9 +74,8 @@ namespace Domain.Services.Impl.Services
                 InitializeCalendarService().Events.Delete("primary", googleCalendarEventId).Execute();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // TODO: Shouldn't this throw 'ex'?
                 return false;
             }
         }

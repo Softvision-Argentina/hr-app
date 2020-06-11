@@ -152,7 +152,7 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         {
             //Arrange
             var candidateProfile = DataFactory.CreateInstance<UpdateCandidateProfileContract>()
-                .WithPropertyValue(property, default);
+                .WithPropertyValue(property, default(string));
 
             //Act
             var ex = Assert.Throws<CreateContractInvalidException>(() => _candidateProfileService.Update(candidateProfile));

@@ -123,7 +123,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var model = DataFactory.CreateInstance<CreateCandidateProfileViewModel>()
-                .WithPropertyValue(propertyName, default);
+                .WithPropertyValue(propertyName, default(string));
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
@@ -204,7 +204,7 @@ namespace ApiServer.FunctionalTests.Controller
             await _fixture.SeedAsync(profileInDb);
             var profile = _fixture.GetAsync<CandidateProfile>(profileInDb.Id);
             var updateModel = DataFactory.CreateInstance<UpdateCandidateProfileViewModel>()
-                .WithPropertyValue(propertyName, default);
+                .WithPropertyValue(propertyName, default(string));
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, profile.Id);

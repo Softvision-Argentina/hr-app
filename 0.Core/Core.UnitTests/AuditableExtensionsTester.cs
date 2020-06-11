@@ -11,14 +11,14 @@ namespace Core.UnitTests
         [InlineData("Valid Username")]
         public void GivenValidUserName_AuditCreateShouldSetProperties(string userName)
         {
-            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default, LastModifiedBy = null, LastModifiedDate = default };
+            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default(DateTime), LastModifiedBy = null, LastModifiedDate = default(DateTime)};
 
             auditable.AuditCreate(userName);
 
             Assert.Equal(userName, auditable.CreatedBy);
             Assert.NotNull(auditable.LastModifiedBy);
-            Assert.NotEqual(default, auditable.CreatedDate);
-            Assert.NotEqual(default, auditable.LastModifiedBy);
+            Assert.NotEqual(default(DateTime), auditable.CreatedDate);
+            Assert.NotEqual(default(string), auditable.LastModifiedBy);
         }
 
         [Theory(DisplayName = "Verify that invalid username throws correct exception")]
@@ -27,7 +27,7 @@ namespace Core.UnitTests
         [InlineData(null)]
         public void GivenInvalidUsername_AuditCreateShouldThrowException(string userName)
         {
-            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default, LastModifiedBy = null, LastModifiedDate = default };
+            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default(DateTime), LastModifiedBy = null, LastModifiedDate = default(DateTime) };
 
             Exception ex = Assert.Throws<InvalidAuditableUsernameException>(() =>
                 auditable.AuditCreate(userName));
@@ -39,12 +39,12 @@ namespace Core.UnitTests
         [InlineData("Valid Username")]
         public void GivenValidUserName_AuditModifyShouldSetProperties(string userName)
         {
-            IAuditable auditable = new Cv { Id = 1, LastModifiedBy = null, LastModifiedDate = default };
+            IAuditable auditable = new Cv { Id = 1, LastModifiedBy = null, LastModifiedDate = default(DateTime) };
 
             auditable.AuditModify(userName);
 
             Assert.Equal(userName, auditable.LastModifiedBy);
-            Assert.NotEqual(default, auditable.LastModifiedDate);
+            Assert.NotEqual(default(DateTime), auditable.LastModifiedDate);
         }
 
         [Theory(DisplayName = "Verify that invalid username throws correct exception")]
@@ -53,7 +53,7 @@ namespace Core.UnitTests
         [InlineData(null)]
         public void GivenInvalidUsername_AuditModifyShouldThrowException(string userName)
         {
-            IAuditable auditable = new Cv { Id = 1, LastModifiedBy = null, LastModifiedDate = default };
+            IAuditable auditable = new Cv { Id = 1, LastModifiedBy = null, LastModifiedDate = default(DateTime) };
 
             Exception ex = Assert.Throws<InvalidAuditableUsernameException>(() =>
                 auditable.AuditModify(userName));

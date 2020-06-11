@@ -315,7 +315,7 @@ namespace ApiServer.FunctionalTests.Controller
                 LinkedInProfile = "/linkedin"
             };
 
-            model.WithPropertyValue(parameterName, default);
+            model.WithPropertyValue(parameterName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
@@ -489,7 +489,7 @@ namespace ApiServer.FunctionalTests.Controller
                 PreferredOfficeId = officeInDb.Id
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, candidate.Id);

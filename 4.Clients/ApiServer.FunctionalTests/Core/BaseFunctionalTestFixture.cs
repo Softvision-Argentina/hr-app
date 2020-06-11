@@ -23,7 +23,7 @@ namespace ApiServer.FunctionalTests.Core
             Context.ResetAllIdentitiesId();
         }
 
-        public async Task<HttpResultData<T>> HttpCallAsync<T>(string httpVerb, string endPoint, object model = null, int id = default) where T : class
+        public async Task<HttpResultData<T>> HttpCallAsync<T>(string httpVerb, string endPoint, object model = null, int id = default(int)) where T : class
         {
             HttpResultData<T> result;
 
@@ -118,7 +118,7 @@ namespace ApiServer.FunctionalTests.Core
             }
             catch (Exception)
             {
-                return default;
+                return null;
             }
         }
         private T ParseJsonStringToEntity<T>(string responseString) where T : class
@@ -129,7 +129,7 @@ namespace ApiServer.FunctionalTests.Core
             }
             catch (Exception)
             {
-                return default;
+                return null;
             }
         }
 
