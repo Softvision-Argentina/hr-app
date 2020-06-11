@@ -118,6 +118,7 @@ export class Globals {
     { id: StageStatusEnum.PendingReply, name: 'Pending Reply', value: 'Pending Reply' },
     { id: StageStatusEnum.Accepted, name: 'Accepted', value: 'Accepted' },
     { id: StageStatusEnum.Declined, name: 'Declined', value: 'Declined' },
+    { id: OfferStatusEnum.Rejected, name: 'Rejected' },
   ];
 
   offerStatusList: any[] = [
