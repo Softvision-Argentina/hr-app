@@ -223,8 +223,7 @@
             <div nz-col nzSpan="24">
                 <nz-form-item *ngFor="let control of controlArray; let i = index">
                     <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i == 0" [nzFor]="control.controlInstance">
-                        Items
-                    </nz-form-label>
+                        Items</nz-form-label>
                     <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i == 0 ? 0 : 4">
                         <input nz-input style="width: 85%; margin-right:8px;" placeholder="Input your task items here"
                             [attr.id]="control.id" [formControlName]="control.controlInstance" />

@@ -11,8 +11,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
-                    Status
-                </nz-form-label>
+                    Status</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
@@ -27,8 +26,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Date of Presentation
-                </nz-form-label>
+                    Date of Presentation</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
                     <nz-form-explain *ngIf="clientForm.get('date').dirty && clientForm.get('date').errors">
@@ -43,8 +41,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
-                    Interviewer
-                </nz-form-label>
+                    Interviewer</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="interviewer" id="interviewer"
                         placeholder="Please input the interviewer's name">
@@ -55,8 +52,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
-                    Delegate
-                </nz-form-label>
+                    Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="delegateName" id="delegateName"
                         placeholder="Please input the delegate name">
@@ -69,8 +65,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
-                    Feedback
-                </nz-form-label>
+                    Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
@@ -89,8 +84,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason
-                </nz-form-label>
+                    Rejection Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
                         placeholder="Input the rejection reason"></textarea>

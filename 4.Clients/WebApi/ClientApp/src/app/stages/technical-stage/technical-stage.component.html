@@ -10,8 +10,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
-                    Status
-                </nz-form-label>
+                    Status</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
@@ -25,8 +24,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Date
-                </nz-form-label>
+                    Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
                     <nz-form-explain *ngIf="technicalForm.get('date').dirty && technicalForm.get('date').errors">
@@ -40,8 +38,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
-                    Interviewer
-                </nz-form-label>
+                    Interviewer</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
                         <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
@@ -56,8 +53,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
-                    Delegate
-                </nz-form-label>
+                    Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
                         <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
@@ -74,8 +70,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority" [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
-                    Seniority
-                </nz-form-label>
+                    Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select #seniority formControlName="seniority"
                         (ngModelChange)="updateSeniority(seniority.value)">
@@ -93,8 +88,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="alternativeSeniority" [ngClass]="{'requiredFieldLabel': isRequiredField('alternativeSeniority')}">
-                    Alternative Seniority
-                </nz-form-label>
+                    Alternative Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select #alternativeSeniority formControlName="alternativeSeniority"
                         (ngModelChange)="updateAlternativeSeniority(alternativeSeniority.value)">
@@ -125,8 +119,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
-                    Feedback
-                </nz-form-label>
+                    Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
@@ -144,8 +137,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="client" [ngClass]="{'requiredFieldLabel': isRequiredField('client')}">
-                    Client
-                </nz-form-label>
+                    Client</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input id="client" formControlName="client"
                         placeholder="Input the client that best suits" />
@@ -157,8 +149,7 @@
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason
-                </nz-form-label>
+                    Rejection Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
                         placeholder="Input the rejection reason"></textarea>
@@ -178,8 +169,7 @@
         <div nz-col nzSpan="24">
             <nz-form-item *ngFor="let control of controlArray;let i = index">
                 <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]" style="margin-left: 20px;">
-                    Skills
-                </nz-form-label>
+                    Skills</nz-form-label>
                 <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0 ? 0 : 4">
                     <div nz-col nzSpan="24" [ngClass]="{ highlightedSkill: isFirstSkillControl(control) }">
                         <div class="skill-control" style="margin-left: 10px;">

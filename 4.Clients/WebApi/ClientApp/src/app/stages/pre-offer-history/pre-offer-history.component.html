@@ -20,8 +20,7 @@
               <nz-form-item>
                   <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="healthInsurance"
                       [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}">
-                      Health insurance
-                  </nz-form-label>
+                      Health insurance</nz-form-label>
                   <nz-form-control [nzSm]="14" [nzXs]="24">
                       <nz-select formControlName="healthInsurance">
                           <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
