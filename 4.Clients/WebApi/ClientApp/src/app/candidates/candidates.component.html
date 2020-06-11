@@ -19,17 +19,22 @@
                     <th>E-mail</th>
                     <th>Phone</th>
                     <th nzCustomFilter>Status
-                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdownStatus>
+                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight"  nzTableFilter #dropdownStatus>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" nz-dropdown></i>
-                            <div class="search-box">
+                            <ol nz-menu class="search-box status-filter">
                                 <nz-select placeholder="Search status" [(ngModel)]="searchValueStatus" class="search-select">
                                     <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                                     </nz-option>
                                 </nz-select>
                                 <br />
-                                <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()" class="search-button">Search</button>
-                                <button nz-button nzSize="small" (click)="reset()">Reset</button>
-                            </div>
+                                <li nz-menu-item>
+                                    <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()" class="search-button">Search</button>
+                                </li>
+                                <li nz-menu-item>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </li>
+
+                            </ol>
                         </nz-dropdown>
                     </th>
                     <th>Action</th>

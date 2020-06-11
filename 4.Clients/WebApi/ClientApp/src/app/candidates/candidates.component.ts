@@ -220,7 +220,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend')
       ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     this.searchValueStatus = '';
-    this.statusDropdown.nzVisible = false;
+
   }
 
   sort(sortName: string, value: string): void {
