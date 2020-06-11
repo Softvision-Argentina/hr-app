@@ -156,6 +156,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
+            var flag = _config.GetValue<bool>("MailSending");
+
             if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.InProgress)
             {
                 var notification = new Notification
@@ -166,6 +168,33 @@ namespace Domain.Services.Impl.Services
                 _notificationRepository.Create(notification, process.Candidate.Id);
 
                 SendEmailNotification(process, status);
+            }
+
+            try
+            {
+                if (flag != false)
+                {
+                    if (!process.HrStage.SentEmail)
+                    {
+                        if (process.HrStage.Status == StageStatus.Accepted)
+                        {
+                            SendHrStageEmailNotification(process);
+                            process.HrStag.SentEmail = true;
+                        }
+                    }
+
+                    if (!process.TechnicalStage.SentEmail)
+                    {
+                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                        {
+                            SendTechnicalStageEmailNotification(process);
+                            process.TechnicalStage.SentEmail = true;
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("Mail could not been sent");
             }
 
             return createdProcessContract;
@@ -188,29 +217,6 @@ namespace Domain.Services.Impl.Services
             process.ClientStage.UserOwnerId = process.UserOwnerId;
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
-
-            var flag = _config.GetValue<bool>("MailSending");
-
-            if (flag != false)
-            {
-                if (!process.HrStage.SentEmail)
-                {
-                    if (process.HrStage.Status == StageStatus.Accepted)
-                    {
-                        SendHrStageEmailNotification(process);
-                        process.HrStage.SentEmail = true;
-                    }
-                }
-
-                if (!process.TechnicalStage.SentEmail)
-                {
-                    if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
-                    {
-                        SendTechnicalStageEmailNotification(process);
-                        process.TechnicalStage.SentEmail = true;
-                    }
-                }
-            }
 
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);
@@ -249,7 +255,39 @@ namespace Domain.Services.Impl.Services
                 SendEmailNotification(process, status);
             }
 
-            _unitOfWork.Complete();
+
+            try
+            {
+                var flag = _config.GetValue<bool>("MailSending");
+
+                if (flag != false)
+                {
+                    if (!process.HrStage.SentEmail)
+                    {
+                        if (process.HrStage.Status == StageStatus.Accepted)
+                        {
+                            SendHrStageEmailNotification(process);
+                            process.HrStage.SentEmail = true;
+                        }
+                    }
+
+                    if (!process.TechnicalStage.SentEmail)
+                    {
+                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                        {
+                            SendTechnicalStageEmailNotification(process);
+                            process.TechnicalStage.SentEmail = true;
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("Mail could not been sent");
+            }
+            finally
+            {
+                _unitOfWork.Complete();
+            }
         }
 
         public void Approve(int processId)
@@ -300,6 +338,7 @@ namespace Domain.Services.Impl.Services
             using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
                 client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
                 client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
                 var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
                 client.Send(message);
@@ -320,6 +359,7 @@ namespace Domain.Services.Impl.Services
             using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
                 client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
                 client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
                 var message = new MailMessage(_config.GetValue<string>("email"), email, "RECRU - New candidate for Interview!",
                     $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
@@ -342,6 +382,7 @@ namespace Domain.Services.Impl.Services
             using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
             {
                 client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
                 client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
                 var message = new MailMessage(_config.GetValue<string>("email"), email, $"RECRU - Feedback of {process.Candidate.Name} {process.Candidate.LastName} is now available!",
                     $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
