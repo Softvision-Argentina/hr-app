@@ -360,4 +360,8 @@ export class ClientStageComponent implements OnInit {
     });
 
   }
+
+  hideAddNewInterviewForm() {
+    return !(this.clientForm.controls.status.value === StageStatusEnum.InProgress);
+  }
 }

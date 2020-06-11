@@ -100,10 +100,10 @@
         </div>
     </div>
 </form>
-<form nz-form [formGroup]="interviewForm" [nzLayout]="'horizontal'">
-    <div nz-row>
-        <nz-divider nzText="INTERVIEWS"></nz-divider>
-    </div>
+<div nz-row>
+    <nz-divider nzText="INTERVIEWS"></nz-divider>
+</div>
+<form nz-form [formGroup]="interviewForm" [nzLayout]="'horizontal'" [hidden]="hideAddNewInterviewForm()">    
     <nz-collapse>
         <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.acitve"
             [nzShowArrow]="panelControl.arrow">
@@ -156,23 +156,23 @@
                 </div>
             </div>
             <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
-                    <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
-                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
-                            Field required
-                        </ng-container>
-                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
-                            The maximun length is 300
-                        </ng-container>
-                    </nz-form-explain>                    
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
+                            <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
+                                <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
+                                    Field required
+                                </ng-container>
+                                <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
+                                    The maximun length is 300
+                                </ng-container>
+                            </nz-form-explain>                    
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
             <div nz-row>
                 <div nz-col nzSpan="6" nzOffset="11">
                     <nz-form-item>
