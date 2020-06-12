@@ -4,6 +4,9 @@ using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
 using Domain.Services.ExternalServices.Config;
+using Mailer;
+using Mailer.Entities;
+using Mailer.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -131,6 +134,12 @@ namespace ApiServer
                 });
                 c.AddSecurityRequirement(security);
             });
+
+            var mailConfig = Configuration.GetSection("MailSettings")
+                .Get<MailServerSettings>();
+
+            services.AddSingleton(mailConfig);
+            services.AddScoped<IMailSender, MailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

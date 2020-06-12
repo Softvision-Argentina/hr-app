@@ -68,6 +68,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Services.Repositorie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Testing", "0.Core\Core.Testing\Core.Testing.csproj", "{9CCD3691-3312-4FC5-9A5E-F54A974005D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailer", "Mailer\Mailer\Mailer.csproj", "{681808E2-4567-4EB2-9408-2E8BEF795826}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -411,6 +413,20 @@ Global
 		{9CCD3691-3312-4FC5-9A5E-F54A974005D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CCD3691-3312-4FC5-9A5E-F54A974005D1}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CCD3691-3312-4FC5-9A5E-F54A974005D1}.UAT|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.INT|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.INT|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.IntegrationTest|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.IntegrationTest|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.PROD|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.PROD|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{681808E2-4567-4EB2-9408-2E8BEF795826}.UAT|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

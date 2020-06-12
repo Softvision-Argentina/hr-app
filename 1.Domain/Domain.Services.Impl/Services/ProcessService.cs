@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using Mailer.Interfaces;
+using Mailer.Entities;
 
 namespace Domain.Services.Impl.Services
 {
@@ -35,6 +37,7 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IMailSender _mailSender;
 
         public ProcessService(
             IMapper mapper,
@@ -54,7 +57,8 @@ namespace Domain.Services.Impl.Services
             INotificationRepository notificationRepository,
             IConfiguration config,
             IHttpContextAccessor httpContext,
-            IPreOfferStageRepository preOfferStageRepository)
+            IPreOfferStageRepository preOfferStageRepository,
+            IMailSender mailSender)
             
         {            
             _candidateRepository = candidateRepository;
@@ -75,6 +79,7 @@ namespace Domain.Services.Impl.Services
             _config = config;
             _httpContext = httpContext;
             _preOfferStageRepository = preOfferStageRepository;
+            _mailSender = mailSender;
         }
 
         public ReadedProcessContract Read(int id)
@@ -334,15 +339,9 @@ namespace Domain.Services.Impl.Services
         private void SendEmailNotification(Process process, ProcessStatus status)
         {
             var email = GetUserMail(process.Candidate.ReferredBy);
-
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
-            {
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
-                client.Send(message);
-            }
+            var messageBody = $"The process status of your referral, {process.Candidate.Name} {process.Candidate.LastName}, is now {status}.";
+            var message = new Message(email, "Referral status", messageBody);
+            _mailSender.SendAsync(message);
         }
 
         private void SendHrStageEmailNotification(Process process)
@@ -356,19 +355,13 @@ namespace Domain.Services.Impl.Services
                     _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
             }
 
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
-            {
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage(_config.GetValue<string>("email"), email, "RECRU - New candidate for Interview!",
-                    $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
+            var messageBody = new MessageBody();
+            messageBody.HtmlBody = $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
                     $"{process.Candidate.Name} {process.Candidate.LastName}, A new { process.Candidate.Profile.Name } candidate has been submitted for { process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
                     $"Please reach out to {process.Candidate.User.FirstName} {process.Candidate.User.LastName} with Interviewer name / s and availability. <br />" +
-                    "Thank you.");
-                message.IsBodyHtml = true;
-                client.Send(message);
-            }
+                    "Thank you.";
+            var message = new Message(email, "New candidate for Interview!", messageBody);
+            _mailSender.SendAsync(message);
         }
 
         private void SendTechnicalStageEmailNotification(Process process)
@@ -379,19 +372,13 @@ namespace Domain.Services.Impl.Services
             var skills = process.Candidate.CandidateSkills;
             var skillsListed = skills.ToList();
 
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
-            {
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage(_config.GetValue<string>("email"), email, $"RECRU - Feedback of {process.Candidate.Name} {process.Candidate.LastName} is now available!",
-                    $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
-                    $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} and {delegateInterviewer.FirstName} {delegateInterviewer.LastName} on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
-                    $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
-                    $"Thank you");
-                message.IsBodyHtml = true;
-                client.Send(message);
-            }
+            var messageBody = new MessageBody();
+            messageBody.HtmlBody = $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
+                $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} {(delegateInterviewer != null ? "and" + delegateInterviewer.FirstName + " " + delegateInterviewer.LastName + " " : "")}on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
+                $"Thank you";
+            var message = new Message(email, $"Feedback for {process.Candidate.Name} {process.Candidate.LastName} is now available!", messageBody);
+            _mailSender.SendAsync(message);
         }
 
         private string GetUserMail(string referredBy)
