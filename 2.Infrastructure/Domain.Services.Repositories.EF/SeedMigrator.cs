@@ -465,7 +465,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
                 HrStage = new HrStage { ProcessId = 1, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14), EnglishLevel = EnglishLevel.HighIntermediate, WantedSalary = 10000, ActualSalary = 5000 },
-                TechnicalStage = new TechnicalStage { ProcessId = 1, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Seniority = Seniority.SemiSenior2, Client = "EY" },
+                TechnicalStage = new TechnicalStage { ProcessId = 1, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Seniority = Seniority.SemiSenior2, EnglishLevel = EnglishLevel.HighIntermediate, Client = "EY" },
                 ClientStage = new ClientStage { 
                     ProcessId = 1, 
                     UserDelegateId = 2, 
@@ -492,7 +492,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
                 HrStage = new HrStage { ProcessId = 2, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 2, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "PWC" },
+                TechnicalStage = new TechnicalStage { ProcessId = 2, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), EnglishLevel = EnglishLevel.HighIntermediate, Client = "PWC" },
                 ClientStage = new ClientStage { ProcessId = 2, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 2, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-10) }
             };
@@ -507,7 +507,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.Rejected,
                 CurrentStage = ProcessCurrentStage.Finished,
                 HrStage = new HrStage { ProcessId = 3, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 3, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "YL" },
+                TechnicalStage = new TechnicalStage { ProcessId = 3, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), EnglishLevel = EnglishLevel.HighIntermediate, Client = "YL" },
                 ClientStage = new ClientStage { ProcessId = 3, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Rejected, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 3, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(-1) }
             };
@@ -521,7 +521,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.InProgress,
                 CurrentStage = ProcessCurrentStage.ClientStage,
                 HrStage = new HrStage { ProcessId = 4, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 4, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
+                TechnicalStage = new TechnicalStage { ProcessId = 4, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), EnglishLevel = EnglishLevel.HighIntermediate, Client = "" },
                 ClientStage = new ClientStage { ProcessId = 4, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 4, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(15) }
             };
@@ -535,7 +535,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.Hired,
                 CurrentStage = ProcessCurrentStage.Finished,
                 HrStage = new HrStage { ProcessId = 5, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(12) },
-                TechnicalStage = new TechnicalStage { ProcessId = 5, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "" },
+                TechnicalStage = new TechnicalStage { ProcessId = 5, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), EnglishLevel = EnglishLevel.HighIntermediate, Client = "" },
                 ClientStage = new ClientStage { ProcessId = 5, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 5, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.Hired, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(35) }
         };
@@ -549,7 +549,7 @@ namespace Domain.Services.Repositories.EF
                 Status = ProcessStatus.Recall,
                 CurrentStage = ProcessCurrentStage.ClientStage,
                 HrStage = new HrStage { ProcessId = 6, UserDelegateId = 1, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-14) },
-                TechnicalStage = new TechnicalStage { ProcessId = 6, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), Client = "EY" },
+                TechnicalStage = new TechnicalStage { ProcessId = 6, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.Accepted, Date = DateTime.Today.AddDays(-12), EnglishLevel = EnglishLevel.HighIntermediate, Client = "EY" },
                 ClientStage = new ClientStage { ProcessId = 6, UserDelegateId = 2, UserOwnerId = 1, Status = StageStatus.InProgress, Date = DateTime.Today.AddDays(-12) },
                 OfferStage = new OfferStage { ProcessId = 6, UserDelegateId = 4, UserOwnerId = 1, Status = StageStatus.NA, Date = DateTime.Today.AddDays(-12), HireDate = DateTime.Today.AddDays(3) }
             };

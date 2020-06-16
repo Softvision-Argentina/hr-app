@@ -1146,6 +1146,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime?>("Date");
 
+                    b.Property<int>("EnglishLevel");
+
                     b.Property<string>("Feedback");
 
                     b.Property<string>("LastModifiedBy");

@@ -8,6 +8,7 @@ import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { TechnicalStage } from 'src/entities/technical-stage';
 import { Skill } from 'src/entities/skill';
+import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Candidate } from 'src/entities/candidate';
 import { CandidateSkill } from 'src/entities/candidateSkill';
 import { ProcessService } from '../../services/process.service';
@@ -51,12 +52,13 @@ export class TechnicalStageComponent implements OnInit {
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
+    englishLevel: EnglishLevelEnum.None,
     client: [null],
     rejectionReason: [null, [Validators.required]],
     sentEmail: [false]
   });
 
-  feedbackContent:string = "";
+  feedbackContent: string = "";
 
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
@@ -64,19 +66,21 @@ export class TechnicalStageComponent implements OnInit {
   private completeSkillList: Skill[] = [];
 
   statusList: any[];
-  disable: boolean;
+  disabled: boolean;
 
   seniorityList: any[];
 
   selectedSeniorities: any[2];
   usersFiltered: User[];
 
+  englishLevelList: any[];
   disabledSeniority = false;
   chosenSeniority: number;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
     this.seniorityList = globals.seniorityList;
+    this.englishLevelList = globals.englishLevelList;
   }
 
   ngOnInit() {
@@ -96,7 +100,7 @@ export class TechnicalStageComponent implements OnInit {
       .subscribe(res => {
         this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
       }, err => {
-          this.facade.errorHandlerService.showErrorMessage(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -144,10 +148,14 @@ export class TechnicalStageComponent implements OnInit {
       if (this.technicalForm.controls[i] !== this.technicalForm.controls['status']) {
         if (enable) {
           this.technicalForm.controls[i].enable();
-          this.disable = false;
+          if (this.technicalForm.controls[i] === this.technicalForm.controls['englishLevel']) {
+            this.disabled = false;
+            console.log(this.disabled)
+          this.technicalForm.controls[i].enable();
+          }
         } else {
           this.technicalForm.controls[i].disable();
-          this.disable = true;
+          this.disabled = true;
         }
       }
     }
@@ -169,6 +177,7 @@ export class TechnicalStageComponent implements OnInit {
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
     stage.feedback = this.feedbackContent;
+    stage.englishLevel = this.getControlValue(form.controls.englishLevel);
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
@@ -230,6 +239,10 @@ export class TechnicalStageComponent implements OnInit {
 
     if (technicalStage.feedback) {
       this.feedbackContent = technicalStage.feedback;
+    }
+
+    if (technicalStage.englishLevel) {
+      this.technicalForm.controls['englishLevel'].setValue(technicalStage.englishLevel);
     }
 
     if (technicalStage.seniority) {
@@ -315,25 +328,25 @@ export class TechnicalStageComponent implements OnInit {
       }
     }
 
-    const index = this.controlArray.push(control); 
+    const index = this.controlArray.push(control);
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, Validators.required));
   }
 
-  updateSkills(skillControl){
+  updateSkills(skillControl) {
     const skillForm = this.technicalForm.controls[skillControl.controlInstance[0]];
 
     skillForm.valueChanges
-    .subscribe(selectedValue => {
-      // Remove previous skill selected from usedSkills
-      this.usedSkills = this.usedSkills.filter(skill => skill.id !== +selectedValue);
-      // Add skill selected to usedSkills
-      this.usedSkills.push(this.skills.filter(skill => skill.id === +selectedValue)[0]);
-    });
+      .subscribe(selectedValue => {
+        // Remove previous skill selected from usedSkills
+        this.usedSkills = this.usedSkills.filter(skill => skill.id !== +selectedValue);
+        // Add skill selected to usedSkills
+        this.usedSkills.push(this.skills.filter(skill => skill.id === +selectedValue)[0]);
+      });
   }
 
-  isAvailable(selectedSkill: Skill){
+  isAvailable(selectedSkill: Skill) {
     return !this.usedSkills.some(usedSkill => usedSkill.id === selectedSkill.id);
   }
 
@@ -366,7 +379,7 @@ export class TechnicalStageComponent implements OnInit {
       .subscribe(res => {
         this.skills = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }, err => {
-          this.facade.errorHandlerService.showErrorMessage(err);
+        this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
@@ -374,7 +387,7 @@ export class TechnicalStageComponent implements OnInit {
     return formFieldHasRequiredValidator(field, this.technicalForm)
   }
 
-  isFirstSkillControl(control: { id: number, controlInstance: string[] }) : boolean {
+  isFirstSkillControl(control: { id: number, controlInstance: string[] }): boolean {
     return control.id === this.controlArray[0].id;
   }
 

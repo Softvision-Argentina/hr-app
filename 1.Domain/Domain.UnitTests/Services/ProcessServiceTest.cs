@@ -60,6 +60,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockConfiguration = new Mock<IConfiguration>();
             _mockhttpContext = new Mock<IHttpContextAccessor>();
             _mockMailSender = new Mock<IMailSender>();
+
             _service = new ProcessService(
                 _mockMapper.Object,
                 _mockRepoUser.Object,

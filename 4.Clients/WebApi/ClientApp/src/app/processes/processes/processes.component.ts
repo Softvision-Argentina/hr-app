@@ -1072,6 +1072,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
+        englishLevel: EnglishLevelEnum.None,
         userOwnerId: null,
         userDelegateId: null,
         processId: 0,

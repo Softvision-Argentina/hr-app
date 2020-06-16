@@ -146,6 +146,24 @@
         </div>
     </div>
     <div nz-row>
+        <div nz-col nzSpan="24">
+            <nz-form-item>
+                <nz-form-control>
+                    <div class="flex-container">
+                        <nz-form-label class="englishLabel" [nzSm]="10" [nzXs]="24" nzFor="englishLevel"
+                            [ngClass]="{'requiredFieldLabel': isRequiredField('englishLevel')}">
+                            English Level
+                        </nz-form-label>
+                        <nz-radio-group formControlName="englishLevel">
+                            <label *ngFor="let level of englishLevelList" nz-radio-button [nzDisabled]="disabled" 
+                                [nzValue]="level.id"><span>{{level.name}}</span></label>
+                        </nz-radio-group>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
@@ -174,7 +192,7 @@
                     <div nz-col nzSpan="24" [ngClass]="{ highlightedSkill: isFirstSkillControl(control) }">
                         <div class="skill-control" style="margin-left: 10px;">
                             <div class="item">
-                                <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
+                                <nz-select [nzDisabled]="disabled" style="width: 95%; margin-right:1%;"
                                     (ngModelChange)="updateSkills(control)" [formControlName]="control.controlInstance[0]" [attr.id]="control.id"
                                     id="control.id" nzShowSearch nzAllowClear [nzAllowClear]="false" nzPlaceHolder="Select a skill">
                                     <ng-container *ngFor="let skill of skills">
@@ -189,7 +207,7 @@
                             </div>
                             <div class="item">
                                 <nz-form-control style="text-align: center; margin-left: 10%;">
-                                    <nz-slider [nzDisabled]="disable" formControlName="{{control.controlInstance[1]}}"
+                                    <nz-slider [nzDisabled]="disabled" formControlName="{{control.controlInstance[1]}}"
                                         id="control.controlInstance[1]">
                                     </nz-slider>
                                 </nz-form-control>

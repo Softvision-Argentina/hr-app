@@ -884,6 +884,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
+        englishLevel: EnglishLevelEnum.None,
         userOwnerId: candidate.user.id,
         userDelegateId: candidate.user.id,
         processId: 0,

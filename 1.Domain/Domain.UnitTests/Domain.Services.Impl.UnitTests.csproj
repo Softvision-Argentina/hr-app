@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Mailer\Mailer\Mailer.csproj" />
     <ProjectReference Include="..\Domain.Model\Domain.Model.csproj" />
     <ProjectReference Include="..\Domain.Services\Domain.Services.csproj" />
     <ProjectReference Include="..\Domain.Services.Impl\Domain.Services.Impl.csproj" />

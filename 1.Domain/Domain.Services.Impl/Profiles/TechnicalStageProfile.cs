@@ -18,7 +18,9 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(destination => destination.Seniority,
                 opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
                 .ForMember(destination => destination.AlternativeSeniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)));
+                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
+                .ForMember(destination => destination.EnglishLevel,
+                opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
 
             CreateMap<TechnicalStage, CreatedTechnicalStageContract>();
 
@@ -28,7 +30,9 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(destination => destination.Seniority,
                 opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
                 .ForMember(destination => destination.AlternativeSeniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)));
+                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
+                .ForMember(destination => destination.EnglishLevel,
+                opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
 
             CreateMap<UpdateTechnicalStageViewModel, UpdateTechnicalStageContract>();
         }

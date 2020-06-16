@@ -9,6 +9,7 @@ namespace Domain.Model
         public StageType Type { get; set; }
         public DateTime? Date { get; set; }
         public string Feedback { get; set; }
+        public EnglishLevel EnglishLevel { get; set; }
         public StageStatus Status { get; set; }
         public int ProcessId { get; set; }
         public Process Process { get; set; }
