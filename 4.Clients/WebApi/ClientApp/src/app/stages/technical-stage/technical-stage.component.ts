@@ -192,7 +192,9 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   getFormDataSkills(): CandidateSkill[] {
+    this.removeEmptyOrInvalidSkillFields();
     const candidateSkills: CandidateSkill[] = [];
+
     this.controlArray.forEach(skillControl => {
       const skill: CandidateSkill = {
         candidateId: 0,
@@ -202,6 +204,7 @@ export class TechnicalStageComponent implements OnInit {
         rate: this.technicalForm.controls[skillControl.controlInstance[1]].value,
         comment: this.technicalForm.controls[skillControl.controlInstance[2]].value
       };
+      
       candidateSkills.push(skill);
     });
 
@@ -393,5 +396,19 @@ export class TechnicalStageComponent implements OnInit {
 
   hideAddSkillButton(): boolean {
     return !(this.technicalForm.controls.status.value === StageStatusEnum.InProgress);
+  }
+
+  removeEmptyOrInvalidSkillFields() {
+    let skillControl, skillIdField, index;
+
+    for(index = this.controlArray.length - 1; index >= 0; index--) {
+      skillControl = this.controlArray[index];
+      skillIdField = this.technicalForm.controls[skillControl.controlInstance[0]];
+
+      if(skillIdField.value === null) {
+        let fakeMouseEvent = new MouseEvent('click');
+        this.removeField(skillControl, fakeMouseEvent);
+      }
+    }
   }
 }

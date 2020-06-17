@@ -836,7 +836,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       let newCandidate: Candidate;
       let newProcess: Process;
       this.isLoading = true;
-      newCandidate = this.candidateAdd.getFormData();
+      newCandidate = this.candidateAdd.getFormData();      
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       // temp fix, we should check if englishlevel should be in Candidate table and HrStage table
