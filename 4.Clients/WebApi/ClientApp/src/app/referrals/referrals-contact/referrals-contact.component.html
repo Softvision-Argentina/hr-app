@@ -71,7 +71,7 @@
                                 <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                             </nz-select>
                         </ng-template>
-                        <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9 -]+$" nz-input placeholder="Please input a phone number">
+                        <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input placeholder="Please input a phone number">
                     </nz-input-group>
                     <nz-form-explain *ngIf="candidateForm.get('phoneNumber').dirty && candidateForm.get('phoneNumber').errors">
                         Please enter a valid phone number</nz-form-explain>

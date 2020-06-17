@@ -59,7 +59,7 @@ export class EmployeesComponent implements OnInit {
       lastName: [null, [Validators.required, trimValidator]],
       dni: [null, Validators.required],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9 -]+$/)]],
+      phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       emailAddress: [null, [Validators.email, Validators.required]],
       linkedInProfile: [null, [trimValidator]],
       additionalInformation: [null, [trimValidator]],

@@ -177,7 +177,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       dni: [null],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null, Validators.pattern(/^[0-9 -]+$/)],
+      phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
       linkedin: [null, [trimValidator]],      
       user: [null, [Validators.required]],
       englishLevel: 'none',
