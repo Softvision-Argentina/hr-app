@@ -19,17 +19,22 @@
                     <th>E-mail</th>
                     <th>Phone</th>
                     <th nzCustomFilter>Status
-                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdownStatus>
+                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight"  nzTableFilter #dropdownStatus>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" nz-dropdown></i>
-                            <div class="search-box">
+                            <ol nz-menu class="search-box status-filter">
                                 <nz-select placeholder="Search status" [(ngModel)]="searchValueStatus" class="search-select">
                                     <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                                     </nz-option>
                                 </nz-select>
                                 <br />
-                                <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()" class="search-button">Search</button>
-                                <button nz-button nzSize="small" (click)="reset()">Reset</button>
-                            </div>
+                                <li nz-menu-item>
+                                    <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()" class="search-button">Search</button>
+                                </li>
+                                <li nz-menu-item>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </li>
+
+                            </ol>
                         </nz-dropdown>
                     </th>
                     <th>Action</th>
@@ -235,7 +240,7 @@
         <div nz-row *ngIf="validateForm.controls['isReferred'].value">
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" >Referred By: </nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" >Referred By</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" >
                         <input type="text"  nz-input formControlName="referredBy" id="referredBy" required>
                         <nz-form-explain *ngIf="validateForm.get('referredBy').dirty && validateForm.get('referredBy').invalid">
@@ -308,8 +313,7 @@
                 </div>
                 <nz-form-item *ngFor="let control of controlArray;let i = index">
                     <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0 && !(controlEditArray.length > 0)" [nzFor]="control.controlInstance[0]">
-                        Skills
-                    </nz-form-label>
+                        Skills</nz-form-label>
                     <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="!isEdit ? i==0 ? 0 : 4 : 4">
                         <div nz-row>
                             <div nz-col nzSpan="4">

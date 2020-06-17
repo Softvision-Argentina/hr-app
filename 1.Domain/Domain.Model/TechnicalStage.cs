@@ -9,6 +9,7 @@ namespace Domain.Model
         public StageType Type { get; set; }
         public DateTime? Date { get; set; }
         public string Feedback { get; set; }
+        public EnglishLevel EnglishLevel { get; set; }
         public StageStatus Status { get; set; }
         public int ProcessId { get; set; }
         public Process Process { get; set; }
@@ -20,5 +21,6 @@ namespace Domain.Model
         public Seniority Seniority { get; set; }
         public Seniority AlternativeSeniority { get; set; }
         public string Client { get; set; }
+        public bool SentEmail { get; set; }
     }
 }

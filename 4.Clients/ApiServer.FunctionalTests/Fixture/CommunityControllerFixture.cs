@@ -1,4 +1,4 @@
-﻿using ApiServer.FunctionalTests.Core;
+﻿using Core.Testing.Platform;
 
 namespace ApiServer.FunctionalTests.Fixture
 {
@@ -11,7 +11,6 @@ namespace ApiServer.FunctionalTests.Fixture
 
         public void Dispose()
         {
-            Context.Dispose();
             Client.Dispose();
             Server.Dispose();
         }

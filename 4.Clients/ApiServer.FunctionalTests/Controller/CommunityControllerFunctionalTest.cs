@@ -1,24 +1,24 @@
 ﻿using ApiServer.Contracts.CandidateProfile;
 using ApiServer.Contracts.Community;
-using Core;
 using Domain.Model;
 using Persistance.EF.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using ApiServer.FunctionalTests.Fixture;
-using Core.Persistance;
+using Core.Testing.Platform;
 using Xunit;
 
 namespace ApiServer.FunctionalTests.Controller
 {
-    [Collection(nameof(EnvironmentType.Functional))]
+    [Collection(nameof(TestType.Functional))]
     public class CommunityControllerFunctionalTest : IClassFixture<CommunityControllerFixture>
     {
         private readonly CommunityControllerFixture _fixture;
         public CommunityControllerFunctionalTest(CommunityControllerFixture fixture)
         {
             _fixture = fixture;
+            _fixture.CleanTestingDatabase();
         }
 
         [Fact(DisplayName = "Verify api/Community [Get] is returning ok [200] and collection of entities when found in database")]
@@ -27,7 +27,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var community = new Community() { Name = "Test community", Profile = new CandidateProfile() { Name = "Candidate Profile" } };
-            await _fixture.SeedAsync(community);
+            _fixture.Seed(community);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<List<ReadedCommunityViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}");
@@ -36,10 +36,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Single(httpResultData.ResponseEntity);
             Assert.Equal(community.Id, httpResultData.ResponseEntity.Single().Id);
-
-            //Clean
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         [Fact(DisplayName = "verify api/community [get] is returning ok [200] and empty collection when there are no entities in database")]
@@ -60,7 +56,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var community = new Community() { Name = "Test community", Profile = new CandidateProfile() { Name = "Candidate Profile" } };
-            await _fixture.SeedAsync(community);
+            _fixture.Seed(community);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<ReadedCommunityViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{community.Id}");
@@ -68,10 +64,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(community.Id, httpResultData.ResponseEntity.Id);
-
-            //Clean
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         [Fact(DisplayName = "Verify api/Community [Get/{Id}] is returning Not Found [404] and entity Id when entity is not found")]
@@ -95,7 +87,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var profile = new CandidateProfile() { Name = "Testing" };
-            await _fixture.SeedAsync(profile);
+            _fixture.Seed(profile);
             var profileVm = new CreateCandidateProfileViewModel() { Name = "Rodrigo" };
             var model = new CreateCommunityViewModel()
             {
@@ -111,9 +103,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.Created, httpResultData.Response.StatusCode);
             Assert.True(httpResultData.ResponseEntity.Id > 0);
-
-            //Clean
-            await _fixture.DeleteAsync<CandidateProfile>();
         }
 
         [Theory(DisplayName = "Verify api/Community [Post] is returning error when viewmodel posted is not valid")]
@@ -132,7 +121,7 @@ namespace ApiServer.FunctionalTests.Controller
                 ProfileId = 1
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<CreatedCommunityViewModel>(HttpVerb.POST, $"{_fixture.ControllerName}", model);
@@ -140,7 +129,7 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.Equal("Bad Request", httpResultData.Response.ReasonPhrase);
-            Assert.True(httpResultData.ResponseEntity.Id == default);
+            Assert.True(httpResultData.ResponseEntity.Id == 0);
         }
 
         [Fact(DisplayName = "Verify api/Community [Put] is returning Accepted [202] and return updated id")]
@@ -149,30 +138,27 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var profile = new CandidateProfile() { Name = "Testing" };
-            await _fixture.SeedAsync(profile);
-            var wrongCommunity = new Community() { Name = "Outdated wrong community name, should be updated", Description = "Outdated wrong description name, should be updated", Profile = profile };
-            var rightCommunity = new Community() { Name = "Valid community name, should not change on update", Description = "Valid community description, should not change on update", Profile = profile };
+            _fixture.Seed(profile);
+            var wrongCommunity = new Community() { Name = "Outdated wrong community name, should be updated", Description = "Outdated wrong description name, should be updated", ProfileId = profile.Id};
+            var rightCommunity = new Community() { Name = "Valid community name, should not change on update", Description = "Valid community description, should not change on update", ProfileId = profile.Id };
             var communityList = new List<Community> { wrongCommunity, rightCommunity };
-            await _fixture.SeedAsync(communityList);
+            _fixture.Seed(communityList);
+
             var model = new UpdateCommunityViewModel()
             {
                 Name = "New Community Name",
                 Description = "New Description Name",
-                ProfileId = profile.Id,
-                //Profile = new UpdateCandidateProfileViewModel() { Name = "This profile would be created", Description = "This profile would be created" }
+                ProfileId = profile.Id
             };
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, wrongCommunity.Id);
 
             //Assert
-            var communityFromDatabase = await _fixture.GetAsync<Community>(wrongCommunity.Id);
+            var communityFromDatabase = _fixture.Get<Community>(wrongCommunity.Id);
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(model.Name, communityFromDatabase.Name);
             Assert.Equal(model.Description, communityFromDatabase.Description);
-
-            //Clean
-            await _fixture.DeleteAsync<CandidateProfile>();
         }
 
         [Theory(DisplayName = "Verify api/Community [Put] is returning error Bad Request 400 when viewmodel is not valid")]
@@ -189,7 +175,7 @@ namespace ApiServer.FunctionalTests.Controller
                 ProfileId = 1
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, 1);
@@ -206,21 +192,18 @@ namespace ApiServer.FunctionalTests.Controller
             //Arrange
             var profile = new CandidateProfile() { Name = "Testing" };
             var wrongCommunity = new Community() { Name = "Wrong community should be deleted", Description = "Wrong community should be deleted", Profile = profile };
-            await _fixture.SeedAsync(wrongCommunity);
-            int beforeDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
+            _fixture.Seed(wrongCommunity);
+            int beforeDeleteCommunityCount = _fixture.GetCount<Community>();
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, wrongCommunity.Id);
-            int afterDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
+            int afterDeleteCommunityCount = _fixture.GetCount<Community>();
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(1, beforeDeleteCommunityCount);
             Assert.Equal(0, afterDeleteCommunityCount);
             Assert.NotEqual(afterDeleteCommunityCount, beforeDeleteCommunityCount);
-
-            //Clean
-            _fixture.Context.DeleteAllEntities();
         }
 
         [Fact(DisplayName = "Verify api/login [Delete] is returning not found when there is no valid Id")]
@@ -231,9 +214,9 @@ namespace ApiServer.FunctionalTests.Controller
             var invalidId = 999;
 
             //Act
-            var beforeDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
+            var beforeDeleteCommunityCount = _fixture.GetCount<Community>();
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidId);
-            var afterDeleteCommunityCount = await _fixture.GetCountAsync<Community>();
+            var afterDeleteCommunityCount = _fixture.GetCount<Community>();
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);

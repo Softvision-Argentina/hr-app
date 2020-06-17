@@ -475,6 +475,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("RejectionReasonsHr");
 
+                    b.Property<bool>("SentEmail");
+
                     b.Property<int>("Status");
 
                     b.Property<int>("Type");
@@ -1144,6 +1146,8 @@ namespace ApiServer.Migrations
 
                     b.Property<DateTime?>("Date");
 
+                    b.Property<int>("EnglishLevel");
+
                     b.Property<string>("Feedback");
 
                     b.Property<string>("LastModifiedBy");
@@ -1155,6 +1159,8 @@ namespace ApiServer.Migrations
                     b.Property<string>("RejectionReason");
 
                     b.Property<int>("Seniority");
+
+                    b.Property<bool>("SentEmail");
 
                     b.Property<int>("Status");
 

@@ -10,8 +10,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
-                    Status
-                </nz-form-label>
+                    Status</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
@@ -27,8 +26,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
-                    Responsible
-                </nz-form-label>
+                    Responsible</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
@@ -41,8 +39,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
-                    Delegate
-                </nz-form-label>
+                    Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
                         <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
@@ -57,8 +54,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="hireDate" [ngClass]="{'requiredFieldLabel': isRequiredField('hireDate')}">
-                    Hire Date
-                </nz-form-label>
+                    Hire Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="hireDate"></nz-date-picker>
                     <nz-form-explain *ngIf="offerForm.get('hireDate').dirty && offerForm.get('hireDate').errors">
@@ -120,8 +116,7 @@
     <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="healthInsurance" [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}" >
-                Health insurance
-            </nz-form-label>
+                Health insurance</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <nz-select formControlName="healthInsurance">
                     <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}" [nzValue]="insurance.id">
@@ -136,8 +131,7 @@
     <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="notes" [ngClass]="{'requiredFieldLabel': isRequiredField('notes')}" >
-                Notes
-            </nz-form-label>
+                Notes</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <input type="text" nz-input formControlName="notes" id="notes" placeholder="Please input the notes">
             </nz-form-control>                
@@ -148,8 +142,7 @@
         <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason
-                </nz-form-label>
+                    Rejection Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
                         placeholder="Input the rejection reason"></textarea>

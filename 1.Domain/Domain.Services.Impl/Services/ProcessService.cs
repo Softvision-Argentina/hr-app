@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
+using Mailer.Interfaces;
+using Mailer.Entities;
 
 namespace Domain.Services.Impl.Services
 {
@@ -35,6 +35,7 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IMailSender _mailSender;
 
         public ProcessService(
             IMapper mapper,
@@ -54,7 +55,8 @@ namespace Domain.Services.Impl.Services
             INotificationRepository notificationRepository,
             IConfiguration config,
             IHttpContextAccessor httpContext,
-            IPreOfferStageRepository preOfferStageRepository)
+            IPreOfferStageRepository preOfferStageRepository,
+            IMailSender mailSender)
             
         {            
             _candidateRepository = candidateRepository;
@@ -75,6 +77,7 @@ namespace Domain.Services.Impl.Services
             _config = config;
             _httpContext = httpContext;
             _preOfferStageRepository = preOfferStageRepository;
+            _mailSender = mailSender;
         }
 
         public ReadedProcessContract Read(int id)
@@ -156,6 +159,8 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
+            var mailSendingEnabled = _config.GetValue<bool>("MailSending");
+
             if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.InProgress)
             {
                 var notification = new Notification
@@ -168,51 +173,34 @@ namespace Domain.Services.Impl.Services
                 SendEmailNotification(process, status);
             }
 
-            return createdProcessContract;
-        }
-
-        private void ValidateDniExistance(Process process)
-        {
-            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
-            if (DNIExists) throw new Exception("DNI number already exists");
-        }
-
-        private int GetUser()
-        {
-            var getUser = _httpContext.HttpContext.User.Identity.Name;
-            var userId = int.Parse(getUser);
-            return userId;
-        }
-
-        private void SendEmailNotification(Process process, ProcessStatus status)
-        {
-            var email = GetUserMail(process.Candidate.ReferredBy);
-
-            using (var client = new SmtpClient(_config.GetValue<string>("smtpClient"), _config.GetValue<int>("smtpClientPort")))
+            try
             {
-                client.EnableSsl = true;
-                client.Credentials = new NetworkCredential(_config.GetValue<string>("networkCredentialMail"), _config.GetValue<string>("networkCredentialPass"));
-                var message = new MailMessage(_config.GetValue<string>("email"), email, "Referral's status", $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}");
-                client.Send(message);
+                if (mailSendingEnabled)
+                {
+                    if (!process.HrStage.SentEmail)
+                    {
+                        if (process.HrStage.Status == StageStatus.Accepted)
+                        {
+                            SendHrStageEmailNotification(process);
+                            process.HrStage.SentEmail = true;
+                        }
+                    }
+
+                    if (!process.TechnicalStage.SentEmail)
+                    {
+                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                        {
+                            SendTechnicalStageEmailNotification(process);
+                            process.TechnicalStage.SentEmail = true;
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("Mail could not been sent");
             }
-        }
 
-        private string GetUserMail(string referredBy)
-        {
-            var referred = referredBy.Split(" ");
-            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
-            var mail = userName.Username;
-
-            return mail;
-        }
-
-        private void AddOfficeToCandidate(Candidate candidate, int officeId)
-        {
-            var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
-            if (office == null)
-                throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
-
-            candidate.PreferredOffice = office;
+            return createdProcessContract;
         }
 
         public void Update(UpdateProcessContract updateProcessContract)
@@ -229,7 +217,6 @@ namespace Domain.Services.Impl.Services
             candidate.Status = SetCandidateStatus(process.Status);
             process.Candidate = candidate;
             candidate.DNI = process.PreOfferStage.DNI;
-            process.HrStage.UserOwnerId = process.UserOwnerId;
             process.ClientStage.UserOwnerId = process.UserOwnerId;
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
@@ -271,7 +258,39 @@ namespace Domain.Services.Impl.Services
                 SendEmailNotification(process, status);
             }
 
-            _unitOfWork.Complete();
+
+            try
+            {
+                var flag = _config.GetValue<bool>("MailSending");
+
+                if (flag != false)
+                {
+                    if (!process.HrStage.SentEmail)
+                    {
+                        if (process.HrStage.Status == StageStatus.Accepted)
+                        {
+                            SendHrStageEmailNotification(process);
+                            process.HrStage.SentEmail = true;
+                        }
+                    }
+
+                    if (!process.TechnicalStage.SentEmail)
+                    {
+                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                        {
+                            SendTechnicalStageEmailNotification(process);
+                            process.TechnicalStage.SentEmail = true;
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("Mail could not been sent");
+            }
+            finally
+            {
+                _unitOfWork.Complete();
+            }
         }
 
         public void Approve(int processId)
@@ -300,6 +319,82 @@ namespace Domain.Services.Impl.Services
             }
 
             _unitOfWork.Complete();
+        }
+
+        private int GetUser()
+        {
+            var getUser = _httpContext.HttpContext.User.Identity.Name;
+            var userId = int.Parse(getUser);
+            return userId;
+        }
+
+        private void ValidateDniExistance(Process process)
+        {
+            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
+            if (DNIExists) throw new Exception("DNI number already exists");
+        }
+
+        private void SendEmailNotification(Process process, ProcessStatus status)
+        {
+            var email = GetUserMail(process.Candidate.ReferredBy);
+            var messageBody = $"The process status of your referral, {process.Candidate.Name} {process.Candidate.LastName}, is now {status}.";
+            var message = new Message(email, "Referral status", messageBody);
+            _mailSender.SendAsync(message);
+        }
+
+        private void SendHrStageEmailNotification(Process process)
+        {
+            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+
+            if (process.Candidate.Community.Name == "Product Delivery")
+            {
+                email = (process.Candidate.Profile.Name == "Project Manager") ?
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Project Manager") :
+                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
+            }
+
+            var messageBody = new MessageBody();
+            messageBody.HtmlBody = $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
+                    $"{process.Candidate.Name} {process.Candidate.LastName}, A new { process.Candidate.Profile.Name } candidate has been submitted for { process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                    $"Please reach out to {process.Candidate.User.FirstName} {process.Candidate.User.LastName} with Interviewer name / s and availability. <br />" +
+                    "Thank you.";
+            var message = new Message(email, "New candidate for Interview!", messageBody);
+            _mailSender.SendAsync(message);
+        }
+
+        private void SendTechnicalStageEmailNotification(Process process)
+        {
+            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+            var interviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
+            var delegateInterviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
+            var skills = process.Candidate.CandidateSkills;
+            var skillsListed = skills.ToList();
+
+            var messageBody = new MessageBody();
+            messageBody.HtmlBody = $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
+                $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} {(delegateInterviewer != null ? "and" + delegateInterviewer.FirstName + " " + delegateInterviewer.LastName + " " : "")}on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
+                $"Thank you";
+            var message = new Message(email, $"Feedback for {process.Candidate.Name} {process.Candidate.LastName} is now available!", messageBody);
+            _mailSender.SendAsync(message);
+        }
+
+        private string GetUserMail(string referredBy)
+        {
+            var referred = referredBy.Split(" ");
+            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
+            var mail = userName.Username;
+
+            return mail;
+        }
+
+        private void AddOfficeToCandidate(Candidate candidate, int officeId)
+        {
+            var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
+            if (office == null)
+                throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
+
+            candidate.PreferredOffice = office;
         }
 
         private ProcessStatus SetProcessStatus(Process process)

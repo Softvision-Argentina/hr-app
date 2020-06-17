@@ -876,20 +876,22 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         wantedSalary: 0,
         additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
-        rejectionReasonsHr: null
-
+        rejectionReasonsHr: null,
+        sentEmail: false
       },
       technicalStage: {
         id: 0,
         date: new Date(),
         status: StageStatusEnum.NA,
         feedback: '',
+        englishLevel: EnglishLevelEnum.None,
         userOwnerId: candidate.user.id,
         userDelegateId: candidate.user.id,
         processId: 0,
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
-        client: ''
+        client: '',
+        sentEmail: false
       },
       clientStage: {
         id: 0,

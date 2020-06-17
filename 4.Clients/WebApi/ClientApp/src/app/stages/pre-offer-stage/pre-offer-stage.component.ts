@@ -32,7 +32,7 @@ export class PreOfferStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date()],
-    dni: [0, [Validators.required, dniValidator], UniqueDniValidator(this.facade.candidateService.data.value, this.processId)],
+    dni: [0, [Validators.required, dniValidator]],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
@@ -79,6 +79,7 @@ export class PreOfferStageComponent implements OnInit {
     this.preOfferHistoryModal.showModal(modalContent);
   }
   ngOnInit() {
+    this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
     this.processService.selectedSeniorities.subscribe(sr => {
       this.seniorityList = sr;
       this.preOfferForm.controls['seniority'].setValue(this.seniorityList[0].id);

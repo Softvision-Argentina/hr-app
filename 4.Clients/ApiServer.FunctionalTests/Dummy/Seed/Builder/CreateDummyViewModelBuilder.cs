@@ -8,7 +8,6 @@ namespace ApiServer.FunctionalTests.Dummy.Seed.Builder
         private string name;
         private string description;
         private string testValue;
-        private readonly string _createdBy = "SomeTestUser";
 
         public CreateDummyViewModelBuilder()
         {

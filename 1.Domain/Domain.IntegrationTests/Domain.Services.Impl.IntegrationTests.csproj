@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,9 +21,15 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>    
+    <ProjectReference Include="..\..\0.Core\Core.Testing\Core.Testing.csproj" />    
+    <ProjectReference Include="..\..\4.Clients\ApiServer\ApiServer.csproj" />      
+  </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\0.Core\Core.Persistance\Core.Persistance.csproj" />
-    <ProjectReference Include="..\..\4.Clients\ApiServer\ApiServer.csproj" />
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

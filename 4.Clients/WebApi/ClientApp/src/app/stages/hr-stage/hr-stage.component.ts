@@ -28,6 +28,8 @@ export class HrStageComponent implements OnInit {
     this._users = value;
   }
 
+  @Input() hrStage: HrStage;
+
   hrForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -40,7 +42,8 @@ export class HrStageComponent implements OnInit {
     additionalInformation: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null, [Validators.required]],
-    rejectionReasonsHr: [0, [Validators.required]]
+    rejectionReasonsHr: [0, [Validators.required]],
+    sentEmail: [false]
   });
 
   feedbackContent:string = "";
@@ -49,8 +52,6 @@ export class HrStageComponent implements OnInit {
   englishLevelList: any[];
   rejectionReasonsHRList: any[];
   usersFiltered: User[];
-
-  @Input() hrStage: HrStage;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
     this.statusList = globals.hrStageStatusList;
@@ -120,6 +121,7 @@ export class HrStageComponent implements OnInit {
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
+    hrStage.sentEmail = this.getControlValue(this.hrForm.controls.sentEmail);
     return hrStage;
   }
 
@@ -180,6 +182,10 @@ export class HrStageComponent implements OnInit {
 
     if (hrStage.rejectionReasonsHr) {
       this.hrForm.controls['rejectionReasonsHr'].setValue(hrStage.rejectionReasonsHr);
+    }
+
+    if (hrStage.sentEmail) {
+      this.hrForm.controls['sentEmail'].setValue(hrStage.sentEmail);
     }
   }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Net.Http;
 
-namespace Core
+namespace Core.Testing.Platform
 {
     public class HttpVerb
     {
@@ -24,11 +24,5 @@ namespace Core
         public string ResponseString { get; set; }
         public T ResponseEntity { get; set; }
         public ResponseError ResponseError { get; set; }
-    }
-
-    public class LoginResultData
-    {
-        public string Token { get; set; }
-        public object User { get; set; }
     }
 }

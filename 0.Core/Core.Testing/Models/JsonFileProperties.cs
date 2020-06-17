@@ -1,4 +1,4 @@
-﻿namespace Core.Persistance.Testing.Models
+﻿namespace Core.Testing.Models
 {
     public class JsonFileProperties
     {

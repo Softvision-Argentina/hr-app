@@ -16,4 +16,5 @@ export class HrStage {
     userOwnerId?: number;
     userDelegateId?: number;
     rejectionReason?: string;
+    sentEmail: boolean;
 }

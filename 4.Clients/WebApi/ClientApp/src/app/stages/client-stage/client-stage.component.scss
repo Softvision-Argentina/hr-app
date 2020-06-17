@@ -1,8 +1,11 @@
-nz-table {
+.client-stage nz-table {
     padding: 50px;
 }
 
-::ng-deep .ant-table-tbody > tr > td, .ant-table-thead > tr > th
-{ 
+.client-stage ::ng-deep .ant-table-tbody > tr > td, .ant-table-thead > tr > th{ 
     padding: 26px; 
+}
+
+.action-btn {
+    color:inherit;
 }

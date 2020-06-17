@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using ApiServer.FunctionalTests.Core;
 using ApiServer.Contracts.Login;
+using Core.Testing.Platform;
 using Domain.Services.ExternalServices;
 using Domain.Services.ExternalServices.Config;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +23,7 @@ namespace ApiServer.FunctionalTests.Fixture
             Valid,
             Expired
         }
+
         public TokenViewModel GetTestToken(TokenType tokenType)
         {
             int GetTokenExpiration()
@@ -49,7 +50,6 @@ namespace ApiServer.FunctionalTests.Fixture
         }
         public void Dispose()
         {
-            Context.Dispose();
             Client.Dispose();
             Server.Dispose();
         }

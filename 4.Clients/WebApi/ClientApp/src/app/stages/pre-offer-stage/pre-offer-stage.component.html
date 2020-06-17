@@ -12,8 +12,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
-                    Status
-                </nz-form-label>
+                    Status</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
@@ -32,8 +31,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="dni"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('dni')}">
-                    DNI
-                </nz-form-label>
+                    DNI</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input id="dni" formControlName="dni" (keyup)="checkLength($event.target)" maxlength="8"
                         type="number" nz-input placeholder="Please input a DNI number">
@@ -58,8 +56,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
-                    Born Date
-                </nz-form-label>
+                    Born Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
                     <nz-form-explain *ngIf="preOfferForm.get('date').dirty && preOfferForm.get('date').errors">
@@ -73,8 +70,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}">Gross Salary
-                </nz-form-label>
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}">Gross Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer"
                         placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
@@ -90,8 +86,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="notes">
-                    Notes
-                </nz-form-label>
+                    Notes</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="text" nz-input formControlName="notes" id="notes" placeholder="Please input the notes">
                 </nz-form-control>
@@ -103,8 +98,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('firstday')}">
-                    Tentative Start Date
-                </nz-form-label>
+                    Tentative Start Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
                     <nz-form-explain *ngIf="preOfferForm.get('firstday').dirty && preOfferForm.get('firstday').errors">
@@ -137,8 +131,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDone')}">
-                    Background Check
-                </nz-form-label>
+                    Background Check</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="backgroundCheckDone">
                         <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
@@ -150,8 +143,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="offerDate">
-                    Done Date
-                </nz-form-label>
+                    Done Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="backgroundCheckDoneDate"></nz-date-picker>
                     <nz-form-explain
@@ -167,8 +159,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDone')}">
-                    Medical Check
-                </nz-form-label>
+                    Medical Check</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="backgroundCheckDone">
                         <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
@@ -181,8 +172,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="preocupationalDoneDate"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
-                    Done Date
-                </nz-form-label>
+                    Done Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
                     <nz-form-explain
@@ -198,8 +188,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason
-                </nz-form-label>
+                    Rejection Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
                         placeholder="Input the rejection reason"></textarea>

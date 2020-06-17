@@ -136,7 +136,6 @@ namespace Domain.Services.Impl.UnitTests.Services
         [Fact(DisplayName = "Verify that update when data is valid")]
         public void Should_Update_When_DataIsValid()
         {
-            int id = 0;
             var contract = new UpdateSkillContract()
             {
                 Name = "testName"

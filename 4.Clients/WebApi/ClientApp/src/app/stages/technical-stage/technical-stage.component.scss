@@ -12,3 +12,36 @@
     width: 5%;
     vertical-align: center;
 }
+
+/* English level buttons */
+
+::ng-deep .ant-radio-button-wrapper {
+    width: 171px;
+    height: 40px;
+    padding: 5px 0;
+    text-align: center;
+    box-shadow: #c800a1;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: black;
+}
+
+::ng-deep .ant-radio-button-wrapper-checked {
+    width: 138px;
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: #f4633a;
+    background-image: linear-gradient(to top, #ff8f1c, #f4633a);
+    padding: 5px 0;
+    text-align: center;
+    color: #ffffff;
+    border: none !important;
+}
+
+.flex-container{
+    margin-left: 70px;
+  }
+
+.englishLabel {
+    width: 15%;
+}

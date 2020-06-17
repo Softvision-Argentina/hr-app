@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core;
 using Xunit;
 using ApiServer.Contracts.Candidates;
 using Domain.Model;
@@ -10,18 +9,18 @@ using ApiServer.Contracts.Community;
 using ApiServer.Contracts.User;
 using ApiServer.Contracts.CandidateProfile;
 using ApiServer.FunctionalTests.Fixture;
-using Core.Persistance;
-using Microsoft.EntityFrameworkCore;
+using Core.Testing.Platform;
 
 namespace ApiServer.FunctionalTests.Controller
 {
-    [Collection(nameof(EnvironmentType.Functional))]
+    [Collection(nameof(TestType.Functional))]
     public class CandidatesControllerFunctionalTest : IClassFixture<CandidatesControllerFixture>
     {
         readonly CandidatesControllerFixture _fixture;
         public CandidatesControllerFunctionalTest(CandidatesControllerFixture fixture)
         {
             _fixture = fixture;
+            _fixture.CleanTestingDatabase();
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
@@ -33,9 +32,9 @@ namespace ApiServer.FunctionalTests.Controller
             var userInDb = new User() { Username = "Test" };
             var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
 
-            await _fixture.SeedAsync(candidateInDb);
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(communityInDb);
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
             var model = new CreateCandidateViewModel()
             {
@@ -55,12 +54,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
             Assert.Equal("Phone number already exists", httpResultData.ResponseError.Message);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
@@ -69,8 +62,8 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidateInDb = new Candidate() { Name = "Test", DNI = 36501240 };
-            await _fixture.SeedAsync(candidateInDb);
-            var candidatesCount = await _fixture.GetCountAsync<Candidate>();
+            _fixture.Seed(candidateInDb);
+            var candidatesCount = _fixture.GetCount<Candidate>();
 
             //Act
             var httpResultData =
@@ -81,9 +74,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(candidatesCount, httpResultData.ResponseEntity.Count);
             Assert.Equal(candidateInDb.Id, httpResultData.ResponseEntity.Single().Id);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
         }
 
         
@@ -106,7 +96,7 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidateList = _fixture.GetCandidateList();
-            await _fixture.SeedAsync(candidateList);
+            _fixture.Seed(candidateList);
             var model = _fixture.GetFilterCandidateViewModel(CandidatesControllerFixture.FilterType.Match);
 
             //Act
@@ -116,14 +106,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.True(httpResultData.ResponseEntity.Count == 1);
             Assert.Equal("this will meet search criteria", httpResultData.ResponseEntity.Single().Name);
-
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
-            await _fixture.DeleteAsync<Office>();
-            await _fixture.DeleteAsync<Skill>();
-            await _fixture.DeleteAsync<CandidateSkill>();
         }
 
         
@@ -149,8 +131,8 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidateInDb = new Candidate() { Name = "Test" };
-            await _fixture.SeedAsync(candidateInDb);
-            var candidate = await _fixture.GetAsync<Candidate>(candidateInDb.Id);
+            _fixture.Seed(candidateInDb);
+            var candidate = _fixture.Get<Candidate>(candidateInDb.Id);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<ReadedCandidateViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{candidate.Id}");
@@ -158,9 +140,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(candidate.Id, httpResultData.ResponseEntity.Id);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
         }
 
         
@@ -186,17 +165,14 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidateInDb = new Candidate() { Name = "Test" };
-            await _fixture.SeedAsync(candidateInDb);
-            var candidate = _fixture.GetAsync<Candidate>(candidateInDb.Id);
+            _fixture.Seed(candidateInDb);
+            var candidate = _fixture.Get<Candidate>(candidateInDb.Id);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<ReadedCandidateViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/Exists/{candidate.Id}");
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
         }
 
         
@@ -222,8 +198,8 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidateInDb = new Candidate() { Name = "Test" };
-            await _fixture.SeedAsync(candidateInDb);
-            var entitiesCount = await _fixture.GetCountAsync<Candidate>();
+            _fixture.Seed(candidateInDb);
+            var entitiesCount = _fixture.GetCount<Candidate>();
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateAppViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}/GetApp");
@@ -231,9 +207,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(entitiesCount, httpResultData.ResponseEntity.Count);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
         }
 
         
@@ -259,9 +232,9 @@ namespace ApiServer.FunctionalTests.Controller
             var userInDb = new User() { Username = "Test" };
             var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
 
-            await _fixture.SeedAsync(candidateInDb);
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(communityInDb);
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
             var model = new CreateCandidateViewModel()
             {
@@ -281,11 +254,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.Created, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.ResponseEntity);
             Assert.True(httpResultData.ResponseEntity.Id > 0);
-
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         
@@ -299,9 +267,9 @@ namespace ApiServer.FunctionalTests.Controller
             var userInDb = new User() { Username = "Test" };
             var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
             
-            await _fixture.SeedAsync(candidateInDb);
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(communityInDb);
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
             //Arrange
             var model = new CreateCandidateViewModel()
@@ -315,7 +283,7 @@ namespace ApiServer.FunctionalTests.Controller
                 LinkedInProfile = "/linkedin"
             };
 
-            model.WithPropertyValue(parameterName, default);
+            model.WithPropertyValue(parameterName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
@@ -323,11 +291,6 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.True(httpResultData.ResponseEntity.Id == 0);
-
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         
@@ -339,9 +302,9 @@ namespace ApiServer.FunctionalTests.Controller
             var userInDb = new User() { Username = "Test" };
             var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
             
-            await _fixture.SeedAsync(candidateInDb);
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(communityInDb);
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
             //Arrange
 
@@ -364,12 +327,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.Equal("Email address already exists", httpResultData.ResponseError.Message);
             Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
@@ -383,10 +340,6 @@ namespace ApiServer.FunctionalTests.Controller
             var wrongOfficeInDb = new Office() { Name = "Wrong office" };
             var wrongCommunityInDb = new Community() { Name = "Wrong Community", Profile = wrongProfileInDb };
 
-            await _fixture.SeedAsync(wrongUserInDb);
-            await _fixture.SeedAsync(wrongOfficeInDb);
-            await _fixture.SeedAsync(wrongCommunityInDb);
-
             var candidateToFix = new Candidate()
             {
                 Name = "Testing with TYPO",
@@ -399,16 +352,16 @@ namespace ApiServer.FunctionalTests.Controller
                 PreferredOffice = wrongOfficeInDb,
             };
 
-            await _fixture.SeedAsync(candidateToFix);
+            _fixture.Seed(candidateToFix);
 
             //Right values
             var rightUserInDb = new User() { FirstName = "Right user" };
             var rightProfileInDb = new CandidateProfile() { Name = "Right CandidateProfile" };
             var rightOfficeInDb = new Office() { Name = "Right office" };
             var rightCommunityInDb = new Community() { Name = "Right Community", Profile = rightProfileInDb };
-            await _fixture.SeedAsync(rightUserInDb);
-            await _fixture.SeedAsync(rightOfficeInDb);
-            await _fixture.SeedAsync(rightCommunityInDb);
+            _fixture.Seed(rightUserInDb);
+            _fixture.Seed(rightOfficeInDb);
+            _fixture.Seed(rightCommunityInDb);
 
             var model = new UpdateCandidateViewModel()
             {
@@ -424,13 +377,9 @@ namespace ApiServer.FunctionalTests.Controller
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, candidateToFix.Id);
-            var candidateFromDatabase = _fixture.Context.Candidates
-                .AsNoTracking()
-                .Include(_ => _.User)
-                .Include(_ => _.Community)
-                .Include(_ => _.Profile)
-                .Include(_ => _.PreferredOffice)
-                .Single();
+
+
+            var candidateFromDatabase = _fixture.GetEager(candidateToFix.Id);
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
@@ -441,13 +390,6 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(model.Community.Id, candidateFromDatabase.Community.Id);
             Assert.Equal(model.Profile.Id, candidateFromDatabase.Profile.Id);
             Assert.Equal(model.PreferredOfficeId, candidateFromDatabase.PreferredOffice.Id);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
-            await _fixture.DeleteAsync<Office>();
         }
 
         
@@ -462,9 +404,9 @@ namespace ApiServer.FunctionalTests.Controller
             var officeInDb = new Office() { Name = "Test" };
             var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
             
-            await _fixture.SeedAsync(userInDb);
-            await _fixture.SeedAsync(officeInDb);
-            await _fixture.SeedAsync(communityInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(officeInDb);
+            _fixture.Seed(communityInDb);
 
             var candidate = new Candidate()
             {
@@ -476,7 +418,7 @@ namespace ApiServer.FunctionalTests.Controller
                 Community = new Community() { Name = "Outdated Community", Profile = new CandidateProfile() { Name = "Outdated candidate profile name" } }
             };
 
-            await _fixture.SeedAsync(candidate);
+            _fixture.Seed(candidate);
 
             var model = new UpdateCandidateViewModel()
             {
@@ -489,21 +431,13 @@ namespace ApiServer.FunctionalTests.Controller
                 PreferredOfficeId = officeInDb.Id
             };
 
-            model.WithPropertyValue(propertyName, default);
+            model.WithPropertyValue(propertyName, null);
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, $"{_fixture.ControllerName}", model, candidate.Id);
 
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
-            await _fixture.DeleteAsync<CandidateSkill>();
-            await _fixture.DeleteAsync<User>();
-            await _fixture.DeleteAsync<CandidateProfile>();
-            await _fixture.DeleteAsync<Community>();
-            await _fixture.DeleteAsync<Office>();
         }
 
         
@@ -513,21 +447,18 @@ namespace ApiServer.FunctionalTests.Controller
         {
             //Arrange
             var candidate = new Candidate() { Name = "Testing" };
-            await _fixture.SeedAsync(candidate);
-            var entityCountBeforeDelete = await _fixture.GetCountAsync<Candidate>();
+            _fixture.Seed(candidate);
+            var entityCountBeforeDelete = _fixture.GetCount<Candidate>();
 
             //Act
             var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, candidate.Id);
-            var entityCountAfterDelete = await _fixture.GetCountAsync<Candidate>();
+            var entityCountAfterDelete = _fixture.GetCount<Candidate>();
 
             //Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(1, entityCountBeforeDelete);
             Assert.Equal(0, entityCountAfterDelete);
             Assert.NotEqual(entityCountBeforeDelete, entityCountAfterDelete);
-
-            //Clean
-            await _fixture.DeleteAsync<Candidate>();
         }
 
         

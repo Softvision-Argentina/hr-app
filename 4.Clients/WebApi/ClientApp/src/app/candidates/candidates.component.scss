@@ -47,3 +47,14 @@
 .button-skill{
   width: 82%;
 }
+.status-filter{
+  li{
+    display: inline-block;
+    padding: 0;
+
+    &:hover{
+      background-color: white;
+      color: none;
+    }
+  }
+}
