@@ -1,36 +1,19 @@
+@import "../../styles/abstracts/variables";
+
 #googleBtn {
-    display: inline-block;
-    background: white;
-    width: 60%;
-    border: 3px solid #C800A1;
-    white-space: nowrap;
-  }
-  #googleBtn:hover {
-    cursor: pointer;
-  }
-  span.label {
-    font-family: serif;
-    font-weight: normal;
-  }
-  span.icon {
-    background: url('./../../assets/g-normal.png') transparent 5px 50% no-repeat;
-    display: inline-block;
-    vertical-align: middle;
-    width: 42px;
-    height: 42px;
-  }
-  span.buttonText {
-    display: inline-block;
-    vertical-align: middle;
-    padding-right: 31px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #C800A1;
-    
-    font-family: 'Roboto', sans-serif;
-  }
-  @media screen and (max-width: 1380px) and (min-width: 1024px){
-    #googleBtn {
-      width: 100%;
-    }
-  }
+  background-image: url("./../../assets/images/g-200px.png");
+  background-size: 60%;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  outline: none;
+  border: 1px solid $form-border;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.google-signin {
+  text-align: center;
+}

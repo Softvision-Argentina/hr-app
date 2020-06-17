@@ -1,94 +1,52 @@
-<ng-template #contentTemplate>
-    <nz-card [nzBordered]="false" style="width: 100%;" [nzCover]="coverTemplate">
-        <nz-card-meta nzTitle="{{currentUser.firstName}}" nzDescription="{{currentUser.username}}">
-        </nz-card-meta>
-        <br />
-        <ul class="ant-card-actions">
-            <li [style.width.%]="100" nzTitle="Logout">
-                <span (click)="logout()" style="cursor: pointer;"><i nz-icon nzType="logout"
-            style="vertical-align: middle; margin-right: 1%;" nzTheme="outline"></i>Logout</span>
-            </li>
-        </ul>
-    </nz-card>
-</ng-template>
+<div class="section-container">
 
-<ng-template #coverTemplate>
-    <img alt="userImg" class="loggedUser" src="{{currentUser.imgURL}}" />
-</ng-template>
+  <div class="login-hero">
+    <div class="login-hero__inner">
+      <div class="login-hero__waves"></div>
+      <div class="hero-text">
+        <h1 class="hero-text__title">
+          EMPOWERING OUR BEST TALENT.
+        </h1>
+        <p class="hero-text__subtitle">The Cognizant Softvision app for users</p>
+      </div>
+    </div>
+  </div>
 
-<ng-template #loginModal>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
+
+  <div class="main-container">
+    <div class="login-container">
+
+      <div class="intro-item">
+        <div class="intro">
+          <div class="image">
+            <img class="recru-logo-black" src="../../assets/images/recru-logo-black.png">
+            <!-- <img class="recru-logo" src="../../assets/images/recru-logo.png"> -->
+          </div>
+          <div class="header-text">
+            <h3 class="header-text__title">
+              EMPOWERING OUR BEST TALENT.
+            </h3>
+            <p class="header-text__subtitle">The Cognizant Softvision app for users</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-item">
+        <div class="form">
+          <h1 class="form-title">Log In</h1>
+          <div class="login-inputs">
             <csoft-login></csoft-login>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
+          </div>
+          <div class="divider">
             <nz-divider nzText="OR"></nz-divider>
-        </div>
-        <div nz-col nzSpan="2"></div>
-    </div>
-    <br />
-    <div nz-row>
-        <div nz-col nzSpan="2"></div>
-        <div nz-col nzSpan="20">
+          </div>
+          <div class="google-login">
             <google-signin></google-signin>
+          </div>
         </div>
-        <div nz-col nzSpan="2"></div>
+      </div>
+
     </div>
-</ng-template>
-<div  nz-row  style="height: 100%">
-    <div class="background" nz-col nzSpan="16">
-        <div>
-            <div class="welcome">
-                <div nz-row>
-                    <div nz-col nzSpan="18">
-                        <div class="recru-container" nz-col nzSpan="5">
-                            <div nz-row nzType="flex" nzJustify="end">
-                                <img class="recru-logo" src="../../assets/images/recru-logo.png">
-                            </div>
-                            </div>
+  </div>
 
-                        <div nz-col nzSpan="17"></div>
-                    </div>
-                </div>
-
-                <div class="login-background-image" nz-row>
-                    <div style="margin-top: 10%" nz-row>
-                        <div nz-col nzSpan="18">
-                            <div nz-row class="title">EMPOWERING</div>
-                            <div nz-row class="title">OUR BEST</div>
-                            <div nz-row class="title">TALENT</div>
-                        </div>
-                    </div>
-                    <div nz-row>
-                        <div nz-col nzSpan="18">
-                            <h5 class="subtitle">The Cognizant Softvision app for users</h5>
-                        </div>
-                    </div>
-                    <img style="margin-top: 90px" src="../../assets/images/rectangle.png">
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    <div class="loginForm" nz-col nzSpan="8">
-        <div style="padding: 200px 95px 0px 50px" nz-row>
-            <h2 style="padding-bottom: 40px" ><b>Login</b></h2>
-
-            <div>
-                <csoft-login></csoft-login>
-            </div>
-            <google-signin></google-signin>
-
-        </div>
-        <br />
-        <div nz-row>
-            <div nz-col nzSpan="20">
-            </div>
-        </div>
-    </div>
 </div>

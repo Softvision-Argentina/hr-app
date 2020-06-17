@@ -1,29 +1,31 @@
-<form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitForm()">
-  <nz-form-item>
+<form nz-form [formGroup]="loginForm" class="csoft-login-form" (ngSubmit)="submitForm()">
+
+  <nz-form-item class="login-input-container">
     <nz-form-control>
-      <nz-input-group>
-        <input type="text" nz-input formControlName="userName" placeholder="Username" />
-      </nz-input-group>
-      <nz-form-explain *ngIf="checkDirtyandErrors('userName')"
-        >Please input your username!</nz-form-explain
-      >
+      <label class="login-input-group">
+        <input required nz-input nzSize="large" type="text" formControlName="userName" maxlength="64"/>
+        <span>Username</span>
+      </label>
+      <nz-form-explain *ngIf="checkDirtyandErrors('userName')">Please input your username</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
+
+  <nz-form-item class="login-input-container">
     <nz-form-control>
-      <nz-input-group [nzSuffix]="prefixLock">
-        <input type="password" nz-input formControlName="password" placeholder="Password" />
-      </nz-input-group>
-      <nz-form-explain *ngIf="checkDirtyandErrors('password')"
-        >Please input your Password!</nz-form-explain
-      >
+      <label class="login-input-group">
+        <input required nz-input nzSize="large" type="password" formControlName="password" maxlength="64" />
+        <span>Password</span>
+      </label>
+      <nz-form-explain *ngIf="checkDirtyandErrors('password')">Please input your password</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item class="login-button">
+
+  <nz-form-item class="login-input-container">
     <nz-form-control>
-      <button nz-button class="login-form-button" nzType="primary">LOG IN</button>
+      <button nz-button nzType="primary" class="login-button">LOG IN</button>
     </nz-form-control>
   </nz-form-item>
+
 </form>
 
 <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>

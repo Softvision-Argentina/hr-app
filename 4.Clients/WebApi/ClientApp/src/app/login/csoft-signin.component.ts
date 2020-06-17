@@ -13,7 +13,8 @@ import { User } from '../../entities/user';
 export class CSoftComponent {
 
   loginForm: FormGroup;
-  authenticatedUser:User;
+  authenticatedUser: User;
+  inputEmpty: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -21,7 +22,7 @@ export class CSoftComponent {
     private jwtHelper: JwtHelper,
     private router: Router,
     public zone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -46,36 +47,36 @@ export class CSoftComponent {
 
   authenticateUser(userName: string, password: string) {
     this.facade.authService.authenticate(userName, password)
-    .subscribe(res => {
-      if(!res.user){
-        this.invalidUser();
-      }else{
-        this.authenticatedUser = {
-          id: res.user.id,
-          firstName: res.user.firstName,
-          lastName: res.user.lastName,
-          imgURL: "",
-          username: res.user.username,
-          role: res.user.role,
-          token: res.token,
-          community: res.user.community,
-          userDashboards: []
+      .subscribe(res => {
+        if (!res.user) {
+          this.invalidUser();
+        } else {
+          this.authenticatedUser = {
+            id: res.user.id,
+            firstName: res.user.firstName,
+            lastName: res.user.lastName,
+            imgURL: "",
+            username: res.user.username,
+            role: res.user.role,
+            token: res.token,
+            community: res.user.community,
+            userDashboards: []
+          }
+          localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
+          this.facade.userService.getRoles();
+          this.facade.modalService.closeAll();
+          this.navigateByRole(this.authenticatedUser.role);
         }
-        localStorage.setItem('currentUser', JSON.stringify(this.authenticatedUser));
-        this.facade.userService.getRoles();
-        this.facade.modalService.closeAll();
-        this.navigateByRole(this.authenticatedUser.role);
-      }
-    }, err => {
-      this.invalidUser();
-    });
+      }, err => {
+        this.invalidUser();
+      });
   }
 
-  isUserAuthenticated(): boolean{
+  isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if(currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
       return true;
-    }else{
+    } else {
       localStorage.clear();
       return false;
     }
@@ -89,13 +90,21 @@ export class CSoftComponent {
       this.router.navigate(['/'])
     }
   }
-  invalidUser(){
-    this.zone.run(() => { this.router.navigate(['/unauthorized']);});
+  invalidUser() {
+    this.zone.run(() => { this.router.navigate(['/unauthorized']); });
     this.facade.toastrService.error('Invalid username or password.');
   }
 
-  checkDirtyandErrors(controlName: string): boolean{
+  checkDirtyandErrors(controlName: string): boolean {
     let control = this.loginForm.get(controlName);
     return control ? control.dirty && control.errors !== null : false;
+  }
+
+  checkInputContent(input: HTMLInputElement) {
+    debugger;
+    input.parentElement.classList.add("active");
+    if (input.value == "") {
+      input.parentElement.classList.remove("active");
+    }
   }
 }
