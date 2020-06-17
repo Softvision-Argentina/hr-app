@@ -89,7 +89,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     name: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
     dni: [0],
-    email: [null, [Validators.email, trimValidator],  UniqueEmailValidator(this.facade.candidateService.get())],
+    email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
     linkedin: [null, [trimValidator]],
