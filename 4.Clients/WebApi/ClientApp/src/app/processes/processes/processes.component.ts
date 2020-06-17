@@ -1158,4 +1158,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngOnDestroy() {
     this.processesSubscription.unsubscribe();
   }
+
+  clearDataAndCloseModal() {
+    this.clientStage.clearInterviewOperations();
+    this.closeModal();
+  }
 }

@@ -283,21 +283,16 @@ export class ClientStageComponent implements OnInit {
   }
 
   deleteInterview(interviewId: number) {
-
-    let operation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
-
-    if (operation) {
-      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
-    } else {
+      const addOperation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
       this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
 
-      this.interviewOperations.push(
-        {
-          operation: "delete",
-          data: this.interviews.find(interview => interview.id === interviewId)
+        if (!addOperation) {
+            this.interviewOperations.push(
+                {
+                    operation: "delete",
+                    data: this.interviews.find(interview => interview.id === interviewId)
+                });
         }
-      )
-    }
     this.interviews = [...this.interviews.filter(interview => interview.id !== interviewId)];
   }
 
@@ -312,6 +307,7 @@ export class ClientStageComponent implements OnInit {
     }
     return true
   }
+
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
@@ -323,30 +319,26 @@ export class ClientStageComponent implements OnInit {
       edit: false
     };
   }
+
   saveEdit(id: number): void {
-
-    let operation = this.interviewOperations.find(o => o.data.id === id && o.operation === "add");
+    const addOperation = this.interviewOperations.find(o => o.data.id === id && o.operation === "add");
     const index = this.interviews.findIndex(item => item.id === id);
-    if (operation) {
+    this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
 
-      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
+    if (addOperation) {      
       this.interviewOperations.push(
         {
           operation: "add",
           data: this.interviews[index],
-        }
-      )
+        });
     } else {
-
-      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
       this.interviewOperations.push(
         {
           operation: "edit",
           data: this.interviews[index],
-        }
-      )
-
+        });
     }
+
     Object.assign(this.interviews[index], this.editCache[id].data);
     this.editCache[id].edit = false;
   }
@@ -363,5 +355,9 @@ export class ClientStageComponent implements OnInit {
 
   hideAddNewInterviewForm() {
     return !(this.clientForm.controls.status.value === StageStatusEnum.InProgress);
+  }
+
+  clearInterviewOperations() {
+    this.interviewOperations = [];
   }
 }
