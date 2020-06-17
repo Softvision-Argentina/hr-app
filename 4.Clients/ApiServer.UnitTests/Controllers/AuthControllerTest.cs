@@ -78,7 +78,7 @@ namespace ApiServer.UnitTests.Controllers
             testToken.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RNYWlsIiwiZXhwIjo0MDc5MTg0ODUzfQ.rkWON_tlcNaMZDlHCpFFdBAdfbw94LpmI1SU4NRNgNM";
             var expectedValue = new ReadedUserViewModel();
 
-            mockService.Setup(_ => _.Authenticate(It.IsAny<string>())).Returns(new ReadedUserContract());
+            mockService.Setup(_ => _.AuthenticateExternal(It.IsAny<string>())).Returns(new ReadedUserContract());
 
             var result = controller.LoginExternal(testToken);
 
@@ -90,7 +90,7 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Authenticate(It.IsAny<string>()), Times.Once);
+            mockService.Verify(_ => _.AuthenticateExternal(It.IsAny<string>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'LoginExternal' returns NotFoundObjectResult when data is invalid")]
@@ -107,7 +107,7 @@ namespace ApiServer.UnitTests.Controllers
             Assert.NotNull(result);
             Assert.IsType<UnauthorizedResult>(result);
             Assert.Equal(expectedStatusCode, (result as UnauthorizedResult).StatusCode);
-            mockService.Verify(_ => _.Authenticate(It.IsAny<string>()), Times.Never);
+            mockService.Verify(_ => _.AuthenticateExternal(It.IsAny<string>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]

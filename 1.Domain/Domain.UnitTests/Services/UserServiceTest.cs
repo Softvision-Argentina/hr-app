@@ -82,7 +82,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
             _mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
 
-            var readedUser = _service.Authenticate(username);
+            var readedUser = _service.AuthenticateExternal(username);
 
             Assert.NotNull(readedUser);
             Assert.Equal(expectedValue, readedUser);
@@ -95,7 +95,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser";
 
-            var readedUser = _service.Authenticate(username);
+            var readedUser = _service.AuthenticateExternal(username);
 
             Assert.Null(readedUser);
             _mockUserRepository.Verify(_ => _.Query(), Times.Once);

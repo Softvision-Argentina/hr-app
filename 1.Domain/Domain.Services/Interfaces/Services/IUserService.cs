@@ -6,7 +6,7 @@ namespace Domain.Services.Interfaces.Services
     public interface IUserService
     {
         ReadedUserContract Authenticate(string username, string password);
-        ReadedUserContract Authenticate(string username);
+        ReadedUserContract AuthenticateExternal(string username);
         IEnumerable<ReadedUserContract> GetAll();
         IEnumerable<ReadedUserContract> GetFilteredForTech();
         IEnumerable<ReadedUserContract> GetFilteredForHr();

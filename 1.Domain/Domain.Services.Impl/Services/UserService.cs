@@ -6,6 +6,7 @@ using Domain.Model.Enum;
 using Domain.Services.Contracts.User;
 using Domain.Services.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,12 +16,14 @@ namespace Domain.Services.Impl.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<User> _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UserService(IMapper mapper, IRepository<User> userRepository,
                            IUnitOfWork unitOfWork, ILog<UserService> log)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public ReadedUserContract Authenticate(string username, string password)
@@ -37,17 +40,46 @@ namespace Domain.Services.Impl.Services
             }
         }
 
-        public ReadedUserContract Authenticate(string username)
+        public ReadedUserContract AuthenticateExternal(string username)
         {
             var user = ExternalLogin(username);
+            var getUser = _userRepository.QueryEager().FirstOrDefault(x => x.Username == username);
 
-            if (user != null)
+            if(getUser == null && IsSoftvisionEmail(username))
+            {
+                var newUser = new User()
+                {
+                    Role = Roles.Employee,
+                    Username = username
+                };
+
+                _userRepository.Create(newUser);
+
+                _unitOfWork.Complete();
+
+                return _mapper.Map<ReadedUserContract>(newUser);
+            }
+            else if(user != null)
             {
                 return _mapper.Map<ReadedUserContract>(user);
             }
             else
             {
                 return null;
+            }
+        }
+
+        private bool IsSoftvisionEmail(string user)
+        {
+            var email = user.Split("@");
+
+            if (email[1] == "softvision.com")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

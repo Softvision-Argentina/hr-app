@@ -9,6 +9,7 @@
         TechnicalInterviewer,
         Common,
         Recruiter,
-        CommunityManager
+        CommunityManager,
+        Employee
     }
 }

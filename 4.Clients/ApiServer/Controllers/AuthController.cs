@@ -82,7 +82,7 @@ namespace ApiServer.Controllers
                 
                 if (token.ValidTo > DateTime.UtcNow)
                 {
-                    var userContract = this._userService.Authenticate(email.Value);
+                    var userContract = this._userService.AuthenticateExternal(email.Value);
 
                     if (userContract != null)
                     {
