@@ -153,7 +153,7 @@
 <ng-template #taskModal>
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -175,7 +175,7 @@
             </div>
         </div>
         <div nz-row *ngIf="canAssign()">
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">User</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -199,7 +199,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">End date</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -220,7 +220,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item *ngFor="let control of controlArray; let i = index">
                     <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i == 0" [nzFor]="control.controlInstance">
                         Items</nz-form-label>

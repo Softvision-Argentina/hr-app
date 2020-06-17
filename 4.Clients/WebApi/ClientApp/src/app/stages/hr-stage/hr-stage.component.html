@@ -7,10 +7,10 @@
 
     </nz-form-item>
     <div nz-row>
-        <div nz-col [nzMd]="21" [nzSm]="22">
+        <div nz-col nzSpan="22">
             <nz-form-item>
-                <nz-form-label [nzMd]="5" [nzSm]="5" [nzXs]="24 " nzFor="feedback">Feedback</nz-form-label>
-                <nz-form-control [nzMd]="12" [nzSm]="18">
+                <nz-form-label [nzMd]="5" [nzSm]="5" [nzXs]="5" nzFor="feedback">Feedback</nz-form-label>
+                <nz-form-control [nzMd]="19" [nzSm]="19" [nzXs]="19">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d "
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
@@ -43,7 +43,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="date"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">
                     Actual Salary</nz-form-label>
@@ -68,7 +68,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Expected Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -79,7 +79,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
                     Interviewer</nz-form-label>
@@ -92,7 +92,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
                     Delegate</nz-form-label>
@@ -107,7 +107,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item hidden>
                 <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information</nz-form-label>
@@ -128,7 +128,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
+        <div nz-col nzSpan="11" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReasonsHr')}">
@@ -153,7 +153,7 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="22">
             <nz-form-item>
                 <nz-form-control>
                     <div class="flex-container">

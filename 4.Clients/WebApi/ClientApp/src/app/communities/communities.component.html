@@ -1,5 +1,5 @@
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <button nz-button nzType="primary" (click)="showAddModal(communityModal)" nzShape="round">
       <i nz-icon type="plus" theme="outline"></i>Add new community</button>
     </div>
@@ -7,7 +7,7 @@
 
 <br />
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <nz-table #communityTable [nzData]="detailedCommunity" [nzPageSize]="10">
             <thead>
                 <tr>
@@ -37,7 +37,7 @@
 <ng-template #communityModal>
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">

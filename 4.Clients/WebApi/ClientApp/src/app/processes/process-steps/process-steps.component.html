@@ -16,7 +16,7 @@
 <nz-divider nzText="Process progress"></nz-divider>
 
 <div *ngIf="process && selectedView === 'vertical'" nz-row>
-  <div nz-col nzSpan="24">
+  <div nz-col nzSpan="22">
     <nz-steps *ngIf="process.stages && process.stages.length > 0" nzDirection="vertical">
       <nz-step *ngFor="let stage of process.stages" [nzTitle]="stage.title" [nzStatus]="stage.status.toLowerCase()"
         [nzDescription]="stage.description">
@@ -26,7 +26,7 @@
 </div>
 
 <div *ngIf="process && selectedView === 'horizontal'" nz-row>
-  <div nz-col nzSpan="24">
+  <div nz-col nzSpan="22">
     <nz-steps *ngIf="process.stages && process.stages.length > 0" nzDirection="horizontal" nzSize="small">
       <nz-step *ngFor="let stage of process.stages" [nzTitle]="stage.title" [nzStatus]="stage.status.toLowerCase()"
         [nzDescription]="stage.description">
@@ -36,7 +36,7 @@
 </div>
 
 <div *ngIf="process && selectedView === 'timeline'" nz-row>
-  <div nz-col nzSpan="24">
+  <div nz-col nzSpan="22">
 
     <nz-timeline *ngIf="process.stages && process.stages.length > 0">
         <nz-timeline-item *ngFor="let stage of process.stages" [nzColor]="getStatusColor(stage.status)">

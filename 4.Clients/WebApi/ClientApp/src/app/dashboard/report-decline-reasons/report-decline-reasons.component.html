@@ -3,7 +3,7 @@
     <div style="display: block">
       <br />      
       <div nz-row>
-          <div nz-col nzSpan="24" *ngIf="hasProjections">
+          <div nz-col nzSpan="22" *ngIf="hasProjections">
             <canvas baseChart
               [datasets]="chartData"
               [options]="chartOptions"
@@ -13,7 +13,7 @@
               [chartType]="chartType">              
             </canvas>
           </div>
-          <div nz-col nzSpan="24" *ngIf="!hasProjections" style="text-align: center;">
+          <div nz-col nzSpan="22" *ngIf="!hasProjections" style="text-align: center;">
               <span><strong>THERE IS NO DATA TO SHOW</strong></span>
           </div>
         </div>          

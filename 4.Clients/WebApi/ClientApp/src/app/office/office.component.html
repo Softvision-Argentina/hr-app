@@ -1,5 +1,5 @@
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <button nz-button nzType="primary" (click)="showAddModal(officeModal)" nzShape="round">
       <i nz-icon type="plus" theme="outline"></i>Add new Office</button>
     </div>
@@ -7,7 +7,7 @@
 
 <br />
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <nz-table #OfficeTable [nzData]="detailedOffice" [nzPageSize]="10">
 
             <thead>
@@ -38,7 +38,7 @@
 <ng-template #officeModal>
     <form nz-form [formGroup]="officeForm">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">

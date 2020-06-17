@@ -7,7 +7,7 @@
         </nz-form-control>
     </nz-form-item>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status</nz-form-label>
@@ -21,7 +21,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date" [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
                     Date</nz-form-label>
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
                     Interviewer</nz-form-label>
@@ -50,7 +50,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
                     Delegate</nz-form-label>
@@ -67,7 +67,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="seniority" [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
                     Seniority</nz-form-label>
@@ -85,7 +85,7 @@
 
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="alternativeSeniority" [ngClass]="{'requiredFieldLabel': isRequiredField('alternativeSeniority')}">
                     Alternative Seniority</nz-form-label>
@@ -116,7 +116,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback</nz-form-label>
@@ -134,7 +134,7 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="client" [ngClass]="{'requiredFieldLabel': isRequiredField('client')}">
                     Client</nz-form-label>
@@ -164,7 +164,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
+        <div nz-col nzSpan="11" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
                     Rejection Reason</nz-form-label>
@@ -184,12 +184,12 @@
     </div>
 
     <div nz-row>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="22">
             <nz-form-item *ngFor="let control of controlArray;let i = index">
                 <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]" style="margin-left: 20px;">
                     Skills</nz-form-label>
                 <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0 ? 0 : 4">
-                    <div nz-col nzSpan="24" [ngClass]="{ highlightedSkill: isFirstSkillControl(control) }">
+                    <div nz-col nzSpan="22" [ngClass]="{ highlightedSkill: isFirstSkillControl(control) }">
                         <div class="skill-control" style="margin-left: 10px;">
                             <div class="item">
                                 <nz-select [nzDisabled]="disabled" style="width: 95%; margin-right:1%;"

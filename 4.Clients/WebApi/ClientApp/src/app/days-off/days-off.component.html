@@ -1,7 +1,7 @@
 <br/>
 <br/>
 <div nz-row>
-    <div nz-col nzSpan="12">
+    <div nz-col nzSpan="11">
         <button nz-button nzType="primary" (click)="showAddModal(DaysOffModal)" nzShape="round">
           <i nz-icon type="plus" theme="outline"></i>
           Add new day/s off
@@ -10,7 +10,7 @@
 </div>
 <br/>
 <div class="grid-padding" nz-row>
-    <div nz-col nzSpan="24">
+    <div nz-col nzSpan="22">
         <nz-table  #daysOffTable [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
             <thead>
                 <tr>
@@ -81,7 +81,7 @@
 <ng-template #DaysOffModal>
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="DNI">D.N.I.</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Reason</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -126,7 +126,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="date">Date</nz-form-label>
                 <div nz-col nzSpan="8">
                     <nz-form-item>
@@ -166,7 +166,7 @@
             </div>
         </div>
         <div nz-row *ngIf="isHr">
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-control>
                         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>

@@ -16,7 +16,7 @@
 
 
 <div *ngIf="process" nz-row>
-    <div nz-col nzSpan="12">
+    <div nz-col nzSpan="11">
         <h5>Details</h5>
         <ul>
             <li><strong style="margin-right: 1%;">Title:</strong> {{ process.title }}</li>
@@ -31,7 +31,7 @@
           {{ process.candidate.lastName }}</a></li>
         </ul>
     </div>
-    <div nz-col nzSpan="12">
+    <div nz-col nzSpan="11">
         <h5>Go to the graphic overview of the process</h5>
         <button nz-button nzType="primary" *ngIf="process" [routerLink]="['/process-steps/', process.id]">
       Graphic overview
@@ -98,7 +98,7 @@
     <form nz-form [formGroup]="stageForm" [nzLayout]="'horizontal'">
 
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -108,7 +108,7 @@
                 </nz-form-item>
             </div>
 
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="isEdit">
@@ -128,7 +128,7 @@
         </div>
 
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -140,7 +140,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -155,7 +155,7 @@
         </div>
 
         <div nz-row *ngIf="isEdit">
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="startDate">Start date</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -166,7 +166,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">End date</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -181,7 +181,7 @@
 
         <div nz-row>
 
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
 
@@ -194,7 +194,7 @@
                 </nz-form-item>
             </div>
 
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">

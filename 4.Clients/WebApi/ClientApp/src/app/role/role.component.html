@@ -1,5 +1,5 @@
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <button nz-button nzType="primary" (click)="showAddModal(roleModal)" nzShape="round">
       <i nz-icon type="plus" theme="outline"></i>Add new Role</button>
     </div>
@@ -7,7 +7,7 @@
 
 <br />
 <div nz-row>
-    <div nz-col nzSpan="23">
+    <div nz-col nzSpan="22">
         <nz-table #RoleTable [nzData]="roles" [nzPageSize]="10" *ngIf="roles.length > 0">
             <thead>
                 <tr>
@@ -39,7 +39,7 @@
 <ng-template #roleModal>
     <form nz-form [formGroup]="roleForm">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
                     <nz-form-control [nzSm]="7" [nzXs]="24">
@@ -60,7 +60,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isActive">Status</nz-form-label>
                     <nz-select formControlName="isActive" style="width: 100px;">

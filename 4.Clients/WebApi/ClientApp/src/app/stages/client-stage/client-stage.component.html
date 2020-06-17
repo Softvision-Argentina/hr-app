@@ -7,7 +7,7 @@
         </nz-form-control>
     </nz-form-item>
     <div nz-row>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
@@ -22,7 +22,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="date"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div nz-row hidden>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('interviewer')}">
@@ -48,7 +48,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="delegateName"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('delegateName')}">
@@ -61,7 +61,7 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="12" hidden>
+        <div nz-col nzSpan="11" hidden>
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
@@ -80,7 +80,7 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
+        <div nz-col nzSpan="11" *ngIf="showRejectionReason()">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
@@ -108,7 +108,7 @@
         <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.acitve"
             [nzShowArrow]="panelControl.arrow">
             <div nz-row>
-                <div nz-col nzSpan="12">
+                <div nz-col nzSpan="11">
                     <nz-form-item>
                         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewDate">Date</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -121,7 +121,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="12">
+                <div nz-col nzSpan="11">
                     <nz-form-item>
                         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewClient">Client</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -136,7 +136,7 @@
                 </div>
             </div>
             <div nz-row>
-                <div nz-col nzSpan="12">
+                <div nz-col nzSpan="11">
                     <nz-form-item>
                         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="clientInterviewer">Interviewer</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -145,7 +145,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="12">
+                <div nz-col nzSpan="11">
                     <nz-form-item>
                         <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="project">Project</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -156,23 +156,23 @@
                 </div>
             </div>
             <div nz-row>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
-                            <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
-                                <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
-                                    Field required
-                                </ng-container>
-                                <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
-                                    The maximun length is 300
-                                </ng-container>
-                            </nz-form-explain>                    
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
+                    <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
+                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
+                            Field required
+                        </ng-container>
+                        <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
+                            The maximum length is 300
+                        </ng-container>
+                    </nz-form-explain>                    
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
             <div nz-row>
                 <div nz-col nzSpan="6" nzOffset="11">
                     <nz-form-item>

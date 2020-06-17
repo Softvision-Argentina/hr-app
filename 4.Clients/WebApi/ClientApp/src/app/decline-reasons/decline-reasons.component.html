@@ -1,12 +1,12 @@
 <div nz-row>
-  <div nz-col nzSpan="23">
+  <div nz-col nzSpan="22">
       <button nz-button nzType="primary" (click)="showAddModal(declineReasonModal)" nzShape="round">
     <i nz-icon type="plus" theme="outline"></i>Add new decline reason</button>
   </div>
 </div>
 <br />
 <div nz-row>
-  <div nz-col nzSpan="23">
+  <div nz-col nzSpan="22">
       <nz-table #declineReasonTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
           <thead>
               <tr>

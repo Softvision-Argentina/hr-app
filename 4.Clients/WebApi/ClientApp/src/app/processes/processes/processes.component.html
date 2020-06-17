@@ -49,7 +49,7 @@
       <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
       <nz-divider></nz-divider>
       <div *ngIf="emptyProcess" nz-row>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="22">
           <nz-steps *ngIf="emptyProcess.stages && emptyProcess.stages.length > 0" nzDirection="horizontal"
             nzSize="small">
             <nz-step *ngFor="let stage of emptyProcess.stages" [nzTitle]="stage.title"
@@ -72,12 +72,12 @@
       <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">
         <nz-form-item>
           <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
               <nz-form-label [nzSm]="9" [nzXs]="24" nzFor="type">Rejection reason</nz-form-label>
             </div>
           </div>
           <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
               <nz-form-control [nzSm]="22" [nzXs]="24">
                 <textarea rows="5" id="rejectionReasonDescription" nz-input formControlName="rejectionReasonDescription"
                   placeholder="Please enter reason of rejection" id="rejectionReasonDescription"></textarea>
@@ -93,7 +93,7 @@
     </ng-template>
 
     <ng-template #processStart>
-      <div nz-col nzSpan="24">
+      <div nz-col nzSpan="22">
         <nz-steps nzLabelPlacement="vertical" [nzCurrent]="stepIndex">
           <nz-step nzTitle="HR" id="candidateButton"
             (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">

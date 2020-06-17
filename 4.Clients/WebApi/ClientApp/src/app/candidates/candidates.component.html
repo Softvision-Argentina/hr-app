@@ -1,5 +1,5 @@
 <div nz-row>
-    <div nz-col nzSpan="24">
+    <div nz-col nzSpan="22">
         <nz-table #candidateTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
             <thead>
                 <tr>
@@ -67,7 +67,7 @@
 <ng-template #candidateModal>
     <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item *ngIf="isEdit">
                     <nz-form-control>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="status">Status</nz-form-label>
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -88,7 +88,7 @@
                     </nz-form-control>                    
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="name">First Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -109,7 +109,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -128,7 +128,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -139,7 +139,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -155,7 +155,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber']">
@@ -175,7 +175,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="user">Recruiter</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -187,7 +187,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -201,7 +201,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="profile">Profile</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -214,7 +214,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community">Community</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -228,7 +228,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="isReferred">Is Referred</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -238,7 +238,7 @@
             </div>
         </div>
         <div nz-row *ngIf="validateForm.controls['isReferred'].value">
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="referredBy" >Referred By</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" >
@@ -249,7 +249,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="11">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="knownFrom">Known For</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -259,7 +259,7 @@
             </div>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-control>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="englishLevel">English Level</nz-form-label>
@@ -273,7 +273,7 @@
         <div nz-row>
         </div>
         <div nz-row>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="22">
                 <div>
                     <nz-form-item *ngFor="let control of controlEditArray;let i = index">
                         <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]">Skills</nz-form-label>
