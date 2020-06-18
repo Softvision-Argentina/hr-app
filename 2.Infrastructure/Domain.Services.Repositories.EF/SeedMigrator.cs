@@ -101,6 +101,7 @@ namespace Domain.Services.Repositories.EF
             var user25 = new User { FirstName = "Damian", LastName = "Costa", Username = "damian.costa@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user26 = new User { FirstName = "Gabriel", LastName = "Damalis", Username = "gabriel.damalis@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
             var user27 = new User { FirstName = "Ivan", LastName = "Zerzer", Username = "ivan.zerzer@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
+            var user28 = new User { FirstName = "Andrea", LastName = "Santos", Username = "andrea.santos@softvision.com", Role = Roles.Admin, Token = "", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
 
             context.Users.Add(user2);
             context.Users.Add(user3);
@@ -133,6 +134,7 @@ namespace Domain.Services.Repositories.EF
             context.Users.Add(user25);
             context.Users.Add(user26);
             context.Users.Add(user27);
+            context.Users.Add(user28);
 
             context.SaveChanges();
             #endregion
