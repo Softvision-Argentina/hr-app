@@ -179,7 +179,7 @@ namespace Domain.Services.Impl.Services
                 {
                     if (!process.HrStage.SentEmail)
                     {
-                        if (process.HrStage.Status == StageStatus.Accepted)
+                        if (process.HrStage.Status == StageStatus.Accepted && process.HrStage.UserOwner != null)
                         {
                             SendHrStageEmailNotification(process);
                             process.HrStage.SentEmail = true;
@@ -188,7 +188,7 @@ namespace Domain.Services.Impl.Services
 
                     if (!process.TechnicalStage.SentEmail)
                     {
-                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
+                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback) && process.TechnicalStage.UserOwner != null && process.TechnicalStage.UserDelegate != null)
                         {
                             SendTechnicalStageEmailNotification(process);
                             process.TechnicalStage.SentEmail = true;
@@ -364,7 +364,8 @@ namespace Domain.Services.Impl.Services
 
         private void SendTechnicalStageEmailNotification(Process process)
         {
-            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+            var userToSend =  _userRepository.QueryEager().FirstOrDefault(x => x.Username == process.UserOwner.Username);
+            var email = userToSend.Username;
             var interviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
             var delegateInterviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
             var skills = process.Candidate.CandidateSkills;
