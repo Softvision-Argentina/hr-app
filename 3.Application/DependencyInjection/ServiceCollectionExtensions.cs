@@ -35,6 +35,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Persistance.EF;
+using FluentValidation;
 
 namespace DependencyInjection
 {
@@ -94,6 +95,8 @@ namespace DependencyInjection
             services.AddScoped<UpdateRoleContractValidator, UpdateRoleContractValidator>();
             services.AddScoped<CreatePreOfferContractValidator, CreatePreOfferContractValidator>();
             services.AddScoped<UpdatePreOfferContractValidator, UpdatePreOfferContractValidator>();
+            services.AddScoped<IValidator<CreateProcessContract>, CreateProcessContractValidator>();
+            services.AddScoped<IValidator<UpdateProcessContract>, UpdateProcessContractValidator>();
             services.AddTransient<IDummyService, DummyService>();
             services.AddTransient<ISkillService, SkillService>();
             services.AddTransient<ICandidateService, CandidateService>();

@@ -6,4 +6,14 @@
         internal const string RULESET_UPDATE = "Update";
         internal const string RULESET_DEFAULT = "default";
     }
+
+    internal class ValidationConstants
+    {
+        internal const int MAX_INPUT = 30;
+        internal const int MAX_TEXTAREA = 300;
+        internal const int MAX_INPUT_EMAIL = 60;
+        internal const int MAX_MONTHLY_INCOME = 1000000;
+        internal const int MAX_DNI = 999999999;
+        internal const int MAX_PHONE_NUMBER = 16;
+    }
 }

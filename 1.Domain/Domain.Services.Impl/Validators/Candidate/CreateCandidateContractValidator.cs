@@ -9,11 +9,32 @@ namespace Domain.Services.Impl.Validators.Candidate
         {
             RuleSet(ValidatorConstants.RULESET_CREATE, () =>
             {
-                RuleFor(_ => _.Name).NotEmpty();
-                RuleFor(_ => _.LastName).NotEmpty();
-                RuleFor(_ => _.User).NotEmpty();
-                RuleFor(_ => _.Community).NotEmpty();
-                RuleFor(_ => _.Profile).NotEmpty();
+                RuleFor(_ => _.Name)
+                    .NotEmpty()
+                    .MaximumLength(ValidationConstants.MAX_INPUT);
+                
+                RuleFor(_ => _.LastName)
+                    .NotEmpty()
+                    .MaximumLength(ValidationConstants.MAX_INPUT);
+
+                RuleFor(_ => _.DNI).LessThan(ValidationConstants.MAX_DNI);
+
+                RuleFor(_ => _.EmailAddress)
+                    .MaximumLength(ValidationConstants.MAX_INPUT_EMAIL)
+                    .NotNull()
+                        .When(_ => string.IsNullOrEmpty(_.PhoneNumber));
+
+                RuleFor(_ => _.PhoneNumber)
+                    .MaximumLength(ValidationConstants.MAX_PHONE_NUMBER)
+                    .NotNull()
+                        .When(_ => string.IsNullOrEmpty(_.EmailAddress));
+
+                RuleFor(_ => _.EnglishLevel).IsInEnum();
+                RuleFor(_ => _.Status).IsInEnum();
+
+                RuleFor(_ => _.KnownFrom).MaximumLength(ValidationConstants.MAX_INPUT);
+                RuleFor(_ => _.LinkedInProfile).MaximumLength(ValidationConstants.MAX_INPUT);
+                RuleFor(_ => _.ReferredBy).MaximumLength(ValidationConstants.MAX_INPUT);
             });
         }
     }

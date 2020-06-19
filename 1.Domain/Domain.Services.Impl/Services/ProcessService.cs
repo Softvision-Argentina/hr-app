@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Mailer.Interfaces;
 using Mailer.Entities;
+using Domain.Services.Impl.Validators;
+using FluentValidation;
+using Domain.Model.Exceptions.Process;
 
 namespace Domain.Services.Impl.Services
 {
@@ -36,6 +39,8 @@ namespace Domain.Services.Impl.Services
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IMailSender _mailSender;
+        private readonly IValidator<UpdateProcessContract> _updateProcessContractValidator;
+        private readonly IValidator<CreateProcessContract> _createProcessContractValidator;
 
         public ProcessService(
             IMapper mapper,
@@ -56,7 +61,10 @@ namespace Domain.Services.Impl.Services
             IConfiguration config,
             IHttpContextAccessor httpContext,
             IPreOfferStageRepository preOfferStageRepository,
-            IMailSender mailSender)
+            IMailSender mailSender,
+            IValidator<UpdateProcessContract> updateProcessContractValidator,
+            IValidator<CreateProcessContract> createProcessContractValidator
+            )
             
         {            
             _candidateRepository = candidateRepository;
@@ -78,6 +86,8 @@ namespace Domain.Services.Impl.Services
             _httpContext = httpContext;
             _preOfferStageRepository = preOfferStageRepository;
             _mailSender = mailSender;
+            _createProcessContractValidator = createProcessContractValidator;
+            _updateProcessContractValidator = updateProcessContractValidator;
         }
 
         public ReadedProcessContract Read(int id)
@@ -128,6 +138,8 @@ namespace Domain.Services.Impl.Services
 
         public CreatedProcessContract Create(CreateProcessContract createProcessContract)
         {
+            ValidateContract(createProcessContract);
+
             var process = _mapper.Map<Process>(createProcessContract);
             
             ValidateDniExistance(process);
@@ -205,6 +217,8 @@ namespace Domain.Services.Impl.Services
 
         public void Update(UpdateProcessContract updateProcessContract)
         {
+            ValidateContract(updateProcessContract);
+            
             var process = _mapper.Map<Process>(updateProcessContract);
             
             ValidateDniExistance(process);
@@ -445,6 +459,32 @@ namespace Domain.Services.Impl.Services
             }
 
             return ProcessCurrentStage.HrStage;
+        }
+
+        private void ValidateContract(CreateProcessContract contract)
+        {
+            try
+            {
+                _createProcessContractValidator.ValidateAndThrow(contract,
+                    $"{ValidatorConstants.RULESET_CREATE}");
+            }
+            catch (ValidationException ex)
+            {
+                throw new CreateProcessInvalidException(ex.ToListOfMessages());
+            }
+        }
+
+        private void ValidateContract(UpdateProcessContract contract)
+        {
+            try
+            {
+                _updateProcessContractValidator.ValidateAndThrow(contract,
+                    $"{ValidatorConstants.RULESET_UPDATE}");
+            }
+            catch (ValidationException ex)
+            {
+                throw new UpdateProcessInvalidException(ex.ToListOfMessages());
+            }
         }
     }
 }

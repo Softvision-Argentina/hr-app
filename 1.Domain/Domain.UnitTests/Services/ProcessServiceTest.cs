@@ -8,6 +8,8 @@ using Domain.Services.Contracts.Process;
 using Domain.Services.Impl.Services;
 using Domain.Services.Impl.UnitTests.Dummy;
 using Domain.Services.Interfaces.Repositories;
+using FluentValidation;
+using FluentValidation.Results;
 using Mailer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +41,8 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<IHttpContextAccessor> _mockhttpContext;
         private readonly Mock<IMailSender> _mockMailSender;
+        private readonly Mock<IValidator<CreateProcessContract>> _mockCreateProcessValidator;
+        private readonly Mock<IValidator<UpdateProcessContract>> _mockUpdateProcessValidator;
 
         public ProcessServiceTest()
         {
@@ -60,6 +64,8 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockConfiguration = new Mock<IConfiguration>();
             _mockhttpContext = new Mock<IHttpContextAccessor>();
             _mockMailSender = new Mock<IMailSender>();
+            _mockUpdateProcessValidator = new Mock<IValidator<UpdateProcessContract>>();
+            _mockCreateProcessValidator = new Mock<IValidator<CreateProcessContract>>();
 
             _service = new ProcessService(
                 _mockMapper.Object,
@@ -80,16 +86,20 @@ namespace Domain.Services.Impl.UnitTests.Services
                 _mockConfiguration.Object,
                 _mockhttpContext.Object,
                 _mockRepoPreOfferStage.Object,
-                _mockMailSender.Object
+                _mockMailSender.Object,
+                _mockUpdateProcessValidator.Object,
+                _mockCreateProcessValidator.Object
             );
         }
 
         [Fact(DisplayName = "Verify that create throws error when data for creation is invalid")]
         public void GivenCreate_WhenDataIsInvalid_ThrowCreateContractInvalidException()
         {
-            var contract = new CreateProcessContract
+            var contract = new CreateProcessContract    
             { Candidate = new UpdateCandidateContract { PreferredOfficeId = 1 } };                           
-            _mockMapper.Setup(mm => mm.Map<Process>(It.IsAny<CreateProcessContract>())).Returns(new Process());            
+            _mockMapper.Setup(mm => mm.Map<Process>(It.IsAny<CreateProcessContract>())).Returns(new Process());
+
+            _mockCreateProcessValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<CreateProcessContract>>())).Returns(new ValidationResult());
 
             var exception = Assert.Throws<OfficeNotFoundException>(() => _service.Create(contract));
 
