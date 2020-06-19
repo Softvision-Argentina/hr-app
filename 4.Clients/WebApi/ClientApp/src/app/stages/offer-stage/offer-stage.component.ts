@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Globals } from '../../app-globals/globals';
@@ -11,7 +11,8 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 @Component({
   selector: 'offer-stage',
   templateUrl: './offer-stage.component.html',
-  styleUrls: ['./offer-stage.component.scss']
+  styleUrls: ['./offer-stage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OfferStageComponent implements OnInit {
 

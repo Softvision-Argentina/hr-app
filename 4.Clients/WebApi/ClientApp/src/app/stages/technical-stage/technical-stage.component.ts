@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
@@ -17,7 +17,8 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
 @Component({
   selector: 'technical-stage',
   templateUrl: './technical-stage.component.html',
-  styleUrls: ['./technical-stage.component.scss']
+  styleUrls: ['./technical-stage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalStageComponent implements OnInit {
 

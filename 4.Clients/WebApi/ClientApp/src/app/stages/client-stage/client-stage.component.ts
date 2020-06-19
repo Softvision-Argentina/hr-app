@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectionStrategy  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -12,7 +12,8 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'client-stage',
   templateUrl: './client-stage.component.html',
-  styleUrls: ['./client-stage.component.scss']
+  styleUrls: ['./client-stage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientStageComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild, ChangeDetectionStrategy  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Globals } from '../../app-globals/globals';
@@ -14,7 +14,8 @@ import { FacadeService } from 'src/app/services/facade.service';
   selector: 'pre-offer-stage',
   templateUrl: './pre-offer-stage.component.html',
   styleUrls: ['./pre-offer-stage.component.scss'],
-  providers: [PreOfferHistory]
+  providers: [PreOfferHistory],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PreOfferStageComponent implements OnInit {

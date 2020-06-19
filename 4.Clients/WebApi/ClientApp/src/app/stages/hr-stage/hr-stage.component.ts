@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -13,7 +13,8 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 @Component({
   selector: 'hr-stage',
   templateUrl: './hr-stage.component.html',
-  styleUrls: ['./hr-stage.component.scss']
+  styleUrls: ['./hr-stage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HrStageComponent implements OnInit {
 
