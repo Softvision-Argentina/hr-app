@@ -11,36 +11,29 @@
     </div>
     <br />
     <nz-tabset>
-
       <nz-tab nzTitle="MY PROCESSES" (nzClick)="searchOwnRecruiter()">
-        <app-processes-table [profiles]="profiles" [communities]="communities" [listOfDisplayData]="listOfDisplayOwnData"
+        <app-processes-table [profiles]="profiles" [communities]="communities"
+          [listOfDisplayData]="listOfDisplayOwnData" [filteredProcesses]="filteredOwnProcesses"
           [statusList]="statusList" [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
           (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
           (userId)="showUserDetailsModal($event, userDetailModal)"
-          (searchProfile)="searchOwnProfile($event)" (searchCommunity)="searchOwnCommunity($event)"
           (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
           (showDeleteConfirm)="showDeleteConfirm($event)"
           (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-          (rejectProcess)="rejectProcess($event, rejectProcessModal)"
-          (searchValueCurrentStage)="triggerSearchOwnCurrentStage($event)" (status)="triggerSearchOwnStatus($event)"
-          (resetStatus)="resetStatus()"
-          (resetCurrentStage)="resetCurrentStage()">
+          (rejectProcess)="rejectProcess($event, rejectProcessModal)">
         </app-processes-table>
       </nz-tab>
 
       <nz-tab nzTitle="BA STUDIO" (nzClick)="searchAllProcess()" class="process">
         <app-processes-table #processTable [profiles]="profiles" [communities]="communities"
-          [listOfDisplayData]="listOfDisplayData" [statusList]="statusList" [currentStageList]="currentStageList"
-          [emptyProcess]="emptyProcess" (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
-          (userId)="showUserDetailsModal($event, userDetailModal)" (searchProfile)="searchProfile($event)"
-          (searchCommunity)="searchCommunity($event)"
+          [listOfDisplayData]="listOfDisplayData" [filteredProcesses]="filteredProcesses" [statusList]="statusList"
+          [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
+          (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
+          (userId)="showUserDetailsModal($event, userDetailModal)"
           (showProcessStart)="showProcessStart(processStart, startModalButtons, $event)"
           (showDeleteConfirm)="showDeleteConfirm($event)"
           (showApproveProcessConfirm)="showApproveProcessConfirm($event)"
-          (rejectProcess)="rejectProcess($event, rejectProcessModal)"
-          (searchValueCurrentStage)="triggerSearchCurrentStage($event)" (status)="triggerSearchStatus($event)"
-          (resetStatus)="resetStatus()"
-          (resetCurrentStage)="resetCurrentStage()">
+          (rejectProcess)="rejectProcess($event, rejectProcessModal)">
         </app-processes-table>
       </nz-tab>
     </nz-tabset>
@@ -104,7 +97,7 @@
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Client" id="clientButton"
             (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)"></nz-step>
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Pre-Offer" id="preOfferButton"
-                   (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
+            (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Offer" id="offerButton"
             (click)="slickModal.slickGoTo(4);wishedStage(4, $event.currentTarget.id)"></nz-step>
         </nz-steps>
@@ -126,8 +119,8 @@
           <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage" [processSaveEvent]="saveEventSubject.asObservable()"></client-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
-          <pre-offer-stage [_users]="users" [preOfferStage]="emptyProcess.preOfferStage" [processId]="processId"
-               (selectedSeniority)="updateSeniority($event)"></pre-offer-stage>
+          <pre-offer-stage [_users]="users" [preOfferStage]="emptyProcess.preOfferStage"
+            (selectedSeniority)="updateSeniority($event)"></pre-offer-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
           <offer-stage [_users]="users" [offerStage]="emptyProcess.offerStage"
@@ -176,7 +169,7 @@
 
     <ng-template #startModalButtons>
       <div nz-row nzType="flex" nzJustify="space-between">
-        
+
         <div nz-col>
           <button nz-button nzType="default" (click)="clearDataAndCloseModal()">Cancel</button>
           <button nz-button nzType="primary" (click)="saveProcess(declineProcessModal)">Save <nz-spin *ngIf="isLoading"

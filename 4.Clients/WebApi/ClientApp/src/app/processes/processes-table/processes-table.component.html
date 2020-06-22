@@ -1,75 +1,99 @@
 <div nz-row>
-    <div nz-col nzSpan="22">
-      <nz-table #processTable [nzData]="listOfDisplayData" [nzPageSize]="20" nzShowSizeChanger>
-        <thead class="tableHead">
-          <tr>
-            <th class="tableHead noFilter">
-              Candidate
-            </th>
-            <th class="tableHead">
-              Profile
-              <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
-                <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
-                <ul nz-menu class="filterList">
-                  <li nz-menu-item (click)="emitProfileId(0)">
-                    <label>ALL</label>
+  <div nz-col nzSpan="24">
+    <nz-table #processTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+      <thead class="tableHead">
+        <tr>
+          <th class="tableHead noFilter">
+            Candidate
+          </th>
+          <th class="tableHead">
+            Profile
+            <nz-dropdown [nzPlacement]="'bottomCenter'" [nzClickHide]="false" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="resetFilter()">
+                  <label>ALL</label>
+                </li>
+                <span *ngFor="let profile of profiles">
+                  <li nz-menu-item *ngIf="checkProfile(profile.id)" #profileId
+                    (click)="pushProfileIdToSelectedProfiles(profile.id)">
+                    <label class="profileItem">{{profile.name}}</label>
+                    <i [ngClass]="{'visibleElement': selectedProfileOption(profile.id)}"
+                      class="fa tickSign">&#xf00c;</i>
                   </li>
-                  <li nz-menu-item *ngFor="let profile of profiles" #profileId (click)="emitProfileId(profile.id)">
-                    <label>{{profile.name}}</label>
-                  </li>
-                </ul>
-              </nz-dropdown>
-            </th>
-            <th class="tableHead">
-              Community
-              <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
-                <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
-                <ul nz-menu class="filterList">
-                  <li nz-menu-item (click)="emitCommunityId(0)">
-                    <label>ALL</label>
-                  </li>
-                  <li nz-menu-item *ngFor="let community of communities" (click)="emitCommunityId(community.id)">
+                </span>
+              </ul>
+              <button [ngClass]="{'visibleElement': selectedProfiles.length}" class="submitButton"
+                (click)="setProfileFilter(selectedProfiles)">SUBMIT</button>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead">
+            Community
+            <nz-dropdown [nzPlacement]="'bottomCenter'" [nzClickHide]="false" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="resetFilter()">
+                  <label>ALL</label>
+                </li>
+                <span *ngFor="let community of communities">
+                  <li nz-menu-item *ngIf="checkCommunity(community.id)" (click)="pushCommunityIdToSelectedCommunities(community.id)">
                     <label>{{community.name}}</label>
+                    <i [ngClass]="{'visibleElement': selectedCommunityOption(community.id)}"
+                      class="fa tickSign">&#xf00c;</i>
                   </li>
-                </ul>
-              </nz-dropdown>
-            </th>
-            <th class="tableHead">
-              Status
-              <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
-                <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
-                <ul nz-menu class="filterList">
-                  <li nz-menu-item (click)="emitResetStatus()">
-                    <label>ALL</label>
-                  </li>
-                  <li nz-menu-item *ngFor="let status of statusList" (click)="emitStatus(status.id)">
+                </span>
+              </ul>
+              <button [ngClass]="{'visibleElement': selectedCommunities.length}" class="submitButton"
+                (click)="setCommunityFilter(selectedCommunities)">SUBMIT</button>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead">
+            Status
+            <nz-dropdown [nzPlacement]="'bottomCenter'" [nzClickHide]="false" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="resetFilter()">
+                  <label>ALL</label>
+                </li>
+                <span *ngFor="let status of statusList">
+                  <li nz-menu-item *ngIf="checkStatus(status.id, status.name)" (click)="pushStatusIdToSelectedStatus(status.id)">
                     <label>{{status.name}}</label>
+                    <i [ngClass]="{'visibleElement': selectedStatusOption(status.id)}" class="fa tickSign">&#xf00c;</i>
                   </li>
-                </ul>
-              </nz-dropdown>
-            </th>
-            <th class="tableHead">
-              Current Stage
-              <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
-                <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
-                <ul nz-menu class="filterList">
-                  <li nz-menu-item (click)="emitResetCurrentStage()">
-                    <label>ALL</label>
-                  </li>
-                  <li nz-menu-item *ngFor="let cs of currentStageList" (click)="emitCurrentStageValue(cs.id)">
+                </span>
+              </ul>
+              <button [ngClass]="{'visibleElement': selectedStatus.length}" class="submitButton"
+                (click)="setStatusFilter(selectedStatus)">SUBMIT</button>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead">
+            Current Stage
+            <nz-dropdown [nzPlacement]="'bottomCenter'" [nzClickHide]="false" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="resetFilter()">
+                  <label>ALL</label>
+                </li>
+                <span *ngFor="let cs of currentStageList">
+                  <li nz-menu-item *ngIf="checkCurrentStage(cs.id)" (click)="pushStagesIdToSelectedStages(cs.id)">
                     <label>{{cs.name}}</label>
+                    <i [ngClass]="{'visibleElement': selectedStagesOption(cs.id)}" class="fa tickSign">&#xf00c;</i>
                   </li>
-                </ul>
-              </nz-dropdown>
-            </th>
-            <th class="tableHead noFilter">
-              Recruiter
-            </th>
-            <th class="tableHead noFilter">Actions</th>
-          </tr>
-        </thead>
-        
-        <tbody>
+                </span>
+              </ul>
+              <button [ngClass]="{'visibleElement': selectedStages.length}" class="submitButton"
+                (click)="setCurrentStageFilter(selectedStages)">SUBMIT</button>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead noFilter">
+            Recruiter
+          </th>
+          <th class="tableHead noFilter">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container *ngIf="filterParameters.length === 0; else processesAfterFilter">
           <tr *ngFor="let process of processTable.data">
             <td scope="row">
               <a *ngIf="process.candidate" class="nameStyle" (click)="emitCandidateId(process.candidate.id)">
@@ -112,8 +136,62 @@
                 *ngIf="process && process.status != 4" nz-icon nzType="close" nzTheme="outline"
                 (click)="emitReject(process.id)"></i>
             </td>
+
           </tr>
-        </tbody>
-      </nz-table>
-    </div>
+
+
+
+        </ng-container>
+        <ng-template #processesAfterFilter>
+          <tr *ngFor="let process of listOfDisplayDataAfterFilter[listOfDisplayDataAfterFilter.length - 1]">
+            <td scope="row">
+              <a *ngIf="process.candidate" class="nameStyle" (click)="emitCandidateId(process.candidate.id)">
+                {{ process.candidate.name }} {{ process.candidate.lastName }}
+              </a>
+            </td>
+            <td scope="row">
+              {{ process.candidate.profile.name }}
+            </td>
+            <td scope="row">
+              {{ process.candidate.community.name }}
+            </td>
+            <td scope="row">
+              <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
+              {{ getStatus(process.status) }}
+            </td>
+            <td scope="row">
+              <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
+              {{ getCurrentStage(process.currentStage) }}
+            </td>
+            <td scope="row">
+              <a *ngIf="process.candidate.user" class="nameStyle" (click)="emitUserId(process.candidate.user.id)">
+                {{ process.candidate.user.firstName }}
+                {{ process.candidate.user.lastName }}
+              </a>
+            </td>
+            <td [style.text-align]="center">
+              <i nzTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon type="edit"
+                theme="outline"></i>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i nzTitle="Delete" (click)="emitDelete(process.id)" style="cursor: pointer;" nz-tooltip nz-icon
+                type="delete" theme="outline"></i>
+              <nz-divider nzType="vertical" *ngIf="process && (process.status != 2 && process.status != 3  )">
+              </nz-divider>
+              <i nzTitle="Approve Process" style="cursor: pointer;" nz-tooltip
+                *ngIf="process && (process.status != 2 && process.status != 3  )" nz-icon nzType="check-circle"
+                nzTheme="outline" (click)="emitApproval(process.id)"></i>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i nzTitle="Reject process" nzPlacement="topLeft" nz-tooltip style="cursor: pointer;"
+                *ngIf="process && process.status != 4" nz-icon nzType="close" nzTheme="outline"
+                (click)="emitReject(process.id)"></i>
+            </td>
+
+          </tr>
+
+
+
+        </ng-template>
+      </tbody>
+    </nz-table>
   </div>
+</div>

@@ -60,3 +60,26 @@
   max-height: 400px; 
   overflow: auto;
 }
+
+.submitButton {
+  width: 100%;
+  color: #fafafa;
+  font-weight: bold;
+  background-color: #c800a1;
+  border-radius: 5px;
+  display: none;
+}
+
+.profileItem:target + .tickSign {
+  display: inline;
+}
+
+.tickSign {
+  display: none;
+  color: #c800a1;
+  text-indent: 1em;
+}
+
+.visibleElement {
+  display: inline-block;
+}
