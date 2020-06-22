@@ -14,8 +14,7 @@ import { FacadeService } from 'src/app/services/facade.service';
   selector: 'pre-offer-stage',
   templateUrl: './pre-offer-stage.component.html',
   styleUrls: ['./pre-offer-stage.component.scss'],
-  providers: [PreOfferHistory],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [PreOfferHistory]
 })
 
 export class PreOfferStageComponent implements OnInit {
@@ -39,10 +38,10 @@ export class PreOfferStageComponent implements OnInit {
     feedback: '',
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
-    notes: '',
-    firstday: [new Date(), [Validators.required]],
-    bonus: '',
-    hireDate: [new Date(), [Validators.required]],
+    notes: '', // should be removed because it's in pre-offer-history
+    firstday: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
+    bonus: '', // should be removed because it's in pre-offer-history
+    hireDate: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
     backgroundCheckDone: false,
     backgroundCheckDoneDate: [new Date()],
     preocupationalDone: false,

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AppConfig } from '../app-config/app.config';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ErrorResponse } from '../../entities/ErrorResponse';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class BaseService<T> {
@@ -15,7 +15,7 @@ export class BaseService<T> {
   public token: string;
   public apiUrl: string;
   public data: BehaviorSubject<T[]> = new BehaviorSubject<T[]>(null);
-
+  public currentId: Subject<number> = new Subject<number>();
   constructor(private router: Router, private config: AppConfig, public http: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
     this.token = user !== null ? user.token : null;
@@ -66,7 +66,9 @@ export class BaseService<T> {
         headers: this.headersWithAuth,
       })
       .pipe(
-        tap(res => this.get().subscribe()),
+        tap(res => {
+          this.get().subscribe();
+        }),
         catchError(this.handleErrors));
   }
 

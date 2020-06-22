@@ -907,10 +907,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
                   }
                 });
             } else {
+              
               this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(res => {
                   this.isLoading = false;
                   this.saveEventSubject.next(newProcess.id);
+                  this.facade.processService.currentId.next(newProcess.id);
                   this.facade.appService.stopLoading();
                   this.facade.toastrService.success('The process was successfully saved !');
                   this.createEmptyProcess(newCandidate);

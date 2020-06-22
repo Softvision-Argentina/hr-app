@@ -69,66 +69,6 @@
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="remunerationOffer"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}">Gross Salary</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer"
-                        placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
-                    <nz-form-explain
-                        *ngIf="preOfferForm.get('remunerationOffer').dirty && preOfferForm.get('remunerationOffer').errors">
-                        Please input a final gross remuneration offer
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="notes">
-                    Notes</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="notes" id="notes" placeholder="Please input the notes">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="firstday"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('firstday')}">
-                    Tentative Start Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-date-picker style="width: 100%;" formControlName="firstday"></nz-date-picker>
-                    <nz-form-explain *ngIf="preOfferForm.get('firstday').dirty && preOfferForm.get('firstday').errors">
-                        Please input a date
-                    </nz-form-explain>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="bonus">Bonus</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1" id="bonus" nz-input formControlName="bonus"
-                        placeholder="Input any additional information if necessary" id="bonus"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d"
-                    *ngIf="preOfferForm.get('bonus').dirty && preOfferForm.get('bonus').errors">
-                    <ng-container *ngIf="preOfferForm.get('bonus')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="preOfferForm.get('bonus')?.hasError('trimEndError')">
-                        The input has trailing whitespace!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDone')}">
                     Background Check</nz-form-label>
@@ -204,6 +144,6 @@
         </div>
     </div>
 
-    <pre-offer-history [_processId]=preOfferStage.processId keyboard="false"></pre-offer-history>
+    <pre-offer-history [preOfferStatus]="preOfferForm.get('status').value" [_processId]=preOfferStage.processId keyboard="false"></pre-offer-history>
 
 </form>
