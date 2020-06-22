@@ -52,7 +52,7 @@ namespace Core.Testing.Platform
             {
                 entities.ForEach((entity) => { context.Set<T>().Add(entity); });
                 context.SaveChanges();
-                context.DetachAllEntities();
+               // context.DetachAllEntities();T
             });
         }
         public void Seed<T>(T entity) where T : class
@@ -90,12 +90,12 @@ namespace Core.Testing.Platform
         {
             throw new NotImplementedException();
         }
-        public void CleanTestingDatabase()
-        {
-            ContextAction((context) =>
-            {
-                context.DeleteAllEntities();
-            });
-        }
+        //public void CleanTestingDatabase()
+        //{
+        //    ContextAction((context) =>
+        //    {
+        //        context.DeleteAllEntities();
+        //    });
+        //}
     }
 }

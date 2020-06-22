@@ -20,7 +20,7 @@ namespace Core.Testing.Platform
         {
             ContextAction((context) =>
             {
-                context.ResetAllIdentitiesId();
+             //   context.ResetAllIdentitiesId();
             });
         }
 
@@ -32,16 +32,16 @@ namespace Core.Testing.Platform
             switch (httpVerb)
             {
                 case HttpVerb.GET:
-                    result = await GetHttpCallAsync<T>(endPoint);
+                    result = await GetHttpCallAsync<T>(endPoint).ConfigureAwait(false);
                     break;
                 case HttpVerb.POST:
-                    result = await PostHttpCallAsync<T>(endPoint, model);
+                    result = await PostHttpCallAsync<T>(endPoint, model).ConfigureAwait(false);
                     break;
                 case HttpVerb.PUT:
-                    result = await PutHttpCallAsync<T>(endPoint, model, id);
+                    result = await PutHttpCallAsync<T>(endPoint, model, id).ConfigureAwait(false);
                     break;
                 case HttpVerb.DELETE:
-                    result = await DeleteHttpCallAsync<T>(endPoint, id);
+                    result = await DeleteHttpCallAsync<T>(endPoint, id).ConfigureAwait(false);
                     break;
                 default: throw new NotImplementedException("Http verb is not implemented");
             }

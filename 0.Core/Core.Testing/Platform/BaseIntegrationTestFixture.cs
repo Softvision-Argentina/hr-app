@@ -13,7 +13,7 @@ namespace Core.Testing.Platform
         {
             ContextAction((context) =>
             {
-                context.ResetAllIdentitiesId();
+               // context.ResetAllIdentitiesId();
             });
         }
     }

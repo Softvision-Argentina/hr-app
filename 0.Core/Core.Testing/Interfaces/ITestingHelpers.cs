@@ -13,6 +13,6 @@ namespace Core.Testing.Interfaces
         T Get<T>(int id) where T : Entity<int>;
         int GetCount<T>() where T : class;
         T GetEager<T>(int id) where T : class;
-        void CleanTestingDatabase();
+       // void CleanTestingDatabase();
     }
 }

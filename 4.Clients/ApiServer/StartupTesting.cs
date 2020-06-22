@@ -18,9 +18,9 @@ namespace ApiServer
         {
             Configuration = configuration;
 
-            DatabaseConfigurations = new DatabaseConfigurations(false, false, false, string.Empty,
-                Configuration.GetConnectionString("SeedDBTesting")
-            );
+            //DatabaseConfigurations = new DatabaseConfigurations(false, false, false, string.Empty,
+            //    Configuration.GetConnectionString("SeedDBTesting")
+            //);
 
             UseTestingAuthentication = true;
         }
@@ -36,10 +36,10 @@ namespace ApiServer
             //Override the database context options to replace current connection string for testing connectionstring
             if (alreadyRegisteredContextService != null)
                 services.Remove(alreadyRegisteredContextService);
-
+            
             services.AddDbContext<DataBaseContext>(options =>
             {
-                options.UseSqlServer(DatabaseConfigurations.ConnectionStringTesting, b => b.MigrationsAssembly("ApiServer"));
+                options.UseInMemoryDatabase("InMemoryDbForTesting");
             });
         }
 
@@ -48,10 +48,10 @@ namespace ApiServer
             base.Configure(app, env, loggerFactory);
 
             //Use always the latest version of migrations
-            using (var db = (DataBaseContext) app.ApplicationServices.GetRequiredService(typeof(DataBaseContext)))
-            {
-                db.Database.Migrate();
-            }
+            //using (var db = (DataBaseContext) app.ApplicationServices.GetRequiredService(typeof(DataBaseContext)))
+            //{
+            //    db.Database.Migrate();
+            //}
         }
     }
 }
