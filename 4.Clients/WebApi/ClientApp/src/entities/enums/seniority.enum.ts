@@ -2,11 +2,10 @@ export enum SeniorityEnum {
     NA = 0,
     Junior1 = 1,
     Junior2 = 2,
-    Junior3 = 3,
-    SemiSenior1 = 4,
-    SemiSenior2 = 5,
-    SemiSenior3 = 6,
-    Senior1 = 7,
-    Senior2 = 8,
-    Senior3 = 9
+    SemiSenior1 = 3,
+    SemiSenior2 = 4,
+    SemiSenior3 = 5,
+    Senior1 = 6,
+    Senior2 = 7,
+    Senior3 = 8
 }

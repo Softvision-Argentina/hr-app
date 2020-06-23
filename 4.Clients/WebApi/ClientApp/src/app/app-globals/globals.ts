@@ -16,7 +16,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 export class Globals {
   seniorityList: any[] = [
     { id: SeniorityEnum.NA, name: 'NA' }, { id: SeniorityEnum.Junior1, name: 'Junior 1' },
-    { id: SeniorityEnum.Junior2, name: 'Junior 2' }, { id: SeniorityEnum.Junior3, name: 'Junior 3' },
+    { id: SeniorityEnum.Junior2, name: 'Junior 2' },
     { id: SeniorityEnum.SemiSenior1, name: 'Semi-Senior 1' }, { id: SeniorityEnum.SemiSenior2, name: 'Semi-Senior 2' },
     { id: SeniorityEnum.SemiSenior3, name: 'Semi-Senior 3' },
     { id: SeniorityEnum.Senior1, name: 'Senior 1' }, { id: SeniorityEnum.Senior2, name: 'Senior 2' },
