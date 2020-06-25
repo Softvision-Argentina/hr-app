@@ -11,7 +11,7 @@
             <nz-form-item>
                 <nz-form-label [nzMd]="5" [nzSm]="5" [nzXs]="5" nzFor="feedback">Feedback</nz-form-label>
                 <nz-form-control [nzMd]="19" [nzSm]="19" [nzXs]="19">
-                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d "
                     *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">

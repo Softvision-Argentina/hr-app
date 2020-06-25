@@ -1,6 +1,6 @@
 <div class="text-editor">
-  <div #textEditorWrapper class="recruEdit-wrapper" tabindex="0">
-      <div #editor id="recruEdit-editor" role="textbox" contenteditable="true" aria-label="Feedback" class="recruEdit-editor" data-placeholder="Add Feedback" style="user-select: text;" (keyup)="saveEditor()">
+  <div #textEditorWrapper [ngClass]="{'recruEdit-wrapper': isEditable, 'recruEdit-editor-noteditable': !isEditable}" tabindex="0">
+      <div [ngClass]="{'recruEdit-editor': isEditable}" #editor id="recruEdit-editor" role="textbox" [attr.contenteditable]="isEditable" aria-label="Feedback" data-placeholder="Add Feedback" style="user-select: text;" (keyup)="saveEditor()">
           <div><br></div>
       </div>
       <div #toolbar *ngIf="isToolbarActive" class="recruEdit-toolbar">

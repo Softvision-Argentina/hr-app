@@ -126,7 +126,7 @@ export class ClientStageComponent implements OnInit {
   }
 
   getFeedbackContent(content: string): void {
-    this.feedbackContent = content;
+    this.interviewForm.controls['interviewFeedback'].setValue(content);
   }
 
   changeFormStatus(enable: boolean) {
@@ -257,7 +257,7 @@ export class ClientStageComponent implements OnInit {
       this.interviewClient.nativeElement.value = '';
       this.clientInterviewer.nativeElement.value = '';
       this.project.nativeElement.value = '';
-      this.interviewFeedback.nativeElement.value = '';
+      this.feedbackContent= '';
 
       this.updateEditCache();
     }
@@ -341,7 +341,11 @@ export class ClientStageComponent implements OnInit {
     }
 
     Object.assign(this.interviews[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    this.editCache[id].edit = false;  
+  }
+
+  getFeedbackToCache(content: string, id: number){
+    this.editCache[id].data.feedback = content
   }
 
   updateEditCache(): void {
