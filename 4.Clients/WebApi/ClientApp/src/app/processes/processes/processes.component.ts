@@ -721,6 +721,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         if (!newCandidate.id) {
           this.facade.candidateService.add(newCandidate).subscribe(res => {
             newProcess.candidate.id = res.id;
+            this.currentCandidate.id = res.id; 
             this.facade.processService.add(newProcess)
               .subscribe(() => {
                 this.saveEventSubject.next(res.id);
@@ -730,6 +731,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
                 this.createEmptyProcess(newCandidate);
                 this.closeModal();
               }, err => {
+                this.isEdit = true;
                 this.isLoading = false;
                 this.facade.appService.stopLoading();
                 this.facade.toastrService.error(err);
@@ -756,7 +758,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
             });
         }
       } else {
-
         this.facade.candidateService.update(newCandidate.id, newCandidate)
           .subscribe(() => {
             this.isLoading = false;
@@ -767,7 +768,21 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           });
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
-            if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
+            if (!res || newProcess.id == 0) {
+              this.facade.processService.add(newProcess)
+              .subscribe(() => {
+                this.saveEventSubject.next(newCandidate.id);
+                this.isLoading = false;
+                this.facade.appService.stopLoading();
+                this.facade.toastrService.success('The process was successfully saved !');
+                this.createEmptyProcess(newCandidate);
+                this.closeModal();
+              }, err => {
+                this.isLoading = false;
+                this.facade.appService.stopLoading();
+                this.facade.toastrService.error(err);
+              });
+            } else if (res && res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
               const declineReason = newProcess.declineReason;
               this.openDeclineModal(newProcess, declineProcessModal).afterClose
@@ -780,7 +795,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
                   }
                 });
             } else {
-              
               this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(() => {
                   this.isLoading = false;
