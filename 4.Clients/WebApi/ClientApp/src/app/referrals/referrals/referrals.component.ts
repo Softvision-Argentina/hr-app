@@ -109,7 +109,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   profiles: CandidateProfile[] = [];
   openPositions: OpenPosition[];
   displayOpenPositions: any[];
-  stepIndex = 0;  
+  stepIndex = 0;
   isDeclineReasonOther = false;
   isOwnedProcesses = false;
   notis: Notification[] = [];
@@ -119,6 +119,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   visible: boolean;
   modalStart: boolean;
   displayNavAndSideMenu: boolean;
+  selectedIndex = 0;
 
   referralsSubscriptions: Subscription = new Subscription();
   constructor(private facade: FacadeService, private formBuilder: FormBuilder,
@@ -141,15 +142,25 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       instruction => this.displayNavAndSideMenu = instruction
     );
 
+    this._referralsService.displayNavAndSideMenu(true);
+
+    if (this.currentUser.role === 'Employee') {
+      if (this.modalStart === true) {
+        this.selectedIndex = 0;
+      } else {
+        this.selectedIndex = 1;
+      }
+    }
+
     this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getCandidates();
     this.getUsers();
     this.getOffices();
     this.getCommunities();
-    this.getProfiles();    
+    this.getProfiles();
     this.getOpenPositions();
-    this.displayOpenPositions = this.openPositions;    
+    this.displayOpenPositions = this.openPositions;
 
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
@@ -166,7 +177,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.showContactCandidatesModal(this.newCandidate);
       }
     }, 700);
-
 
     this.facade.appService.stopLoading();
   }
@@ -271,13 +281,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.referralsSubscriptions.add(profileSubscription);
   }
 
-  getOpenPositions(){
+  getOpenPositions() {
     const openPositionsSubscription = this.facade.openPositionService.getData().subscribe(res => {
       this.openPositions = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
-    });   
-    this.referralsSubscriptions.add(openPositionsSubscription); 
+    });
+    this.referralsSubscriptions.add(openPositionsSubscription);
   }
 
   getProfile(profile: number): string {
@@ -419,7 +429,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   resetRecruiter(): void {
-    this.searchRecruiterValue = '';    
+    this.searchRecruiterValue = '';
   }
 
   search(): void {
@@ -435,7 +445,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.lastName + ' ' + this.currentUser.firstName;    
+    this.searchRecruiterValue = this.currentUser.lastName + ' ' + this.currentUser.firstName;
     this.isOwnedProcesses = true;
   }
 
@@ -479,11 +489,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  searchByPriority(isHot : number){
+  searchByPriority(isHot: number) {
     if (isHot === 0) {
       this.openPositions = this.displayOpenPositions;
     } else {
-      this.openPositions = this.displayOpenPositions.filter(p => p.priority);        
+      this.openPositions = this.displayOpenPositions.filter(p => p.priority);
     }
   }
 
@@ -680,18 +690,18 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
-              this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(() => {
-                  this.getProcesses();
-                  this.getCandidates();
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.success('The process was successfully saved !');
-                  this.createEmptyProcess(newCandidate);
-                  this.closeModal();
-                }, err => {
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err.message);
-                });
+            this.facade.processService.update(newProcess.id, newProcess)
+              .subscribe(() => {
+                this.getProcesses();
+                this.getCandidates();
+                this.facade.appService.stopLoading();
+                this.facade.toastrService.success('The process was successfully saved !');
+                this.createEmptyProcess(newCandidate);
+                this.closeModal();
+              }, err => {
+                this.facade.appService.stopLoading();
+                this.facade.toastrService.error(err.message);
+              });
           }, err => {
             this.facade.appService.stopLoading();
             this.facade.toastrService.error(err.message);
