@@ -30,6 +30,8 @@ import { SlickComponent } from 'ngx-slick';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs/Subscription';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
+import { ReferralsService } from 'src/app/services/referrals.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-referrals',
@@ -51,6 +53,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
+  @ViewChild('newCandidate') newCandidate;
 
   @ViewChild('processCarousel') processCarousel;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
@@ -112,11 +115,14 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   id: number;
   forms: FormGroup[] = [];
   visible: boolean;
+  modalStart: boolean;
+  displayNavAndSideMenu: boolean;
 
   referralsSubscriptions: Subscription = new Subscription();
   constructor(private facade: FacadeService, private formBuilder: FormBuilder,
     private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
-    private globals: Globals) {
+    private globals: Globals, private _referralsService: ReferralsService,
+    private router: Router) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -124,6 +130,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    this._referralsService._startReferralsModalSource.subscribe(
+      startModalInstruction => this.modalStart = startModalInstruction
+    );
+
+    this._referralsService._displayNavAndSideMenuSource.subscribe(
+      instruction => this.displayNavAndSideMenu = instruction
+    );
+
     this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getCandidates();
@@ -142,6 +157,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       declineReasonName: [null, [Validators.required]]
     });
     this.getNotifications();
+
+    setTimeout(() => {
+      if (this.modalStart === true) {
+        this.showContactCandidatesModal(this.newCandidate);
+      }
+    }, 700);
+
+
+    this.facade.appService.stopLoading();
   }
 
   ngAfterViewChecked() {
@@ -246,7 +270,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   getDeclineReasons() {
     const declineReasons = this.facade.declineReasonService.getData().subscribe(res => {
-      this.declineReasons = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      if (res) {
+        this.declineReasons = res.sort((a, b) => (a.name.localeCompare(b.name)));
+      }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -623,7 +649,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (slide > -1) {
       this.processCarousel.goTo(slide);
       const elementName: string = slide === 0 ? 'candidateButton' : slide === 1 ? 'hrButton' : slide === 2 ? 'technicalButton'
-        : slide === 3 ? 'clientButton' : slide === 4 ? 'preOfferButton' : slide === 5 ?'offerButton' : slide === 6 ? 'hireButton' : 'none';
+        : slide === 3 ? 'clientButton' : slide === 4 ? 'preOfferButton' : slide === 5 ? 'offerButton' : slide === 6 ? 'hireButton' : 'none';
       this.checkSlideIndex(elementName);
       return false;
     } else {
@@ -919,7 +945,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         healthInsurance: HealthInsuranceEnum.NA,
         notes: '',
         firstday: new Date(),
-        bonus: '',        
+        bonus: '',
         hireDate: new Date(),
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),

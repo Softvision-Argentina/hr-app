@@ -25,6 +25,11 @@ export const appRoutes: Routes = [
     canLoad: [HRGuard]
   },
   {
+    path: 'welcome',
+    loadChildren: './welcome-page/welcome-page.module#WelcomePageModule',
+    canActivate: [CommonGuard]
+  },
+  {
     path: 'referrals',
     loadChildren: './referrals/referrals/referrals.module#ReferralsModule',
     canActivate: [CommonGuard]

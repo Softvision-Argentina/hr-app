@@ -30,6 +30,8 @@ import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription, Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
+import { Router } from '@angular/router';
+import { ReferralsService } from '../../services/referrals.service';
 
 @Component({
   selector: 'app-processes',
@@ -113,6 +115,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   isOwnedProcesses = false;
   forms: FormGroup[] = [];
   isLoading = false;
+  processId: number;
+  displayNavAndSideMenu: boolean;
 
   searchSub: Subscription = new Subscription();
   processesSubscription: Subscription = new Subscription();
@@ -124,7 +128,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     private candidateDetailsModal: CandidateDetailsComponent,
     private app: AppComponent,
     private userDetailsModal: UserDetailsComponent,
-    private globals: Globals) {
+    private globals: Globals,
+    private router: Router,
+    private _referralsService: ReferralsService) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -132,6 +138,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    this._referralsService._displayNavAndSideMenuSource.subscribe(
+      instruction => this.displayNavAndSideMenu = instruction
+    );
+    this._referralsService.displayNavAndSideMenu(true);
     this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getUserProcesses();
@@ -698,7 +709,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       let newCandidate: Candidate;
       let newProcess: Process;
       this.isLoading = true;
-      newCandidate = this.candidateAdd.getFormData();      
+      newCandidate = this.candidateAdd.getFormData();
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       // temp fix, we should check if englishlevel should be in Candidate table and HrStage table

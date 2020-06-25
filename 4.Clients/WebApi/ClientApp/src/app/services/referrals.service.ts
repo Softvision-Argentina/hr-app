@@ -11,8 +11,15 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ReferralsService extends BaseService<Candidate> {
   currentReferralList: Candidate[] = [];
+
   private referralList = new BehaviorSubject<Candidate[]>(this.currentReferralList);
   referrals = this.referralList.asObservable();
+
+  public _startReferralsModalSource = new BehaviorSubject<boolean>(false);
+  startReferralsModal$ = this._startReferralsModalSource.asObservable();
+
+  public _displayNavAndSideMenuSource = new BehaviorSubject<boolean>(false);
+  _displayNavAndSideMenu$ = this._displayNavAndSideMenuSource.asObservable();
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
@@ -59,4 +66,13 @@ export class ReferralsService extends BaseService<Candidate> {
   public updateList(referrals: Candidate[]): void {
     this.referralList.next(referrals);
   }
+
+  public startReferralsModal(instruction: boolean) {
+    this._startReferralsModalSource.next(instruction);
+  }
+
+  public displayNavAndSideMenu(instruction: boolean) {
+    this._displayNavAndSideMenuSource.next(instruction);
+  }
+
 }

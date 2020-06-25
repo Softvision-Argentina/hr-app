@@ -6,6 +6,7 @@ import { AppConfig } from './app-config/app.config';
 import { INg2LoadingSpinnerConfig, ANIMATION_TYPES } from 'ng2-loading-spinner';
 import { Subscription } from 'rxjs/Subscription';
 import { debounceTime } from 'rxjs/operators';
+import { ReferralsService } from './services/referrals.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./app.component.scss'],
   providers: [GoogleSigninComponent]
 })
-export class AppComponent   {
+export class AppComponent {
   title = 'app';
   showSpinner = true;
   showBigImage = true;
@@ -27,12 +28,14 @@ export class AppComponent   {
   };
   loadingSubscription: Subscription;
   showBigImageSubscription: Subscription;
+  displayNavAndSideMenu: boolean;
 
   constructor(
     private renderer: Renderer2,
     private google: GoogleSigninComponent,
     private facade: FacadeService,
-    private config: AppConfig
+    private config: AppConfig,
+    private _referralsService: ReferralsService
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +50,8 @@ export class AppComponent   {
     ).subscribe((value) => {
       this.showBigImage = value;
     });
+
+    this._referralsService._displayNavAndSideMenuSource.subscribe(instruction => this.displayNavAndSideMenu = instruction);
   }
 
   changeBg() {

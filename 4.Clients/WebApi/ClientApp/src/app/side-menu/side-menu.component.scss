@@ -69,6 +69,10 @@
   background-image: linear-gradient(#F4633A, #C800A1);
 }
 
+.hideReferrals {
+  display: none;
+}
+
 @media(max-height: 800px){
   .side-menu{
     padding: 8px 18px 10px 0px;

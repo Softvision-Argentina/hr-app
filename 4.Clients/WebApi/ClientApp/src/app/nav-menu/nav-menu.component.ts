@@ -6,6 +6,7 @@ import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
 import { FacadeService } from '../services/facade.service';
 import { SearchbarPlaceholderEnum } from '../../entities/enums/searchbar-placeholder-enum';
+import { ReferralsService } from '../services/referrals.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -20,7 +21,8 @@ export class NavMenuComponent implements OnInit {
     private _appComponent: AppComponent,
     private router: Router,
     private google: GoogleSigninComponent,
-    private facade: FacadeService
+    private facade: FacadeService,
+    private _referralsService: ReferralsService
   ) { }
   isExpanded: boolean = false;
   currentUser: User = null;
@@ -28,15 +30,23 @@ export class NavMenuComponent implements OnInit {
   url: string = '';
   search: string = '';
   searchbarPlaceholder = 'Search...';
+  displayNavAndSideMenu: boolean;
+
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.router.events.subscribe(data => {
       this.search = '';
     });
     this.getPlaceholder();
+
+    this._referralsService._displayNavAndSideMenuSource.subscribe(instruction => this.displayNavAndSideMenu = instruction);
+
+
   }
 
   logout() {
+    this._referralsService.startReferralsModal(false);
+    this._referralsService.displayNavAndSideMenu(true);
     this.google.logout();
   }
 
@@ -50,7 +60,7 @@ export class NavMenuComponent implements OnInit {
     });
   }
 
-  onSearchChange( search: string) {
+  onSearchChange(search: string) {
     this.facade.searchbarService.search(this.router.url, search);
   }
 
@@ -89,7 +99,7 @@ export class NavMenuComponent implements OnInit {
           default:
             this.searchbarPlaceholder = 'Search...';
             break;
-          }
+        }
       }
     });
   }

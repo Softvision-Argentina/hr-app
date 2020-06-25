@@ -74,7 +74,7 @@ import { PreOfferService } from './services/pre-offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReferralsService } from './services/referrals.service';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 registerLocaleData(en);
 
@@ -92,7 +92,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     LoaderComponent,
     PreferencesComponent,
     HasRoleDirective,
-    SideMenuComponent,
+    SideMenuComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

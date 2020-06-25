@@ -122,7 +122,7 @@ export class ReferralsContactComponent implements OnInit {
   emptyCandidate: Candidate;
   emptyUser: User;
 
-  editingCandidateId: number = 0;  
+  editingCandidateId: number = 0;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService, private process: ReferralsComponent) {
@@ -132,8 +132,12 @@ export class ReferralsContactComponent implements OnInit {
   ngOnInit() {
     this.fillUsers = this._users;
     this.comms = this._communities;
-    this.filteredCommunity = this._communities.sort((a, b) => (a.name.localeCompare(b.name)));
-    this.profiles = this._candidateProfiles.sort((a, b) => (a.name.localeCompare(b.name)));
+    if (this.communities) {
+      this.filteredCommunity = this._communities.sort((a, b) => (a.name.localeCompare(b.name)));
+    }
+    if (this._candidateProfiles) {
+      this.profiles = this._candidateProfiles.sort((a, b) => (a.name.localeCompare(b.name)));
+    }
     this.processFootModal = this._processFooterModal;
     this.processStartModal = this._processModal;
     this.getUsers();
@@ -289,7 +293,7 @@ export class ReferralsContactComponent implements OnInit {
         user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: editedCandidate.linkedInProfile,
-        englishLevel: editedCandidate.englishLevel,        
+        englishLevel: editedCandidate.englishLevel,
         status: editedCandidate.status,
         candidateSkills: editedCandidate.candidateSkills,
         preferredOfficeId: editedCandidate.preferredOfficeId,
@@ -327,7 +331,7 @@ export class ReferralsContactComponent implements OnInit {
       user: this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
-      englishLevel: editedCandidate.englishLevel,      
+      englishLevel: editedCandidate.englishLevel,
       status: CandidateStatusEnum.Recall,
       preferredOfficeId: editedCandidate.preferredOfficeId,
       candidateSkills: editedCandidate.candidateSkills,
@@ -369,9 +373,9 @@ export class ReferralsContactComponent implements OnInit {
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         user: new User(this.candidateForm.controls['user'].value, null),
-        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),        
+        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: null,
-        englishLevel: EnglishLevelEnum.None,        
+        englishLevel: EnglishLevelEnum.None,
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
         candidateSkills: [],

@@ -85,9 +85,10 @@ export class CSoftComponent {
 
     if (role === 'Common') {
       this.router.navigate(['/referrals']);
-    }
-    else {
-      this.router.navigate(['/'])
+    } else if (role === 'Employee') {
+      this.router.navigate(['/welcome']);
+    } else {
+      this.router.navigate(['/']);
     }
   }
   invalidUser() {

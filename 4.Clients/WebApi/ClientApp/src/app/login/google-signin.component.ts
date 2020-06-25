@@ -118,8 +118,9 @@ export class GoogleSigninComponent implements AfterViewInit {
   navigateByRole(role: string) {
     if (role === 'Common') {
       this.router.navigate(['/referrals']);
-    }
-    else {
+    } else if (role === 'Employee') {
+      this.router.navigate(['/welcome']);
+    } else {
       this.router.navigate(['/'])
     }
   }

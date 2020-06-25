@@ -18,7 +18,8 @@ export class HRGuard implements CanActivate, CanLoad {
     'HRUser',
     'Interviewer',
     'CommunityManager',
-    'Recruiter'
+    'Recruiter',
+    'Employee'
   ];
 
   constructor(private jwtHelper: JwtHelper, private router: Router,  config: AppConfig) {

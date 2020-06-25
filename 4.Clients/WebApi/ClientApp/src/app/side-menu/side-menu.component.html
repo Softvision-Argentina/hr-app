@@ -37,11 +37,11 @@
         <p>Days off</p>
       </div>
   </div>
-  <div [routerLink]="['/referrals']" [routerLinkActive]="['active']" class="container-item">
+  <div  [routerLink]="['/referrals']" [routerLinkActive]="['active']" class="container-item">
       <div class="gradient-border"></div>
-      <div class="item">
-        <i nz-icon nzType="solution" nzTheme="outline"></i>
-        <p>Referrals</p>
+      <div  class="item">
+        <i [ngClass]="{hideReferrals : displayNavAndSideMenu === false  }" nz-icon nzType="solution" nzTheme="outline"></i>
+        <p [ngClass]="{hideReferrals : displayNavAndSideMenu === false  }" >Referrals</p>
       </div>
   </div>
   <div [routerLink]="['/reports']" [routerLinkActive]="['active']" class="container-item" *appHasRole = "['Admin']">

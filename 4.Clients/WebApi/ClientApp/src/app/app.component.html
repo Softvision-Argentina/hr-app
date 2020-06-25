@@ -1,12 +1,8 @@
-<div
-  [ng2-loading]="showSpinner"
-  [config]="loadingConfig"
-  [ngClass]="{
+<div [ng2-loading]="showSpinner" [config]="loadingConfig" [ngClass]="{
     'big-image': showBigImage,
     'non-big-image': !showBigImage
-  }"
->
-  <app-nav-menu *ngIf="isAuthenticated()"></app-nav-menu>
+  }">
+  <app-nav-menu [ngClass]="{hideElement : displayNavAndSideMenu === false}" *ngIf="isAuthenticated()"></app-nav-menu>
   <app-side-menu *ngIf="isAuthenticated()"></app-side-menu>
   <div class="container-fluid padding main" [ngClass]="{'authenticated': isAuthenticated()}">
     <router-outlet></router-outlet>

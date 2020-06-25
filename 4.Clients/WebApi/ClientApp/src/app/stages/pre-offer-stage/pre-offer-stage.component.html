@@ -144,6 +144,9 @@
         </div>
     </div>
 
-    <pre-offer-history [preOfferStatus]="preOfferForm.get('status').value" [_processId]=preOfferStage.processId keyboard="false"></pre-offer-history>
+    <span *ngIf="preOfferStage">
+        <pre-offer-history [preOfferStatus]="preOfferForm.get('status').value" [_processId]=preOfferStage.processId keyboard="false"></pre-offer-history>
+    </span>
+    
 
 </form>
