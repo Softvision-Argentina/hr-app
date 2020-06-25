@@ -33,6 +33,7 @@ import { AppService } from './app.service';
 import { ReferralsService } from './referrals.service';
 import { InterviewService } from './interview.service'
 import { from } from 'rxjs';
+import { OpenPositionService } from './open-position.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -270,6 +271,14 @@ export class FacadeService {
       this._authService = this.injector.get(AuthService);
     }
     return this._authService;
+  }
+
+  private _openPositionService: OpenPositionService;
+  public get openPositionService(): OpenPositionService {
+    if (!this._openPositionService) {
+      this._openPositionService = this.injector.get(OpenPositionService);
+    }
+    return this._openPositionService;
   }
 
   private _declineReasonService: DeclineReasonService;

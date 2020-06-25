@@ -19,6 +19,7 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { FileUploadModule } from 'ng2-file-upload';
 import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
+import { OpenPositionsComponent } from './referrals/open-positions/open-positions.component';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
         CommunitiesComponent,
         CandidatesProfileComponent,
         ReferralsContactComponent,
-        TextEditorComponent
+        TextEditorComponent,
+        OpenPositionsComponent,
     ],
     exports: [
         CandidateDetailsComponent,
@@ -62,7 +64,8 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
         CandidatesProfileComponent,
         ReferralsContactComponent,
         FileUploadModule,
-        TextEditorComponent
+        TextEditorComponent,
+        OpenPositionsComponent
     ],
     providers: [ { provide: NZ_I18N, useValue: en_US }]
 })

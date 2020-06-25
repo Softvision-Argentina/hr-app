@@ -83,8 +83,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   candidatesFullList: Candidate[] = [];
   users: User[] = [];
   profileSearch = 0;
-  profileSearchName = 'ALL';
-  communitySearch = 0;
+  profileSearchName = 'ALL';  
   communitySearchName = 'ALL';
   profileList: any[];
   statusList: any[];

@@ -1,0 +1,75 @@
+<div nz-row>
+  <div nz-col nzSpan="22">
+    <nz-table *ngIf="positionsDisplayData" #positionsTable [nzData]="positionsDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+      <thead class="tableHead">
+        <tr>
+          <th class="tableHead noFilter">
+            Tittle
+          </th>
+          <th class="tableHead noFilter">
+            Seniority
+          </th>
+          <th class="tableHead noFilter">
+            Studio
+          </th>
+          <th class="tableHead">
+            Community
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="emitCommunityId(0)">
+                  <label>ALL</label>
+                </li>
+                <li nz-menu-item *ngFor="let community of communities" (click)="emitCommunityId(community.id)">
+                  <label>{{community.name}}</label>
+                </li>
+              </ul>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead">
+            Priority
+            <nz-dropdown [nzPlacement]="'bottomCenter'" class="filterButton">
+              <button nz-button nz-dropdown class="filterIcon"><i class="fa">&#xf0b0;</i></button>
+              <ul nz-menu class="filterList">
+                <li nz-menu-item (click)="emitPriority(0)">
+                  <label>ALL</label>
+                </li>
+                <li nz-menu-item (click)="emitPriority(1)">
+                  <label>HOT</label>
+                </li>
+              </ul>
+            </nz-dropdown>
+          </th>
+          <th class="tableHead noFilter">
+            Apply your referral
+          </th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr *ngFor="let position of positionsTable.data">
+          <td scope="row" class="title">
+              {{ position.title }}            
+          </td>
+          <td scope="row">
+            {{ getSeniorityName(position.seniority) }}
+          </td>
+          <td scope="row">
+            {{ position.studio }}
+          </td>
+          <td scope="row">            
+            {{ position.community.name }}
+          </td>
+          <td scope="row">
+            <div *ngIf="position.priority" class="hot">
+              <img src="../../assets/images/vector.svg" class="vector">HOT
+            </div>            
+          </td>
+          <td scope="row">            
+            <a class="apply">Apply</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

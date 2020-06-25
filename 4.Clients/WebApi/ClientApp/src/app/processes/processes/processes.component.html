@@ -24,7 +24,7 @@
         </app-processes-table>
       </nz-tab>
 
-      <nz-tab nzTitle="BA STUDIO" (nzClick)="searchAllProcess()" class="process">
+      <nz-tab nzTitle="BA STUDIO" (nzClick)="searchAllProcess()">
         <app-processes-table #processTable [profiles]="profiles" [communities]="communities"
           [listOfDisplayData]="listOfDisplayData" [filteredProcesses]="filteredProcesses" [statusList]="statusList"
           [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"

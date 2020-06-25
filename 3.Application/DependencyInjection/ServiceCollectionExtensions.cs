@@ -36,6 +36,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Persistance.EF;
 using FluentValidation;
+using Domain.Services.Impl.Validators.OpenPosition;
 
 namespace DependencyInjection
 {
@@ -97,6 +98,8 @@ namespace DependencyInjection
             services.AddScoped<UpdatePreOfferContractValidator, UpdatePreOfferContractValidator>();
             services.AddScoped<IValidator<CreateProcessContract>, CreateProcessContractValidator>();
             services.AddScoped<IValidator<UpdateProcessContract>, UpdateProcessContractValidator>();
+            services.AddScoped<CreateOpenPositionContractValidator, CreateOpenPositionContractValidator>();
+            services.AddScoped<UpdateOpenPositionContractValidator, UpdateOpenPositionContractValidator>();
             services.AddTransient<IDummyService, DummyService>();
             services.AddTransient<ISkillService, SkillService>();
             services.AddTransient<ICandidateService, CandidateService>();
@@ -125,6 +128,7 @@ namespace DependencyInjection
             services.AddTransient<ICvService, CvService>();
             services.AddTransient<IInterviewService,InterviewService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IOpenPositionService, OpenPositionService>();
         }
 
         private static void AddExternalServices(IServiceCollection services)
@@ -192,6 +196,7 @@ namespace DependencyInjection
             services.AddScoped<IRepository<Community>, CommunityRepository>();
             services.AddScoped<IRepository<CandidateProfile>, CandidateProfileRepository>();
             services.AddTransient<IMigrator, SeedMigrator>();
+            services.AddScoped<IRepository<OpenPosition>, OpenPositionRepository>();
         }
     }
 }

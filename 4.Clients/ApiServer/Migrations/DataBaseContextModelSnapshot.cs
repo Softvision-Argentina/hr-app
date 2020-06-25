@@ -650,6 +650,39 @@ namespace ApiServer.Migrations
                     b.ToTable("Office");
                 });
 
+            modelBuilder.Entity("Domain.Model.OpenPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CommunityId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<bool>("Priority");
+
+                    b.Property<int>("Seniority");
+
+                    b.Property<string>("Studio");
+
+                    b.Property<string>("Title");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.ToTable("OpenPositions");
+                });
+
             modelBuilder.Entity("Domain.Model.Postulant", b =>
                 {
                     b.Property<int>("Id")
@@ -1373,6 +1406,13 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.User", "UserOwner")
                         .WithMany()
                         .HasForeignKey("UserOwnerId");
+                });
+
+            modelBuilder.Entity("Domain.Model.OpenPosition", b =>
+                {
+                    b.HasOne("Domain.Model.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId");
                 });
 
             modelBuilder.Entity("Domain.Model.PreOfferStage", b =>

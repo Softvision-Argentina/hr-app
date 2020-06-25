@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { ReferralsService } from 'src/app/services/referrals.service';
 import { Router } from '@angular/router';
+import { OpenPosition } from 'src/entities/open-position';
 
 @Component({
   selector: 'app-referrals',
@@ -106,8 +107,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   offices: Office[] = [];
   communities: Community[] = [];
   profiles: CandidateProfile[] = [];
-  stepIndex = 0;
-  declineReasons: DeclineReason[] = [];
+  openPositions: OpenPosition[];
+  displayOpenPositions: any[];
+  stepIndex = 0;  
   isDeclineReasonOther = false;
   isOwnedProcesses = false;
   notis: Notification[] = [];
@@ -145,8 +147,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.getUsers();
     this.getOffices();
     this.getCommunities();
-    this.getProfiles();
-    this.getDeclineReasons();
+    this.getProfiles();    
+    this.getOpenPositions();
+    this.displayOpenPositions = this.openPositions;    
 
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null, [Validators.required]]
@@ -268,15 +271,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.referralsSubscriptions.add(profileSubscription);
   }
 
-  getDeclineReasons() {
-    const declineReasons = this.facade.declineReasonService.getData().subscribe(res => {
-      if (res) {
-        this.declineReasons = res.sort((a, b) => (a.name.localeCompare(b.name)));
-      }
+  getOpenPositions(){
+    const openPositionsSubscription = this.facade.openPositionService.getData().subscribe(res => {
+      this.openPositions = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
-    });
-    this.referralsSubscriptions.add(declineReasons);
+    });   
+    this.referralsSubscriptions.add(openPositionsSubscription); 
   }
 
   getProfile(profile: number): string {
@@ -418,18 +419,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   resetRecruiter(): void {
-    this.searchRecruiterValue = '';
-    this.searchRecruiter();
-  }
-
-  resetStatus(): void {
-    this.searchValueStatus = '';
-    this.searchStatus();
-  }
-
-  resetCurrentStage(): void {
-    this.searchValueCurrentStage = '';
-    this.searchCurrentStage();
+    this.searchRecruiterValue = '';    
   }
 
   search(): void {
@@ -443,22 +433,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.profileSearchName = 'ALL';
     this.nameDropdown.nzVisible = false;
   }
-  searchRecruiter(): void {
-    const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => (item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).indexOf(p) !== -1) : true) &&
-        (replaceAccent(item.candidate.user.firstName.toString() + ' ' + item.candidate.user.lastName.toString()).toUpperCase().indexOf(replaceAccent(this.searchRecruiterValue).toUpperCase()) !== -1);
-    };
-    const data = this.filteredProcesses.filter(item => filterFunc(item));
-    // const data = this.filteredProcesses;
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.communitySearchName = 'ALL';
-    this.profileSearchName = 'ALL';
-    this.nameDropdown.nzVisible = false;
-  }
 
   searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.lastName + ' ' + this.currentUser.firstName;
-    this.searchRecruiter();
+    this.searchRecruiterValue = this.currentUser.lastName + ' ' + this.currentUser.firstName;    
     this.isOwnedProcesses = true;
   }
 
@@ -480,28 +457,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.nameDropdown.nzVisible = false;
   }
 
-  searchStatus(): void {
-    const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.status.indexOf(p) !== -1) : true) &&
-        (item.status === this.searchValueStatus);
-    };
-    const data = this.searchValueStatus !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.searchValueStatus = '';
-    this.statusDropdown.nzVisible = false;
-  }
-
-  searchCurrentStage(): void {
-    const filterFunc = (item) => {
-      return (this.listOfSearchProcesses.length ? this.listOfSearchProcesses.some(p => item.currentStage.indexOf(p) !== -1) : true) &&
-        (item.currentStage === this.searchValueCurrentStage);
-    };
-    const data = this.searchValueCurrentStage !== '' ? this.filteredProcesses.filter(item => filterFunc(item)) : this.filteredProcesses;
-    this.listOfDisplayData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.searchValueCurrentStage = '';
-    this.currentStageDropdown.nzVisible = false;
-  }
-
   searchProfile(searchedProfile: number) {
     this.profileSearch = searchedProfile;
 
@@ -517,17 +472,18 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   searchCommunity(searchedCommunity: number) {
-    this.communitySearch = searchedCommunity;
-
-
-    if (this.communitySearch === 0) {
-      this.listOfDisplayData = this.filteredProcesses;
-      this.communitySearchName = 'ALL';
+    if (searchedCommunity === 0) {
+      this.openPositions = this.displayOpenPositions;
     } else {
-      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
-      this.communitySearchName = (this.communities.filter(p => p.id === this.communitySearch))[0].name;
-      this.listOfDisplayData = this.filteredProcesses.filter(p => p.candidate.community.id === searchedCommunity);
-      this.profileSearchName = 'ALL';
+      this.openPositions = this.displayOpenPositions.filter(p => p.community.id === searchedCommunity);
+    }
+  }
+
+  searchByPriority(isHot : number){
+    if (isHot === 0) {
+      this.openPositions = this.displayOpenPositions;
+    } else {
+      this.openPositions = this.displayOpenPositions.filter(p => p.priority);        
     }
   }
 
@@ -724,21 +680,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       } else {
         this.facade.processService.getByID(newProcess.id)
           .subscribe(res => {
-            if (res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
-              // Used for verifying whether user pressed OK or Cancel on decline modal.
-              const declineReason = newProcess.declineReason;
-              this.openDeclineModal(newProcess, declineProcessModal).afterClose
-                .subscribe(sel => {
-                  if (declineReason !== newProcess.declineReason) {
-                    this.getCandidates();
-                    this.getProcesses();
-                    this.facade.appService.stopLoading();
-                    this.facade.toastrService.success('The process was successfully saved!');
-                    this.createEmptyProcess(newCandidate);
-                    this.closeModal();
-                  }
-                });
-            } else {
               this.facade.processService.update(newProcess.id, newProcess)
                 .subscribe(() => {
                   this.getProcesses();
@@ -751,7 +692,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
                   this.facade.appService.stopLoading();
                   this.facade.toastrService.error(err.message);
                 });
-            }
           }, err => {
             this.facade.appService.stopLoading();
             this.facade.toastrService.error(err.message);
