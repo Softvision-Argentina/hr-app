@@ -35,8 +35,9 @@
 <br />
 <div class="proximanova-r">
   <div class="row">
-    <nz-tabset [nzSelectedIndex]="selectedIndex">
-      <nz-tab nzTitle="MY REFERRALS">                
+    <nz-tabset>
+      <nz-tab nzTitle="MY REFERRALS">
+        <app-referrals-list></app-referrals-list>              
       </nz-tab>
       <nz-tab nzTitle="OPEN POSITIONS">
         <app-open-positions
@@ -49,7 +50,6 @@
     </nz-tabset>
   </div>
 </div>
-
 <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
   <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
   <nz-divider></nz-divider>

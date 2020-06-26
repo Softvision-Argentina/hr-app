@@ -11,7 +11,7 @@ import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stag
 import { OfferStatusEnum } from 'src/entities/enums/offer-status.enum';
 import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
-
+import { referralCurrentStage } from 'src/entities/enums/referral-currentStage.enum';
 @Injectable()
 export class Globals {
   seniorityList: any[] = [
@@ -137,4 +137,11 @@ export class Globals {
     { id: HealthInsuranceEnum.ContinuesWithCurrentone, name: 'Continues With Current One'},
     { id: HealthInsuranceEnum.Other, name: 'Other'}
   ];
+
+  referralCurrentStage: any[] =[
+    {id: referralCurrentStage.new, name: 'New' },
+    {id: referralCurrentStage.pipeline, name: 'Pipeline' },
+    {id: referralCurrentStage.onProcess, name: 'On process' },
+    {id: referralCurrentStage.contracted, name: 'Contracted' }
+  ]
 }

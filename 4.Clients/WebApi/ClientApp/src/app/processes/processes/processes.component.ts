@@ -339,6 +339,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.appService.startLoading();
     this.facade.processService.approve(processID)
       .subscribe(res => {
+        console.log(res);
         this.getProcesses();
         this.getCandidates();
         this.facade.appService.stopLoading();
