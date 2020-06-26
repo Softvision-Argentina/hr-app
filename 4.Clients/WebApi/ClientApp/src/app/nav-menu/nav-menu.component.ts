@@ -41,12 +41,14 @@ export class NavMenuComponent implements OnInit {
 
     this._referralsService._displayNavAndSideMenuSource.subscribe(instruction => this.displayNavAndSideMenu = instruction);
 
+    if (this.currentUser.role !== 'Employee') {
+      this._referralsService.displayNavAndSideMenu(true);
+    }
 
   }
 
   logout() {
     this._referralsService.startReferralsModal(false);
-    this._referralsService.displayNavAndSideMenu(true);
     this.google.logout();
   }
 

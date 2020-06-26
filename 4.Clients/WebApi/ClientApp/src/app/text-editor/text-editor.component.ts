@@ -11,11 +11,11 @@ export class TextEditorComponent implements OnInit {
   @ViewChild('toolbar') toolbar: ElementRef<HTMLElement>;
   @ViewChild('colorContainer') colorContainer: ElementRef<HTMLElement>;
   
+  @Input() isToolbarActive: boolean;
   @Input() setContent: string;
-  @Output() getContent: EventEmitter<string> = new EventEmitter();
-
-  isActive: boolean = false;
-  isToolbarActive: boolean = true;
+  @Input() isEditable: boolean;
+  @Output() getContent: EventEmitter<string> = new EventEmitter();  
+  
   isColorContainerActive: boolean = false;
   isCreateLinkModalVisible: boolean = false;
   urlProtocol: string = "http://";
@@ -51,9 +51,10 @@ export class TextEditorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.wrapperStyle();
-    this.editor.nativeElement.innerHTML = this.setContent;
-    this.followLinkHandler();
+    this.wrapperStyle();    
+    this.editor.nativeElement.innerHTML = this.setContent;    
+    this.editor.nativeElement.setAttribute("aria-disabled", "false");
+    this.followLinkHandler();    
   }
 
   wrapperStyle() {
@@ -152,7 +153,7 @@ export class TextEditorComponent implements OnInit {
     this.isCreateLinkModalVisible = false;
   }
 
-  createLink() {
+  createLink() {    
     let fullURL = this.url.nativeElement.value;
 
     //THIS IS FOR THE NEW FUNCTIONALITY REPLACING EXECCOMAND
@@ -166,9 +167,9 @@ export class TextEditorComponent implements OnInit {
 
     let newAnchorTag: string;
     if (this.customSelection.range.toString() == ''){
-      newAnchorTag = `<a href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${fullURL}</a> `;
+      newAnchorTag = `<a target="_blank" href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${fullURL}</a>`;
     }else{
-      newAnchorTag = `<a href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${this.customSelection.range.toString()}</a> `;
+      newAnchorTag = `<a target="_blank" href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${this.customSelection.range.toString()}</a>`;
     }        
     
     document.execCommand('insertHTML', false, newAnchorTag);

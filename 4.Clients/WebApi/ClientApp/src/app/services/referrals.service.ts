@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from 'src/entities/candidate';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class ReferralsService extends BaseService<Candidate> {
@@ -21,6 +21,7 @@ export class ReferralsService extends BaseService<Candidate> {
   public _displayNavAndSideMenuSource = new BehaviorSubject<boolean>(false);
   _displayNavAndSideMenu$ = this._displayNavAndSideMenuSource.asObservable();
 
+  candidateAdded = new Subject<boolean>();
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
     this.apiUrl += 'Referrals';
@@ -54,7 +55,9 @@ export class ReferralsService extends BaseService<Candidate> {
         headers: this.headersWithAuth,
       })
       .pipe(
-        catchError(this.handleErrors));
+        tap(res => this.candidateAdded.next(true)),
+        catchError(this.handleErrors)
+      );
   }
 
   public addNew(newReferral: Candidate): void {

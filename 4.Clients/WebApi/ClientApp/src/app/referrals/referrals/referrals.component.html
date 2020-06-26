@@ -33,14 +33,23 @@
   </div>
 </div>
 <br />
-<div class="container mt-4">
+<div class="proximanova-r">
   <div class="row">
-    <div *ngFor="let c of candidateReferred" class="col-lg-2 col-md-3 col-sm-6">
-      <app-referrals-card [cand]="c"></app-referrals-card>
-    </div>
+    <nz-tabset>
+      <nz-tab nzTitle="MY REFERRALS">
+        <app-referrals-list></app-referrals-list>              
+      </nz-tab>
+      <nz-tab nzTitle="OPEN POSITIONS">
+        <app-open-positions
+        [positionsDisplayData]="openPositions"
+        [communities]="communities"
+        (searchPriority)="searchByPriority($event)"
+        (searchCommunity)="searchCommunity($event)">
+      </app-open-positions>
+      </nz-tab>
+    </nz-tabset>
   </div>
 </div>
-
 <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
   <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
   <nz-divider></nz-divider>

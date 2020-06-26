@@ -10,7 +10,7 @@ namespace Domain.Services.Impl.Validators.Stages.OfferStage
             RuleSet(ValidatorConstants.RULESET_CREATE, () =>
             {
                 RuleFor(_ => _.Bonus).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
+                RuleFor(_ => _.Feedback).MaximumLength(5000);
                 RuleFor(_ => _.Notes).MaximumLength(ValidationConstants.MAX_TEXTAREA);
                 RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
 

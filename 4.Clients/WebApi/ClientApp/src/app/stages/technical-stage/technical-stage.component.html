@@ -121,7 +121,7 @@
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="feedback" [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d"
                     *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">

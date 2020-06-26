@@ -102,7 +102,7 @@ export class ReferralsContactComponent implements OnInit {
     community: [null, [Validators.required]],
     profile: [null, [Validators.required]],
     linkedInProfile: [null, [trimValidator]],
-    isReferred: false,
+    isReferred: true,
     id: [null],
     cv: [null],
     knownFrom: [null],

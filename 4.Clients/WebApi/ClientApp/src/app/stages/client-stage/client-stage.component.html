@@ -159,8 +159,8 @@
         <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="interviewFeedback">Feedback</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea #interviewFeedback rows="1 " nz-input id="interviewFeedback" formControlName="interviewFeedback" placeholder="Enter feedback here"></textarea>
+                <nz-form-control [nzSm]="14" [nzXs]="24">                    
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
                     <nz-form-explain *ngIf="interviewForm.get('interviewFeedback').dirty && interviewForm.get('interviewFeedback').errors">                        
                         <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('required')">
                             Field required
@@ -201,7 +201,7 @@
                 <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
                     <td nzWidth="200px">{{interview.interviewDate | date  : 'shortDate' }}</td>
                     <td nzWidth="200px">{{interview.client}}</td>
-                    <td nzWidth="200px" word-break: break-all>{{interview.feedback}}</td>
+                    <td nzWidth="200px" word-break: break-all><app-text-editor [setContent]="interview.feedback" (getContent)="getFeedbackContent($event)"></app-text-editor></td>
                     <td nzWidth="200px">{{interview.clientInterviewer}}</td>
                     <td nzWidth="200px">{{interview.project}}</td>
                     <td>
@@ -220,9 +220,9 @@
                     <td>
                         <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
                     </td>
-                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client" /></td>
-                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.feedback" /></td>
-                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer" /></td>
+                    <td><input type="text" nz-input/></td>
+                    <td><app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" [isEditable]="true"></app-text-editor></td>                    
+                    <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer"/></td>                    
                     <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
                     <td>
                         <a (click)="saveEdit(interview.id)" class="save" style="margin-right: 8px;">Save</a>

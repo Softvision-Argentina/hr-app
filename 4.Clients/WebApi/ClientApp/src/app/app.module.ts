@@ -74,7 +74,8 @@ import { PreOfferService } from './services/pre-offer.service';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReferralsService } from './services/referrals.service';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { OpenPositionService } from './services/open-position.service';
 
 registerLocaleData(en);
 
@@ -165,6 +166,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     DeclineReasonService,
     PreOfferService,
     InterviewService,
+    OpenPositionService,
     { provide: NZ_I18N, useValue: en_US },
     {provide : LocationStrategy , useClass: HashLocationStrategy},
   ],
