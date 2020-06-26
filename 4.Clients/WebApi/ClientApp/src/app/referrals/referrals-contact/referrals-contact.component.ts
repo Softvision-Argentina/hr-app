@@ -13,6 +13,9 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ReferralsComponent } from '../referrals/referrals.component';
+import { Cv } from 'src/entities/cv';
+import { BaseService } from 'src/app/services/base.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-referrals-contact',
@@ -91,22 +94,13 @@ export class ReferralsContactComponent implements OnInit {
   profiles: CandidateProfile[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
-    name: ['', [trimValidator]],
     firstName: [null, [Validators.required, trimValidator]],
     lastName: [null, [Validators.required, trimValidator]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/)]],
-    user: [null, [Validators.required]],
-    contactDay: [new Date(), [Validators.required]],
+    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9 -]+$/)]],
     community: [null, [Validators.required]],
-    profile: [null, [Validators.required]],
-    linkedInProfile: [null, [trimValidator]],
-    isReferred: true,
-    id: [null],
-    cv: [null],
-    knownFrom: [null],
-    referredBy: [null]
+    file: ['']
   });
   visible = false;
   isNewCandidate = false;
@@ -125,7 +119,7 @@ export class ReferralsContactComponent implements OnInit {
   editingCandidateId: number = 0;
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private detailsModal: CandidateDetailsComponent,
-    private modalService: NzModalService, private process: ReferralsComponent) {
+    private modalService: NzModalService, private process: ReferralsComponent, private b: BaseService<Cv>, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -288,21 +282,21 @@ export class ReferralsContactComponent implements OnInit {
         name: this.candidateForm.controls['firstName'].value.toString(),
         lastName: this.candidateForm.controls['lastName'].value.toString(),
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
-        dni: editedCandidate.dni,
+        dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: this.candidateForm.controls['user'].value,
-        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
-        linkedInProfile: editedCandidate.linkedInProfile,
-        englishLevel: editedCandidate.englishLevel,
-        status: editedCandidate.status,
-        candidateSkills: editedCandidate.candidateSkills,
-        preferredOfficeId: editedCandidate.preferredOfficeId,
-        profile: editedCandidate.profile,
-        community: editedCandidate.community,
-        isReferred: editedCandidate.isReferred,
-        cv: editedCandidate.cv,
-        knownFrom: editedCandidate.knownFrom,
-        referredBy: editedCandidate.referredBy,
+        user: null,
+        contactDay: new Date(),
+        linkedInProfile: null,
+        englishLevel: 0,
+        status: 0,
+        candidateSkills: null,
+        preferredOfficeId: null,
+        profile: null,
+        community: null,
+        isReferred: true,
+        cv: null,
+        knownFrom: this.currentUser.firstName + " " + this.currentUser.lastName,
+        referredBy: null,
       };
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -364,6 +358,7 @@ export class ReferralsContactComponent implements OnInit {
       }
     }
 
+
     if (isCompleted) {
       const newCandidate: Candidate = {
         id: 0,
@@ -372,28 +367,36 @@ export class ReferralsContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: new User(this.candidateForm.controls['user'].value, null),
-        contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
+        user: null,
+        contactDay: new Date(),
         linkedInProfile: null,
         englishLevel: EnglishLevelEnum.None,
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
         candidateSkills: [],
-        isReferred: this.candidateForm.controls['isReferred'].value,
+        isReferred: true,
         community: new Community(this.candidateForm.controls['community'].value),
-        profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
+        profile:null,
         cv: null,
         knownFrom: null,
         referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
       };
+
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
+
+
       this.facade.referralsService.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;
           this.visible = false;
+          if (this.candidateForm.get('file').value) {
+            const file = new FormData();
+            file.append('file', this.candidateForm.get('file').value);
+            this.facade.referralsService.saveCv(res.id, file).subscribe()
+          }
           this.facade.appService.stopLoading();
           this.facade.referralsService.addNew(newCandidate);
           this.modalService.closeAll();
@@ -402,5 +405,19 @@ export class ReferralsContactComponent implements OnInit {
           this.facade.appService.stopLoading();
         });
     }
+    this.facade.appService.stopLoading();
   }
+
+    //name: ['', [trimValidator]],
+  onFileSelect(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.candidateForm.get('file').setValue(file);
+    }
+  }
+
+  clearDataAndCloseModal() {
+    this.facade.modalService.openModals[0].destroy();
+  }
+
 }

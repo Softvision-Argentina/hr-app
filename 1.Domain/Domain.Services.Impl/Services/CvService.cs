@@ -18,7 +18,7 @@ namespace Domain.Services.Impl.Services
 
         public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, Google.Apis.Drive.v3.Data.File fileUploaded)
         {
-            cvContract.UrlId = fileUploaded.Id;
+            cvContract.UrlId = fileUploaded.WebViewLink.Replace("drivesdk","sharing");
             cvContract.CandidateId = candidate.Id;
             candidate.Cv = cvContract.UrlId;
 

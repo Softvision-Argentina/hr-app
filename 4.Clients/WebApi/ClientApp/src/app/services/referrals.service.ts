@@ -21,6 +21,9 @@ export class ReferralsService extends BaseService<Candidate> {
   public _displayNavAndSideMenuSource = new BehaviorSubject<boolean>(false);
   _displayNavAndSideMenu$ = this._displayNavAndSideMenuSource.asObservable();
 
+  public _createNewReferralSource = new BehaviorSubject<boolean>(false);
+  _createNewReferral$ = this._createNewReferralSource.asObservable();
+
   candidateAdded = new Subject<boolean>();
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
@@ -60,6 +63,19 @@ export class ReferralsService extends BaseService<Candidate> {
       );
   }
 
+  public saveCv(candidateId: number, formData: FormData): Observable<any> {
+
+    const headers = { Authorization: this.headersWithAuth.get("Authorization")}
+    const cvApi = this.apiUrl.replace('Referrals', '') + 'cv/' + candidateId;
+
+    return this.http
+      .post<any>(cvApi, formData,{
+        headers : headers
+      })
+      .pipe(
+        catchError(this.handleErrors));
+
+  }
   public addNew(newReferral: Candidate): void {
     this.currentReferralList = this.referralList.getValue();
     this.currentReferralList.push(newReferral);
@@ -76,6 +92,10 @@ export class ReferralsService extends BaseService<Candidate> {
 
   public displayNavAndSideMenu(instruction: boolean) {
     this._displayNavAndSideMenuSource.next(instruction);
+  }
+
+  public createNewReferral(instruction: boolean) {
+    this._createNewReferralSource.next(instruction);
   }
 
 }

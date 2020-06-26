@@ -437,12 +437,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);    
-    this.validateForm.controls['user'].setValue(candidate.user.id);
+    this.validateForm.controls['user'].setValue(candidate.user ? candidate.user.id : null);
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);
     this.validateForm.controls['status'].setValue(candidate.status);
     this.validateForm.controls['community'].setValue(candidate.community.id);
-    this.validateForm.controls['profile'].setValue(candidate.profile.id);
+    this.validateForm.controls['profile'].setValue(candidate.profile ? candidate.profile.id : null);
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
     this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
     this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);

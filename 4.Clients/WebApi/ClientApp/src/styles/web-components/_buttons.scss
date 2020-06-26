@@ -1,0 +1,31 @@
+.buttonsWrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.cancelButton {
+    width: 171px;
+    height: 45px;
+    border-radius: 2px;
+    border: solid 3px #ff8f1c;
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    color: #ff8f1c;
+}
+
+.saveButton {
+    width: 171px;
+    height: 45px;
+    border-radius: 2px;
+    background-image: linear-gradient(to top, #f4633a, #c800a1);
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+}

@@ -793,15 +793,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzContent: modalContent,
       nzClosable: false,
       nzWidth: '90%',
-      nzFooter: [
-        {
-          label: 'Cancel',
-          shape: 'default',
-          onClick: () => {
-            modal.destroy();
-            this.refreshTable();
-          }
-        }]
+      nzFooter: null
     });
 
   }

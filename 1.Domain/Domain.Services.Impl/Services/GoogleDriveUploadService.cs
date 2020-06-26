@@ -2,62 +2,83 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using Google.Apis.Util.Store;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace Domain.Services.Impl.Services
 {
     public class GoogleDriveUploadService : IGoogleDriveUploadService
     {
-        //TODO: Encapsulate and divide driveservice in other interface, and File in its proper interface
-        public Google.Apis.Drive.v3.Data.File Upload(DriveService driveService, IFormFile file)
+        public File Upload(DriveService service, IFormFile file)
         {
-            if (file.Length > 0)
-            {
-                Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-                body.Name = Path.GetFileName(file.FileName);
-                body.MimeType = GetMimeType(file.ContentType);
-                var ms = new MemoryStream();
-                file.CopyTo(ms);
-                var fileBytes = ms.ToArray();
-                MemoryStream stream = new MemoryStream(fileBytes);
+            string fileName = Path.GetRandomFileName();
+            fileName = fileName.Replace(".", "");
+            fileName.Substring(0, 8); 
+            fileName = file.FileName + " " + fileName;
 
-                FilesResource.CreateMediaUpload request = driveService.Files.Create(body, stream, GetMimeType(file.ContentType));
-                request.SupportsTeamDrives = true;
-                request.Upload();
+            string folderId = "1KMcb74YrmMd-j3BVNWyC9L9uf5Czivbs";
+            var fileMetadata = new File()
+                {
+                    Name = fileName,
+                    Parents = new List<string>() { folderId } //FOLDER 
+                };
 
-                return request.ResponseBody;
-            }
-            
-            return null;
+                FilesResource.CreateMediaUpload requestAdd;
+                var stream = new MemoryStream();
+                file.CopyTo(stream);
+                requestAdd = service.Files.Create(fileMetadata, stream, "application/pdf");
+                requestAdd.Fields = "id";
+                var response = requestAdd.Upload();
+
+                FilesResource.ListRequest listRequest = service.Files.List();
+                listRequest.PageSize = 100;
+                listRequest.Fields = "nextPageToken, files(id, name, webViewLink)";
+                IList<File> files = listRequest.Execute().Files;
+
+                var webViewLink = files.First(x => x.Name == fileName);
+
+                stream.Close();
+
+                return webViewLink;
+
+
         }
 
         public DriveService Authorize()
         {
-            string[] scopes = new string[] { DriveService.Scope.Drive,
-                               DriveService.Scope.DriveFile,};
+            string[] Scopes = { DriveService.Scope.DriveFile, DriveService.Scope.Drive };
+            string ApplicationName = "ReporteSV";
 
             var directory = GetDirectory();
-            var keyFilePath = $"{directory}\\api.p12"; 
-            var serviceAccountEmail = "descargar@quickstart-1584033347804.iam.gserviceaccount.com"; 
+            var keyFilePath = $"{directory}\\credentials.json"; 
+            var credPath = $"{directory}\\token.json"; 
 
-            var certificate = new X509Certificate2(keyFilePath, "notasecret", X509KeyStorageFlags.Exportable);
-            var cred = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccountEmail)
+            UserCredential credential;
+
+            using (var stream = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read))
             {
-                Scopes = scopes
-            }.FromCertificate(certificate));
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+            }
 
+                var service = new DriveService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = ApplicationName,
+                });
+                return service;
 
-            var service = new DriveService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = cred,
-                ApplicationName = "Drive API Sample",
-            });
-
-            return service;
         }
 
         private static string GetMimeType(string fileName)

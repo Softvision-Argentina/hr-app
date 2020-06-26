@@ -29,6 +29,7 @@ namespace ApiServer.Controllers
             return ApiAction(() =>
             {
                 var contract = _mapper.Map<CreateCandidateContract>(createCandidateVm);
+                
                 var returnContract = _candidateService.Create(contract);
 
                 return Created("Get", _mapper.Map<CreatedCandidateViewModel>(returnContract));

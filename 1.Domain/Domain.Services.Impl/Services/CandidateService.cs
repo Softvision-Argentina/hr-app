@@ -26,7 +26,7 @@ namespace Domain.Services.Impl.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<CandidateService> _log;
         private readonly UpdateCandidateContractValidator _updateCandidateContractValidator;
-        private readonly CreateCandidateContractValidator _createCandidateContractValidator;        
+        private readonly CreateCandidateContractValidator _createCandidateContractValidator;
 
         public CandidateService(IMapper mapper,
             IRepository<Candidate> candidateRepository,
@@ -50,7 +50,7 @@ namespace Domain.Services.Impl.Services
             _candidateProfileRepository = candidateProfileRepository;
             _log = log;
             _updateCandidateContractValidator = updateCandidateContractValidator;
-            _createCandidateContractValidator = createCandidateContractValidator;            
+            _createCandidateContractValidator = createCandidateContractValidator;
         }
 
         public CreatedCandidateContract Create(CreateCandidateContract contract)
@@ -62,9 +62,16 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"Mapping contract {contract.Name}");
             var candidate = _mapper.Map<Candidate>(contract);
 
-            this.AddUserToCandidate(candidate, contract.User.Id);
+            if (contract.User != null)
+            {
+                this.AddUserToCandidate(candidate, contract.User.Id);
+            }
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
+
+            if (contract.Profile != null)
+            {
+                this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
+            }
 
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
@@ -171,7 +178,7 @@ namespace Domain.Services.Impl.Services
         }
 
         public Candidate GetCandidate(int id)
-        {            
+        {
             var candidateQuery = _candidateRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
@@ -203,7 +210,7 @@ namespace Domain.Services.Impl.Services
                 candidate = _candidateRepository.Query()
                     .Where(_ => email != null)
                     .FirstOrDefault(_ => _.EmailAddress == email);
-                
+
                 if (candidate != null)
                     throw new InvalidCandidateException("Email address already exists");
             }
@@ -213,7 +220,7 @@ namespace Domain.Services.Impl.Services
                 candidate = _candidateRepository.Query()
                     .Where(_ => phoneNumber != null)
                     .FirstOrDefault(_ => _.PhoneNumber == phoneNumber);
-                
+
                 if (candidate != null && candidate.PhoneNumber != "(+54)")
                     throw new InvalidCandidateException("Phone number already exists");
             }
@@ -246,7 +253,7 @@ namespace Domain.Services.Impl.Services
         {
             var user = _userRepository.Query().Where(_ => _.Id == userId).FirstOrDefault();
             if (user == null)
-               throw new Domain.Model.Exceptions.User.UserNotFoundException(userId);
+                throw new Domain.Model.Exceptions.User.UserNotFoundException(userId);
 
             candidate.User = user;
         }
