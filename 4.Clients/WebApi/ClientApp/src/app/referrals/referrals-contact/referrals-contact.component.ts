@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
 import { User } from 'src/entities/user';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, UploadFile  } from 'ng-zorro-antd';
 import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
@@ -117,6 +117,8 @@ export class ReferralsContactComponent implements OnInit {
   emptyUser: User;
 
   editingCandidateId: number = 0;
+
+  fileList: UploadFile [] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private detailsModal: CandidateDetailsComponent,
     private modalService: NzModalService, private process: ReferralsComponent, private b: BaseService<Cv>, private router: Router) {
@@ -419,5 +421,22 @@ export class ReferralsContactComponent implements OnInit {
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();
   }
+
+  
+  beforeUpload = (file: UploadFile): boolean => {
+    let fileExtension = file.name.split('.')[1].toLowerCase(),
+      fileSize = file.size;
+
+    if (fileExtension === 'pdf' && fileSize < 6300000) {
+      this.candidateForm.get('file').setValue(file);
+      this.fileList = this.fileList.concat(file);
+    } else if (fileExtension !== 'pdf') {
+      this.facade.toastrService.error('File format must be PDF');
+    } else if (fileSize > 6300000) {
+      this.facade.toastrService.error('File size must be 6Mb');
+    }
+    
+    return false;
+  };
 
 }

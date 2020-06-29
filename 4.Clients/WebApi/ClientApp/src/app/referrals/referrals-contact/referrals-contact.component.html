@@ -6,7 +6,7 @@
             <div nz-row>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="community" [hidden]="!visible">Community
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community
                         </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                             <nz-select formControlName="community">
@@ -24,7 +24,7 @@
             <div nz-row>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name
                         </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                             <input type="text" nz-input formControlName="firstName" id="FirstName"
@@ -49,7 +49,7 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name
                         </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                             <input type="text" nz-input formControlName="lastName" id="lastName"
@@ -76,7 +76,7 @@
             <div nz-row>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" [hidden]="!visible">E-mail</nz-form-label>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email" [hidden]="!visible">E-mail</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                             <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                             <nz-form-explain
@@ -87,7 +87,7 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone
                         </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24"
                             [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible">
@@ -107,10 +107,20 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-            </div>
-            <div nz-row>
                 <div nz-col nzSpan="12">
-                    <input type="file" name="file" id="file" class="inputfile" (change)="onFileSelect($event)" />
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="uploadFile" nzNoColon="true"></nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" (change)="onFileSelect($event)">
+                                <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
+                            </nz-upload>
+                            <p nz-typography>File size must not exceed 6Mb</p>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <!-- <label for="file">
+                        test
+                    </label>
+                    <input type="file" name="file" id="file" class="inputfile" (change)="onFileSelect($event)"/> -->
                 </div>
             </div>
 
