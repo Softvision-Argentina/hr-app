@@ -94,8 +94,8 @@ export class ReferralsContactComponent implements OnInit {
   profiles: CandidateProfile[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
-    firstName: [null, [Validators.required, trimValidator]],
-    lastName: [null, [Validators.required, trimValidator]],
+    firstName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+    lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9 -]+$/)]],
