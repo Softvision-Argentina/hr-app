@@ -661,7 +661,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.stepIndex = 3;
         return 'offerButton';
       default:
-        return 'hireButton';
+        return 'candidateButton';
     }
   }
 
