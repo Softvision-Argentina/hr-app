@@ -744,11 +744,12 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     process.preOfferStage = this.preOfferStage.getFormData(process.id);
     process.offerStage = this.offerStage.getFormData(process.id);
 
-    // Seniority is now handled global between technical stage and offer stage. The process uses the last updated value.
-    process.seniority = this.selectedSeniority ? this.selectedSeniority :
-      (process.technicalStage.seniority ? process.technicalStage.seniority :
-        process.technicalStage.alternativeSeniority ? process.technicalStage.alternativeSeniority :
-          (process.offerStage.seniority));
+    // Seniority is now handled globally between technical stage and offer stage. The process uses the last updated value.
+    process.seniority = (this.selectedSeniority ||
+      process.technicalStage.seniority ||
+      process.technicalStage.alternativeSeniority ||
+      process.offerStage.seniority);
+      
     process.englishLevel = process.englishLevel;
 
     return process;

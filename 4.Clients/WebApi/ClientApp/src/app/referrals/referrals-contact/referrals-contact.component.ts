@@ -98,7 +98,7 @@ export class ReferralsContactComponent implements OnInit {
     lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9 -]+$/)]],
+    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
     file: ['']
   });
