@@ -41,3 +41,34 @@ nz-step {
 .proximanova-r{
     font-family: "ProximaNova-Regular";
 }
+
+.headerFont {
+    display: inline-block;
+    font-family: ProximaNova-Extrabold;
+    font-size: 44px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.02;
+    letter-spacing: -0.88px;
+    color: #222222;
+  }
+
+  ::ng-deep .ant-btn.referralsButton {
+    width: 215px;
+    height: 40px;
+    background-image: linear-gradient(to top, #f4633a, #c800a1);
+    margin-left: 50px;
+    border: none;  
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.67px;
+    color: #ffffff;
+  }
+
+  ::ng-deep .ant-tabs-extra-content {
+      padding-right: 8.33%;
+  }
