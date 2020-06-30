@@ -13,6 +13,6 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    Contents: |
+    Contents:
       Structure\*.sql
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
