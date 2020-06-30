@@ -14,7 +14,5 @@ steps:
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
     Contents: |
-      ConsoleApplication1\ConsoleApplication1\bin\**\*.exe
-      ConsoleApplication1\ConsoleApplication1\bin\**\*.dll
-      ConsoleApplication1\readme.txt
+      Structure\*.sql
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
