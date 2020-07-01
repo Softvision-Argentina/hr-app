@@ -86,8 +86,8 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   @Input() _offices: Office[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
-    name: [null, [Validators.required, trimValidator]],
-    lastName: [null, [Validators.required, trimValidator]],
+    name: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
+    lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     dni: [0],
     email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
     phoneNumberPrefix: ['+54'],
