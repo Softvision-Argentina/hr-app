@@ -281,13 +281,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 };
                 candidateSkills.push(skill);
               });
-              const referredBy = !this.validateForm.controls['isReferred'].value ? null : this.validateForm.controls['referredBy'].value;
+              const referredBy = this.validateForm.controls['referredBy'].value;
               let knownFrom;
-              if (!this.validateForm.controls['isReferred'].value) {
-                knownFrom = null;
-              } else {
-                knownFrom = this.validateForm.controls['knownFrom'].value;
-              }
+              knownFrom = this.validateForm.controls['knownFrom'].value;
               editedCandidate = {
                 id: 0,
                 name: this.validateForm.controls['name'].value.toString(),
