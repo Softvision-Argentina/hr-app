@@ -15,7 +15,7 @@
         <td> {{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
         <td [ngStyle]="getTextColor(referralItem, false)"> {{ referralItem.currentStatus.message }} </td>
         <td nzAlign='center' >
-          <i nzTitle="Edit referral" nz-tooltip  nz-icon nzType="edit" nzTheme="outline"></i>
+          <i nzTitle="Edit referral" nz-tooltip  nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"  (click)="showContactReferralModal(referralItem.candidate)"></i>
         </td>
       </tr>
     </tbody>

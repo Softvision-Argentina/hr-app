@@ -76,6 +76,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReferralsService } from './services/referrals.service';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { OpenPositionService } from './services/open-position.service';
+import { ReferralsModule } from './referrals/referrals/referrals.module';
 
 registerLocaleData(en);
 
@@ -128,6 +129,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     PipesModule,
     Ng2LoadingSpinnerModule.forRoot({}),
     AppRoutingModule,
+    ReferralsModule
   ],
   providers: [
     Globals,

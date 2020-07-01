@@ -33,6 +33,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { ReferralsService } from 'src/app/services/referrals.service';
 import { Router } from '@angular/router';
 import { OpenPosition } from 'src/entities/open-position';
+import { ReferralsContactComponent } from '../referrals-contact/referrals-contact.component';
 
 @Component({
   selector: 'app-referrals',
@@ -793,6 +794,23 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
+      nzWidth: '90%',
+      nzFooter: null
+    });
+
+  }
+
+
+  showContactReferralModal(referral: Candidate) {
+    const modal = this.facade.modalService.create({
+      nzTitle: null,
+      nzContent: ReferralsContactComponent,
+      nzClosable: false,
+      nzComponentParams: {
+        referralToEdit: referral,
+        isEditReferral: true,
+        communities: this.communities
+      },
       nzWidth: '90%',
       nzFooter: null
     });

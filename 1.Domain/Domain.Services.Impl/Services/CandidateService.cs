@@ -113,10 +113,18 @@ namespace Domain.Services.Impl.Services
                 _processRepository.Update(process);
             }
 
-            this.AddUserToCandidate(candidate, contract.User.Id);
+
+            if (contract.User != null)
+            {
+                this.AddUserToCandidate(candidate, contract.User.Id);
+            }
             this.AddOfficeToCandidate(candidate, contract.PreferredOfficeId);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
-            this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
+
+            if (contract.Profile != null)
+            {
+                this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
+            }
 
             var updatedCandidate = _candidateRepository.Update(candidate);
             _log.LogInformation($"Complete for {contract.Name}");

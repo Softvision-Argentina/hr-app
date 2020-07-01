@@ -98,4 +98,11 @@ export class ReferralsService extends BaseService<Candidate> {
     this._createNewReferralSource.next(instruction);
   }
 
+  public update(referralId: number,newCandidate: Candidate): Observable<Candidate>{
+    return super.update(referralId,newCandidate)
+    .pipe(
+      tap(res => this.candidateAdded.next(true))
+    );
+  }
+
 }

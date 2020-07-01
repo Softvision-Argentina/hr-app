@@ -35,5 +35,18 @@ namespace ApiServer.Controllers
                 return Created("Get", _mapper.Map<CreatedCandidateViewModel>(returnContract));
             });
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]UpdateCandidateViewModel vm)
+        {
+            return ApiAction(() =>
+            {
+                var contract = _mapper.Map<UpdateCandidateContract>(vm);
+                contract.Id = id;
+                _candidateService.Update(contract);
+
+                return Accepted(new { id });
+            });
+        }
     }
 }

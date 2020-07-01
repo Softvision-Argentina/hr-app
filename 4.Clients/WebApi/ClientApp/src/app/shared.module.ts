@@ -17,7 +17,6 @@ import { PipesModule } from './pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ReferralsContactComponent } from './referrals/referrals-contact/referrals-contact.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { OpenPositionsComponent } from './referrals/open-positions/open-positions.component';
 
@@ -44,7 +43,6 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         ProcessContactComponent,
         CommunitiesComponent,
         CandidatesProfileComponent,
-        ReferralsContactComponent,
         TextEditorComponent,
         OpenPositionsComponent,
     ],
@@ -62,7 +60,6 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         ProcessContactComponent,
         CommunitiesComponent,
         CandidatesProfileComponent,
-        ReferralsContactComponent,
         FileUploadModule,
         TextEditorComponent,
         OpenPositionsComponent

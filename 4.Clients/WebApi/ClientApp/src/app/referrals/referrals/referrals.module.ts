@@ -12,11 +12,6 @@ import { SharedModule } from '../../shared.module';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { ReferralsListComponent } from '../referrals-list/referrals-list.component';
 @NgModule({
-    declarations: [
-        ReferralsComponent,
-        ReferralsCardComponent,
-        ReferralsListComponent
-    ],
     imports: [
         RouterModule.forChild(ReferralsRoutes),
         CommonModule,
@@ -25,12 +20,20 @@ import { ReferralsListComponent } from '../referrals-list/referrals-list.compone
         SlickModule,
         PipesModule,
         SharedModule,
-        NgZorroAntdModule
+        NgZorroAntdModule,
+
     ],
+    declarations: [
+        ReferralsComponent,
+        ReferralsCardComponent,
+        ReferralsListComponent,
+        ReferralsContactComponent
+    ],
+    entryComponents: [ ReferralsContactComponent ],
     exports: [
         ReferralsComponent,
         ReferralsCardComponent,
-        ReferralsListComponent
+        ReferralsListComponent,
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US } ]
 })

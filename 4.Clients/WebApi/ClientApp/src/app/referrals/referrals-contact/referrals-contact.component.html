@@ -8,8 +8,8 @@
                     <nz-form-item>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community
                         </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                            <nz-select formControlName="community">
+                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" >
+                            <nz-select formControlName="community" [nzDisabled]="isEditReferral">
                                 <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
                                 </nz-option>
                             </nz-select>
@@ -110,17 +110,13 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="uploadFile" nzNoColon="true"></nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="isEditReferral">
                             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" (change)="onFileSelect($event)">
-                                <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
+                                <button nz-button ><i nz-icon nzType="upload"></i>Choose a file</button>
                             </nz-upload>
                             <p nz-typography>File size must not exceed 6Mb</p>
                         </nz-form-control>
                     </nz-form-item>
-                    <!-- <label for="file">
-                        test
-                    </label>
-                    <input type="file" name="file" id="file" class="inputfile" (change)="onFileSelect($event)"/> -->
                 </div>
             </div>
 
@@ -129,8 +125,10 @@
             <div nz-col nzSpan="18">
                 <nz-divider></nz-divider>
                 <div class="buttonsWrapper">
-                    <button nz-button nzType="primary" [hidden]="!isNewCandidate" (click)="createNewCandidate()"
+                    <button nz-button nzType="primary" [hidden]="isEditReferral" (click)="createNewCandidate()"
                         class="saveButton">SAVE</button>
+                    <button nz-button nzType="primary" [hidden]="!isEditReferral" (click)="saveEdit()"
+                        class="saveButton">EDIT</button>
                     <button nz-button nzType="default" (click)="clearDataAndCloseModal()"
                         class="cancelButton">Cancel</button>
                 </div>

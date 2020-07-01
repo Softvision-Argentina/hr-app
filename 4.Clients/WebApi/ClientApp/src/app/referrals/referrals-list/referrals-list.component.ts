@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, EventEmitter, Output } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
 import { Candidate } from 'src/entities/candidate';
@@ -24,6 +24,9 @@ export class ReferralsListComponent implements OnInit, OnDestroy {
   processStatusList: {id: number, name: string, value: string}[] = [];
   processesSubscription: Subscription;
   candidateSubscription: Subscription;
+
+  @Output() editEvent = new EventEmitter();
+
   constructor(private facade: FacadeService, private globals: Globals) {
     this.referralListStatus = globals.referralCurrentStage;
     this.processStatusList = globals.stageStatusList;
@@ -60,6 +63,7 @@ export class ReferralsListComponent implements OnInit, OnDestroy {
   }
 
   getReferralsList() {
+    this.referralsList = []
     if (!!this.candidates && !!this.processes) {
       const referredCandidates: Candidate[] = this.candidates.filter(candidate => {
         if (candidate.referredBy && candidate.referredBy.length > 0) {
@@ -71,9 +75,6 @@ export class ReferralsListComponent implements OnInit, OnDestroy {
       });
       referredCandidates.map(candidate => {
         const relatedProcess = this.processes.find(process => process.candidateId === candidate.id);
-        const exists = this.referralsList.find(item => item.candidate.id === candidate.id);
-        if (!exists) {
-          // Should check if conditional is necessary
           if (relatedProcess) {
             this.referralsList = [
               ...this.referralsList,
@@ -85,7 +86,6 @@ export class ReferralsListComponent implements OnInit, OnDestroy {
                 {candidate: {...candidate}, currentStatus: this.getCurrentStatus(null, this.getCurrentStage(null))}
               ];
           }
-        }
       });
     }
   }
@@ -204,6 +204,26 @@ export class ReferralsListComponent implements OnInit, OnDestroy {
         break;
     }
   }
+
+/*   showContactReferralModal(referral: Candidate) {
+    const modal = this.facade.modalService.create({
+      nzTitle: null,
+      nzContent: ReferralsContactComponent,
+      nzClosable: false,
+      nzComponentParams: {
+        referralToEdit: referral,
+        isEditReferral: true
+      },
+      nzWidth: '90%',
+      nzFooter: null
+    });
+
+  } */
+
+  showContactReferralModal(referral: Candidate){
+    this.editEvent.emit(referral);
+  }
+
 
 
   ngOnDestroy() {

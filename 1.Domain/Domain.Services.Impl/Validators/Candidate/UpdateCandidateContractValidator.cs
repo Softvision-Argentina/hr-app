@@ -13,9 +13,9 @@ namespace Domain.Services.Impl.Validators.Candidate
             RuleFor(_ => _.LastName).NotEmpty()
                 .MaximumLength(ValidationConstants.MAX_INPUT);
 
-            RuleFor(_ => _.User).NotEmpty();
+            //RuleFor(_ => _.User).NotEmpty();
             RuleFor(_ => _.Community).NotEmpty();
-            RuleFor(_ => _.Profile).NotEmpty();
+            //RuleFor(_ => _.Profile).NotEmpty();
 
             RuleFor(_ => _.Cv)
                 .MaximumLength(ValidationConstants.MAX_INPUT);
