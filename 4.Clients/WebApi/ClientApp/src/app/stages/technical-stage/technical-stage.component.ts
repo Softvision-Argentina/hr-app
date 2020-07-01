@@ -48,7 +48,7 @@ export class TechnicalStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    seniority: [0, [Validators.required]],
+    seniority: [null, [Validators.required]],
     alternativeSeniority: [0, [Validators.required]],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
@@ -106,6 +106,7 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   updateSeniority(seniorityId) {
+    this.technicalForm.controls['alternativeSeniority'].enable();
     if (this.chosenSeniority) {
       if (this.chosenSeniority !== seniorityId + 1 && this.chosenSeniority !== seniorityId - 1) {
         this.technicalForm.controls['alternativeSeniority'].setValue(0);
@@ -154,6 +155,11 @@ export class TechnicalStageComponent implements OnInit {
             console.log(this.disabled)
           this.technicalForm.controls[i].enable();
           }
+          if(this.technicalForm.controls[i] === this.technicalForm.controls['alternativeSeniority']) {
+            if(this.technicalForm.controls['seniority'].value === null) {
+              this.technicalForm.controls[i].disable();
+            }
+          }
         } else {
           this.technicalForm.controls[i].disable();
           this.disabled = true;
@@ -184,7 +190,7 @@ export class TechnicalStageComponent implements OnInit {
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.processId = processId;
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
-    stage.seniority = this.getControlValue(form.controls.seniority);
+    stage.seniority = this.getControlValue(form.controls.seniority) === null ? 0 : this.getControlValue(form.controls.seniority);
     stage.alternativeSeniority = this.getControlValue(form.controls.alternativeSeniority);
     stage.client = this.getControlValue(form.controls.client);
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
