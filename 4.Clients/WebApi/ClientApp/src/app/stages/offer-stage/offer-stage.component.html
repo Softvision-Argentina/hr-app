@@ -138,23 +138,4 @@
         </nz-form-item>
     </div>
 </div>
-    <div nz-row>
-        <div nz-col nzSpan="11" *ngIf="showRejectionReason()">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason" [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
-                        placeholder="Input the rejection reason"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d "
-                    *ngIf="showRejectionReason() && offerForm.get('rejectionReason').dirty && offerForm.get('rejectionReason').errors ">
-                    <ng-container
-                        *ngIf="offerForm.get('rejectionReason')?.dirty && offerForm.get('rejectionReason')?.errors ">
-                        Please input rejection reason!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div>
-    </div>
 </form>

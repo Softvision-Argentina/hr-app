@@ -17,19 +17,28 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Process> QueryEager()
         {
-            return Query()         
+            return Query()
                 .Include(x => x.HrStage)
+                    .ThenInclude(x => x.ReaddressStatus)
+                        .ThenInclude(x => x.ReaddressReason)
                 .Include(x => x.TechnicalStage)
+                    .ThenInclude(x => x.ReaddressStatus)
+                        .ThenInclude(x => x.ReaddressReason)
                 .Include(x => x.ClientStage)
-                .ThenInclude(x => x.Interviews)
+                    .ThenInclude(x => x.ReaddressStatus)
+                        .ThenInclude(x => x.ReaddressReason)
+                .Include(x => x.ClientStage)
+                    .ThenInclude(x => x.Interviews)
                 .Include(x => x.PreOfferStage)
+                    .ThenInclude(x => x.ReaddressStatus)
+                        .ThenInclude(x => x.ReaddressReason)
                 .Include(x => x.OfferStage)
                 .Include(x => x.UserOwner)
                 .Include(x => x.UserDelegate)
                 .Include(x => x.DeclineReason)
                 .Include(x => x.Candidate)
-                .ThenInclude(c => c.CandidateSkills)
-                .ThenInclude(cs => cs.Skill)
+                    .ThenInclude(c => c.CandidateSkills)
+                    .ThenInclude(cs => cs.Skill)
                 .Include(x => x.Candidate.User)
                 .Include(x => x.Candidate.PreferredOffice)
                 .Include(x => x.Candidate.Community)
@@ -90,6 +99,11 @@ namespace Domain.Services.Repositories.EF
         public StageStatus RejectStage(StageStatus currentStatus)
         {
             return currentStatus != StageStatus.Accepted ? StageStatus.Rejected : currentStatus;
+        }
+
+        public override bool Exist(int id)
+        {
+            return Query().AsNoTracking().FirstOrDefault(_ => _.Id == id) != null;
         }
     }
 }

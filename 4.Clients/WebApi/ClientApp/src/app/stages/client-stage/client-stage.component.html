@@ -36,6 +36,38 @@
             </nz-form-item>
         </div>
     </div>
+
+    <div nz-row *ngIf="CanShowReaddressPossibility()">
+        <div nz-col nzSpan="11">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24">
+            Reason
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select formControlName="reasonSelectControl" 
+            [(ngModel)]="selectedReason" 
+            (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
+                <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
+                </nz-option>
+            </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    
+        <div nz-col nzSpan="11">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24">
+            Reason explanation
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <textarea rows="1 " nz-input id="readdressReason" formControlName="reasonDescriptionTextAreaControl"
+                        placeholder="Input the reason"
+                        (input)="onDescriptionChange($event.target.value)"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    </div>
+
     <div nz-row hidden>
         <div nz-col nzSpan="11">
             <nz-form-item>
@@ -80,24 +112,24 @@
                 </nz-form-explain>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11" *ngIf="showRejectionReason()">
-            <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
-                    Rejection Reason</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
-                        placeholder="Input the rejection reason"></textarea>
-                </nz-form-control>
-                <nz-form-explain style="color: #f5222d "
-                    *ngIf="showRejectionReason() && clientForm.get('rejectionReason').dirty && clientForm.get('rejectionReason').errors ">
-                    <ng-container
-                        *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
-                        Please input rejection reason!
-                    </ng-container>
-                </nz-form-explain>
-            </nz-form-item>
-        </div>
+    </div>
+    <div nz-col nzSpan="11" style="display:none">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
+                [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                Rejection Reason</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                    placeholder="Input the rejection reason"></textarea>
+            </nz-form-control>
+            <nz-form-explain style="color: #f5222d "
+                >
+                <ng-container
+                    *ngIf="clientForm.get('rejectionReason')?.dirty && clientForm.get('rejectionReason')?.errors ">
+                    Please input rejection reason!
+                </ng-container>
+            </nz-form-explain>
+        </nz-form-item>
     </div>
 </form>
 <div nz-row>

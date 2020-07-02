@@ -1,4 +1,5 @@
-﻿using ApiServer.Contracts.User;
+﻿using ApiServer.Contracts.ReaddressStatus;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
 
@@ -21,5 +22,6 @@ namespace ApiServer.Contracts.Stage
         public Seniority AlternativeSeniority { get; set; }
         public string Client { get; set; }
         public bool SentEmail { get; set; }
+        public ReadReaddressStatusViewModel ReaddressStatus { get; set; }
     }
 }

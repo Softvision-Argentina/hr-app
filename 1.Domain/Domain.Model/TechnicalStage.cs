@@ -22,5 +22,7 @@ namespace Domain.Model
         public Seniority AlternativeSeniority { get; set; }
         public string Client { get; set; }
         public bool SentEmail { get; set; }
+        public int? ReaddressStatusId { get; set; }
+        public ReaddressStatus ReaddressStatus { get; set; }
     }
 }

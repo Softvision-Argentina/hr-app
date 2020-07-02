@@ -2,6 +2,7 @@ import { StageStatusEnum } from './enums/stage-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
 import { Stage } from './stage';
 import { EnglishLevelEnum } from './enums/english-level.enum';
+import { ReaddressStatus } from './ReaddressStatus';
 
 export class TechnicalStage {
     id: number;
@@ -17,4 +18,5 @@ export class TechnicalStage {
     rejectionReason?: string;
     date?: Date;
     sentEmail: boolean;
+    readdressStatus: ReaddressStatus;
 }

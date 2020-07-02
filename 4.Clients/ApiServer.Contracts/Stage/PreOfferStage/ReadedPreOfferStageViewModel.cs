@@ -1,4 +1,5 @@
-﻿using ApiServer.Contracts.User;
+﻿using ApiServer.Contracts.ReaddressStatus;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
 
@@ -26,5 +27,7 @@ namespace ApiServer.Contracts.Stage
         public string Bonus { get; set; }
         public string Notes { get; set; }
         public HealthInsuranceEnum HealthInsurance { get; set; }
+        public ReadReaddressStatusViewModel ReaddressStatus { get; set; }
+
     }
 }

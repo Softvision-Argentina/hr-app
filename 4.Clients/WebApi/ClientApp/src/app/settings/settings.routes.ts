@@ -41,6 +41,14 @@ export const SettingsRoutes: Routes = [
       {
         path: 'declining-reasons',
         loadChildren: '../decline-reasons/decline-reasons.module#DeclineReasonsModule'
+      },
+      {
+        path: 'reasons',
+        loadChildren: '../readdress-reason/readdress-reason.module#ReaddressReasonModule'
+      },
+      {
+        path: 'reasons-categories',
+        loadChildren: '../readdress-reason-type/readdress-reason-type.module#ReaddressReasonTypeModule'
       }
     ]
   }

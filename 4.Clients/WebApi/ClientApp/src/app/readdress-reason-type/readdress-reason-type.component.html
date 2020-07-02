@@ -1,0 +1,81 @@
+<div nz-row>
+  <div nz-col nzSpan="23">
+      <button nz-button nzType="primary" (click)="showAddModal(readdressReasonTypeModal)" nzShape="round">
+    <i nz-icon type="plus" theme="outline"></i>Add new reason category</button>
+  </div>
+</div>
+<br />
+<div nz-row>
+  <div nz-col nzSpan="23">
+      <nz-table #readdressReasonTypeTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+          <thead>
+              <tr>
+                  <th nzCustomFilter>Name
+                      <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                          <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                          <div class="search-box">
+                              <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
+                              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+                              <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                          </div>
+                      </nz-dropdown>
+                  </th>
+                  <th [style.text-align]="'center'">Description</th>
+                  <th [style.text-align]="'center'">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let readdressReasonType of readdressReasonTypeTable.data">
+                  <td>{{ readdressReasonType.name }}</td>
+                  <td>{{ readdressReasonType.description }}</td>
+                  <td [style.text-align]="'center'">
+                    <i (click)="showDetailsModal(readdressReasonType.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i (click)="showEditModal(readdressReasonTypeModal, readdressReasonType.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i (click)="showDeleteConfirm(readdressReasonType.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
+                </td>
+              </tr>
+          </tbody>
+      </nz-table>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Reason category Details" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+  <nz-list nzBordered nzSize="large" *ngIf="emptyReaddressReasonType">
+      <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyReaddressReasonType.name}}</nz-list-item>
+      <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyReaddressReasonType.description}}</nz-list-item>
+  </nz-list>
+</nz-modal>
+
+<ng-template #readdressReasonTypeModal>
+  <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
+              <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">Please input the name</nz-form-explain>
+              <nz-form-explain *ngIf="validateForm.get('name')?.hasError('trimBeginError')">
+                  The input has leading whitespace!
+              </nz-form-explain>
+              <nz-form-explain *ngIf="validateForm.get('name')?.hasError('trimEndError')">
+                  The input has leading whitespace!
+              </nz-form-explain>
+          </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input type="text" nz-input formControlName="description" id="description" placeholder="Please input the description">
+              <nz-form-explain *ngIf="validateForm.get('description').dirty && validateForm.get('description')?.hasError('required')">Please input the description</nz-form-explain>
+              <nz-form-explain *ngIf="validateForm.get('description')?.hasError('trimBeginError')">
+                  The input has leading whitespace!
+              </nz-form-explain>
+              <nz-form-explain *ngIf="validateForm.get('description')?.hasError('trimEndError')">
+                  The input has leading whitespace!
+              </nz-form-explain>
+          </nz-form-control>
+      </nz-form-item>
+  </form>
+</ng-template>
+

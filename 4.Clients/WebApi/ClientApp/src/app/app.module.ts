@@ -67,6 +67,8 @@ import { NumbersOnlyDirective } from './directives/numbersOnlyDirective';
 import { SlickModule } from 'ngx-slick';
 import { PostulantsService } from './services/postulants.service';
 import { DeclineReasonService } from './services/decline-reason.service';
+import { ReaddressReasonService } from './services/readdress-reason.service';
+import { ReaddressReasonTypeService } from './services/readdress-reason-type.service';
 import { InterviewService } from './services/interview.service';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
@@ -167,6 +169,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     PostulantsService,
     DeclineReasonService,
     PreOfferService,
+    ReaddressReasonService,
+    ReaddressReasonTypeService,
     InterviewService,
     OpenPositionService,
     { provide: NZ_I18N, useValue: en_US },

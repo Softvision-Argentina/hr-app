@@ -44,7 +44,7 @@ export class OfferStageComponent implements OnInit {
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
     preocupationalDone: false,
     preocupationalDoneDate: [new Date(), [Validators.required]],
-    rejectionReason: [null, [Validators.required]],
+    rejectionReason: [null],
   });
 
   feedbackContent:string = "";
@@ -258,14 +258,6 @@ export class OfferStageComponent implements OnInit {
     }
   }
 
-  showRejectionReason() {
-    if (this.offerForm.controls['status'].value === StageStatusEnum.Rejected) {
-      this.offerForm.controls['rejectionReason'].enable();
-      return true;
-    }
-    this.offerForm.controls['rejectionReason'].disable();
-    return false;
-  }
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.offerForm)

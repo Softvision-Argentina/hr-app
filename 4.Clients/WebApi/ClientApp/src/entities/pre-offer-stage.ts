@@ -1,6 +1,7 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { SeniorityEnum } from './enums/seniority.enum';
 import { HealthInsuranceEnum } from './enums/health-insurance.enum';
+import { ReaddressStatus } from './ReaddressStatus';
 
 export class preOfferStage {
   id: number;
@@ -24,4 +25,5 @@ export class preOfferStage {
   backgroundCheckDoneDate: Date;
   preocupationalDone: boolean;
   preocupationalDoneDate: Date;
+  readdressStatus: ReaddressStatus;
 }

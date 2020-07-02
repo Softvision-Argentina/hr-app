@@ -25,6 +25,9 @@
         CompanyCalendar = 2000,
         DeclineReason = 2100,
         PreOffer = 2200,
+        ReaddressReason = 2300,
+        ReaddressReasonType = 2400,
+        ReaddressStatus = 2500,
 
         Dummy = 99999
     }

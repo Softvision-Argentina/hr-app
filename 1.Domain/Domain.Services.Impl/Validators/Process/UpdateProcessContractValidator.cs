@@ -1,5 +1,6 @@
 ﻿using Domain.Services.Contracts.Process;
 using Domain.Services.Impl.Validators.Candidate;
+using Domain.Services.Impl.Validators.ReaddressStatus;
 using Domain.Services.Impl.Validators.Stages.ClientStage;
 using Domain.Services.Impl.Validators.Stages.HrStage;
 using Domain.Services.Impl.Validators.Stages.OfferStage;
@@ -19,6 +20,11 @@ namespace Domain.Services.Impl.Validators.Reservation
                 RuleFor(_ => _.OfferStage).SetValidator(new UpdateOfferStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
                 RuleFor(_ => _.PreOfferStage).SetValidator(new UpdatePreOfferStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
                 RuleFor(_ => _.HrStage).SetValidator(new UpdateHrStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
+
+                RuleFor(_ => _.HrStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
+                RuleFor(_ => _.TechnicalStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
+                RuleFor(_ => _.ClientStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
+                RuleFor(_ => _.PreOfferStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
 
                 RuleFor(_ => _.CurrentStage).IsInEnum();
                 RuleFor(_ => _.EnglishLevel).MaximumLength(ValidationConstants.MAX_INPUT);

@@ -164,7 +164,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.displayOpenPositions = this.openPositions;
 
     this.rejectProcessForm = this.formBuilder.group({
-      rejectionReasonDescription: [null, [Validators.required]]
+      rejectionReasonDescription: [null]
     });
 
     this.declineProcessForm = this.formBuilder.group({
@@ -864,7 +864,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
         rejectionReasonsHr: null,
-        sentEmail: false
+        sentEmail: false,
+        readdressStatus: null
       },
       technicalStage: {
         id: 0,
@@ -878,7 +879,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
         client: '',
-        sentEmail: false
+        sentEmail: false,
+        readdressStatus: null
       },
       clientStage: {
         id: 0,
@@ -889,7 +891,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         userDelegateId: candidate.user.id,
         processId: 0,
         interviewer: '',
-        delegateName: ''
+        delegateName: '',
+        readdressStatus: null
       },
       preOfferStage: {
         id: 0,
@@ -911,7 +914,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date()
+        preocupationalDoneDate: new Date(),
+        readdressStatus: null
       },
       offerStage: {
         id: 0,

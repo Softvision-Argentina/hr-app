@@ -21,5 +21,7 @@ namespace Domain.Model
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
         public IList<Interview> Interviews { get; set; }
+        public int? ReaddressStatusId { get; set; }
+        public ReaddressStatus ReaddressStatus { get; set; }
     }
 }

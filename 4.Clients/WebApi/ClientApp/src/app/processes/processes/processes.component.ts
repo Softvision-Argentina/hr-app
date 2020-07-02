@@ -31,7 +31,9 @@ import { Subscription, Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { Router } from '@angular/router';
-import { ReferralsService } from '../../services/referrals.service';
+import { ReferralsService } from '../../services/referrals.service';import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
+import { ReaddressStatus } from 'src/entities/ReaddressStatus';
 
 @Component({
   selector: 'app-processes',
@@ -121,15 +123,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   processesSubscription: Subscription = new Subscription();
   saveEventSubject: Subject<number> = new Subject<number>();
 
+  readdressReasonList: ReaddressReason[] = [];
+  readdressReasonTypeList: ReaddressReasonType[] = [];
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
+  currentStage: ProcessCurrentStageEnum;
+
   constructor(
     private facade: FacadeService,
     private formBuilder: FormBuilder,
     private candidateDetailsModal: CandidateDetailsComponent,
     private app: AppComponent,
     private userDetailsModal: UserDetailsComponent,
-    private globals: Globals,
     private router: Router,
-    private _referralsService: ReferralsService) {
+    private _referralsService: ReferralsService,
+    private globals: Globals) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
@@ -152,8 +159,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.getProfiles();
     this.getDeclineReasons();
     this.getSearchInfo();
+    this.getReaddressReasonList();
+    this.getReaddressReasonTypeList();
+
     this.rejectProcessForm = this.formBuilder.group({
-      rejectionReasonDescription: [null, [Validators.required]]
+      rejectionReasonDescription: [null]
     });
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
@@ -383,7 +393,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               }
             }
             if (isCompleted) {
-              const rejectionReason = this.rejectProcessForm.controls['rejectionReasonDescription'].value.toString();
+              const rejectionReason = "";
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
@@ -610,6 +620,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.forms.forEach(form => {
       form = this.checkForm(form);
       if (carouselSlide === -1 && form.invalid) {
+        console.log("form:", form);
         carouselSlide = i;
       }
       i++;
@@ -953,7 +964,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         additionalInformation: '',
         englishLevel: EnglishLevelEnum.None,
         rejectionReasonsHr: null,
-        sentEmail: false
+        sentEmail: false,
+        readdressStatus: null
       },
       technicalStage: {
         id: 0,
@@ -967,7 +979,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         seniority: SeniorityEnum.NA,
         alternativeSeniority: SeniorityEnum.NA,
         client: '',
-        sentEmail: false
+        sentEmail: false,
+        readdressStatus: null
       },
       clientStage: {
         id: 0,
@@ -978,7 +991,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         userDelegateId: null,
         processId: 0,
         interviewer: '',
-        delegateName: ''
+        delegateName: '',
+        readdressStatus: null
       },
       preOfferStage: {
         id: 0,
@@ -1000,7 +1014,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         backgroundCheckDone: false,
         backgroundCheckDoneDate: new Date(),
         preocupationalDone: false,
-        preocupationalDoneDate: new Date()
+        preocupationalDoneDate: new Date(),
+        readdressStatus: null
       },
       offerStage: {
         id: 0,
@@ -1042,6 +1057,59 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
   }
+
+  onHrStageSlideClick(currentTargetId){
+    this.setCurrentStage(ProcessCurrentStageEnum.HrStage); 
+    this.slickModal.slickGoTo(0);
+    this.wishedStage(0, currentTargetId);
+  }
+
+  onTechnicalStageSlideClick(currentTargetId){
+    this.setCurrentStage(ProcessCurrentStageEnum.TechnicalStage);
+    this.slickModal.slickGoTo(1);
+    this.wishedStage(1, currentTargetId);
+  }
+
+  onClientStageSlideClick(currentTargetId){
+    this.setCurrentStage(ProcessCurrentStageEnum.ClientStage);
+    this.slickModal.slickGoTo(2);
+    this.wishedStage(2, currentTargetId);
+  }
+
+  onPreOfferStageSlideClick(currentTargetId){
+    this.setCurrentStage(ProcessCurrentStageEnum.PreOfferStage); 
+    this.slickModal.slickGoTo(3);
+    this.wishedStage(3, currentTargetId);
+  }
+
+  onOfferStageSlideClick(currentTargetId){
+    this.setCurrentStage(ProcessCurrentStageEnum.OfferStage); 
+    this.slickModal.slickGoTo(3);
+    this.wishedStage(4, currentTargetId);
+  }
+
+  setCurrentStage(value){
+    this.currentStage = value;
+  }
+
+  getReaddressReasonList(){
+    this.facade.readdressReasonService.getData()
+    .subscribe(res => {
+        this.readdressReasonList = res;
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  getReaddressReasonTypeList(){
+    this.facade.readdressReasonTypeService.getData()
+    .subscribe(res => {
+        this.readdressReasonTypeList = res;
+    }, err => {
+      console.log(err);
+    });
+  } 
+
 
   ngOnDestroy() {
     this.processesSubscription.unsubscribe();

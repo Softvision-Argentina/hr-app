@@ -1,4 +1,5 @@
-﻿using ApiServer.Contracts.User;
+﻿using ApiServer.Contracts.ReaddressStatus;
+using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
 
@@ -22,5 +23,6 @@ namespace ApiServer.Contracts.Stage
         public EnglishLevel EnglishLevel { get; set; }
         public RejectionReasonsHr RejectionReasonsHr { get; set; }
         public bool SentEmail { get; set; }
+        public ReadReaddressStatusViewModel ReaddressStatus { get; set; }
     }
 }

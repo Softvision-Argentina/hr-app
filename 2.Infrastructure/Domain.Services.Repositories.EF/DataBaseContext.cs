@@ -38,11 +38,14 @@ namespace Domain.Services.Repositories.EF
         public DbSet<CompanyCalendar> CompanyCalendar { get; set; }
         public DbSet<DeclineReason> DeclineReasons { get; set; }
         public DbSet<PreOffer> PreOffer { get; set; }
+        public DbSet<ReaddressReason> ReaddressReasons { get; set; }
+        public DbSet<ReaddressReasonType> ReaddressReasonTypes { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
         public DbSet<Cv> Cv { get; set; }
         public DbSet<UserDashboard> UserDashboards { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<OpenPosition> OpenPositions { get; set; }
+        public DbSet<ReaddressStatus> ReaddressStatus { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {
@@ -90,6 +93,11 @@ namespace Domain.Services.Repositories.EF
                 .HasOne<Dashboard>(ud => ud.Dashboard)
                 .WithMany(d => d.UserDashboards)
                 .HasForeignKey(ud => ud.DashboardId);
+
+            modelBuilder.Entity<ReaddressReasonType>()
+                .HasMany(_ => _.Reasons)
+                .WithOne(_ => _.Type)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

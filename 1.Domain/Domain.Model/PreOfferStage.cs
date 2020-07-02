@@ -28,5 +28,7 @@ namespace Domain.Model
         public string Bonus { get; set; }
         public HealthInsuranceEnum HealthInsurance { get; set; }
         public string Notes { get; set; }
+        public int? ReaddressStatusId { get; set; }
+        public ReaddressStatus ReaddressStatus { get; set; }
     }
 }

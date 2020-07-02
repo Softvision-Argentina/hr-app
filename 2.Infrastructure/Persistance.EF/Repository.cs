@@ -73,5 +73,10 @@ namespace Persistance.EF
         {
             throw new NotImplementedException("This method should be implemented in a specialized repository.");
         }
+
+        public virtual bool Exist(int id)
+        {
+            throw new NotImplementedException("This method should be implemented in a specialized repository.");
+        }
     }
 }

@@ -31,6 +31,8 @@ export class ProcessTableComponent {
     processesAfterFilter = [];
     listOfDisplayDataAfterFilter = [];
 
+    constructor() {}
+
     emitCandidateId(id) {
         this.candidateId.emit(id);
     }

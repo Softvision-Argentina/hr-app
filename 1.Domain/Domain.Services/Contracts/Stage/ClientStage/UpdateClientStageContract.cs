@@ -1,5 +1,6 @@
 ﻿using Domain.Model.Enum;
 using Domain.Services.Contracts.Interview;
+using Domain.Services.Contracts.ReaddressStatus;
 using Domain.Services.Contracts.Stage.StageItem;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,7 @@ namespace Domain.Services.Contracts.Stage
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
         public IList<UpdateInterviewContract> Interviews { get; set; }
+        public UpdateReaddressStatus ReaddressStatus { get; set; }
+
     }
 }

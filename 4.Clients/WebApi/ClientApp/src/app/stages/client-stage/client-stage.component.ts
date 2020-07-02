@@ -5,9 +5,12 @@ import { FacadeService } from 'src/app/services/facade.service';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { Globals } from 'src/app/app-globals/globals';
 import { ClientStage } from 'src/entities/client-stage';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { formFieldHasRequiredValidator, CanShowReaddressPossibility } from 'src/app/utils/utils.functions'
 import { Interview } from 'src/entities/interview';
 import { Observable, Subscription } from 'rxjs';
+import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
+import { ReaddressStatus } from 'src/entities/ReaddressStatus'
 
 @Component({
   selector: 'client-stage',
@@ -44,8 +47,10 @@ export class ClientStageComponent implements OnInit {
     userDelegateId: [null],
     feedback: [null],
     delegateName: [null],
-    rejectionReason: [null, [Validators.required]],
-    interviews: [null]
+    rejectionReason: [null],
+    interviews: [null],
+    reasonSelectControl: [null],
+    reasonDescriptionTextAreaControl: [null]
   });
 
   interviewForm: FormGroup = this.fb.group({
@@ -69,6 +74,14 @@ export class ClientStageComponent implements OnInit {
   editInterviewCounter: number;
   processSaveSubscription: Subscription;
 
+  currentStageStatus: StageStatusEnum;
+  readdressStatus: ReaddressStatus = new ReaddressStatus()
+  @Input() readdressReasonList: ReaddressReason[] = [];
+  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
+  readdressFilteredList: ReaddressReason[] = [];
+  selectedReasonId: number;
+  selectedReason: string
+
   @Input() clientStage: ClientStage;
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
@@ -77,6 +90,25 @@ export class ClientStageComponent implements OnInit {
   resetInterviewDate;
 
   ngOnInit() {
+
+    this.currentStageStatus = this.clientStage.status;
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    
+    this.selectedReason = undefined;
+    this.readdressStatus.feedback = undefined;
+    this.readdressStatus.fromStatus = undefined;
+    this.readdressStatus.toStatus = undefined;
+    this.readdressStatus.id = undefined;
+  
+    if (this.clientStage.readdressStatus){
+      this.selectedReason = `${this.clientStage.readdressStatus.readdressReasonId}`;
+      this.readdressStatus.feedback = this.clientStage.readdressStatus.feedback;
+      this.readdressStatus.fromStatus = this.clientStage.readdressStatus.fromStatus;
+      this.readdressStatus.toStatus = this.clientStage.readdressStatus.toStatus;
+      this.readdressStatus.id = this.clientStage.readdressStatus.id
+    }
+
     this.processSaveSubscription = this.processSaveEvent.subscribe((res) => this.saveChangesToInterviewListInDatabase(res))
     this.interviewOperations = [];
     this.changeFormStatus(false);
@@ -139,15 +171,27 @@ export class ClientStageComponent implements OnInit {
         }
       }
     }
+
+    this.clientForm.controls['reasonSelectControl'].setValue(undefined);
+    this.clientForm.controls['reasonSelectControl'].enable();
+    this.clientForm.controls['reasonDescriptionTextAreaControl'].enable();
   }
 
   statusChanged() {
+    this.readdressStatus.readdressReasonId = undefined;
+    this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue("");
+    this.currentStageStatus = this.clientForm.controls['status'].value;
+    
     if (this.clientForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.clientForm.markAsTouched();
     } else {
       this.changeFormStatus(false);
     }
+
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressStatus.toStatus = this.currentStageStatus
   }
 
   getFormData(processId: number): ClientStage {
@@ -164,6 +208,7 @@ export class ClientStageComponent implements OnInit {
     stage.delegateName = this.getControlValue(form.controls.delegateName);
     stage.processId = processId;
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
+    stage.readdressStatus = this.readdressStatus;
     return stage;
   }
 
@@ -208,16 +253,31 @@ export class ClientStageComponent implements OnInit {
     if (clientStage.rejectionReason) {
       this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);
     }
+    if (clientStage.readdressStatus){
+      if (clientStage.readdressStatus.feedback)
+      this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue(clientStage.readdressStatus.feedback);
+    }
   }
 
-  showRejectionReason() {
-    if (this.clientForm.controls['status'].value === StageStatusEnum.Rejected) {
-      this.clientForm.controls['rejectionReason'].enable();
-      return true;
+  validatorsOnReaddressControls(flag: boolean)
+  {
+    let reasonSelectControl = this.clientForm.controls['reasonSelectControl'];
+    let feedbackTextAreaControl = this.clientForm.controls['reasonDescriptionTextAreaControl'];
+
+    function enableValidations(){
+      reasonSelectControl.setValidators(Validators.required);
+      feedbackTextAreaControl.setValidators([Validators.required]);
     }
-    this.clientForm.controls['rejectionReason'].disable();
-    return false;
+
+    function disableValidations(){
+      reasonSelectControl.clearValidators();
+      feedbackTextAreaControl.clearValidators();
+    }
+
+    flag == true ? enableValidations() : disableValidations();
   }
+  
+
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.clientForm)
@@ -355,7 +415,26 @@ export class ClientStageComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
 
+  CanShowReaddressPossibility() {
+    if (CanShowReaddressPossibility(this.currentStageStatus)){
+      this.validatorsOnReaddressControls(true);
+      return true;
+    }
+    else{
+      this.validatorsOnReaddressControls(false);
+      return false;
+    }
+  }
+
+  getSelectedReason(reason){
+    this.selectedReasonId = reason;
+    this.readdressStatus.readdressReasonId = this.selectedReasonId;
+  }
+
+  onDescriptionChange(description: string): void {  
+    this.readdressStatus.feedback = description;
   }
 
   hideAddNewInterviewForm() {

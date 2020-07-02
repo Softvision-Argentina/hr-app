@@ -148,6 +148,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("ProcessId");
 
+                    b.Property<int?>("ReaddressStatusId");
+
                     b.Property<string>("RejectionReason");
 
                     b.Property<int>("Status");
@@ -164,6 +166,8 @@ namespace ApiServer.Migrations
 
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("ReaddressStatusId");
 
                     b.HasIndex("UserDelegateId");
 
@@ -471,6 +475,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("ProcessId");
 
+                    b.Property<int?>("ReaddressStatusId");
+
                     b.Property<string>("RejectionReason");
 
                     b.Property<int>("RejectionReasonsHr");
@@ -493,6 +499,8 @@ namespace ApiServer.Migrations
 
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("ReaddressStatusId");
 
                     b.HasIndex("UserDelegateId");
 
@@ -789,6 +797,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("ProcessId");
 
+                    b.Property<int?>("ReaddressStatusId");
+
                     b.Property<string>("RejectionReason");
 
                     b.Property<int>("RemunerationOffer");
@@ -809,6 +819,8 @@ namespace ApiServer.Migrations
 
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("ReaddressStatusId");
 
                     b.HasIndex("UserDelegateId");
 
@@ -862,6 +874,98 @@ namespace ApiServer.Migrations
                     b.HasIndex("UserOwnerId");
 
                     b.ToTable("Processes");
+                });
+
+            modelBuilder.Entity("Domain.Model.ReaddressReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("TypeId");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("ReaddressReasons");
+                });
+
+            modelBuilder.Entity("Domain.Model.ReaddressReasonType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReaddressReasonTypes");
+                });
+
+            modelBuilder.Entity("Domain.Model.ReaddressStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Feedback");
+
+                    b.Property<int>("FromStatus");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<int?>("ReaddressReasonId");
+
+                    b.Property<int>("ToStatus");
+
+                    b.Property<long>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReaddressReasonId");
+
+                    b.ToTable("ReaddressStatus");
                 });
 
             modelBuilder.Entity("Domain.Model.Reservation", b =>
@@ -1195,6 +1299,8 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("ProcessId");
 
+                    b.Property<int?>("ReaddressStatusId");
+
                     b.Property<string>("RejectionReason");
 
                     b.Property<int>("Seniority");
@@ -1215,6 +1321,8 @@ namespace ApiServer.Migrations
 
                     b.HasIndex("ProcessId")
                         .IsUnique();
+
+                    b.HasIndex("ReaddressStatusId");
 
                     b.HasIndex("UserDelegateId");
 
@@ -1312,6 +1420,10 @@ namespace ApiServer.Migrations
                         .HasForeignKey("Domain.Model.ClientStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Domain.Model.ReaddressStatus", "ReaddressStatus")
+                        .WithMany()
+                        .HasForeignKey("ReaddressStatusId");
+
                     b.HasOne("Domain.Model.User", "UserDelegate")
                         .WithMany()
                         .HasForeignKey("UserDelegateId");
@@ -1366,6 +1478,10 @@ namespace ApiServer.Migrations
                         .WithOne("HrStage")
                         .HasForeignKey("Domain.Model.HrStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.ReaddressStatus", "ReaddressStatus")
+                        .WithMany()
+                        .HasForeignKey("ReaddressStatusId");
 
                     b.HasOne("Domain.Model.User", "UserDelegate")
                         .WithMany()
@@ -1422,6 +1538,10 @@ namespace ApiServer.Migrations
                         .HasForeignKey("Domain.Model.PreOfferStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Domain.Model.ReaddressStatus", "ReaddressStatus")
+                        .WithMany()
+                        .HasForeignKey("ReaddressStatusId");
+
                     b.HasOne("Domain.Model.User", "UserDelegate")
                         .WithMany()
                         .HasForeignKey("UserDelegateId");
@@ -1448,6 +1568,21 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.User", "UserOwner")
                         .WithMany()
                         .HasForeignKey("UserOwnerId");
+                });
+
+            modelBuilder.Entity("Domain.Model.ReaddressReason", b =>
+                {
+                    b.HasOne("Domain.Model.ReaddressReasonType", "Type")
+                        .WithMany("Reasons")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Model.ReaddressStatus", b =>
+                {
+                    b.HasOne("Domain.Model.ReaddressReason", "ReaddressReason")
+                        .WithMany()
+                        .HasForeignKey("ReaddressReasonId");
                 });
 
             modelBuilder.Entity("Domain.Model.Reservation", b =>
@@ -1524,6 +1659,10 @@ namespace ApiServer.Migrations
                         .WithOne("TechnicalStage")
                         .HasForeignKey("Domain.Model.TechnicalStage", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Model.ReaddressStatus", "ReaddressStatus")
+                        .WithMany()
+                        .HasForeignKey("ReaddressStatusId");
 
                     b.HasOne("Domain.Model.User", "UserDelegate")
                         .WithMany()

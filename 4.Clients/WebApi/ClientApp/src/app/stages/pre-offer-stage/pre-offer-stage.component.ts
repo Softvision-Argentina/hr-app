@@ -7,8 +7,11 @@ import { preOfferStage } from 'src/entities/pre-offer-stage';
 import { ProcessService } from '../../services/process.service';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
 import { dniValidator, UniqueDniValidator } from 'src/app/directives/dni.validator';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { formFieldHasRequiredValidator, CanShowReaddressPossibility } from 'src/app/utils/utils.functions';
 import { FacadeService } from 'src/app/services/facade.service';
+import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
+import { ReaddressStatus } from 'src/entities/ReaddressStatus'
 
 @Component({
   selector: 'pre-offer-stage',
@@ -46,7 +49,9 @@ export class PreOfferStageComponent implements OnInit {
     backgroundCheckDoneDate: [new Date()],
     preocupationalDone: false,
     preocupationalDoneDate: [new Date()],
-    rejectionReason: [null, [Validators.required]],
+    rejectionReason: [null],    
+    reasonSelectControl: [null],
+    reasonDescriptionTextAreaControl: [null]
   });
 
   statusList: any[];
@@ -62,7 +67,17 @@ export class PreOfferStageComponent implements OnInit {
     { label: 'Accepted', value: false}
   ];
 
+  currentStageStatus: StageStatusEnum;
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
+  currentReaddressDescription: string = "";
+  readdressFilteredList: ReaddressReason[] = [];
+  selectedReasonId: number;
+  selectedReason: string;
+
   @Input() preOfferStage: preOfferStage;
+  @Input() readdressReasonList: ReaddressReason[] = [];
+  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
+  
   @ViewChild(PreOfferHistory) preOfferHistory: PreOfferHistory ;
   @Output() selectedSeniority = new EventEmitter();
   constructor(
@@ -78,8 +93,27 @@ export class PreOfferStageComponent implements OnInit {
   showPreOfferHistoryModal(modalContent: TemplateRef<{}>) {
     this.preOfferHistoryModal.showModal(modalContent);
   }
+
   ngOnInit() {
     this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
+    this.currentStageStatus = this.preOfferStage.status;
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    
+    this.selectedReason = undefined;
+    this.readdressStatus.feedback = undefined;
+    this.readdressStatus.fromStatus = undefined;
+    this.readdressStatus.toStatus = undefined;
+    this.readdressStatus.id = undefined;
+  
+    if (this.preOfferStage.readdressStatus){
+      this.selectedReason = `${this.preOfferStage.readdressStatus.readdressReasonId}`;
+      this.readdressStatus.feedback = this.preOfferStage.readdressStatus.feedback;
+      this.readdressStatus.fromStatus = this.preOfferStage.readdressStatus.fromStatus;
+      this.readdressStatus.toStatus = this.preOfferStage.readdressStatus.toStatus;
+      this.readdressStatus.id = this.preOfferStage.readdressStatus.id
+    }
+
     this.processService.selectedSeniorities.subscribe(sr => {
       this.seniorityList = sr;
       this.preOfferForm.controls['seniority'].setValue(this.seniorityList[0].id);
@@ -109,15 +143,27 @@ export class PreOfferStageComponent implements OnInit {
 
     this.backCheckEnabled = enable;
     this.preocupationalCheckEnabled = enable;
+    this.preOfferForm.controls['reasonSelectControl'].setValue(undefined);
+    this.preOfferForm.controls['reasonSelectControl'].enable();
+    this.preOfferForm.controls['reasonDescriptionTextAreaControl'].enable();
   }
 
   statusChanged() {
+
+    this.readdressStatus.readdressReasonId = undefined;
+    this.preOfferForm.controls['reasonDescriptionTextAreaControl'].setValue("");
+    this.currentStageStatus = this.preOfferForm.controls['status'].value;
+    
     if (this.preOfferForm.controls['status'].value === StageStatusEnum.InProgress || this.preOfferForm.controls['status'].value === StageStatusEnum.PendingReply) {
        this.changeFormStatus(true);
        this.preOfferForm.markAsTouched();
     } else {
        this.changeFormStatus(false);
     }
+
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressStatus.toStatus = this.currentStageStatus
   }
 
   getFormData(processId: number): preOfferStage {
@@ -144,6 +190,7 @@ export class PreOfferStageComponent implements OnInit {
     stage.preocupationalDone = this.getControlValue(form.controls.preocupationalDone);
     stage.preocupationalDoneDate = stage.preocupationalDone ? this.getControlValue(form.controls.preocupationalDoneDate) : null;
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
+    stage.readdressStatus = this.readdressStatus;
     return stage;
   }
 
@@ -223,6 +270,11 @@ export class PreOfferStageComponent implements OnInit {
     if (preOfferStage.rejectionReason) {
       this.preOfferForm.controls['rejectionReason'].setValue(preOfferStage.rejectionReason);
     }
+
+    if (preOfferStage.readdressStatus){
+      if(preOfferStage.readdressStatus.feedback)
+        this.preOfferForm.controls['reasonDescriptionTextAreaControl'].setValue(preOfferStage.readdressStatus.feedback);
+    }
   }
 
   toggleBackgroundCheck() {
@@ -238,17 +290,28 @@ export class PreOfferStageComponent implements OnInit {
     this.changeFormStatus(false);
   }
 
-  showRejectionReason() {
-    if (this.preOfferForm.controls['status'].value === StageStatusEnum.Rejected) {
-      this.preOfferForm.controls['rejectionReason'].enable();
-      return true;
-    }
-    this.preOfferForm.controls['rejectionReason'].disable();
-    return false;
-  }
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.preOfferForm);
+  }
+
+  validatorsOnReaddressControls(flag: boolean)
+  {
+    let reasonSelectControl = this.preOfferForm.controls['reasonSelectControl'];
+    let feedbackTextAreaControl = this.preOfferForm.controls['reasonDescriptionTextAreaControl'];
+
+    function enableValidations(){
+      reasonSelectControl.setValidators(Validators.required);
+      feedbackTextAreaControl.setValidators([Validators.required]);
+    }
+
+    function disableValidations(){
+      reasonSelectControl.clearValidators();
+      feedbackTextAreaControl.clearValidators();
+    }
+
+    flag == true ? enableValidations() : disableValidations();
+
   }
 
   checkLength(field) {
@@ -263,4 +326,23 @@ export class PreOfferStageComponent implements OnInit {
     }
   }
 
+  CanShowReaddressPossibility() {
+    if (CanShowReaddressPossibility(this.currentStageStatus)){
+      this.validatorsOnReaddressControls(true);
+      return true;
+    }
+    else{
+      this.validatorsOnReaddressControls(false);
+      return false;
+    }
+  }
+
+  getSelectedReason(reason){
+    this.selectedReasonId = reason;
+    this.readdressStatus.readdressReasonId = this.selectedReasonId;
+  }
+
+  onDescriptionChange(description: string): void {  
+    this.readdressStatus.feedback = description;
+  }
 }

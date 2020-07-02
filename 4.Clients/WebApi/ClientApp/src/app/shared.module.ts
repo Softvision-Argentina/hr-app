@@ -44,7 +44,7 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         CommunitiesComponent,
         CandidatesProfileComponent,
         TextEditorComponent,
-        OpenPositionsComponent,
+        OpenPositionsComponent
     ],
     exports: [
         CandidateDetailsComponent,

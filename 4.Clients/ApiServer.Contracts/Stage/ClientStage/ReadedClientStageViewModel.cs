@@ -1,4 +1,5 @@
 ﻿using ApiServer.Contracts.Interview;
+using ApiServer.Contracts.ReaddressStatus;
 using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
@@ -21,5 +22,6 @@ namespace ApiServer.Contracts.Stage
         public string Interviewer { get; set; }
         public string DelegateName { get; set; }
         public IList<ReadedInterviewViewModel> Interviews { get; set; }
+        public ReadReaddressStatusViewModel ReaddressStatus { get; set; }
     }
 }

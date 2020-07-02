@@ -1,6 +1,7 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { EnglishLevelEnum } from './enums/english-level.enum';
 import { RejectionReasonsHrEnum } from './enums/rejection-reasons-hr.enum';
+import { ReaddressStatus } from './ReaddressStatus';
 
 export class HrStage {
     id: number;
@@ -17,4 +18,5 @@ export class HrStage {
     userDelegateId?: number;
     rejectionReason?: string;
     sentEmail: boolean;
+    readdressStatus: ReaddressStatus;
 }

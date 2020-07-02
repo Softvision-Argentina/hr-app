@@ -22,5 +22,6 @@ namespace Core.Persistance
         TEntity Update(TEntity entity);
         void Delete(TEntity entity);
         int Count();
+        bool Exist(int id);
     }
 }

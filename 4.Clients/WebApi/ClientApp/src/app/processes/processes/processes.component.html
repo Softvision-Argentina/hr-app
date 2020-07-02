@@ -89,17 +89,17 @@
       <div nz-col nzSpan="22">
         <nz-steps nzLabelPlacement="vertical" [nzCurrent]="stepIndex">
           <nz-step nzTitle="HR" id="candidateButton"
-            (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
+            (click)="onHrStageSlideClick($event.currentTarget.id)">
           </nz-step>
           <nz-step nzTitle="Technical" id="technicalButton"
-            (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)">
+            (click)="onTechnicalStageSlideClick($event.currentTarget.id)">
           </nz-step>
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Client" id="clientButton"
-            (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)"></nz-step>
+            (click)="onClientStageSlideClick($event.currentTarget.id)"></nz-step>
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Pre-Offer" id="preOfferButton"
-            (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
+            (click)="onPreOfferStageSlideClick($event.currentTarget.id)"></nz-step>
           <nz-step *ngIf="isUserRole(['Admin','Recruiter'])" nzTitle="Offer" id="offerButton"
-            (click)="slickModal.slickGoTo(4);wishedStage(4, $event.currentTarget.id)"></nz-step>
+            (click)="onOfferStageSlideClick($event.currentTarget.id)"></nz-step>
         </nz-steps>
       </div>
       <br />
@@ -109,17 +109,17 @@
           <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
             [_users]="users" [_candidate]="currentCandidate" [_offices]="offices">
           </candidate-add>
-          <hr-stage [_users]="users" [hrStage]="emptyProcess.hrStage"></hr-stage>
+          <hr-stage [_users]="users" [readdressReasonTypeList]= "readdressReasonTypeList" [readdressReasonList]="readdressReasonList" [hrStage]="emptyProcess.hrStage"></hr-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 512px">
-          <technical-stage [_process]="emptyProcess" [_users]="users" [technicalStage]="emptyProcess.technicalStage"
+          <technical-stage [_process]="emptyProcess" [_users]="users" [readdressReasonTypeList]= "readdressReasonTypeList" [readdressReasonList]="readdressReasonList" [technicalStage]="emptyProcess.technicalStage"
             (selectedSeniority)="updateSeniority($event)"></technical-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 550px">
-          <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage" [processSaveEvent]="saveEventSubject.asObservable()"></client-stage>
+          <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage" [readdressReasonTypeList]= "readdressReasonTypeList" [readdressReasonList]="readdressReasonList" [processSaveEvent]="saveEventSubject.asObservable()"></client-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
-          <pre-offer-stage [_users]="users" [preOfferStage]="emptyProcess.preOfferStage"
+          <pre-offer-stage [_users]="users" [preOfferStage]="emptyProcess.preOfferStage" [readdressReasonTypeList]= "readdressReasonTypeList" [readdressReasonList]="readdressReasonList"
             (selectedSeniority)="updateSeniority($event)"></pre-offer-stage>
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">

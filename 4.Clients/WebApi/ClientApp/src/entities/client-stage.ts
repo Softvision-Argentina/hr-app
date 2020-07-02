@@ -1,5 +1,6 @@
 import { StageStatusEnum } from './enums/stage-status.enum';
 import { Interview } from 'src/entities/interview';
+import { ReaddressStatus } from './ReaddressStatus';
 
 export class ClientStage {
     id: number;
@@ -12,5 +13,6 @@ export class ClientStage {
     userOwnerId?: number;
     userDelegateId?: number;
     rejectionReason?: string;
-    interviews?: Interview[]
+    interviews?: Interview[];
+    readdressStatus: ReaddressStatus;
 }

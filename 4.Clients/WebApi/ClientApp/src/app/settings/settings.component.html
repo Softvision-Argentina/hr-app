@@ -1,47 +1,53 @@
 <nz-layout>
-    <nz-sider nzWidth="350px">
-        <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu">
-            <li nz-menu-item>
-                <a routerLink="/settings/hire-projected">Hire Project Data</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/employee-casualties">Employee Casualties Data</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/skills-list">Skills List</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/skills-types">Skill Types</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/profiles/candidates-profile">Candidate Profiles</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/profiles/communities">Communities</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/locations/offices">Offices</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/locations/rooms">Rooms</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/roles">Roles</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/festivities">Festivities Reminders</a>
-            </li>
-            <li nz-menu-item>
-                <a routerLink="/settings/declining-reasons">Declining Reasons</a>
-            </li>
-        </ul>
-    </nz-sider>
-    <nz-layout>
-        <nz-content>
-            <div class="container">
-                <router-outlet></router-outlet>
-            </div>
-        </nz-content>
-        <nz-footer>Interview App designed with Ant Design ©2019, Implementing Angular</nz-footer>
-    </nz-layout>
+  <nz-sider nzWidth="350px">
+    <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu">
+      <li nz-menu-item>
+        <a routerLink="/settings/hire-projected">Hire Project Data</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/employee-casualties">Employee Casualties Data</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/skills-list">Skills List</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/skills-types">Skill Types</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/profiles/candidates-profile">Candidate Profiles</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/profiles/communities">Communities</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/locations/offices">Offices</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/locations/rooms">Rooms</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/roles">Roles</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/festivities">Festivities Reminders</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/declining-reasons">Declining Reasons</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/reasons">Reasons</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/settings/reasons-categories">Reasons categories</a>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-content>
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <nz-footer>Interview App designed with Ant Design ©2019, Implementing Angular</nz-footer>
+  </nz-layout>
 </nz-layout>

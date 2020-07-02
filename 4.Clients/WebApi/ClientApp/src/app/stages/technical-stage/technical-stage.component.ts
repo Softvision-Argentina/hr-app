@@ -12,7 +12,10 @@ import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { Candidate } from 'src/entities/candidate';
 import { CandidateSkill } from 'src/entities/candidateSkill';
 import { ProcessService } from '../../services/process.service';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions'
+import { formFieldHasRequiredValidator, CanShowReaddressPossibility } from 'src/app/utils/utils.functions'
+import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
+import { ReaddressStatus } from 'src/entities/ReaddressStatus'
 
 @Component({
   selector: 'technical-stage',
@@ -40,6 +43,10 @@ export class TechnicalStageComponent implements OnInit {
     this._process = value;
   }
 
+  currentStageStatus: StageStatusEnum;
+  @Input() readdressReasonList: ReaddressReason[] = [];
+  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
+  
   @Input() technicalStage: TechnicalStage;
 
   @Output() selectedSeniority = new EventEmitter();
@@ -55,8 +62,10 @@ export class TechnicalStageComponent implements OnInit {
     feedback: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
     client: [null],
-    rejectionReason: [null, [Validators.required]],
-    sentEmail: [false]
+    rejectionReason: [null],
+    sentEmail: [false],
+    reasonSelectControl: [null],
+    reasonDescriptionTextAreaControl: [null]
   });
 
   feedbackContent: string = "";
@@ -78,6 +87,12 @@ export class TechnicalStageComponent implements OnInit {
   disabledSeniority = false;
   chosenSeniority: number;
 
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
+  currentReaddressDescription: string = "";
+  readdressFilteredList: ReaddressReason[] = [];
+  selectedReasonId: number;
+  selectedReason: string;
+
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
     this.seniorityList = globals.seniorityList;
@@ -85,11 +100,29 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.currentStageStatus = this.technicalStage.status;
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    
+    this.selectedReason = undefined;
+    this.readdressStatus.feedback = undefined;
+    this.readdressStatus.fromStatus = undefined;
+    this.readdressStatus.toStatus = undefined;
+    this.readdressStatus.id = undefined;
+  
+    if (this.technicalStage.readdressStatus){
+      this.selectedReason = `${this.technicalStage.readdressStatus.readdressReasonId}`;
+      this.readdressStatus.feedback = this.technicalStage.readdressStatus.feedback;
+      this.readdressStatus.fromStatus = this.technicalStage.readdressStatus.fromStatus;
+      this.readdressStatus.toStatus = this.technicalStage.readdressStatus.toStatus;
+      this.readdressStatus.id = this.technicalStage.readdressStatus.id
+    }
+
     this.processService.selectedSeniorities.subscribe(sr => this.selectedSeniorities = sr);
     this.getSkills();
     this.changeFormStatus(false);
     if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
-    this.getFilteredUsersForTech();
+    this.getFilteredUsersForTech();    
   }
 
   getFeedbackContent(content: string): void {
@@ -152,7 +185,6 @@ export class TechnicalStageComponent implements OnInit {
           this.technicalForm.controls[i].enable();
           if (this.technicalForm.controls[i] === this.technicalForm.controls['englishLevel']) {
             this.disabled = false;
-            console.log(this.disabled)
           this.technicalForm.controls[i].enable();
           }
           if(this.technicalForm.controls[i] === this.technicalForm.controls['alternativeSeniority']) {
@@ -166,15 +198,27 @@ export class TechnicalStageComponent implements OnInit {
         }
       }
     }
+
+    this.technicalForm.controls['reasonSelectControl'].setValue(undefined);
+    this.technicalForm.controls['reasonSelectControl'].enable();
+    this.technicalForm.controls['reasonDescriptionTextAreaControl'].enable();
   }
 
   statusChanged() {
+    this.readdressStatus.readdressReasonId = undefined;
+    this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue("");
+    this.currentStageStatus = this.technicalForm.controls['status'].value;
+    
     if (this.technicalForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.technicalForm.markAsTouched();
     } else {
       this.changeFormStatus(false);
     }
+
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressStatus.toStatus = this.currentStageStatus;
   }
 
   getFormData(processId: number): TechnicalStage {
@@ -195,6 +239,7 @@ export class TechnicalStageComponent implements OnInit {
     stage.client = this.getControlValue(form.controls.client);
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
     stage.sentEmail = this.getControlValue(form.controls.sentEmail);
+    stage.readdressStatus = this.readdressStatus;
     return stage;
   }
 
@@ -301,16 +346,36 @@ export class TechnicalStageComponent implements OnInit {
     if (technicalStage.sentEmail) {
       this.technicalForm.controls['sentEmail'].setValue(technicalStage.sentEmail);
     }
+
+    if (technicalStage.readdressStatus)
+      if(technicalStage.readdressStatus.feedback){
+      this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue(technicalStage.readdressStatus.feedback);
+    }
   }
 
-  showRejectionReason() {
-    if (this.technicalForm.controls['status'].value === StageStatusEnum.Rejected) {
-      this.technicalForm.controls['rejectionReason'].enable();
-      return true;
+  validatorsOnReaddressControls(flag: boolean)
+  {
+    let reasonSelectControl = this.technicalForm.controls['reasonSelectControl'];
+    let feedbackTextAreaControl = this.technicalForm.controls['reasonDescriptionTextAreaControl'];
+
+    function enableValidations(){
+      reasonSelectControl.setValidators(Validators.required);
+      reasonSelectControl.updateValueAndValidity();
+      feedbackTextAreaControl.setValidators([Validators.required]);
+      feedbackTextAreaControl.updateValueAndValidity();
     }
-    this.technicalForm.controls['rejectionReason'].disable();
-    return false;
+
+    function disableValidations(){
+      reasonSelectControl.clearValidators();
+      reasonSelectControl.updateValueAndValidity();
+      feedbackTextAreaControl.clearValidators();
+      feedbackTextAreaControl.updateValueAndValidity();
+    }
+
+    flag == true ? enableValidations() : disableValidations();
+
   }
+
 
   addField(e?: MouseEvent): void {
     if (e) {
@@ -417,5 +482,25 @@ export class TechnicalStageComponent implements OnInit {
         this.removeField(skillControl, fakeMouseEvent);
       }
     }
+  }
+
+  CanShowReaddressPossibility() {
+    if (CanShowReaddressPossibility(this.currentStageStatus)){
+      this.validatorsOnReaddressControls(true);
+      return true;
+    }
+    else{
+      this.validatorsOnReaddressControls(false);
+      return false;
+    }
+  }
+
+  getSelectedReason(reason){
+    this.selectedReasonId = reason;
+    this.readdressStatus.readdressReasonId = this.selectedReasonId;
+  }
+
+  onDescriptionChange(description: string): void {  
+    this.readdressStatus.feedback = description;
   }
 }

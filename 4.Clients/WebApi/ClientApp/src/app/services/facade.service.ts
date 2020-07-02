@@ -23,6 +23,8 @@ import { RoleService } from './role.service';
 import { CompanyCalendarService } from './company-calendar.service';
 import { PostulantsService } from './postulants.service';
 import { DeclineReasonService } from './decline-reason.service';
+import { ReaddressReasonService } from './readdress-reason.service';
+import { ReaddressReasonTypeService } from './readdress-reason-type.service';
 import { DashboardService } from './dashboard.service';
 import { OfferService } from './offer.service';
 import { PreOfferService } from './pre-offer.service';
@@ -320,6 +322,22 @@ export class FacadeService {
     }
 
     return this._appService;
+  }
+
+  private _readdressReasonService: ReaddressReasonService;
+  public get readdressReasonService(): ReaddressReasonService {
+    if (!this._readdressReasonService) {
+      this._readdressReasonService = this.injector.get(ReaddressReasonService);
+    }
+    return this._readdressReasonService;
+  }
+
+  private _readdressReasonTypeService: ReaddressReasonTypeService;
+  public get readdressReasonTypeService(): ReaddressReasonTypeService {
+    if (!this._readdressReasonTypeService) {
+      this._readdressReasonTypeService = this.injector.get(ReaddressReasonTypeService);
+    }
+    return this._readdressReasonTypeService;
   }
 
   constructor(private injector: Injector) {

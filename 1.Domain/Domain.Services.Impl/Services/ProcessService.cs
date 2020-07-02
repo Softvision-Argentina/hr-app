@@ -41,6 +41,7 @@ namespace Domain.Services.Impl.Services
         private readonly IMailSender _mailSender;
         private readonly IValidator<UpdateProcessContract> _updateProcessContractValidator;
         private readonly IValidator<CreateProcessContract> _createProcessContractValidator;
+        private readonly IReaddressStatusService _readdressStatusService;
 
         public ProcessService(
             IMapper mapper,
@@ -50,6 +51,8 @@ namespace Domain.Services.Impl.Services
             IRepository<Community> communityRepository,
             IRepository<Office> officeRepository,
             IRepository<DeclineReason> declineReasonRepository,
+            IRepository<ReaddressReason> readdressReasonRepository,
+            IRepository<ReaddressStatus> readdressStatusRepository,
             IProcessRepository processRepository,
             IProcessStageRepository processStageRepository,
             IHrStageRepository hrStageRepository,
@@ -63,7 +66,8 @@ namespace Domain.Services.Impl.Services
             IPreOfferStageRepository preOfferStageRepository,
             IMailSender mailSender,
             IValidator<UpdateProcessContract> updateProcessContractValidator,
-            IValidator<CreateProcessContract> createProcessContractValidator
+            IValidator<CreateProcessContract> createProcessContractValidator,
+            IReaddressStatusService readdressStatuService
             )
             
         {            
@@ -88,6 +92,7 @@ namespace Domain.Services.Impl.Services
             _mailSender = mailSender;
             _createProcessContractValidator = createProcessContractValidator;
             _updateProcessContractValidator = updateProcessContractValidator;
+            _readdressStatusService = readdressStatuService;
         }
 
         public ReadedProcessContract Read(int id)
@@ -156,6 +161,18 @@ namespace Domain.Services.Impl.Services
             var userId = GetUser();
 
             process.UserOwnerId = userId;
+
+            if (process.HrStage.ReaddressStatus != null)
+                _readdressStatusService.Create(createProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
+           
+            if (process.TechnicalStage.ReaddressStatus != null)
+                _readdressStatusService.Create(createProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
+
+            if (process.ClientStage.ReaddressStatus != null)
+                _readdressStatusService.Create(createProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
+
+            if (process.PreOfferStage.ReaddressStatus != null)
+                _readdressStatusService.Create(createProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
 
             var createdProcess = _processRepository.Create(process);
 
@@ -234,6 +251,15 @@ namespace Domain.Services.Impl.Services
             process.ClientStage.UserOwnerId = process.UserOwnerId;
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
+
+            if (process.HrStage.ReaddressStatus != null)
+                _readdressStatusService.Update(updateProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
+            if (process.TechnicalStage.ReaddressStatus != null)
+                _readdressStatusService.Update(updateProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
+            if (process.ClientStage.ReaddressStatus != null)
+                _readdressStatusService.Update(updateProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
+            if (process.PreOfferStage.ReaddressStatus != null)
+                _readdressStatusService.Update(updateProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
 
             _hrStageRepository.Update(process.HrStage);
             _technicalStageRepository.Update(process.TechnicalStage);

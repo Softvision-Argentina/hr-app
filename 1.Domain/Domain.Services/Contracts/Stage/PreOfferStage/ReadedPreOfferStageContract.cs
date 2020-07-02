@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.ReaddressStatus;
 using Domain.Services.Contracts.User;
 using System;
 
@@ -26,5 +27,6 @@ namespace Domain.Services.Contracts.Stage
         public string Bonus { get; set; }
         public string Notes { get; set; }
         public HealthInsuranceEnum HealthInsurance { get; set; }
+        public ReadReaddressStatus ReaddressStatus { get; set; }
     }
 }

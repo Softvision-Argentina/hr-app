@@ -26,6 +26,37 @@
         </div>
     </div>
 
+    <div nz-row *ngIf="CanShowReaddressPossibility()">
+        <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24">
+            Reason
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select formControlName="reasonSelectControl" 
+            [(ngModel)]="selectedReason" 
+            (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
+                <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
+                </nz-option>
+            </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    
+        <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="10" [nzXs]="24">
+            Reason explanation
+            </nz-form-label>
+            <nz-form-control [nzSm]="7" [nzXs]="24">
+            <textarea rows="1 " nz-input id="readdressReason" formControlName="reasonDescriptionTextAreaControl"
+                        placeholder="Input the reason"
+                        (input)="onDescriptionChange($event.target.value)"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    </div>
+
     <div nz-row>
         <div nz-col nzSpan="12">
             <nz-form-item>
@@ -123,8 +154,9 @@
             </nz-form-item>
         </div>
     </div>
+
     <div nz-row>
-        <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
+        <div nz-col nzSpan="12" style="display:none">
             <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
@@ -134,7 +166,7 @@
                         placeholder="Input the rejection reason"></textarea>
                 </nz-form-control>
                 <nz-form-explain style="color: #f5222d "
-                    *ngIf="showRejectionReason() && preOfferForm.get('rejectionReason').dirty && preOfferForm.get('rejectionReason').errors ">
+                    >
                     <ng-container
                         *ngIf="preOfferForm.get('rejectionReason')?.dirty && preOfferForm.get('rejectionReason')?.errors ">
                         Please input rejection reason!

@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
+import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Globals } from '../../app-globals/globals';
@@ -8,7 +10,8 @@ import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { HrStage } from '../../../entities/hr-stage';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
 import { AppComponent } from 'src/app/app.component';
-import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
+import { ReaddressStatus } from 'src/entities/ReaddressStatus';
 
 @Component({
   selector: 'hr-stage',
@@ -29,8 +32,6 @@ export class HrStageComponent implements OnInit {
     this._users = value;
   }
 
-  @Input() hrStage: HrStage;
-
   hrForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -42,25 +43,57 @@ export class HrStageComponent implements OnInit {
     feedback: [null, [trimValidator]],
     additionalInformation: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
-    rejectionReason: [null, [Validators.required]],
-    rejectionReasonsHr: [0, [Validators.required]],
-    sentEmail: [false]
+    rejectionReason: [null],
+    rejectionReasonsHr: [0],
+    sentEmail: [false],
+    reasonSelectControl: [null],
+    reasonDescriptionTextAreaControl: [null]
   });
 
   feedbackContent:string = "";
 
   statusList: any[] ;
   englishLevelList: any[];
-  rejectionReasonsHRList: any[];
-  usersFiltered: User[];
 
-  constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private _appComponent: AppComponent) {
+  currentStageStatus: StageStatusEnum;
+  usersFiltered: User[];
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
+
+  @Input() hrStage: HrStage;
+  @Input() readdressReasonList: ReaddressReason[] = [];
+  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
+  
+  readdressFilteredList: ReaddressReason[] = [];
+  selectedReasonId: number;
+  selectedReason: string;
+
+  constructor(private fb: FormBuilder, private facade: FacadeService,
+     private globals: Globals, private _appComponent: AppComponent) {
+
     this.statusList = globals.hrStageStatusList;
     this.englishLevelList = globals.englishLevelList;
-    this.rejectionReasonsHRList = globals.rejectionReasonsHRList.sort((a, b) => (a.name.localeCompare(b.name)));
   }
 
   ngOnInit() {
+
+  this.currentStageStatus = this.hrStage.status;
+	let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+  this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+  
+  this.selectedReason = undefined;
+  this.readdressStatus.feedback = undefined;
+  this.readdressStatus.fromStatus = undefined;
+  this.readdressStatus.toStatus = undefined;
+  this.readdressStatus.id = undefined;
+
+  if (this.hrStage.readdressStatus){
+    this.selectedReason = `${this.hrStage.readdressStatus.readdressReasonId}`;
+    this.readdressStatus.feedback = this.hrStage.readdressStatus.feedback;
+    this.readdressStatus.fromStatus = this.hrStage.readdressStatus.fromStatus;
+    this.readdressStatus.toStatus = this.hrStage.readdressStatus.toStatus;
+    this.readdressStatus.id = this.hrStage.readdressStatus.id
+  }
+
     this.changeFormStatus(false);
     if (this.hrStage) { this.fillForm(this.hrStage); }
     this.getFilteredUsersForHr();
@@ -93,15 +126,28 @@ export class HrStageComponent implements OnInit {
         }
       }
     }
+
+    this.hrForm.controls['reasonSelectControl'].setValue(undefined);
+    this.hrForm.controls['reasonSelectControl'].enable();
+    this.hrForm.controls['reasonDescriptionTextAreaControl'].enable();
   }
 
   statusChanged() {
-    if (this.hrForm.controls['status'].value === 1) {
+    this.readdressStatus.readdressReasonId = undefined;
+    this.hrForm.controls['reasonDescriptionTextAreaControl'].setValue("");
+    this.currentStageStatus = this.hrForm.controls['status'].value;
+
+    if (this.currentStageStatus === StageStatusEnum.InProgress) {
       this.changeFormStatus(true);
       this.hrForm.markAsTouched();
-    } else {
+    }
+     else {
       this.changeFormStatus(false);
     }
+
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+     this.readdressStatus.toStatus = this.currentStageStatus;
   }
 
 
@@ -110,7 +156,7 @@ export class HrStageComponent implements OnInit {
 
     hrStage.id = this.getControlValue(this.hrForm.controls.id);
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
-    hrStage.feedback =  this.feedbackContent; //this.getControlValue(this.hrForm.controls.feedback);
+    hrStage.feedback =  this.feedbackContent;
     hrStage.status = this.getControlValue(this.hrForm.controls.status);
     hrStage.userOwnerId = this.getControlValue(this.hrForm.controls.userOwnerId);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
@@ -123,6 +169,7 @@ export class HrStageComponent implements OnInit {
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
     hrStage.sentEmail = this.getControlValue(this.hrForm.controls.sentEmail);
+    hrStage.readdressStatus = this.readdressStatus;
     return hrStage;
   }
 
@@ -180,32 +227,60 @@ export class HrStageComponent implements OnInit {
     if (hrStage.rejectionReason) {
       this.hrForm.controls['rejectionReason'].setValue(hrStage.rejectionReason);
     }
-
-    if (hrStage.rejectionReasonsHr) {
-      this.hrForm.controls['rejectionReasonsHr'].setValue(hrStage.rejectionReasonsHr);
-    }
-
     if (hrStage.sentEmail) {
       this.hrForm.controls['sentEmail'].setValue(hrStage.sentEmail);
     }
+    if (hrStage.readdressStatus){
+      if(hrStage.readdressStatus.feedback)
+        this.hrForm.controls['reasonDescriptionTextAreaControl'].setValue(hrStage.readdressStatus.feedback);
+    }
   }
 
-  showRejectionReason() {
-    if (this.hrForm.controls['status'].value === StageStatusEnum.Rejected) {
-      this.hrForm.controls['rejectionReason'].enable();
-      this.hrForm.controls['rejectionReasonsHr'].enable();
-      return true;
-    }
-    this.hrForm.controls['rejectionReason'].disable();
-    this.hrForm.controls['rejectionReasonsHr'].disable();
-    return false;
-  }
 
   isUserRole(roles: string[]): boolean {
     return this._appComponent.isUserRole(roles);
   }
 
   isRequiredField(field: string) {
-    return formFieldHasRequiredValidator(field, this.hrForm)
+    return formFieldHasRequiredValidator(field, this.hrForm);
+  }
+
+  validatorsOnReaddressControls(flag: boolean)
+  {
+    let reasonSelectControl = this.hrForm.controls['reasonSelectControl'];
+    let feedbackTextAreaControl = this.hrForm.controls['reasonDescriptionTextAreaControl'];
+
+    function enableValidations(){
+      reasonSelectControl.setValidators(Validators.required);
+      feedbackTextAreaControl.setValidators([Validators.required]);
+    }
+
+    function disableValidations(){
+      reasonSelectControl.clearValidators();
+      feedbackTextAreaControl.clearValidators();
+    }
+
+    flag == true ? enableValidations() : disableValidations();
+
+  }
+
+  CanShowReaddressPossibility() {
+    if (CanShowReaddressPossibility(this.currentStageStatus)){
+      this.validatorsOnReaddressControls(true);
+      return true;
+    }
+    else{
+      this.validatorsOnReaddressControls(false);
+      return false;
+    }
+  }
+
+  getSelectedReason(reason){
+    this.selectedReasonId = reason;
+    this.readdressStatus.readdressReasonId = this.selectedReasonId;
+  }
+
+  onDescriptionChange(description: string): void {  
+    this.readdressStatus.feedback = description;
   }
 }

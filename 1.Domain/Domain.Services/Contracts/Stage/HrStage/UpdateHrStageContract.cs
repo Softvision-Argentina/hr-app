@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.ReaddressStatus;
 using Domain.Services.Contracts.Stage.StageItem;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,6 @@ namespace Domain.Services.Contracts.Stage
         public EnglishLevel EnglishLevel { get; set; }
         public RejectionReasonsHr RejectionReasonsHr { get; set; }
         public bool SentEmail { get; set; }
+        public UpdateReaddressStatus ReaddressStatus { get; set; }
     }
 }

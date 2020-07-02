@@ -751,6 +751,75 @@ namespace Domain.Services.Repositories.EF
             context.SaveChanges();
             #endregion
 
+            #region ReaddressReasonType
+            var DeclineReaddress = new ReaddressReasonType { Name = "Declined", Description = "Candidate won't continue with proccess" };
+            var RejectedReaddress = new ReaddressReasonType { Name = "Rejected", Description = "Company won't continue the process with candidate" };
+            var PipelineReaddress = new ReaddressReasonType { Name = "Pipeline", Description = "Company freezed process" };
+
+            context.ReaddressReasonTypes.Add(DeclineReaddress);
+            context.ReaddressReasonTypes.Add(RejectedReaddress);
+            context.ReaddressReasonTypes.Add(PipelineReaddress);
+            context.SaveChanges();
+            #endregion
+
+            #region ReaddressReason
+            var RR1 = new ReaddressReason { Name = "Negative References", Description = "Candidate has negative references", Type = RejectedReaddress };
+            var RR2 = new ReaddressReason { Name = "Not a good fit for CSV", Description = "Candidate is not a good fit por CSV", Type = RejectedReaddress };
+            var RR4 = new ReaddressReason { Name = "Bad attitude", Description = "Candidate has bad attitude", Type = RejectedReaddress };
+            var RR5 = new ReaddressReason { Name = "Low English level", Description = "Candidate has low english level", Type = RejectedReaddress };
+            var RR6 = new ReaddressReason { Name = "Lack of technical skills / experience", Description = "Candidate lack of technical", Type = RejectedReaddress };
+            var RR7 = new ReaddressReason { Name = "High Salary Requirements", Description = "Candidate has hight salary requirements", Type = RejectedReaddress };
+            var RR8 = new ReaddressReason { Name = "High Benefit Requirements", Description = "Candidate has benefit requirements", Type = RejectedReaddress };
+            var RR19 = new ReaddressReason { Name = "High Salary Requirements", Description = "Candidate has high salary requirements", Type = RejectedReaddress };
+            var RR22 = new ReaddressReason { Name = "Negative Background check", Description = "Candidate has negativa background check", Type = RejectedReaddress };
+            var RR23 = new ReaddressReason { Name = "Other", Description = "Other", Type = RejectedReaddress };
+
+            var RR3 = new ReaddressReason { Name = "No fit for current roles", Description = "Candidate isn't a good fit for current roles", Type = PipelineReaddress };
+            var RR21 = new ReaddressReason { Name = "CSV process delay", Description = "Process delayed", Type = PipelineReaddress };
+            var RR25 = new ReaddressReason { Name = "Other", Description = "Other", Type = PipelineReaddress };
+
+            var RR9 = new ReaddressReason { Name = "Employment type", Description = "Candidate decline on employment type", Type = DeclineReaddress };
+            var RR10 = new ReaddressReason { Name = "Office location", Description = "Candidate decline on office location", Type = DeclineReaddress };
+            var RR11 = new ReaddressReason { Name = "Looking for work abroad", Description = "Candidate decline because was looking for work abroad", Type = DeclineReaddress };
+            var RR12 = new ReaddressReason { Name = "Looking for remote work", Description = "Candidate decline because was looking for remote work", Type = DeclineReaddress };
+            var RR13 = new ReaddressReason { Name = "Remain at current work", Description = "Candidate choose remain at current work", Type = DeclineReaddress };
+            var RR14 = new ReaddressReason { Name = "Current salary improvement", Description = "Candidate achieve a salary improvement", Type = DeclineReaddress };
+            var RR15 = new ReaddressReason { Name = "Current work conditions improvement", Description = "Candidate achieve a work condition Improvement", Type = DeclineReaddress };
+            var RR16 = new ReaddressReason { Name = "Current salary and conditions improvement", Description = "Candidate achieve salary and work conditions improvement", Type = DeclineReaddress };
+            var RR17 = new ReaddressReason { Name = "Accepted other proposal", Description = "Candidate accepted other proposal", Type = DeclineReaddress };
+            var RR18 = new ReaddressReason { Name = "Accepted other offer in US$", Description = "Candidate accepted other offer in USD$", Type = DeclineReaddress };
+            var RR20 = new ReaddressReason { Name = "Accepted other offer in AR$", Description = "Candidate accepted other offer in AR$", Type = DeclineReaddress };
+            var RR24 = new ReaddressReason { Name = "Other", Description = "Other", Type = DeclineReaddress };
+
+            context.ReaddressReasons.Add(RR1);
+            context.ReaddressReasons.Add(RR2);
+            context.ReaddressReasons.Add(RR3);
+            context.ReaddressReasons.Add(RR4);
+            context.ReaddressReasons.Add(RR5);
+            context.ReaddressReasons.Add(RR6);
+            context.ReaddressReasons.Add(RR7);
+            context.ReaddressReasons.Add(RR8);
+            context.ReaddressReasons.Add(RR9);
+            context.ReaddressReasons.Add(RR10);
+            context.ReaddressReasons.Add(RR11);
+            context.ReaddressReasons.Add(RR12);
+            context.ReaddressReasons.Add(RR13);
+            context.ReaddressReasons.Add(RR14);
+            context.ReaddressReasons.Add(RR15);
+            context.ReaddressReasons.Add(RR16);
+            context.ReaddressReasons.Add(RR17);
+            context.ReaddressReasons.Add(RR18);
+            context.ReaddressReasons.Add(RR19);
+            context.ReaddressReasons.Add(RR20);
+            context.ReaddressReasons.Add(RR21);
+            context.ReaddressReasons.Add(RR22);
+            context.ReaddressReasons.Add(RR23);
+            context.ReaddressReasons.Add(RR24);
+            context.ReaddressReasons.Add(RR25);
+
+            context.SaveChanges();
+            #endregion
+
         }
     }
 }

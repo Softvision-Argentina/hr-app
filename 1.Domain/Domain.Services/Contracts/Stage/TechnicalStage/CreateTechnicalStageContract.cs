@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Enum;
+using Domain.Services.Contracts.ReaddressStatus;
 using Domain.Services.Contracts.Stage.StageItem;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,6 @@ namespace Domain.Services.Contracts.Stage
         public Seniority AlternativeSeniority { get; set; }
         public string Client { get; set; }
         public bool SentEmail { get; set; }
+        public CreateReaddressStatus ReaddressStatus { get; set; }
     }
 }
