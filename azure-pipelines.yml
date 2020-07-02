@@ -15,6 +15,7 @@ steps:
   inputs:
     Contents:
       Structure\*.sql
+      Structure\*.bat
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
