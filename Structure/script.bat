@@ -1,1 +1,1 @@
-for %%G in (d:\a\1\a\Structure\*.sql) do sqlcmd /S sql-hrapp-qa.database.windows.net /d recrutemp -U sqladmin -P uy%3A0"%5D123 -i"%%G"
+for %%G in (*.sql) do sqlcmd /S sql-hrapp-qa.database.windows.net /d recrutemp -U sqladmin -P uy%3A0"%5D123 -i"%%G"
