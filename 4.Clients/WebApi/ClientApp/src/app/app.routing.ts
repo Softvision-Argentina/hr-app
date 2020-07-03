@@ -6,22 +6,22 @@ import { CommonGuard } from './guards/common-guard.service';
 export const appRoutes: Routes = [
   {
     path: 'daysOff',
-    loadChildren: './days-off/days-off.module#DaysOffModule',
+    loadChildren: () => import('./days-off/days-off.module').then(m => m.DaysOffModule),
     canLoad: [ManagementGuard]
   },
   {
     path: 'processes',
-    loadChildren: './processes/processes/processes.module#ProcessesModule',
+    loadChildren: () => import('./processes/processes/processes.module').then(m => m.ProcessesModule),
     canLoad: [HRGuard]
   },
   {
     path: 'process-details/:id',
-    loadChildren: './processes/process-detail/processes-detail.module#ProcessDetailModule',
+    loadChildren: () => import('./processes/process-detail/processes-detail.module').then(m => m.ProcessDetailModule),
     canLoad: [HRGuard]
   },
   {
     path: 'process-steps/:id',
-    loadChildren: './processes/process-steps/process-steps.module#ProcessStepsModule',
+    loadChildren: () => import('./processes/process-steps/process-steps.module').then(m => m.ProcessStepsModule),
     canLoad: [HRGuard]
   },
   {
@@ -31,83 +31,88 @@ export const appRoutes: Routes = [
   },
   {
     path: 'referrals',
-    loadChildren: './referrals/referrals/referrals.module#ReferralsModule',
+    loadChildren: () => import('./referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {
     path: 'stage-details/:id',
-    loadChildren: './stages/stage-detail/stage-detail.module#StageDetailModule',
+    loadChildren: () => import('./stages/stage-detail/stage-detail.module').then(m => m.StageDetailModule),
     canActivate: [CommonGuard]
   },
   {
     path: 'stage-edit/:id',
-    loadChildren: './stages/stage-edit/stage-edit.module#StageEditModule',
+    loadChildren: () => import('./stages/stage-edit/stage-edit.module').then(m => m.StageEditModule),
     canActivate: [CommonGuard]
   },
   {
     path: 'candidates-profile',
-    loadChildren: './candidates-profile/candidates-profile.module#CandidatesProfileModule',
+    loadChildren: () => import('./candidates-profile/candidates-profile.module').then(m => m.CandidatesProfileModule),
     canLoad: [HRGuard]
   },
   {
     path: 'communities',
-    loadChildren: './communities/communities.module#CommunitiesModule',
+    loadChildren: () => import('./communities/communities.module').then(m => m.CommunitiesModule),
     canLoad: [HRGuard]
   },
   {
     path: 'people',
-    loadChildren: './people/people.module#PeopleModule',
+    loadChildren: () => import('./people/people.module').then(m => m.PeopleModule),
     canLoad: [HRGuard]
   },
   {
     path: 'dashboard',
-    loadChildren: './dashboard/dashboard.module#DashboardModule',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
     canLoad: [HRGuard]
   },
   {
     path: 'reports',
-    loadChildren: './reports/reports.module#ReportsModule',
+    loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
     canLoad: [ManagementGuard]
   },
   {
     path: 'settings',
-    loadChildren: './settings/settings.module#SettingsModule',
+    loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
     canLoad: [ManagementGuard]
   },
 
   {
     path: 'tasks',
-    loadChildren: './tasks/tasks.module#TasksModule',
+    loadChildren: () => import('./tasks/tasks.module').then(m => m.TasksModule),
     canLoad: [HRGuard]
   },
   {
     path: 'reservation',
-    loadChildren: './reservations/reservations.module#ReservationsModule',
+    loadChildren: () => import('./reservations/reservations.module').then(m => m.ReservationsModule),
     canLoad: [HRGuard]
   },
   {
     path: 'employees',
-    loadChildren: './employees/employees.module#EmployeesModule'
+    loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule)
   },
   {
     path: 'postulants',
-    loadChildren: './postulants/postulants.module#PostulantsModule'
+    loadChildren: () => import('./postulants/postulants.module').then(m => m.PostulantsModule)
   },
   {
     path: 'login',
-    loadChildren: './login/login.module#LoginModule'
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
   },
   {
     path: 'unauthorized',
-    loadChildren: './unauthorized/unauthorized.module#UnauthorizedModule'
+    loadChildren: () => import('./unauthorized/unauthorized.module').then(m => m.UnauthorizedModule)
   },
   {
     path: '404',
-    loadChildren: './not-found/not-found.module#NotFoundModule'
+    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule)
   },
-  { path: '', redirectTo: '/processes', pathMatch: 'full', canActivate: [HRGuard] },
+  {
+    path: '',
+    redirectTo: '/processes',
+    pathMatch: 'full',
+    canActivate: [HRGuard]
+  },
   {
     path: '**',
-    loadChildren: './not-found/not-found.module#NotFoundModule'
+    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule)
   }
 ];

@@ -2,80 +2,88 @@
     <nz-divider nzText="HR STAGE"></nz-divider>
     <br />
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="name"
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('name')}">First Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="firstNameErrorMsg">
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input a Name">
-                    <nz-form-explain *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
-                        <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                    <ng-template #firstNameErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
+                            <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
+                                Please input a name!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('name')?.hasError('pattern')">
+                                Please input only letters and space  
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
-                            Please input a name!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('pattern')">
-                            Please input only letters and space  
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="lastName"
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('lastName')}">
                     Last Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="lastNameErrorMsg">
                     <input type="text" nz-input formControlName="lastName" id="lastName"
                         placeholder="Please input a last name">
-                    <nz-form-explain
-                        *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                        <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                    <ng-template #lastNameErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
+                            <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
+                                Please input a last name!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('pattern')">
+                                Please input only letters and space
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
-                            Please input a last name!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('pattern')">
-                            Please input only letters and space
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="email"
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('email')}">E-mail</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input an email">
-                    <nz-form-explain>
-                        <nz-form-explain class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
+                    <ng-template #emailErrorMsg>
+                        <ng-container>
+                            <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
                         && candidateForm.hasError('emailAndPhoneValidator')">
-                            Please input a valid Email
-                        </nz-form-explain>
-                        <nz-form-explain *ngIf="candidateForm.get('email').hasError('emailExists')">
-                            The email already exists
-                        </nz-form-explain>
-                    </nz-form-explain>
+                                Please input a valid Email
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
+                                The email already exists
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="phoneNumber" [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
                     Phone Number</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']"
+                    [nzErrorTip]="phoneNumberErrorMsg">
                     <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                         <ng-template #addOnBeforeTemplate>
                             <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
@@ -86,66 +94,84 @@
                         <input formControlName="phoneNumber" id="phoneNumber" type="tel" pattern="^[0-9]+$" nz-input
                             placeholder="Please input a phone number">
                     </nz-input-group>
-                    <nz-form-explain class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('phoneNumber').dirty
-                    && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
-                        Please input a phone number!
-                    </nz-form-explain>
+                    <ng-template #phoneNumberErrorMsg>
+                        <ng-container class="Error" Id="Error" Name="Error"
+                            *ngIf="candidateForm.get('phoneNumber').dirty
+                            && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
+                            Please input a phone number!
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="linkedin" [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedin"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
                     LinkedIn</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input nz-input formControlName="linkedin" id="linkedin" placeholder="Please input the LinkedIn URL">
-                    <nz-form-explain *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
-                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="linkedInErrorMsg">
+                    <input nz-input formControlName="linkedin" id="linkedin"
+                        placeholder="Please input the LinkedIn URL">
+                    <ng-template #linkedInErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
+                            <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('preferredOffice')}">
                     Preferred Office</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="preferredOfficeErrorMsg">
                     <nz-select formControlName="preferredOffice" [(ngModel)]="selectedValue">
                         <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain
-                        *ngIf="candidateForm.get('preferredOffice').dirty && candidateForm.get('preferredOffice').errors">
-                        Please input a preferred office</nz-form-explain>
+                    <ng-template #preferredOfficeErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('preferredOffice').dirty && candidateForm.get('preferredOffice').errors">
+                            Please input a preferred office
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="community" [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="community"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
                     Community</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="communityErrorMsg">
                     <nz-select formControlName="community">
                         <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">Please input the community</nz-form-explain>
+                    <ng-template #communityErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">
+                            Please input the community
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="profile" [ngClass]="{'requiredFieldLabel': isRequiredField('profile')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="profile"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('profile')}">
                     Profile</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="profile">
@@ -155,16 +181,27 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <nz-form-item hidden>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('user')}">
-                Recruiter</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <nz-select formControlName="user">
-                    <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user.id">
-                    </nz-option>
-                </nz-select>
-                <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>     
     </div>
+    <div nz-row hidden>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('user')}">
+                    Recruiter</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="recruiterErrorMsg">
+                    <nz-select formControlName="user">
+                        <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}"
+                            [nzValue]="user.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #recruiterErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">
+                            Please input the user
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+
 </form>

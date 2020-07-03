@@ -3,16 +3,18 @@ import { FacadeService } from '../services/facade.service';
 import { User } from 'src/entities/user';
 import { Dashboard } from 'src/entities/dashboard';
 import { UserDashboard } from 'src/entities/userDashboard';
+
 @Component({
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',
   styleUrls: ['./preferences.component.scss']
 })
+
 export class PreferencesComponent implements OnInit {
   dashboards: Dashboard[] = [];
   currentUser: User = new User(null,null);
-  dashboardStatus: boolean[] = new Array()
-
+  dashboardStatus: boolean[] = new Array();
+  
   constructor(private facade: FacadeService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));    
   }

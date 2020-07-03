@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../app-config/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable ,  BehaviorSubject } from 'rxjs';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { catchError, tap } from 'rxjs/operators';
 import { Process } from 'src/entities/process';
 import { Candidate } from 'src/entities/candidate';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Globals } from '../app-globals/globals';
 import { User } from 'src/entities/user';
 

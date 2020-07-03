@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 import { SettingsModule } from './../settings/settings.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconsProviderModule } from '@app/icons-provider.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    PipesModule,
     NzFormModule,
     NzTableModule,
     NzDividerModule,
@@ -33,8 +35,22 @@ import { CommonModule } from '@angular/common';
     NzPopoverModule,
     NzInputModule,
     NzButtonModule,
-    PipesModule,
     NzLayoutModule,
+    SettingsModule,
+    IconsProviderModule
+  ],
+  exports: [
+    NzFormModule,
+    NzTableModule,
+    NzDividerModule,
+    NzModalModule,
+    NzListModule,
+    NzTagModule,
+    NzPopoverModule,
+    NzInputModule,
+    NzButtonModule,
+    NzLayoutModule,
+    IconsProviderModule,
     SettingsModule
   ]
 })

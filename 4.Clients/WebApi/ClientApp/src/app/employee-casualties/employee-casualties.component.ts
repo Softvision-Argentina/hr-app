@@ -57,11 +57,12 @@ export class EmployeeCasualtiesComponent implements OnInit {
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.casualtyForm.reset();
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New casualty',
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {
@@ -111,9 +112,9 @@ export class EmployeeCasualtiesComponent implements OnInit {
       nzTitle: 'Edit Casualty',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {

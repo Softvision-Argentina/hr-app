@@ -2,12 +2,10 @@
 <br />
 <div nz-row>
   <h1 class="headerFont">Hello and Welcome {{currentUser.firstName}}!</h1>
-  <div nz-col nzSpan="20">
-  </div>
 </div>
 <br />
-<div class="proximanova-r">
-  <div class="row">
+<div nz-row class="referralsTabset">
+  <div nz-col nzSpan="22">
     <nz-tabset [nzTabBarExtraContent]="newReferralsButton">
       <nz-tab nzTitle="MY REFERRALS">
         <app-referrals-list (editEvent)="showContactReferralModal($event)"></app-referrals-list>              
@@ -24,11 +22,12 @@
     </ng-template>
   </div>
 </div>
-<nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
+
+<!-- <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
   <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
   <nz-divider></nz-divider>
   <div *ngIf="emptyProcess" nz-row>
-    <div nz-col nzSpan="22">
+    <div nz-col nzSpan="24">
       <nz-steps *ngIf="emptyProcess.stages && emptyProcess.stages.length > 0" nzDirection="horizontal" nzSize="small">
         <nz-step *ngFor="let stage of emptyProcess.stages" [nzTitle]="stage.title"
           [nzStatus]="stage.status.toLowerCase()" [nzDescription]="stage.description">
@@ -36,7 +35,7 @@
       </nz-steps>
     </div>
   </div>
-</nz-modal>
+</nz-modal> -->
 
 
 <ng-template #candidateDetailModal>
@@ -47,24 +46,25 @@
   <user-details [_detailedUser]="emptyUser"></user-details>
 </ng-template>
 
-
 <ng-template #rejectProcessModal>
   <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'">
     <nz-form-item>
       <div nz-row>
-        <div nz-col nzSpan="22">
+        <div nz-col nzSpan="24">
           <nz-form-label [nzSm]="9" [nzXs]="24" nzFor="type">Rejection reason</nz-form-label>
         </div>
       </div>
       <div nz-row>
-        <div nz-col nzSpan="22">
-          <nz-form-control [nzSm]="22" [nzXs]="24">
+        <div nz-col nzSpan="24">
+          <nz-form-control [nzSm]="22" [nzXs]="24" [nzErrorTip]="rejectionReasonErrorMsg">
             <textarea rows="5" id="rejectionReasonDescription" nz-input formControlName="rejectionReasonDescription"
-              placeholder="Please enter reason of rejection" id="rejectionReasonDescription"></textarea>
-            <nz-form-explain
-              *ngIf="rejectProcessForm.get('rejectionReasonDescription').dirty && rejectProcessForm.get('rejectionReasonDescription').errors">
-              Please specify why the process is rejected
-            </nz-form-explain>
+              placeholder="Please enter reason of rejection"></textarea>
+            <ng-template #rejectionReasonErrorMsg>
+              <ng-container
+                *ngIf="rejectProcessForm.get('rejectionReasonDescription').dirty && rejectProcessForm.get('rejectionReasonDescription').errors">
+                Please specify why the process is rejected
+              </ng-container>
+            </ng-template>
           </nz-form-control>
         </div>
       </div>
@@ -73,7 +73,7 @@
 </ng-template>
 
 <ng-template #processStart>
-  <div nz-col nzSpan="22">
+  <div nz-col nzSpan="24">
     <nz-steps [nzCurrent]="stepIndex">
       <nz-step nzTitle="Candidate" id="candidateButton"
         (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
@@ -93,7 +93,7 @@
   </div>
   <br />
   <br />
-  <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (destroy)="closeModal()">
+  <ngx-slick-carousel #slickModal class="carousel" [config]="slideConfig" (destroy)="closeModal()">
     <div ngxSlickItem class="slide">
       <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess" [_users]="users"
         [_candidate]="currentCandidate" [_offices]="offices">
@@ -113,7 +113,7 @@
       <offer-stage [_users]="users" [offerStage]="emptyProcess.offerStage"
         (selectedSeniority)="updateSeniority($event)"></offer-stage>
     </div>
-  </ngx-slick>
+  </ngx-slick-carousel>
 </ng-template>
 
 <ng-template #declineProcessModal>
@@ -121,7 +121,7 @@
     <div nz-row>
       <div nz-col>
         <nz-form-item>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="declineReasonNameErrorMsg">
             <nz-select name="declineReasonName" formControlName="declineReasonName"
               (ngModelChange)="declineReasonNameChanged()" nzPlaceHolder="Choose a decline reason">
               <nz-option *ngFor="let declineReason of declineReasons" nzLabel="{{declineReason.name}}"
@@ -130,9 +130,12 @@
               <nz-option nzLabel="Other" [nzValue]="-1">
               </nz-option>
             </nz-select>
-            <nz-form-explain
-              *ngIf="declineProcessForm.get('declineReasonName').dirty && declineProcessForm.get('declineReasonName').errors">
-              Please select a decline reason</nz-form-explain>
+            <ng-template #declineReasonNameErrorMsg>
+              <ng-container
+                *ngIf="declineProcessForm.get('declineReasonName').dirty && declineProcessForm.get('declineReasonName').errors">
+                Please select a decline reason
+              </ng-container>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -140,13 +143,16 @@
     <div nz-row>
       <div nz-col>
         <nz-form-item>
-          <nz-form-control *ngIf="isDeclineReasonOther" [nzSm]="22" [nzXs]="24">
+          <nz-form-control *ngIf="isDeclineReasonOther" [nzSm]="22" [nzXs]="24"
+            [nzErrorTip]="declineReasonDescriptionErrorMsg">
             <textarea rows="5" id="declineReasonDescription" nz-input formControlName="declineReasonDescription"
-              placeholder="Please enter the decline reason" id="declineReasonDescription"></textarea>
-            <nz-form-explain
-              *ngIf="declineProcessForm.get('declineReasonDescription').dirty && declineProcessForm.get('declineReasonDescription').errors">
-              Please specify why the process was declined
-            </nz-form-explain>
+              placeholder="Please enter the decline reason"></textarea>
+            <ng-template #declineReasonDescriptionErrorMsg>
+              <ng-container
+                *ngIf="declineProcessForm.get('declineReasonDescription').dirty && declineProcessForm.get('declineReasonDescription').errors">
+                Please specify why the process was declined
+              </ng-container>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>

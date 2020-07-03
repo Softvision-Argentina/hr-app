@@ -1,10 +1,10 @@
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanLoad, Route } from '@angular/router';
 import { User } from 'src/entities/user';
 import { AppConfig } from '../app-config/app.config';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ManagementGuard implements CanActivate, CanLoad {
 
   previousUrl: string;
@@ -19,7 +19,7 @@ export class ManagementGuard implements CanActivate, CanLoad {
     'Recruiter'
   ];
 
-  constructor(private jwtHelper: JwtHelper, private router: Router,  config: AppConfig) {
+  constructor(private jwtHelperService: JwtHelperService, private router: Router,  config: AppConfig) {
     this.roles = config.getConfig('roles');
   }
 
@@ -34,7 +34,7 @@ export class ManagementGuard implements CanActivate, CanLoad {
   isUserAllowed(returnUrl: string): boolean {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    if (!this.currentUser || this.jwtHelper.isTokenExpired(this.currentUser.token)) {
+    if (!this.currentUser || this.jwtHelperService.isTokenExpired(this.currentUser.token)) {
       this.router.navigate(['login'], { queryParams: { returnUrl } });
       return false;
     }

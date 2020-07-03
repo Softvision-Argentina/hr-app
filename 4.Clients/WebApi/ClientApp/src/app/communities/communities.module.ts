@@ -22,6 +22,16 @@ import { CommonModule } from '@angular/common';
     NzIconModule,
     NzLayoutModule,
     SettingsModule
+  ],
+  exports: [
+    NzGridModule,
+    NzTableModule,
+    NzDividerModule,
+    NzFormModule,
+    NzSelectModule,
+    NzButtonModule,
+    NzIconModule,
+    NzLayoutModule
   ]
 })
 export class CommunitiesModule { }

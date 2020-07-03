@@ -48,6 +48,21 @@ import {
     NzInputModule,
     PipesModule
   ],
-  exports: [CompanyCalendarComponent]
+  exports: [
+    CompanyCalendarComponent,
+    NzFormModule,
+    NzTableModule,
+    NzDividerModule,
+    NzRadioModule,
+    NzDatePickerModule,
+    NzCalendarModule,
+    NzBadgeModule,
+    NzLayoutModule,
+    NzPopoverModule,
+    NzIconModule,
+    NzButtonModule,
+    NzModalModule,
+    NzInputModule,
+  ]
 })
 export class CompanyCalendarModule { }

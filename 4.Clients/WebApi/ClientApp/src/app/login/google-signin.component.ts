@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from 'src/entities/user';
 import { AppConfig } from './../app-config/app.config';
 import { FacadeService } from '../services/facade.service';
@@ -22,7 +22,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   public auth2: any;
 
-  constructor(private jwtHelper: JwtHelper, private element: ElementRef, private router: Router, public zone: NgZone, private appConfig: AppConfig,
+  constructor(private jwtHelperService: JwtHelperService, private element: ElementRef, private router: Router, public zone: NgZone, private appConfig: AppConfig,
     private facade: FacadeService) {
   }
 
@@ -33,7 +33,9 @@ export class GoogleSigninComponent implements AfterViewInit {
       that.auth2 = gapi.auth2.init({
         client_id: that.clientId,
         cookiepolicy: 'single_host_origin',
-        scope: that.scope
+        scope: that.scope,
+        sameSite: 'None',
+        secure: true
       });
       that.attachSignin(that.element.nativeElement.firstChild);
     });
@@ -101,7 +103,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser && !this.jwtHelperService.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {

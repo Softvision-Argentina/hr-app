@@ -80,9 +80,9 @@ export class DeclineReasonComponent implements OnInit {
       nzTitle: 'Add New Decline reason',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {
@@ -133,9 +133,9 @@ export class DeclineReasonComponent implements OnInit {
       nzTitle: 'Edit Decline reason',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {

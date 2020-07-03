@@ -1,81 +1,101 @@
 <div nz-row>
-  <div nz-col nzSpan="22">
-      <button nz-button nzType="primary" (click)="showAddModal(declineReasonModal)" nzShape="round">
-    <i nz-icon type="plus" theme="outline"></i>Add new decline reason</button>
-  </div>
+    <div nz-col nzSpan="23">
+        <button nz-button nzType="primary" (click)="showAddModal(declineReasonModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new decline reason</button>
+    </div>
 </div>
 <br />
 <div nz-row>
-  <div nz-col nzSpan="22">
-      <nz-table #declineReasonTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
-          <thead>
-              <tr>
-                  <th nzCustomFilter>Name
-                      <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
-                          <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
-                          <div class="search-box">
-                              <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
-                              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
-                              <button nz-button nzSize="small" (click)="reset()">Reset</button>
-                          </div>
-                      </nz-dropdown>
-                  </th>
-                  <th [style.text-align]="'center'">Description</th>
-                  <th [style.text-align]="'center'">Action</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let declineReason of declineReasonTable.data">
-                  <td>{{ declineReason.name }}</td>
-                  <td>{{ declineReason.description }}</td>
-                  <td [style.text-align]="'center'">
-                      <i (click)="showDetailsModal(declineReason.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
-                      <nz-divider nzType="vertical"></nz-divider>
-                      <i (click)="showEditModal(declineReasonModal, declineReason.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
-                      <nz-divider nzType="vertical"></nz-divider>
-                      <i (click)="showDeleteConfirm(declineReason.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
-                  </td>
-              </tr>
-          </tbody>
-      </nz-table>
-  </div>
+    <div nz-col nzSpan="23">
+        <nz-table #declineReasonTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th nzCustomFilter>Name
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="nameFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #nameFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input #focusInput type="text" placeholder="Search name"
+                                        [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let declineReason of declineReasonTable.data">
+                    <td>{{ declineReason.name }}</td>
+                    <td>{{ declineReason.description }}</td>
+                    <td>
+                        <i (click)="showDetailsModal(declineReason.id)" style="cursor: pointer;" nz-icon
+                            nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(declineReasonModal, declineReason.id)" style="cursor: pointer;"
+                            nz-icon nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(declineReason.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
 </div>
 
-<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill type Details" [nzFooter]="null" (nzOnCancel)="handleCancel()">
-  <nz-list nzBordered nzSize="large" *ngIf="emptyDeclineReason">
-      <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyDeclineReason.name}}</nz-list-item>
-      <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyDeclineReason.description}}</nz-list-item>
-  </nz-list>
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill type Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
+    <nz-list nzBordered nzSize="large" *ngIf="emptyDeclineReason">
+        <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyDeclineReason.name}}</nz-list-item>
+        <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyDeclineReason.description}}
+        </nz-list-item>
+    </nz-list>
 </nz-modal>
 
 <ng-template #declineReasonModal>
-  <form nz-form [formGroup]="validateForm">
-      <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-              <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
-              <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">Please input the name</nz-form-explain>
-              <nz-form-explain *ngIf="validateForm.get('name')?.hasError('trimBeginError')">
-                  The input has leading whitespace!
-              </nz-form-explain>
-              <nz-form-explain *ngIf="validateForm.get('name')?.hasError('trimEndError')">
-                  The input has leading whitespace!
-              </nz-form-explain>
-          </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-              <input type="text" nz-input formControlName="description" id="description" placeholder="Please input the description">
-              <nz-form-explain *ngIf="validateForm.get('description').dirty && validateForm.get('description')?.hasError('required')">Please input the description</nz-form-explain>
-              <nz-form-explain *ngIf="validateForm.get('description')?.hasError('trimBeginError')">
-                  The input has leading whitespace!
-              </nz-form-explain>
-              <nz-form-explain *ngIf="validateForm.get('description')?.hasError('trimEndError')">
-                  The input has leading whitespace!
-              </nz-form-explain>
-          </nz-form-control>
-      </nz-form-item>
-  </form>
+    <form nz-form [formGroup]="validateForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
+                <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
+                <ng-template #nameErrorMsg>
+                    <ng-container
+                        *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">
+                        Please input the name
+                    </ng-container>
+                    <ng-container *ngIf="validateForm.get('name')?.hasError('trimBeginError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                    <ng-container *ngIf="validateForm.get('name')?.hasError('trimEndError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+                <input type="text" nz-input formControlName="description" id="description"
+                    placeholder="Please input the description">
+                <ng-template #descriptionErrorMsg>
+                    <ng-container
+                        *ngIf="validateForm.get('description').dirty && validateForm.get('description')?.hasError('required')">
+                        Please input the description</ng-container>
+                    <ng-container *ngIf="validateForm.get('description')?.hasError('trimBeginError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                    <ng-container *ngIf="validateForm.get('description')?.hasError('trimEndError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
 </ng-template>
-

@@ -28,7 +28,7 @@ export const dniValidator: ValidatorFn = (control: FormControl): { [key: string]
 export function UniqueDniValidator(processes: Process[], processId: number): AsyncValidatorFn {
     processes = processes.filter(process => !!process.preOfferStage);
     return({value}: AbstractControl): Observable<ValidationErrors | null> => {
-        const dniAlreadyExist = processes.find(process => process.preOfferStage && value && process.preOfferStage.dni === value && value !== 0 && process.id != processId);
+        const dniAlreadyExist = processes.find(process => process.preOfferStage && value && process.preOfferStage.dni === value && value !== 0 && process.id !== processId);
         return new Observable(subscriber => {
             if (!!dniAlreadyExist) {
                 subscriber.next({dniExists: true});

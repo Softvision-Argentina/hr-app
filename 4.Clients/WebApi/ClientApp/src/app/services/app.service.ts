@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { UserService } from './user.service';
 import { AppConfig } from '../app-config/app.config';
 import { User } from 'src/entities/user';

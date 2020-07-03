@@ -23,7 +23,6 @@ export class PostulantsComponent implements OnInit {
     this.facade.postulantService.get().subscribe(res => {
       this.listOfDisplayData = res;
       this.facade.appService.stopLoading();
-      console.log(res);
     }, err => {
       console.log(err);
     });

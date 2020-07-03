@@ -14,7 +14,12 @@ import { NzTableModule, NzDropDownModule, NzDividerModule } from 'ng-zorro-antd'
         NzDropDownModule,
         NzDividerModule
     ],
-    exports: [PostulantsComponent]
+    exports: [
+        PostulantsComponent,
+        NzTableModule,
+        NzDropDownModule,
+        NzDividerModule
+    ]
 })
 
 export class PostulantsModule { }

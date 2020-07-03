@@ -6,7 +6,7 @@ import { trimValidator } from '../directives/trim.validator';
 import { dniValidator } from '../directives/dni.validator';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
-import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays"
 import { User } from 'src/entities/user';
 import { Globals } from '../app-globals/globals';
 import { DaysOffStatusEnum } from '../../entities/enums/daysoff-status.enum';
@@ -125,8 +125,9 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzTitle: 'Add new day off',
       nzContent: modalContent,
       nzClosable: true,
+      nzWrapClassName: 'modal-custom',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {
@@ -190,13 +191,14 @@ export class DaysOffComponent implements OnInit, OnDestroy {
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
     this.fillForm(editedDayOff);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit day off',
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {

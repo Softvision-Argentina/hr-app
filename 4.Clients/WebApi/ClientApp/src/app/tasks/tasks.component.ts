@@ -8,7 +8,7 @@ import { TaskItem } from 'src/entities/taskItem';
 import { AppConfig } from '../app-config/app.config';
 import { dateValidator } from '../directives/date.validator';
 import { SearchbarService } from '../services/searchbar.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tasks',
@@ -274,13 +274,13 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.controlArray = [];
     this.resetForm();
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Task',
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

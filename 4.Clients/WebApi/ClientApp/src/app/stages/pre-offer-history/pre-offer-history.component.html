@@ -1,120 +1,132 @@
-<div nz-row nzType="flex" nzJustify="center" class="addPreOffer">
+<div nz-row nzJustify="center" class="addPreOffer">
   <div nz-col nzSpan="20">
     <nz-collapse>
-      <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.active" [nzDisabled]="preOfferStatus !== 8"
-        [nzShowArrow]="panelControl.arrow">
+      <nz-collapse-panel [nzHeader]="panelControl.name" [(nzActive)]="panelControl.active"
+        [nzDisabled]="preOfferStatus !== 8" [nzShowArrow]="panelControl.arrow">
         <form nz-form class="editForm" [formGroup]="editForm" [nzLayout]="'horizontal'">
-          <div nz-row nzType="flex" nzJustify="center">
-            <div nz-col nzSpan="11">
+          <div nz-row nzJustify="center">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="preOfferDate">Pre Offer Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="preOfferDateErrorMsg">
                   <nz-date-picker style="width: 100%;" formControlName="preOfferDate"></nz-date-picker>
-                  <nz-form-explain *ngIf="editForm.get('preOfferDate').dirty && editForm.get('preOfferDate').errors">
-                    Please input a pre-offer date
-                  </nz-form-explain>
+                  <ng-template #preOfferDateErrorMsg>
+                    <ng-container *ngIf="editForm.get('preOfferDate').dirty && editForm.get('preOfferDate').errors">
+                      Please input a pre-offer date
+                    </ng-container>
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="salary">Gross salary</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="grossSalaryErrorMsg">
                   <input type="number" nz-input formControlName="salary" id="salary"
                     placeholder="Please input the salary pre-offer" pattern="[0-9]+([\.,][0-9]+)?">
-                  <nz-form-explain
-                    *ngIf="editForm.get('salary').dirty && editForm.get('salary').hasError('required')">
-                    Please input the gross salary
-                  </nz-form-explain>
-                  <nz-form-explain
-                    *ngIf="editForm.get('salary').dirty && editForm.get('salary').hasError('min')">
-                    Please input a valid gross salary
-                  </nz-form-explain>
+                  <ng-template #grossSalaryErrorMsg>
+                    <ng-container *ngIf="editForm.get('salary').dirty && editForm.get('salary').hasError('required')">
+                      Please input the gross salary
+                    </ng-container>
+                    <ng-container *ngIf="editForm.get('salary').dirty && editForm.get('salary').hasError('min')">
+                      Please input a valid gross salary
+                    </ng-container>
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
+            </div>
           </div>
-          </div>
-          <div nz-row nzType="flex" nzJustify="center">
-            <div nz-col nzSpan="11">
+          <div nz-row nzJustify="center">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="healthInsurance"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}">
-                    Health insurance</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="healthInsurance">
-                        <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
-                            [nzValue]="insurance.id">
-                        </nz-option>
-                    </nz-select>
-                    <nz-form-explain
-                        *ngIf="editForm.get('healthInsurance').dirty && editForm.get('healthInsurance').errors">
-                        Please input the health insurance
-                    </nz-form-explain>
+                  [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}">
+                  Health insurance</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="healthInsuranceErrorMsg">
+                  <nz-select formControlName="healthInsurance">
+                    <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
+                      [nzValue]="insurance.id">
+                    </nz-option>
+                  </nz-select>
+                  <ng-template #healthInsuranceErrorMsg>
+                    <ng-container
+                      *ngIf="editForm.get('healthInsurance').dirty && editForm.get('healthInsurance').errors">
+                      Please input the health insurance
+                    </ng-container>
+                  </ng-template>
                 </nz-form-control>
-            </nz-form-item>
+              </nz-form-item>
             </div>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="notes"
-                    [ngClass]="{'requiredFieldLabel' : isRequiredField('notes')}"> Notes</nz-form-label>
+                  [ngClass]="{'requiredFieldLabel' : isRequiredField('notes')}"> Notes</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                  <input type="text" nz-input formControlName="notes" id="notes"
-                    placeholder="Please input notes">
+                  <input type="text" nz-input formControlName="notes" id="preOfferHistoryNotes" placeholder="Please input notes">
                 </nz-form-control>
               </nz-form-item>
             </div>
           </div>
-          <div nz-row nzType="flex" nzJustify="center">
-            <div nz-col nzSpan="11">
+          <div nz-row nzJustify="center">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="vacationDays"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('vacationDays')}">Vacation days</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="number" nz-input formControlName="vacationDays" id="vacationDays"
-                        placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
-                    <nz-form-explain
-                        *ngIf="editForm.get('vacationDays').dirty && editForm.get('vacationDays').errors">
-                        Please input vacations days
-                    </nz-form-explain>
+                  [ngClass]="{'requiredFieldLabel': isRequiredField('vacationDays')}">Vacation days</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="vacationDaysErrorMsg">
+                  <input type="number" nz-input formControlName="vacationDays" id="preOfferHistoryVacationDays"
+                    placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
+                  <ng-template #vacationDaysErrorMsg>
+                    <ng-container *ngIf="editForm.get('vacationDays').dirty && editForm.get('vacationDays').errors">
+                      Please input vacations days
+                    </ng-container>
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
+              <!-- This field doesn't have any validation on the script, consider removing the validation message in the future -->
               <nz-form-item>
                 <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="bonus"> Bonus </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                  <input type="number" nz-input formControlName="bonus" id="bonus"
-                    placeholder="Please input the bonus" pattern="[0-9]+([\.,][0-9]+)?">
-                  <nz-form-explain
-                    *ngIf="editForm.get('bonus').dirty && editForm.get('bonus').errors">
-                    Please input a valid bonus
-                  </nz-form-explain>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="bonusErrorMsg">
+                  <input type="number" nz-input formControlName="bonus" id="preOfferHistoryBonus" placeholder="Please input the bonus"
+                    pattern="[0-9]+([\.,][0-9]+)?">
+                  <ng-template #bonusErrorMsg>
+                    <ng-container *ngIf="editForm.get('bonus').dirty && editForm.get('bonus').errors">
+                      Please input a valid bonus
+                    </ng-container>
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
           </div>
           <div nz-row>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
               <nz-form-item>
-                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="tentativeStartDate" 
-                  [ngClass]="{'requiredFieldLabel' : isRequiredField('tentativeStartDate')}"> Tentative start date</nz-form-label>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="tentativeStartDate"
+                  [ngClass]="{'requiredFieldLabel' : isRequiredField('tentativeStartDate')}"> Tentative start date
+                </nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
-                  <nz-date-picker style="width: 100%;" formControlName="tentativeStartDate" [nzDisabledDate]="disabledDate"></nz-date-picker>
+                  <nz-date-picker style="width: 100%;" formControlName="tentativeStartDate"
+                    [nzDisabledDate]="disabledDate"></nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
           </div>
-          <div nz-row nzType="flex" nzJustify="center">
+          <div nz-row nzJustify="center">
             <div nz-col nzSpan="6" class="center-col">
               <button nz-button nzType='primary' (click)="addPreOffer()" [disabled]="!addPreOfferButton.enabled">
                 Add pre-offer
               </button>
-              <nz-form-explain class="text-danger" *ngIf="addPreOfferButton.processInvalid">
+            </div>
+          </div>
+          <div nz-row nzJustify="center">
+            <div nz-col nz-span="12">
+              <span nz-typography nzType="danger" *ngIf="addPreOfferButton.processInvalid">
                 Please save this current process before adding a pre-offer
-              </nz-form-explain>
-              <nz-form-explain class="text-danger" *ngIf="addPreOfferButton.preOfferNotConcluded">
+              </span>
+              <span nz-typography nzType="danger" *ngIf="addPreOfferButton.preOfferNotConcluded">
                 Can't add an pre-offer if the last one is pending or accepted
-              </nz-form-explain>
+              </span>
             </div>
           </div>
         </form>
@@ -123,7 +135,7 @@
   </div>
 </div>
 
-<div nz-row nzType="flex" nzJustify="center">
+<div nz-row nzJustify="center">
   <div nz-col nzSpan="20">
     <nz-table nzBordered [nzData]="preOffers" [nzPageSize]="10">
       <thead>
@@ -166,15 +178,15 @@
             <nz-badge [nzStatus]="getStatusColor(preOffer.status)"></nz-badge>
             {{ getStatusName(preOffer.status) }}
           </td>
-          <td [style.text-align]="'center'">
-            <i *ngIf="preOffer.status === 8" nzTitle="Decline" (click)="editStatus('Declined', preOffer.id)"
-              style="cursor: pointer;" nz-tooltip nz-icon type="stop" theme="outline"></i>
+          <td>
+            <i *ngIf="preOffer.status === 8" nzTooltipTitle="Decline" (click)="editStatus('Declined', preOffer.id)"
+              style="cursor: pointer;" nz-tooltip nz-icon nzType="stop" theme="outline"></i>
             <nz-divider *ngIf="preOffer.status === 8" nzType="vertical"></nz-divider>
             <i *ngIf="preOffer.status === 8" nzTitle="Accept" (click)="editStatus('Accepted', preOffer.id)"
-              style="cursor: pointer;" nz-tooltip nz-icon type="check" theme="outline"></i>
-            <nz-divider *ngIf="preOffer.status === 8"  nzType="vertical"></nz-divider>
-            <i *ngIf="preOffer.status === 8" nzTitle="Delete" (click)="showDeleteConfirm(preOffer.id)" style="cursor: pointer;" nz-tooltip nz-icon
-              type="delete" theme="outline"></i>
+              style="cursor: pointer;" nz-tooltip nz-icon nzType="check" theme="outline"></i>
+            <nz-divider *ngIf="preOffer.status === 8" nzType="vertical"></nz-divider>
+            <i *ngIf="preOffer.status === 8" nzTooltipTitle="Delete" (click)="showDeleteConfirm(preOffer.id)"
+              style="cursor: pointer;" nz-tooltip nz-icon nzType="delete" theme="outline"></i>
           </td>
         </tr>
       </tbody>

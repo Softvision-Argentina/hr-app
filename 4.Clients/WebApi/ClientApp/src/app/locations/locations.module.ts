@@ -44,6 +44,18 @@ import { LocationsComponent } from './locations.component';
     NzInputModule,
     PipesModule
   ],
-  exports: [LocationsComponent]
+  exports: [
+    LocationsComponent,
+    NzFormModule,
+    NzModalModule,
+    NzTableModule,
+    NzDividerModule,
+    NzListModule,
+    NzTagModule,
+    NzPopoverModule,
+    NzSelectModule,
+    NzButtonModule,
+    NzInputModule
+  ]
 })
 export class LocationsModule { }

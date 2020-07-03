@@ -4,7 +4,7 @@ import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { AppConfig } from '../app-config/app.config';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

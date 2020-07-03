@@ -1,13 +1,13 @@
 <h4>Stage details</h4>
 
-<ul *ngIf="stage">
+<!-- <ul *ngIf="stage">
   <li><strong>Tittle:</strong> {{ stage.tittle }}</li>
   <li><strong>Description:</strong> {{ stage.stageDescription }}</li>
   <li><strong>Start Date:</strong> {{ stage.startDate }}</li>
   <li><strong>End Date:</strong> {{ stage.endDate }}</li>
-  <li *ngIf="stage.userOwner"><strong>User: </strong><a [routerLink]="">{{ stage.userOwner.firstName }} {{ stage.userOwner.lastName }}</a></li>
+  <li *ngIf="stage.userOwner"><strong>User: </strong><a routerLink="">{{ stage.userOwner.firstName }} {{ stage.userOwner.lastName }}</a></li>
   <li><strong>Status:</strong> {{ stage.status }}</li>
-</ul>
+</ul> -->
 
 <hr>
 
@@ -33,4 +33,4 @@
   There are no stage items yet
 </p> -->
 
-<a [routerLink]="['/process-details/', processId]">Process</a>
+<a routerLink="['/process-details/', processId]">Process</a>

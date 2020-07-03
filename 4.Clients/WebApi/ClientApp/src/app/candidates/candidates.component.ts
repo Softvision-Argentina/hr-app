@@ -25,7 +25,7 @@ import { Subscription } from 'rxjs';
 
 export class CandidatesComponent implements OnInit, OnDestroy {
 
-  @ViewChild('dropdown') nameDropdown;
+  @ViewChild('dropdown', { static: false }) nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('focusInput') inputFocus;
   filteredCandidates: Candidate[] = [];
@@ -240,6 +240,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     let editedCandidate: Candidate = this.filteredCandidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Candidate',
       nzContent: modalContent,
       nzClosable: true,
@@ -247,7 +248,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {

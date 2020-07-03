@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, AbstractControl, Validators, FormControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { trimValidator } from 'src/app/directives/trim.validator';

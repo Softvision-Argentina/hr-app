@@ -2,68 +2,79 @@
     <nz-divider nzText="CONTACTED CANDIDATE "></nz-divider>
     <br />
     <div nz-row [hidden]="visible">
-        <div nz-col nzSpan="22">
+        <div nz-col nzSpan="24">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="12" nzFor="name">Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
-                    <nz-form-explain *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                    <ng-template #nameErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
+                            <ng-container *ngIf="candidateForm.get('name')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('name')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
+                                Please input the name!
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
-                            Please input the name!
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
-                <button nz-button nzType="primary" style="background-color: green; margin: 0.5% 0% 0% 1%;" (click)="searchCandidate(candidateForm.get('name').value,userDetailModal)">Check</button>
+                <button nz-button nzType="primary" style="background-color: green; margin: 0.5% 0% 0% 1%;"
+                    (click)="searchCandidate(candidateForm.get('name').value,userDetailModal)">Check</button>
             </nz-form-item>
         </div>
     </div>
 
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <input type="text" nz-input formControlName="firstName" id="FirstName" placeholder="Please input the First Name">
-                    <nz-form-explain *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
-                        <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="firstNameErrorMsg">
+                    <input type="text" nz-input formControlName="firstName" id="FirstName"
+                        placeholder="Please input the First Name">
+                    <ng-template #firstNameErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
+                            <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
+                                Please input the First name!
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
-                            Please input the First name!
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <input type="text" nz-input formControlName="lastName" id="lastName" placeholder="Please input the last name">
-                    <nz-form-explain *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="lastNameErrorMsg">
+                    <input type="text" nz-input formControlName="lastName" id="lastName"
+                        placeholder="Please input the last name">
+                    <ng-template #lastNameErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
+                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
+                                Please input the last name!
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
-                            Please input the last name!
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="id" [hidden]="true">id</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="true">
@@ -74,19 +85,25 @@
     </div>
 
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" [hidden]="!visible">E-mail</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
-                    <nz-form-explain *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
+                    <ng-template #emailErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">
+                            The input is not valid E-mail!
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone Number</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone Number
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="candidateForm.controls['phoneNumber']"
+                    [hidden]="!visible" [nzErrorTip]="phoneNumberErrorMsg">
                     <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                         <ng-template #addOnBeforeTemplate>
                             <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
@@ -96,87 +113,115 @@
                         </ng-template>
                         <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input placeholder="Please enter a phone number">
                     </nz-input-group>
-                    <nz-form-explain *ngIf="candidateForm.get('phoneNumber').dirty && candidateForm.get('phoneNumber').errors">
-                        Please enter a valid phone number</nz-form-explain>
+                    <ng-template #phoneNumberErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('phoneNumber').dirty && candidateForm.get('phoneNumber').errors">
+                            Please enter a valid phone number
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
 
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="contactDay" [hidden]="!visible">Contact Day</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
                     <nz-date-picker formControlName="contactDay" [nzSize]="'size'" nzPlaceHolder="Select a date">
                     </nz-date-picker>
-                    <!-- <nz-form-explain *ngIf="candidateForm.get('contactDay').dirty && candidateForm.get('contactDay').errors && !exists(candidateForm.get('contactDay').errors)">Please input
-                      the date</nz-form-explain> -->
+                    <!-- <ng-template #contactDayErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('contactDay').dirty && candidateForm.get('contactDay').errors && !exists(candidateForm.get('contactDay').errors)">
+                            Please input the date
+                        </ng-container>
+                    </ng-template> -->
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type" [hidden]="!visible">Recruiter</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="recruiterErrorMsg">
                     <nz-select formControlName="user">
-                        <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}" [nzValue]="user">
+                        <nz-option *ngFor="let user of fillUsers" nzLabel="{{user.firstName}} {{user.lastName}}"
+                            [nzValue]="user">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">Please input the user</nz-form-explain>
+                    <ng-template #recruiterErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('user').dirty && candidateForm.get('user').errors">
+                            Please input the user
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="profile" [hidden]="!visible">Profile</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="profileErrorMsg">
                     <nz-select formControlName="profile" (ngModelChange)="profileChanges($event)">
                         <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('profile').dirty && candidateForm.get('profile').errors">
-                        Please input the profile</nz-form-explain>
+                    <ng-template #profileErrorMsg>
+                        <ng-container *ngIf="candidateForm.get('profile').dirty && candidateForm.get('profile').errors">
+                            Please input the profile
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="community" [hidden]="!visible">Community</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <nz-select formControlName="community" >
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="communityErrorMsg">
+                    <nz-select formControlName="community">
                         <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">Please input the community</nz-form-explain>
+                    <ng-template #communityErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">
+                            Please input the community
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile" [hidden]="!visible">LinkedIn Profile</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible">
-                    <input nz-input formControlName="linkedInProfile" id="linkedInProfile" placeholder="Please input the LinkedIn's profile URL">
-                    <nz-form-explain *ngIf="candidateForm.get('linkedInProfile').dirty && candidateForm.get('linkedInProfile').errors">
-                        <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile" [hidden]="!visible">LinkedIn Profile
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="linkedinProfileErrorMsg">
+                    <input nz-input formControlName="linkedInProfile" id="linkedInProfile"
+                        placeholder="Please input the LinkedIn's profile URL">
+                    <ng-template #linkedinProfileErrorMsg>
+                        <ng-container
+                            *ngIf="candidateForm.get('linkedInProfile').dirty && candidateForm.get('linkedInProfile').errors">
+                            <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimBeginError')">
+                                The input has leading whitespace!
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimEndError')">
+                                The input has trailing whitespace!
+                            </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </nz-form-explain>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
-    <div nz-row nzType="flex" nzJustify="center">
-        <button nz-button nzType="primary" style="background-color: green;" [hidden]="!isNewCandidate" (click)="createNewCandidate()">SAVE</button>
-        <button nz-button nzType="primary" style="background-color: blue;" [hidden]="!isEditCandidate" (click)="saveEdit(candidateForm.get('id').value)" nzJustify="end">Recontact</button>
-        <button nz-button nzType="primary" style="background-color: green;" [hidden]="!isEditCandidate" (click)="createNewCandidate()">START PROCESS</button>
+    <div nz-row nzJustify="center">
+        <button nz-button nzType="primary" style="background-color: green;" [hidden]="!isNewCandidate"
+            (click)="createNewCandidate()">SAVE</button>
+        <button nz-button nzType="primary" style="background-color: blue;" [hidden]="!isEditCandidate"
+            (click)="saveEdit(candidateForm.get('id').value)" nzJustify="end">Recontact</button>
+        <button nz-button nzType="primary" style="background-color: green;" [hidden]="!isEditCandidate"
+            (click)="createNewCandidate()">START PROCESS</button>
     </div>
 </form>
 
@@ -184,10 +229,10 @@
     <nz-table #CandidateTable [nzData]="filteredCandidate" [nzPageSize]="10">
         <thead>
             <tr>
-                <th [style.text-align]="'center'">Name</th>
-                <th [style.text-align]="'center'">Last Name</th>
-                <th [style.text-align]="'center'">E-Mail</th>
-                <th [style.text-align]="'center'">Action</th>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>E-Mail</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -195,19 +240,22 @@
                 <td>{{ Candidate.name }}</td>
                 <td>{{ Candidate.lastName }}</td>
                 <td>{{ Candidate.emailAddress | truncate:75 }}</td>
-                <td [style.text-align]="'center'">
+                <td>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <i (click)="showDetailsModal(Candidate.id, detailModal)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
+                    <i (click)="showDetailsModal(Candidate.id, detailModal)" style="cursor: pointer;" nz-icon
+                        nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <i (click)="Recontact(Candidate.id)" style="cursor: pointer;" nz-icon type="phone" theme="outline" nzTitle="Recontact" nz-tooltip></i>
+                    <i (click)="Recontact(Candidate.id)" style="cursor: pointer;" nz-icon nzType="phone" theme="outline"
+                    nzTooltipTitle="Recontact" nz-tooltip></i>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <i (click)="startNewProcess(Candidate.id)" style="cursor: pointer;" nz-icon nzType="play-circle" nzTheme="outline" nzTitle="Start New Processes" nz-tooltip></i>
+                    <i (click)="startNewProcess(Candidate.id)" style="cursor: pointer;" nz-icon nzType="play-circle"
+                        nzTheme="outline" nzTooltipTitle="Start New Processes" nz-tooltip></i>
                     <!-- <nz-divider nzType="vertical"></nz-divider>
-                <i (click)="edit(Candidate.id)" style="cursor: pointer;" nz-icon type="edit"
-                  theme="outline" nzTitle="Edit" nz-tooltip></i>  -->
+                <i (click)="edit(Candidate.id)" style="cursor: pointer;" nz-icon nzType="edit"
+                  theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>  -->
                     <!-- <nz-divider nzType="vertical"></nz-divider>
-                <i (click)="showDeleteConfirm(Candidate.id)" style="cursor: pointer;" nz-icon type="delete"
-                  theme="outline" nzTitle="Delete" nz-tooltip></i> -->
+                <i (click)="showDeleteConfirm(Candidate.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                  theme="outline" nzTooltipTitle="Delete" nz-tooltip></i> -->
                 </td>
             </tr>
         </tbody>

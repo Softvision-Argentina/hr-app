@@ -1,4 +1,4 @@
-<nz-list nzBordered nzSize="large" *ngIf="detailedCandidate">
+<nz-list class="candidate-details" nzBordered nzSize="large" *ngIf="detailedCandidate">
     <nz-list-item><strong style="margin-right: 1%">Recruiter:</strong> {{ userName }}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Profile:</strong> {{ profileName }}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Community:</strong> {{ communityName }}</nz-list-item>
@@ -6,10 +6,10 @@
     <nz-list-item><strong style="margin-right: 2%">Status:</strong>
         <button nz-button>{{ getCandidateStatus() }}</button>
     </nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{ detailedCandidate.emailAddress }}
-        <div style="margin-left: 1%; margin-bottom: 1%;" *ngIf="detailedCandidate.linkedInProfile">
+    <nz-list-item><strong style="margin-right: 1%">Email:</strong> {{detailedCandidate.emailAddress}}
+        <div *ngIf="detailedCandidate.linkedInProfile">
             <nz-divider nzType="vertical" style="margin-top: 20%;"></nz-divider>
-            <a href="https://linkedin.com/{{ detailedCandidate.linkedInProfile }}"><i nz-icon type="linkedin" theme="fill"></i></a>
+            <a href="https://linkedin.com/{{ detailedCandidate.linkedInProfile }}"><i nz-icon nzType="linkedin" theme="fill"></i></a>
         </div>
     </nz-list-item>
     <nz-list-item><strong style="margin-right: 1%">Phone:</strong> {{ detailedCandidate.phoneNumber }}</nz-list-item>    

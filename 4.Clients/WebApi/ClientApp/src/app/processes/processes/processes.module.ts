@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ProcessTableComponent } from '../processes-table/processes-table.component';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlickModule } from 'ngx-slick';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import {
     NzFormModule,
     NzTabsModule,
@@ -40,14 +40,14 @@ import { SharedModule } from '../../shared.module';
     imports: [
         RouterModule.forChild(ProcessesRoutes),
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SlickCarouselModule,
         NzTabsModule,
         NzModalModule,
         NzDividerModule,
         NzStepsModule,
-        FormsModule,
-        ReactiveFormsModule,
         NzFormModule,
-        SlickModule,
         NzSelectModule,
         NzSpinModule,
         NzListModule,
@@ -59,9 +59,9 @@ import { SharedModule } from '../../shared.module';
         NzRadioModule,
         NzSliderModule,
         NzCheckboxModule,
-        PipesModule,
         NzIconModule,
         NzToolTipModule,
+        PipesModule,
         SharedModule
     ],
     providers: [
@@ -70,7 +70,25 @@ import { SharedModule } from '../../shared.module';
     ],
     exports: [
         ProcessesComponent,
-        ProcessTableComponent
+        ProcessTableComponent,
+        NzTabsModule,
+        NzModalModule,
+        NzDividerModule,
+        NzStepsModule,
+        NzFormModule,
+        NzSelectModule,
+        NzSpinModule,
+        NzListModule,
+        NzTableModule,
+        NzDropDownModule,
+        NzBadgeModule,
+        NzInputModule,
+        NzDatePickerModule,
+        NzRadioModule,
+        NzSliderModule,
+        NzCheckboxModule,
+        NzIconModule,
+        NzToolTipModule,
     ],
 })
 

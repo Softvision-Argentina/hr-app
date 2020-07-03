@@ -10,7 +10,7 @@ import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
 @Component({
   selector: 'app-readdress-reason-type',
   templateUrl: './readdress-reason-type.component.html',
-  styleUrls: ['./readdress-reason-type.component.css'],
+  styleUrls: ['./readdress-reason-type.component.scss'],
   providers: [AppComponent]
 })
 export class ReaddressReasonTypeComponent implements OnInit {
@@ -84,12 +84,11 @@ export class ReaddressReasonTypeComponent implements OnInit {
       nzClosable: true,
       nzWrapClassName: 'vertical-center-modal',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        { label: 'Cancel', onClick: () => modal.destroy() },
         {
-          label: 'Save', type: 'primary', loading: false,
+          label: 'Save', type:'primary', loading: false,
           onClick: () => {
             this.app.showLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
@@ -138,9 +137,9 @@ export class ReaddressReasonTypeComponent implements OnInit {
       nzClosable: true,
       nzWrapClassName: 'vertical-center-modal',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        { label: 'Cancel', onClick: () => modal.destroy() },
         {
-          label: 'Save', type: 'primary', loading: false,
+          label: 'Save', loading: false,
           onClick: () => {
             this.app.showLoading();
             modal.nzFooter[1].loading = true;

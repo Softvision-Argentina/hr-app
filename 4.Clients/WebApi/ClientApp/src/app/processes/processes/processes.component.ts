@@ -25,7 +25,7 @@ import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
-import { SlickComponent } from 'ngx-slick';
+import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription, Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
@@ -51,11 +51,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     accessibility: false
   };
 
-  @ViewChild('slickModal') slickModal: SlickComponent;
-  @ViewChild('dropdown') nameDropdown;
-  @ViewChild('dropdownStatus') statusDropdown;
-  @ViewChild('dropdownCurrentStage') currentStageDropdown;
-  @ViewChild('processCarousel') processCarousel;
+  @ViewChild('slickModal', {static: false}) slickModal: SlickCarouselComponent;
+  @ViewChild('dropdown', {static: false}) nameDropdown;
+  @ViewChild('dropdownStatus', {static: false}) statusDropdown;
+  @ViewChild('dropdownCurrentStage', {static: false}) currentStageDropdown;
+  @ViewChild('processCarousel', {static: false}) processCarousel;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
   @ViewChild(TechnicalStageComponent) technicalStage: TechnicalStageComponent;
@@ -174,7 +174,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngAfterViewChecked() {
     if (this.slickModal && this.openFromEdit) {
-      this.slickModal.slickGoTo(this.stepIndex);
+      setTimeout(() => {
+        this.slickModal.slickGoTo(this.stepIndex);
+      }, 500)
       this.openFromEdit = false;
     }
   }
@@ -349,7 +351,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.appService.startLoading();
     this.facade.processService.approve(processID)
       .subscribe(res => {
-        console.log(res);
         this.getProcesses();
         this.getCandidates();
         this.facade.appService.stopLoading();
@@ -369,12 +370,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.rejectProcessForm.reset();
     const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -418,6 +419,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.appService.stopLoading();
     this.declineProcessForm.reset();
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
       // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
@@ -425,7 +427,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -522,6 +523,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
+    this.processId = processId;
     this.facade.appService.startLoading();
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
@@ -536,6 +538,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.emptyProcess = undefined;
     }
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
@@ -575,6 +578,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
     this.createEmptyProcess(this.currentCandidate);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
@@ -620,7 +624,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.forms.forEach(form => {
       form = this.checkForm(form);
       if (carouselSlide === -1 && form.invalid) {
-        console.log("form:", form);
         carouselSlide = i;
       }
       i++;
@@ -901,6 +904,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   showContactCandidatesModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
@@ -908,7 +912,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => {
             modal.destroy();
             this.refreshTable();
@@ -1084,7 +1087,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   onOfferStageSlideClick(currentTargetId){
     this.setCurrentStage(ProcessCurrentStageEnum.OfferStage); 
-    this.slickModal.slickGoTo(3);
+    this.slickModal.slickGoTo(4);
     this.wishedStage(4, currentTargetId);
   }
 

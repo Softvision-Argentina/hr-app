@@ -93,11 +93,10 @@ export class SkillTypeComponent implements OnInit {
       nzTitle: 'Add New Skill type',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -161,11 +160,10 @@ export class SkillTypeComponent implements OnInit {
       nzTitle: 'Edit Skill type',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

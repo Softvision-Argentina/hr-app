@@ -1,13 +1,13 @@
 <br/>
 <div class="row">
     <div nz-col nzSpan="18">
-        <a [routerLink]="['/']">
+        <a routerLink="['/']">
             <i nz-icon nzType="arrow-left"></i>
         </a>
     </div>
     <div nz-col nzSpan="6">
         <p *ngIf="process">Current status: &nbsp;
-            <button nzTitle="Current state of the process" nzPlacement="topLeft" nz-button nz-tooltip>{{process.status}}</button>
+            <button nzTooltipTitle="Current state of the process" nzTooltipContent="topLeft" nz-button nz-tooltip>{{process.status}}</button>
         </p>
     </div>
 </div>
@@ -15,8 +15,8 @@
 
 
 
-<div *ngIf="process" nz-row>
-    <div nz-col nzSpan="11">
+<!-- <div *ngIf="process" nz-row>
+    <div nz-col nzSpan="12">
         <h5>Details</h5>
         <ul>
             <li><strong style="margin-right: 1%;">Title:</strong> {{ process.title }}</li>
@@ -33,16 +33,16 @@
     </div>
     <div nz-col nzSpan="11">
         <h5>Go to the graphic overview of the process</h5>
-        <button nz-button nzType="primary" *ngIf="process" [routerLink]="['/process-steps/', process.id]">
+        <button nz-button nzType="primary" *ngIf="process" routerLink="['/process-steps/', process.id]">
       Graphic overview
     </button>
     </div>
-</div>
+</div> -->
 
 <nz-divider nzText="Process progress">Stages</nz-divider>
 
-<button [nzSize]="'small'" nz-button nzType="primary" (click)="showAddModal(stageModal)" nzShape="round">
-  <i nz-icon type="plus" theme="outline"></i>Add new stage</button>
+<button nz-button nzSize="'small'" nzType="primary" (click)="showAddModal(stageModal)" nzShape="round">
+  <i nz-icon nzType="plus" theme="outline"></i>Add new stage</button>
 <br /><br />
 
 <!-- TODO: stages does not exist in proccess it should be deleted or should be add stages as a property? -->
@@ -52,18 +52,18 @@
         <thead>
             <tr>
                 <th nzCustomFilter>Title
-                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                    <nz-dropdown-menu nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
                         <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                         <div class="search-box">
                             <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue">
                             <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
                             <button nz-button nzSize="small" (click)="reset()">Reset</button>
                         </div>
-                    </nz-dropdown>
+                    </nz-dropdown-menu>
                 </th>
-                <th [style.text-align]="'center'">Date</th>
-                <th [style.text-align]="'center'">Status</th>
-                <th [style.text-align]="'center'">Actions</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody cdkDropList (cdkDropListDropped)="dropStage($event)">
@@ -72,13 +72,13 @@
                 <td scope="row">{{ stage.startDate | date:'shortDate' }}</td>
                 <td scope="row">{{ stage.status }}</td>
 
-                <td [style.text-align]="'center'">
-                    <i (click)="showDetailsModal(stage)" nzTitle="Details" style="cursor: pointer" nz-tooltip nz-icon type="info-circle" theme="outline"></i>
+                <td>
+                    <i (click)="showDetailsModal(stage)" nzTooltipTitle="Details" style="cursor: pointer" nz-tooltip nz-icon nzType="info-circle" theme="outline"></i>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <i (click)="showEditModal(stageModal, stage.id)" nzTitle="Edit" style="cursor: pointer" nz-tooltip nz-icon type="edit" theme="outline"></i>
+                    <i (click)="showEditModal(stageModal, stage.id)" nzTooltipTitle="Edit" style="cursor: pointer" nz-tooltip nz-icon nzType="edit" theme="outline"></i>
 
                     <nz-divider nzType="vertical"></nz-divider>
-                    <i (click)="showDeleteConfirm(stage.id)" nzTitle="Delete" style="cursor: pointer" nz-tooltip nz-icon type="delete" theme="outline"></i>
+                    <i (click)="showDeleteConfirm(stage.id)" nzTooltipTitle="Delete" style="cursor: pointer" nz-tooltip nz-icon nzType="delete" theme="outline"></i>
                 </td>
             </tr>
         </tbody>
@@ -98,28 +98,35 @@
     <form nz-form [formGroup]="stageForm" [nzLayout]="'horizontal'">
 
         <div nz-row>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="titleErrorMsg">
                         <input type="text" nz-input formControlName="title" id="title" placeholder="Please input the Name">
-                        <nz-form-explain *ngIf="stageForm.get('title').dirty && stageForm.get('title').errors">Please input the title</nz-form-explain>
+                        <ng-template #titleErrorMsg>
+                            <ng-container *ngIf="stageForm.get('title').dirty && stageForm.get('title').errors">
+                                Please input the title
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
 
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="isEdit">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="isEdit" [nzErrorTip]="statusErrorMsg">
                         <nz-select formControlName="status">
                             <nz-option *ngFor="let status of statusList" nzValue="{{status.id}}" nzLabel="{{status.name}}"></nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('status').dirty && stageForm.get('status').errors">Please input the status
-                        </nz-form-explain>
+                        <ng-template #statusErrorMsg>
+                            <ng-container *ngIf="stageForm.get('status').dirty && stageForm.get('status').errors">
+                                Please input the status
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                     <nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="!isEdit">
-                        <button nzTitle="Default State" nzPlacement="topLeft" nz-button nz-tooltip>{{statusList[3].name}}</button>
+                        <button nzTitle="Default State" nzTooltipContent="topLeft" nz-button nz-tooltip>{{statusList[3].name}}</button>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -128,52 +135,64 @@
         </div>
 
         <div nz-row>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="interviewerErrorMsg">
                         <nz-select formControlName="userOwnerId">
-                            <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                            <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('userOwnerId').dirty && stageForm.get('userOwnerId').errors">Please input the owner</nz-form-explain>
+                        <ng-template #interviewerErrorMsg>
+                            <ng-container *ngIf="stageForm.get('userOwnerId').dirty && stageForm.get('userOwnerId').errors">
+                                Please input the owner
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="delegateErrorMsg">
                         <nz-select formControlName="userDelegateId">
-                            <nz-option *ngFor="let c of users" nzLabel="{{c.name}} {{c.lastName}}" [nzValue]="c.id">
+                            <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
                             </nz-option>
                         </nz-select>
-                        <nz-form-explain *ngIf="stageForm.get('userDelegateId').dirty && stageForm.get('userDelegateId').errors">Please input the user</nz-form-explain>
+                        <ng-template #delegateErrorMsg>
+                            <ng-container *ngIf="stageForm.get('userDelegateId').dirty && stageForm.get('userDelegateId').errors">
+                                Please input the user
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
         </div>
 
         <div nz-row *ngIf="isEdit">
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="startDate">Start date</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="startDateErrorMsg">
                         <nz-date-picker formControlName="startDate"></nz-date-picker>
-                        <nz-form-explain *ngIf="stageForm.get('startDate').dirty && stageForm.get('startDate').errors">
-                            Please input the start date
-                        </nz-form-explain>
+                        <ng-template #startDateErrorMsg>
+                            <ng-container *ngIf="stageForm.get('startDate').dirty && stageForm.get('startDate').errors">
+                                Please input the start date
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">End date</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="endDateErrorMsg">
                         <nz-date-picker formControlName="endDate"></nz-date-picker>
-                        <nz-form-explain *ngIf="stageForm.get('endDate').dirty && stageForm.get('endDate').errors">
-                            Please input the end date
-                        </nz-form-explain>
+                        <ng-template #endDateErrorMsg>
+                            <ng-container *ngIf="stageForm.get('endDate').dirty && stageForm.get('endDate').errors">
+                                Please input the end date
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -181,27 +200,31 @@
 
         <div nz-row>
 
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
 
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="feedbackErrorMsg">
                         <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"></app-text-editor>
-                        <nz-form-explain *ngIf="stageForm.get('feedback').dirty && stageForm.get('feedback').errors">
-                            Please input the feedback for the stage
-                        </nz-form-explain>
+                        <ng-template #feedbackErrorMsg>
+                            <ng-container *ngIf="stageForm.get('feedback').dirty && stageForm.get('feedback').errors">
+                                Please input the feedback for the stage
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
 
-            <div nz-col nzSpan="11">
+            <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
                         <input type="text" nz-input formControlName="description" id="description" placeholder="Stage Description">
-                        <nz-form-explain *ngIf="stageForm.get('description').dirty && stageForm.get('description').errors">
-                            Please input the description
-                        </nz-form-explain>
+                        <ng-template #descriptionErrorMsg>
+                            <ng-container *ngIf="stageForm.get('description').dirty && stageForm.get('description').errors">
+                                Please input the description
+                            </ng-container>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -210,7 +233,7 @@
 
     </form>
 </ng-template>
-
+<!-- 
 <nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Stage Details" [nzFooter]="null" (nzOnCancel)="handleCancel()">
     <nz-list nzBordered nzSize="small" *ngIf="emptyStage">
         <nz-list-item><strong style="margin-right: 1%;">Nombre: </strong> {{emptyStage.title}}</nz-list-item>
@@ -228,7 +251,7 @@
             <strong style="margin-right: 1%;">Delegate user: </strong> {{userDelegate.firstName}} {{ userDelegate.lastName }}
         </nz-list-item>
     </nz-list>
-</nz-modal>
+</nz-modal> -->
 
 
 <ng-template #candidateDetailModal>

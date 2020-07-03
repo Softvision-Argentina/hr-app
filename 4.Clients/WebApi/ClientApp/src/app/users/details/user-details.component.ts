@@ -28,7 +28,7 @@ export class UserDetailsComponent implements OnInit {
         nzTitle: fullName + "'s details",
         nzContent: modalContent,
         nzClosable: true,
-        nzWrapClassName: 'vertical-center-modal',
+        nzWrapClassName: 'vertical-center-modal modal-custom',
         nzFooter: null
     });
 }

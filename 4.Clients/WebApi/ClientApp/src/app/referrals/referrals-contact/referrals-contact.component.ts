@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
 import { User } from 'src/entities/user';
-import { NzModalRef, NzModalService, UploadFile  } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzUploadFile } from 'ng-zorro-antd';
 import { CandidateAddComponent } from 'src/app/candidates/add/candidate-add.component';
 import { CandidateStatusEnum } from '../../../entities/enums/candidate-status.enum';
 import { EnglishLevelEnum } from '../../../entities/enums/english-level.enum';
@@ -66,8 +66,9 @@ export class ReferralsContactComponent implements OnInit {
 
   emptyCandidate: Candidate;
   emptyUser: User;
-  fileList: UploadFile [] = [];
   editingCandidateId: number = 0;
+
+  fileList: NzUploadFile[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService,
     private modalService: NzModalService, private b: BaseService<Cv>, private router: Router) {
@@ -217,19 +218,12 @@ export class ReferralsContactComponent implements OnInit {
     this.facade.appService.stopLoading();
   }
 
-  onFileSelect(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.candidateForm.get('file').setValue(file);
-    }
-  }
-
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();
   }
 
-  
-  beforeUpload = (file: UploadFile): boolean => {
+
+  beforeUpload = (file: NzUploadFile): boolean => {
     let fileExtension = file.name.split('.')[1].toLowerCase(),
       fileSize = file.size;
 

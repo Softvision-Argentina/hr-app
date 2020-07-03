@@ -16,14 +16,20 @@ import {
     imports: [
         CommonModule,
         RouterModule.forChild(ProcessStepsRoutes),
-        NzDividerModule,
-        NzSelectModule,
         FormsModule,
         ReactiveFormsModule,
+        NzDividerModule,
+        NzSelectModule,
         NzStepsModule,
         NzTimelineModule
     ],
-    exports: [ProcessStepsComponent]
+    exports: [
+        ProcessStepsComponent,
+        NzDividerModule,
+        NzSelectModule,
+        NzStepsModule,
+        NzTimelineModule
+    ]
 })
 
 export class ProcessStepsModule { }

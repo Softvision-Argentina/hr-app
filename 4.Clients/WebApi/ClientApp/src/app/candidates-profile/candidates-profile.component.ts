@@ -95,6 +95,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
     this.resetForm();
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Candidate Profile',
       nzContent: modalContent,
       nzClosable: true,
@@ -102,7 +103,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {
@@ -152,6 +153,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
     this.fillCandidateProfileForm(editedCandidateProfile);
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Candidate Profile',
       nzContent: modalContent,
       nzClosable: true,
@@ -159,7 +161,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {

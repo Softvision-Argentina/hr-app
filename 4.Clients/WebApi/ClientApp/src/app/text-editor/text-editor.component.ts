@@ -7,7 +7,7 @@ import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter }
 })
 export class TextEditorComponent implements OnInit {
   @ViewChild('url') url: ElementRef;
-  @ViewChild('editor') editor: ElementRef;
+  @ViewChild('editor', { static: false }) editor: ElementRef;
   @ViewChild('toolbar') toolbar: ElementRef<HTMLElement>;
   @ViewChild('colorContainer') colorContainer: ElementRef<HTMLElement>;
   
@@ -51,10 +51,13 @@ export class TextEditorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.wrapperStyle();    
-    this.editor.nativeElement.innerHTML = this.setContent;    
-    this.editor.nativeElement.setAttribute("aria-disabled", "false");
-    this.followLinkHandler();    
+    this.wrapperStyle();
+    this.followLinkHandler();
+  }
+
+  ngAfterViewInit(){
+      this.editor.nativeElement.innerHTML = this.setContent;
+      this.editor.nativeElement.setAttribute("aria-disabled", "false");
   }
 
   wrapperStyle() {

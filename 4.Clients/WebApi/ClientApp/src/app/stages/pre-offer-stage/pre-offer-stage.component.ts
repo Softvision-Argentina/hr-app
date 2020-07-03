@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild, ChangeDetectionStrategy  } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, TemplateRef, ViewChild, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Globals } from '../../app-globals/globals';
@@ -25,12 +25,14 @@ export class PreOfferStageComponent implements OnInit {
   @Input()
   private _users: User[];
   public get users(): User[] {
-      return this._users.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
+    return this._users.sort((a, b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
   }
   public set users(value: User[]) {
-      this._users = value;
+    this._users = value;
   }
-  @Input() processId;
+
+  @Input() processId: number;
+
   preOfferForm: FormGroup = this.fb.group({
     id: [0],
     status: [0, [Validators.required]],
@@ -63,8 +65,8 @@ export class PreOfferStageComponent implements OnInit {
   isDniLoading = false;
   isDniValid = false;
   acceptedDeclined: any[] = [
-    { label: 'Declined', value: true},
-    { label: 'Accepted', value: false}
+    { label: 'Declined', value: true },
+    { label: 'Accepted', value: false }
   ];
 
   currentStageStatus: StageStatusEnum;
@@ -87,7 +89,7 @@ export class PreOfferStageComponent implements OnInit {
     private processService: ProcessService,
     public preOfferHistoryModal: PreOfferHistory) {
 
-    this.statusList = globals.preOfferStatusList;  
+    this.statusList = globals.preOfferStatusList;
   }
 
   showPreOfferHistoryModal(modalContent: TemplateRef<{}>) {
@@ -120,6 +122,7 @@ export class PreOfferStageComponent implements OnInit {
     });
     this.changeFormStatus(false);
     if (this.preOfferStage) { this.fillForm(this.preOfferStage); }
+    this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
   }
 
   updateSeniority(seniorityId) {
@@ -155,10 +158,10 @@ export class PreOfferStageComponent implements OnInit {
     this.currentStageStatus = this.preOfferForm.controls['status'].value;
     
     if (this.preOfferForm.controls['status'].value === StageStatusEnum.InProgress || this.preOfferForm.controls['status'].value === StageStatusEnum.PendingReply) {
-       this.changeFormStatus(true);
-       this.preOfferForm.markAsTouched();
+      this.changeFormStatus(true);
+      this.preOfferForm.markAsTouched();
     } else {
-       this.changeFormStatus(false);
+      this.changeFormStatus(false);
     }
 
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
@@ -201,7 +204,7 @@ export class PreOfferStageComponent implements OnInit {
   fillForm(preOfferStage: preOfferStage) {
     const status: number = this.statusList.filter(s => s.id === preOfferStage.status)[0].id;
 
-    if (status === StageStatusEnum.InProgress || status === StageStatusEnum.PendingReply ) {
+    if (status === StageStatusEnum.InProgress || status === StageStatusEnum.PendingReply) {
       this.changeFormStatus(true);
     }
 
@@ -214,11 +217,11 @@ export class PreOfferStageComponent implements OnInit {
     if (preOfferStage.dni !== 0) {
       this.preOfferForm.controls['dni'].setValue(preOfferStage.dni);
     }
-    
+
     if (preOfferStage.remunerationOffer) {
       this.preOfferForm.controls['remunerationOffer'].setValue(preOfferStage.remunerationOffer);
     }
-    
+
     if (preOfferStage.notes) {
       this.preOfferForm.controls['notes'].setValue(preOfferStage.notes);
     }
@@ -316,11 +319,11 @@ export class PreOfferStageComponent implements OnInit {
 
   checkLength(field) {
     let fieldName = field.attributes.id.nodeValue,
-        maxLength = Number(field.attributes.maxlength.nodeValue) || 8,
-        inputValue = this.preOfferForm.controls[fieldName].value;
+      maxLength = Number(field.attributes.maxlength.nodeValue) || 8,
+      inputValue = this.preOfferForm.controls[fieldName].value;
 
-    if (inputValue == null) { return } 
-    
+    if (inputValue == null) { return }
+
     if (inputValue.toString().length > maxLength) {
       this.preOfferForm.controls[fieldName].setValue(inputValue.toString().replace(".", "").substring(0, maxLength));
     }

@@ -7,8 +7,7 @@ import { Reservation } from 'src/entities/reservation'
 import { User } from 'src/entities/user';
 import { Room } from 'src/entities/room';
 import { Office } from 'src/entities/office';
-import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
-import { getDate } from 'date-fns';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 // check in
 @Component({
@@ -127,7 +126,6 @@ export class ReservationsComponent implements OnInit {
         },
         {
           label: 'Close',
-          shape: 'default',
           onClick: () => modal.destroy()
         }
       ]
@@ -137,6 +135,7 @@ export class ReservationsComponent implements OnInit {
   showEditModal(reservation: Reservation, modalContent: TemplateRef<{}>) {
     this.fillEditReservationForm(reservation);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Reservation',
       nzContent: modalContent,
       nzClosable: true,
@@ -144,12 +143,11 @@ export class ReservationsComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {
           label: 'Save',
-          shape: 'primary',
           onClick: () => {
             this.editReservation(modal, reservation);
           }

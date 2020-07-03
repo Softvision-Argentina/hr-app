@@ -12,6 +12,9 @@ import { UnauthorizedRoutes } from './unauthorized.routes';
     CommonModule,
     NzGridModule
   ],
-  exports: [UnauthorizedComponent]
+  exports: [
+    UnauthorizedComponent,
+    NzGridModule
+  ]
 })
 export class UnauthorizedModule { }

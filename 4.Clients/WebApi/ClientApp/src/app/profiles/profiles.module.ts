@@ -38,6 +38,16 @@ import { SharedModule } from '../shared.module';
     PipesModule,
     SharedModule
   ],
-  exports: [ProfilesComponent]
+  exports: [
+    ProfilesComponent,
+    NzFormModule,
+    NzTableModule,
+    NzDividerModule,
+    NzSelectModule,
+    NzModalModule,
+    NzListModule,
+    NzTagModule,
+    NzPopoverModule,
+  ]
 })
 export class ProfilesModule { }

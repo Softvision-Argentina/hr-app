@@ -35,6 +35,18 @@ import { SkillTypeRoutes } from './skill-type.routes';
     NzIconModule,
     NzInputModule
   ],
-  exports: [SkillTypeComponent]
+  exports: [
+    SkillTypeComponent,
+    NzFormModule,
+    NzGridModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzDividerModule,
+    NzModalModule,
+    NzListModule,
+    NzButtonModule,
+    NzIconModule,
+    NzInputModule
+  ]
 })
 export class SkillTypeModule { }

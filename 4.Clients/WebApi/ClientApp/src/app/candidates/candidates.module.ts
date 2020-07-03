@@ -26,13 +26,13 @@ import { SharedModule } from '../shared.module';
     imports: [
         RouterModule.forChild(CandidatesRoutes),
         CommonModule,
+        PipesModule,
+        FormsModule,
+        ReactiveFormsModule,
         NzTableModule,
         NzDropDownModule,
         NzSelectModule,
-        FormsModule,
-        PipesModule,
         NzDividerModule,
-        ReactiveFormsModule,
         NzFormModule,
         NzRadioModule,
         NzButtonModule,
@@ -44,8 +44,24 @@ import { SharedModule } from '../shared.module';
         NzGridModule,
         SharedModule
     ],
-    providers: [CandidateDetailsComponent],
-    exports: [CandidatesComponent]
+    providers: [ CandidateDetailsComponent ],
+    exports: [
+        CandidatesComponent,
+        FormsModule,
+        NzTableModule,
+        NzDropDownModule,
+        NzSelectModule,
+        NzDividerModule,
+        NzFormModule,
+        NzRadioModule,
+        NzButtonModule,
+        NzListModule,
+        NzIconModule,
+        NzToolTipModule,
+        NzInputModule,
+        NzSliderModule,
+        NzGridModule,
+    ]
 })
 
 export class CandidatesModule { }

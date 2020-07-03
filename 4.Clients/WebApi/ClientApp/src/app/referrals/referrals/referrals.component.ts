@@ -3,7 +3,6 @@ import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
-import { CandidateDetailsComponent } from 'src/app/candidates/details/candidate-details.component';
 import { UserDetailsComponent } from 'src/app/users/details/user-details.component';
 import { AppComponent } from 'src/app/app.component';
 import { Stage } from 'src/entities/stage';
@@ -26,9 +25,9 @@ import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { User } from 'src/entities/user';
-import { SlickComponent } from 'ngx-slick';
+import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DeclineReason } from 'src/entities/declineReason';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { ReferralsService } from 'src/app/services/referrals.service';
 import { Router } from '@angular/router';
@@ -39,7 +38,7 @@ import { ReferralsContactComponent } from '../referrals-contact/referrals-contac
   selector: 'app-referrals',
   templateUrl: './referrals.component.html',
   styleUrls: ['./referrals.component.scss'],
-  providers: [CandidateDetailsComponent, UserDetailsComponent, AppComponent]
+  providers: [UserDetailsComponent, AppComponent]
 })
 
 export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
@@ -51,7 +50,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     draggable: false
   };
 
-  @ViewChild('slickModal') slickModal: SlickComponent;
+  @ViewChild('slickModal') slickModal: SlickCarouselComponent;
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
@@ -121,10 +120,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   modalStart: boolean;
   displayNavAndSideMenu: boolean;
   selectedIndex = 0;
-
+  declineReasons: DeclineReason[] = [];
   referralsSubscriptions: Subscription = new Subscription();
+  
   constructor(private facade: FacadeService, private formBuilder: FormBuilder,
-    private candidateDetailsModal: CandidateDetailsComponent, private userDetailsModal: UserDetailsComponent,
+    private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _referralsService: ReferralsService,
     private router: Router) {
     this.profileList = globals.profileList;
@@ -374,6 +374,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.declineProcessForm.reset();
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
       // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
@@ -381,7 +382,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -513,6 +513,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
     }
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
@@ -529,6 +530,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.currentCandidate = candidate;
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
@@ -556,11 +558,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       }
     }
     return candidate;
-  }
-
-  showCandidateDetailsModal(candidateID: number, modalContent: TemplateRef<{}>): void {
-    this.emptyCandidate = this.candidatesFullList.filter(candidate => candidate.id === candidateID)[0];
-    this.candidateDetailsModal.showModal(modalContent, this.emptyCandidate.name + ' ' + this.emptyCandidate.lastName);
   }
 
   showUserDetailsModal(userID: number, modalContent: TemplateRef<{}>): void {
@@ -791,10 +788,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   showContactCandidatesModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom referralForm',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
+      nzWidth: '50%',
       nzFooter: null
     });
 
@@ -811,7 +809,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         isEditReferral: true,
         communities: this.communities
       },
-      nzWidth: '90%',
+      nzWidth: '50%',
       nzFooter: null
     });
 

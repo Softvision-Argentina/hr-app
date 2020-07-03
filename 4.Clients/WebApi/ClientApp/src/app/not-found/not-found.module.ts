@@ -13,6 +13,9 @@ import { NotFoundRoutes } from './not-found.routes';
     CommonModule,
     NzGridModule
   ],
-  exports: [NotFoundComponent]
+  exports: [
+    NotFoundComponent,
+    NzGridModule
+  ]
 })
 export class NotFoundModule { }

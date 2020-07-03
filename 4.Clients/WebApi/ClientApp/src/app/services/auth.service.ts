@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../app-config/app.config';
 import { catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable ,  of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

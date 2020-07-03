@@ -19,10 +19,10 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     imports: [
         RouterModule.forChild(ReservationsRoutes),
         CommonModule,
+        FormsModule,
         NzSelectModule,
         NzMenuModule,
         NzCalendarModule,
-        FormsModule,
         NzPopoverModule,
         NzPageHeaderModule,
         NzBadgeModule,
@@ -32,7 +32,18 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
         ReactiveFormsModule,
         
     ],
-    exports: [ReservationsComponent]
+    exports: [
+        ReservationsComponent,
+        NzSelectModule,
+        NzMenuModule,
+        NzCalendarModule,
+        NzPopoverModule,
+        NzPageHeaderModule,
+        NzBadgeModule,
+        NzDividerModule,
+        NzFormModule,
+        NzDatePickerModule
+    ]
 })
 
 export class ReservationsModule {}

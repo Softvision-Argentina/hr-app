@@ -69,6 +69,7 @@ export class RoomComponent implements OnInit, OnChanges {
     this.roomForm.controls['profileId'].setValue(this.offices[0].id);
     }
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Room',
       nzContent: modalContent,
       nzClosable: true,
@@ -76,7 +77,6 @@ export class RoomComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -129,6 +129,7 @@ export class RoomComponent implements OnInit, OnChanges {
     this.fillRoomForm(editedRoom);
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Room',
       nzContent: modalContent,
       nzClosable: true,
@@ -136,7 +137,6 @@ export class RoomComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

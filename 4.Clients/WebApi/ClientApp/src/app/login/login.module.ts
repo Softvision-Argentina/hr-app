@@ -26,6 +26,13 @@ import { LoginRoutes } from './login.routes';
     NzDividerModule,
     NzInputModule
   ],
-  exports: [LoginComponent]
+  exports: [
+    LoginComponent,
+    NzGridModule,
+    NzFormModule,
+    NzCardModule,
+    NzDividerModule,
+    NzInputModule
+  ]
 })
 export class LoginModule { }

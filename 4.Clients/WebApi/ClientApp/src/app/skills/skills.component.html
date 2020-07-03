@@ -1,7 +1,7 @@
 <div nz-row>
     <div nz-col nzSpan="22">
         <button nz-button nzType="primary" (click)="showAddModal(skillModal)" nzShape="round">
-      <i nz-icon type="plus" theme="outline"></i>Add new skill</button>
+            <i nz-icon nzType="plus" theme="outline"></i>Add new skill</button>
     </div>
 </div>
 <br />
@@ -11,18 +11,24 @@
             <thead>
                 <tr>
                     <th nzCustomFilter>Name
-                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
-                            <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
-                            <div class="search-box">
-                                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" (keyup.enter)="search()">
-                                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
-                                <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="nameFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #nameFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input type="text" placeholder="Search name"
+                                        [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
                             </div>
-                        </nz-dropdown>
+                        </nz-dropdown-menu>
                     </th>
-                    <th [style.text-align]="'center'">Description</th>
-                    <th [style.text-align]="'center'">Type</th>
-                    <th [style.text-align]="'center'">Action</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,12 +36,15 @@
                     <td>{{ skill.name }}</td>
                     <td>{{ skill.description | truncate: 70 }}</td>
                     <td>{{ getSkillTypeNameByID(skill.type) }}</td>
-                    <td [style.text-align]="'center'">
-                        <i (click)="showDetailsModal(skill.id)" style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
+                    <td>
+                        <i (click)="showDetailsModal(skill.id)" style="cursor: pointer;" nz-icon nzType="info-circle"
+                            theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showEditModal(skillModal, skill.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+                        <i (click)="showEditModal(skillModal, skill.id)" style="cursor: pointer;" nz-icon nzType="edit"
+                            theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showDeleteConfirm(skill.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
+                        <i (click)="showDeleteConfirm(skill.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
                     </td>
                 </tr>
             </tbody>
@@ -43,11 +52,13 @@
     </div>
 </div>
 
-<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill Details" [nzFooter]="null" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
     <nz-list nzBordered nzSize="large" *ngIf="emptySkill">
         <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptySkill.name}}</nz-list-item>
         <nz-list-item><strong style="margin-right: 1%;">Descripción: </strong> {{emptySkill.description}}</nz-list-item>
-        <nz-list-item *ngIf="skillTypeForDetail"><strong style="margin-right: 1%;">Type: </strong> {{skillTypeForDetail}}</nz-list-item>
+        <nz-list-item *ngIf="skillTypeForDetail"><strong style="margin-right: 1%;">Type: </strong>
+            {{skillTypeForDetail}}</nz-list-item>
     </nz-list>
 </nz-modal>
 
@@ -55,38 +66,52 @@
     <form nz-form [formGroup]="skillForm">
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
                 <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
-                <nz-form-explain *ngIf="skillForm.get('name').dirty && skillForm.get('name')?.hasError('required')">Please input the name</nz-form-explain>
-                <nz-form-explain *ngIf="skillForm.get('name')?.hasError('trimBeginError')">
-                    The input has leading whitespace!
-                </nz-form-explain>
-                <nz-form-explain *ngIf="skillForm.get('name')?.hasError('trimEndError')">
-                    The input has leading whitespace!
-                </nz-form-explain>
+                <ng-template #nameErrorMsg>
+                    <ng-container *ngIf="skillForm.get('name').dirty && skillForm.get('name')?.hasError('required')">
+                        Please input the name
+                    </ng-container>
+                    <ng-container *ngIf="skillForm.get('name')?.hasError('trimBeginError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                    <ng-container *ngIf="skillForm.get('name')?.hasError('trimEndError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                </ng-template>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <input type="text" nz-input formControlName="description" id="description" placeholder="Please input the description">
-                <nz-form-explain *ngIf="skillForm.get('description').dirty && skillForm.get('description')?.hasError('required')">Please input the description</nz-form-explain>
-                <nz-form-explain *ngIf="skillForm.get('description')?.hasError('trimBeginError')">
-                    The input has leading whitespace!
-                </nz-form-explain>
-                <nz-form-explain *ngIf="skillForm.get('description')?.hasError('trimEndError')">
-                    The input has leading whitespace!
-                </nz-form-explain>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+                <input type="text" nz-input formControlName="description" id="description"
+                    placeholder="Please input the description">
+                <ng-template #descriptionErrorMsg>
+                    <ng-container
+                        *ngIf="skillForm.get('description').dirty && skillForm.get('description')?.hasError('required')">
+                        Please input the description
+                    </ng-container>
+                    <ng-container *ngIf="skillForm.get('description')?.hasError('trimBeginError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                    <ng-container *ngIf="skillForm.get('description')?.hasError('trimEndError')">
+                        The input has leading whitespace!
+                    </ng-container>
+                </ng-template>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Type</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="typeErrorMsg">
                 <nz-select formControlName="type">
                     <nz-option *ngFor="let option of skillTypes" [nzLabel]="option.name" [nzValue]="option.id">
                     </nz-option>
                 </nz-select>
-                <nz-form-explain *ngIf="skillForm.get('type').dirty && skillForm.get('type').errors">Please input the type</nz-form-explain>
+                <ng-template #typeErrorMsg>
+                    <ng-container *ngIf="skillForm.get('type').dirty && skillForm.get('type').errors">
+                        Please input the type
+                    </ng-container>
+                </ng-template>
             </nz-form-control>
         </nz-form-item>
 

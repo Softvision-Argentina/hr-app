@@ -3,10 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from 'src/entities/candidate';
-import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class ReferralsService extends BaseService<Candidate> {

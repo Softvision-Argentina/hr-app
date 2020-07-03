@@ -54,11 +54,12 @@ export class HireProjectedComponent implements OnInit {
   showAddModal(modalContent: TemplateRef<{}>): void {
     this.projectionForm.reset();
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Projection',
       nzContent: modalContent,
       nzClosable: true,
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {
@@ -108,9 +109,9 @@ export class HireProjectedComponent implements OnInit {
       nzTitle: 'Edit Projection',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
-        { label: 'Cancel', shape: 'default', onClick: () => modal.destroy() },
+        {  label: 'Cancel', onClick: () => modal.destroy() },
         {
           label: 'Save', type: 'primary', loading: false,
           onClick: () => {

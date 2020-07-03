@@ -4,15 +4,15 @@
           <thead>
               <tr>
                   <th nzCustomFilter>Name
-                      <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                      <a nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
                           <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
-                      </nz-dropdown>
+                      </a>
                   </th>
-                  <th [style.text-align]="'center'">E-mail</th>
-                  <th [style.text-align]="'center'">LinkedIn</th>
-                  <th [style.text-align]="'center'">CV</th>
-                  <th [style.text-align]="'center'">Created Date</th>
-                  <th [style.text-align]="'center'">Action</th>
+                  <th>E-mail</th>
+                  <th>LinkedIn</th>
+                  <th>CV</th>
+                  <th>Created Date</th>
+                  <th>Action</th>
               </tr>
           </thead>
           <tbody>
@@ -22,12 +22,12 @@
                   <td>{{ postulant.linkedInProfile }}</td>
                   <td>{{ postulant.cv }}</td>
                   <td>{{ postulant.createdDate| date: 'dd-MM-yyyy'}}</td>
-                  <td [style.text-align]="'center'">
-                      <i style="cursor: pointer;" nz-icon type="info-circle" theme="outline" nzTitle="Details" nz-tooltip></i>
+                  <td>
+                      <i style="cursor: pointer;" nz-icon nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <i  style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+                      <i  style="cursor: pointer;" nz-icon nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <i style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip></i>
+                      <i style="cursor: pointer;" nz-icon nzType="delete" theme="outline" nzTooltipTitle="Delete" nz-tooltip></i>
                   </td>
               </tr>
           </tbody>

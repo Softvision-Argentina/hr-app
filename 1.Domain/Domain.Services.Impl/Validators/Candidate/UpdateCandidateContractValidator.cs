@@ -18,7 +18,7 @@ namespace Domain.Services.Impl.Validators.Candidate
             //RuleFor(_ => _.Profile).NotEmpty();
 
             RuleFor(_ => _.Cv)
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+                .MaximumLength(100);
 
             RuleFor(_ => _.EmailAddress)
                 .MaximumLength(ValidationConstants.MAX_INPUT_EMAIL);

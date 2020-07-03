@@ -11,11 +11,13 @@ import {
   NzInputModule,
   NzModalModule,
   NzListModule,
-  NzFormModule
+  NzFormModule,
+  NzIconModule
 } from 'ng-zorro-antd';
 
 import { DeclineReasonsRoutes } from './decline-reasons.routes';
 import { DeclineReasonComponent } from './decline-reasons.component';
+import { IconsProviderModule } from '@app/icons-provider.module';
 
 @NgModule({
   declarations: [DeclineReasonComponent],
@@ -23,17 +25,32 @@ import { DeclineReasonComponent } from './decline-reasons.component';
     RouterModule.forChild(DeclineReasonsRoutes),
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
+    NzFormModule,
+    NzGridModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzDividerModule,
+    NzModalModule,
+    NzListModule,
+    NzButtonModule,
+    NzIconModule,
+    NzInputModule,
+    IconsProviderModule
+  ],
+  exports: [
+    DeclineReasonComponent,
     NzTableModule,
     NzButtonModule,
     NzDropDownModule,
     NzDividerModule,
     NzGridModule,
-    ReactiveFormsModule,
     NzInputModule,
     NzModalModule,
     NzListModule,
-    NzFormModule
-  ],
-  exports: [DeclineReasonComponent]
+    NzFormModule,
+    NzIconModule,
+    IconsProviderModule
+  ]
 })
 export class DeclineReasonsModule { }

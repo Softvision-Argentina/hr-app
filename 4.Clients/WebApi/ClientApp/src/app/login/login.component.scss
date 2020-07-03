@@ -15,7 +15,6 @@
   }
 
   .login-container {
-    font-family: "ProximaNova-Regular";
     margin: 0 auto;
     max-width: 450px;
     padding: 2rem 1rem;
@@ -66,7 +65,7 @@
     color: $dark-color;
     font-size: 1rem;
     position: relative;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova";
     padding-bottom: 0.85rem;
 
     &::after {
@@ -179,7 +178,7 @@
     color: $light-color;
     font-size: 1.5rem;
     position: relative;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova";
     padding-bottom: 1rem;
   }
 

@@ -30,10 +30,10 @@ import { PipesModule } from '../pipes/pipes.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    PipesModule,
     NzSwitchModule,
     NzDropDownModule,
     NzButtonModule,
-    PipesModule,
     NzEmptyModule,
     NzGridModule,
     NzCardModule,
@@ -47,7 +47,24 @@ import { PipesModule } from '../pipes/pipes.module';
     NzDatePickerModule,
     NzCheckboxModule
   ],
-  exports: [TasksComponent]
+  exports: [
+    TasksComponent,
+    NzSwitchModule,
+    NzDropDownModule,
+    NzButtonModule,
+    NzEmptyModule,
+    NzGridModule,
+    NzCardModule,
+    NzPopoverModule,
+    NzIconModule,
+    NzSkeletonModule,
+    NzDividerModule,
+    NzInputModule,
+    NzFormModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    NzCheckboxModule
+  ]
 })
 
 export class TasksModule { }

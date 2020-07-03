@@ -1,22 +1,30 @@
 <form nz-form [formGroup]="loginForm" class="csoft-login-form" (ngSubmit)="submitForm()">
 
   <nz-form-item class="login-input-container">
-    <nz-form-control>
+    <nz-form-control [nzErrorTip]="usernameErrorMsg">
       <label class="login-input-group">
         <input required nz-input nzSize="large" type="text" formControlName="userName" maxlength="64"/>
         <span>Username</span>
       </label>
-      <nz-form-explain *ngIf="checkDirtyandErrors('userName')">Please input your username</nz-form-explain>
+      <ng-template #usernameErrorMsg>
+        <ng-container *ngIf="checkDirtyandErrors('userName')">
+          Please input your username!
+        </ng-container>
+      </ng-template>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item class="login-input-container">
-    <nz-form-control>
+    <nz-form-control [nzErrorTip]="passwordErrorMsg">
       <label class="login-input-group">
         <input required nz-input nzSize="large" type="password" formControlName="password" maxlength="64" />
         <span>Password</span>
       </label>
-      <nz-form-explain *ngIf="checkDirtyandErrors('password')">Please input your password</nz-form-explain>
+      <ng-template #passwordErrorMsg>
+        <ng-container *ngIf="checkDirtyandErrors('password')">
+          Please input your Password!
+        </ng-container>
+      </ng-template>
     </nz-form-control>
   </nz-form-item>
 
@@ -28,5 +36,5 @@
 
 </form>
 
-<ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
-<ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+<ng-template #prefixUser><i nz-icon nzType="user"></i></ng-template>
+<ng-template #prefixLock><i nz-icon nzType="lock"></i></ng-template>

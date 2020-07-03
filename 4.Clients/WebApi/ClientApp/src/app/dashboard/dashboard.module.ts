@@ -44,10 +44,10 @@ import { ReportDeclineReasonsComponent } from './report-decline-reasons/report-d
     imports: [
         RouterModule.forChild(DashboardRoutes),
         CommonModule,
+        ChartsModule,
         NzGridModule,
         NzCardModule,
         NzSkeletonModule,
-        ChartsModule,
         NzIconModule,
         NzListModule,
         NzStatisticModule,
@@ -57,7 +57,18 @@ import { ReportDeclineReasonsComponent } from './report-decline-reasons/report-d
         ReactiveFormsModule,
         FormsModule
     ],
-    exports: [DashboardComponent]
+    exports: [
+        DashboardComponent,
+        NzGridModule,
+        NzCardModule,
+        NzSkeletonModule,
+        NzIconModule,
+        NzListModule,
+        NzStatisticModule,
+        NzCarouselModule,
+        NzButtonModule,
+        NzDatePickerModule,
+    ]
 })
 
 export class DashboardModule { }

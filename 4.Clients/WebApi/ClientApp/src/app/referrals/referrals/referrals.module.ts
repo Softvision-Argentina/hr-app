@@ -7,33 +7,37 @@ import { ReferralsCardComponent } from '../referrals-card/referrals-card.compone
 import { ReferralsContactComponent } from '../referrals-contact/referrals-contact.component';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlickModule } from 'ngx-slick';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { SharedModule } from '../../shared.module';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NZ_I18N, en_US, NzAvatarModule, NzStepsModule } from 'ng-zorro-antd';
 import { ReferralsListComponent } from '../referrals-list/referrals-list.component';
-@NgModule({
-    imports: [
-        RouterModule.forChild(ReferralsRoutes),
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        SlickModule,
-        PipesModule,
-        SharedModule,
-        NgZorroAntdModule,
 
-    ],
+@NgModule({
     declarations: [
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
         ReferralsContactComponent
     ],
+    imports: [
+        RouterModule.forChild(ReferralsRoutes),
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SlickCarouselModule,
+        PipesModule,
+        SharedModule,
+        NzAvatarModule,
+        NzStepsModule
+    ],
     entryComponents: [ ReferralsContactComponent ],
     exports: [
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
+        ReferralsContactComponent,
+        NzAvatarModule,
+        NzStepsModule
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US } ]
 })

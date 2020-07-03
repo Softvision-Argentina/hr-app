@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { FacadeService } from '../services/facade.service';
 import { User } from '../../entities/user';
@@ -19,7 +19,7 @@ export class CSoftComponent {
   constructor(
     private fb: FormBuilder,
     private facade: FacadeService,
-    private jwtHelper: JwtHelper,
+    private jwtHelperService: JwtHelperService,
     private router: Router,
     public zone: NgZone
   ) { }
@@ -74,7 +74,7 @@ export class CSoftComponent {
 
   isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser && !this.jwtHelperService.isTokenExpired(currentUser.token)) {
       return true;
     } else {
       localStorage.clear();
@@ -99,13 +99,5 @@ export class CSoftComponent {
   checkDirtyandErrors(controlName: string): boolean {
     let control = this.loginForm.get(controlName);
     return control ? control.dirty && control.errors !== null : false;
-  }
-
-  checkInputContent(input: HTMLInputElement) {
-    debugger;
-    input.parentElement.classList.add("active");
-    if (input.value == "") {
-      input.parentElement.classList.remove("active");
-    }
   }
 }

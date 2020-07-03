@@ -15,10 +15,14 @@ import { CommunitiesComponent } from './communities/communities.component';
 import { CandidatesProfileComponent } from './candidates-profile/candidates-profile.component';
 import { PipesModule } from './pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NZ_I18N, en_US, NzLayoutModule, NzMenuModule, NzDividerModule, NzFormModule, NzSelectModule, NzDatePickerModule, NzRadioModule, NzModalModule, NzSliderModule, NzInputModule, NzListModule, NzTableModule, NzCollapseModule, NzBadgeModule, NzTagModule, NzPopoverModule, NzStatisticModule, NzCardModule, NzDropDownModule, NzTabsModule, NzButtonModule, NzTypographyModule, NzUploadModule } from 'ng-zorro-antd';
 import { FileUploadModule } from 'ng2-file-upload';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { OpenPositionsComponent } from './referrals/open-positions/open-positions.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { IconsProviderModule } from './icons-provider.module';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+
 
 @NgModule({
     imports: [
@@ -26,8 +30,32 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         FormsModule,
         ReactiveFormsModule,
         PipesModule,
-        NgZorroAntdModule,
-        FileUploadModule
+        NzLayoutModule,
+        NzMenuModule,
+        FileUploadModule,
+        IconsProviderModule,
+        NzDividerModule,
+        NzFormModule,
+        NzSelectModule,
+        NzDatePickerModule,
+        NzRadioModule,
+        NzModalModule,
+        NzSliderModule,
+        NzInputModule,
+        NzListModule,
+        NzTableModule,
+        NzCollapseModule,
+        NzBadgeModule,
+        NzTagModule,
+        NzPopoverModule,
+        NzStatisticModule,
+        NzCardModule,
+        NzDropDownModule,
+        NzTabsModule,
+        NzButtonModule,
+        NzTypographyModule,
+        NzUploadModule,
+        NzSpaceModule
     ],
     declarations: [
         CandidateDetailsComponent,
@@ -47,6 +75,7 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         OpenPositionsComponent
     ],
     exports: [
+        CommonModule,
         CandidateDetailsComponent,
         UserDetailsComponent,
         CandidateAddComponent,
@@ -62,8 +91,34 @@ import { OpenPositionsComponent } from './referrals/open-positions/open-position
         CandidatesProfileComponent,
         FileUploadModule,
         TextEditorComponent,
-        OpenPositionsComponent
+        OpenPositionsComponent,
+        TextEditorComponent,
+        NzLayoutModule,
+        NzMenuModule,
+        IconsProviderModule,
+        NzDividerModule,
+        NzFormModule,
+        NzSelectModule,
+        NzDatePickerModule,
+        NzRadioModule,
+        NzModalModule,
+        NzSliderModule,
+        NzInputModule,
+        NzListModule,
+        NzTableModule,
+        NzCollapseModule,
+        NzBadgeModule,
+        NzTagModule,
+        NzPopoverModule,
+        NzStatisticModule,
+        NzCardModule,
+        NzDropDownModule,
+        NzTabsModule,
+        NzButtonModule,
+        NzTypographyModule,
+        NzUploadModule,
+        NzSpaceModule 
     ],
-    providers: [ { provide: NZ_I18N, useValue: en_US }]
+    providers: [{ provide: NZ_I18N, useValue: en_US }]
 })
 export class SharedModule { }

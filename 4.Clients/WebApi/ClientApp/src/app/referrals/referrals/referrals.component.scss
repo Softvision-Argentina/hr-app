@@ -1,45 +1,50 @@
 .pop {
-    height: 50px;
-    width: 40%;
-    margin-left: 20px;
-    border: 1px solid saddlebrown;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 50px;
+  width: 40%;
+  margin-left: 20px;
+  border: 1px solid saddlebrown;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 nz-step {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-
-.padding-info{
-    padding: 0px 213px 0px 213px;
+.padding-info {
+  padding: 0px 213px 0px 213px;
 }
-
 
 .alert-info {
-    text-align: center;
-    right: 55px;
+  text-align: center;
+  right: 55px;
 }
 
 .number {
-    position: absolute;    
-    background-color:red;
-    line-height:20px;
-    width:20px;
-    height:20px;
-    border-radius:10px;
-    color: white;
-    text-align: -webkit-center;    
+  position: absolute;
+  background-color: red;
+  line-height: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  color: white;
+  text-align: -webkit-center;
 }
 
-.noti{
-    font-weight: 400;
-}
+.referralsTabset {
+  & ::ng-deep .ant-tabs-nav .ant-tabs-tab-inactive {
+    color: #c4c4c4;
+  }
 
-.proximanova-r{
-    font-family: "ProximaNova-Regular";
+  & ::ng-deep .ant-tabs-nav .ant-tabs-tab:hover {
+    color: #c800a1;
+  }
+
+  & ::ng-deep .ant-tabs-nav .ant-tabs-tab-active {
+    color: black;
+    font-family: ProximaNova-Bold;
+  }
 }
 
 .headerFont {
@@ -58,17 +63,10 @@ nz-step {
     width: 215px;
     height: 40px;
     background-image: linear-gradient(to top, #f4633a, #c800a1);
-    margin-left: 50px;
     border: none;  
     font-size: 20px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
+    font-family: ProximaNova-SemiBold;
     line-height: normal;
     letter-spacing: -0.67px;
     color: #ffffff;
-  }
-
-  ::ng-deep .ant-tabs-extra-content {
-      padding-right: 8.33%;
   }

@@ -8,48 +8,48 @@ export const SettingsRoutes: Routes = [
     children: [
       {
         path: 'festivities',
-        loadChildren: '../company-calendar/company-calendar.module#CompanyCalendarModule'
+        loadChildren: () => import('@app/company-calendar/company-calendar.module').then(m => m.CompanyCalendarModule)
       },
       {
         path: 'hire-projected',
-        loadChildren: '../hire-projected/hire-projected.module#HireProjectedModule'
+        loadChildren: () => import('@app/hire-projected/hire-projected.module').then(m => m.HireProjectedModule)
       },
       {
         path: 'employee-casualties',
-        loadChildren: '../employee-casualties/employee-casualties.module#EmployeeCasualtiesModule'
+        loadChildren: () => import('@app/employee-casualties/employee-casualties.module').then(m => m.EmployeeCasualtiesModule)
       },
       {
         path: 'skills-list',
-        loadChildren: '../skills/skills.module#SkillsModule'
+        loadChildren: () => import('@app/skills/skills.module').then(m => m.SkillsModule)
       },
       {
         path: 'skills-types',
-        loadChildren: '../skill-type/skill-type.module#SkillTypeModule'
+        loadChildren: () => import('@app/skill-type/skill-type.module').then(m => m.SkillTypeModule)
       },
       {
         path: 'profiles/:tab',
-        loadChildren: '../profiles/profiles.module#ProfilesModule'
+        loadChildren: () => import('@app/profiles/profiles.module').then(m => m.ProfilesModule)
       },
       {
         path: 'locations/:tab',
-        loadChildren: '../locations/locations.module#LocationsModule'
+        loadChildren: () => import('@app/locations/locations.module').then(m => m.LocationsModule)
       },
       {
         path: 'roles',
-        loadChildren: '../role/role.module#RoleModule'
+        loadChildren: () => import('@app/role/role.module').then(m => m.RoleModule)
       },
       {
         path: 'declining-reasons',
-        loadChildren: '../decline-reasons/decline-reasons.module#DeclineReasonsModule'
-      },
-      {
-        path: 'reasons',
-        loadChildren: '../readdress-reason/readdress-reason.module#ReaddressReasonModule'
-      },
-      {
-        path: 'reasons-categories',
-        loadChildren: '../readdress-reason-type/readdress-reason-type.module#ReaddressReasonTypeModule'
-      }
+            loadChildren: () => import('@app/decline-reasons/decline-reasons.module').then(m => m.DeclineReasonsModule)
+        },
+        {
+            path: 'reasons',
+            loadChildren: () => import('@app/readdress-reason/readdress-reason.module').then(m => m.ReaddressReasonModule)
+        },
+        {
+            path: 'reasons-categories',
+            loadChildren: () => import('@app/readdress-reason-type/readdress-reason-type.module').then(m => m.ReaddressReasonTypeModule)
+        }
     ]
   }
 ];

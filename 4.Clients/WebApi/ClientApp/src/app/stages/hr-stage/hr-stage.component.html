@@ -1,5 +1,5 @@
 <form nz-form [formGroup]="hrForm" [nzLayout]="'horizontal'">
-    <nz-form-item>
+    <nz-form-item hidden>
         <nz-form-control>
             <input type="hidden" formControlName="id">
 
@@ -7,59 +7,65 @@
 
     </nz-form-item>
     <div nz-row>
-        <div nz-col nzSpan="22">
+        <div nz-col nzSpan="24">
             <nz-form-item>
-                <nz-form-label [nzMd]="5" [nzSm]="5" [nzXs]="5" nzFor="feedback">Feedback</nz-form-label>
-                <nz-form-control [nzMd]="19" [nzSm]="19" [nzXs]="19">
+                <nz-form-label [nzMd]="3" [nzSm]="6" nzFor="feedback">Feedback</nz-form-label>
+                <nz-form-control [nzMd]="19" [nzSm]="18" [nzErrorTip]="feedbackErrorMsg">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d "
-                    *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">
-                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimBeginError') ">
-                        The input has leading whitespace!
+                <ng-template #feedbackErrorMsg>
+                    <ng-container style="color: #f5222d "
+                        *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">
+                        <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimBeginError') ">
+                            The input has leading whitespace!
+                        </ng-container>
+                        <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimEndError') ">
+                            The input has trailing whitespace!
+                        </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimEndError') ">
-                        The input has trailing whitespace!
-                    </ng-container>
-                </nz-form-explain>
+                </ng-template>
             </nz-form-item>
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type"
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
                     <nz-select formControlName="status" (ngModelChange)="statusChanged()">
                         <nz-option *ngFor="let status of statusList | slice:1" nzLabel="{{status.name}}"
                             [nzValue]="status.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="hrForm.get('status').dirty && hrForm.get('status').errors">Please select a
-                        status
-                    </nz-form-explain>
+                    <ng-template #statusErrorMsg>
+                        <ng-container *ngIf="hrForm.get('status').dirty && hrForm.get('status').errors">
+                            Please select a status
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="date"
+                <nz-form-label [nzSm]="6" [nzXs]="24 " nzFor="date"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
                     Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dateErrorMsg">
                     <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
-                    <nz-form-explain *ngIf="hrForm.get('date').dirty && hrForm.get( 'date').errors">
-                        Please input a date
-                    </nz-form-explain>
+                    <ng-template #dateErrorMsg>
+                        <ng-container *ngIf="hrForm.get('date').dirty && hrForm.get( 'date').errors">
+                            Please input a date
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
  
     <div nz-row *ngIf="CanShowReaddressPossibility()">
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="10" [nzXs]="24">
             Reason
@@ -90,9 +96,9 @@
     </div>
 	
     <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="actualSalary">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="actualSalary">
                     Actual Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="actualSalary" id="actualSalary"
@@ -100,9 +106,9 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="wantedSalary">Expected Salary</nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="wantedSalary">Expected Salary</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input type="number" nz-input formControlName="wantedSalary" id="wantedSalary"
                         placeholder="Please input an expected salary" pattern="[0-9]+([\.,][0-9]+)?">
@@ -111,26 +117,34 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="type" [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userOwnerId"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
                     Interviewer</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="interviewerErrorMsg">
                     <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}} " [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}} "
+                            [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
-                    <nz-form-explain *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">Please input the user</nz-form-explain>
+                    <ng-template #interviewerErrorMsg>
+                        <ng-container *ngIf="hrForm.get( 'userOwnerId').dirty && hrForm.get( 'userOwnerId').errors">
+                            Please input the user
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item>
-                <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="userDelegateId" [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
                     Delegate</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                        <nz-option *ngFor="let c of usersFiltered" nzLabel="{{c.firstName}} {{c.lastName}}"
+                            [nzValue]="c.id">
                         </nz-option>
                     </nz-select>
 
@@ -139,57 +153,65 @@
         </div>
     </div>
     <div nz-row>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="12">
             <nz-form-item hidden>
-                <nz-form-label [nzSm]="10" [nzXs]="24 " nzFor="feedback"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-label [nzSm]="6" [nzXs]="24 " nzFor="feedback"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="additionalInformationErrorMsg">
                     <textarea rows="1" id="feedback" nz-input formControlName="feedback" style="width: 50%;"
                         placeholder="Input any additional information if necessary" id="feedback"></textarea>
                 </nz-form-control>
-                <nz-form-explain style="color: #f5222d"
-                    *ngIf="hrForm.get('additionalInformation').dirty && hrForm.get('additionalInformation').errors">
-                    <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
+                <ng-template #additionalInformationErrorMsg>
+                    <ng-container style="color: #f5222d"
+                        *ngIf="hrForm.get('additionalInformation').dirty && hrForm.get('additionalInformation').errors">
+                        <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimBeginError')">
+                            The input has leading whitespace!
+                        </ng-container>
+                        <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimEndError')">
+                            The input has trailing whitespace!
+                        </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimEndError')">
-                        The input has trailing whitespace!
-                    </ng-container>
-                </nz-form-explain>
+                </ng-template>
             </nz-form-item>
         </div>
     </div>
-    <div nz-col nzSpan="11" style="display:none">
-        <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="rejectionReason"
-                [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReasonsHr')}">
-                Rejection Reason</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24">
-                <nz-select [nzDisabled]="disable" style="width: 95%; margin-right:1%;"
-                    formControlName="rejectionReasonsHr" [nzDisabled]="disabled" nzShowSearch nzAllowClear
-                    [nzAllowClear]="false" nzPlaceHolder="Select a reason">
-                    <nz-option *ngFor="let reason of rejectionReasonsHRList" nzLabel="{{reason.name}}"
-                        nzValue="{{reason.id}}">
-                    </nz-option>
-                </nz-select>
-                <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
-                    placeholder="Please, briefly explain what happened."></textarea>
-            </nz-form-control>
-            <nz-form-explain style="color: #f5222d "
-                >
-                <ng-container
-                    *ngIf="hrForm.get('rejectionReason')?.dirty && hrForm.get('rejectionReason')?.errors ">
-                    Please tell us more about your decision!
-                </ng-container>
-            </nz-form-explain>
-        </nz-form-item>
-    </div>
+    <!-- NOTE: Deprecated. To be removed in future version
     <div nz-row>
-        <div nz-col nzSpan="22">
+        <div nz-col nzSpan="12" *ngIf="showRejectionReason()">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rejectionReason"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReasonsHr')}">
+                    Rejection Reason</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="rejectionReasonErrorMsg">
+                    <nz-select [nzDisabled]="false" style="width: 95%; margin-right:1%;"
+                        formControlName="rejectionReasonsHr" [nzDisabled]="disabled" nzShowSearch nzAllowClear
+                        [nzAllowClear]="false" nzPlaceHolder="Select a reason">
+                        <nz-option *ngFor="let reason of rejectionReasonsHRList" nzLabel="{{reason.name}}"
+                            nzValue="{{reason.id}}">
+                        </nz-option>
+                    </nz-select>
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Please, briefly explain what happened."></textarea>
+                </nz-form-control>
+                <ng-template #rejectionReasonErrorMsg>
+                    <ng-container style="color: #f5222d "
+                        *ngIf="showRejectionReason() && hrForm.get('rejectionReason').dirty && hrForm.get('rejectionReason').errors ">
+                        <ng-container
+                            *ngIf="hrForm.get('rejectionReason')?.dirty && hrForm.get('rejectionReason')?.errors ">
+                            Please tell us more about your decision!
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </nz-form-item>
+        </div>
+    </div> -->
+    <div nz-row nzJustify="center">
+        <div nz-col [nzSm]="14" [nzXs]="24">
             <nz-form-item>
                 <nz-form-control>
                     <div class="flex-container">
-                        <nz-form-label class="englishLabel" [nzSm]="10" [nzXs]="24" nzFor="englishLevel"
+                        <nz-form-label class="englishLabel" nzFor="englishLevel"
                             [ngClass]="{'requiredFieldLabel': isRequiredField('englishLevel')}">
                             English Level</nz-form-label>
                         <nz-radio-group formControlName="englishLevel">

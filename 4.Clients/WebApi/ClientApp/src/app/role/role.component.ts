@@ -72,6 +72,7 @@ export class RoleComponent implements OnInit {
     this.roleForm.reset();
     this.roleForm.controls["isActive"].setValue("true");
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Role',
       nzContent: modalContent,
       nzClosable: true,
@@ -79,7 +80,6 @@ export class RoleComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -120,6 +120,7 @@ export class RoleComponent implements OnInit {
     this.roleForm.reset();
     this.fillRoleForm(role);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Role',
       nzContent: modalContent,
       nzClosable: true,
@@ -127,7 +128,6 @@ export class RoleComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

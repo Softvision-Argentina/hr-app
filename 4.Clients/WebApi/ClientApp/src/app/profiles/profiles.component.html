@@ -2,11 +2,11 @@
   *ngIf="tab == 'communities'"
   [_detailedCommunity]="emptyCommunity"
   [_detailedCandidateProfile]="emptyCandidateProfile"
-  (communityChanged)="getCommunities($event)"
-  (candidatesProfileChanged)="getCandidatesProfile($event)"
+  (communityChanged)="getCommunities()"
+  (candidatesProfileChanged)="getCandidatesProfile()"
 ></app-communities>
 <app-candidates-profile
   *ngIf="tab == 'candidates-profile'"
   [_detailedCandidateProfile]="emptyCandidateProfile"
-  (candidatesProfileChanged)="getCandidatesProfile($event)"
+  (candidatesProfileChanged)="getCandidatesProfile()"
 ></app-candidates-profile>

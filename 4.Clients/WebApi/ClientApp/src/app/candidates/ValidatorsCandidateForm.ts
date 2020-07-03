@@ -1,5 +1,5 @@
 import { FormGroup, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Candidate } from 'src/entities/candidate';
 import { delay } from 'rxjs/operators';
 export function validateCandidateForm(form: FormGroup) {

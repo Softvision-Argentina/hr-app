@@ -1,39 +1,18 @@
 .nameStyle {
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.25;
-    letter-spacing: normal;
-    color: #c800a1;
-  }
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #c800a1;
+}
 
 .tableHead {
-  color: rgba(0,0,0,.85);
+  color: rgba(0, 0, 0, 0.85);
   font-weight: bold;
   text-align: left;
   vertical-align: middle;
-}
-
-::ng-deep .ant-btn:not(.ant-btn-circle):not(.ant-btn-circle-outline).ant-btn-icon-only {
-  position: absolute;
-  top: 3px;
-  background-color: #fafafa;
-  border: none;
-}
-
-.filterIcon {
-  background-color: #fafafa;
-  border: none;
-  font-size: 15px;
-}
-
-.filterIcon:hover {
-  color:#c800a1;
-}
-
-::ng-deep .filterIcon[_ngcontent-c9]::selection {
-  color:#c800a1;
 }
 
 @media screen and (max-width: 1400px) and (min-width: 1280px) {
@@ -41,45 +20,8 @@
     padding-right: 4px;
     padding-left: 6px;
   }
-
-  .filterButton {
-    margin-left: 15px;
-  }
-
-  .filterIcon {
-    padding-right: 0px;
-    padding-left: 0px;
-  }
-
-  th.noFilter {
-    padding-left: 16px;
-  }
- }
-
-.filterList {
-  max-height: 400px; 
-  overflow: auto;
 }
 
-.submitButton {
-  width: 100%;
-  color: #fafafa;
-  font-weight: bold;
-  background-color: #c800a1;
-  border-radius: 5px;
-  display: none;
-}
-
-.profileItem:target + .tickSign {
-  display: inline;
-}
-
-.tickSign {
-  display: none;
-  color: #c800a1;
-  text-indent: 1em;
-}
-
-.visibleElement {
-  display: inline-block;
+.clearFilters {
+  margin-bottom: 1rem;
 }

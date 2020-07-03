@@ -104,11 +104,10 @@ export class OfficeComponent implements OnInit {
       nzTitle: 'Add New Office',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -162,6 +161,7 @@ export class OfficeComponent implements OnInit {
     const editOffice: Office = this._detailedOffice.filter(office => office.id === officeId)[0];
     this.fillOfficeForm(editOffice);
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Office',
       nzContent: modalContent,
       nzClosable: true,
@@ -169,7 +169,6 @@ export class OfficeComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

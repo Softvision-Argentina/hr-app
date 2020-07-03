@@ -180,7 +180,6 @@ export class ProcessContactComponent implements OnInit {
         },
         {
           label: 'Close',
-          shape: 'default',
           onClick: () => modal.destroy()
         }
       ]

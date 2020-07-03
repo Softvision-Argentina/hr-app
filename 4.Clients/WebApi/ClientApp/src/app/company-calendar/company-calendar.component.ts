@@ -3,7 +3,7 @@ import { CompanyCalendar} from 'src/entities/Company-Calendar';
 import { FacadeService } from '../services/facade.service';
 import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import * as  differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 @Component({
   selector: 'app-company-calendar',
@@ -85,6 +85,7 @@ export class CompanyCalendarComponent implements OnInit {
     this.resetForm();
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New festivity/reminder day',
       nzContent: modalContent,
       nzClosable: true,
@@ -92,7 +93,7 @@ export class CompanyCalendarComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {
@@ -145,6 +146,7 @@ export class CompanyCalendarComponent implements OnInit {
     this.fillCompanyCalendarForm(editedCompanyCalendar);
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Company Calendar',
       nzContent: modalContent,
       nzClosable: true,
@@ -152,7 +154,7 @@ export class CompanyCalendarComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
+          
           onClick: () => modal.destroy()
         },
         {

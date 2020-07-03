@@ -1,53 +1,36 @@
-import { PipesModule } from './pipes/pipes.module';
-import { APP_INITIALIZER } from '@angular/core';
-import { AppConfig } from './app-config/app.config';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { SideMenuComponent } from './side-menu/side-menu.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { NzListModule, NzCardModule, NzAvatarModule, NzSwitchModule, NZ_I18N, en_US, NzCalendarModule, NzModalModule } from 'ng-zorro-antd';
+import { Globals } from './app-globals/globals';
+import { FacadeService } from './services/facade.service';
+import { AppConfig } from './app-config/app.config';
+import { BaseService } from './services/base.service';
 import { RegisterService } from './services/register.service';
 import { CandidateService } from './services/candidate.service';
+import { ReferralsService } from './services/referrals.service';
+import { SkillService } from './services/skill.service';
 import { ProcessService } from './services/process.service';
 import { StageService } from './services/stage.service';
-import { ConfigService } from './services/config.service';
-import { SkillService } from './services/skill.service';
-import { LoaderComponent } from './loader/loader.component';
-import {
-  MatFormFieldModule,
-  MatInputModule,
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatProgressSpinnerModule,
-  MatDatepickerModule,
-  MatNativeDateModule
-} from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
-import { Ng2LoadingSpinnerModule } from 'ng2-loading-spinner';
+import { UserService } from './services/user.service';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { CommonGuard } from './guards/common-guard.service';
+import { HRGuard } from './guards/hr-guard.service';
 import { ManagementGuard } from './guards/management-guard.service';
 import { AdminGuard } from './guards/admin-guard.service';
-import { JwtHelper } from 'angular2-jwt';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
-import { ChartsModule } from 'ng2-charts';
-import { registerLocaleData } from '@angular/common';
-import en from '@angular/common/locales/en';
 import { SkillTypeService } from './services/skillType.service.';
-import { BaseService } from './services/base.service';
-import { FacadeService } from './services/facade.service';
 import { TaskService } from './services/task.service';
-import { UserService } from './services/user.service';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { HRGuard } from './guards/hr-guard.service';
 import { HireProjectionService } from './services/hireProjection.service';
-import { EmployeeCasualtyService } from './services/employee-casualty.service';
-import { CommunityService } from './services/community.service';
 import { CandidateProfileService } from './services/candidate-profile.service';
-
+import { CommunityService } from './services/community.service';
+import { EmployeeCasualtyService } from './services/employee-casualty.service';
 import { EmployeeService } from './services/employee.service';
 import { DaysOffService } from './services/days-off.service';
 import { RoomService } from './services/room.service';
@@ -55,64 +38,54 @@ import { ReservationService } from './services/reservation.service';
 import { OfficeService } from './services/office.service';
 import { RoleService } from './services/role.service';
 import { CompanyCalendarService } from './services/company-calendar.service';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { HttpClientJsonpModule } from '@angular/common/http';
-import { NZ_ICONS } from 'ng-zorro-antd';
-import { IconDefinition } from '@ant-design/icons-angular';
-import * as AllIcons from '@ant-design/icons-angular/icons';
-import { NzCalendarComponent } from './nz-calendar/NzCalendar';
-import { NzPopoverModule } from 'ng-zorro-antd';
-import { Globals } from './app-globals/globals';
-import { NumbersOnlyDirective } from './directives/numbersOnlyDirective';
-import { SlickModule } from 'ngx-slick';
 import { PostulantsService } from './services/postulants.service';
 import { DeclineReasonService } from './services/decline-reason.service';
 import { ReaddressReasonService } from './services/readdress-reason.service';
 import { ReaddressReasonTypeService } from './services/readdress-reason-type.service';
-import { InterviewService } from './services/interview.service';
-import { PreferencesComponent } from './preferences/preferences.component';
-import { HasRoleDirective } from 'src/app/directives/appHasRole.directive';
 import { PreOfferService } from './services/pre-offer.service';
-import { SideMenuComponent } from './side-menu/side-menu.component';
-import { AppRoutingModule } from './app-routing.module';
-import { ReferralsService } from './services/referrals.service';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { InterviewService } from './services/interview.service';
+import { LocationStrategy, HashLocationStrategy, CommonModule } from '@angular/common';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ChartsModule } from 'ng2-charts';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ToastrModule } from 'ngx-toastr';
+import { PipesModule } from './pipes/pipes.module';
+import { IconsProviderModule } from './icons-provider.module';
+import { HasRoleDirective } from './directives/appHasRole.directive';
 import { OpenPositionService } from './services/open-position.service';
 import { ReferralsModule } from './referrals/referrals/referrals.module';
 
-registerLocaleData(en);
-
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
-
 @NgModule({
   declarations: [
-    NumbersOnlyDirective,
-    NzCalendarComponent,
     AppComponent,
-    NavMenuComponent,
-    LoaderComponent,
-    PreferencesComponent,
     HasRoleDirective,
-    SideMenuComponent
+    SideMenuComponent,
+    NavMenuComponent,
+    PreferencesComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    BrowserModule,
-    HttpModule,
+    BrowserModule.withServerTransition({ appId: 'recru-webapp' }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {
+          return localStorage.getItem("currentUser");
+        }
+      }
+    }),
+    CommonModule,
+    AppRoutingModule,
     FormsModule,
     HttpClientModule,
     HttpClientJsonpModule,
-    ReactiveFormsModule,
-    NgZorroAntdModule,
-    BrowserAnimationsModule,
     ScrollingModule,
-    DragDropModule,
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
     ReactiveFormsModule,
     MatInputModule,
     MatAutocompleteModule,
@@ -122,23 +95,23 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BrowserAnimationsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgZorroAntdModule,
-    NzPopoverModule,
     ChartsModule,
     DragDropModule,
-    SlickModule.forRoot(),
     ToastrModule.forRoot(),
     PipesModule,
-    Ng2LoadingSpinnerModule.forRoot({}),
-    AppRoutingModule,
+    IconsProviderModule,
+    NzAvatarModule,
+    NzCardModule,
+    NzListModule,
+    NzSwitchModule,
+    NzCalendarModule,
+    NzModalModule,
     ReferralsModule
   ],
   providers: [
     Globals,
-    { provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons },
     FacadeService,
     AppConfig,
-    { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.load(), deps: [AppConfig], multi: true },
     BaseService,
     RegisterService,
     CandidateService,
@@ -146,9 +119,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SkillService,
     ProcessService,
     StageService,
-    ConfigService,
     UserService,
-    JwtHelper,
+    JwtHelperService,
     CommonGuard,
     HRGuard,
     ManagementGuard,
@@ -174,8 +146,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     InterviewService,
     OpenPositionService,
     { provide: NZ_I18N, useValue: en_US },
-    {provide : LocationStrategy , useClass: HashLocationStrategy},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

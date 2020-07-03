@@ -5,7 +5,8 @@ import { RouterModule } from '@angular/router';
 import { DaysOffComponent } from './days-off.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NZ_I18N, en_US } from 'ng-zorro-antd';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
     declarations: [DaysOffComponent],
@@ -15,9 +16,9 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
         FormsModule,
         PipesModule,
         ReactiveFormsModule,
-        NgZorroAntdModule
+        SharedModule
     ],
-    exports: [DaysOffComponent],
+    exports: [ DaysOffComponent ],
     providers: [{ provide: NZ_I18N, useValue: en_US } ]
 })
 

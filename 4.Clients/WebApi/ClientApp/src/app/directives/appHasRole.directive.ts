@@ -1,6 +1,6 @@
 import { Directive, TemplateRef, ViewContainerRef, OnInit, Input } from '@angular/core';
 import { User } from 'src/entities/user';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Directive({
     selector: '[appHasRole]'
@@ -12,7 +12,7 @@ export class HasRoleDirective implements OnInit {
     constructor(
         private viewContainerRef: ViewContainerRef,
         private templateRef: TemplateRef<any>,
-        private jwtHelper: JwtHelper
+        private jwtHelperService: JwtHelperService
     ) {
         this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     }
@@ -25,7 +25,7 @@ export class HasRoleDirective implements OnInit {
 
   isUserAuthenticated(): boolean {
     let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser != null && !this.jwtHelper.isTokenExpired(currentUser.token)) {
+    if (currentUser != null && !this.jwtHelperService.isTokenExpired(currentUser.token)) {
       return true;
     }
     else {

@@ -95,6 +95,7 @@ export class CommunitiesComponent implements OnInit {
     }
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Add New Community',
       nzContent: modalContent,
       nzClosable: true,
@@ -102,7 +103,6 @@ export class CommunitiesComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {
@@ -153,6 +153,7 @@ export class CommunitiesComponent implements OnInit {
     this.fillCommunityForm(editedCommunity);
 
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Edit Community',
       nzContent: modalContent,
       nzClosable: true,
@@ -160,7 +161,6 @@ export class CommunitiesComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          shape: 'default',
           onClick: () => modal.destroy()
         },
         {

@@ -44,9 +44,6 @@ button.ant-modal-close.ng-star-inserted {
   outline: none;
 }
 
-button > i {
-  vertical-align: unset !important;
-}
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -74,13 +71,11 @@ nz-table img {
 }
 
 .highlightedSkill {
-  width: 101%;
-  margin-left: 167px;
   box-sizing: border-box;
   background: #fff;
   background-clip: padding-box;
   border: solid 5px transparent;
-  border-radius: 1em;
+  border-radius: 4px;
 }
 
 .highlightedSkill:before {
@@ -92,7 +87,6 @@ nz-table img {
   bottom: 0;
   left: 0;
   z-index: -1;
-  margin: -5px;
   border-radius: inherit;
   background: linear-gradient(to top, #f4633a, #c800a1);
 }
@@ -113,4 +107,10 @@ nz-table img {
 
 .search-button {
   margin-right: 8px;
+}
+
+.modal-custom {
+  .ant-modal-title {
+    font-family: "ProximaNova-Bold";
+  }
 }

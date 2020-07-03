@@ -65,7 +65,6 @@ export class StageEditComponent implements OnInit {
     this.facade.userService.get()
       .subscribe(res => {
         this.users = res;
-        console.log(this.users);
       }, err => {
         console.log(err);
       });

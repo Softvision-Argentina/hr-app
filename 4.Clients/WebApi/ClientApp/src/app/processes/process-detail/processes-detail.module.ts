@@ -5,7 +5,7 @@ import { ProcessDetailRoutes } from './processes-detail.routes';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NZ_I18N, en_US } from 'ng-zorro-antd';
 import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
@@ -16,7 +16,6 @@ import { PipesModule } from '../../pipes/pipes.module';
         SharedModule,
         FormsModule,
         ReactiveFormsModule,
-        NgZorroAntdModule,
         PipesModule
     ],
     exports: [ProcessDetailComponent],

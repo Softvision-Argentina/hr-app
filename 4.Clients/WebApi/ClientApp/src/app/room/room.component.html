@@ -1,7 +1,7 @@
 <div nz-row>
     <div nz-col nzSpan="22">
         <button nz-button nzType="primary" (click)="showAddModal(roomModal)" nzShape="round">
-        <i nz-icon type="plus" theme="outline"></i>Add new Room</button>
+            <i nz-icon nzType="plus" theme="outline"></i>Add new Room</button>
     </div>
 </div>
 
@@ -11,10 +11,10 @@
         <nz-table #RoomTable [nzData]="detailedRoom" [nzPageSize]="10">
             <thead>
                 <tr>
-                    <th [style.text-align]="'center'">Name</th>
-                    <th [style.text-align]="'center'">Description</th>
-                    <th [style.text-align]="'center'">Office</th>
-                    <th [style.text-align]="'center'">Action</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Office</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,11 +22,13 @@
                     <td>{{ room.name }}</td>
                     <td>{{ room.description | truncate:75 }}</td>
                     <td>{{ getOfficeNameByID(room.officeId) }}</td>
-                    <td [style.text-align]="'center'">
+                    <td>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showEditModal(roomModal, room.id)" style="cursor: pointer;" nz-icon type="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+                        <i (click)="showEditModal(roomModal, room.id)" style="cursor: pointer;" nz-icon nzType="edit"
+                            theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i (click)="showDeleteConfirm(room.id)" style="cursor: pointer;" nz-icon type="delete" theme="outline" nzTitle="Delete" nz-tooltip hidden="true"></i>
+                        <i (click)="showDeleteConfirm(room.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
                     </td>
                 </tr>
             </tbody>
@@ -40,19 +42,22 @@
             <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
-                        <nz-form-explain *ngIf="roomForm.get('name').dirty && roomForm.get('name').errors">
-                            <ng-container *ngIf="roomForm.get('name')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
+                        <input type="text" nz-input formControlName="name" id="name"
+                            placeholder="Please input the Name">
+                        <ng-template #nameErrorMsg>
+                            <ng-container *ngIf="roomForm.get('name').dirty && roomForm.get('name').errors">
+                                <ng-container *ngIf="roomForm.get('name')?.hasError('trimBeginError')">
+                                    The input has leading whitespace!
+                                </ng-container>
+                                <ng-container *ngIf="roomForm.get('name')?.hasError('trimEndError')">
+                                    The input has trailing whitespace!
+                                </ng-container>
+                                <ng-container *ngIf="roomForm.get('name')?.hasError('required')">
+                                    Please input the name!
+                                </ng-container>
                             </ng-container>
-                            <ng-container *ngIf="roomForm.get('name')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="roomForm.get('name')?.hasError('required')">
-                                Please input the name!
-                            </ng-container>
-                        </nz-form-explain>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -61,19 +66,23 @@
             <div nz-col nzSpan="22">
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <input type="text" nz-input formControlName="description" id="description" placeholder="Please input the description">
-                        <nz-form-explain *ngIf="roomForm.get('description').dirty && roomForm.get('description').errors">
-                            <ng-container *ngIf="roomForm.get('description')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+                        <input type="text" nz-input formControlName="description" id="description"
+                            placeholder="Please input the description">
+                        <ng-template #descriptionErrorMsg>
+                            <ng-container
+                                *ngIf="roomForm.get('description').dirty && roomForm.get('description').errors">
+                                <ng-container *ngIf="roomForm.get('description')?.hasError('trimBeginError')">
+                                    The input has leading whitespace!
+                                </ng-container>
+                                <ng-container *ngIf="roomForm.get('description')?.hasError('trimEndError')">
+                                    The input has trailing whitespace!
+                                </ng-container>
+                                <ng-container *ngIf="roomForm.get('description')?.hasError('required')">
+                                    Please input the description!
+                                </ng-container>
                             </ng-container>
-                            <ng-container *ngIf="roomForm.get('description')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="roomForm.get('description')?.hasError('required')">
-                                Please input the description!
-                            </ng-container>
-                        </nz-form-explain>
+                        </ng-template>
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>

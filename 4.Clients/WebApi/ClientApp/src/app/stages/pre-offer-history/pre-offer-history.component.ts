@@ -94,7 +94,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
       nzTitle: 'Pre-Offer history',
       nzContent: modalContent,
       nzClosable: false,
-      nzWrapClassName: 'vertical-center-modal',
+      nzWrapClassName: 'vertical-center-modal modal-custom',
       nzWidth: '60%',
       nzFooter: null
     });

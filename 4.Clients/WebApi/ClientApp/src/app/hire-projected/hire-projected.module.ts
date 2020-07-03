@@ -21,8 +21,8 @@ import { HireProjectedComponent } from './hire-projected.component';
     RouterModule.forChild(HireProjectedRoutes),
     CommonModule,
     FormsModule,
-    NzFormModule,
     ReactiveFormsModule,
+    NzFormModule,
     NzTableModule,
     NzDropDownModule,
     NzDividerModule,
@@ -31,6 +31,16 @@ import { HireProjectedComponent } from './hire-projected.component';
     NzIconModule,
     NzInputModule
   ],
-  exports: [HireProjectedComponent]
+  exports: [
+    HireProjectedComponent,
+    NzFormModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzDividerModule,
+    NzDatePickerModule,
+    NzButtonModule,
+    NzIconModule,
+    NzInputModule
+  ]
 })
 export class HireProjectedModule { }

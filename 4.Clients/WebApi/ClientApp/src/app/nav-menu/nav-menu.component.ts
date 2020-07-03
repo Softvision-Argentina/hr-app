@@ -1,12 +1,9 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
-import { JwtHelper } from 'angular2-jwt';
 import { Router, NavigationEnd } from '@angular/router';
 import { GoogleSigninComponent } from '../login/google-signin.component';
-import { AppComponent } from '../app.component';
 import { User } from 'src/entities/user';
-import { FacadeService } from '../services/facade.service';
-import { SearchbarPlaceholderEnum } from '../../entities/enums/searchbar-placeholder-enum';
-import { ReferralsService } from '../services/referrals.service';
+import { ReferralsService } from '@app/services/referrals.service';
+import { FacadeService } from '@app/services/facade.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -17,8 +14,6 @@ import { ReferralsService } from '../services/referrals.service';
 export class NavMenuComponent implements OnInit {
 
   constructor(
-    private jwtHelper: JwtHelper,
-    private _appComponent: AppComponent,
     private router: Router,
     private google: GoogleSigninComponent,
     private facade: FacadeService,
@@ -54,6 +49,7 @@ export class NavMenuComponent implements OnInit {
 
   showPreferencesModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
+      nzWrapClassName: 'modal-custom',
       nzTitle: 'Manage Preferences',
       nzContent: modalContent,
       nzClosable: true,

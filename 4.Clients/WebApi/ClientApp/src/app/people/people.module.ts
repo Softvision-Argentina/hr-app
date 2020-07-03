@@ -5,7 +5,7 @@ import { PeopleRoutes } from './people.routes';
 import { CommonModule } from '@angular/common';
 import { CandidatesModule } from '../candidates/candidates.module';
 import { SharedModule } from '../shared.module';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NZ_I18N, en_US } from 'ng-zorro-antd';
 
 @NgModule({
     declarations: [PeopleComponent],
@@ -13,8 +13,7 @@ import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
         RouterModule.forChild(PeopleRoutes),
         CommonModule,
         CandidatesModule,
-        SharedModule,
-        NgZorroAntdModule
+        SharedModule
     ],
     exports: [PeopleComponent],
     providers: [{ provide: NZ_I18N, useValue: en_US } ]

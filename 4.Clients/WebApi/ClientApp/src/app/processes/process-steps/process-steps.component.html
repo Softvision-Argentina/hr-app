@@ -1,6 +1,6 @@
-<a *ngIf="process" [routerLink]="['/process-details/', process.id]">Go back to Process details</a>
+<a *ngIf="process" routerLink="['/process-details/', process.id]">Go back to Process details</a>
 <nz-divider></nz-divider>
-<h4>Process <i *ngIf="processStatus === 'finish'" nz-icon type="check-circle" theme="outline"></i></h4>
+<h4>Process <i *ngIf="processStatus === 'finish'" nz-icon nzType="check-circle" theme="outline"></i></h4>
 <p *ngIf="process && process.candidate">Candidate: {{process.candidate.name}} {{process.candidate.lastName}}</p>
 <div nz-row>
   <label>Choose view</label>
@@ -14,29 +14,29 @@
 <br>
 
 <nz-divider nzText="Process progress"></nz-divider>
-
+<!-- 
 <div *ngIf="process && selectedView === 'vertical'" nz-row>
-  <div nz-col nzSpan="22">
+  <div nz-col nzSpan="24">
     <nz-steps *ngIf="process.stages && process.stages.length > 0" nzDirection="vertical">
       <nz-step *ngFor="let stage of process.stages" [nzTitle]="stage.title" [nzStatus]="stage.status.toLowerCase()"
         [nzDescription]="stage.description">
       </nz-step>
     </nz-steps>
   </div>
-</div>
+</div> -->
 
-<div *ngIf="process && selectedView === 'horizontal'" nz-row>
-  <div nz-col nzSpan="22">
+<!-- <div *ngIf="process && selectedView === 'horizontal'" nz-row>
+  <div nz-col nzSpan="24">
     <nz-steps *ngIf="process.stages && process.stages.length > 0" nzDirection="horizontal" nzSize="small">
       <nz-step *ngFor="let stage of process.stages" [nzTitle]="stage.title" [nzStatus]="stage.status.toLowerCase()"
         [nzDescription]="stage.description">
       </nz-step>
     </nz-steps>
   </div>
-</div>
+</div> -->
 
-<div *ngIf="process && selectedView === 'timeline'" nz-row>
-  <div nz-col nzSpan="22">
+<!-- <div *ngIf="process && selectedView === 'timeline'" nz-row>
+  <div nz-col nzSpan="24">
 
     <nz-timeline *ngIf="process.stages && process.stages.length > 0">
         <nz-timeline-item *ngFor="let stage of process.stages" [nzColor]="getStatusColor(stage.status)">
@@ -50,8 +50,8 @@
     </nz-timeline>
 
   </div>
-</div>
+</div> -->
 
 
 <nz-divider></nz-divider>
-<a *ngIf="process" [routerLink]="['/process-details/', process.id]">Go back to Process details</a>
+<a *ngIf="process" routerLink="['/process-details/', process.id]">Go back to Process details</a>

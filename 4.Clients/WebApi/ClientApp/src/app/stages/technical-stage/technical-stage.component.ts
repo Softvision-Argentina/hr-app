@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy  } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
@@ -86,6 +86,7 @@ export class TechnicalStageComponent implements OnInit {
   englishLevelList: any[];
   disabledSeniority = false;
   chosenSeniority: number;
+  ownerId: number;
 
   readdressStatus: ReaddressStatus = new ReaddressStatus();
   currentReaddressDescription: string = "";
@@ -121,7 +122,6 @@ export class TechnicalStageComponent implements OnInit {
     this.processService.selectedSeniorities.subscribe(sr => this.selectedSeniorities = sr);
     this.getSkills();
     this.changeFormStatus(false);
-    if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
     this.getFilteredUsersForTech();    
   }
 
@@ -133,13 +133,14 @@ export class TechnicalStageComponent implements OnInit {
     this.facade.userService.getFilteredForTech()
       .subscribe(res => {
         this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
+        if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
   }
 
-  updateSeniority(seniorityId) {
-    this.technicalForm.controls['alternativeSeniority'].enable();
+    updateSeniority(seniorityId: number) {
+        this.technicalForm.controls['alternativeSeniority'].enable();
     if (this.chosenSeniority) {
       if (this.chosenSeniority !== seniorityId + 1 && this.chosenSeniority !== seniorityId - 1) {
         this.technicalForm.controls['alternativeSeniority'].setValue(0);
@@ -246,7 +247,6 @@ export class TechnicalStageComponent implements OnInit {
   getFormDataSkills(): CandidateSkill[] {
     this.removeEmptyOrInvalidSkillFields();
     const candidateSkills: CandidateSkill[] = [];
-
     this.controlArray.forEach(skillControl => {
       const skill: CandidateSkill = {
         candidateId: 0,
@@ -256,7 +256,7 @@ export class TechnicalStageComponent implements OnInit {
         rate: this.technicalForm.controls[skillControl.controlInstance[1]].value,
         comment: this.technicalForm.controls[skillControl.controlInstance[2]].value
       };
-      
+
       candidateSkills.push(skill);
     });
 
@@ -336,7 +336,6 @@ export class TechnicalStageComponent implements OnInit {
           id,
           controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
         };
-
         const index = this.controlArray.push(control);
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(id.toString()));
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
@@ -473,11 +472,11 @@ export class TechnicalStageComponent implements OnInit {
   removeEmptyOrInvalidSkillFields() {
     let skillControl, skillIdField, index;
 
-    for(index = this.controlArray.length - 1; index >= 0; index--) {
+    for (index = this.controlArray.length - 1; index >= 0; index--) {
       skillControl = this.controlArray[index];
       skillIdField = this.technicalForm.controls[skillControl.controlInstance[0]];
 
-      if(skillIdField.value === null) {
+      if (skillIdField.value === null) {
         let fakeMouseEvent = new MouseEvent('click');
         this.removeField(skillControl, fakeMouseEvent);
       }

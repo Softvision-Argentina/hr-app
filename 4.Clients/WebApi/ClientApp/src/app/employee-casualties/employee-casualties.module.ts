@@ -20,10 +20,10 @@ import { CommonModule } from '@angular/common';
   imports: [
     RouterModule.forChild(EmployeeCasualtiesRoutes),
     CommonModule,
-    NzTableModule,
-    NzDropDownModule,
     FormsModule,
     ReactiveFormsModule,
+    NzTableModule,
+    NzDropDownModule,
     NzFormModule,
     NzDividerModule,
     NzDatePickerModule,
@@ -31,6 +31,16 @@ import { CommonModule } from '@angular/common';
     NzInputModule,
     NzIconModule
   ],
-  exports: [EmployeeCasualtiesComponent]
+  exports: [
+    EmployeeCasualtiesComponent,
+    NzTableModule,
+    NzDropDownModule,
+    NzFormModule,
+    NzDividerModule,
+    NzDatePickerModule,
+    NzButtonModule,
+    NzInputModule,
+    NzIconModule
+  ]
 })
 export class EmployeeCasualtiesModule { }

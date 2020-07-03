@@ -16,6 +16,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkillsRoutes } from './skills.routes';
 import { SkillsComponent } from './skills.component';
+import { IconsProviderModule } from '@app/icons-provider.module';
 
 @NgModule({
   declarations: [SkillsComponent],
@@ -33,8 +34,20 @@ import { SkillsComponent } from './skills.component';
     NzModalModule,
     NzListModule,
     NzSelectModule,
-    PipesModule
+    PipesModule,
+    IconsProviderModule
   ],
-  exports: [SkillsComponent]
+  exports: [
+    SkillsComponent,
+    NzFormModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzButtonModule,
+    NzInputModule,
+    NzDividerModule,
+    NzModalModule,
+    NzListModule,
+    NzSelectModule,
+  ]
 })
 export class SkillsModule { }

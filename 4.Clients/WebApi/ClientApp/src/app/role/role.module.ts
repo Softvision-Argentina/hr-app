@@ -21,6 +21,15 @@ import { RoleComponent } from './role.component';
     NzInputModule,
     NzButtonModule
   ],
-  exports: [RoleComponent]
+  exports: [
+    RoleComponent,
+    NzFormModule,
+    NzTableModule,
+    NzDividerModule,
+    NzGridModule,
+    NzSelectModule,
+    NzInputModule,
+    NzButtonModule
+  ]
 })
 export class RoleModule { }

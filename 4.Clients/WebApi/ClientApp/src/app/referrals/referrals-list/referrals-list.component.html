@@ -1,5 +1,5 @@
 <div nz-row>
-  <div nz-col nzSpan="22">
+  <div nz-col nzSpan="24">
     <nz-table #referralsTable [nzData]="referralsList">
     <thead >
       <tr class="tableHead">
@@ -11,10 +11,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let referralItem of referralsTable.data">
-        <td [ngStyle]="getTextColor(referralItem, true)"> {{ referralItem.candidate.name }} {{ referralItem.candidate.lastName }} </td>
+        <td [ngStyle]="getTextColor(referralItem)"> {{ referralItem.candidate.name }} {{ referralItem.candidate.lastName }} </td>
         <td> {{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
-        <td [ngStyle]="getTextColor(referralItem, false)"> {{ referralItem.currentStatus.message }} </td>
-        <td nzAlign='center' >
+        <td [ngStyle]="getTextColor(referralItem)"> {{ referralItem.currentStatus.message }} </td>
+        <td>
           <i nzTitle="Edit referral" nz-tooltip  nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"  (click)="showContactReferralModal(referralItem.candidate)"></i>
         </td>
       </tr>
