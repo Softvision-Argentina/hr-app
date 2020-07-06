@@ -15,7 +15,7 @@ namespace Domain.Services.Impl.Validators.Stages.TechnicalStage
                 RuleFor(_ => _.Status).IsInEnum();
 
                 RuleFor(_ => _.Client).MaximumLength(ValidationConstants.MAX_INPUT);
-                RuleFor(_ => _.Feedback).MaximumLength(5000);
+                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
                 RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
             });
         }

@@ -12,7 +12,7 @@ namespace Domain.Services.Impl.Validators.ReaddressStatus
         {
             RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
             {
-                RuleFor(_ => _.Feedback).MaximumLength(5000);
+                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
                 RuleFor(_ => _.FromStatus).IsInEnum();
                 RuleFor(_ => _.ToStatus).IsInEnum();
             });

@@ -13,7 +13,7 @@ namespace Domain.Services.Impl.Validators.Stages.HrStage
                 RuleFor(_ => _.WantedSalary).LessThan(ValidationConstants.MAX_MONTHLY_INCOME);
 
                 RuleFor(_ => _.AdditionalInformation).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.Feedback).MaximumLength(5000);
+                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
                 RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
 
                 RuleFor(_ => _.EnglishLevel).IsInEnum();

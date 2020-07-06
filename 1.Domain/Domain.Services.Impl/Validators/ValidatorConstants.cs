@@ -10,7 +10,7 @@
     internal class ValidationConstants
     {
         internal const int MAX_INPUT = 50;
-        internal const int MAX_TEXTAREA = 5000;
+        internal const int MAX_TEXTAREA =10000;
         internal const int MAX_INPUT_EMAIL = 60;
         internal const int MAX_MONTHLY_INCOME = 1000000;
         internal const int MAX_DNI = 999999999;
