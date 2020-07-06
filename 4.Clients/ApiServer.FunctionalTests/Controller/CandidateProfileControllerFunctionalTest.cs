@@ -144,7 +144,7 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
-            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.Message);
+            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
         }
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Accepted [202] when data is valid", Skip = "Check community update is not working properly")]
@@ -231,7 +231,7 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
-            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.Message);
+            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
         }
 
         //[Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Accepted [202] when id is valid")]
@@ -267,7 +267,7 @@ namespace ApiServer.FunctionalTests.Controller
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal($"Profile not found for the Profile Id: {invalidId}", httpResultData.ResponseError.Message);
+            Assert.Equal($"Profile not found for the Profile Id: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
         }
     }
 }

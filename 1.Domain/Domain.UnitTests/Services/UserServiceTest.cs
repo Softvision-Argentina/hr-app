@@ -70,7 +70,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         [Fact(DisplayName = "Verify that authenticate returns ReadedUserContract when user is valid")]
         public void Should_ReturnReadedUserContract_When_AuthenticateUserIsValid()
         {
-            string username = "testUser";
+            string username = "testUser@gmail.com";
             var queryValue = new List<User>()
                 { new User()
                     {
@@ -93,7 +93,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         [Fact(DisplayName = "Verify that authenticate returns null when user is invalid")]
         public void Should_ReturnNull_When_AuthenticateUserdIsInvalid()
         {
-            string username = "testUser";
+            string username = "testUser@gmail.com";
 
             var readedUser = _service.AuthenticateExternal(username);
 

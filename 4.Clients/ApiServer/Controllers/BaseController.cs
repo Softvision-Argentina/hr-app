@@ -1,7 +1,11 @@
 ﻿using Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace ApiServer.Controllers
@@ -41,26 +45,49 @@ namespace ApiServer.Controllers
             catch (BusinessValidationException bvex)
             {
                 Logger.LogError(bvex, "Validation Error");
-                foreach (var item in bvex.ValidationMessages)
+
+                var exceptionData = new ExceptionData()
                 {
-                    ModelState.AddModelError(item.Key, item.Value);
-                }
-                return BadRequest(ModelState);
+                    HttpStatusCode = (int) HttpStatusCode.BadRequest,
+                    ErrorCode = bvex.ErrorCode,
+                    ValidationErrors = GetValidationErrors(bvex.ValidationMessages),
+                    ExceptionMessage = bvex.Message,
+                    InnerExceptionMessage = bvex.InnerException != null ? bvex.InnerException.Message : string.Empty,
+                    AdditionalInfo = bvex.Data
+                };
+
+
+                return BadRequest(exceptionData);
             }
             catch (BusinessException ex)
             {
                 Logger.LogError(ex, "Business Exception");
-                return StatusCode((int)HttpStatusCode.InternalServerError, new
+
+                var exceptionData = new ExceptionData()
                 {
-                    message = ex.Message,
-                    errorCode = ex.ErrorCode,
-                    additionalData = ex.Data
-                });
+                    HttpStatusCode = (int)HttpStatusCode.BadRequest,
+                    ErrorCode = ex.ErrorCode,
+                    ValidationErrors = null,
+                    ExceptionMessage = ex.Message ?? "Business Exception",
+                    InnerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                    AdditionalInfo = ex.Data
+                };
+
+                return BadRequest(exceptionData);
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Not expected Exception");
-                throw ex;
+                var exceptionData = new ExceptionData()
+                {
+                    HttpStatusCode = (int) HttpStatusCode.InternalServerError,
+                    ErrorCode = (int) ApplicationErrorMainCodes.NotExpected,
+                    ValidationErrors = null,
+                    ExceptionMessage = ex.Message ?? "Not expected exception message",
+                    InnerExceptionMessage = ex.InnerException.Message ?? "Not expected inner exception message",
+                    AdditionalInfo = ex.Data
+                };
+
+                return StatusCode((int) HttpStatusCode.InternalServerError, exceptionData);
             }
         }
 
@@ -86,6 +113,18 @@ namespace ApiServer.Controllers
             }
 
             return jsonData;
+        }
+
+        private List<ValidationError> GetValidationErrors(IReadOnlyList<KeyValuePair<string, string>> keyValueErrors)
+        {
+            var validationsErrors = new List<ValidationError>();
+
+            keyValueErrors.ToList().ForEach((error) =>
+            {
+                validationsErrors.Add(new ValidationError() { Name = error.Key, Description = error.Value });
+            });
+
+            return validationsErrors;
         }
     }
 }

@@ -112,11 +112,11 @@ namespace Core.Testing.Platform
 
             return result;
         }
-        private ResponseError ParseJsonStringErrorToResponseError(string responseString)
+        private ExceptionData ParseJsonStringErrorToResponseError(string responseString)
         {
             try
             {
-                return JsonConvert.DeserializeObject<ResponseError>(responseString);
+                return JsonConvert.DeserializeObject<ExceptionData>(responseString);
             }
             catch (Exception)
             {

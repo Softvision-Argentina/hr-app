@@ -221,7 +221,7 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.Equal(beforeDeleteCommunityCount, afterDeleteCommunityCount);
-            Assert.Equal($"Community not found for the CommunityId: {invalidId}", httpResultData.ResponseError.Message);
+            Assert.Equal($"Community not found for the CommunityId: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
         }
 
         [Fact(DisplayName = "Verify api/login [Ping] is Ok [200]")]

@@ -1,5 +1,13 @@
+export class ValidationError{
+    name: string;
+    description: string;
+}
+
 export class ErrorResponse {
-    additionalData: any;
+    additionalInfo: any;
     errorCode: number;
-    message: string;
+    exceptionMessage: string;
+    httpStatusCode: number;
+    innerExceptionMessage: string;
+    validationErrors: ValidationError[];
 }

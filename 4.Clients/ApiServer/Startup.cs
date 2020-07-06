@@ -4,6 +4,7 @@ using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
 using Domain.Services.ExternalServices.Config;
+using FluentValidation;
 using Mailer;
 using Mailer.Entities;
 using Mailer.Interfaces;
@@ -46,6 +47,8 @@ namespace ApiServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            ValidatorOptions.LanguageManager.Enabled = false;
+
             var jwtSettings = new JwtSettings
             {
                 Key = Configuration["jwtSettings:key"],

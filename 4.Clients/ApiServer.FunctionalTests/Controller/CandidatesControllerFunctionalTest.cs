@@ -56,7 +56,7 @@ namespace ApiServer.FunctionalTests.Controller
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
             Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
-            Assert.Equal("Phone number already exists", httpResultData.ResponseError.Message);
+            Assert.Equal("Phone number already exists", httpResultData.ResponseError.ExceptionMessage);
         }
 
         //[Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
@@ -247,7 +247,8 @@ namespace ApiServer.FunctionalTests.Controller
                 User = new ReadedUserViewModel() { Id = userInDb.Id },
                 Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
                 Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-                LinkedInProfile = "/linkedin"
+                LinkedInProfile = "/linkedin",
+                PhoneNumber = "0111551277868"
             };
 
             //Act
@@ -328,7 +329,7 @@ namespace ApiServer.FunctionalTests.Controller
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal("Email address already exists", httpResultData.ResponseError.Message);
+            Assert.Equal("Email address already exists", httpResultData.ResponseError.ExceptionMessage);
             Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
         }
 
@@ -477,7 +478,7 @@ namespace ApiServer.FunctionalTests.Controller
 
             //Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.Message);
+            Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.ExceptionMessage);
         }
 
         

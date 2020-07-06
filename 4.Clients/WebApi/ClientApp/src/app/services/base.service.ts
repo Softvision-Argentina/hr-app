@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { AppConfig } from '../app-config/app.config';
@@ -15,6 +15,8 @@ export class BaseService<T> {
   public apiUrl: string;
   public data: BehaviorSubject<T[]> = new BehaviorSubject<T[]>(null);
   public currentId: Subject<number> = new Subject<number>();
+  public defaultServerErrorMessage: string = "The service is not available now. Try again later.";
+
   constructor(private router: Router, private config: AppConfig, public http: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
     this.token = user !== null ? user.token : null;
@@ -94,46 +96,32 @@ export class BaseService<T> {
         catchError(this.handleErrors));
   }
 
-  public getErrorMessage(error): string {
-    let errorMessage = 'Ha ocurrido un error';
+  public handleErrors = (httpErrorResponse) => {
 
-    // TODO is this okay? Should this be error && error.error?
-    if (!error && !error.error) {
-      for (const msg in error.error) {
-        if (error.error.hasOwnProperty(msg)) {
-          errorMessage = errorMessage.concat(msg);
-        }
-      }
+    let errorObject: ErrorResponse = httpErrorResponse.error;
+
+    if (httpErrorResponse.status == 500){
+      return throwError([this.defaultServerErrorMessage]);
     }
 
-    return errorMessage;
-  }
-
- public handleErrors = (error) => {
-
-    // Cuando el error que devuelve el BE es un 400 (Bad Request), los errores llegan en formato key/value
-    if (error.error && error.status !== 400) {
-      return throwError(error.error as ErrorResponse);
-    }
-
-    else if (error.status === 400) {
-      const errMessage = this.getErrorMessage(error);
-
-      const err: ErrorResponse = {
-        additionalData: {},
-        errorCode: error.status,
-        message: errMessage
+    else if (httpErrorResponse.status == 400){
+      if (errorObject.errorCode == 200){
+        //back-end validation error from fluent validation
+        let errorArray = [];
+        errorObject.validationErrors.forEach(error => {
+          errorArray.push(error.description);
+        })
+        return throwError(errorArray);
       }
-      return throwError(err);
+      else{
+        //back-end business validations such as uniqueness of names and others
+        return throwError([errorObject.exceptionMessage]);
+      }
     }
 
     else {
-      const err: ErrorResponse = {
-        additionalData: {},
-        errorCode: error.status,
-        message: error.message
-      }
-      return throwError(err);
+      return throwError([this.defaultServerErrorMessage]);
     }
-  };
+
+  }
 }

@@ -29,6 +29,7 @@
         ReaddressReasonType = 2400,
         ReaddressStatus = 2500,
 
-        Dummy = 99999
+        Dummy = 99999,
+        NotExpected = 999999
     }
 }

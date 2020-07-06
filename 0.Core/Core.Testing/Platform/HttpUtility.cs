@@ -11,18 +11,11 @@ namespace Core.Testing.Platform
         public const string PUT = "PUT";
     }
 
-    public class ResponseError
-    {
-        public string Message { get; set; }
-        public int ErrorCode { get; set; }
-        public IDictionary AdditionalData { get; set; }
-    }
-
     public class HttpResultData<T> where T : class
     {
         public HttpResponseMessage Response { get; set; }
         public string ResponseString { get; set; }
         public T ResponseEntity { get; set; }
-        public ResponseError ResponseError { get; set; }
+        public ExceptionData ResponseError { get; set; }
     }
 }
