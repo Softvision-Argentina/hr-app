@@ -31,7 +31,7 @@
     <div nz-row *ngIf="CanShowReaddressPossibility()">
         <div nz-col nzSpan="12">
         <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24">
+            <nz-form-label [nzSm]="6" [nzXs]="24">
             Reason
             </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -47,10 +47,10 @@
     
         <div nz-col nzSpan="12">
         <nz-form-item>
-            <nz-form-label [nzSm]="10" [nzXs]="24">
+            <nz-form-label [nzSm]="6" [nzXs]="24">
             Reason explanation
             </nz-form-label>
-            <nz-form-control [nzSm]="7" [nzXs]="24">
+            <nz-form-control [nzSm]="14" [nzXs]="24">
             <textarea rows="1 " nz-input id="readdressReason" formControlName="reasonDescriptionTextAreaControl"
                         placeholder="Input the reason"
                         (input)="onDescriptionChange($event.target.value)"></textarea>
