@@ -1,7 +1,17 @@
 {
-    "apiUrl": "http://someUrl/api/",
-    "clientId": "709137403761-5a8rphtf85q4r98p2fm8gkphk5ra7ju4.apps.googleusercontent.com",
-    "scopes": ["profile", "email"],
-    "taskDeadline": 3,
-    "roles": ["Admin", "HRManagement", "HRUser", "Interviewer"]
+  "apiUrl": "https://webapihrappqa.azurewebsites.net/api/",
+  "clientId": "328994200031-ik9vp7ao94bivcsjd4jplesirh1m7i3k.apps.googleusercontent.com",
+  "scopes": ["profile", "email"],
+  "taskDeadline": 3,
+  "roles": [
+    "Admin",
+    "HRManagement",
+    "HRUser",
+    "Interviewer",
+    "TechnicalInterviewer",
+    "Common",
+    "CommunityManager",
+    "Recruiter",
+    "Employee"
+  ]
 }

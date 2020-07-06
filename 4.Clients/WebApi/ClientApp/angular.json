@@ -19,7 +19,7 @@
           "options": {
             "progress": true,
             "extractCss": true,
-            "outputPath": "dist/recru-webapp/browser",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
