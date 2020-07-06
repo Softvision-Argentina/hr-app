@@ -563,7 +563,3 @@ FakesAssemblies/
 /4.Clients/package-lock.json
 *.csproj.nuget.g.targets
 
-
-# Google auth token file
-**/ApiServer/token.json/**
-
