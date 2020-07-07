@@ -14,7 +14,6 @@
   vertical-align: middle;  
 }
 
-
 @media screen and (max-width: 1400px) and (min-width: 1280px) {
   th.tableHead {
     padding-right: 4px;
@@ -40,6 +39,19 @@
   overflow: auto;
 }
 
+.submitButton {
+  width: 100%;
+  color: #fafafa;
+  font-weight: bold;
+  background-color: #c800a1;
+  border-radius: 5px;
+  display: none;
+}
+
+.visibleElement {
+  display: inline-block;
+}
+
 .vector {
   width: 13px;
   object-fit: contain;
@@ -63,5 +75,11 @@
 .apply {
   font-size: 16px;
   font-family: ProximaNova-Bold; 
+}
+
+.tickSign {
+  display: none;
+  color: #C800A1;
+  text-indent: 1em;
 }
 

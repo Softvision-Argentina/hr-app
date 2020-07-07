@@ -129,7 +129,7 @@ export class ProcessTableComponent implements OnChanges {
     }
 
     getStatus(status: number): string {
-        return this.statusList.find(st => st.id === status).name;
+        return this.statusList.find(st => st.id === status).name;        
     }
 
     getCurrentStage(cr: number): string {

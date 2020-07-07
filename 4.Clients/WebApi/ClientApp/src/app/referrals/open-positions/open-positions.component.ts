@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { Globals } from 'src/app/app-globals/globals';
+import { User } from 'src/entities/user';
+import { FacadeService } from 'src/app/services/facade.service';
+import { OpenPosition } from 'src/entities/open-position';
 import { ColumnItem } from 'src/entities/ColumnItem';
 
 @Component({
@@ -7,18 +10,29 @@ import { ColumnItem } from 'src/entities/ColumnItem';
   templateUrl: './open-positions.component.html',
   styleUrls: ['./open-positions.component.scss']
 })
-export class OpenPositionsComponent {
+export class OpenPositionsComponent implements OnInit, OnChanges {  
   @Input() positionsDisplayData = [];
   @Input() communities;
+  @Input() filteredPositions;
   @Output() searchCommunity = new EventEmitter();
   @Output() searchPriority = new EventEmitter();
-  
-  seniorityList: any[] = [];
+  @Output() showEdit = new EventEmitter();  
+  @Output() showDeleteConfirm = new EventEmitter();  
+
+  seniorityList: any[] = [];  
+  currentUser: User;
+  filterParameters = [];  
+  listOfDisplayDataAfterFilter = [];
+  selectedCommunities = [];
   listOfColumns: ColumnItem[];
   priorityFilterList: any =  [ { text: 'HOT', value: 'HOT'}, { text: 'NOT HOT', value: 'NOT HOT'} ];
+
+  constructor(private globals: Globals, private facade: FacadeService) {    
+    this.seniorityList = globals.seniorityList    
+  }
   
-  constructor(private globals: Globals) {
-    this.seniorityList = globals.seniorityList;
+  ngOnInit(){
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnChanges() {
@@ -30,7 +44,9 @@ export class OpenPositionsComponent {
           name: 'Title'
         },
         {
-          name: 'Seniority'
+          name: 'Seniority',
+          listOfFilter: this.seniorityList.map((value, index) => { return { text: value.name, value: value.id } }),
+          filterFn: (seniorityIdList: number[], item: any) => seniorityIdList.some(id => this.getSeniorityName(item.seniority).indexOf(this.getSeniorityName(id)) !== -1)          
         },
         {
           name: 'Studio'
@@ -46,7 +62,7 @@ export class OpenPositionsComponent {
           filterFn: (priorityName: string, item: any) => priorityName.indexOf(this.getPriorityName(item.priority)) !== -1
         },
         {
-          name: 'Apply your referral'
+          name:  this.isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter']) ? 'Actions' : 'Apply your referral'
         }
       ];
     }
@@ -83,5 +99,16 @@ export class OpenPositionsComponent {
 
   getPriorityName(priority: boolean): string {
     return priority ? 'HOT' : 'NOT HOT';
+  }
+  emitDelete(id: number){
+    this.showDeleteConfirm.emit(id);
+  }
+
+  emitEdit(positionToEdit: OpenPosition){
+    this.showEdit.emit(positionToEdit);
+  }
+
+  isUserRole(roles: string[]): boolean {
+    return this.facade.appService.isUserRole(roles);
   }
 }

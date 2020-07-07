@@ -1,42 +1,35 @@
 <br />
 <br />
 <div nz-row>
-  <h1 class="headerFont">Hello and Welcome {{currentUser.firstName}}!</h1>
+  <h1 *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])" class="headerFont">Hello and Welcome {{currentUser.firstName}}!</h1>
 </div>
 <br />
-<div nz-row class="referralsTabset">
-  <div nz-col nzSpan="22">
-    <nz-tabset [nzTabBarExtraContent]="newReferralsButton">
+<div class="proximanova-r">
+  <div class="row">
+    <nz-tabset [(nzSelectedIndex)]="tabIndex" [nzTabBarExtraContent]="extraContent()">
       <nz-tab nzTitle="MY REFERRALS">
         <app-referrals-list (editEvent)="showContactReferralModal($event)"></app-referrals-list>              
       </nz-tab>
-      <nz-tab nzTitle="OPEN POSITIONS">
-        <app-open-positions [positionsDisplayData]="openPositions" [communities]="communities"
-          (searchPriority)="searchByPriority($event)" (searchCommunity)="searchCommunity($event)">
-        </app-open-positions>
+      <nz-tab nzTitle="OPEN POSITIONS" (nzClick)="getOpenPositions()">
+        <app-open-positions
+        [positionsDisplayData]="openPositions"
+        [communities]="communities"
+        [filteredPositions]="openPositions"
+        (searchPriority)="searchByPriority($event)"
+        (searchCommunity)="searchCommunity($event)"        
+        (showDeleteConfirm)="deletePositionConfirm($event)"
+        (showEdit)="showEditPositionModal($event)">
+      </app-open-positions>
       </nz-tab>
     </nz-tabset>
     <ng-template #newReferralsButton>
-      <button class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate)">New
-        Referral</button>
+      <button class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate)">NEW REFERRAL</button>
+    </ng-template>
+    <ng-template #newPositionButton>
+      <button class="referralsButton" nz-button (click)="showOpenPositionModal(newPosition)">ADD POSITION</button>
     </ng-template>
   </div>
 </div>
-
-<!-- <nz-modal nzWidth="90%" [(nzVisible)]="isDetailsVisible" nzTitle="Graphic view" [nzFooter]="null">
-  <span *ngIf="emptyProcess">{{emptyProcess.title}}</span>
-  <nz-divider></nz-divider>
-  <div *ngIf="emptyProcess" nz-row>
-    <div nz-col nzSpan="24">
-      <nz-steps *ngIf="emptyProcess.stages && emptyProcess.stages.length > 0" nzDirection="horizontal" nzSize="small">
-        <nz-step *ngFor="let stage of emptyProcess.stages" [nzTitle]="stage.title"
-          [nzStatus]="stage.status.toLowerCase()" [nzDescription]="stage.description">
-        </nz-step>
-      </nz-steps>
-    </div>
-  </div>
-</nz-modal> -->
-
 
 <ng-template #candidateDetailModal>
   <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
@@ -168,5 +161,9 @@
 </ng-template>
 
 <ng-template #newCandidate>
-  <app-referrals-contact [_visible]=true  [communities]=communities ></app-referrals-contact>
+  <app-referrals-contact [_visible]=true [communities]=communities></app-referrals-contact>
+</ng-template>
+
+<ng-template #newPosition>
+  <app-position-add [_communities]=communities></app-position-add>
 </ng-template>

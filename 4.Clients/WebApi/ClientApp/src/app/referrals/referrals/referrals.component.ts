@@ -32,6 +32,8 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { ReferralsService } from 'src/app/services/referrals.service';
 import { Router } from '@angular/router';
 import { OpenPosition } from 'src/entities/open-position';
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
+import { PositionAddComponent } from '../position-add/position-add.component';
 import { ReferralsContactComponent } from '../referrals-contact/referrals-contact.component';
 
 @Component({
@@ -64,6 +66,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(PreOfferStageComponent) preOfferStage: PreOfferStageComponent;
   @ViewChild(OfferStageComponent) offerStage: OfferStageComponent;
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
+  @ViewChild('newReferralsButton') newReferralsButton : any; 
+  @ViewChild('newPositionButton') newPositionButton : any;
 
   filteredProcesses: Process[] = [];
   searchValue = '';
@@ -96,7 +100,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   emptyCandidate: Candidate;
   emptyUser: User;
   currentCandidate: Candidate;
-
+  tabIndex: number;
 
   isEdit = false;
   openFromEdit = false;
@@ -285,6 +289,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   getOpenPositions() {
     const openPositionsSubscription = this.facade.openPositionService.getData().subscribe(res => {
       this.openPositions = res;
+      this.displayOpenPositions = this.openPositions;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -565,19 +570,17 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 
-  showDeleteConfirm(processID: number): void {
-    const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
-    const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
+  deletePositionConfirm(positionId: number): void {    
     this.facade.modalService.confirm({
-      nzTitle: 'Are you sure you want to delete the process for ' + processText + ' ?',
+      nzTitle: 'Are you sure you want to delete the position?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.processService.delete(processID)
+      nzOnOk: () => this.facade.openPositionService.delete(positionId)
         .subscribe(res => {
-          this.getProcesses();
-          this.facade.toastrService.success('Process was deleted !');
+          this.getOpenPositions();
+          this.facade.toastrService.success('Position was deleted !');
         }, err => {
           this.facade.toastrService.error(err.message);
         })
@@ -812,7 +815,32 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzWidth: '50%',
       nzFooter: null
     });
+  }
 
+  showOpenPositionModal(modalContent: TemplateRef<{}>) {
+    const modal = this.facade.modalService.create({
+      nzTitle: '<h1 class="title"> <strong> Add open position</strong></h1>',
+      nzContent: modalContent,
+      nzClosable: false,
+      nzWidth: '90%',
+      nzFooter: null
+    });
+  }
+
+  showEditPositionModal(positionToEdit: OpenPosition) {    
+    const modal = this.facade.modalService.create({
+      nzTitle: '<h1 class="title"> <strong> Edit open position</strong></h1>',
+      nzContent: PositionAddComponent,
+      nzClosable: false,
+      nzComponentParams: {
+        positionToEdit: positionToEdit,
+        isEditPosition: true,
+        communities: this.communities
+      },
+      nzWidth: '90%',
+      nzFooter: null
+    });    
+    console.log(this.tabIndex);
   }
 
   refreshTable() {
@@ -956,6 +984,22 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     } else {
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
+    }
+  }
+
+  extraContent(): any {    
+    if (this.isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])){
+      if(this.tabIndex == 1){
+        return this.newPositionButton;
+      }else{
+        return null;
+      }      
+    }else{
+      if(this.tabIndex == 0){
+        return this.newReferralsButton;
+      }else{
+        return null;
+      }
     }
   }
 

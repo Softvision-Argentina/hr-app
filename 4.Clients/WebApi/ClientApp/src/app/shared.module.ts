@@ -72,7 +72,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
         CommunitiesComponent,
         CandidatesProfileComponent,
         TextEditorComponent,
-        OpenPositionsComponent
+        OpenPositionsComponent        
     ],
     exports: [
         CommonModule,
@@ -117,7 +117,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
         NzButtonModule,
         NzTypographyModule,
         NzUploadModule,
-        NzSpaceModule 
+        NzSpaceModule        
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }]
 })

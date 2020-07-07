@@ -11,13 +11,15 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { SharedModule } from '../../shared.module';
 import { NZ_I18N, en_US, NzAvatarModule, NzStepsModule } from 'ng-zorro-antd';
 import { ReferralsListComponent } from '../referrals-list/referrals-list.component';
+import { PositionAddComponent } from '../position-add/position-add.component';
 
 @NgModule({
     declarations: [
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
-        ReferralsContactComponent
+        ReferralsContactComponent,
+        PositionAddComponent
     ],
     imports: [
         RouterModule.forChild(ReferralsRoutes),
@@ -30,12 +32,13 @@ import { ReferralsListComponent } from '../referrals-list/referrals-list.compone
         NzAvatarModule,
         NzStepsModule
     ],
-    entryComponents: [ ReferralsContactComponent ],
+    entryComponents: [ ReferralsContactComponent, PositionAddComponent ],
     exports: [
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
         ReferralsContactComponent,
+        PositionAddComponent,        
         NzAvatarModule,
         NzStepsModule
     ],
