@@ -70,6 +70,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="token.json\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <!--<ItemGroup>
     <Content Remove="appsettings.Development.json" Condition="'$(Configuration)' != 'Development' And '$(Configuration)' != 'Debug'" />
     <Content Remove="appsettings.IntegrationTest.json" Condition="'$(Configuration)' != 'IntegrationTest' And '$(Configuration)' != 'Debug' And '$(Configuration)' != 'Development'" />
