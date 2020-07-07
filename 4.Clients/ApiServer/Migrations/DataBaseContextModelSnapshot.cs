@@ -55,7 +55,11 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("OpenPositionId");
+
                     b.Property<string>("PhoneNumber");
+
+                    b.Property<string>("PositionTitle");
 
                     b.Property<int?>("PreferredOfficeId");
 
@@ -72,6 +76,8 @@ namespace ApiServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
+
+                    b.HasIndex("OpenPositionId");
 
                     b.HasIndex("PreferredOfficeId");
 
@@ -1386,6 +1392,10 @@ namespace ApiServer.Migrations
                     b.HasOne("Domain.Model.Community", "Community")
                         .WithMany()
                         .HasForeignKey("CommunityId");
+
+                    b.HasOne("Domain.Model.OpenPosition", "OpenPosition")
+                        .WithMany()
+                        .HasForeignKey("OpenPositionId");
 
                     b.HasOne("Domain.Model.Office", "PreferredOffice")
                         .WithMany()

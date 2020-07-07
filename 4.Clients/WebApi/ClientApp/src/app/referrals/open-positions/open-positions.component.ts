@@ -18,7 +18,7 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   @Output() searchPriority = new EventEmitter();
   @Output() showEdit = new EventEmitter();  
   @Output() showDeleteConfirm = new EventEmitter();  
-
+  @Output() position = new EventEmitter<OpenPosition>();
   seniorityList: any[] = [];  
   currentUser: User;
   filterParameters = [];  
@@ -93,8 +93,12 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
     this.searchPriority.emit(isHot);
   }
 
+  emitPosition(position: OpenPosition) {
+    this.position.emit(position);
+  }
+
   getSeniorityName(id: number): string {
-    return this.seniorityList.filter(x => x.id == id)[0].name;
+    return this.seniorityList.filter(x => x.id === id)[0].name;
   }
 
   getPriorityName(priority: boolean): string {

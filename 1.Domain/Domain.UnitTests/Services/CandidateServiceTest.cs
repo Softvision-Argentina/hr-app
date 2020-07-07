@@ -29,6 +29,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<IRepository<Office>> _mockRepoOffice;
         private readonly Mock<IRepository<Community>> _mockRepoCommunity;
         private readonly Mock<IRepository<CandidateProfile>> _mockRepoCandidateP;
+        private readonly Mock<IRepository<OpenPosition>> _mockRepoOpenPosition;
         private readonly Mock<ILog<CandidateService>> _mockLogCandidateService;
         private readonly Mock<UpdateCandidateContractValidator> _mockUpdateCandidateContractValidator;
         private readonly Mock<CreateCandidateContractValidator> _mockCreateCandidateContractValidator;        
@@ -42,6 +43,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockRepoOffice = new Mock<IRepository<Office>>();
             _mockRepoCommunity = new Mock<IRepository<Community>>();
             _mockRepoCandidateP = new Mock<IRepository<CandidateProfile>>();
+            _mockRepoOpenPosition = new Mock<IRepository<OpenPosition>>();
             _mockLogCandidateService = new Mock<ILog<CandidateService>>();
             _mockUpdateCandidateContractValidator = new Mock<UpdateCandidateContractValidator>();
             _mockCreateCandidateContractValidator = new Mock<CreateCandidateContractValidator>();            
@@ -53,6 +55,7 @@ namespace Domain.Services.Impl.UnitTests.Services
                 _mockRepoUser.Object,
                 _mockRepoOffice.Object,
                 _mockRepoProcess.Object,
+                _mockRepoOpenPosition.Object,
                 MockUnitOfWork.Object,
                 _mockLogCandidateService.Object,
                 _mockUpdateCandidateContractValidator.Object,

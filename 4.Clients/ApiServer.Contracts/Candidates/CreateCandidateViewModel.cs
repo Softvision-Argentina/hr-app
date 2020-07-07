@@ -1,6 +1,7 @@
 ﻿using ApiServer.Contracts.CandidateProfile;
 using ApiServer.Contracts.CandidateSkill;
 using ApiServer.Contracts.Community;
+using ApiServer.Contracts.OpenPosition;
 using ApiServer.Contracts.User;
 using Domain.Model.Enum;
 using System;
@@ -27,5 +28,7 @@ namespace ApiServer.Contracts.Candidates
         public string Cv { get; set; }
         public string KnownFrom { get; set; }
         public string ReferredBy { get; set; }
+        public ReadedOpenPositionViewModel OpenPosition { get; set; }
+        public string OpenPositionTitle { get; set; }
     }
 }

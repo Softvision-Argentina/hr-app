@@ -33,7 +33,7 @@
               </div>            
             </td>
             <td *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser'])">            
-              <a class="apply">Apply</a>
+              <a (click)="emitPosition(position)" class="apply">Apply</a>
             </td>
             <td>
               <i nzTitle="Edit" (click)="emitEdit(position)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit" theme="outline"></i>

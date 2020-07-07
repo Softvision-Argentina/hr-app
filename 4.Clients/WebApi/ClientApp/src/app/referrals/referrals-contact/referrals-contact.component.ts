@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { trimValidator } from 'src/app/directives/trim.validator';
@@ -13,6 +13,8 @@ import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { Cv } from 'src/entities/cv';
 import { BaseService } from 'src/app/services/base.service';
 import { Router } from '@angular/router';
+import { OpenPosition } from 'src/entities/open-position';
+
 
 @Component({
   selector: 'app-referrals-contact',
@@ -37,9 +39,11 @@ export class ReferralsContactComponent implements OnInit {
 
 
   @Input()
-   communities: Community[];
+  communities: Community[];
   filteredCommunity: Community[] = [];
   currentUser: User;
+  @Input() position: OpenPosition = null;
+  @Output() previousPosition = new EventEmitter<OpenPosition>();
   candidateForm: FormGroup = this.fb.group({
     firstName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
@@ -47,7 +51,8 @@ export class ReferralsContactComponent implements OnInit {
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
-    file: ['']
+    file: [''],
+    openPositionTitle:[null, {disabled: true}]
   });
   visible = true;
   isNewCandidate = false;
@@ -81,12 +86,11 @@ export class ReferralsContactComponent implements OnInit {
     }
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-
     this.fillReferralForm(this.referralToEdit);
   }
 
   fillReferralForm(candidate: Candidate) {
-
+    this.candidateForm.controls['openPositionTitle'].setValue(!!this.position ? this.position.title : null);
     if (this.isEditReferral) {
       this.candidateForm.controls['firstName'].setValue(candidate.name);
       this.candidateForm.controls['lastName'].setValue(candidate.lastName);
@@ -139,7 +143,7 @@ export class ReferralsContactComponent implements OnInit {
           community: new Community(this.candidateForm.controls['community'].value),
           isReferred: true,
           cv: this.referralToEdit.cv,
-          knownFrom: this.currentUser.firstName + " " + this.currentUser.lastName,
+          knownFrom: this.currentUser.firstName + ' ' + this.currentUser.lastName,
           referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
         };
         if (this.candidateForm.controls['phoneNumber'].value) {
@@ -167,9 +171,8 @@ export class ReferralsContactComponent implements OnInit {
         if (!this.candidateForm.controls[i].valid) { isCompleted = false; }
       }
     }
-
-
     if (isCompleted) {
+      
       const newCandidate: Candidate = {
         id: 0,
         name: this.candidateForm.controls['firstName'].value.toString(),
@@ -189,7 +192,9 @@ export class ReferralsContactComponent implements OnInit {
         profile: null,
         cv: null,
         knownFrom: null,
-        referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
+        referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName,
+        openPositionTitle: this.position ? this.position.title : null,
+        openPosition: this.position ? this.position : null
       };
 
       if (this.candidateForm.controls['phoneNumber'].value) {
@@ -202,6 +207,7 @@ export class ReferralsContactComponent implements OnInit {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;
           this.visible = false;
+          this.previousPosition.emit(null);
           if (this.candidateForm.get('file').value) {
             const file = new FormData();
             file.append('file', this.candidateForm.get('file').value);
@@ -215,11 +221,13 @@ export class ReferralsContactComponent implements OnInit {
           this.facade.appService.stopLoading();
         });
     }
+
     this.facade.appService.stopLoading();
   }
 
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();
+    this.previousPosition.emit(null);
   }
 
 

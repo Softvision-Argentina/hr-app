@@ -14,7 +14,8 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.User, opt => opt.MapFrom(r => r.User))
                 .ForMember(x => x.PreferredOfficeId, opt => opt.MapFrom(r => r.PreferredOffice.Id))
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
+                .ForMember(x=> x.OpenPosition, opt => opt.Ignore());
 
             CreateMap<CreateCandidateContract, Candidate>()
                 .ForMember(destination => destination.EnglishLevel,
@@ -22,12 +23,14 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.User, opt => opt.Ignore())
                 .ForMember(x => x.PreferredOffice, opt => opt.Ignore())
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
+                .ForMember(x => x.OpenPosition, opt => opt.Ignore());
 
             CreateMap<Candidate, CreateCandidateContract>()
                 .ForMember(x => x.User, opt => opt.Ignore())
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
+                .ForMember(x => x.OpenPosition, opt => opt.Ignore());
 
             CreateMap<Candidate, CreatedCandidateContract>();
 
@@ -35,7 +38,8 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.User, opt => opt.MapFrom(r => r.User))
                 .ForMember(x => x.PreferredOffice, opt => opt.MapFrom(r => r.PreferredOffice))
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
+                .ForMember(x => x.OpenPosition, opt => opt.Ignore());
 
             CreateMap<UpdateCandidateContract, Candidate>()
                 .ForMember(destination => destination.EnglishLevel,
@@ -43,7 +47,8 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.User, opt => opt.Ignore())
                 .ForMember(x => x.PreferredOffice, opt => opt.Ignore())
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
-                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile));
+                .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
+                .ForMember(x => x.OpenPosition, opt => opt.Ignore());
         }
     }
 }

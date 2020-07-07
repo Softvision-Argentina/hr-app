@@ -72,6 +72,7 @@ export class ReferralsService extends BaseService<Candidate> {
         headers : headers
       })
       .pipe(
+        tap(res => this.candidateAdded.next(true)),
         catchError(this.handleErrors));
 
   }

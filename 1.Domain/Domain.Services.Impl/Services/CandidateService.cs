@@ -23,6 +23,7 @@ namespace Domain.Services.Impl.Services
         private readonly IRepository<Office> _officeRepository;
         private readonly IRepository<Community> _communityRepository;
         private readonly IRepository<CandidateProfile> _candidateProfileRepository;
+        private readonly IRepository<OpenPosition> _openPositionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILog<CandidateService> _log;
         private readonly UpdateCandidateContractValidator _updateCandidateContractValidator;
@@ -35,6 +36,7 @@ namespace Domain.Services.Impl.Services
             IRepository<User> userRepository,
             IRepository<Office> officeRepository,
             IRepository<Process> processRepository,
+            IRepository<OpenPosition> openPositionRepository,
             IUnitOfWork unitOfWork,
             ILog<CandidateService> log,
             UpdateCandidateContractValidator updateCandidateContractValidator,
@@ -48,6 +50,7 @@ namespace Domain.Services.Impl.Services
             _officeRepository = officeRepository;
             _communityRepository = communityRepository;
             _candidateProfileRepository = candidateProfileRepository;
+            _openPositionRepository = openPositionRepository;
             _log = log;
             _updateCandidateContractValidator = updateCandidateContractValidator;
             _createCandidateContractValidator = createCandidateContractValidator;
@@ -72,7 +75,12 @@ namespace Domain.Services.Impl.Services
             {
                 this.AddCandidateProfileToCandidate(candidate, contract.Profile.Id);
             }
+            if(contract.OpenPosition != null)
+            {
+                this.AddOpenPositionForCandidate(candidate, contract.OpenPosition.Id);
+            }
 
+            
             var createdCandidate = _candidateRepository.Create(candidate);
             _log.LogInformation($"Complete for {contract.Name}");
             _unitOfWork.Complete();
@@ -291,6 +299,16 @@ namespace Domain.Services.Impl.Services
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
 
             candidate.PreferredOffice = office;
+        }
+
+        private void AddOpenPositionForCandidate(Candidate candidate, int id)
+        {
+            var position = _openPositionRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            if (position == null)
+                throw new Exception("Postion for the Candidate not found");
+
+            candidate.OpenPosition = position;
+            candidate.PositionTitle = position.Title;
         }
     }
 }

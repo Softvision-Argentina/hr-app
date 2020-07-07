@@ -4,7 +4,7 @@ import { EnglishLevelEnum } from './enums/english-level.enum';
 import { User } from './user';
 import { Community } from './community';
 import { CandidateProfile } from './Candidate-Profile';
-
+import { OpenPosition } from './open-position';
 export class Candidate {
   id: number;
   name: string;
@@ -25,4 +25,6 @@ export class Candidate {
   knownFrom: string;
   cv: string;
   dni?: number;
+  openPosition?: OpenPosition;
+  openPositionTitle?: string;
 }

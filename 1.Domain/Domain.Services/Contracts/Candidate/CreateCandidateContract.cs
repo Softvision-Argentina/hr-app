@@ -3,6 +3,7 @@ using Domain.Services.Contracts.CandidateProfile;
 using Domain.Services.Contracts.CandidateSkill;
 using Domain.Services.Contracts.Community;
 using Domain.Services.Contracts.User;
+using Domain.Services.Contracts.OpenPositions;
 using System;
 using System.Collections.Generic;
 
@@ -27,5 +28,7 @@ namespace Domain.Services.Contracts.Candidate
         public string Cv { get; set; }
         public string KnownFrom { get; set; }
         public string ReferredBy { get; set; }
+        public ReadedOpenPositionContract OpenPosition { get; set; }
+        public string OpenPositionTitle { get; set; }
     }
 }

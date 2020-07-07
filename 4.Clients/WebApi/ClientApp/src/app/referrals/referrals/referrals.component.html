@@ -18,7 +18,8 @@
         (searchPriority)="searchByPriority($event)"
         (searchCommunity)="searchCommunity($event)"        
         (showDeleteConfirm)="deletePositionConfirm($event)"
-        (showEdit)="showEditPositionModal($event)">
+        (showEdit)="showEditPositionModal($event)"
+        (position)="apply($event)">
       </app-open-positions>
       </nz-tab>
     </nz-tabset>
@@ -161,7 +162,7 @@
 </ng-template>
 
 <ng-template #newCandidate>
-  <app-referrals-contact [_visible]=true [communities]=communities></app-referrals-contact>
+  <app-referrals-contact [position]=currentPosition [_visible]=true [communities]=communities></app-referrals-contact>
 </ng-template>
 
 <ng-template #newPosition>

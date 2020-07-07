@@ -21,6 +21,14 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
+                <div nz-col nzSpan="12" *ngIf="!!position">
+                    <nz-form-item >
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Position">Position </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input nz-tooltip nzTooltipTrigger="hover" nzTooltipPlacement="topLeft" [nzTooltipTitle]="'This cannot be changed'" formControlName="openPositionTitle" id="Position" readonly>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
             </div>
             <div nz-row>
                 <div nz-col nzSpan="12">

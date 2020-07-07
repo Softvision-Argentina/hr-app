@@ -25,7 +25,8 @@ namespace Domain.Services.Repositories.EF
                 .Include(r => r.User)
                 .Include(r => r.PreferredOffice)
                 .Include(r => r.Community)
-                .Include(r => r.Profile);
+                .Include(r => r.Profile)
+                .Include(r => r.OpenPosition);
 
         }
 

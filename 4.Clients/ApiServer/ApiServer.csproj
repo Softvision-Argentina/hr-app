@@ -27,6 +27,10 @@
     <Compile Remove="Migrations\20200529173242_tenth.Designer.cs" />
     <Compile Remove="Migrations\20200529174830_Tenth.cs" />
     <Compile Remove="Migrations\20200529174830_Tenth.Designer.cs" />
+    <Compile Remove="Migrations\20200626164739_Nineteenth.cs" />
+    <Compile Remove="Migrations\20200626164739_Nineteenth.Designer.cs" />
+    <Compile Remove="Migrations\20200629131442_Nineteenth.cs" />
+    <Compile Remove="Migrations\20200629131442_Nineteenth.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis" Version="1.43.0" />

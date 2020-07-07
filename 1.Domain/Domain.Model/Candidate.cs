@@ -23,7 +23,9 @@ namespace Domain.Model
         public IList<CandidateSkill> CandidateSkills { get; set; }
         public string Cv { get; set; }
         public string KnownFrom { get; set; }
-        public string ReferredBy { get; set; }
         public User User { get; set; }
+        public string ReferredBy { get; set; }
+        public OpenPosition OpenPosition { get; set; }
+        public string PositionTitle { get; set; }
     }
 }

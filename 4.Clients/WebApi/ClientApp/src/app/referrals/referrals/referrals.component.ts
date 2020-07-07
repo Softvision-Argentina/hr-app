@@ -126,6 +126,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   selectedIndex = 0;
   declineReasons: DeclineReason[] = [];
   referralsSubscriptions: Subscription = new Subscription();
+  currentPosition: OpenPosition = null;
   
   constructor(private facade: FacadeService, private formBuilder: FormBuilder,
     private userDetailsModal: UserDetailsComponent,
@@ -523,7 +524,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzContent: modalContent,
       nzClosable: false,
       nzWidth: '90%',
-      nzFooter: footer
+      nzFooter: footer,
+
     });
     this.facade.appService.stopLoading();
   }
@@ -796,7 +798,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzContent: modalContent,
       nzClosable: false,
       nzWidth: '50%',
-      nzFooter: null
+      nzFooter: null,
+      nzOnCancel: () => this.currentPosition = null
     });
 
   }
@@ -985,6 +988,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.isDeclineReasonOther = false;
       this.declineProcessForm.controls['declineReasonDescription'].disable();
     }
+  }
+
+  apply(position: OpenPosition) {
+    this.currentPosition = position;
+    this.showContactCandidatesModal(this.newCandidate);
+  }
+
+  resetPosition() {
+    this.currentPosition = null;
   }
 
   extraContent(): any {    
