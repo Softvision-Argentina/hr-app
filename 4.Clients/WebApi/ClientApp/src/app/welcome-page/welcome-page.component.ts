@@ -36,7 +36,7 @@ export class WelcomePageComponent implements OnInit {
 
   goToReferralsComponent() {
     this._referralsService.displayNavAndSideMenu(true);
-    this.router.navigateByUrl('/referrals');
+    this.router.navigateByUrl('/referrals/openpositions');
   }
 
 }

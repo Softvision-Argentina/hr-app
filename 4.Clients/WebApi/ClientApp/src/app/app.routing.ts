@@ -26,7 +26,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'welcome',
-    loadChildren: './welcome-page/welcome-page.module#WelcomePageModule',
+    loadChildren: () => import ('./welcome-page/welcome-page.module').then(m => m.WelcomePageModule),
+    canActivate: [CommonGuard]
+  },
+  {
+    path: 'referrals/:openpositions',
+    loadChildren: () => import('./referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {

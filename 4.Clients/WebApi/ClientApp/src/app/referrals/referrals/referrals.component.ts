@@ -30,7 +30,7 @@ import { DeclineReason } from 'src/entities/declineReason';
 import { Subscription } from 'rxjs';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { ReferralsService } from 'src/app/services/referrals.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OpenPosition } from 'src/entities/open-position';
 import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 import { PositionAddComponent } from '../position-add/position-add.component';
@@ -128,13 +128,14 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   referralsSubscriptions: Subscription = new Subscription();
   currentPosition: OpenPosition = null;
   
-  constructor(private facade: FacadeService, private formBuilder: FormBuilder,
+  constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _referralsService: ReferralsService,
     private router: Router) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
+    this.tabIndex = this.route.snapshot.params['openpositions'] ? 1 : 0; 
   }
 
   ngOnInit() {
