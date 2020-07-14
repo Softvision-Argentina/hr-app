@@ -31,7 +31,7 @@ import { Subscription, Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { Router } from '@angular/router';
-import { ReferralsService } from '../../services/referrals.service';import { ReaddressReason } from 'src/entities/ReaddressReason';
+import { ReferralsService } from '../../services/referrals.service'; import { ReaddressReason } from 'src/entities/ReaddressReason';
 import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
 import { ReaddressStatus } from 'src/entities/ReaddressStatus';
 
@@ -51,11 +51,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     accessibility: false
   };
 
-  @ViewChild('slickModal', {static: false}) slickModal: SlickCarouselComponent;
-  @ViewChild('dropdown', {static: false}) nameDropdown;
-  @ViewChild('dropdownStatus', {static: false}) statusDropdown;
-  @ViewChild('dropdownCurrentStage', {static: false}) currentStageDropdown;
-  @ViewChild('processCarousel', {static: false}) processCarousel;
+  @ViewChild('slickModal', { static: false }) slickModal: SlickCarouselComponent;
+  @ViewChild('dropdown', { static: false }) nameDropdown;
+  @ViewChild('dropdownStatus', { static: false }) statusDropdown;
+  @ViewChild('dropdownCurrentStage', { static: false }) currentStageDropdown;
+  @ViewChild('processCarousel', { static: false }) processCarousel;
   @ViewChild(CandidateAddComponent) candidateAdd: CandidateAddComponent;
   @ViewChild(HrStageComponent) hrStage: HrStageComponent;
   @ViewChild(TechnicalStageComponent) technicalStage: TechnicalStageComponent;
@@ -85,7 +85,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   candidatesFullList: Candidate[] = [];
   users: User[] = [];
   profileSearch = 0;
-  profileSearchName = 'ALL';  
+  profileSearchName = 'ALL';
   communitySearchName = 'ALL';
   profileList: any[];
   statusList: any[];
@@ -735,7 +735,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         if (!newCandidate.id) {
           this.facade.candidateService.add(newCandidate).subscribe(res => {
             newProcess.candidate.id = res.id;
-            this.currentCandidate.id = res.id; 
+            this.currentCandidate.id = res.id;
             this.facade.processService.add(newProcess)
               .subscribe(() => {
                 this.saveEventSubject.next(res.id);
@@ -784,18 +784,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
           .subscribe(res => {
             if (!res || newProcess.id == 0) {
               this.facade.processService.add(newProcess)
-              .subscribe(() => {
-                this.saveEventSubject.next(newCandidate.id);
-                this.isLoading = false;
-                this.facade.appService.stopLoading();
-                this.facade.toastrService.success('The process was successfully saved !');
-                this.createEmptyProcess(newCandidate);
-                this.closeModal();
-              }, err => {
-                this.isLoading = false;
-                this.facade.appService.stopLoading();
-                this.facade.toastrService.error(err);
-              });
+                .subscribe(() => {
+                  this.saveEventSubject.next(newCandidate.id);
+                  this.isLoading = false;
+                  this.facade.appService.stopLoading();
+                  this.facade.toastrService.success('The process was successfully saved !');
+                  this.createEmptyProcess(newCandidate);
+                  this.closeModal();
+                }, err => {
+                  this.isLoading = false;
+                  this.facade.appService.stopLoading();
+                  this.facade.toastrService.error(err);
+                });
             } else if (res && res.status !== ProcessStatusEnum.Declined && this.isDeclined(newProcess)) {
               // Used for verifying whether user pressed OK or Cancel on decline modal.
               const declineReason = newProcess.declineReason;
@@ -1061,57 +1061,57 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  onHrStageSlideClick(currentTargetId){
-    this.setCurrentStage(ProcessCurrentStageEnum.HrStage); 
+  onHrStageSlideClick(currentTargetId) {
+    this.setCurrentStage(ProcessCurrentStageEnum.HrStage);
     this.slickModal.slickGoTo(0);
     this.wishedStage(0, currentTargetId);
   }
 
-  onTechnicalStageSlideClick(currentTargetId){
+  onTechnicalStageSlideClick(currentTargetId) {
     this.setCurrentStage(ProcessCurrentStageEnum.TechnicalStage);
     this.slickModal.slickGoTo(1);
     this.wishedStage(1, currentTargetId);
   }
 
-  onClientStageSlideClick(currentTargetId){
+  onClientStageSlideClick(currentTargetId) {
     this.setCurrentStage(ProcessCurrentStageEnum.ClientStage);
     this.slickModal.slickGoTo(2);
     this.wishedStage(2, currentTargetId);
   }
 
-  onPreOfferStageSlideClick(currentTargetId){
-    this.setCurrentStage(ProcessCurrentStageEnum.PreOfferStage); 
+  onPreOfferStageSlideClick(currentTargetId) {
+    this.setCurrentStage(ProcessCurrentStageEnum.PreOfferStage);
     this.slickModal.slickGoTo(3);
     this.wishedStage(3, currentTargetId);
   }
 
-  onOfferStageSlideClick(currentTargetId){
-    this.setCurrentStage(ProcessCurrentStageEnum.OfferStage); 
+  onOfferStageSlideClick(currentTargetId) {
+    this.setCurrentStage(ProcessCurrentStageEnum.OfferStage);
     this.slickModal.slickGoTo(4);
     this.wishedStage(4, currentTargetId);
   }
 
-  setCurrentStage(value){
+  setCurrentStage(value) {
     this.currentStage = value;
   }
 
-  getReaddressReasonList(){
+  getReaddressReasonList() {
     this.facade.readdressReasonService.getData()
-    .subscribe(res => {
+      .subscribe(res => {
         this.readdressReasonList = res;
-    }, err => {
-      console.log(err);
-    });
+      }, err => {
+        console.log(err);
+      });
   }
 
-  getReaddressReasonTypeList(){
+  getReaddressReasonTypeList() {
     this.facade.readdressReasonTypeService.getData()
-    .subscribe(res => {
+      .subscribe(res => {
         this.readdressReasonTypeList = res;
-    }, err => {
-      console.log(err);
-    });
-  } 
+      }, err => {
+        console.log(err);
+      });
+  }
 
 
   ngOnDestroy() {

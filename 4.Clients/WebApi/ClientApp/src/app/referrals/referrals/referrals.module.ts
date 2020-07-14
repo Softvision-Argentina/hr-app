@@ -9,7 +9,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { SharedModule } from '../../shared.module';
-import { NZ_I18N, en_US, NzAvatarModule, NzStepsModule, NzToolTipModule } from 'ng-zorro-antd';
+import { NZ_I18N, en_US, NzAvatarModule, NzStepsModule, NzToolTipModule,  NzTableModule } from 'ng-zorro-antd';
 import { ReferralsListComponent } from '../referrals-list/referrals-list.component';
 import { PositionAddComponent } from '../position-add/position-add.component';
 
@@ -31,7 +31,8 @@ import { PositionAddComponent } from '../position-add/position-add.component';
         SharedModule,
         NzAvatarModule,
         NzStepsModule,
-        NzToolTipModule
+        NzToolTipModule,
+        NzTableModule
     ],
     entryComponents: [ ReferralsContactComponent, PositionAddComponent ],
     exports: [
@@ -39,7 +40,7 @@ import { PositionAddComponent } from '../position-add/position-add.component';
         ReferralsCardComponent,
         ReferralsListComponent,
         ReferralsContactComponent,
-        PositionAddComponent,        
+        PositionAddComponent,
         NzAvatarModule,
         NzStepsModule,
         NzToolTipModule

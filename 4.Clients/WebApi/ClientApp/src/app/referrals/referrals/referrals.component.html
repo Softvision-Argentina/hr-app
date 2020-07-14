@@ -7,8 +7,8 @@
 <div class="proximanova-r">
   <div class="row">
     <nz-tabset [(nzSelectedIndex)]="tabIndex" [nzTabBarExtraContent]="extraContent()">
-      <nz-tab nzTitle="MY REFERRALS">
-        <app-referrals-list (editEvent)="showContactReferralModal($event)"></app-referrals-list>              
+      <nz-tab nzTitle="{{referralsListTabTitle}}">
+        <app-referrals-list (editEvent)="showContactReferralModal($event)" [communities]="communities"></app-referrals-list>              
       </nz-tab>
       <nz-tab nzTitle="OPEN POSITIONS" (nzClick)="getOpenPositions()">
         <app-open-positions
@@ -24,7 +24,7 @@
       </nz-tab>
     </nz-tabset>
     <ng-template #newReferralsButton>
-      <button class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate)">NEW REFERRAL</button>
+      <button *ngIf="!checkHrRole()" class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate)">NEW REFERRAL</button>
     </ng-template>
     <ng-template #newPositionButton>
       <button class="referralsButton" nz-button (click)="showOpenPositionModal(newPosition)">ADD POSITION</button>

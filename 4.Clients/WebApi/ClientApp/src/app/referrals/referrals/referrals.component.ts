@@ -66,8 +66,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(PreOfferStageComponent) preOfferStage: PreOfferStageComponent;
   @ViewChild(OfferStageComponent) offerStage: OfferStageComponent;
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
-  @ViewChild('newReferralsButton') newReferralsButton : any; 
-  @ViewChild('newPositionButton') newPositionButton : any;
+  @ViewChild('newReferralsButton') newReferralsButton: any;
+  @ViewChild('newPositionButton') newPositionButton: any;
 
   filteredProcesses: Process[] = [];
   searchValue = '';
@@ -129,6 +129,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   currentPosition: OpenPosition = null;
   jobDescriptionContent : string;
   
+  referralsListTabTitle: string;
+
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _referralsService: ReferralsService,
@@ -136,7 +138,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
-    this.tabIndex = this.route.snapshot.params['openpositions'] ? 1 : 0; 
+    this.tabIndex = this.route.snapshot.params['openpositions'] ? 1 : 0;
   }
 
   ngOnInit() {
@@ -185,6 +187,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.showContactCandidatesModal(this.newCandidate);
       }
     }, 700);
+
+    this.currentUser.role === 'HRUser' || this.currentUser.role === 'HRManagement' || this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter' ? this.referralsListTabTitle = 'REFERRALS' : this.referralsListTabTitle = 'MY REFERRALS';
 
     this.facade.appService.stopLoading();
   }
@@ -558,7 +562,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName + ' ' + this.emptyUser.lastName);
   }
 
-  deletePositionConfirm(positionId: number): void {    
+  deletePositionConfirm(positionId: number): void {
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete the position?',
       nzContent: '',
@@ -738,7 +742,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       process.technicalStage.seniority ||
       process.technicalStage.alternativeSeniority ||
       process.offerStage.seniority);
-      
+
     process.englishLevel = process.englishLevel;
 
     return process;
@@ -816,7 +820,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
-  showEditPositionModal(positionToEdit: OpenPosition) {    
+  showEditPositionModal(positionToEdit: OpenPosition) {
     const modal = this.facade.modalService.create({
       nzTitle: '<h1 class="title"> <strong> Edit open position</strong></h1>',
       nzContent: PositionAddComponent,
@@ -829,15 +833,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzWidth: '90%',
       nzFooter: null
     });    
-  }
-
-  priorityChange(positionToEdit: OpenPosition){        
-    positionToEdit.priority = !positionToEdit.priority;    
-    this.facade.openPositionService.update(positionToEdit.id, positionToEdit)
-    .subscribe(res => {
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });    
+    console.log(this.tabIndex);
   }
 
   refreshTable() {
@@ -984,6 +980,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
+  checkHrRole() {
+    return this.currentUser.role === 'HRManagement' || this.currentUser.role === 'HRUser' ? true : false;
+  }
+
   apply(position: OpenPosition) {
     this.currentPosition = position;
     this.showContactCandidatesModal(this.newCandidate);
@@ -993,17 +993,17 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.currentPosition = null;
   }
 
-  extraContent(): any {    
-    if (this.isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])){
-      if(this.tabIndex == 1){
+  extraContent(): any {
+    if (this.isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])) {
+      if (this.tabIndex == 1) {
         return this.newPositionButton;
-      }else{
+      } else {
         return null;
-      }      
-    }else{
-      if(this.tabIndex == 0){
+      }
+    } else {
+      if (this.tabIndex == 0) {
         return this.newReferralsButton;
-      }else{
+      } else {
         return null;
       }
     }

@@ -9,21 +9,21 @@
         <p>Dashboard</p>
       </div>
   </div>
-  <div routerLink="/processes" routerLinkActiveOptions="{exact:true}" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Interviewer','CommunityManager','Recruiter']">
+  <div routerLink="/processes" routerLinkActiveOptions="{exact:true}" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Interviewer','CommunityManager','Recruiter', 'HRUser', 'HRManagement']">
       <div class="gradient-border"></div>
       <div class="item">
         <i nz-icon nzType="file-search" nzTheme="outline"></i>
         <p>Processes</p>
       </div>
   </div>
-  <div routerLink="/people" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Recruiter']">
+  <div routerLink="/people" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Recruiter', 'HRUser', 'HRManagement']">
       <div class="gradient-border"></div>
       <div class="item">
         <i nz-icon nzType="usergroup-add" nzTheme="outline"></i>
         <p>People</p>
       </div>
   </div>
-  <div routerLink="/tasks" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Recruiter']">
+  <div routerLink="/tasks" routerLinkActive="active" class="container-item" *appHasRole = "['Admin','Recruiter', 'HRUser', 'HRManagement']">
       <div class="gradient-border"></div>
       <div class="item">
         <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
@@ -51,7 +51,7 @@
       <p>Reports</p>
     </div>
   </div>
-  <div routerLink="/settings" routerLinkActive="active" class="container-item" *appHasRole = "['Admin', 'Recruiter']">
+  <div routerLink="/settings" routerLinkActive="active" class="container-item" *appHasRole = "['Admin', 'Recruiter', 'HRUser', 'HRManagement']">
     <div class="gradient-border"></div>
     <div class="item">
       <i nz-icon nzType="setting" nzTheme="outline"></i>
