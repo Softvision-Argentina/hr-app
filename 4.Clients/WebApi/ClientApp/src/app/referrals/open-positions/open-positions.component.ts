@@ -19,6 +19,9 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   @Output() showEdit = new EventEmitter();  
   @Output() showDeleteConfirm = new EventEmitter();  
   @Output() position = new EventEmitter<OpenPosition>();
+  @Output() jobInfo = new EventEmitter();
+  @Output() radioClick = new EventEmitter();
+  checked : boolean ;
   seniorityList: any[] = [];  
   currentUser: User;
   filterParameters = [];  
@@ -57,7 +60,7 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
           filterFn: (communityNameList: string[], item: any) => communityNameList.some(name => item.community.name.indexOf(name) !== -1)
         },
         {
-          name: 'Priority',
+          name: this.isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter']) ? 'Mark as HOT' : 'Priority',
           listOfFilter: this.priorityFilterList,
           filterFn: (priorityName: string, item: any) => priorityName.indexOf(this.getPriorityName(item.priority)) !== -1
         },
@@ -85,12 +88,8 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
     return item.name;
   }
 
-  emitCommunityId(id: number) {
-    this.searchCommunity.emit(id);
-  }
-
-  emitPriority(isHot: number) {
-    this.searchPriority.emit(isHot);
+  emitPositionInfo(description: string){
+    this.jobInfo.emit(description);
   }
 
   emitPosition(position: OpenPosition) {
@@ -109,7 +108,11 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   }
 
   emitEdit(positionToEdit: OpenPosition){
-    this.showEdit.emit(positionToEdit);
+    this.showEdit.emit(positionToEdit);    
+  }
+
+  emitRadioClick(positionToEdit: OpenPosition){        
+    this.radioClick.emit(positionToEdit);        
   }
 
   isUserRole(roles: string[]): boolean {

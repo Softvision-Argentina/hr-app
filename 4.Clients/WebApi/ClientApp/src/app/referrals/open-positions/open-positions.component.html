@@ -7,6 +7,7 @@
           [nzFilters]="column.listOfFilter"
           [nzFilterFn]="column.filterFn"
           class="tableHead">
+            <img *ngIf="column.name=='Mark as HOT'" src="../../assets/images/vector.svg" class="vector">
             {{ column.name }}
           </th>
         </tr>
@@ -15,8 +16,10 @@
       <tbody>
         <ng-container *ngIf="filterParameters.length === 0;">        
           <tr *ngFor="let position of positionsTable.data">
-            <td class="title">
-                {{ position.title }}            
+            <td >
+              <a class="title" (click)="emitPositionInfo(position.jobDescription)">
+                {{ position.title }}
+              </a>                                      
             </td>
             <td>
               {{ getSeniorityName(position.seniority) }}
@@ -27,15 +30,20 @@
             <td>            
               {{ position.community.name }}
             </td>
-            <td>
-              <div *ngIf="position.priority" class="hot">
+            <td *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter']) && position.priority" class="hot">              
                 <img src="../../assets/images/vector.svg" class="vector">HOT
-              </div>            
+            </td>              
+            <td *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])">                                
+                <!-- <label nz-radio [ngModel]=position.priority (click)="emitRadioClick(position)"></label> -->
+                <div>
+                  <label *ngIf="position.priority" class="radio" nz-radio [ngModel]=true (click)="emitRadioClick(position)"></label>
+                  <label *ngIf="!position.priority" class="radio" nz-radio [ngModel]=false (click)="emitRadioClick(position)"></label>
+                </div>                
             </td>
-            <td *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser'])">            
+            <td *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])">
               <a (click)="emitPosition(position)" class="apply">Apply</a>
             </td>
-            <td>
+            <td *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])">
               <i nzTitle="Edit" (click)="emitEdit(position)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit" theme="outline"></i>
               <nz-divider nzType="vertical"></nz-divider>
               <i nzTitle="Delete" (click)="emitDelete(position.id)" style="cursor: pointer;" nz-tooltip nz-icon nzType="delete" theme="outline"></i>              

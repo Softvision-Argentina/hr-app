@@ -27,18 +27,20 @@ export class PositionAddComponent implements OnInit {
   @Input() positionToEdit: OpenPosition;  
 
   seniorityList: any[];
+  jobDescriptionContent: string = "";
 
   positionForm: FormGroup = this.fb.group({
-    title: [null, [Validators.required, trimValidator]],
+    title: [null, [Validators.required, trimValidator, Validators.maxLength(50)]],
     community: [null, [Validators.required]],
     seniority: [null, [Validators.required]],
-    studio: ['',Validators.required],    
-    priority: [false]
+    studio: ['',[Validators.required, Validators.maxLength(40)]],
+    priority: [false],
+    jobDescription: [null, [Validators.required, Validators.maxLength(1000)]]
   });
 
   constructor(private fb: FormBuilder, private globals: Globals, private facade: FacadeService,  private modalService: NzModalService) {
     this.seniorityList = globals.seniorityList;
-   }
+  }
 
   ngOnInit() {
     if (this.communities) {
@@ -53,6 +55,8 @@ export class PositionAddComponent implements OnInit {
       this.positionForm.controls['studio'].setValue(openPositionToEdit.studio);
       this.positionForm.controls['seniority'].setValue(openPositionToEdit.seniority);
       this.positionForm.controls['community'].setValue(openPositionToEdit.community.id);
+      this.jobDescriptionContent = openPositionToEdit.jobDescription;      
+      this.positionForm.controls['jobDescription'].setValue(openPositionToEdit.jobDescription);      
       this.positionForm.controls['priority'].setValue(openPositionToEdit.priority);
     }
   }
@@ -76,6 +80,7 @@ export class PositionAddComponent implements OnInit {
         studio: this.positionForm.controls['studio'].value.toString(),
         community: new Community(this.positionForm.controls['community'].value),
         seniority: this.positionForm.controls['seniority'].value,
+        jobDescription: this.positionForm.controls['jobDescription'].value,        
         priority: this.positionForm.controls['priority'].value
       };
 
@@ -99,7 +104,8 @@ export class PositionAddComponent implements OnInit {
       studio: this.positionForm.controls['studio'].value.toString(),
       community: new Community(this.positionForm.controls['community'].value),
       seniority: this.positionForm.controls['seniority'].value,
-      priority: this.positionForm.controls['priority'].value
+      priority: this.positionForm.controls['priority'].value,
+      jobDescription: this.positionForm.controls['jobDescription'].value
     };
     this.facade.openPositionService.update(this.positionToEdit.id, editedPosition)
       .subscribe(res => {
@@ -112,5 +118,9 @@ export class PositionAddComponent implements OnInit {
 
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();
+  }
+
+  getJobDescriptionContent(content: string): void {    
+    this.positionForm.controls['jobDescription'].setValue(content);
   }
 }

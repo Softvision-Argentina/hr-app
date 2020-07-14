@@ -15,5 +15,6 @@ namespace Domain.Services.Contracts.OpenPositions
         public string Studio { get; set; }
         public ReadedCommunityContract Community { get; set; }
         public bool Priority { get; set; }
+        public string JobDescription { get; set; }
     }
 }

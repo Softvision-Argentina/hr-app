@@ -14,13 +14,13 @@
         <app-open-positions
         [positionsDisplayData]="openPositions"
         [communities]="communities"
-        [filteredPositions]="openPositions"
-        (searchPriority)="searchByPriority($event)"
-        (searchCommunity)="searchCommunity($event)"        
+        [filteredPositions]="openPositions"      
         (showDeleteConfirm)="deletePositionConfirm($event)"
         (showEdit)="showEditPositionModal($event)"
-        (position)="apply($event)">
-      </app-open-positions>
+        (position)="apply($event)"
+        (jobInfo)="showJobDescription($event,jobDescription)"
+        (radioClick)="priorityChange($event)">        
+        </app-open-positions>
       </nz-tab>
     </nz-tabset>
     <ng-template #newReferralsButton>
@@ -167,4 +167,10 @@
 
 <ng-template #newPosition>
   <app-position-add [_communities]=communities></app-position-add>
+</ng-template>
+
+<ng-template #jobDescription>
+  <div class="jobDescription">
+    <app-text-editor [setContent]="jobDescriptionContent"></app-text-editor>
+  </div>
 </ng-template>

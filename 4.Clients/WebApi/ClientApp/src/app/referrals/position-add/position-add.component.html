@@ -9,11 +9,18 @@
                       </nz-form-label>
                       <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="TitleError">
                         <input type="text" nz-input formControlName="title" id="title" placeholder="Please input the title">
-                        <ng-template #TitleError>
+                        <ng-template #TitleError>   
                             <ng-container
-                                *ngIf="positionForm.get('title').dirty && positionForm.get('title').errors">
-                                Please input the title
-                            </ng-container>
+                            *ngIf="positionForm.get('title').dirty && positionForm.get('title').errors">                         
+                                <ng-container 
+                                    *ngIf="positionForm.get('title')?.hasError('required')">
+                                    Please input the title
+                                </ng-container>                                
+                                <ng-container
+                                    *ngIf="positionForm.get('title')?.hasError('maxlength')">
+                                    The maximun length is 50
+                                </ng-container>                
+                            </ng-container>            
                         </ng-template>
                       </nz-form-control>
                   </nz-form-item>
@@ -63,8 +70,15 @@
                         <input nz-input formControlName="studio" id="studio" placeholder="Please input the studio">
                         <ng-template #StudioError>
                             <ng-container
-                                *ngIf="positionForm.get('studio').dirty && positionForm.get('studio').errors">
-                                Please input the studio
+                            *ngIf="positionForm.get('studio').dirty && positionForm.get('studio').errors">                         
+                                <ng-container 
+                                    *ngIf="positionForm.get('studio')?.hasError('required')">
+                                    Please input the studio
+                                </ng-container>                                
+                                <ng-container
+                                    *ngIf="positionForm.get('studio')?.hasError('maxlength')">
+                                    The maximun length is 40
+                                </ng-container>                
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -72,6 +86,27 @@
             </div>
           </div>
           <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="jobDescription">Job description</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="jobDescriptionErrorMsg">
+                        <app-text-editor [setContent]="jobDescriptionContent" (getContent)="getJobDescriptionContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>                        
+                        <ng-template #jobDescriptionErrorMsg>
+                            <ng-container
+                                *ngIf="positionForm.get('jobDescription').dirty && positionForm.get('jobDescription').errors">
+                                <ng-container
+                                    *ngIf="positionForm.get('jobDescription')?.hasError('required')">
+                                    Field required
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="positionForm.get('jobDescription')?.hasError('maxlength')">
+                                    The maximun length is 1000
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
             <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="priority">

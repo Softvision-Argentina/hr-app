@@ -7,5 +7,6 @@ export class OpenPosition {
   seniority: SeniorityEnum;
   studio: string;
   community: Community;
+  jobDescription: string;
   priority: boolean;
 }

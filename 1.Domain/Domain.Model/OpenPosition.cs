@@ -10,5 +10,6 @@ namespace Domain.Model
         public string Studio { get; set; }
         public Community Community { get; set; }
         public bool Priority { get; set; }
+        public string JobDescription { get; set; }
     }
 }

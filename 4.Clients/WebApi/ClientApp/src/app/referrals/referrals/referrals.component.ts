@@ -127,6 +127,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   declineReasons: DeclineReason[] = [];
   referralsSubscriptions: Subscription = new Subscription();
   currentPosition: OpenPosition = null;
+  jobDescriptionContent : string;
   
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userDetailsModal: UserDetailsComponent,
@@ -489,22 +490,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  searchCommunity(searchedCommunity: number) {
-    if (searchedCommunity === 0) {
-      this.openPositions = this.displayOpenPositions;
-    } else {
-      this.openPositions = this.displayOpenPositions.filter(p => p.community.id === searchedCommunity);
-    }
-  }
-
-  searchByPriority(isHot: number) {
-    if (isHot === 0) {
-      this.openPositions = this.displayOpenPositions;
-    } else {
-      this.openPositions = this.displayOpenPositions.filter(p => p.priority);
-    }
-  }
-
   sort(sortName: string, value: boolean): void {
     this.sortName = sortName;
     this.sortValue = value;
@@ -798,7 +783,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '50%',
+      nzWidth: '50%',      
       nzFooter: null,
       nzOnCancel: () => this.currentPosition = null
     });
@@ -844,7 +829,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzWidth: '90%',
       nzFooter: null
     });    
-    console.log(this.tabIndex);
+  }
+
+  priorityChange(positionToEdit: OpenPosition){        
+    positionToEdit.priority = !positionToEdit.priority;    
+    this.facade.openPositionService.update(positionToEdit.id, positionToEdit)
+    .subscribe(res => {
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });    
   }
 
   refreshTable() {
@@ -1014,6 +1007,17 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         return null;
       }
     }
+  }
+
+  showJobDescription(info: string, modalContent: TemplateRef<{}> ){        
+    this.jobDescriptionContent = info;
+    const modal = this.facade.modalService.create({
+      nzTitle: '<strong>Job Description</strong>',
+      nzContent: modalContent,
+      nzClosable: false,
+      nzWidth: '50%',
+      nzFooter: null           
+    });    
   }
 
   ngOnDestroy() {
