@@ -1020,6 +1020,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     });    
   }
 
+  priorityChange(positionToEdit: OpenPosition){        
+    positionToEdit.priority = !positionToEdit.priority;    
+    this.facade.openPositionService.update(positionToEdit.id, positionToEdit)
+    .subscribe(res => {
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });    
+  }
+  
   ngOnDestroy() {
     this.referralsSubscriptions.unsubscribe();
   }
