@@ -98,6 +98,20 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpGet("EmailExists/{email}")]
+        public IActionResult EmailExists(string email)
+        {
+            return ApiAction(() =>
+            {
+                if (_candidateService.Exists(email))
+                {
+                    return Ok(new { Exists = true
+                    });
+                }
+
+                return Ok(new { Exists = false } );
+            });
+        }
 
         [HttpGet("GetApp")]
         public IActionResult GetCandidateApp()

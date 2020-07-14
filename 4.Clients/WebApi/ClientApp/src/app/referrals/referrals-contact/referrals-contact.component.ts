@@ -14,7 +14,7 @@ import { Cv } from 'src/entities/cv';
 import { BaseService } from 'src/app/services/base.service';
 import { Router } from '@angular/router';
 import { OpenPosition } from 'src/entities/open-position';
-
+import { UniqueEmailValidator } from 'src/app/candidates/ValidatorsCandidateForm';
 
 @Component({
   selector: 'app-referrals-contact',
@@ -47,7 +47,13 @@ export class ReferralsContactComponent implements OnInit {
   candidateForm: FormGroup = this.fb.group({
     firstName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-    email: [null, [Validators.email]],
+    email: [null, 
+      {
+        validators: [Validators.email, trimValidator],
+        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+        updateOn: "blur"
+      }
+    ],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
@@ -108,7 +114,13 @@ export class ReferralsContactComponent implements OnInit {
       name: ['', [trimValidator]],
       firstName: [null, [Validators.required, trimValidator]],
       lastName: [null, [Validators.required, trimValidator]],
-      email: [null, [Validators.email]],
+      email: [null, 
+        {
+          validators: [Validators.email, trimValidator],
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+          updateOn: "blur"
+        }
+      ],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
       user: [null, [Validators.required]],

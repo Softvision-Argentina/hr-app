@@ -25,6 +25,17 @@ export class CandidateService extends BaseService<Candidate> {
       );
   }
 
+  public exists(email: string): Observable<any>{
+    return this.http.get(this.apiUrl + '/EmailExists/' + email, {
+      headers: this.headersWithAuth,
+      observe: "response"
+    })
+      .pipe(
+        tap(data => {}),
+        catchError(this.handleErrors)
+      );
+  }
+
   public getCandidatesBySkills(candidatesFilters): Observable<any>{
 
     return this.http.post(this.apiUrl + '/filter/' , candidatesFilters ,{

@@ -83,8 +83,11 @@
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="emailErroMsg">
                             <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                             <ng-template #emailErroMsg>
-                                <ng-container *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">
-                                    The input is not valid E-mail!
+                                <ng-container *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').hasError('email')">
+                                    Enter a valid e-mail address
+                                </ng-container>
+                                <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
+                                    E-mail address already exists
                                 </ng-container>
                             </ng-template>
                         </nz-form-control>

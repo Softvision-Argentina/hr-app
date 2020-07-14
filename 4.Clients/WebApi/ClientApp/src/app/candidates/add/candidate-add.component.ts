@@ -89,7 +89,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     name: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     dni: [0],
-    email: [null, [Validators.email, trimValidator], UniqueEmailValidator(this.facade.candidateService.data.value)],
+    email: [null, 
+      {
+        validators: [Validators.email, trimValidator],
+        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+        updateOn: "blur"
+      }
+    ],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
     linkedin: [null, [trimValidator]],
@@ -105,7 +111,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     knownFrom: [null],
     referredBy: [null]
   }, { validator: checkIfEmailAndPhoneNulll });
-
+  
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   isEdit: boolean = false;

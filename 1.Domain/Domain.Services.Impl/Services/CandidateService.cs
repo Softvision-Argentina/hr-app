@@ -174,6 +174,15 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
+        public bool Exists(string email)
+        {
+            if (_candidateRepository.QueryEager().Where(c => c.EmailAddress == email).FirstOrDefault() != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public IEnumerable<ReadedCandidateContract> List()
         {
             var candidateQuery = _candidateRepository

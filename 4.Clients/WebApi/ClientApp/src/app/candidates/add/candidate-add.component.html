@@ -66,11 +66,14 @@
                     <ng-template #emailErrorMsg>
                         <ng-container>
                             <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
-                        && candidateForm.hasError('emailAndPhoneValidator')">
-                                Please input a valid Email
+                            && candidateForm.hasError('emailAndPhoneValidator')">
+                                Enter a valid e-mail address
+                            </ng-container>
+                            <ng-container *ngIf="candidateForm.get('email').hasError('email')">
+                                Enter a valid e-mail address
                             </ng-container>
                             <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
-                                The email already exists
+                                E-mail address already exists
                             </ng-container>
                         </ng-container>
                     </ng-template>

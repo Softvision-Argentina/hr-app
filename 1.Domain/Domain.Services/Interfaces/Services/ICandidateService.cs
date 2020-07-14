@@ -10,6 +10,7 @@ namespace Domain.Services.Interfaces.Services
         CreatedCandidateContract Create(CreateCandidateContract contract);
         ReadedCandidateContract Read(int id);
         ReadedCandidateContract Exists(int id);
+        bool Exists(string email);
         void Update(UpdateCandidateContract contract);
         void Delete(int id);
         IEnumerable<ReadedCandidateContract> List();
