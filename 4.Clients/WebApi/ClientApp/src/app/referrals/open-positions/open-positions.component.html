@@ -30,8 +30,10 @@
             <td>            
               {{ position.community.name }}
             </td>
-            <td *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter']) && position.priority" class="hot">              
+            <td>
+              <div *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter']) && position.priority" class="hot">
                 <img src="../../assets/images/vector.svg" class="vector">HOT
+              </div>    
             </td>              
             <td *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])">                                
                 <!-- <label nz-radio [ngModel]=position.priority (click)="emitRadioClick(position)"></label> -->
