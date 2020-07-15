@@ -61,7 +61,7 @@ export class TechnicalStageComponent implements OnInit {
     userDelegateId: [null],
     feedback: [null, [trimValidator]],
     englishLevel: EnglishLevelEnum.None,
-    client: [null],
+    client: [null, Validators.pattern(/^[a-zA-Z0-9\s]*$/)],
     rejectionReason: [null],
     sentEmail: [false],
     reasonSelectControl: [null],
@@ -339,7 +339,7 @@ export class TechnicalStageComponent implements OnInit {
         const index = this.controlArray.push(control);
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(id.toString()));
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
-        this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, Validators.required));
+        this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
       });
     }
     if (technicalStage.sentEmail) {
@@ -405,7 +405,7 @@ export class TechnicalStageComponent implements OnInit {
     const index = this.controlArray.push(control);
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
-    this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, Validators.required));
+    this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
   }
 
   updateSkills(skillControl) {

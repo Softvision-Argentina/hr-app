@@ -201,9 +201,17 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="client"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('client')}">
                     Client</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="clientErrorMsg">
                     <input nz-input id="client" formControlName="client"
                         placeholder="Input the client that best suits" />
+                    <ng-template #clientErrorMsg>
+                        <ng-container style="color:#f5222d"
+                            *ngIf="technicalForm.get('client').dirty && technicalForm.get('client').errors">
+                            <ng-container *ngIf="technicalForm.get('client')?.hasError('pattern')">
+                                Please input only letters, numbers and space
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -299,6 +307,10 @@
                                         <ng-container
                                             *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
                                             Please input a comment!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('pattern')">
+                                            Please input only letters, numbers and space
                                         </ng-container>
                                     </ng-container>
                                 </ng-template>
