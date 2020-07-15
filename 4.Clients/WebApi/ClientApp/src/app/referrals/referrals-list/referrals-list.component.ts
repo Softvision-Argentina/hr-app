@@ -128,7 +128,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     if (!!this.candidates && !!this.processes) {
       const referredCandidates: Candidate[] = this.candidates.filter(candidate => {
         if (candidate.referredBy && candidate.referredBy.length > 0) {
-          const fullName = this.currentUser.firstName + ' ' + this.currentUser.lastName;
+          const fullName = this.currentUser.username;
           if (this.currentUser.role === 'HRUser' || this.currentUser.role === 'HRManagement' || this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
             return candidate;
           } else {

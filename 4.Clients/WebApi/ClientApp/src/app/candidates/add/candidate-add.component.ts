@@ -92,8 +92,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     email: [null, 
       {
         validators: [Validators.email, trimValidator],
-        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-        updateOn: "blur"
+        asyncValidators: UniqueEmailValidator(this.facade.candidateService)
       }
     ],
     phoneNumberPrefix: ['+54'],

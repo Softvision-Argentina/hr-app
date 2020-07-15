@@ -51,7 +51,6 @@ export class ReferralsContactComponent implements OnInit {
       {
         validators: [Validators.email, trimValidator],
         asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-        updateOn: "blur"
       }
     ],
     phoneNumberPrefix: ['+54'],
@@ -117,8 +116,7 @@ export class ReferralsContactComponent implements OnInit {
       email: [null, 
         {
           validators: [Validators.email, trimValidator],
-          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-          updateOn: "blur"
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService)
         }
       ],
       phoneNumberPrefix: ['+54'],
@@ -176,15 +174,18 @@ export class ReferralsContactComponent implements OnInit {
     this.facade.appService.startLoading();
     let isCompleted = true;
 
-    for (const i in this.candidateForm.controls) {
-      if (this.candidateForm.controls[i]) {
-        this.candidateForm.controls[i].markAsDirty();
-        this.candidateForm.controls[i].updateValueAndValidity();
-        if (!this.candidateForm.controls[i].valid) { isCompleted = false; }
+    if (this.candidateForm.invalid) {
+        this.checkForm();
+        isCompleted = false;
       }
-    }
+      else {
+        isCompleted = true;
+      }
+
+    console.log(isCompleted);
+    
     if (isCompleted) {
-      
+
       const newCandidate: Candidate = {
         id: 0,
         name: this.candidateForm.controls['firstName'].value.toString(),
@@ -204,7 +205,7 @@ export class ReferralsContactComponent implements OnInit {
         profile: null,
         cv: null,
         knownFrom: null,
-        referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName,
+        referredBy: this.currentUser.username,
         openPositionTitle: this.position ? this.position.title : null,
         openPosition: this.position ? this.position : null
       };
@@ -236,6 +237,13 @@ export class ReferralsContactComponent implements OnInit {
 
     this.facade.appService.stopLoading();
   }
+
+  checkForm() {
+      for (const i in this.candidateForm.controls) {
+        this.candidateForm.controls[i].markAsDirty();
+        this.candidateForm.controls[i].updateValueAndValidity();
+      }
+    }
 
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();

@@ -176,11 +176,11 @@ namespace Domain.Services.Impl.Services
 
         public bool Exists(string email)
         {
-            if (_candidateRepository.QueryEager().Where(c => c.EmailAddress == email).FirstOrDefault() != null)
+            if (_candidateRepository.QueryEager().FirstOrDefault(c => c.EmailAddress == email) == null)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         public IEnumerable<ReadedCandidateContract> List()

@@ -103,13 +103,13 @@ namespace ApiServer.Controllers
         {
             return ApiAction(() =>
             {
-                if (_candidateService.Exists(email))
+                if (_candidateService.Exists(email) == false)
                 {
-                    return Ok(new { Exists = true
+                    return Ok(new { Exists = false
                     });
                 }
 
-                return Ok(new { Exists = false } );
+                return Ok(new { Exists = true } );
             });
         }
 
