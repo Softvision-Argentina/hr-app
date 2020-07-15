@@ -8,7 +8,10 @@
   <div class="row">
     <nz-tabset [(nzSelectedIndex)]="tabIndex" [nzTabBarExtraContent]="extraContent()">
       <nz-tab nzTitle="{{referralsListTabTitle}}">
-        <app-referrals-list (editEvent)="showContactReferralModal($event)" [communities]="communities"></app-referrals-list>              
+        <app-referrals-list 
+        (editEvent)="showContactReferralModal($event)" 
+        [communities]="communities"
+        (deleteEvent)="deleteReferral($event)"></app-referrals-list>              
       </nz-tab>
       <nz-tab nzTitle="OPEN POSITIONS" (nzClick)="getOpenPositions()">
         <app-open-positions

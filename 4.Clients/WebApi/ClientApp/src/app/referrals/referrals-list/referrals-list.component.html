@@ -13,15 +13,17 @@
         <tr *ngFor="let referralItem of referralsTable.data">
           <td [ngStyle]="getTextColor(referralItem)"> {{ referralItem.candidate.name }}
             {{ referralItem.candidate.lastName }} </td>
+
           <td>{{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
+
           <td [ngStyle]="getTextColor(referralItem)">
               {{ referralItem.currentStatus.message }}
           </td>
+
           <td>
             <i nzTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
               (click)="showContactReferralModal(referralItem.candidate)"></i>
             <nz-divider nzType="vertical"></nz-divider>
-            <i nzTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete" nzTheme="outline"></i>
           </td>
         </tr>
       </tbody>
@@ -74,7 +76,8 @@
               <i nzTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
                 (click)="showContactReferralModal(referralItem.candidate)"></i>
               <nz-divider nzType="vertical"></nz-divider>
-              <i nzTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete" nzTheme="outline"></i>
+              <i nzTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete" nzTheme="outline"
+              (click)="deleteEvent.emit(referralItem.candidate)"></i>
             </td>
           </tr>
         </tbody>

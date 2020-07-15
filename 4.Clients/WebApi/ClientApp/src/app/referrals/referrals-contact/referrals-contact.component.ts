@@ -153,8 +153,8 @@ export class ReferralsContactComponent implements OnInit {
           community: new Community(this.candidateForm.controls['community'].value),
           isReferred: true,
           cv: this.referralToEdit.cv,
-          knownFrom: this.currentUser.firstName + ' ' + this.currentUser.lastName,
-          referredBy: this.currentUser.firstName + ' ' + this.currentUser.lastName
+          knownFrom: null,
+          referredBy: this.currentUser.username
         };
         if (this.candidateForm.controls['phoneNumber'].value) {
           editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -181,8 +181,6 @@ export class ReferralsContactComponent implements OnInit {
       else {
         isCompleted = true;
       }
-
-    console.log(isCompleted);
     
     if (isCompleted) {
 

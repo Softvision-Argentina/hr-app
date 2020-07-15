@@ -105,4 +105,12 @@ export class ReferralsService extends BaseService<Candidate> {
     );
   }
 
+  public delete(referralId: number): Observable<Candidate>{
+    //Should we keep using candidate endpoint?
+    this.apiUrl = this.apiUrl.replace('Referrals', 'Candidates');
+    return super.delete(referralId)
+    .pipe(
+      tap(res => this.candidateAdded.next(true))
+    );
+  }
 }

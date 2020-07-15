@@ -28,7 +28,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() communities;
   @Output() editEvent = new EventEmitter();
-
+  @Output() deleteEvent = new EventEmitter();
   listOfColumns: ColumnItem[];
 
   constructor(private facade: FacadeService, private globals: Globals) {
@@ -274,20 +274,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  /*   showContactReferralModal(referral: Candidate) {
-      const modal = this.facade.modalService.create({
-        nzTitle: null,
-        nzContent: ReferralsContactComponent,
-        nzClosable: false,
-        nzComponentParams: {
-          referralToEdit: referral,
-          isEditReferral: true
-        },
-        nzWidth: '90%',
-        nzFooter: null
-      });
-  
-    } */
+
 
   showContactReferralModal(referral: Candidate) {
     this.editEvent.emit(referral);

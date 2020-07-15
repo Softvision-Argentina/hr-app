@@ -810,6 +810,29 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
+  deleteReferral(referral: Candidate ){
+    this.facade.modalService.confirm({
+      nzTitle: `Are you sure you want to delete ${referral.name} ${referral.lastName} ?`,
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzCancelText: 'No',
+      nzOnOk: () => this.confirmDelete(referral.id)
+    });
+  }
+
+  confirmDelete(referralId: number){
+    this.facade.appService.startLoading();
+    this.facade.referralsService.delete(referralId)
+    .subscribe(() => {
+      this.facade.appService.stopLoading();
+      this.facade.toastrService.success('Referral was successfully deleted');
+    }, err => {
+      this.facade.appService.stopLoading();
+      this.facade.errorHandlerService.showErrorMessage(err, 'Referral cannot be deleted');
+    });
+  }
+
   showOpenPositionModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
       nzTitle: '<h1 class="title"> <strong> Add open position</strong></h1>',
@@ -832,8 +855,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       },
       nzWidth: '90%',
       nzFooter: null
-    });    
-    console.log(this.tabIndex);
+    });
   }
 
   refreshTable() {
