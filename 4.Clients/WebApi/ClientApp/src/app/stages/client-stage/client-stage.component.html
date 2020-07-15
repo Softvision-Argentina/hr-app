@@ -277,7 +277,7 @@
                         <td>
                             <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
                         </td>
-                        <td><input type="text" nz-input/></td>
+                        <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client"/></td>
                         <td><app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" [isEditable]="true"></app-text-editor></td>                    
                         <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer"/></td>
                         <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
