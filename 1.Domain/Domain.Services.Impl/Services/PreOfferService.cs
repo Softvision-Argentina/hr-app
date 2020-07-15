@@ -103,6 +103,16 @@ namespace Domain.Services.Impl.Services
             return _mapper.Map<ReadedPreOfferContract>(preOfferResult);
         }
 
+        public IEnumerable<ReadedPreOfferContract> GetByProcessId(int id)
+        {
+            var preOfferQuery = _preOfferRepository
+                .QueryEager().Where(_ => _.ProcessId == id);
+
+            var preOfferResult = preOfferQuery.ToList();
+
+            return _mapper.Map<List<ReadedPreOfferContract>>(preOfferResult);
+        }
+
         private void ValidateContract(CreatePreOfferContract contract)
         {
             try

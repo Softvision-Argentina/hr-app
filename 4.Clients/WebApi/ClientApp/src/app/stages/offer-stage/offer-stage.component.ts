@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy  } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy, OnChanges  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Globals } from '../../app-globals/globals';
@@ -14,7 +14,7 @@ import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
   styleUrls: ['./offer-stage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OfferStageComponent implements OnInit {
+export class OfferStageComponent implements OnInit, OnChanges {
 
   @Input()
   private _users: User[];
@@ -44,8 +44,14 @@ export class OfferStageComponent implements OnInit {
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
     preocupationalDone: false,
     preocupationalDoneDate: [new Date(), [Validators.required]],
-    rejectionReason: [null],
+    rejectionReason: [null]
   });
+
+  remunerationOfferControl: AbstractControl;
+  vacationDaysControl: AbstractControl;
+  healthInsuranceControl: AbstractControl;
+  bonusControl: AbstractControl;
+  hireDateControl: AbstractControl;
 
   feedbackContent:string = "";
 
@@ -59,6 +65,8 @@ export class OfferStageComponent implements OnInit {
 
   @Input() offerStage: OfferStage;
   @Output() selectedSeniority = new EventEmitter();
+
+  @Input() preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum} = null;
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +84,18 @@ export class OfferStageComponent implements OnInit {
     });
     this.changeFormStatus(false);
     if (this.offerStage) { this.fillForm(this.offerStage); }
+
+    this.setAbstractControls();
+  }
+
+  ngOnChanges() {
+    if(this.preOfferData && (this.offerForm.controls['status'].value === StageStatusEnum.NA)) {
+      this.hireDateControl.setValue(this.preOfferData.tentativeStartDate);
+      this.bonusControl.setValue(this.preOfferData.bonus);
+      this.remunerationOfferControl.setValue(this.preOfferData.grossSalary);
+      this.vacationDaysControl.setValue(this.preOfferData.vacationDays);
+      this.healthInsuranceControl.setValue(this.preOfferData.healthInsurance);
+    }
   }
 
   updateSeniority(seniorityId) {
@@ -261,5 +281,13 @@ export class OfferStageComponent implements OnInit {
 
   isRequiredField(field: string) {
     return formFieldHasRequiredValidator(field, this.offerForm)
+  }
+
+  setAbstractControls() {
+    this.remunerationOfferControl = this.offerForm.controls["remunerationOffer"];
+    this.vacationDaysControl = this.offerForm.controls["vacationDays"];
+    this.healthInsuranceControl = this.offerForm.controls["healthInsurance"];
+    this.bonusControl = this.offerForm.controls["bonus"];
+    this.hireDateControl = this.offerForm.controls["hireDate"];
   }
 }

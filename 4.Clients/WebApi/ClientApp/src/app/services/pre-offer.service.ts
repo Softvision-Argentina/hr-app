@@ -4,6 +4,8 @@ import { BaseService } from './base.service';
 import { AppConfig } from '../app-config/app.config';
 import { Router } from '@angular/router';
 import { PreOffer } from 'src/entities/pre-offer';
+import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class PreOfferService extends BaseService<PreOffer> {
@@ -13,4 +15,15 @@ export class PreOfferService extends BaseService<PreOffer> {
     this.apiUrl += 'PreOffer';
   }
 
+  public getByProcessId(processId: number): Observable<any>{
+    let url = this.apiUrl + '/GetByProcess/' + processId.toString();
+    return this.http.get<PreOffer[]>(url, 
+      { headers: this.headersWithAuth, observe: "body" })
+        .pipe(
+          tap((res) => {
+            this.data.next(res);
+          }),
+          catchError(this.handleErrors)
+        );
+  }
 }

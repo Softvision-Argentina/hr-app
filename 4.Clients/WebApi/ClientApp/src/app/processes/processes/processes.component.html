@@ -128,7 +128,7 @@
         </div>
         <div ngxSlickItem class="slide" style="overflow-y: auto; height: 565px">
           <offer-stage [_users]="users" [offerStage]="emptyProcess.offerStage"
-            (selectedSeniority)="updateSeniority($event)"></offer-stage>
+            [preOfferData]="preOfferData" (selectedSeniority)="updateSeniority($event)"></offer-stage>
         </div>
   </ngx-slick-carousel>
 </ng-template>

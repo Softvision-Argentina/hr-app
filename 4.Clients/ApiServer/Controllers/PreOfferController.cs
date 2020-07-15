@@ -66,6 +66,30 @@ namespace ApiServer.Controllers
         }
 
         /// <summary>
+        /// Get PreOffers by process Id.
+        /// </summary>
+        /// <param name="id">processId.</param>
+        /// <response code="202">return a  ReadedPreOfferViewModel.</response>
+        /// <response code="404">if preoffer is null.</response>
+        [HttpGet("GetByProcess/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        public IActionResult GetByProcessId(int id)
+        {
+            return ApiAction(() =>
+            {
+                var preOffer = _preOfferService.GetByProcessId(id);
+
+                if (preOffer == null)
+                {
+                    return NotFound(id);
+                }
+
+                return Accepted(_mapper.Map<List<ReadedPreOfferViewModel>>(preOffer));
+            });
+        }
+
+        /// <summary>
         /// Add new preOffer.
         /// </summary>
         /// <param name="createPreOfferViewModel">createPreOfferViewModel.</param>

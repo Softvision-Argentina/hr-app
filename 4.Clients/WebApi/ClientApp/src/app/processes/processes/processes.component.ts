@@ -34,6 +34,8 @@ import { Router } from '@angular/router';
 import { ReferralsService } from '../../services/referrals.service'; import { ReaddressReason } from 'src/entities/ReaddressReason';
 import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
 import { ReaddressStatus } from 'src/entities/ReaddressStatus';
+import { PreOffer } from 'src/entities/pre-offer';
+import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
 
 @Component({
   selector: 'app-processes',
@@ -127,6 +129,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   readdressReasonTypeList: ReaddressReasonType[] = [];
   readdressStatus: ReaddressStatus = new ReaddressStatus();
   currentStage: ProcessCurrentStageEnum;
+
+  preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum} = null;
 
   constructor(
     private facade: FacadeService,
@@ -525,6 +529,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
     this.processId = processId;
     this.facade.appService.startLoading();
+    this.preOfferData = null;
     if (processId > -1) {
       this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
       this.isEdit = true;
@@ -534,6 +539,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       } else {
         this.stepIndex = 0;
       }
+      this.getPreOfferData(processId);
     } else {
       this.emptyProcess = undefined;
     }
@@ -586,6 +592,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzFooter: footer,
       nzMaskClosable: false
     });
+    this.preOfferData = null;
     this.facade.appService.stopLoading();
   }
 
@@ -1122,4 +1129,28 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.clientStage.clearInterviewOperations();
     this.closeModal();
   }
+
+  getPreOfferData(processId: number) {
+    let preOffers: PreOffer[] = null;
+    this.facade.preOfferService.getByProcessId(processId)
+      .subscribe(res => {
+        preOffers = res;
+
+        if(preOffers && (preOffers.length > 0) && (this.emptyProcess.preOfferStage.status == StageStatusEnum.Accepted)) {
+          let mainAcceptedPreOffer = preOffers.find(_ => _.status == preOfferStatusEnum.Accepted);
+          if(mainAcceptedPreOffer) {
+            this.preOfferData = {
+              tentativeStartDate: mainAcceptedPreOffer.tentativeStartDate,
+              bonus: mainAcceptedPreOffer.bonus,
+              grossSalary: mainAcceptedPreOffer.salary,
+              vacationDays: mainAcceptedPreOffer.vacationDays,
+              healthInsurance: mainAcceptedPreOffer.healthInsurance
+            }
+          }        
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });    
+  }
+
 }

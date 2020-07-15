@@ -10,5 +10,6 @@ namespace Domain.Services.Interfaces.Services
         void Update(UpdatePreOfferContract contract);
         void Delete(int id);
         IEnumerable<ReadedPreOfferContract> List();
+        IEnumerable<ReadedPreOfferContract> GetByProcessId(int id);
     }
 }
