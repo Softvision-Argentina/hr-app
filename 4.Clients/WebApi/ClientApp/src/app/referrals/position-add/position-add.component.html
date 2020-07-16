@@ -64,26 +64,22 @@
                   </nz-form-item>
               </div>
               <div nz-col nzSpan="12">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="studio">Studio</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="StudioError">
-                        <input nz-input formControlName="studio" id="studio" placeholder="Please input the studio">
-                        <ng-template #StudioError>
+                  <nz-form-item>
+                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="studio">Studio
+                      </nz-form-label>
+                      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="StudioError">
+                        <nz-select #studio formControlName="studio">
+                          <nz-option nzLabel="Buenos Aires" [nzValue]="1"></nz-option>
+                       </nz-select>
+                       <ng-template #StudioError>
                             <ng-container
-                            *ngIf="positionForm.get('studio').dirty && positionForm.get('studio').errors">                         
-                                <ng-container 
-                                    *ngIf="positionForm.get('studio')?.hasError('required')">
-                                    Please input the studio
-                                </ng-container>                                
-                                <ng-container
-                                    *ngIf="positionForm.get('studio')?.hasError('maxlength')">
-                                    The maximun length is 40
-                                </ng-container>                
+                                *ngIf="positionForm.get('studio').dirty && positionForm.get('studio').errors">
+                                Please input the studio
                             </ng-container>
                         </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+                      </nz-form-control>
+                  </nz-form-item>
+              </div>
           </div>
           <div nz-row>
             <div nz-col nzSpan="12">
