@@ -88,9 +88,26 @@
           <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="jobDescription">Job description</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="jobDescriptionErrorMsg">
-                        <app-text-editor [setContent]="jobDescriptionContent" (getContent)="getJobDescriptionContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>                        
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="priority">
+                        HOT
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <div class="flex-container">
+                            <nz-select formControlName="priority">
+                                <nz-option nzLabel="NO" [nzValue]="false"></nz-option>
+                                <nz-option nzLabel="YES" [nzValue]="true"></nz-option>
+                            </nz-select>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+          </div>
+          <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" [nzMd]="4" nzFor="jobDescription">Job description</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzMd]="19" [nzErrorTip]="jobDescriptionErrorMsg">
+                        <app-text-editor id="openPositionTextEditor" [setContent]="jobDescriptionContent" (getContent)="getJobDescriptionContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>                        
                         <ng-template #jobDescriptionErrorMsg>
                             <ng-container
                                 *ngIf="positionForm.get('jobDescription').dirty && positionForm.get('jobDescription').errors">
@@ -104,21 +121,6 @@
                                 </ng-container>
                             </ng-container>
                         </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="12">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="priority">
-                        HOT
-                    </nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <div class="flex-container">
-                            <nz-select formControlName="priority">
-                                <nz-option nzLabel="NO" [nzValue]="false"></nz-option>
-                                <nz-option nzLabel="YES" [nzValue]="true"></nz-option>
-                            </nz-select>
-                        </div>
                     </nz-form-control>
                 </nz-form-item>
             </div>
