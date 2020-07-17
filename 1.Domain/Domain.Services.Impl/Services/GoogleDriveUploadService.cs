@@ -68,8 +68,8 @@ namespace Domain.Services.Impl.Services
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
                     "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
+                    CancellationToken.None).Result;
+                    //new FileDataStore(credPath, true)).Result;
             }
 
                 var service = new DriveService(new BaseClientService.Initializer()
