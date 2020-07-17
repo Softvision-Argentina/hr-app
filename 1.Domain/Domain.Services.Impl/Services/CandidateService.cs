@@ -11,6 +11,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Domain.Services.Impl.Services
 {
@@ -63,7 +64,10 @@ namespace Domain.Services.Impl.Services
             ValidateExistence(contract.EmailAddress, contract.PhoneNumber);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
+
             var candidate = _mapper.Map<Candidate>(contract);
+
+            candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
 
             if (contract.User != null)
             {
@@ -111,7 +115,10 @@ namespace Domain.Services.Impl.Services
             ValidateContract(contract);
 
             _log.LogInformation($"Mapping contract {contract.Name}");
+
             var candidate = _mapper.Map<Candidate>(contract);
+
+            candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
 
             var currentProcesses = _processRepository.Query().Where(p => p.CandidateId == candidate.Id && p.Status != Model.Enum.ProcessStatus.Hired);
 
@@ -121,11 +128,11 @@ namespace Domain.Services.Impl.Services
                 _processRepository.Update(process);
             }
 
-
             if (contract.User != null)
             {
                 this.AddUserToCandidate(candidate, contract.User.Id);
             }
+
             this.AddOfficeToCandidate(candidate, contract.PreferredOfficeId);
             this.AddCommunityToCandidate(candidate, contract.Community.Id);
 
@@ -152,11 +159,9 @@ namespace Domain.Services.Impl.Services
 
         public IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filterRule)
         {
-
             var candidateQuery = _candidateRepository
                 .QueryEager()
                 .Where(filterRule);
-
 
             var candidateResult = candidateQuery.ToList();
 
@@ -318,6 +323,16 @@ namespace Domain.Services.Impl.Services
 
             candidate.OpenPosition = position;
             candidate.PositionTitle = position.Title;
+        }
+
+        private string GetLinkedInUsername(string url)
+        {
+            var match = Regex.Match(url, @"linkedin\.com\/in\/(?<userId>[^\/]+)");
+            if (match.Success)
+            {
+                return match.Groups["userId"].Value;
+            }
+            return url;
         }
     }
 }
