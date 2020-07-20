@@ -153,7 +153,11 @@ namespace Domain.Services.Impl.Services
             AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
             process.Candidate.Status = CandidateStatus.InProgress;
-            process.Candidate.LinkedInProfile = GetLinkedInUsername(process.Candidate.LinkedInProfile);
+
+            if (process.Candidate.LinkedInProfile != null)
+            {
+                process.Candidate.LinkedInProfile = GetLinkedInUsername(process.Candidate.LinkedInProfile);
+            }
 
             _candidateRepository.Update(process.Candidate);
 

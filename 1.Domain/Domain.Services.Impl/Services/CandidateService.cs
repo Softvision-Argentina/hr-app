@@ -67,7 +67,10 @@ namespace Domain.Services.Impl.Services
 
             var candidate = _mapper.Map<Candidate>(contract);
 
-            candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+            if (candidate.LinkedInProfile != null)
+            {
+                candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+            }
 
             if (contract.User != null)
             {
@@ -118,7 +121,10 @@ namespace Domain.Services.Impl.Services
 
             var candidate = _mapper.Map<Candidate>(contract);
 
-            candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+            if (candidate.LinkedInProfile != null)
+            {
+                candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+            }
 
             var currentProcesses = _processRepository.Query().Where(p => p.CandidateId == candidate.Id && p.Status != Model.Enum.ProcessStatus.Hired);
 
