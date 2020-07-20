@@ -47,8 +47,6 @@ namespace Domain.Services.Impl.Services
                 stream.Close();
 
                 return webViewLink;
-
-
         }
 
         public DriveService Authorize()
