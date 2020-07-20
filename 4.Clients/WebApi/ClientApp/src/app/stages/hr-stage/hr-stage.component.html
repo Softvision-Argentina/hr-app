@@ -209,12 +209,12 @@
     <div nz-row nzJustify="center">
         <div nz-col [nzSm]="14" [nzXs]="24">
             <nz-form-item>
-                <nz-form-control>
+                <nz-form-control id="englishLevelButtons">
                     <div class="flex-container">
                         <nz-form-label class="englishLabel" nzFor="englishLevel"
                             [ngClass]="{'requiredFieldLabel': isRequiredField('englishLevel')}">
                             English Level</nz-form-label>
-                        <nz-radio-group formControlName="englishLevel">
+                        <nz-radio-group formControlName="englishLevel" class="englishLevelButtons">
                             <label *ngFor="let level of englishLevelList" [nzDisabled]="disabled" nz-radio-button
                                 [nzValue]="level.id"><span>{{level.name}}</span></label>
                         </nz-radio-group>

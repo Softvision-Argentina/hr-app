@@ -158,8 +158,35 @@
   width: 71.5%;
 }
 
-@media screen and (max-width: 1440px) and (min-width: 1280px) {
+@media screen and (max-width: 1644px) {
   #feedbackLabel {
     margin-left: 100px;
   }
+
+  .flex-container {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 1293px) {
+  ::ng-deep .ant-radio-group.englishLevelButtons {
+    width: 655px;
+  }
+} 
+
+@media screen and (max-width: 1199px) and (min-width: 768px) {
+  ::ng-deep #englishLevelButtons .ant-form-item-control-input {
+    position: relative;
+    right: 100px;
+  }
+
+  ::ng-deep .englishLevelButtons .ant-radio-button-wrapper {
+    width: 161px;
+  }
+  
+  ::ng-deep .englishLevelButtons .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    width: 128px;
+
+}
+
 }
