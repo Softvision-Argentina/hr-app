@@ -577,6 +577,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         referredBy: null,
         knownFrom: null,
         cv: null,
+        source: null
       };
       this.currentCandidate = newCandidate;
     } else {

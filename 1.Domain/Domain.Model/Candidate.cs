@@ -27,5 +27,6 @@ namespace Domain.Model
         public string ReferredBy { get; set; }
         public OpenPosition OpenPosition { get; set; }
         public string PositionTitle { get; set; }
+        public string Source { get; set; }
     }
 }

@@ -27,4 +27,5 @@ export class Candidate {
   dni?: number;
   openPosition?: OpenPosition;
   openPositionTitle?: string;
+  source: string;
 }

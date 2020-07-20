@@ -30,5 +30,6 @@ namespace Domain.Services.Contracts.Candidate
         public string ReferredBy { get; set; }
         public ReadedOpenPositionContract OpenPosition { get; set; }
         public string OpenPositionTitle { get; set; }
+        public string Source { get; set; }
     }
 }

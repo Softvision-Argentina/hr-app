@@ -30,5 +30,6 @@ namespace ApiServer.Contracts.Candidates
         public string ReferredBy { get; set; }
         public ReadedOpenPositionViewModel OpenPosition { get; set; }
         public string OpenPositionTitle { get; set; }
+        public string Source { get; set; }
     }
 }

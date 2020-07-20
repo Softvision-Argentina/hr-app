@@ -43,7 +43,18 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   searchName = '';
   searchSub: Subscription;
   candidateSubscriptions: Subscription = new Subscription();
-
+  sourceArray = [
+    {name: 'Linkedin'},
+    {name: 'Instagram'},
+    {name: 'Facebook'},
+    {name: 'Twitter'},
+    {name: 'Event / Meetup'},
+    {name: 'Mailing'},
+    {name: 'Indeed/ Glassdoor'},
+    {name: 'A friend / colleague'},
+    {name: 'Online Ad'},
+    {name: 'Other'}
+  ];
   // Modals
   skills: Skill[] = [];
   private completeSkillList: Skill[] = [];
@@ -109,7 +120,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getProfiles() {
     const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
-      this.profiles = res.sort((a, b) => (a.name).localeCompare(b.name));
+      if(!!res){
+        this.profiles = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -118,7 +131,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
-      this.communities = res.sort((a, b) => (a.name).localeCompare(b.name));
+      if(!!res){
+        this.communities = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -136,7 +151,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getOffices() {
     const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
-      this._offices = res.sort((a, b) => (a.name).localeCompare(b.name));
+      if(!!res){
+        this._offices = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
@@ -185,10 +202,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       contactDay: null,
       preferredOffice: [null],
       community: [null, [Validators.required]],
-      profile: [null, [Validators.required]],
+      profile: [null],
       isReferred: [null],
       referredBy: [null],
-      knownFrom: [null]
+      knownFrom: [null],
+      source: null
     });
   }
 
@@ -257,7 +275,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             if (validateCandidateForm(this.validateForm)) {
               const candidateSkills: CandidateSkill[] = [];
               this.controlEditArray.forEach(skillEdit => {
@@ -305,7 +322,8 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 isReferred: this.validateForm.controls['isReferred'].value,
                 cv: null,
                 knownFrom: knownFrom,
-                referredBy: referredBy
+                referredBy: referredBy,
+                source: this.validateForm.controls['source'].value
               };
               if (this.validateForm.controls['phoneNumber'].value) {
                 editedCandidate.phoneNumber += this.validateForm.controls['phoneNumber'].value.toString();
@@ -443,6 +461,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
     this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
     this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
+    this.validateForm.controls['source'].setValue(candidate.source);
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = (this.controlEditArray.length > 0) ? this.controlEditArray[this.controlEditArray.length - 1].id + 1 : 0;

@@ -301,6 +301,21 @@
             </div>
         </div>
         <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="source">
+                        Source</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-select formControlName="source" nzPlaceHolder="Select the source of the candidate">
+                            <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}"
+                                [nzValue]="s.name">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-item>
                     <nz-form-control>

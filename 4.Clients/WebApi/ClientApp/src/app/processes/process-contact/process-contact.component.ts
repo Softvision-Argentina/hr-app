@@ -297,6 +297,7 @@ export class ProcessContactComponent implements OnInit {
         cv: editedCandidate.cv,
         knownFrom: editedCandidate.knownFrom,
         referredBy: editedCandidate.referredBy,
+        source: editedCandidate.source
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -334,7 +335,8 @@ export class ProcessContactComponent implements OnInit {
       isReferred: editedCandidate.isReferred,
       cv: editedCandidate.cv,
       knownFrom: editedCandidate.knownFrom,
-      referredBy: editedCandidate.referredBy
+      referredBy: editedCandidate.referredBy,
+      source: editedCandidate.source
     };
     this.facade.candidateService.update(idCandidate, editedCandidate)
       .subscribe(res => {
@@ -375,7 +377,8 @@ export class ProcessContactComponent implements OnInit {
         profile: new CandidateProfile(this.candidateForm.controls['profile'].value),
         cv: null,
         knownFrom: null,
-        referredBy: null
+        referredBy: null,
+        source: null
       }
       if (this.candidateForm.controls['phoneNumber'].value) {
         newCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();

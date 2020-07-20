@@ -78,6 +78,18 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     public set candidateProfiles(value: CandidateProfile[]) {
       this.profiles = value;
     }
+  sourceArray = [
+      {name: 'Linkedin'},
+      {name: 'Instagram'},
+      {name: 'Facebook'},
+      {name: 'Twitter'},
+      {name: 'Event / Meetup'},
+      {name: 'Mailing'},
+      {name: 'Indeed/ Glassdoor'},
+      {name: 'A friend / colleague'},
+      {name: 'Online Ad'},
+      {name: 'Other'}
+    ];
   fillCandidate: Candidate;
   fillUsers: User[] = [];
   comms: Community[] =[];
@@ -108,7 +120,8 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     isReferred: [null],
     cv: [null],
     knownFrom: [null],
-    referredBy: [null]
+    referredBy: [null],
+    source: [null]
   }, { validator: checkIfEmailAndPhoneNulll });
   
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
@@ -233,6 +246,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
     this.candidateForm.controls['cv'].setValue(candidate.cv);
     this.candidateForm.controls['knownFrom'].setValue(candidate.knownFrom);
+    this.candidateForm.controls['source'].setValue(candidate.source);
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = skill.skillId || skill.skill.id;
@@ -283,7 +297,8 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,      
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
-      referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value
+      referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value,
+      source: !this.candidateForm.controls['source'].value ? null : this.candidateForm.controls['source'].value
     }
     return newCandidate;
   }

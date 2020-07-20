@@ -154,7 +154,8 @@ export class ReferralsContactComponent implements OnInit {
           isReferred: true,
           cv: this.referralToEdit.cv,
           knownFrom: null,
-          referredBy: this.currentUser.username
+          referredBy: this.currentUser.username,
+          source: 'A friend / colleague'
         };
         if (this.candidateForm.controls['phoneNumber'].value) {
           editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
@@ -205,7 +206,8 @@ export class ReferralsContactComponent implements OnInit {
         knownFrom: null,
         referredBy: this.currentUser.username,
         openPositionTitle: this.position ? this.position.title : null,
-        openPosition: this.position ? this.position : null
+        openPosition: this.position ? this.position : null,
+        source: 'A friend / colleague'
       };
 
       if (this.candidateForm.controls['phoneNumber'].value) {

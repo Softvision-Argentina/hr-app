@@ -67,6 +67,8 @@ namespace ApiServer.Migrations
 
                     b.Property<string>("ReferredBy");
 
+                    b.Property<string>("Source");
+
                     b.Property<int>("Status");
 
                     b.Property<int?>("UserId");
