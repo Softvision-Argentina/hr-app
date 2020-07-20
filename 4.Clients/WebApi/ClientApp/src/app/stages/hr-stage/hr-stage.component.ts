@@ -4,7 +4,6 @@ import { User } from 'src/entities/user';
 import { ReaddressReason } from 'src/entities/ReaddressReason';
 import { ReaddressReasonType } from 'src/entities/ReaddressReasonType';
 import { FacadeService } from 'src/app/services/facade.service';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Globals } from '../../app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
 import { HrStage } from '../../../entities/hr-stage';
@@ -40,8 +39,8 @@ export class HrStageComponent implements OnInit {
     wantedSalary: [null],
     userOwnerId: [],
     userDelegateId: [null],
-    feedback: [null, [trimValidator]],
-    additionalInformation: [null, [trimValidator]],
+    feedback: [null, []],
+    additionalInformation: [null],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null],
     rejectionReasonsHr: [0],
@@ -62,11 +61,10 @@ export class HrStageComponent implements OnInit {
   @Input() hrStage: HrStage;
   @Input() readdressReasonList: ReaddressReason[] = [];
   @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
-  
+
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
   selectedReason: string;
-
   constructor(private fb: FormBuilder, private facade: FacadeService,
      private globals: Globals, private _appComponent: AppComponent) {
 
@@ -79,7 +77,7 @@ export class HrStageComponent implements OnInit {
   this.currentStageStatus = this.hrStage.status;
 	let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
   this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-  
+
   this.selectedReason = undefined;
   this.readdressStatus.feedback = undefined;
   this.readdressStatus.fromStatus = undefined;
@@ -280,7 +278,7 @@ export class HrStageComponent implements OnInit {
     this.readdressStatus.readdressReasonId = this.selectedReasonId;
   }
 
-  onDescriptionChange(description: string): void {  
+  onDescriptionChange(description: string): void {
     this.readdressStatus.feedback = description;
   }
 }

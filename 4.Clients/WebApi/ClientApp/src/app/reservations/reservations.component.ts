@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { Reservation } from 'src/entities/reservation'
@@ -46,11 +45,11 @@ export class ReservationsComponent implements OnInit {
   constructor(private fb: FormBuilder, private facade: FacadeService, private modalService: NzModalService) { }
 
   reservationForm: FormGroup = this.fb.group({
-    description: [null, [Validators.required, trimValidator]],
+    description: [null, [Validators.required]],
     sinceReservation: [null, [Validators.required]],
     untilReservation: [null, [Validators.required]],
     user: [null, [Validators.required]],
-    roomId: [null, [Validators.required, trimValidator]],
+    roomId: [null, [Validators.required]],
     room: [null],
     office: [2, [Validators.required]]
   });
@@ -143,7 +142,7 @@ export class ReservationsComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {

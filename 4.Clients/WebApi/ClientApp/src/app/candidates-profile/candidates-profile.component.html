@@ -65,12 +65,6 @@
                             placeholder="Please input the Name">
                         <ng-template #nameErrorMsg>
                             <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
-                                <ng-container *ngIf="validateForm.get('name')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('name')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
                                     Please input the name!
                                 </ng-container>
@@ -90,12 +84,6 @@
                         <ng-template #descriptionErrorMsg>
                             <ng-container
                                 *ngIf="validateForm.get('description').dirty && validateForm.get('description').errors">
-                                <ng-container *ngIf="validateForm.get('description')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('description')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="validateForm.get('description')?.hasError('required')">
                                     Please input the description!
                                 </ng-container>

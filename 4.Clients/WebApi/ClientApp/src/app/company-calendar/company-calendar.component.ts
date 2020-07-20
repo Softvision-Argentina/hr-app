@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { CompanyCalendar} from 'src/entities/Company-Calendar';
 import { FacadeService } from '../services/facade.service';
-import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
@@ -65,7 +64,7 @@ export class CompanyCalendarComponent implements OnInit {
     this.validateForm = this.fb.group({
       type: [null, [Validators.required]],
       date: [new Date(), [Validators.required]],
-      comments: [null, [Validators.required, trimValidator]],
+      comments: [null, Validators.required],
     });
   }
 
@@ -93,7 +92,7 @@ export class CompanyCalendarComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -154,7 +153,7 @@ export class CompanyCalendarComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {

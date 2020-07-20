@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { Candidate } from 'src/entities/candidate';
 import { FacadeService } from 'src/app/services/facade.service';
-import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { CandidateSkill } from 'src/entities/candidateSkill';
 import { Skill } from 'src/entities/skill';
@@ -66,7 +65,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   controlEditArray: Array<{ id: number, controlInstance: string[] }> = [];
   isEdit = false;
   editingCandidateId = 0;
-  isDniLoading = false;  
+  isDniLoading = false;
   currentUser: User;
   searchValueStatus = '';
   statusList: any[];
@@ -189,13 +188,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      lastName: [null, [Validators.required, trimValidator]],
+      name: [null,Validators.required],
+      lastName: [null, Validators.required],
       dni: [null],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
-      linkedin: [null, [trimValidator]],      
+      linkedin: [null],
       user: [null, [Validators.required]],
       englishLevel: 'none',
       status: null,
@@ -266,7 +265,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -311,7 +310,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 phoneNumber: '(' + this.validateForm.controls['phoneNumberPrefix'].value.toString() + ')',
                 linkedInProfile: this.validateForm.controls['linkedin'].value === null
                   ? null : this.validateForm.controls['linkedin'].value.toString(),
-                candidateSkills: candidateSkills,                
+                candidateSkills: candidateSkills,
                 englishLevel: this.validateForm.controls['englishLevel'].value,
                 status: this.validateForm.controls['status'].value,
                 preferredOfficeId: this.validateForm.controls['preferredOffice'].value,
@@ -451,7 +450,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['email'].setValue(candidate.emailAddress);
     this.validateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
-    this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);    
+    this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.validateForm.controls['user'].setValue(candidate.user ? candidate.user.id : null);
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);
@@ -478,7 +477,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  dniChanged() {    
+  dniChanged() {
     this.changeFormStatus(false);
   }
 

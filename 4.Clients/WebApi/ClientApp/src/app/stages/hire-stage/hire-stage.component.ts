@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl, Validators, FormControl } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Process } from 'src/entities/process';
 import { Globals } from 'src/app/app-globals/globals';
 import { StageStatusEnum } from '../../../entities/enums/stage-status.enum';
@@ -38,7 +37,7 @@ export class HireStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
-    feedback: [null, [trimValidator]]
+    feedback: [null]
   });
 
   feedbackContent:string = "";
@@ -60,7 +59,7 @@ export class HireStageComponent implements OnInit {
   getFeedbackContent(content: string): void {
     this.feedbackContent = content;
   }
-  
+
   changeFormStatus(enable: boolean) {
     for (const i in this.hireForm.controls) {
       if (this.hireForm.controls[i] !== this.hireForm.controls['status']) {

@@ -79,20 +79,9 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="bonus">Bonus</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="bonusErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24" >
                     <textarea rows="1" id="bonus" nz-input formControlName="bonus"
                         placeholder="Input any additional information if necessary"></textarea>
-                    <ng-template #bonusErrorMsg>
-                        <ng-container style="color: #f5222d"
-                            *ngIf="offerForm.get('bonus').dirty && offerForm.get('bonus').errors">
-                            <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="offerForm.get('bonus')?.hasError('bonus')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                        </ng-container>
-                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -118,20 +107,9 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="vacationDaysErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24" >
                     <input type="number" nz-input formControlName="vacationDays" id="vacationDays"
                         placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
-                    <ng-template #vacationDaysErrorMsg>
-                        <ng-container style="color: #f5222d"
-                            *ngIf="offerForm.get('bonus').dirty && offerForm.get('bonus').errors">
-                            <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="offerForm.get('bonus')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                        </ng-container>
-                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>

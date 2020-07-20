@@ -161,12 +161,6 @@
                             placeholder="Please input the Title of the task">
                         <ng-template #titleErrorMsg>
                             <ng-container *ngIf="validateForm.get('title').dirty && validateForm.get('title').errors">
-                                <ng-container *ngIf="validateForm.get('title')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('title')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="validateForm.get('title')?.hasError('required')">
                                     Please input the title!
                                 </ng-container>

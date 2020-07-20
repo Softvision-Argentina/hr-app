@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { trimValidator } from '../directives/trim.validator';
 import { Role } from 'src/entities/role';
 import { Employee } from 'src/entities/employee';
 
@@ -21,7 +20,7 @@ export class RoleComponent implements OnInit {
     this.getRoles();
 
     this.roleForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
+      name: [null, [Validators.required]],
       isActive: [null, [Validators.required]]
     });
   }

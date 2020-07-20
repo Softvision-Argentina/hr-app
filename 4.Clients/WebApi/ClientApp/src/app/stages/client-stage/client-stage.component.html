@@ -49,8 +49,8 @@
             Reason
             </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-select formControlName="reasonSelectControl" 
-            [(ngModel)]="selectedReason" 
+            <nz-select formControlName="reasonSelectControl"
+            [(ngModel)]="selectedReason"
             (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
                 <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
                 </nz-option>
@@ -58,7 +58,7 @@
             </nz-form-control>
         </nz-form-item>
         </div>
-    
+
         <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">
@@ -107,15 +107,6 @@
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)">
                     </app-text-editor>
                 </nz-form-control>
-                <ng-template #feedbackErrorMsg style="color: #f5222d"
-                    *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
-                    <ng-container *ngIf="clientForm.get('feedback')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="clientForm.get('feedback')?.hasError('trimEndError')">
-                        The input has trailing whitespace!
-                    </ng-container>
-                </ng-template>
             </nz-form-item>
         </div>
         <!-- NOTE: Deprecated. To be removed in future version
@@ -278,7 +269,7 @@
                             <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
                         </td>
                         <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client"/></td>
-                        <td><app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" [isEditable]="true"></app-text-editor></td>                    
+                        <td><app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" [isEditable]="true"></app-text-editor></td>
                         <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer"/></td>
                         <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
                         <td>

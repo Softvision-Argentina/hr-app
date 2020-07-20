@@ -76,21 +76,10 @@
         <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="feedbackErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)">
                     </app-text-editor>
                 </nz-form-control>
-                <ng-template #feedbackErrorMsg>
-                    <ng-container style="color: #f5222d"
-                        *ngIf="hireForm.get('feedback').dirty && hireForm.get('feedback').errors">
-                        <ng-container *ngIf="hireForm.get('feedback')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="hireForm.get('feedback')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </ng-container>
-                </ng-template>
             </nz-form-item>
         </div>
     </div>

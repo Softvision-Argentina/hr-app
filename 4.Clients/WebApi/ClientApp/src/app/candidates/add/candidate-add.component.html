@@ -10,17 +10,11 @@
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input a Name">
                     <ng-template #firstNameErrorMsg>
                         <ng-container *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
-                            <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="!candidateForm.get('name')?.hasError('pattern') && candidateForm.get('name')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
                             <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
                                 Please input a name!
                             </ng-container>
                             <ng-container *ngIf="candidateForm.get('name')?.hasError('pattern')">
-                                Please input only letters and space  
+                                Please input only letters and space
                             </ng-container>
                         </ng-container>
                     </ng-template>
@@ -38,12 +32,6 @@
                     <ng-template #lastNameErrorMsg>
                         <ng-container
                             *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                            <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="!candidateForm.get('lastName')?.hasError('pattern') && candidateForm.get('lastName')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
                             <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
                                 Please input a last name!
                             </ng-container>
@@ -114,20 +102,9 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedin"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
                     LinkedIn</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="linkedInErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24" >
                     <input nz-input formControlName="linkedin" id="linkedin"
                         placeholder="Please input the LinkedIn URL">
-                    <ng-template #linkedInErrorMsg>
-                        <ng-container
-                            *ngIf="candidateForm.get('linkedin').dirty && candidateForm.get('linkedin').errors">
-                            <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('linkedin')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                        </ng-container>
-                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>

@@ -114,12 +114,6 @@
                             placeholder="Please input the DNI">
                         <ng-template #dniErrorMsg>
                             <ng-container *ngIf="validateForm.get('DNI').dirty && validateForm.get('DNI').errors">
-                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="validateForm.get('DNI')?.hasError('required')">
                                     Please input the DNI!
                                 </ng-container>

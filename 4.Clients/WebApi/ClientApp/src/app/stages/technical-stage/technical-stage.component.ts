@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Process } from 'src/entities/process';
@@ -46,7 +45,7 @@ export class TechnicalStageComponent implements OnInit {
   currentStageStatus: StageStatusEnum;
   @Input() readdressReasonList: ReaddressReason[] = [];
   @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
-  
+
   @Input() technicalStage: TechnicalStage;
 
   @Output() selectedSeniority = new EventEmitter();
@@ -59,7 +58,7 @@ export class TechnicalStageComponent implements OnInit {
     alternativeSeniority: [0, [Validators.required]],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
-    feedback: [null, [trimValidator]],
+    feedback: [null],
     englishLevel: EnglishLevelEnum.None,
     client: [null, Validators.pattern(/^[a-zA-Z0-9\s]*$/)],
     rejectionReason: [null],
@@ -104,13 +103,13 @@ export class TechnicalStageComponent implements OnInit {
     this.currentStageStatus = this.technicalStage.status;
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-    
+
     this.selectedReason = undefined;
     this.readdressStatus.feedback = undefined;
     this.readdressStatus.fromStatus = undefined;
     this.readdressStatus.toStatus = undefined;
     this.readdressStatus.id = undefined;
-  
+
     if (this.technicalStage.readdressStatus){
       this.selectedReason = `${this.technicalStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.technicalStage.readdressStatus.feedback;
@@ -122,7 +121,7 @@ export class TechnicalStageComponent implements OnInit {
     this.processService.selectedSeniorities.subscribe(sr => this.selectedSeniorities = sr);
     this.getSkills();
     this.changeFormStatus(false);
-    this.getFilteredUsersForTech();    
+    this.getFilteredUsersForTech();
   }
 
   getFeedbackContent(content: string): void {
@@ -209,7 +208,7 @@ export class TechnicalStageComponent implements OnInit {
     this.readdressStatus.readdressReasonId = undefined;
     this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.technicalForm.controls['status'].value;
-    
+
     if (this.technicalForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.technicalForm.markAsTouched();
@@ -499,7 +498,7 @@ export class TechnicalStageComponent implements OnInit {
     this.readdressStatus.readdressReasonId = this.selectedReasonId;
   }
 
-  onDescriptionChange(description: string): void {  
+  onDescriptionChange(description: string): void {
     this.readdressStatus.feedback = description;
   }
 }

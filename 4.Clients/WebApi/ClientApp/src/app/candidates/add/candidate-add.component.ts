@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { User } from 'src/entities/user';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Candidate } from 'src/entities/candidate';
@@ -18,7 +17,7 @@ import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 import { UniqueEmailValidator } from '../ValidatorsCandidateForm';
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
-  if((c.get('email').value === null || c.get('email').value.length === 0) 
+  if((c.get('email').value === null || c.get('email').value.length === 0)
       && (c.get('phoneNumber').value === null || c.get('phoneNumber').value.length === 0)){
       return {
           'emailAndPhoneValidator': true
@@ -33,7 +32,7 @@ export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors 
   styleUrls: ['./candidate-add.component.scss']
 })
 export class CandidateAddComponent implements OnInit, OnDestroy {
- 
+
   @Input()
     private _process: Process;
     public get process(): Process {
@@ -60,7 +59,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     public set candidate(value: Candidate) {
         this.fillCandidate = value;
     }
-    
+
     @Input()
     private _communities: Community[];
     public get communities(): Community[] {
@@ -69,7 +68,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     public set communities(value: Community[]) {
       this.comms = value;
     }
-  
+
     @Input()
     private _candidateProfiles: CandidateProfile[];
     public get candidateProfiles(): CandidateProfile[] {
@@ -98,18 +97,18 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   @Input() _offices: Office[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
-    name: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
-    lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
+    name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
+    lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     dni: [0],
-    email: [null, 
+    email: [null,
       {
-        validators: [Validators.email, trimValidator],
+        validators: [Validators.email],
         asyncValidators: UniqueEmailValidator(this.facade.candidateService)
       }
     ],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
-    linkedin: [null, [trimValidator]],
+    linkedin: [null],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
@@ -123,11 +122,11 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     referredBy: [null],
     source: [null]
   }, { validator: checkIfEmailAndPhoneNulll });
-  
+
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
   isEdit: boolean = false;
-  
+
   statusList: any[];
   candidates: Candidate[] = [];
   candidateSubscription: Subscription;
@@ -194,10 +193,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
       if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni'])){
-        if (enable){ 
-          this.candidateForm.controls[i].enable(); 
-        }else{ 
-          this.candidateForm.controls[i].disable(); 
+        if (enable){
+          this.candidateForm.controls[i].enable();
+        }else{
+          this.candidateForm.controls[i].disable();
         }
       }
     }
@@ -267,14 +266,14 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   getFormControl(name: string): AbstractControl {
     return this.candidateForm.controls[name];
   }
-   
-  getFormData(): Candidate {    
+
+  getFormData(): Candidate {
     let pn = this.candidateForm.controls['phoneNumber'].value == undefined
     || this.candidateForm.controls['phoneNumber'].value == null ? ''
     : this.candidateForm.controls['phoneNumber'].value.toString();
 
 
-    let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined 
+    let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined
     || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
     : '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')';
 
@@ -286,7 +285,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       emailAddress: this.candidateForm.controls['email'].value === null ? null : this.candidateForm.controls['email'].value.toString(),
       phoneNumber: prefix + pn,
       linkedInProfile: this.candidateForm.controls['linkedin'].value === null ? null : this.candidateForm.controls['linkedin'].value.toString(),
-      candidateSkills: null,      
+      candidateSkills: null,
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
       user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
@@ -294,7 +293,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       contactDay: new Date(),
       profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,      
+      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
       knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
       referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value,

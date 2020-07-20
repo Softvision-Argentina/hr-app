@@ -49,12 +49,6 @@
                             placeholder="Please input the Name">
                         <ng-template #nameErrorMsg>
                             <ng-container *ngIf="roleForm.get('name').dirty && roleForm.get('name').errors">
-                                <ng-container *ngIf="roleForm.get('name')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="roleForm.get('name')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="roleForm.get('name')?.hasError('required')">
                                     Please input the name!
                                 </ng-container>

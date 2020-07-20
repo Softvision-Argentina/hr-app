@@ -9,12 +9,6 @@
                     <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
                     <ng-template #nameErrorMsg>
                         <ng-container *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
-                            <ng-container *ngIf="candidateForm.get('name')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('name')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
                             <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
                                 Please input the name!
                             </ng-container>
@@ -37,12 +31,6 @@
                     <ng-template #firstNameErrorMsg>
                         <ng-container
                             *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
-                            <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
                             <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
                                 Please input the First name!
                             </ng-container>
@@ -60,12 +48,6 @@
                     <ng-template #lastNameErrorMsg>
                         <ng-container
                             *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
                             <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
                                 Please input the last name!
                             </ng-container>
@@ -197,20 +179,9 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile" [hidden]="!visible">LinkedIn Profile
                 </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="linkedinProfileErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" >
                     <input nz-input formControlName="linkedInProfile" id="linkedInProfile"
                         placeholder="Please input the LinkedIn's profile URL">
-                    <ng-template #linkedinProfileErrorMsg>
-                        <ng-container
-                            *ngIf="candidateForm.get('linkedInProfile').dirty && candidateForm.get('linkedInProfile').errors">
-                            <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('linkedInProfile')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                        </ng-container>
-                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>

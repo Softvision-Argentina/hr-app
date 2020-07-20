@@ -39,12 +39,6 @@
                                 placeholder="Please input the First Name">
                             <ng-template #firstNameErrorMsg>
                                 <ng-container *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
-                                    <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimBeginError')">
-                                        The input has leading whitespace!
-                                    </ng-container>
-                                    <ng-container *ngIf="candidateForm.get('firstName')?.hasError('trimEndError')">
-                                        The input has trailing whitespace!
-                                    </ng-container>
                                     <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
                                         Please input the First name!
                                     </ng-container>
@@ -61,12 +55,6 @@
                                 placeholder="Please input the last name">
                             <ng-template #lastNameErrorMsg>
                                 <ng-container *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                                    <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimBeginError')">
-                                        The input has leading whitespace!
-                                    </ng-container>
-                                    <ng-container *ngIf="candidateForm.get('lastName')?.hasError('trimEndError')">
-                                        The input has trailing whitespace!
-                                    </ng-container>
                                     <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
                                         Please input the last name!
                                     </ng-container>

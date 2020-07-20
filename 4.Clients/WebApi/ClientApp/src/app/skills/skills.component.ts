@@ -1,4 +1,3 @@
-import { trimValidator } from './../directives/trim.validator';
 import { Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import { Skill } from 'src/entities/skill';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -40,8 +39,8 @@ export class SkillsComponent implements OnInit {
     this.getSkillTypes();
 
     this.skillForm = this.formBuilder.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
+      name: [null, Validators.required],
+      description: [null, Validators.required],
       type: [null, [Validators.required]],
     });
     this.facade.appService.stopLoading();

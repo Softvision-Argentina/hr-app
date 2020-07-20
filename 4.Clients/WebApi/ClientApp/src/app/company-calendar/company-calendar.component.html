@@ -89,12 +89,6 @@
                         <ng-template #commentsErrorMsg>
                             <ng-container
                                 *ngIf="validateForm.get('comments').dirty && validateForm.get('comments').errors">
-                                <ng-container *ngIf="validateForm.get('comments')?.hasError('trimBeginError')">
-                                    The input has leading whitespace!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('comments')?.hasError('trimEndError')">
-                                    The input has trailing whitespace!
-                                </ng-container>
                                 <ng-container *ngIf="validateForm.get('comments')?.hasError('required')">
                                     Please input the Comments!
                                 </ng-container>

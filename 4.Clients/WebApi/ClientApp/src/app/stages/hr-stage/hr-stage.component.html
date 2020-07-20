@@ -10,20 +10,9 @@
         <div nz-col nzSpan="24">
             <nz-form-item>
                 <nz-form-label [nzMd]="3" [nzSm]="6" nzFor="feedback">Feedback</nz-form-label>
-                <nz-form-control [nzMd]="19" [nzSm]="18" [nzErrorTip]="feedbackErrorMsg">
+                <nz-form-control [nzMd]="19" [nzSm]="18">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
                 </nz-form-control>
-                <ng-template #feedbackErrorMsg>
-                    <ng-container style="color: #f5222d "
-                        *ngIf="hrForm.get('feedback').dirty && hrForm.get('feedback').errors ">
-                        <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimBeginError') ">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="hrForm.get('feedback')?.hasError('trimEndError') ">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </ng-container>
-                </ng-template>
             </nz-form-item>
         </div>
     </div>
@@ -63,7 +52,7 @@
             </nz-form-item>
         </div>
     </div>
- 
+
     <div nz-row *ngIf="CanShowReaddressPossibility()">
         <div nz-col nzSpan="12">
         <nz-form-item>
@@ -71,8 +60,8 @@
             Reason
             </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-select formControlName="reasonSelectControl" 
-            [(ngModel)]="selectedReason" 
+            <nz-select formControlName="reasonSelectControl"
+            [(ngModel)]="selectedReason"
             (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
                 <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
                 </nz-option>
@@ -80,7 +69,7 @@
             </nz-form-control>
         </nz-form-item>
         </div>
-    
+
         <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">
@@ -94,7 +83,7 @@
         </nz-form-item>
         </div>
     </div>
-	
+
     <div nz-row *ngIf="isUserRole(['Admin', 'Recruiter'])">
         <div nz-col nzSpan="12">
             <nz-form-item>
@@ -158,21 +147,10 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24 " nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">Additional Information
                 </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="additionalInformationErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24">
                     <textarea rows="1" id="feedback" nz-input formControlName="feedback" style="width: 50%;"
                         placeholder="Input any additional information if necessary" id="feedback"></textarea>
                 </nz-form-control>
-                <ng-template #additionalInformationErrorMsg>
-                    <ng-container style="color: #f5222d"
-                        *ngIf="hrForm.get('additionalInformation').dirty && hrForm.get('additionalInformation').errors">
-                        <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimBeginError')">
-                            The input has leading whitespace!
-                        </ng-container>
-                        <ng-container *ngIf="hrForm.get('additionalInformation')?.hasError('trimEndError')">
-                            The input has trailing whitespace!
-                        </ng-container>
-                    </ng-container>
-                </ng-template>
             </nz-form-item>
         </div>
     </div>

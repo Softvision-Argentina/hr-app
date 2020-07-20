@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { FacadeService } from '../services/facade.service';
-import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { Community } from 'src/entities/community';
@@ -83,8 +82,8 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
 
   resetForm() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]]
+      name: [null, Validators.required],
+      description: [null, Validators.required]
     });
   }
 
@@ -103,7 +102,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -161,7 +160,7 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {

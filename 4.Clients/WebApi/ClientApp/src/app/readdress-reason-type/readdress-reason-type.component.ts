@@ -1,4 +1,3 @@
-import { trimValidator } from './../directives/trim.validator';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -39,8 +38,8 @@ export class ReaddressReasonTypeComponent implements OnInit {
     this.getReaddressReasonTypes();
 
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
+      name: [null, [Validators.required]],
+      description: [null, [Validators.required]],
     });
     this.app.hideLoading();
   }
@@ -112,7 +111,7 @@ export class ReaddressReasonTypeComponent implements OnInit {
                         modal.nzFooter[1].loading = false;
                         this.facade.errorHandlerService.showErrorMessage(err);
                       })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
@@ -128,7 +127,7 @@ export class ReaddressReasonTypeComponent implements OnInit {
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
     this.validateForm.reset();
     let editedreaddressReasonType: ReaddressReasonType = this.filteredReaddressReasonType.filter(readdressReasonType => readdressReasonType.id === id)[0];
-    let editedreaddressReasonTypeId = editedreaddressReasonType.id; 
+    let editedreaddressReasonTypeId = editedreaddressReasonType.id;
     this.validateForm.controls['description'].setValue(editedreaddressReasonType.description);
     this.validateForm.controls['name'].setValue(editedreaddressReasonType.name);
     const modal = this.facade.modalService.create({
@@ -166,7 +165,7 @@ export class ReaddressReasonTypeComponent implements OnInit {
               modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
             })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }

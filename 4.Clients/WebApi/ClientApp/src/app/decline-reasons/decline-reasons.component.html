@@ -70,31 +70,14 @@
                         *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">
                         Please input the name
                     </ng-container>
-                    <ng-container *ngIf="validateForm.get('name')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="validateForm.get('name')?.hasError('trimEndError')">
-                        The input has leading whitespace!
-                    </ng-container>
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+            <nz-form-control [nzSm]="14" [nzXs]="24">
                 <input type="text" nz-input formControlName="description" id="description"
                     placeholder="Please input the description">
-                <ng-template #descriptionErrorMsg>
-                    <ng-container
-                        *ngIf="validateForm.get('description').dirty && validateForm.get('description')?.hasError('required')">
-                        Please input the description</ng-container>
-                    <ng-container *ngIf="validateForm.get('description')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="validateForm.get('description')?.hasError('trimEndError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                </ng-template>
             </nz-form-control>
         </nz-form-item>
     </form>

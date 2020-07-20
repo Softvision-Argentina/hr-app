@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, Input, SimpleChanges } from '@angular/core';
 import { Community } from 'src/entities/community';
 import { FacadeService } from 'src/app/services/facade.service';
-import { trimValidator } from '../directives/trim.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/entities/user';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
@@ -78,9 +77,9 @@ export class CommunitiesComponent implements OnInit {
 
   resetForm() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
-      profileId: [null, [Validators.required, trimValidator]]
+      name: [null, [Validators.required]],
+      description: [null, Validators.required],
+      profileId: [null, Validators.required]
     });
   }
 

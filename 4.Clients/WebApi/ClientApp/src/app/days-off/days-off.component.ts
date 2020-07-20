@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/c
 import { FacadeService } from 'src/app/services/facade.service';
 import { DaysOff } from 'src/entities/days-off';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { trimValidator } from '../directives/trim.validator';
 import { dniValidator } from '../directives/dni.validator';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DaysOffService } from '../services/days-off.service';
@@ -198,7 +197,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -277,7 +276,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
     const dni = this.isHr ? null : this.employee.dni;
 
     this.validateForm = this.fb.group({
-      DNI: [dni, [Validators.required, trimValidator, dniValidator]],
+      DNI: [dni, [Validators.required, dniValidator]],
       type: [null, [Validators.required]],
       date: [new Date(), [Validators.required]],
       endDate: [new Date(), [Validators.required]],

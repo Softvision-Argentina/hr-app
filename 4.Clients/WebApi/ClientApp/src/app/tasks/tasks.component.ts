@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { FacadeService } from '../services/facade.service';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { User } from '../../entities/user';
-import { trimValidator } from '../directives/trim.validator';
 import { Task } from 'src/entities/task';
 import { TaskItem } from 'src/entities/taskItem';
 import { AppConfig } from '../app-config/app.config';
@@ -346,12 +345,12 @@ export class TasksComponent implements OnInit, OnDestroy {
                 .subscribe(res => {
                   newTask.id = res.id;
                   this.toDoList.push(newTask);
-                  this.facade.toastrService.success('Task was successfully created !');                  
+                  this.facade.toastrService.success('Task was successfully created !');
                   modal.destroy();
                 }, err => {
                   modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
-                });                
+                });
             }else{
               modal.nzFooter[1].loading = false;
             }
@@ -362,9 +361,9 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.validateForm = this.fb.group({
-      title: [null, [Validators.required, trimValidator]],
+      title: [null, Validators.required],
       endDate: [null, [Validators.required, dateValidator]],
-      user: [null, [Validators.required, trimValidator]]
+      user: [null, Validators.required]
     });
   }
 

@@ -72,12 +72,6 @@
                     <ng-container *ngIf="skillForm.get('name').dirty && skillForm.get('name')?.hasError('required')">
                         Please input the name
                     </ng-container>
-                    <ng-container *ngIf="skillForm.get('name')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="skillForm.get('name')?.hasError('trimEndError')">
-                        The input has leading whitespace!
-                    </ng-container>
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
@@ -90,12 +84,6 @@
                     <ng-container
                         *ngIf="skillForm.get('description').dirty && skillForm.get('description')?.hasError('required')">
                         Please input the description
-                    </ng-container>
-                    <ng-container *ngIf="skillForm.get('description')?.hasError('trimBeginError')">
-                        The input has leading whitespace!
-                    </ng-container>
-                    <ng-container *ngIf="skillForm.get('description')?.hasError('trimEndError')">
-                        The input has leading whitespace!
                     </ng-container>
                 </ng-template>
             </nz-form-control>

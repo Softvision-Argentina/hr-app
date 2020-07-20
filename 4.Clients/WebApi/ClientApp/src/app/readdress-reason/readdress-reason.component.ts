@@ -1,4 +1,3 @@
-import { trimValidator } from './../directives/trim.validator';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -43,8 +42,8 @@ export class ReaddressReasonComponent implements OnInit {
     this.getReaddressReasonTypes();
 
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
+      name: [null, [Validators.required]],
+      description: [null, [Validators.required]],
       type: [null, [Validators.required]],
     });
     this.app.hideLoading();
@@ -69,7 +68,7 @@ export class ReaddressReasonComponent implements OnInit {
       });
   }
 
-  filterReaddressReason(name){    
+  filterReaddressReason(name){
     this.listOfDisplayData = this.filteredreaddressReason.filter(function(e){return e.type == name});
   }
 
@@ -111,7 +110,7 @@ export class ReaddressReasonComponent implements OnInit {
                         modal.nzFooter[1].loading = false;
                         this.facade.errorHandlerService.showErrorMessage(err);
                       })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
@@ -128,7 +127,7 @@ export class ReaddressReasonComponent implements OnInit {
     this.validateForm.reset();
     let editedReaddressReason: ReaddressReason = this.filteredreaddressReason.find(_ => _.id === id);
     let readdressType: ReaddressReasonType = this.readdressReasonTypes.find(_ => _.name == editedReaddressReason.type);
-  
+
     this.validateForm.controls['description'].setValue(editedReaddressReason.description);
     this.validateForm.controls['name'].setValue(editedReaddressReason.name);
     this.selectedType = readdressType.id;
@@ -169,7 +168,7 @@ export class ReaddressReasonComponent implements OnInit {
               modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
             })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }

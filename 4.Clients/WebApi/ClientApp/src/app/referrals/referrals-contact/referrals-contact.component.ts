@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
 import { User } from 'src/entities/user';
 import { NzModalRef, NzModalService, NzUploadFile } from 'ng-zorro-antd';
@@ -45,16 +44,16 @@ export class ReferralsContactComponent implements OnInit {
   @Input() position: OpenPosition = null;
   @Output() previousPosition = new EventEmitter<OpenPosition>();
   candidateForm: FormGroup = this.fb.group({
-    firstName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-    lastName: [null, [Validators.required, trimValidator, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-    email: [null, 
+    firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+    lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+    email: [null,
       {
-        validators: [Validators.email, trimValidator],
+        validators: [Validators.email],
         asyncValidators: UniqueEmailValidator(this.facade.candidateService),
       }
     ],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
+    phoneNumber: [null, [ Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
     file: [''],
     openPositionTitle:[null, {disabled: true}]
@@ -110,12 +109,12 @@ export class ReferralsContactComponent implements OnInit {
 
   resetForm() {
     this.candidateForm = this.fb.group({
-      name: ['', [trimValidator]],
-      firstName: [null, [Validators.required, trimValidator]],
-      lastName: [null, [Validators.required, trimValidator]],
-      email: [null, 
+      name: [''],
+      firstName: [null, [Validators.required]],
+      lastName: [null, [Validators.required]],
+      email: [null,
         {
-          validators: [Validators.email, trimValidator],
+          validators: [Validators.email],
           asyncValidators: UniqueEmailValidator(this.facade.candidateService)
         }
       ],
@@ -125,7 +124,7 @@ export class ReferralsContactComponent implements OnInit {
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
-      linkedInProfile: [null, [trimValidator]],
+      linkedInProfile: [null],
       isReferred: false,
       id: [null],
       knownFrom: [null],
@@ -263,7 +262,7 @@ export class ReferralsContactComponent implements OnInit {
     } else if (fileSize > 6300000) {
       this.facade.toastrService.error('File size must be 6Mb');
     }
-    
+
     return false;
   };
 

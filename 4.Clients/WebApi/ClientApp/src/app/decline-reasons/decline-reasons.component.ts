@@ -1,4 +1,3 @@
-import { trimValidator } from './../directives/trim.validator';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { DeclineReason } from 'src/entities/declineReason';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -37,8 +36,8 @@ export class DeclineReasonComponent implements OnInit {
     this.getDeclineReasons();
 
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
+      name: [null, Validators.required],
+      description: [null, Validators.required],
     });
     this.app.hideLoading();
   }
@@ -111,7 +110,7 @@ export class DeclineReasonComponent implements OnInit {
                         modal.nzFooter[1].loading = false;
                         this.facade.errorHandlerService.showErrorMessage(err);
                       })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
@@ -164,7 +163,7 @@ export class DeclineReasonComponent implements OnInit {
               modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
             })
-            } 
+            }
             else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { trimValidator } from '../directives/trim.validator';
 import { FacadeService } from 'src/app/services/facade.service';
 import { AppComponent } from '../app.component';
 import { Employee } from 'src/entities/employee';
@@ -55,14 +54,14 @@ export class EmployeesComponent implements OnInit {
     this.showReviewerNotFoundMessage = false;
 
     this.employeeForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      lastName: [null, [Validators.required, trimValidator]],
+      name: [null, Validators.required],
+      lastName: [null, Validators.required],
       dni: [null, Validators.required],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       emailAddress: [null, [Validators.email, Validators.required]],
-      linkedInProfile: [null, [trimValidator]],
-      additionalInformation: [null, [trimValidator]],
+      linkedInProfile: [null ],
+      additionalInformation: [null],
       userId: [null, [Validators.required]],
       status: [null],
       role: [null],
@@ -151,7 +150,7 @@ export class EmployeesComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -218,7 +217,7 @@ export class EmployeesComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => modal.destroy()
         },
         {
@@ -393,7 +392,7 @@ export class EmployeesComponent implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          
+
           onClick: () => {
             modal.destroy();
             this.employeeForm.controls['isReviewer'].setValue(true);

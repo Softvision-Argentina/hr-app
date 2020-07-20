@@ -49,8 +49,8 @@
             Reason
             </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-select formControlName="reasonSelectControl" 
-            [(ngModel)]="selectedReason" 
+            <nz-select formControlName="reasonSelectControl"
+            [(ngModel)]="selectedReason"
             (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
                 <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
                 </nz-option>
@@ -58,7 +58,7 @@
             </nz-form-control>
         </nz-form-item>
         </div>
-    
+
         <div nz-col nzSpan="12">
         <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">
@@ -179,20 +179,9 @@
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('feedback')}">
                     Feedback</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="feedbackErrorMsg">
+                <nz-form-control [nzSm]="14" [nzXs]="24" >
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)"
                         [isToolbarActive]="true" [isEditable]="true"></app-text-editor>
-                    <ng-template #feedbackErrorMsg>
-                        <ng-container style="color: #f5222d"
-                            *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">
-                            <ng-container *ngIf="technicalForm.get('feedback')?.hasError('trimBeginError')">
-                                The input has leading whitespace!
-                            </ng-container>
-                            <ng-container *ngIf="technicalForm.get('feedback')?.hasError('trimEndError')">
-                                The input has trailing whitespace!
-                            </ng-container>
-                        </ng-container>
-                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -296,14 +285,6 @@
                                 <ng-template #skillCommentErrorMsg>
                                     <ng-container
                                         *ngIf="technicalForm.get(control.controlInstance[2]).dirty && technicalForm.get(control.controlInstance[2]).errors">
-                                        <ng-container
-                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimBeginError')">
-                                            The input has leading whitespace!
-                                        </ng-container>
-                                        <ng-container
-                                            *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('trimEndError')">
-                                            The input has trailing whitespace!
-                                        </ng-container>
                                         <ng-container
                                             *ngIf="technicalForm.get(control.controlInstance[2])?.hasError('required')">
                                             Please input a comment!

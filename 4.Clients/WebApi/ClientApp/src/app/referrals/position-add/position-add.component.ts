@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Community } from 'src/entities/community';
 import { Globals } from 'src/app/app-globals/globals';
 import { OpenPosition } from 'src/entities/open-position';
@@ -24,13 +23,13 @@ export class PositionAddComponent implements OnInit {
   }
 
   @Input() isEditPosition = false;
-  @Input() positionToEdit: OpenPosition;  
+  @Input() positionToEdit: OpenPosition;
 
   seniorityList: any[];
   jobDescriptionContent: string = "";
 
   positionForm: FormGroup = this.fb.group({
-    title: [null, [Validators.required, trimValidator, Validators.maxLength(50)]],
+    title: [null, [Validators.required, Validators.maxLength(50)]],
     community: [null, [Validators.required]],
     seniority: [null, [Validators.required]],
     studio: ['',[Validators.required, Validators.maxLength(40)]],
@@ -55,8 +54,8 @@ export class PositionAddComponent implements OnInit {
       this.positionForm.controls['studio'].setValue(openPositionToEdit.studio);
       this.positionForm.controls['seniority'].setValue(openPositionToEdit.seniority);
       this.positionForm.controls['community'].setValue(openPositionToEdit.community.id);
-      this.jobDescriptionContent = openPositionToEdit.jobDescription;      
-      this.positionForm.controls['jobDescription'].setValue(openPositionToEdit.jobDescription);      
+      this.jobDescriptionContent = openPositionToEdit.jobDescription;
+      this.positionForm.controls['jobDescription'].setValue(openPositionToEdit.jobDescription);
       this.positionForm.controls['priority'].setValue(openPositionToEdit.priority);
     }
   }
@@ -80,14 +79,14 @@ export class PositionAddComponent implements OnInit {
         studio: this.positionForm.controls['studio'].value.toString(),
         community: new Community(this.positionForm.controls['community'].value),
         seniority: this.positionForm.controls['seniority'].value,
-        jobDescription: this.positionForm.controls['jobDescription'].value,        
+        jobDescription: this.positionForm.controls['jobDescription'].value,
         priority: this.positionForm.controls['priority'].value
       };
 
       this.facade.openPositionService.add(newPosition)
         .subscribe(res => {
-          this.facade.toastrService.success('Position was successfully created !');                    
-          this.facade.appService.stopLoading();          
+          this.facade.toastrService.success('Position was successfully created !');
+          this.facade.appService.stopLoading();
           this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
@@ -120,7 +119,7 @@ export class PositionAddComponent implements OnInit {
     this.facade.modalService.openModals[0].destroy();
   }
 
-  getJobDescriptionContent(content: string): void {    
+  getJobDescriptionContent(content: string): void {
     this.positionForm.controls['jobDescription'].setValue(content);
   }
 }

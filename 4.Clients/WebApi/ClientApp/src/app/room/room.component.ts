@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { FacadeService } from '../services/facade.service';
-import { trimValidator } from '../directives/trim.validator';
 import { Office } from 'src/entities/office';
 import { Room } from 'src/entities/room';
 
@@ -207,9 +206,9 @@ export class RoomComponent implements OnInit, OnChanges {
 
   resetForm() {
     this.roomForm = this.fb.group({
-      name: [null, [Validators.required, trimValidator]],
-      description: [null, [Validators.required, trimValidator]],
-      profileId: [null, [Validators.required, trimValidator]]
+      name: [null, Validators.required],
+      description: [null, [Validators.required]],
+      profileId: [null, [Validators.required]]
     });
   }
 }

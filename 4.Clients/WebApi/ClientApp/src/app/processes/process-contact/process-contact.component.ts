@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Input, TemplateRef } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { trimValidator } from 'src/app/directives/trim.validator';
 import { Candidate } from 'src/entities/candidate';
 import { AppComponent } from 'src/app/app.component';
 import { User } from 'src/entities/user';
@@ -91,17 +90,17 @@ export class ProcessContactComponent implements OnInit {
   profiles: CandidateProfile[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
-    name: ['', [trimValidator]],
-    firstName: [null, [Validators.required, trimValidator]],
-    lastName: [null, [Validators.required, trimValidator]],
+    name: [''],
+    firstName: [null, [Validators.required]],
+    lastName: [null, [Validators.required]],
     email: [null, [Validators.email]],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [trimValidator, Validators.pattern(/^[0-9]+$/)]],
+    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/)]],
     user: [null, [Validators.required]],
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
     profile: [null, [Validators.required]],
-    linkedInProfile: [null, [trimValidator]],
+    linkedInProfile: [null],
     isReferred: false,
     id: [null],
     cv: [null],
@@ -254,9 +253,9 @@ export class ProcessContactComponent implements OnInit {
 
   resetForm() {
     this.candidateForm = this.fb.group({
-      name: ['', [trimValidator]],
-      firstName: [null, [Validators.required, trimValidator]],
-      lastName: [null, [Validators.required, trimValidator]],
+      name: [''],
+      firstName: [null, [Validators.required]],
+      lastName: [null, [Validators.required]],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
@@ -264,7 +263,7 @@ export class ProcessContactComponent implements OnInit {
       contactDay: [null, [Validators.required]],
       community: [null, [Validators.required]],
       profile: [null, [Validators.required]],
-      linkedInProfile: [null, [trimValidator]],
+      linkedInProfile: [null],
       isReferred: false,
       id: [null],
       knownFrom: [null],
@@ -287,7 +286,7 @@ export class ProcessContactComponent implements OnInit {
         user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: editedCandidate.linkedInProfile,
-        englishLevel: editedCandidate.englishLevel,        
+        englishLevel: editedCandidate.englishLevel,
         status: editedCandidate.status,
         candidateSkills: editedCandidate.candidateSkills,
         preferredOfficeId: editedCandidate.preferredOfficeId,
@@ -326,7 +325,7 @@ export class ProcessContactComponent implements OnInit {
       user: this.fillUsers.filter(r => r.username.toLowerCase() === this.currentUser.username.toLowerCase())[0],
       contactDay: new Date(),
       linkedInProfile: editedCandidate.linkedInProfile,
-      englishLevel: editedCandidate.englishLevel,      
+      englishLevel: editedCandidate.englishLevel,
       status: CandidateStatusEnum.Recall,
       preferredOfficeId: editedCandidate.preferredOfficeId,
       candidateSkills: editedCandidate.candidateSkills,
@@ -368,7 +367,7 @@ export class ProcessContactComponent implements OnInit {
         user: this.candidateForm.controls['user'].value,
         contactDay: new Date(this.candidateForm.controls['contactDay'].value.toString()),
         linkedInProfile: null,
-        englishLevel: EnglishLevelEnum.None,        
+        englishLevel: EnglishLevelEnum.None,
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
         candidateSkills: [],
