@@ -1,0 +1,29 @@
+name: Recru-web
+
+pool:
+  vmImage: 'windows-latest'
+
+trigger:
+  - develop
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Installing Node.js'
+
+  - script: |
+      npm install
+      npm run build:qa
+    displayName: 'Running npm install and build for qa'
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+      contents: |
+        **/*
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      overWrite: true
+    displayName: 'Copying built static files'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publishing Artifacts'
