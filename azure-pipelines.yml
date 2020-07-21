@@ -1,7 +1,7 @@
 name: Recru-web
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'Ubuntu 16.04'
 
 trigger:
   - develop
