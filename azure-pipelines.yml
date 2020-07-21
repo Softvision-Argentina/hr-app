@@ -18,25 +18,25 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: 'Recru.sln'
+    projects: 'RecruApi.sln'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'Recru.sln'
+    projects: 'RecruApi.sln'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: 'Recru.sln'
+    projects: 'RecruApi.sln'
     arguments: "--configuration $(BuildConfiguration)"
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     publishWebProjects: false
     arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
-    projects: 'Recru.sln'
+    projects: 'RecruApi.sln'
     zipAfterPublish: True
 
 - task: DotNetCoreCLI@2
