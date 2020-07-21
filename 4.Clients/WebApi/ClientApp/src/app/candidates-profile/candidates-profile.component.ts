@@ -110,7 +110,6 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls[i]) {
@@ -133,10 +132,9 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                   this.getCommunity();
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });
@@ -168,7 +166,6 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls[i]) {
@@ -190,10 +187,9 @@ export class CandidatesProfileComponent implements OnInit, OnChanges {
                   this.getCommunity();
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });

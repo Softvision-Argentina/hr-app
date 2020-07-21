@@ -83,7 +83,6 @@ export class RoomComponent implements OnInit, OnChanges {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true; // el boton de guardar cambios cambia a true
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
               if (this.roomForm.controls.hasOwnProperty(i)) {
@@ -110,10 +109,9 @@ export class RoomComponent implements OnInit, OnChanges {
 
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });
@@ -143,7 +141,6 @@ export class RoomComponent implements OnInit, OnChanges {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.roomForm.controls) {
               if (this.roomForm.controls.hasOwnProperty(i)) {
@@ -169,10 +166,9 @@ export class RoomComponent implements OnInit, OnChanges {
                   this.facade.toastrService.success('Room was successfully edited !');
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });

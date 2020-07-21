@@ -109,7 +109,6 @@ export class CommunitiesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls[i]) {
@@ -132,10 +131,9 @@ export class CommunitiesComponent implements OnInit {
                   this.facade.toastrService.success('Community was successfully created !');
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });
@@ -167,7 +165,6 @@ export class CommunitiesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls[i]) {
@@ -190,10 +187,9 @@ export class CommunitiesComponent implements OnInit {
                   this.getCandidateProfiles();
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
           }
         }],
     });

@@ -159,7 +159,6 @@ export class EmployeesComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean;
             isCompleted = this.validateEmployeeFields();
             if (isCompleted) {
@@ -191,12 +190,10 @@ export class EmployeesComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 })
             }
             else {
-              modal.nzFooter[1].loading = false;
               this.facade.appService.stopLoading();
             }
           }
@@ -225,7 +222,6 @@ export class EmployeesComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean;
             isCompleted = this.validateEmployeeFields();
             if (isCompleted) {
@@ -249,11 +245,9 @@ export class EmployeesComponent implements OnInit {
                   this.facade.toastrService.success('Employee succesfully updated.');
                 }, err => {
                   this.facade.errorHandlerService.showErrorMessage(err);
-                  modal.nzFooter[1].loading = false;
                   this.facade.appService.stopLoading();
                 });
             }
-            else modal.nzFooter[1].loading = false;
             this.facade.appService.stopLoading();
           }
         }

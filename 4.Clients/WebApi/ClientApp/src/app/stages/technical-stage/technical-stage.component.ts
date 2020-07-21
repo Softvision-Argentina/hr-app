@@ -113,7 +113,7 @@ export class TechnicalStageComponent implements OnInit {
     if (this.technicalStage.readdressStatus){
       this.selectedReason = `${this.technicalStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.technicalStage.readdressStatus.feedback;
-      this.readdressStatus.fromStatus = this.technicalStage.readdressStatus.fromStatus;
+      this.readdressStatus.fromStatus = this.technicalStage.status;
       this.readdressStatus.toStatus = this.technicalStage.readdressStatus.toStatus;
       this.readdressStatus.id = this.technicalStage.readdressStatus.id
     }
@@ -204,8 +204,17 @@ export class TechnicalStageComponent implements OnInit {
     this.technicalForm.controls['reasonDescriptionTextAreaControl'].enable();
   }
 
-  statusChanged() {
+  statusChanged(status: number) {
+    
+    //Hago este check porque este metodo (StatusChanged()) se dispara cada vez que se abre un 
+    //proceso por ejecutar en el onInit el fillform() adentro del subscribe de getFilteredUsersForTech,
+    // lo cual dispara toda la logica adentro aun cuando el status no sufrio ningun cambio
+    
+    if (status == this.technicalStage.status){
+      return;
+    }
     this.readdressStatus.readdressReasonId = undefined;
+    this.readdressStatus.feedback = undefined;
     this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.technicalForm.controls['status'].value;
 
@@ -358,16 +367,12 @@ export class TechnicalStageComponent implements OnInit {
 
     function enableValidations(){
       reasonSelectControl.setValidators(Validators.required);
-      reasonSelectControl.updateValueAndValidity();
       feedbackTextAreaControl.setValidators([Validators.required]);
-      feedbackTextAreaControl.updateValueAndValidity();
     }
 
     function disableValidations(){
       reasonSelectControl.clearValidators();
-      reasonSelectControl.updateValueAndValidity();
       feedbackTextAreaControl.clearValidators();
-      feedbackTextAreaControl.updateValueAndValidity();
     }
 
     flag == true ? enableValidations() : disableValidations();

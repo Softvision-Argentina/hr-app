@@ -205,7 +205,6 @@ export class DaysOffComponent implements OnInit, OnDestroy {
           type: 'primary',
           loading: false,
           onClick: () => {
-            // modal.nzFooter[1].loading = true;
             this.facade.appService.startLoading();
             this.employeeService.GetByDNI(this.validateForm.controls.DNI.value)
               .subscribe(res => {

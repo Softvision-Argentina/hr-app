@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core;
+using Core.ExtensionHelpers;
 using Core.Persistance;
 using Domain.Model;
 using Domain.Model.Exceptions.Candidate;
@@ -69,7 +70,7 @@ namespace Domain.Services.Impl.Services
 
             if (candidate.LinkedInProfile != null)
             {
-                candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+                candidate.LinkedInProfile = RegexExtensions.GetLinkedInUsername(candidate.LinkedInProfile);
             }
 
             if (contract.User != null)
@@ -123,7 +124,7 @@ namespace Domain.Services.Impl.Services
 
             if (candidate.LinkedInProfile != null)
             {
-                candidate.LinkedInProfile = GetLinkedInUsername(candidate.LinkedInProfile);
+                candidate.LinkedInProfile = RegexExtensions.GetLinkedInUsername(candidate.LinkedInProfile);
             }
 
             var currentProcesses = _processRepository.Query().Where(p => p.CandidateId == candidate.Id && p.Status != Model.Enum.ProcessStatus.Hired);
@@ -329,16 +330,6 @@ namespace Domain.Services.Impl.Services
 
             candidate.OpenPosition = position;
             candidate.PositionTitle = position.Title;
-        }
-
-        private string GetLinkedInUsername(string url)
-        {
-            var match = Regex.Match(url, @"linkedin\.com\/in\/(?<userId>[^\/]+)");
-            if (match.Success)
-            {
-                return match.Groups["userId"].Value;
-            }
-            return url;
         }
     }
 }

@@ -287,7 +287,6 @@ export class TasksComponent implements OnInit, OnDestroy {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             const items: any[] = [];
 
@@ -348,11 +347,8 @@ export class TasksComponent implements OnInit, OnDestroy {
                   this.facade.toastrService.success('Task was successfully created !');
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            }else{
-              modal.nzFooter[1].loading = false;
             }
           }
         }]

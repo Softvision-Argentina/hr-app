@@ -104,7 +104,6 @@ export class SkillTypeComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
 
             for (const i in this.validateForm.controls) {
@@ -132,13 +131,9 @@ export class SkillTypeComponent implements OnInit {
                     modal.destroy();
                   }, err => {
                     this.facade.appService.stopLoading();
-                    modal.nzFooter[1].loading = false;
                     this.facade.errorHandlerService.showErrorMessage(err);
                   });
-            } else {
-              modal.nzFooter[1].loading = false;
             }
-
             this.facade.appService.stopLoading();
           }
         }],
@@ -171,7 +166,6 @@ export class SkillTypeComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
 
             for (const i in this.validateForm.controls) {
@@ -199,17 +193,13 @@ export class SkillTypeComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   if (err.message) {
                     this.facade.toastrService.error(err.message);
                   } else {
                     this.facade.toastrService.error('The service is not available now. Try again later.');
                   }
                 });
-            } else {
-              modal.nzFooter[1].loading = false;
             }
-
             this.facade.appService.stopLoading();
           }
         }],

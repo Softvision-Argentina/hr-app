@@ -133,55 +133,11 @@
   </ngx-slick-carousel>
 </ng-template>
 
-<ng-template #declineProcessModal>
-  <form nz-form [formGroup]="declineProcessForm" [nzLayout]="'horizontal'">
-    <div nz-row>
-      <div nz-col>
-        <nz-form-item>
-          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="declineReasonNameErrorMsg">
-            <nz-select name="declineReasonName" formControlName="declineReasonName"
-              (ngModelChange)="declineReasonNameChanged()" nzPlaceHolder="Choose a decline reason">
-              <nz-option *ngFor="let declineReason of declineReasons" nzLabel="{{declineReason.name}}"
-                nzValue="{{declineReason.id}}">
-              </nz-option>
-              <nz-option nzLabel="Other" [nzValue]="-1">
-              </nz-option>
-            </nz-select>
-            <ng-template #declineReasonNameErrorMsg>
-              <ng-container
-                *ngIf="declineProcessForm.get('declineReasonName').dirty && declineProcessForm.get('declineReasonName').errors">
-                Please select a decline reason
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-    <div nz-row>
-      <div nz-col>
-        <nz-form-item>
-          <nz-form-control *ngIf="isDeclineReasonOther" [nzSm]="22" [nzXs]="24"
-            [nzErrorTip]="declineReasonDescriptionErrorMsg">
-            <textarea rows="5" id="declineReasonDescription" nz-input formControlName="declineReasonDescription"
-              placeholder="Please enter the decline reason"></textarea>
-            <ng-template #declineReasonDescriptionErrorMsg>
-              <ng-container
-                *ngIf="declineProcessForm.get('declineReasonDescription').dirty && declineProcessForm.get('declineReasonDescription').errors">
-                Please specify why the process was declined
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-  </form>
-</ng-template>
-
 <ng-template #startModalButtons>
   <div nz-row nzJustify="center">
     <div nz-col>
       <button nz-button nzType="default" (click)="clearDataAndCloseModal()">Cancel</button>
-      <button nz-button nzType="primary" (click)="saveProcess(declineProcessModal)">
+      <button nz-button nzType="primary" (click)="saveProcess()">
         Save
         <nz-spin *ngIf="isLoading" nzSimple style="display: inline-block!important;" [nzIndicator]="indicatorTemplate"
           [nzSize]="'small'">

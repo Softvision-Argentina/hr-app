@@ -120,7 +120,6 @@ export class SkillsComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.skillForm.controls) {
               if (this.skillForm.controls.hasOwnProperty(i)) {
@@ -148,13 +147,10 @@ export class SkillsComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else {
-              modal.nzFooter[1].loading = false;
-              this.facade.appService.stopLoading();
-            }
+            } 
+            this.facade.appService.stopLoading();  
           }
         }],
     });
@@ -188,7 +184,6 @@ export class SkillsComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.skillForm.controls) {
               if (this.skillForm.controls.hasOwnProperty(i)) {
@@ -217,13 +212,9 @@ export class SkillsComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else {
-              modal.nzFooter[1].loading = false;
-            }
-
+            } 
             this.facade.appService.stopLoading();
           }
         }],

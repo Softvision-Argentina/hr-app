@@ -108,11 +108,9 @@ export class ReaddressReasonTypeComponent implements OnInit {
                         modal.destroy();
                       }, err => {
                         this.app.hideLoading();
-                        modal.nzFooter[1].loading = false;
                         this.facade.errorHandlerService.showErrorMessage(err);
                       })
             }
-            else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
         }],
@@ -141,7 +139,6 @@ export class ReaddressReasonTypeComponent implements OnInit {
           label: 'Save', loading: false,
           onClick: () => {
             this.app.showLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean = true;
             for (const i in this.validateForm.controls) {
               this.validateForm.controls[i].markAsDirty();
@@ -162,11 +159,9 @@ export class ReaddressReasonTypeComponent implements OnInit {
               modal.destroy();
             }, err => {
               this.app.hideLoading();
-              modal.nzFooter[1].loading = false;
               this.facade.errorHandlerService.showErrorMessage(err);
             })
             }
-            else modal.nzFooter[1].loading = false;
             this.app.hideLoading();
           }
         }],

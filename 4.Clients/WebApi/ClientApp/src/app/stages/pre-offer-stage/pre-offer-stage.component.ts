@@ -111,7 +111,7 @@ export class PreOfferStageComponent implements OnInit {
     if (this.preOfferStage.readdressStatus){
       this.selectedReason = `${this.preOfferStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.preOfferStage.readdressStatus.feedback;
-      this.readdressStatus.fromStatus = this.preOfferStage.readdressStatus.fromStatus;
+      this.readdressStatus.fromStatus = this.preOfferStage.status;
       this.readdressStatus.toStatus = this.preOfferStage.readdressStatus.toStatus;
       this.readdressStatus.id = this.preOfferStage.readdressStatus.id
     }
@@ -153,6 +153,7 @@ export class PreOfferStageComponent implements OnInit {
 
   statusChanged() {
 
+    this.readdressStatus.feedback = undefined
     this.readdressStatus.readdressReasonId = undefined;
     this.preOfferForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.preOfferForm.controls['status'].value;
@@ -202,13 +203,12 @@ export class PreOfferStageComponent implements OnInit {
   }
 
   fillForm(preOfferStage: preOfferStage) {
-    const status: number = this.statusList.filter(s => s.id === preOfferStage.status)[0].id;
 
-    if (status === StageStatusEnum.InProgress || status === StageStatusEnum.PendingReply) {
+    if (this.currentStageStatus === StageStatusEnum.InProgress || this.currentStageStatus === StageStatusEnum.PendingReply) {
       this.changeFormStatus(true);
     }
 
-    this.preOfferForm.controls['status'].setValue(status);
+    this.preOfferForm.controls['status'].setValue(preOfferStage.status as number);
 
     if (preOfferStage.id) {
       this.preOfferForm.controls['id'].setValue(preOfferStage.id);

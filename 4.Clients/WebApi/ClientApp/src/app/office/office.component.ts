@@ -115,7 +115,6 @@ export class OfficeComponent implements OnInit {
           loading: false,
           onClick: () => {
             this.facade.appService.startLoading();
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.officeForm.controls) {
               if (this.officeForm.controls.hasOwnProperty(i)) {
@@ -142,11 +141,8 @@ export class OfficeComponent implements OnInit {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else {
-              modal.nzFooter[1].loading = false;
             }
             this.facade.appService.stopLoading();
           }
@@ -175,7 +171,6 @@ export class OfficeComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const control in this.officeForm.controls) {
               if (this.officeForm.controls.hasOwnProperty(control)) {
@@ -195,11 +190,8 @@ export class OfficeComponent implements OnInit {
                 this.facade.toastrService.success('Office was successfully edited !');
                 modal.destroy();
               }, err => {
-                modal.nzFooter[1].loading = false;
                 this.facade.errorHandlerService.showErrorMessage(err);
               });
-            } else {
-              modal.nzFooter[1].loading = false;
             }
           }
         }]

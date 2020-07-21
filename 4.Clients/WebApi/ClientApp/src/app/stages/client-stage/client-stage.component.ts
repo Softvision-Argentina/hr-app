@@ -104,7 +104,7 @@ export class ClientStageComponent implements OnInit {
     if (this.clientStage.readdressStatus){
       this.selectedReason = `${this.clientStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.clientStage.readdressStatus.feedback;
-      this.readdressStatus.fromStatus = this.clientStage.readdressStatus.fromStatus;
+      this.readdressStatus.fromStatus = this.clientStage.status;
       this.readdressStatus.toStatus = this.clientStage.readdressStatus.toStatus;
       this.readdressStatus.id = this.clientStage.readdressStatus.id
     }
@@ -179,6 +179,7 @@ export class ClientStageComponent implements OnInit {
 
   statusChanged() {
     this.readdressStatus.readdressReasonId = undefined;
+    this.readdressStatus.feedback = undefined;
     this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.clientForm.controls['status'].value;
     

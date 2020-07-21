@@ -381,61 +381,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.isDetailsVisible = true;
   }
 
-  /**Opens modal for entering a process declination reason, which updates process upon pressing OK.*/
-  openDeclineModal(process: Process, modalContent: TemplateRef<{}>) {
-    this.declineProcessForm.reset();
-
-    const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
-      nzTitle: 'Are you sure you want to decline the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
-      nzContent: modalContent,
-      // added this because it was showing behind the process edit modal, might have been caused by an unrelated issue though
-      nzZIndex: 5,
-      nzFooter: [
-        {
-          label: 'Cancel',
-          onClick: () => modal.destroy()
-        },
-        {
-          label: 'Submit',
-          type: 'primary',
-          onClick: () => {
-            this.facade.appService.startLoading();
-            let isCompleted = true;
-            for (const i in this.declineProcessForm.controls) {
-              if (this.declineProcessForm.controls[i]) {
-                this.declineProcessForm.controls[i].markAsDirty();
-                this.declineProcessForm.controls[i].updateValueAndValidity();
-                if (!this.declineProcessForm.controls[i].valid && this.declineProcessForm.controls[i].enabled) {
-                  isCompleted = false;
-                }
-              }
-            }
-            if (isCompleted) {
-              const declineReason: DeclineReason = {
-                id: this.declineProcessForm.controls['declineReasonName'].value,
-                name: '',
-                description: this.declineProcessForm.controls['declineReasonDescription'].enabled ? this.declineProcessForm.controls['declineReasonDescription'].value.toString() : ''
-              };
-              process.declineReason = declineReason;
-              this.facade.processService.update(process.id, process)
-                .subscribe(res => {
-                  this.facade.appService.stopLoading();
-                  modal.destroy();
-                  this.facade.toastrService.success('Process and associated candidate were declined');
-                }, err => {
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err.message);
-                });
-            }
-            this.facade.appService.stopLoading();
-          }
-        }
-      ]
-    });
-    return modal;
-  }
-
   reset(): void {
     this.searchValue = '';
     this.search();
@@ -657,7 +602,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
 
-  saveProcess(declineProcessModal: TemplateRef<{}>) {
+  saveProcess() {
     if (this.validateForms()) {
       this.facade.appService.startLoading();
       let newCandidate: Candidate;

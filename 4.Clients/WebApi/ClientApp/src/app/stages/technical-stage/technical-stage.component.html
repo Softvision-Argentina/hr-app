@@ -13,7 +13,7 @@
                     [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
                     Status</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
-                    <nz-select formControlName="status" (ngModelChange)="statusChanged()">
+                    <nz-select formControlName="status" (ngModelChange)="statusChanged($event)">
                         <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
                         </nz-option>
                     </nz-select>

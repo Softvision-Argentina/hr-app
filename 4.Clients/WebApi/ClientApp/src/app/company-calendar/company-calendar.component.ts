@@ -100,7 +100,6 @@ export class CompanyCalendarComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -126,11 +125,8 @@ export class CompanyCalendarComponent implements OnInit {
                   this.getCompanyCalendar();
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else {
-              modal.nzFooter[1].loading = false;
             }
           }
         }],
@@ -161,7 +157,6 @@ export class CompanyCalendarComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.validateForm.controls) {
               if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -195,11 +190,9 @@ export class CompanyCalendarComponent implements OnInit {
                   modal.destroy();
                   this.getCompanyCalendar();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
             } else {
-              modal.nzFooter[1].loading = false;
             }
           }
         }],

@@ -87,7 +87,7 @@ export class HrStageComponent implements OnInit {
   if (this.hrStage.readdressStatus){
     this.selectedReason = `${this.hrStage.readdressStatus.readdressReasonId}`;
     this.readdressStatus.feedback = this.hrStage.readdressStatus.feedback;
-    this.readdressStatus.fromStatus = this.hrStage.readdressStatus.fromStatus;
+    this.readdressStatus.fromStatus = this.hrStage.status;
     this.readdressStatus.toStatus = this.hrStage.readdressStatus.toStatus;
     this.readdressStatus.id = this.hrStage.readdressStatus.id
   }
@@ -132,6 +132,7 @@ export class HrStageComponent implements OnInit {
 
   statusChanged() {
     this.readdressStatus.readdressReasonId = undefined;
+    this.readdressStatus.feedback = undefined;
     this.hrForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.hrForm.controls['status'].value;
 

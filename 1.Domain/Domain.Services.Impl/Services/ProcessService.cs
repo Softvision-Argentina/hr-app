@@ -16,6 +16,7 @@ using Domain.Services.Impl.Validators;
 using FluentValidation;
 using Domain.Model.Exceptions.Process;
 using System.Text.RegularExpressions;
+using Core.ExtensionHelpers;
 
 namespace Domain.Services.Impl.Services
 {
@@ -153,10 +154,10 @@ namespace Domain.Services.Impl.Services
             AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
             process.Candidate.Status = CandidateStatus.InProgress;
-
+            
             if (process.Candidate.LinkedInProfile != null)
             {
-                process.Candidate.LinkedInProfile = GetLinkedInUsername(process.Candidate.LinkedInProfile);
+                process.Candidate.LinkedInProfile = RegexExtensions.GetLinkedInUsername(process.Candidate.LinkedInProfile);
             }
 
             _candidateRepository.Update(process.Candidate);
@@ -517,16 +518,6 @@ namespace Domain.Services.Impl.Services
             {
                 throw new UpdateProcessInvalidException(ex.ToListOfMessages());
             }
-        }
-
-        private string GetLinkedInUsername(string url)
-        {
-            var match = Regex.Match(url, @"linkedin\.com\/in\/(?<userId>[^\/]+)");
-            if (match.Success)
-            {
-                return match.Groups["userId"].Value;
-            }
-            return url;
         }
     }
 }

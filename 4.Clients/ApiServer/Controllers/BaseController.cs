@@ -83,13 +83,22 @@ namespace ApiServer.Controllers
                     ErrorCode = (int) ApplicationErrorMainCodes.NotExpected,
                     ValidationErrors = null,
                     ExceptionMessage = ex.Message ?? "Not expected exception message",
-                    InnerExceptionMessage = ex.InnerException.Message ?? "Not expected inner exception message",
+                    InnerExceptionMessage = GetInnerException(ex),
                     AdditionalInfo = ex.Data
                 };
 
                 return StatusCode((int) HttpStatusCode.InternalServerError, exceptionData);
             }
         }
+
+        private string GetInnerException(Exception exception)
+        {
+            string defaultMessage = "Not expected inner exception message";
+
+            return exception.InnerException == null ? defaultMessage :
+                exception.InnerException.Message ?? defaultMessage;
+        }
+
 
         private string GetRequestBody()
         {

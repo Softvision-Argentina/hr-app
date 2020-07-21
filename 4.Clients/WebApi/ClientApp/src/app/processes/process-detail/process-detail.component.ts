@@ -155,7 +155,6 @@ export class ProcessDetailComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted = true;
             for (const i in this.stageForm.controls) {
               if (this.stageForm.controls.hasOwnProperty(i)) {
@@ -182,11 +181,9 @@ export class ProcessDetailComponent implements OnInit {
                   this.getProcessByID(this.processID);
                   modal.destroy();
                 }, err => {
-                  modal.nzFooter[1].loading = false;
                   this.facade.toastrService.error(err.message);
                 })
             }
-            else modal.nzFooter[1].loading = false;
           }
         }],
     });

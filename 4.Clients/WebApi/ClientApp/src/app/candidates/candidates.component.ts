@@ -335,10 +335,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                   modal.destroy();
                 }, err => {
                   this.facade.appService.stopLoading();
-                  modal.nzFooter[1].loading = false;
                   this.facade.errorHandlerService.showErrorMessage(err);
                 });
-            } else { modal.nzFooter[1].loading = false; }
+            }
             this.facade.appService.stopLoading();
           }
         }],

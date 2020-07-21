@@ -86,7 +86,6 @@ export class RoleComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean = true;
             for (let role in this.roleForm.controls) {
               this.roleForm.controls[role].markAsDirty();
@@ -107,7 +106,6 @@ export class RoleComponent implements OnInit {
                 this.facade.errorHandlerService.showErrorMessage(err);
               })
             }
-            else modal.nzFooter[1].loading = false;
           }
         }
 
@@ -134,7 +132,6 @@ export class RoleComponent implements OnInit {
           type: 'primary',
           loading: false,
           onClick: () => {
-            modal.nzFooter[1].loading = true;
             let isCompleted: boolean = true;
             for (const i in this.roleForm.controls) {
               this.roleForm.controls[i].markAsDirty();
@@ -153,7 +150,6 @@ export class RoleComponent implements OnInit {
                 this.facade.errorHandlerService.showErrorMessage(err);
               })
             }
-            else modal.nzFooter[1].loading = false;
           }
         }]
     });
