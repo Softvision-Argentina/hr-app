@@ -1,7 +1,0 @@
-{
-        "apiUrl": "http://localhost:61059/api/",
-        "clientId": "817485236596-gbllrhc65h8jmn14purvci98brcdq3sq.apps.googleusercontent.com",
-        "scopes": ["profile", "email"],
-        "taskDeadline": 3,
-        "roles": ["Admin", "HRManagement", "HRUser", "Interviewer","TechnicalInterviewer","Common","CommunityManager","Recruiter", "Employee"]
-}

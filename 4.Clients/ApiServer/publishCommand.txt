@@ -1,9 +1,0 @@
-dotnet publish ApiServer.csproj --configuration int --output bin\int\publish
-
-dotnet publish ApiServer.csproj --configuration qa --output bin\qa\publish
-
-dotnet publish ApiServer.csproj --configuration uat --output bin\uat\publish
-
-dotnet publish ApiServer.csproj --configuration prod --output bin\prod\publish
-
-dotnet publish ApiServer.csproj --configuration IntegrationTest --output bin\IntegrationTest\publish
