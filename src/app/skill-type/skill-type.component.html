@@ -1,0 +1,89 @@
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <button nz-button nzType="primary" (click)="showAddModal(skillTypeModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new skill type</button>
+    </div>
+</div>
+<br />
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <nz-table #skillTypeTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th nzCustomFilter>Name
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="nameFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #nameFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input #focusInput type="text" placeholder="Search name"
+                                        [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let skillType of skillTypeTable.data">
+                    <td>{{ skillType.name }}</td>
+                    <td>{{ skillType.description }}</td>
+                    <td>
+                        <i (click)="showDetailsModal(skillType.id)" style="cursor: pointer;" nz-icon nzType="info-circle"
+                            theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(skillTypeModal, skillType.id)" style="cursor: pointer;" nz-icon
+                            nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(skillType.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill type Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
+    <nz-list nzBordered nzSize="large" *ngIf="emptySkillType">
+        <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptySkillType.name}}</nz-list-item>
+        <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptySkillType.description}}
+        </nz-list-item>
+    </nz-list>
+</nz-modal>
+
+<ng-template #skillTypeModal>
+    <form nz-form [formGroup]="validateForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
+                <input type="text" nz-input formControlName="name" id="name" placeholder="Please input the Name">
+                <ng-template #nameErrorMsg>
+                    <ng-container
+                        *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">
+                        Please input the name
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+                <input type="text" nz-input formControlName="description" id="description"
+                    placeholder="Please input the description">
+                <ng-template #descriptionErrorMsg>
+                    <ng-container
+                        *ngIf="validateForm.get('description').dirty && validateForm.get('description')?.hasError('required')">
+                        Please input the description</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>

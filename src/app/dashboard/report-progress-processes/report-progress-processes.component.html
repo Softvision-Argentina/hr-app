@@ -1,0 +1,24 @@
+<div nz-col [nzSpan]="1"></div>
+<div nz-col [nzSpan]="10">
+  <nz-card nzTitle="You currently have: " [nzHoverable]="true">
+    <nz-carousel nzAutoPlay>
+      <div nz-carousel-content *ngIf="haveProcesses()">
+        <span *ngIf="processInProgress > 1">{{processInProgress}} PROCESSES IN PROGRESS</span>
+        <span *ngIf="processInProgress === 1">{{processInProgress}} PROCESS IN PROGRESS</span>
+        <span *ngIf="processInProgress === 0">NO PROCESSES IN PROGRESS</span>
+      </div>
+      <!-- <div nz-carousel-content *ngIf="haveProcesses()">
+        <span *ngIf="processWait > 1">{{processWait}} PROCESSES WAITING FOR YOUR INPUT</span>
+        <span *ngIf="processWait === 1">{{processWait}} PROCESS WAITING FOR YOUR INPUT</span>
+        <span *ngIf="processWait === 0">NO PROCESSES WAITING FOR YOUR INPUT</span>
+      </div> -->
+      <div nz-carousel-content *ngIf="haveProcesses() && processNotStarted > 0">
+        <span *ngIf="processNotStarted > 1">{{processNotStarted}} PROCESSES NOT STARTED YET</span>
+        <span *ngIf="processNotStarted === 1">{{processNotStarted}} NOT STARTED YET</span>
+      </div>
+      <div nz-carousel-content *ngIf="!haveProcesses()">
+        <span>THERE IS NO DATA TO SHOW</span>
+      </div>
+    </nz-carousel>
+  </nz-card>
+</div>

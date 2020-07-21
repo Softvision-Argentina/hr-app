@@ -1,0 +1,12 @@
+<app-communities
+  *ngIf="tab == 'communities'"
+  [_detailedCommunity]="emptyCommunity"
+  [_detailedCandidateProfile]="emptyCandidateProfile"
+  (communityChanged)="getCommunities()"
+  (candidatesProfileChanged)="getCandidatesProfile()"
+></app-communities>
+<app-candidates-profile
+  *ngIf="tab == 'candidates-profile'"
+  [_detailedCandidateProfile]="emptyCandidateProfile"
+  (candidatesProfileChanged)="getCandidatesProfile()"
+></app-candidates-profile>

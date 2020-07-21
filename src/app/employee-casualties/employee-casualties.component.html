@@ -1,0 +1,84 @@
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <button nz-button nzType="primary" (click)="showAddModal(casualtyModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new casualty</button>
+    </div>
+</div>
+<br />
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <nz-table #casualtyTable [nzData]="listOfDisplayData" [nzPageSize]="12" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Month</th>
+                    <th nzCustomFilter>Year
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="yearFilter">
+                            <i nz-icon nzType="caret-down" nzTheme="outline"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #yearFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <ul nz-menu>
+                                    <li nz-menu-item (click)="searchYear(0)"><label>ALL</label></li>
+                                    <li nz-menu-divider></li>
+                                    <li nz-menu-item *ngFor="let year of yearList" (click)="searchYear(year)">
+                                        <label>{{year}}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let casualty of casualtyTable.data">
+                    <td>{{ casualty.value }}</td>
+                    <td>{{ getMonth(casualty) }}</td>
+                    <td>{{ casualty.year }}</td>
+                    <td>
+                        <i (click)="showEditModal(casualtyModal, casualty.id)" style="cursor: pointer;" nz-icon
+                            nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(casualty.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #casualtyModal>
+    <form nz-form [formGroup]="casualtyForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="month">Month</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="monthErrorMsg">
+                <nz-month-picker formControlName="month" (ngModelChange)="onMonthChange($event)"
+                    nzPlaceHolder="Select a month">
+                </nz-month-picker>
+                <ng-template #monthErrorMsg>
+                    <ng-container
+                        *ngIf="casualtyForm.get('month').dirty && casualtyForm.get('month').errors && !exists(casualtyForm.get('month').errors)">
+                        Please input the month
+                    </ng-container>
+                    <ng-container *ngIf="casualtyForm.get('month').dirty && exists(casualtyForm.get('month').errors)">
+                        This month is already projected
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="value">Value</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="valueErrorMsg">
+                <input numbersOnly type="number" pattern="[0-9]*" nz-input formControlName="value" id="value"
+                    placeholder="Please input the value">
+                <ng-template #valueErrorMsg>
+                    <ng-container *ngIf="casualtyForm.get('value').dirty && casualtyForm.get('value').errors">
+                        Please input the value
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>

@@ -1,0 +1,28 @@
+@media (max-width: 767px) {
+  /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+  .body-content {
+    padding-top: 50px;
+  }
+}
+
+.main{
+    height: 100%;
+}
+
+.backdrop[_ngcontent-c7] {
+  z-index: 0 !important;
+}
+.padding {
+  padding: 0px 0px;
+}
+
+.authenticated {
+  margin-left: 140px;
+  width: calc(100% - 140px);
+  padding-top: 75px;
+}
+
+
+.hideElement {
+  display: none;
+}

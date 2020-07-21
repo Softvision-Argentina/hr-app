@@ -1,0 +1,9 @@
+.add-info {
+  padding: 5px 0 5px 5px;
+  width: 90%;
+  text-align: justify;
+}
+
+.candidate-details ::ng-deep .ant-list-item {
+  justify-content: start;
+}

@@ -1,0 +1,97 @@
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <button nz-button nzType="primary" (click)="showAddModal(CandidateProfileModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new Candidate Profile</button>
+    </div>
+</div>
+
+<br />
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <nz-table #CandidateProfileTable [nzData]="detailedCandidateProfile" [nzPageSize]="10">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let CandidateProfile of CandidateProfileTable.data">
+                    <td>{{ CandidateProfile.name }}</td>
+                    <td>{{ CandidateProfile.description | truncate:75 }}</td>
+                    <td>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDetailsModal(CandidateProfile.id)" style="cursor: pointer;" nz-icon
+                            nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(CandidateProfileModal, CandidateProfile.id)" style="cursor: pointer;"
+                            nz-icon nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(CandidateProfile.id)" style="cursor: pointer;" nz-icon
+                            nzType="delete" theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Candidate Profile Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
+    <nz-list nzBordered nzSize="large" *ngIf="emptyCandidateProfile">
+        <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyCandidateProfile.name}}</nz-list-item>
+        <nz-list-item><strong style="margin-right: 1%;">Descripción: </strong> {{emptyCandidateProfile.description}}
+        </nz-list-item>
+        <nz-list-item *ngIf="emptyCandidateProfile.communityItems"><strong style="margin-right: 1%;">Communities:
+            </strong>
+            <div>
+                <nz-tag nz-popover [nzPopoverContent]="community.description" style="margin: 1%;"
+                    [nzColor]="getColor(emptyCandidateProfile.communityItems, community)"
+                    *ngFor="let community of emptyCandidateProfile.communityItems">{{ community.name}}</nz-tag>
+            </div>
+        </nz-list-item>
+    </nz-list>
+</nz-modal>
+
+<ng-template #CandidateProfileModal>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+        <div nz-row>
+            <div nz-col nzSpan="22">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">Name</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameErrorMsg">
+                        <input type="text" nz-input formControlName="name" id="name"
+                            placeholder="Please input the Name">
+                        <ng-template #nameErrorMsg>
+                            <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
+                                <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
+                                    Please input the name!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="22">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Description</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorMsg">
+                        <input type="text" nz-input formControlName="description" id="description"
+                            placeholder="Please input the description">
+                        <ng-template #descriptionErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('description').dirty && validateForm.get('description').errors">
+                                <ng-container *ngIf="validateForm.get('description')?.hasError('required')">
+                                    Please input the description!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</ng-template>

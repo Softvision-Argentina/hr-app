@@ -1,0 +1,412 @@
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <nz-table #candidateTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th nzCustomFilter>
+                        Name
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="nameFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #nameFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input #focusInput type="text" placeholder="Search name"
+                                        [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>DNI</th>
+                    <th>E-mail</th>
+                    <th>Phone</th>
+                    <th nzCustomFilter>Status
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="statusFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #statusFilter="nzDropdownMenu" nzPlacement="bottomRight">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <div>
+                                        <nz-select placeholder="Search status" [(ngModel)]="searchValueStatus"
+                                            class="search-select">
+                                            <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}"
+                                                [nzValue]="status.id">
+                                            </nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let candidate of candidateTable.data">
+                    <td>{{ candidate.name }} {{ candidate.lastName }}</td>
+                    <td>{{ candidate.dni }}</td>
+                    <td>{{ candidate.emailAddress }}</td>
+                    <td>{{ candidate.phoneNumber }}</td>
+                    <td>{{ getStatus(candidate.status) }}</td>
+                    <td *ngIf="candidate.id">
+                        <i nz-tooltip (click)="showDetailsModal(candidate.id, detailModal)" class="icon-action" nz-icon
+                            nzType="info-circle" nzTooltipTitle="Details"></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i nz-tooltip (click)="showEditModal(candidateModal, candidate.id)" class="icon-action" nz-icon nzType="edit"
+                            nzTooltipTitle="Edit"></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon nzType="delete"
+                            nzTooltipTitle="Delete"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #detailModal>
+    <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
+</ng-template>
+
+<ng-template #candidateModal>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item *ngIf="isEdit">
+                    <nz-form-control>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="status">Status</nz-form-label>
+                        <nz-radio-group formControlName="status">
+                            <label *ngFor="let status of statusList" nz-radio-button
+                                [nzValue]="status.id"><span>{{ status.name }}</span></label>
+                        </nz-radio-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
+                        <input formControlName="dni" id="dni" (change)="dniChanged()" type="number" nz-input
+                            placeholder="Please input a DNI">
+                        <ng-template #dniErrorMsg>
+                            <ng-container *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">The
+                                input is not valid DNI!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="name">First Name</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="fristNameErrorMsg">
+                        <input type="text" nz-input formControlName="name" id="name"
+                            placeholder="Please input the Name">
+                        <ng-template #fristNameErrorMsg>
+                            <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
+                                <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
+                                    Please input the name!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="lastNameErrorMsg">
+                        <input type="text" nz-input formControlName="lastName" id="lastName"
+                            placeholder="Please input the last name">
+                        <ng-template #lastNameErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('lastName').dirty && validateForm.get('lastName').errors">
+                                <ng-container *ngIf="validateForm.get('lastName')?.hasError('required')">
+                                    Please input the last name!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email">E-mail</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
+                        <input nz-input formControlName="email" id="email" placeholder="Please input the email">
+                        <ng-template #emailErrorMsg>
+                            <ng-container *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">
+                                The input is not valid E-mail!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                        <input nz-input formControlName="linkedin" id="linkedin"
+                            placeholder="Please input the LinkedIn URL">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber']"
+                        [nzErrorTip]="phoneNumberErrorMsg">
+                        <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+                            <ng-template #addOnBeforeTemplate>
+                                <nz-select formControlName="phoneNumberPrefix" class="prefix-number">
+                                    <nz-option nzLabel="+54" nzValue="+54"></nz-option>
+                                    <nz-option nzLabel="+1" nzValue="+1"></nz-option>
+                                </nz-select>
+                            </ng-template>
+                            <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input placeholder="Please input a phone number">
+                        </nz-input-group>
+                        <ng-template #phoneNumberErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('phoneNumber').dirty && validateForm.get('phoneNumber').errors">
+                                Please input your phone number!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="user">Recruiter</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="recruiterErrorMsg">
+                        <nz-select formControlName="user">
+                            <nz-option *ngFor="let user of users" nzLabel="{{user.firstName}} {{user.lastName}}"
+                                [nzValue]="user.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #recruiterErrorMsg>
+                            <ng-container *ngIf="validateForm.get('user').dirty && validateForm.get('user').errors">
+                                Please input the user
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type">Preferred Office</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="preferredOfficeErrorMsg">
+                        <nz-select formControlName="preferredOffice">
+                            <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #preferredOfficeErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('preferredOffice').dirty && validateForm.get('preferredOffice').errors">
+                                Please input the preferred office
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="profile">Profile</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="profileErrorMsg">
+                        <nz-select formControlName="profile">
+                            <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #profileErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('profile').dirty && validateForm.get('profile').errors">
+                                Please input the profile
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community">Community</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="communityErrorMsg">
+                        <nz-select formControlName="community">
+                            <nz-option *ngFor="let c of communities" nzLabel="{{c.name}}" [nzValue]="c.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #communityErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('community').dirty && validateForm.get('community').errors">
+                                Please input the community
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="referredBy" >Referred By</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                        <input type="text"  nz-input formControlName="referredBy" id="referredBy">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="knownFrom">Known For</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <input type="text" nz-input formControlName="knownFrom" id="knownFrom">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="source">
+                        Source</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-select formControlName="source" nzPlaceHolder="Select the source of the candidate">
+                            <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}"
+                                [nzValue]="s.name">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-control>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="englishLevel">English Level</nz-form-label>
+                        <nz-radio-group formControlName="englishLevel">
+                            <label *ngFor="let level of englishLevelList" [nzDisabled]="false" nz-radio-button
+                                [nzValue]="level.id"><span>{{level.name}}</span></label>
+                        </nz-radio-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <div>
+                    <nz-form-item *ngFor="let control of controlEditArray;let i = index">
+                        <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance[0]">Skills
+                        </nz-form-label>
+                        <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0?0:4">
+                            <div nz-row>
+                                <div nz-col nzSpan="4">
+                                    <input nz-input [formControlName]="control.controlInstance[0]" readonly>
+                                </div>
+                                <div nz-col nzSpan="7">
+                                    <nz-form-control class="skill-slider">
+                                        <nz-slider formControlName="{{control.controlInstance[1]}}"
+                                            id="control.controlInstance[1]">
+                                        </nz-slider>
+                                    </nz-form-control>
+                                </div>
+                                <div nz-col nzSpan="9">
+                                    <nz-form-control [nzSm]="14" [nzXs]="24" class="control-errors"
+                                        [nzErrorTip]="skillCommentErrorMsg">
+                                        <input type="text" nz-input formControlName="{{control.controlInstance[2]}}" placeholder="Please input a comment">
+                                        <ng-template #skillCommentErrorMsg>
+                                            <ng-container
+                                                *ngIf="validateForm.get(control.controlInstance[2]).dirty && validateForm.get(control.controlInstance[2]).errors">
+                                                <ng-container
+                                                    *ngIf="validateForm.get(control.controlInstance[2])?.hasError('required')">
+                                                    Please input a comment!
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </div>
+                                <div nz-col nzSpan="1">
+                                    <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+                                        (click)="removeField(control,$event, true)"></i>
+                                </div>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <nz-form-item *ngFor="let control of controlArray;let i = index">
+                    <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0 && !(controlEditArray.length > 0)"
+                        [nzFor]="control.controlInstance[0]">
+                        Skills</nz-form-label>
+                    <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="!isEdit ? i == 0 ? 0 : 4 : 4"
+                        [nzErrorTip]="skillsErrorMsg">
+                        <div nz-row>
+                            <div nz-col nzSpan="4">
+                                <nz-select [formControlName]="control.controlInstance[0]" [attr.id]="control.id"
+                                    id="control.id" nzShowSearch nzAllowClear [nzAllowClear]="false"
+                                    nzPlaceHolder="Select a skill">
+                                    <nz-option *ngFor="let skill of skills;" nzLabel="{{skill.name}}"
+                                        nzValue="{{skill.id}}">
+                                    </nz-option>
+                                </nz-select>
+                                <ng-template #skillsErrorMsg>
+                                    <ng-container
+                                        *ngIf="getFormControl(control.controlInstance[0])?.dirty&&getFormControl(control.controlInstance[0])?.hasError('required')">
+                                        Please input candidate's skill or delete this field.
+                                    </ng-container>
+                                </ng-template>
+                            </div>
+                            <div nz-col nzSpan="7">
+                                <nz-form-control class="skill-slider">
+                                    <nz-slider formControlName="{{control.controlInstance[1]}}"
+                                        id="control.controlInstance[1]">
+                                    </nz-slider>
+                                </nz-form-control>
+                            </div>
+                            <div nz-col nzSpan="9">
+                                <nz-form-control [nzSm]="14" [nzXs]="24" class="control-errors"
+                                    [nzErrorTip]="commentErrorMsg">
+                                    <input type="text" nz-input formControlName="{{control.controlInstance[2]}}" placeholder="Please input a comment">
+                                    <ng-template #commentErrorMsg>
+                                        <ng-container
+                                            *ngIf="validateForm.get(control.controlInstance[2]).dirty && validateForm.get(control.controlInstance[2]).errors">
+                                            <ng-container
+                                                *ngIf="validateForm.get(control.controlInstance[2])?.hasError('required')">
+                                                Please input a comment!
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </div>
+                            <div nz-col nzSpan="1">
+                                <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+                                    (click)="removeField(control,$event, false)"></i>
+                            </div>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:4}">
+                        <button nz-button nzType="dashed" class="button-skills" (click)="addField($event)"><i nz-icon
+                                type="plus"></i>
+                            Add Skill</button>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</ng-template>

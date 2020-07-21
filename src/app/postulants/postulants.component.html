@@ -1,0 +1,36 @@
+<div nz-row>
+  <div nz-col nzSpan="22">
+      <nz-table #postulantTable [nzData]="listOfDisplayData" [nzPageSize]="10">
+          <thead>
+              <tr>
+                  <th nzCustomFilter>Name
+                      <a nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                          <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                      </a>
+                  </th>
+                  <th>E-mail</th>
+                  <th>LinkedIn</th>
+                  <th>CV</th>
+                  <th>Created Date</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let postulant of postulantTable.data">
+                  <td>{{ postulant.name }}</td>
+                  <td>{{ postulant.emailAddress }}</td>
+                  <td>{{ postulant.linkedInProfile }}</td>
+                  <td>{{ postulant.cv }}</td>
+                  <td>{{ postulant.createdDate| date: 'dd-MM-yyyy'}}</td>
+                  <td>
+                      <i style="cursor: pointer;" nz-icon nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                      <nz-divider nzType="vertical"></nz-divider>
+                      <i  style="cursor: pointer;" nz-icon nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                      <nz-divider nzType="vertical"></nz-divider>
+                      <i style="cursor: pointer;" nz-icon nzType="delete" theme="outline" nzTooltipTitle="Delete" nz-tooltip></i>
+                  </td>
+              </tr>
+          </tbody>
+      </nz-table>
+  </div>
+</div>

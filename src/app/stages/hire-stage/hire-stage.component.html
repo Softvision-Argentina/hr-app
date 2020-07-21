@@ -1,0 +1,86 @@
+<form nz-form [formGroup]="hireForm" [nzLayout]="'horizontal'">
+    <nz-divider nzText="HIRE STAGE"></nz-divider>
+    <br />
+    <nz-form-item hidden>
+        <nz-form-control>
+            <input type="hidden" formControlName="id">
+        </nz-form-control>
+    </nz-form-item>
+    <div nz-row>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Status</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
+                    <nz-select formControlName="status" (ngModelChange)="statusChanged()">
+                        <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #statusErrorMsg>
+                        <ng-container *ngIf="hireForm.get('status').dirty && hireForm.get('status').errors">
+                            Please select a status
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="date">Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dateErrorMsg">
+                    <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
+                    <ng-template #dateErrorMsg>
+                        <ng-container *ngIf="hireForm.get('date').dirty && hireForm.get('date').errors">
+                            Please input a date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Interviewer</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="interviewerErrorMsg">
+                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
+                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #interviewerErrorMsg>
+                        <ng-container *ngIf="hireForm.get('userOwnerId').dirty && hireForm.get('userOwnerId').errors">
+                            Please input the user
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId">Delegate</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="delegateErrorMsg">
+                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
+                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #delegateErrorMsg>
+                        <ng-container
+                            *ngIf="hireForm.get('userDelegateId').dirty && hireForm.get('userDelegateId').errors">
+                            Please input the user
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="11">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)">
+                    </app-text-editor>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+</form>

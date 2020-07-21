@@ -1,0 +1,218 @@
+<br/>
+<br/>
+<div nz-row>
+    <div nz-col nzSpan="12">
+        <button nz-button nzType="primary" (click)="showAddModal(DaysOffModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>
+            Add new day/s off
+        </button>
+    </div>
+</div>
+<br />
+<div class="grid-padding" nz-row>
+    <div nz-col nzSpan="24">
+        <nz-table #daysOffTable class="daysOffTable" [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th nzCustomFilter>D.N.I.
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="dniFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #dniFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input type="text" placeholder="Search DNI" [(ngModel)]="searchValue"
+                                        (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th nzCustomFilter>Type
+                        <nz-filter-trigger #dropdownType [nzDropdownMenu]="typeFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #typeFilter="nzDropdownMenu" nzPlacement="bottomRight">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <div>
+                                        <nz-select placeholder="Search type" [(ngModel)]="searchValueType"
+                                            style="width: 100%; margin-bottom: 2%;">
+                                            <nz-option *ngFor="let reason of reasons" nzLabel="{{reason.name}}"
+                                                [nzValue]="reason.id">
+                                            </nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <button nz-button nzSize="small" nzType="primary" (click)="searchType()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Date</th>
+                    <th>End Date</th>
+                    <th nzCustomFilter>Status
+                        <nz-filter-trigger #dropdownType [nzDropdownMenu]="statusFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #statusFilter="nzDropdownMenu" nzPlacement="bottomRight">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <div>
+                                        <nz-select placeholder="Search status" [(ngModel)]="searchValueStatus"
+                                            style="width: 100%; margin-bottom: 2%;">
+                                            <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}"
+                                                [nzValue]="status.id">
+                                            </nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="resetStatus()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let daysOff of daysOffTable.data | daysOffFilter:searchDni:'dni'">
+                    <td>{{ daysOff.employee?.dni | number:'8.0-0' }}</td>
+                    <td>{{ getType(daysOff) }}</td>
+                    <td>{{ daysOff.date | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ daysOff.endDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ getStatus(daysOff) }}</td>
+                    <td *ngIf="daysOff.id">
+                        <i (click)="showEditModal(DaysOffModal, daysOff.id)" style="cursor: pointer;" nz-icon
+                            nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(daysOff.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip></i>
+                        <nz-divider *ngIf="showAcceptButton(daysOff.status)" nzType="vertical"></nz-divider>
+                        <i nzTooltipTitle="Accept" style="cursor: pointer;" nz-tooltip
+                            *ngIf="showAcceptButton(daysOff.status)" nz-icon nzType="check-circle" nzTheme="outline"
+                            (click)="acceptPetition(daysOff)"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #DaysOffModal>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="DNI">D.N.I.</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
+                        <input #DNI type="number" nz-input formControlName="DNI" id="DNI"
+                            placeholder="Please input the DNI">
+                        <ng-template #dniErrorMsg>
+                            <ng-container *ngIf="validateForm.get('DNI').dirty && validateForm.get('DNI').errors">
+                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('required')">
+                                    Please input the DNI!
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooLongError')">
+                                    The DNI has more than 8 characters!
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooShortError')">
+                                    The DNI shouldn't be less than zero!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Reason</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="reasonErrorMsg">
+                        <nz-select formControlName="type" id="idType">
+                            <nz-option *ngFor="let reason of reasons" nzLabel="{{reason.name}}" [nzValue]="reason.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #reasonErrorMsg>
+                            <ng-container *ngIf="validateForm.get('type').dirty && validateForm.get('type').errors">
+                                <ng-container *ngIf="validateForm.get('type')?.hasError('required')">
+                                    Please input the reason!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="12" [nzXs]="24" nzFor="date">Date</nz-form-label>
+                    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="dateErrorMsg">
+                        <div *ngIf="!isHr">
+                            <nz-date-picker style="width: 100%;" formControlName="date" nzFormat="yyyy-MM-dd"
+                                [nzDisabledDate]="disabledDate">
+                            </nz-date-picker>
+                        </div>
+                        <div *ngIf="isHr">
+                            <nz-date-picker style="width: 100%;" formControlName="date" nzFormat="yyyy-MM-dd">
+                            </nz-date-picker>
+                        </div>
+                        <ng-template #dateErrorMsg>
+                            <ng-container *ngIf="validateForm.get('date').dirty && validateForm.get('date').errors">
+                                Please input a date
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="2" nzFor="endDate">To</nz-form-label>
+                    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="toDateErrorMsg">
+                        <div *ngIf="!isHr">
+                            <nz-date-picker style="width: 100%;" formControlName="endDate" nzFormat="yyyy-MM-dd"
+                                [nzDisabledDate]="disabledDate">
+                            </nz-date-picker>
+                        </div>
+                        <div *ngIf="isHr">
+                            <nz-date-picker style="width: 100%;" formControlName="endDate" nzFormat="yyyy-MM-dd">
+                            </nz-date-picker>
+                        </div>
+                        <ng-template #toDateErrorMsg>
+                            <ng-container
+                                *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
+                                Please input a final date
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row *ngIf="isHr">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
+                        <nz-radio-group formControlName="status">
+                            <label *ngFor="let status of statusList" nz-radio-button
+                                [nzValue]="status.id"><span>{{ status.name }}</span></label>
+                        </nz-radio-group>
+                        <ng-template #statusErrorMsg>
+                            <ng-container>
+                                <ng-container *ngIf="validateForm.get('status')?.hasError('required')">
+                                    Please input the status!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</ng-template>

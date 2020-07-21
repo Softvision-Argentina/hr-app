@@ -1,0 +1,291 @@
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <button nz-button nzType="primary" (click)="showAddModal(employeeModal)" nzShape="round" style="margin-top: 1%">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new employee</button>
+    </div>
+</div>
+<br />
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <nz-table #employeeTable [nzData]="listOfDisplayData" [nzPageSize]="10">
+            <thead>
+                <tr>
+                    <th nzCustomFilter>Name
+                        <a nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter
+                            #dropdown>
+                            <i nz-icon nzType="search" class="ant-table-filter-icon"
+                                [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                            <div class="search-box">
+                                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue">
+                                <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                    class="search-button">Search</button>
+                                <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                            </div>
+                        </a>
+                    </th>
+                    <th>Phone</th>
+                    <th>E-mail</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of employeeTable.data">
+                    <td>{{ employee.name }} {{employee.lastName}}</td>
+                    <td>{{ employee.phoneNumber }}</td>
+                    <td>{{ employee.emailAddress }}</td>
+                    <td>
+                        <i (click)="showDetailsModal(employee.id, detailModal)" style="cursor: pointer;" nz-icon
+                            nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i nzTooltipTitle="Edit" (click)="showEditModal(employee, employeeModal)" style="cursor: pointer;"
+                            nz-tooltip nz-icon nzType="edit" theme="outline"></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(employee.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #employeeModal>
+    <form nz-form [formGroup]="employeeForm" [nzLayout]="'horizontal'">
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">First Name</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="firstNameErrorMsg">
+                        <input type="text" nz-input formControlName="name" id="name"
+                            placeholder="Please input the name">
+                        <ng-template #firstNameErrorMsg>
+                            <ng-container *ngIf="employeeForm.get('name').dirty && employeeForm.get('name').errors">
+                                <ng-container *ngIf="employeeForm.get('name')?.hasError('required')">
+                                    Please input the name!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="lastNameErrorMsg">
+                        <input type="text" nz-input formControlName="lastName" id="lastName"
+                            placeholder="Please input the last name">
+                        <ng-template #lastNameErrorMsg>
+                            <ng-container
+                                *ngIf="employeeForm.get('lastName').dirty && employeeForm.get('lastName').errors">
+                                <ng-container *ngIf="employeeForm.get('lastName')?.hasError('required')">
+                                    Please input the last name!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">DNI</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
+                        <input formControlName="dni" id="'dni'" type="number" nz-input placeholder="Please input a DNI">
+                        <ng-template #dniErrorMsg>
+                            <ng-container *ngIf="employeeForm.get('dni').dirty && employeeForm.get('dni').errors">
+                                Please input the DNI!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="12" nzFor="emailAddress">E-mail</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
+                        <input nz-input formControlName="emailAddress" id="emailAddress"
+                            placeholder="Please input the email">
+                        <ng-template #emailErrorMsg>
+                            <ng-container
+                                *ngIf="employeeForm.get('emailAddress').dirty && employeeForm.get('emailAddress').errors">
+                                The input is not valid E-mail!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber">Phone Number</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="employeeForm.controls['phoneNumber']"
+                        [nzErrorTip]="phoneNumberErrorMsg">
+                        <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+                            <ng-template #addOnBeforeTemplate>
+                                <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
+                                    <nz-option nzLabel="+54" nzValue="+54"></nz-option>
+                                </nz-select>
+                            </ng-template>
+                            <input formControlName="phoneNumber" id="phoneNumber" type="tel" pattern="^[0-9]+$" nz-input
+                                placeholder="Please input the phone number">
+                        </nz-input-group>
+                        <ng-template #phoneNumberErrorMsg>
+                            <ng-container
+                                *ngIf="employeeForm.get('phoneNumber').dirty && employeeForm.get('phoneNumber').errors">
+                                Please input your phone number!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedInProfile">LinkedIn</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                        <input nz-input formControlName="linkedInProfile" id="linkedInProfile"
+                            placeholder="Please input the LinkedIn URL">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24">Role</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="roleErrorMsg">
+                        <nz-select formControlName="roleId">
+                            <nz-option *ngFor="let role of activeRoles" [nzLabel]="role.name" [nzValue]="role.id">
+                            </nz-option>
+                        </nz-select>
+                        <ng-template #roleErrorMsg>
+                            <ng-container *ngIf="employeeForm.get('roleId').dirty && employeeForm.get('roleId').errors">
+                                <ng-container *ngIf="employeeForm.get('roleId')?.hasError('required')">
+                                    Please input the role!
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row *ngIf="editMode">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24">Status</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-select formControlName="status">
+                            <nz-option *ngFor="let status of statusList" [nzLabel]="status.name" [nzValue]="status.id">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24">Recruiter</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-select formControlName="userId">
+                            <nz-option *ngFor="let user of users" [nzLabel]="user.firstName + ' ' + user.lastName"
+                                [nzValue]="user.id">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isReviewer">Is Reviewer</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <label nz-checkbox id="isReviewer" formControlName="isReviewer"
+                            (change)="onIsReviewerChange($event, newReviewerModal)"></label>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-row>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Reviewer">Reviewer</nz-form-label>
+                        <nz-form-control *ngIf="!editMode; else editReviewersFilter" [nzSm]="14" [nzXs]="24"
+                            [nzErrorTip]="reviewerErrorMsg">
+                            <input nz-input [nzAutocomplete]="auto" formControlName="reviewerName" id="Reviewer"
+                                placeholder="Please input the Reviewer" (input)="filterReviewers($event)">
+                            <nz-autocomplete [nzDataSource]="filteredReviewersNames" #auto> </nz-autocomplete>
+                            <ng-template #reviewerErrorMsg style="color: #f5222d">
+                                <ng-container *ngIf="showInputReviewerMessage">
+                                    Please input the Reviewer!
+                                </ng-container>
+                                <ng-container *ngIf="showReviewerNotFoundMessage">
+                                    Reviewer not found!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="additionalInformation">Additional Information
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                        <textarea rows="2" id="additionalInformation" nz-input formControlName="additionalInformation"
+                            placeholder="Input any additional information if necessary"
+                            id="additionalInformation"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #editReviewersFilter>
+    <div [formGroup]="employeeForm">
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="editReviewerErrorMsg">
+            <input nz-input [nzAutocomplete]="auto" formControlName="reviewerName" id="Reviewer"
+                placeholder="Please input the Reviewer" (input)="filterEditReviewers($event)">
+            <nz-autocomplete [nzDataSource]="filteredEditReviewersNames" #auto> </nz-autocomplete>
+            <ng-template #editReviewerErrorMsg style="color: #f5222d">
+                <ng-container *ngIf="showInputReviewerMessage">
+                    Please input the Reviewer!
+                </ng-container>
+                <ng-container *ngIf="showReviewerNotFoundMessage">
+                    Reviewer not found!
+                </ng-container>
+            </ng-template>
+        </nz-form-control>
+    </div>
+</ng-template>
+
+<ng-template #detailModal>
+    <employee-details [_detailedEmployee]="detailedEmployee"></employee-details>
+</ng-template>
+
+<ng-template #newReviewerModal>
+    <p>Some employees has {{editEmployee.name}} {{editEmployee.lastName}} as their reviewer.
+        If you want {{editEmployee.name}} to stop being reviewer you must choose another one for them.</p>
+    <form nz-form [formGroup]="newReviewerForm">
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="newReviewerErrorMsg">
+            <nz-select formControlName="reviewerId">
+                <ng-container *ngFor="let reviewer of reviewers">
+                    <nz-option *ngIf="reviewer.id !== editEmployee.id"
+                        [nzLabel]="reviewer.name + ' ' + reviewer.lastName" [nzValue]="reviewer.id">
+                    </nz-option>
+                </ng-container>
+            </nz-select>
+            <ng-template #newReviewerErrorMsg>
+                <ng-container
+                    *ngIf="newReviewerForm.get('reviewerId').dirty && newReviewerForm.get('reviewerId').errors">
+                    <ng-container *ngIf="newReviewerForm.get('reviewerId')?.hasError('required')">
+                        Please input the reviewer!
+                    </ng-container>
+                </ng-container>
+            </ng-template>
+        </nz-form-control>
+    </form>
+</ng-template>

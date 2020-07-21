@@ -1,0 +1,196 @@
+<form nz-form [formGroup]="preOfferForm" [nzLayout]="'horizontal'">
+    <nz-divider nzText="PRE OFFER STAGE"></nz-divider>
+    <br />
+    <nz-form-item hidden>
+        <nz-form-control>
+            <input type="hidden" formControlName="id">
+        </nz-form-control>
+    </nz-form-item>
+
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
+                    Status</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
+                    <nz-select formControlName="status" (ngModelChange)="statusChanged()">
+                        <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #statusErrorMsg>
+                        <ng-container *ngIf="preOfferForm.get('status').dirty && preOfferForm.get('status').errors">
+                            Please select a status
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+
+    <div nz-row *ngIf="CanShowReaddressPossibility()">
+        <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">
+            Reason
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select formControlName="reasonSelectControl" 
+            [(ngModel)]="selectedReason" 
+            (ngModelChange)="getSelectedReason($event)" nzPlaceHolder="select from list">
+                <nz-option *ngFor="let reason of readdressFilteredList" nzLabel="{{reason.name}}" nzValue="{{reason.id}}">
+                </nz-option>
+            </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    
+        <div nz-col nzSpan="12">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">
+            Reason explanation
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+            <textarea rows="1 " nz-input id="readdressReason" formControlName="reasonDescriptionTextAreaControl"
+                        placeholder="Input the reason"
+                        (input)="onDescriptionChange($event.target.value)"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+        </div>
+    </div>
+
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="dni"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('dni')}">
+                    DNI</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
+                    <input id="dni" formControlName="dni" (keyup)="checkLength($event.target)" maxlength="8"
+                        type="number" nz-input placeholder="Please input a DNI number">
+                    <ng-template #dniErrorMsg>
+                        <ng-container *ngIf="preOfferForm.get('dni').dirty && preOfferForm.get('dni').errors">
+                            <ng-container *ngIf="preOfferForm.get('dni').hasError('dniTooShortError')">
+                                DNI is too short
+                            </ng-container>
+                            <ng-container *ngIf="preOfferForm.get('dni').hasError('emptyInputError')">
+                                DNI is empty
+                            </ng-container>
+                            <ng-container *ngIf="preOfferForm.get('dni').hasError('dniFirstDigitError')">
+                                DNI shouldn't be 0
+                            </ng-container>
+                            <ng-container *ngIf="preOfferForm.get('dni').hasError('dniExists')">
+                                The Dni already exists
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="date"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
+                    Birth Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dateOfBirthErrorMsg">
+                    <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
+                    <ng-template #dateOfBirthErrorMsg>
+                        <ng-container *ngIf="preOfferForm.get('date').dirty && preOfferForm.get('date').errors">
+                            Please input a date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('backgroundCheckDone')}">
+                    Background Check</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="backgroundCheckDone">
+                        <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
+                        <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="offerDate">
+                    Done Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="backgroundCheckDoneDateErrorMsg">
+                    <nz-date-picker style="width: 100%;" formControlName="backgroundCheckDoneDate"></nz-date-picker>
+                    <ng-template #backgroundCheckDoneDateErrorMsg>
+                        <ng-container
+                            *ngIf="preOfferForm.get('backgroundCheckDoneDate').dirty && preOfferForm.get('backgroundCheckDoneDate').errors">
+                            Please input a date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDone')}">
+                    Medical Check</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-select formControlName="backgroundCheckDone">
+                        <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
+                        <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="preocupationalDoneDate"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('preocupationalDoneDate')}">
+                    Done Date</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="preocupationalDoneDateErrorMsg">
+                    <nz-date-picker style="width: 100%;" formControlName="preocupationalDoneDate"></nz-date-picker>
+                    <ng-template #preocupationalDoneDateErrorMsg>
+                        <ng-container
+                            *ngIf="preOfferForm.get('preocupationalDoneDate').dirty && preOfferForm.get('preocupationalDoneDate').errors">
+                            Please input a Preocupational Done Date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <!-- NOTE: Deprecated. To be removed in future version
+    <div nz-row>
+        <div nz-col nzSpan="12" style="display:none">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rejectionReason"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('rejectionReason')}">
+                    Rejection Reason</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="rejectionReasonErrorMsg">
+                    <textarea rows="1 " nz-input id="rejectionReason" formControlName="rejectionReason"
+                        placeholder="Input the rejection reason"></textarea>
+                    <ng-template #rejectionReasonErrorMsg>
+                        <ng-container style="color: #f5222d "
+                            *ngIf="showRejectionReason() && preOfferForm.get('rejectionReason').dirty && preOfferForm.get('rejectionReason').errors ">
+                            <ng-container
+                                *ngIf="preOfferForm.get('rejectionReason')?.dirty && preOfferForm.get('rejectionReason')?.errors ">
+                                Please input rejection reason!
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div> -->
+
+    <span *ngIf="preOfferStage">
+        <pre-offer-history [preOfferStatus]="preOfferForm.get('status').value" [_processId]=preOfferStage.processId keyboard="false"></pre-offer-history>
+    </span>
+    
+
+</form>

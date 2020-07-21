@@ -1,0 +1,32 @@
+<div >
+    <nz-card nzTitle="Completed Processes" [nzHoverable]="true">
+      <div style="display: block">
+        <div nz-row>
+          <div nz-col nzSpan="22" style="text-align: center;">
+              <nz-button-group [nzSize]="'default'">
+                  <button nz-button nzType="default" (click)="previousHireMonth()"><i nz-icon nzType="left"></i></button>
+                  <nz-month-picker [(ngModel)]="month" (ngModelChange)="getHireProjectionReport()" nzPlaceHolder="Select a month" >
+                    </nz-month-picker>
+                  <button nz-button nzType="default" (click)="nextHireMonth()"><i nz-icon nzType="right"></i></button>
+                </nz-button-group>                
+          </div>
+        </div>
+        <br />
+        <div nz-row>
+            <div nz-col nzSpan="22" *ngIf="hasProjections">
+                <canvas baseChart
+                [datasets]="hireChartData"
+                [labels]="hireChartLabels"
+                [options]="hireChartOptions"
+                [plugins]="hireChartPlugins"
+                [legend]="hireChartLegend"
+                [chartType]="hireChartType">
+              </canvas>
+            </div>
+            <div nz-col nzSpan="22" *ngIf="!hasProjections" style="text-align: center;">
+                <span><strong>THERE ARE NO PROJECTIONS FOR THE SELECTED MONTH</strong></span>
+            </div>
+          </div>          
+      </div>
+    </nz-card>
+  </div>

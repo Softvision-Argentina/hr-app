@@ -1,0 +1,79 @@
+<h4>Stage</h4>
+
+<div class="container">
+
+  <form [formGroup]="stageForm">
+    <div class="form-group">
+      <label for="stageTittle">Tittle</label>
+      <input type="text" formControlName="tittle" class="form-control" id="stageTittle" aria-describedby="stageTittle"
+        placeholder="Tittle...">
+      <small *ngIf="!stageForm.get('tittle').valid && stageForm.get('tittle').touched" class="form-text text-muted">
+        Please enter a tittle.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="stageDescription">Description</label>
+      <input type="text" formControlName="description" class="form-control" id="stageDescription"
+        aria-describedby="stageDescription" placeholder="Description...">
+      <small *ngIf="!stageForm.get('description').valid && stageForm.get('description').touched"
+        class="form-text text-muted">
+        Please enter a description.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="stageStartDate">Start Date</label>
+      <input type="date" formControlName="startDate" class="form-control" id="stageStartDate" aria-describedby="stageStartDate">
+    </div>
+
+    <div class="form-group">
+      <label for="stageEndDate">End Date</label>
+      <input type="date" formControlName="endDate" class="form-control" id="stageEndDate"
+        aria-describedby="stageEndDate">
+    </div>
+
+    <div class="form-group">
+      <label for="stageStatus">Status</label>
+      <input type="number" formControlName="status" class="form-control" id="stageStatus"
+        aria-describedby="stageStatus" placeholder="Status...">
+      <small *ngIf="!stageForm.get('status').valid && stageForm.get('status').touched"
+        class="form-text text-muted">
+        Please enter a status.
+      </small>
+    </div>
+
+    <hr>
+
+    <label for="stageItems">Items</label>
+    <br>
+    <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm"
+      (click)="addNewItem()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item</button>
+    <div formArrayName="stageItems">      
+    </div>
+    <hr>
+    <button type="submit" [disabled]="!stageForm.valid" class="btn btn-primary">Cargar</button>
+  </form>
+  <hr>
+
+</div>
+
+<pre>{{stageForm.value | json}}</pre>
+
+<form class="example-form" [formGroup]='userForm'>
+    <mat-form-field class="example-full-width">
+        <input matInput type="text" [matAutocomplete]="auto"  class="form-control" id="userName" placeholder="Choose a user"
+        name="type" formControlName="userName" style="margin-right:5px;">
+    </mat-form-field>
+    <span>Your choice is: {{userForm.get('userName').value | json}}</span>
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+        <ng-container *ngIf="!isLoading">
+          <mat-option *ngFor="let user of users" [value]="user">
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
+            <small> | ID: {{user.id}}</small>
+          </mat-option>
+        </ng-container>
+      </mat-autocomplete>
+  </form>

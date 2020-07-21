@@ -1,0 +1,60 @@
+::ng-deep .vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .vertical-center-modal .ant-modal {
+  top: 0;
+}
+
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+
+.dynamic-delete-button:hover {
+  color: #777;
+}
+
+.prefix-number{
+  width: 70%;
+}
+
+.search-select{
+  width: 100%;
+  margin-bottom: 2%;
+}
+
+.icon-action{  
+  cursor: pointer;
+}
+
+.skill-slider{
+  text-align: center;
+  margin-left: 10%;
+}
+
+.control-errors{
+  margin-left: 10%; 
+  width: 85%;
+}
+
+.button-skill{
+  width: 82%;
+}
+.status-filter{
+  li{
+    display: inline-block;
+    padding: 0;
+
+    &:hover{
+      background-color: white;
+      color: none;
+    }
+  }
+}

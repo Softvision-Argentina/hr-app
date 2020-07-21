@@ -1,0 +1,87 @@
+<div nz-row *ngIf="!checkHrRole(); else nonHRUser">
+  <div nz-col nzSpan="24">
+    <nz-table #referralsTable [nzData]="referralsList" nzTableLayout="fixed" [nzPageSize]="10" nzShowSizeChanger>
+      <thead>
+        <tr class="tableHead">
+            <th>Candidate</th>
+            <th>Referral Date</th>
+            <th>Current Stage</th>
+            <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let referralItem of referralsTable.data">
+          <td [ngStyle]="getTextColor(referralItem)"> {{ referralItem.candidate.name }}
+            {{ referralItem.candidate.lastName }} </td>
+
+          <td>{{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
+
+          <td [ngStyle]="getTextColor(referralItem)">
+              {{ referralItem.currentStatus.message }}
+          </td>
+
+          <td>
+            <i nzTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
+              (click)="showContactReferralModal(referralItem.candidate)"></i>
+            <nz-divider nzType="vertical"></nz-divider>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+<ng-template #nonHRUser>
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-table #referralsTable [nzData]="referralsList" nzTableLayout="fixed" [nzPageSize]="10" nzShowSizeChanger>
+        <thead>
+          <tr class="tableHead">
+              <th *ngFor="let column of listOfColumns; trackBy: trackByName" [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn" class="tableHead" [nzSortOrder]="column.sortOrder"
+              [nzSortFn]="column.sortFn" >
+              {{ column.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let referralItem of referralsTable.data">
+              <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)" class="HRCandidateColumnColor">
+                {{ referralItem.candidate.name }}
+                {{ referralItem.candidate.lastName }}</td>
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+              {{ referralItem.candidate.referredBy }}</td>
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+              {{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+              {{ referralItem.candidate.community.name }} </td>
+            <td [ngStyle]="getTextColor(referralItem)">
+              <span [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+                {{ referralItem.currentStatus.message }}
+              </span>
+            </td>
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+              <span *ngIf="referralItem.candidate.openPosition && referralItem.candidate.openPosition.priority">
+                <img src="../../assets/images/vector.svg" class="vector">&nbsp;&nbsp;
+              </span>
+              {{ referralItem.candidate.openPositionTitle }}</td>
+            <td>
+                <i *ngIf="checkCV(referralItem.candidate.cv); else noCV" nzTitle="Open CV" nz-tooltip nz-icon style="cursor: pointer;" nzType="file-pdf" nzTheme="outline"
+                (click)="openCV(referralItem.candidate.cv)"></i>
+                <ng-template #noCV>
+                  <i nzTitle="No CV available" nz-tooltip nz-icon style="cursor: pointer;" nzType="file-pdf" nzTheme="outline"
+                ></i>
+                </ng-template>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i nzTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
+                (click)="showContactReferralModal(referralItem.candidate)"></i>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i nzTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete" nzTheme="outline"
+              (click)="deleteEvent.emit(referralItem.candidate)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</ng-template>

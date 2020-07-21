@@ -1,0 +1,78 @@
+@import '../../../styles/abstracts/variables';
+
+
+.nameStyle {
+    font-size: 16px;
+    line-height: 1.25;
+    color: $primary-color;
+  }
+
+.tableHead {
+  color: rgba(0,0,0,.85);
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;  
+}
+
+@media screen and (max-width: 1400px) and (min-width: 1280px) {
+  th.tableHead {
+    padding-right: 4px;
+    padding-left: 6px;
+  }
+
+  .filterButton {
+    margin-left: 15px;
+  }
+
+  .filterIcon {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  th.noFilter {
+    padding-left: 16px;
+  }
+ }
+
+.filterList {
+  max-height: 400px; 
+  overflow: auto;
+}
+
+.submitButton {
+  width: 100%;
+  color: #fafafa;
+  font-weight: bold;
+  background-color: #c800a1;
+  border-radius: 5px;
+  display: none;
+}
+
+.visibleElement {
+  display: inline-block;
+}
+
+.vector {
+  width: 13px;
+  object-fit: contain;
+  margin-right: 5px;
+}
+
+.hot {
+  width: 114px;
+  font-family: ProximaNova-Bold;  
+  font-size: 16px;
+  line-height: 1.25;
+  color: $primary-color;  
+}
+
+.title {  
+  font-size: 16px;
+  line-height: 1.25;
+  color: $primary-color;
+}
+
+.apply {
+  font-size: 16px;
+  font-family: ProximaNova-Bold; 
+}

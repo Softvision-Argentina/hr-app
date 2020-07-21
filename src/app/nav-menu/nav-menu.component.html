@@ -1,0 +1,40 @@
+<header>
+    <nav class="main-nav">
+        <div class="main-nav__input">
+            <i nz-icon nzType="search" nzTheme="outline" style="font-size: 30px;"></i>
+            <input placeholder="{{searchbarPlaceholder}}" [(ngModel)]="search" (input)="onSearchChange($event.target.value)">
+        </div>
+        <div class="avatar" (click)="changeUserSettings()">
+            <div class="user-info">
+                {{currentUser.firstName}}
+                {{currentUser.lastName}}
+                <nz-avatar [nzSize]="40" nzIcon="user" nzSrc="{{currentUser.imgURL}}"></nz-avatar>
+            </div>
+            <div *ngIf="showUserSettings">
+                <nz-card nzTitle="{{currentUser.firstName}} {{ currentUser.lastName}}" [nzExtra]="closeModal" [nzBodyStyle]="{'padding': '0'}">
+                    <nz-list>
+                        <nz-list-item>
+                            {{currentUser.username}}
+                        </nz-list-item>
+                        <nz-list-item (click)="showPreferencesModal(preferencesModal)" >
+                            Manage Preferences
+                            <i nz-icon nzType="setting" nzTheme="outline"></i>
+                        </nz-list-item>
+                        <nz-list-item (click)="logout()">
+                            Logout
+                            <i nz-icon nzType="logout" nzTheme="outline"></i>
+                        </nz-list-item>
+                    </nz-list>
+                </nz-card>
+            </div>
+        </div>
+    </nav>
+</header>
+          
+<ng-template #closeModal>
+    <i nz-icon nzType="close" nzTheme="outline"></i>
+</ng-template>
+
+<ng-template #preferencesModal>
+    <app-preferences></app-preferences>
+</ng-template>

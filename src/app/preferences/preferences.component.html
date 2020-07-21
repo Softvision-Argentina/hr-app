@@ -1,0 +1,5 @@
+<nz-list>    
+  <nz-list-item class="list-container" *ngFor="let dash of dashboards;let i = index">
+    <span class="ant-typography">{{dash.name}}</span> <nz-switch class="ant-list-item" [(ngModel)]="dashboardStatus[i]"  (ngModelChange)="updatePreferences(dash, dashboardStatus[i])"></nz-switch>      
+  </nz-list-item>     
+</nz-list>

@@ -1,0 +1,12 @@
+<app-room
+  *ngIf="tab==='rooms'"
+  [_detailedRoom]="emptyRoom"
+  [_detailedOffice]="emptyOffice"
+  (roomsChanged)="onRoomsChanged()"
+></app-room>
+<app-office
+  *ngIf="tab==='offices'"
+  [_detailedRoom]="emptyRoom"
+  [_detailedOffice]="emptyOffice"
+  (officesChanged)="onOfficesChanged()"
+></app-office>
