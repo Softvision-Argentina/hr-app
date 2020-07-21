@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="clientForm" [nzLayout]="'horizontal'">
     <nz-divider nzText="CLIENT STAGE"></nz-divider>
     <br />
-    <nz-form-item>
+    <nz-form-item hidden>
         <nz-form-control>
             <input type="hidden" formControlName="id">
         </nz-form-control>
@@ -232,53 +232,124 @@
         </nz-collapse>
     </div>
 </div>
-<div nz-row nzJustify="center" class="client-stage">
+<div nz-row nzJustify="center" class="interviewEditor">
     <div nz-col nzSpan="20">
-        <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
-            [nzPageSize]="interviews.length">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th>Feedback</th>
-                    <th>Interviewer</th>
-                    <th>Project</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="client-table__row" *ngFor="let interview of interviewTable.data">
-                    <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
-                        <td>{{interview.interviewDate | date  : 'shortDate' }}</td>
-                        <td>{{interview.client}}</td>
-                        <td word-break: break-all><app-text-editor [setContent]="interview.feedback" (getContent)="getFeedbackContent($event)"></app-text-editor></td>
-                        <td>{{interview.clientInterviewer}}</td>
-                        <td>{{interview.project}}</td>
-                        <td>
-                            <a class="action-btn" (click)="startEdit(interview.id)">
-                                <i nz-tooltip nz-icon nzTooltipTitle="Edit" nzType="edit" theme="outline"></i>
-                            </a>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <a class="action-btn" (click)="showDeleteConfirmDialog(interview.id)">
-                                <i nz-tooltip nz-icon nzTooltipTitle="Delete" nzType="delete" theme="outline"></i>
-                            </a>
-                        </td>
-                    </ng-container>
-                    <ng-template #editTemplate>
-                        <td>
-                            <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"></nz-date-picker>
-                        </td>
-                        <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client"/></td>
-                        <td><app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" [isEditable]="true"></app-text-editor></td>
-                        <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer"/></td>
-                        <td><input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project" /></td>
-                        <td>
-                            <a (click)="saveEdit(interview.id)" class="save" style="margin-right: 8px;">Save</a>
-                            <a (click)="cancelEdit(interview.id)">Cancel</a>
-                        </td>
-                    </ng-template>
-                </tr>
-            </tbody>
-        </nz-table>
+        <form [formGroup]="interviewTableRowEdit">
+            <nz-table #interviewTable id="interviewTable" [nzData]="interviews" [nzShowPagination]="false"
+                [nzPageSize]="interviews.length">
+                <thead>
+                    <tr>
+                        <th [nzWidth]="'16%'">Date</th>
+                        <th [nzWidth]="'15%'">Client</th>
+                        <th [nzWidth]="'35%'">Feedback</th>
+                        <th [nzWidth]="'14%'">Interviewer</th>
+                        <th [nzWidth]="'15%'">Project</th>
+                        <th [nzWidth]="'5%'">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="client-table__row" *ngFor="let interview of interviewTable.data">
+                        <ng-container *ngIf="!editCache[interview.id].edit; else editTemplate">
+                            <td>{{interview.interviewDate | date  : 'shortDate' }}</td>
+                            <td>{{interview.client}}</td>
+                            <td>                            
+                                <app-text-editor [setContent]="interview.feedback" (getContent)="getFeedbackContent($event)"></app-text-editor>
+                            </td>
+                            <td>{{interview.clientInterviewer}}</td>
+                            <td>{{interview.project}}</td>
+                            <td>
+                                <a class="action-btn" (click)="startEdit(interview.id)">
+                                    <i nz-tooltip nz-icon nzTooltipTitle="Edit" nzType="edit" theme="outline"></i>
+                                </a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a class="action-btn" (click)="showDeleteConfirmDialog(interview.id)">
+                                    <i nz-tooltip nz-icon nzTooltipTitle="Delete" nzType="delete" theme="outline"></i>
+                                </a>
+                            </td>
+                        </ng-container>
+                        <ng-template #editTemplate>
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control [nzErrorTip]="dateEditErrorMsg">
+                                        <nz-date-picker [(ngModel)]="editCache[interview.id].data.interviewDate"
+                                            formControlName="interviewEditDate" id="interviewEditDate"></nz-date-picker>
+                                        <ng-template #dateEditErrorMsg>
+                                            <ng-container *ngIf="interviewTableRowEdit.get('interviewEditDate').dirty && interviewTableRowEdit.get('interviewEditDate').errors">                        
+                                                <ng-container *ngIf="interviewTableRowEdit.get('interviewEditDate')?.hasError('required')">
+                                                    Field required
+                                                </ng-container> 
+                                            </ng-container>    
+                                        </ng-template>          
+                                    </nz-form-control> 
+                                </nz-form-item>                       
+                            </td>
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control [nzErrorTip]="clientEditErrorMsg">
+                                        <input type="text" nz-input [(ngModel)]="editCache[interview.id].data.client" 
+                                            formControlName="interviewEditClient" id="interviewEditClient" />
+                                        <ng-template #clientEditErrorMsg>
+                                            <ng-container *ngIf="interviewTableRowEdit.get('interviewEditDate').dirty && interviewTableRowEdit.get('interviewEditDate').errors">                        
+                                                Field required
+                                            </ng-container>    
+                                        </ng-template>   
+                                    </nz-form-control>   
+                                </nz-form-item>                     
+                            </td>
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control [nzErrorTip]="feedbackEditErrorMsg">
+                                        <app-text-editor [setContent]="editCache[interview.id].data.feedback" (getContent)="getFeedbackToCache($event,interview.id)" 
+                                            [isEditable]="true"></app-text-editor>
+                                        <ng-template #feedbackEditErrorMsg>
+                                            <ng-container
+                                                *ngIf="interviewForm.get('interviewEditFeedback').dirty && interviewForm.get('interviewEditFeedback').errors">
+                                                    <ng-container
+                                                        *ngIf="interviewForm.get('interviewEditFeedback')?.hasError('required')">
+                                                            Field required
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="interviewForm.get('interviewEditFeedback')?.hasError('maxlength')">
+                                                        The maximun length is 1000
+                                                    </ng-container>
+                                            </ng-container>
+                                        </ng-template>    
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </td>
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <input type="text" nz-input [(ngModel)]="editCache[interview.id].data.clientInterviewer" 
+                                            formControlName="interviewEditInterviewer" id="interviewEditInterviewer" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </td>
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <input type="text" nz-input [(ngModel)]="editCache[interview.id].data.project"
+                                            formControlName="interviewEditProject" id="interviewEditProject" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </td>                
+                            <td>
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <a (click)="editInterview(interview.id)">
+                                            <i nzTitle="Accept" nz-tooltip nz-icon nzType="check" theme="outline"></i>
+                                        </a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a (click)="cancelEdit(interview.id)">
+                                            <i nzTitle="Accept" nz-tooltip nz-icon nzType="undo" theme="outline"></i>
+                                        </a>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </td>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </form>
     </div>
 </div>

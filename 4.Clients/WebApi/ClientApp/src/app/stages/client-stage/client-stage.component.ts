@@ -62,6 +62,14 @@ export class ClientStageComponent implements OnInit {
   });
   feedbackContent: string = "";
 
+  interviewTableRowEdit: FormGroup = this.fb.group({
+    interviewEditDate: [null, [Validators.required]],
+    interviewEditClient: [null, [Validators.required]],
+    interviewEditInterviewer: [null],
+    interviewEditProject: [null],
+    interviewEditFeedback: [null, [Validators.required, Validators.maxLength(1000)]]
+  });
+
   statusList: any[];
   interviews: Interview[] = []
   panelControl: any = {
@@ -372,6 +380,12 @@ export class ClientStageComponent implements OnInit {
 
   startEdit(id: string): void {
     this.editCache[id].edit = true;
+
+    this.interviewTableRowEdit.controls['interviewEditDate'].setValue(this.editCache[id].data['interviewDate']);
+    this.interviewTableRowEdit.controls['interviewEditClient'].setValue(this.editCache[id].data['client']);
+    this.interviewTableRowEdit.controls['interviewEditFeedback'].setValue(this.editCache[id].data['feedback']);
+    this.interviewTableRowEdit.controls['interviewEditInterviewer'].setValue(this.editCache[id].data['clientInterviewer']);
+    this.interviewTableRowEdit.controls['interviewEditProject'].setValue(this.editCache[id].data['project']);
   }
 
   cancelEdit(id: number): void {
@@ -444,5 +458,23 @@ export class ClientStageComponent implements OnInit {
 
   clearInterviewOperations() {
     this.interviewOperations = [];
+  }
+
+  private validateInterviewEditForm() {
+    for (const i in this.interviewTableRowEdit.controls) {
+      this.interviewTableRowEdit.controls[i].markAsDirty();
+      this.interviewTableRowEdit.controls[i].updateValueAndValidity();
+    }
+    if (this.interviewTableRowEdit.invalid) {
+      return false
+    }
+    return true
+  }
+  
+  editInterview(interviewId: number) {
+    if (this.validateInterviewEditForm()) {
+      this.saveEdit(interviewId);
+      this.facade.toastrService.success('Interview modified!');
+    }
   }
 }

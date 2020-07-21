@@ -34,7 +34,8 @@
   padding: 4px 11px;
   height: 100px;
   overflow-y: auto;
-  background-color: white;
+  background-color: white;  
+  word-break: break-all;
 }
 
 .recruEdit-editor:focus {
