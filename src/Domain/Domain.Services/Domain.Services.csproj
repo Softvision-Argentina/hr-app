@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;INT;QA;UAT;PROD;IntegrationTest</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Exceptions\**" />
+    <Compile Remove="Interfaces\ExternalServices\**" />
+    <EmbeddedResource Remove="Exceptions\**" />
+    <EmbeddedResource Remove="Interfaces\ExternalServices\**" />
+    <None Remove="Exceptions\**" />
+    <None Remove="Interfaces\ExternalServices\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="Google.Apis" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.40.2.1643" />
+    <PackageReference Include="Google.Apis.Core" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.43.0.1863" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Persistance\Core.Persistance.csproj" />
+    <ProjectReference Include="..\..\Core\Core\Core.csproj" />
+    <ProjectReference Include="..\..\Server\ApiServer.Contracts\ApiServer.Contracts.csproj" />
+    <ProjectReference Include="..\Domain.Model\Domain.Model.csproj" />
+  </ItemGroup>
+
+</Project>

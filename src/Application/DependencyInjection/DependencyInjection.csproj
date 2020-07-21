@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Configurations>Debug;Release;INT;QA;UAT;PROD;IntegrationTest</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Google.Apis" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Core" Version="1.43.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.43.0.1863" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Persistance\Core.Persistance.csproj" />
+    <ProjectReference Include="..\..\Domain\Domain.Services.Impl\Domain.Services.Impl.csproj" />
+    <ProjectReference Include="..\..\Domain\Domain.Services\Domain.Services.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Domain.Services.ExternalServices\Domain.Services.ExternalServices.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Domain.Services.Repositories.EF\Domain.Services.Repositories.EF.csproj" />
+  </ItemGroup>
+
+</Project>
