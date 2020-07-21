@@ -206,23 +206,23 @@ namespace ApiServer.FunctionalTests.Controller
         //    Assert.NotEqual(afterDeleteCommunityCount, beforeDeleteCommunityCount);
        // }
 
-        [Fact(DisplayName = "Verify api/login [Delete] is returning not found when there is no valid Id")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCommunityDelete_WhenIdDoesNotMatchesEntityInDatabase_ShouldReturnException()
-        {
-            //Arrange
-            var invalidId = 999;
+        //[Fact(DisplayName = "Verify api/login [Delete] is returning not found when there is no valid Id")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCommunityDelete_WhenIdDoesNotMatchesEntityInDatabase_ShouldReturnException()
+        //{
+        //    //Arrange
+        //    var invalidId = 999;
 
-            //Act
-            var beforeDeleteCommunityCount = _fixture.GetCount<Community>();
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidId);
-            var afterDeleteCommunityCount = _fixture.GetCount<Community>();
+        //    //Act
+        //    var beforeDeleteCommunityCount = _fixture.GetCount<Community>();
+        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidId);
+        //    var afterDeleteCommunityCount = _fixture.GetCount<Community>();
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal(beforeDeleteCommunityCount, afterDeleteCommunityCount);
-            Assert.Equal($"Community not found for the CommunityId: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.Equal(beforeDeleteCommunityCount, afterDeleteCommunityCount);
+        //    Assert.Equal($"Community not found for the CommunityId: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
+        //}
 
         [Fact(DisplayName = "Verify api/login [Ping] is Ok [200]")]
         [Trait("Category", "Functional-Test")]

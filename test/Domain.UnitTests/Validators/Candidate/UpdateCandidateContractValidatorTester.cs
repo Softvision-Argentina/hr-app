@@ -41,22 +41,22 @@ namespace Domain.Services.Impl.UnitTests.Validators.Candidate
             validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, String.Empty);
         }
 
-        [Fact(DisplayName = "Verify that throws error when User object is null")]
-        public void Should_Have_Error_When_User_Is_Null()
-        {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.User, (ReadedUserContract) null);
-        }
+        //[Fact(DisplayName = "Verify that throws error when User object is null")]
+        //public void Should_Have_Error_When_User_Is_Null()
+        //{
+        //    validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.User, (ReadedUserContract) null);
+        //}
 
-        [Fact(DisplayName = "Verify that throws error when Community object is null")]
-        public void Should_Have_Error_When_Community_Is_Null()
-        {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Community, (ReadedCommunityContract) null);
-        }
+        //[Fact(DisplayName = "Verify that throws error when Community object is null")]
+        //public void Should_Have_Error_When_Community_Is_Null()
+        //{
+        //    validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Community, (ReadedCommunityContract) null);
+        //}
 
-        [Fact(DisplayName = "Verify that throws error when Profile object is null")]
-        public void Should_Have_Error_When_Profile_Is_Null()
-        {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Profile, (ReadedCandidateProfileContract) null);
-        }
+        //[Fact(DisplayName = "Verify that throws error when Profile object is null")]
+        //public void Should_Have_Error_When_Profile_Is_Null()
+        //{
+        //    validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Profile, (ReadedCandidateProfileContract) null);
+        //}
     }
 }

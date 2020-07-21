@@ -4,17 +4,22 @@ using Core.Persistance;
 using DependencyInjection;
 using DependencyInjection.Config;
 using Domain.Services.ExternalServices.Config;
-using FluentValidation;
 using Mailer;
 using Mailer.Entities;
 using Mailer.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using MimeKit;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -30,7 +35,7 @@ namespace ApiServer
         public DatabaseConfigurations DatabaseConfigurations { get; set; }
         public bool UseTestingAuthentication { get; set; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
 
@@ -47,8 +52,6 @@ namespace ApiServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
-            ValidatorOptions.LanguageManager.Enabled = false;
-
             var jwtSettings = new JwtSettings
             {
                 Key = Configuration["jwtSettings:key"],
@@ -70,10 +73,10 @@ namespace ApiServer
                 {
                     options.DefaultAuthenticateScheme = "JwtBearer";
                     options.DefaultChallengeScheme = "JwtBearer";
-                })                
+                })
                 .AddJwtBearer("JwtBearer", jwtBearerOptions =>
                 {
-                    
+
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -113,7 +116,7 @@ namespace ApiServer
 
             // Add framework services.
             services.AddMvc()
-                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -121,10 +124,10 @@ namespace ApiServer
 
             services.AddDomain(DatabaseConfigurations);
 
-          
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Recru API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recru API", Version = "v1" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -134,14 +137,24 @@ namespace ApiServer
                     {"Bearer", new string[] { }},
                 };
 
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
                 });
-                c.AddSecurityRequirement(security);
+
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement {
+                        { new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme, Id = "Bearer"
+                            }
+                        },
+                            new string[] {}
+                        }
+                    });
             });
 
             var mailConfig = Configuration.GetSection("MailSettings")
@@ -152,7 +165,7 @@ namespace ApiServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -192,9 +205,12 @@ namespace ApiServer
                 migrator.Migrate(DatabaseConfigurations);
             }
 
+            app.UseRouting();
             app.UseAuthentication();
-
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

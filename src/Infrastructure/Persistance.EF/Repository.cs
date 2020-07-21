@@ -35,11 +35,6 @@ namespace Persistance.EF
             return _dbContext.Set<TEntity>().Find(id);
         }
 
-        public virtual Task<TEntity> GetAsync<TKey>(TKey id) where TKey : IComparable, IFormattable
-        {
-            return _dbContext.Set<TEntity>().FindAsync(id);
-        }
-
         public virtual TEntity Create(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);

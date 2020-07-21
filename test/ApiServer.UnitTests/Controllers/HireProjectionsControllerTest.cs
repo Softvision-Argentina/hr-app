@@ -6,7 +6,6 @@ using Core.ExtensionHelpers;
 using Domain.Services.Contracts.HireProjection;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 using Moq;
 using Newtonsoft.Json;
 using System.Collections.Generic;

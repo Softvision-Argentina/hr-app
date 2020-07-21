@@ -26,38 +26,38 @@ namespace ApiServer.FunctionalTests.Controller
             //_fixture.CleanTestingDatabase();
         }
 
-        [Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
-        public async System.Threading.Tasks.Task GivenCandidatePost_WhenCandidatePhoneNumberAlreadyExistOnDatabase_ShouldThrowAnException()
-        {
-            //Arrange
-            var phoneNumber = "011155122200";
-            var candidateInDb = new Candidate() { Name = "Test", PhoneNumber = phoneNumber };
-            var userInDb = new User() { Username = "Test" };
-            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
+        //[Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
+        //public async System.Threading.Tasks.Task GivenCandidatePost_WhenCandidatePhoneNumberAlreadyExistOnDatabase_ShouldThrowAnException()
+        //{
+        //    //Arrange
+        //    var phoneNumber = "011155122200";
+        //    var candidateInDb = new Candidate() { Name = "Test", PhoneNumber = phoneNumber };
+        //    var userInDb = new User() { Username = "Test" };
+        //    var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
 
-            _fixture.Seed(candidateInDb);
-            _fixture.Seed(userInDb);
-            _fixture.Seed(communityInDb);
+        //    _fixture.Seed(candidateInDb);
+        //    _fixture.Seed(userInDb);
+        //    _fixture.Seed(communityInDb);
 
-            var model = new CreateCandidateViewModel()
-            {
-                DNI = 36501240,
-                Name = "Rodrigo",
-                LastName = "Ramirez",
-                User = new ReadedUserViewModel() { Id = userInDb.Id },
-                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
-                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-                PhoneNumber = phoneNumber //Key
-            };
+        //    var model = new CreateCandidateViewModel()
+        //    {
+        //        DNI = 36501240,
+        //        Name = "Rodrigo",
+        //        LastName = "Ramirez",
+        //        User = new ReadedUserViewModel() { Id = userInDb.Id },
+        //        Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
+        //        Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
+        //        PhoneNumber = phoneNumber //Key
+        //    };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
-            Assert.Equal("Phone number already exists", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
+        //    Assert.Equal("Phone number already exists", httpResultData.ResponseError.ExceptionMessage);
+        //}
 
         //[Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
         //[Trait("Category", "Functional-Test")]
@@ -298,40 +298,40 @@ namespace ApiServer.FunctionalTests.Controller
         }
 
         
-        [Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when email is already in database")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnEmail_ShouldReturnInternalServerError500()
-        {
-            var candidateInDb = new Candidate() { Name = "Test", EmailAddress = "test@gmail.com" };
-            var userInDb = new User() { Username = "Test" };
-            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
+        //[Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when email is already in database")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnEmail_ShouldReturnInternalServerError500()
+        //{
+        //    var candidateInDb = new Candidate() { Name = "Test", EmailAddress = "test@gmail.com" };
+        //    var userInDb = new User() { Username = "Test" };
+        //    var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
             
-            _fixture.Seed(candidateInDb);
-            _fixture.Seed(userInDb);
-            _fixture.Seed(communityInDb);
+        //    _fixture.Seed(candidateInDb);
+        //    _fixture.Seed(userInDb);
+        //    _fixture.Seed(communityInDb);
 
-            //Arrange
+        //    //Arrange
 
-            var model = new CreateCandidateViewModel()
-            {
-                DNI = 36501240,
-                Name = "Rodrigo",
-                LastName = "Ramirez",
-                User = new ReadedUserViewModel() { Id = userInDb.Id },
-                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
-                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-                EmailAddress = candidateInDb.EmailAddress, /* wrong data, already in database */
-                LinkedInProfile = "/linkedin"
-            };
+        //    var model = new CreateCandidateViewModel()
+        //    {
+        //        DNI = 36501240,
+        //        Name = "Rodrigo",
+        //        LastName = "Ramirez",
+        //        User = new ReadedUserViewModel() { Id = userInDb.Id },
+        //        Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
+        //        Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
+        //        EmailAddress = candidateInDb.EmailAddress, /* wrong data, already in database */
+        //        LinkedInProfile = "/linkedin"
+        //    };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal("Email address already exists", httpResultData.ResponseError.ExceptionMessage);
-            Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.Equal("Email address already exists", httpResultData.ResponseError.ExceptionMessage);
+        //    Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
+        //}
 
         [Fact(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
         [Trait("Category", "Functional-Test")]
@@ -466,20 +466,20 @@ namespace ApiServer.FunctionalTests.Controller
         //}
 
         
-        [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Internal Server Error [500] when id is not found")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted2022()
-        {
-            //Arrange
-            var invalidEntityId = 999;
+        //[Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Internal Server Error [500] when id is not found")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted2022()
+        //{
+        //    //Arrange
+        //    var invalidEntityId = 999;
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidEntityId);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidEntityId);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.ExceptionMessage);
+        //}
 
         
         [Fact(DisplayName = "Verify that pings returns ok")]

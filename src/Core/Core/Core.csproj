@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;INT;QA;UAT;PROD;IntegrationTest</Configurations>
   </PropertyGroup>
 
@@ -17,6 +17,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.43.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.43.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.43.0.1863" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
   </ItemGroup>
 
 </Project>

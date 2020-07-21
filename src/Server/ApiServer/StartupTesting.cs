@@ -14,7 +14,7 @@ namespace ApiServer
     {
         public new IConfiguration Configuration { get; }
         public new DatabaseConfigurations DatabaseConfigurations { get; set; }
-        public StartupTesting(IConfiguration configuration, IHostingEnvironment env) : base(configuration, env)
+        public StartupTesting(IConfiguration configuration, IWebHostEnvironment env) : base(configuration, env)
         {
             Configuration = configuration;
 
@@ -36,14 +36,14 @@ namespace ApiServer
             //Override the database context options to replace current connection string for testing connectionstring
             if (alreadyRegisteredContextService != null)
                 services.Remove(alreadyRegisteredContextService);
-            
+
             services.AddDbContext<DataBaseContext>(options =>
             {
                 options.UseInMemoryDatabase("InMemoryDbForTesting");
             });
         }
 
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             base.Configure(app, env, loggerFactory);
 

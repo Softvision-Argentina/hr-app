@@ -128,24 +128,24 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.NotEmpty(httpResultData.ResponseString);
         }
 
-        [Fact(DisplayName = "Verify api/CandidateProfile [Post] is returning Internal Server error [500] when model is not valid")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseExistenceError_ShouldReturnInternalServerError500()
-        {
-            //Arrange
-            var candidate = new CandidateProfile() { Name = "Valid model", Description = "Valid model" };
-            _fixture.Seed(candidate);
-            var model = _fixture.Get<CandidateProfile>(candidate.Id);
+        //[Fact(DisplayName = "Verify api/CandidateProfile [Post] is returning Internal Server error [500] when model is not valid")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseExistenceError_ShouldReturnInternalServerError500()
+        //{
+        //    //Arrange
+        //    var candidate = new CandidateProfile() { Name = "Valid model", Description = "Valid model" };
+        //    _fixture.Seed(candidate);
+        //    var model = _fixture.Get<CandidateProfile>(candidate.Id);
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.NotNull(httpResultData);
-            Assert.NotEmpty(httpResultData.ResponseString);
-            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.NotNull(httpResultData);
+        //    Assert.NotEmpty(httpResultData.ResponseString);
+        //    Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
+        //}
 
         [Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Accepted [202] when data is valid", Skip = "Check community update is not working properly")]
         [Trait("Category", "Functional-Test")]
@@ -203,36 +203,36 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.NotNull(httpResultData);
         }
 
-        [Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Internal Server Error [500] when candidate profile already exists in database")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsSuccesfull_ShouldReturnAccepted2302()
-        {
-            //Arrange
-            var profileInDb = new CandidateProfile() { Name = "test", Description = "test" };
-            _fixture.Seed(profileInDb);
-            var profile = _fixture.Get<CandidateProfile>(profileInDb.Id);
-            var invalidId = 999;
+        //[Fact(DisplayName = "Verify api/CandidateProfile [Put] is returning Internal Server Error [500] when candidate profile already exists in database")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsSuccesfull_ShouldReturnAccepted2302()
+        //{
+        //    //Arrange
+        //    var profileInDb = new CandidateProfile() { Name = "test", Description = "test" };
+        //    _fixture.Seed(profileInDb);
+        //    var profile = _fixture.Get<CandidateProfile>(profileInDb.Id);
+        //    var invalidId = 999;
 
-            var updateModel = new UpdateCandidateProfileViewModel()
-            {
-                Name = profile.Name,
-                Description = "A entirely new description for Testin Testirino",
-                CommunityItems = new List<CreateCommunityViewModel>
-                    {
-                        new CreateCommunityViewModel() { Name = "Community 1", Description = "Description Community 1"},
-                        new CreateCommunityViewModel() { Name = "Community 2", Description = "Description Community 2"}
-                    }
-            };
+        //    var updateModel = new UpdateCandidateProfileViewModel()
+        //    {
+        //        Name = profile.Name,
+        //        Description = "A entirely new description for Testin Testirino",
+        //        CommunityItems = new List<CreateCommunityViewModel>
+        //            {
+        //                new CreateCommunityViewModel() { Name = "Community 1", Description = "Description Community 1"},
+        //                new CreateCommunityViewModel() { Name = "Community 2", Description = "Description Community 2"}
+        //            }
+        //    };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, invalidId);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, invalidId);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.NotNull(httpResultData);
-            Assert.NotEmpty(httpResultData.ResponseString);
-            Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.NotNull(httpResultData);
+        //    Assert.NotEmpty(httpResultData.ResponseString);
+        //    Assert.Equal("The Profile already exists .", httpResultData.ResponseError.ExceptionMessage);
+        //}
 
         //[Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Accepted [202] when id is valid")]
         //[Trait("Category", "Functional-Test")]
@@ -255,19 +255,19 @@ namespace ApiServer.FunctionalTests.Controller
         //    Assert.NotNull(httpResultData);
         //}
 
-        [Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Invalid Server [500] when id is invalid")]
-        [Trait("Category", "Functional-Test")]
-        public async System.Threading.Tasks.Task GivenCandidateProfileDeleteId_WhenIdIsValid_ShouldReturnAccepted202()
-        {
-            //Arrange
-            int invalidId = 999;
+        //[Fact(DisplayName = "Verify api/CandidateProfile [Delete] is returning Invalid Server [500] when id is invalid")]
+        //[Trait("Category", "Functional-Test")]
+        //public async System.Threading.Tasks.Task GivenCandidateProfileDeleteId_WhenIdIsValid_ShouldReturnAccepted202()
+        //{
+        //    //Arrange
+        //    int invalidId = 999;
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, _fixture.ControllerName, null, invalidId);
+        //    //Act
+        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, _fixture.ControllerName, null, invalidId);
 
-            //Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-            Assert.Equal($"Profile not found for the Profile Id: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
-        }
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
+        //    Assert.Equal($"Profile not found for the Profile Id: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
+        //}
     }
 }
