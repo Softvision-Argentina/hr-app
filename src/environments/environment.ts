@@ -1,15 +1,13 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-import * as config from '../assets/config.development.json';
-
 export const environment = {
   production: false,
-  apiUrl: config.apiUrl,
-  clientId: config.clientId,
-  scopes: config.scopes,
-  taskDeadline: config.taskDeadline,
-  roles: config.roles
+  apiUrl: "http://localhost:61059/api/",
+  clientId: "817485236596-gbllrhc65h8jmn14purvci98brcdq3sq.apps.googleusercontent.com",
+  scopes: ["profile", "email"],
+  taskDeadline: 3,
+  roles: ["Admin", "HRManagement", "HRUser", "Interviewer", "TechnicalInterviewer", "Common", "CommunityManager", "Recruiter", "Employee"]
 };
 
 /*
