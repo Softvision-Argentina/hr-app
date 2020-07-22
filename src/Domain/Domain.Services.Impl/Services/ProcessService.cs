@@ -231,7 +231,7 @@ namespace Domain.Services.Impl.Services
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch
             {
                 throw new Exception("Mail could not been sent");
             }
