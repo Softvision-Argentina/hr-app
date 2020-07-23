@@ -16,7 +16,11 @@ namespace ApiServer.FunctionalTests.Controller
         public AuthControllerFunctionalTest(AuthControllerFixture fixture)
         {
             _fixture = fixture;
-            //_fixture.CleanTestingDatabase();
+            _fixture.ContextAction((context) =>
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            });
         }
 
         [Fact(DisplayName = "Verify api/login [Post] is returning ok [200] when data is valid")]

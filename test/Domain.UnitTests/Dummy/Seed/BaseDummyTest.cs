@@ -77,15 +77,6 @@ namespace Domain.Services.Impl.UnitTests.Seed
                 .Setup(_ => _.QueryEager())
                 .Returns(InMemoryDummies.AsQueryable());
 
-            //MockDummyRepository
-            //    .Setup(_ => _.Create(It.IsAny<Dummy>()))
-            //    .Callback<Dummy>(t => MockPersistance.Create(t))
-            //    .Returns<Dummy>(t => { t.Id = Guid.NewGuid(); return t; });
-
-            //MockTaskRepository
-            //    .Setup(_ => _.Update(It.IsAny<Task>()))
-            //    .Callback<Task>(t => MockPersistance.Update(t))
-            //    .Returns<Task>(t => t);
         }
 
         #region RepositoryMock

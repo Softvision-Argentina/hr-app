@@ -17,7 +17,11 @@ namespace Domain.Services.Impl.IntegrationTests.Services
         public CandidateProfileServicesIntegrationTest(CandidateProfileFixture fixture)
         {
             _fixture = fixture;
-            //_fixture.CleanTestingDatabase();
+            _fixture.ContextAction((context) =>
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            });
         }
 
         [Fact(DisplayName = "Verify that given a valid model, should add to the database")]
@@ -134,30 +138,30 @@ namespace Domain.Services.Impl.IntegrationTests.Services
             Assert.Equal($"Profile not found for the Profile Id: { candidateProfile.Id }", ex.Message);
         }
 
-        //[Fact(DisplayName = "Verify that given a valid data, should update entity in database")]
-        //public void GivenCandidateProfileUpdate_WhenModelIsValid_ShouldUpdateModel()
-        //{
-        //    //Arrange
-        //    var candidateProfile = new CandidateProfile() { Name = "Testing" };
-        //    _fixture.Seed(candidateProfile);
-        //    var newDescription = "An entirely new description";
-        //    var updateCandidateProfile = new UpdateCandidateProfileContract
-        //    {
-        //        Id = candidateProfile.Id,
-        //        Name = candidateProfile.Name,
-        //        Description = newDescription
-        //    };
+        [Fact(DisplayName = "Verify that given a valid data, should update entity in database")]
+        public void GivenCandidateProfileUpdate_WhenModelIsValid_ShouldUpdateModel()
+        {
+            //Arrange
+            var candidateProfile = new CandidateProfile() { Name = "Testing" };
+            _fixture.Seed(candidateProfile);
+            var newDescription = "An entirely new description";
+            var updateCandidateProfile = new UpdateCandidateProfileContract
+            {
+                Id = candidateProfile.Id,
+                Name = candidateProfile.Name,
+                Description = newDescription
+            };
 
-        //    //Act
-        //    _fixture.UseService<ICandidateProfileService>((service) =>
-        //    {
-        //        service.Update(updateCandidateProfile);
-        //    });
+            //Act
+            _fixture.UseService<ICandidateProfileService>((service) =>
+            {
+                service.Update(updateCandidateProfile);
+            });
 
-        //    //Assert
-        //    var candidateProfileUpdated = _fixture.Get<CandidateProfile>(candidateProfile.Id);
-        //    Assert.Equal(newDescription, candidateProfileUpdated.Description);
-        //}
+            //Assert
+            var candidateProfileUpdated = _fixture.Get<CandidateProfile>(candidateProfile.Id);
+            Assert.Equal(newDescription, candidateProfileUpdated.Description);
+        }
 
         [Theory(DisplayName = "Verify that given invalid properties values, should throw exceptions")]
         [InlineData("Id")]

@@ -23,111 +23,114 @@ namespace ApiServer.FunctionalTests.Controller
         public CandidatesControllerFunctionalTest(CandidatesControllerFixture fixture)
         {
             _fixture = fixture;
-            //_fixture.CleanTestingDatabase();
+            _fixture.ContextAction((context) =>
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            });
         }
 
-        //[Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
-        //public async System.Threading.Tasks.Task GivenCandidatePost_WhenCandidatePhoneNumberAlreadyExistOnDatabase_ShouldThrowAnException()
-        //{
-        //    //Arrange
-        //    var phoneNumber = "011155122200";
-        //    var candidateInDb = new Candidate() { Name = "Test", PhoneNumber = phoneNumber };
-        //    var userInDb = new User() { Username = "Test" };
-        //    var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
+        [Fact(DisplayName = "Verify api/Candidates [Post] is returning validation exception when candidate phone number already exist on database ")]
+        public async System.Threading.Tasks.Task GivenCandidatePost_WhenCandidatePhoneNumberAlreadyExistOnDatabase_ShouldReturnBadRequest()
+        {
+            //Arrange
+            var phoneNumber = "011155122200";
+            var candidateInDb = new Candidate() { Name = "Test", PhoneNumber = phoneNumber };
+            var userInDb = new User() { Username = "Test" };
+            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
 
-        //    _fixture.Seed(candidateInDb);
-        //    _fixture.Seed(userInDb);
-        //    _fixture.Seed(communityInDb);
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
-        //    var model = new CreateCandidateViewModel()
-        //    {
-        //        DNI = 36501240,
-        //        Name = "Rodrigo",
-        //        LastName = "Ramirez",
-        //        User = new ReadedUserViewModel() { Id = userInDb.Id },
-        //        Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
-        //        Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-        //        PhoneNumber = phoneNumber //Key
-        //    };
+            var model = new CreateCandidateViewModel()
+            {
+                DNI = 36501240,
+                Name = "Rodrigo",
+                LastName = "Ramirez",
+                User = new ReadedUserViewModel() { Id = userInDb.Id },
+                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
+                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
+                PhoneNumber = phoneNumber //Key
+            };
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-        //    Assert.Equal("Internal Server Error", httpResultData.Response.ReasonPhrase);
-        //    Assert.Equal("Phone number already exists", httpResultData.ResponseError.ExceptionMessage);
-        //}
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
+            Assert.Equal("Phone number already exists", httpResultData.ResponseError.ExceptionMessage);
+        }
 
-        //[Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
-        //{
-        //    //Arrange
-        //    var candidateInDb = new Candidate() { Name = "Test", DNI = 36501240 };
-        //    _fixture.Seed(candidateInDb);
-        //    var candidatesCount = _fixture.GetCount<Candidate>();
+        [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] when does find entities")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
+        {
+            //Arrange
+            var candidateInDb = new Candidate() { Name = "Test", DNI = 36501240 };
+            _fixture.Seed(candidateInDb);
+            var candidatesCount = _fixture.GetCount<Candidate>();
 
-        //    //Act
-        //    var httpResultData =
-        //        await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.GET,
-        //            $"{_fixture.ControllerName}/");
+            //Act
+            var httpResultData =
+                await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.GET,
+                    $"{_fixture.ControllerName}/");
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.Equal(candidatesCount, httpResultData.ResponseEntity.Count);
-        //    Assert.Equal(candidateInDb.Id, httpResultData.ResponseEntity.Single().Id);
-        //}
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.Equal(candidatesCount, httpResultData.ResponseEntity.Count);
+            Assert.Equal(candidateInDb.Id, httpResultData.ResponseEntity.Single().Id);
+        }
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] and an empty collection when does not find entities")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesGet_WhenThereAreNoEntities_ShouldReturnAccepted202AndEmptyCollection()
-        //{
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.GET, _fixture.ControllerName);
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.Empty(httpResultData.ResponseEntity);
-        //}
+        [Fact(DisplayName = "Verify api/Candidates [Get] is returning Accepted [202] and an empty collection when does not find entities")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesGet_WhenThereAreNoEntities_ShouldReturnAccepted202AndEmptyCollection()
+        {
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.GET, _fixture.ControllerName);
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning right entity when a valid filter is provided and there is a match")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsValidFilterAndValidData_ShouldReturnEntitiesAndAccepted202()
-        //{
-        //    //Arrange
-        //    var candidateList = _fixture.GetCandidateList();
-        //    _fixture.Seed(candidateList);
-        //    var model = _fixture.GetFilterCandidateViewModel(CandidatesControllerFixture.FilterType.Match);
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.Empty(httpResultData.ResponseEntity);
+        }
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.POST, $"{_fixture.ControllerName}/filter", model);
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.True(httpResultData.ResponseEntity.Count == 1);
-        //    Assert.Equal("this will meet search criteria", httpResultData.ResponseEntity.Single().Name);
-        //}
+        [Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning right entity when a valid filter is provided and there is a match")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsValidFilterAndValidData_ShouldReturnEntitiesAndAccepted202()
+        {
+            //Arrange
+            var candidateList = _fixture.GetCandidateList();
+            _fixture.Seed(candidateList);
+            var model = _fixture.GetFilterCandidateViewModel(CandidatesControllerFixture.FilterType.Match);
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning Accepted [202] and a empty collection when there is no match")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsNoMatchForFilter_ShouldReturnAcceptedAndAnEmptyCollectionOfEntities()
-        //{
-        //    //Arrange
-        //    var model = _fixture.GetFilterCandidateViewModel(CandidatesControllerFixture.FilterType.DontMatch);
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.POST, $"{_fixture.ControllerName}/filter", model);
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.POST, $"{_fixture.ControllerName}/filter", model);
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.True(httpResultData.ResponseEntity.Count == 1);
+            Assert.Equal("this will meet search criteria", httpResultData.ResponseEntity.Single().Name);
+        }
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.True(httpResultData.ResponseEntity.Count == 0);
-        //}
 
-        
+        [Fact(DisplayName = "Verify api/Candidates [Get/{FilterCandidateViewModel}] is returning Accepted [202] and a empty collection when there is no match")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesFilter_WhenThereIsNoMatchForFilter_ShouldReturnAcceptedAndAnEmptyCollectionOfEntities()
+        {
+            //Arrange
+            var model = _fixture.GetFilterCandidateViewModel(CandidatesControllerFixture.FilterType.DontMatch);
+
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateViewModel>>(HttpVerb.POST, $"{_fixture.ControllerName}/filter", model);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.True(httpResultData.ResponseEntity.Count == 0);
+        }
+
+
         [Fact(DisplayName = "Verify api/Candidates [Get/{id}] is returning Accepted [202] and entity when Id is valid")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted202()
@@ -212,20 +215,20 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(entitiesCount, httpResultData.ResponseEntity.Count);
         }
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [GetApp] is returning Accepted[202] and a empty collection when there are no entities")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesGetApp_WhenEntitiesAreNotFound_ShouldReturnAcceptedAndEmptyCollection()
-        //{
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateAppViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}/GetApp");
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.Empty(httpResultData.ResponseEntity);
-        //}
+        [Fact(DisplayName = "Verify api/Candidates [GetApp] is returning Accepted[202] and a empty collection when there are no entities")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesGetApp_WhenEntitiesAreNotFound_ShouldReturnAcceptedAndEmptyCollection()
+        {
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateAppViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}/GetApp");
 
-        
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.Empty(httpResultData.ResponseEntity);
+        }
+
+
         [Fact(DisplayName = "Verify api/Candidates [Post] is returning Created [201] when data is valid")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesPost_WhenCreationIsSuccesfull_ShouldReturnCreated201()
@@ -297,41 +300,41 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.True(httpResultData.ResponseEntity.Id == 0);
         }
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Post] is returning Internal Server Error [500] when email is already in database")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnEmail_ShouldReturnInternalServerError500()
-        //{
-        //    var candidateInDb = new Candidate() { Name = "Test", EmailAddress = "test@gmail.com" };
-        //    var userInDb = new User() { Username = "Test" };
-        //    var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
-            
-        //    _fixture.Seed(candidateInDb);
-        //    _fixture.Seed(userInDb);
-        //    _fixture.Seed(communityInDb);
 
-        //    //Arrange
+        [Fact(DisplayName = "Verify api/Candidates [Post] returns bad request when email is already in database")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesPost_WhenExistanceValidationFailsOnEmail_ShouldReturnBadRequest()
+        {
+            var candidateInDb = new Candidate() { Name = "Test", EmailAddress = "test@gmail.com" };
+            var userInDb = new User() { Username = "Test" };
+            var communityInDb = new Community() { Name = "community", Profile = new CandidateProfile() { Name = "community" } };
 
-        //    var model = new CreateCandidateViewModel()
-        //    {
-        //        DNI = 36501240,
-        //        Name = "Rodrigo",
-        //        LastName = "Ramirez",
-        //        User = new ReadedUserViewModel() { Id = userInDb.Id },
-        //        Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
-        //        Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
-        //        EmailAddress = candidateInDb.EmailAddress, /* wrong data, already in database */
-        //        LinkedInProfile = "/linkedin"
-        //    };
+            _fixture.Seed(candidateInDb);
+            _fixture.Seed(userInDb);
+            _fixture.Seed(communityInDb);
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+            //Arrange
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-        //    Assert.Equal("Email address already exists", httpResultData.ResponseError.ExceptionMessage);
-        //    Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
-        //}
+            var model = new CreateCandidateViewModel()
+            {
+                DNI = 36501240,
+                Name = "Rodrigo",
+                LastName = "Ramirez",
+                User = new ReadedUserViewModel() { Id = userInDb.Id },
+                Community = new ReadedCommunityViewModel() { Id = communityInDb.Id },
+                Profile = new ReadedCandidateProfileViewModel() { Id = communityInDb.Profile.Id },
+                EmailAddress = candidateInDb.EmailAddress, /* wrong data, already in database */
+                LinkedInProfile = "/linkedin"
+            };
+
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
+            Assert.Equal("Email address already exists", httpResultData.ResponseError.ExceptionMessage);
+            Assert.Equal(400, httpResultData.ResponseError.ErrorCode);
+        }
 
         [Fact(DisplayName = "Verify api/Candidates [Put] is returning Accepted [202] when update model is valid")]
         [Trait("Category", "Functional-Test")]
@@ -444,44 +447,44 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
         }
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Accepted [202] and deletes the entity when is found")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesDeleteId_WhenEntityIsFound_ShouldDeleteEntityAndReturnAccepted202()
-        //{
-        //    //Arrange
-        //    var candidate = new Candidate() { Name = "Testing" };
-        //    _fixture.Seed(candidate);
-        //    var entityCountBeforeDelete = _fixture.GetCount<Candidate>();
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, candidate.Id);
-        //    var entityCountAfterDelete = _fixture.GetCount<Candidate>();
+        [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Accepted [202] and deletes the entity when is found")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesDeleteId_WhenEntityIsFound_ShouldDeleteEntityAndReturnAccepted202()
+        {
+            //Arrange
+            var candidate = new Candidate() { Name = "Testing" };
+            _fixture.Seed(candidate);
+            var entityCountBeforeDelete = _fixture.GetCount<Candidate>();
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
-        //    Assert.Equal(1, entityCountBeforeDelete);
-        //    Assert.Equal(0, entityCountAfterDelete);
-        //    Assert.NotEqual(entityCountBeforeDelete, entityCountAfterDelete);
-        //}
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, candidate.Id);
+            var entityCountAfterDelete = _fixture.GetCount<Candidate>();
 
-        
-        //[Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Internal Server Error [500] when id is not found")]
-        //[Trait("Category", "Functional-Test")]
-        //public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldReturnAccepted2022()
-        //{
-        //    //Arrange
-        //    var invalidEntityId = 999;
+            //Assert
+            Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
+            Assert.Equal(1, entityCountBeforeDelete);
+            Assert.Equal(0, entityCountAfterDelete);
+            Assert.NotEqual(entityCountBeforeDelete, entityCountAfterDelete);
+        }
 
-        //    //Act
-        //    var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidEntityId);
 
-        //    //Assert
-        //    Assert.Equal(HttpStatusCode.InternalServerError, httpResultData.Response.StatusCode);
-        //    Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.ExceptionMessage);
-        //}
+        [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning bad request when id is not found")]
+        [Trait("Category", "Functional-Test")]
+        public async System.Threading.Tasks.Task GivenCandidatesDelete_WhenEntityIsFound_ShouldReturnBadRequest()
+        {
+            //Arrange
+            var invalidEntityId = 999;
 
-        
+            //Act
+            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, $"{_fixture.ControllerName}", null, invalidEntityId);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
+            Assert.Equal($"Candidate not found for the CandidateId: {invalidEntityId}", httpResultData.ResponseError.ExceptionMessage);
+        }
+
+
         [Fact(DisplayName = "Verify that pings returns ok")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesGetId_WhenEntityIsFound_ShouldRetssurnAccepted2022()

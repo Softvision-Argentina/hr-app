@@ -185,8 +185,6 @@ namespace Domain.Services.Impl.UnitTests.Services
             const string expectedMessage = "The skill already exists .";
             _mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillContract>>())).Returns(new ValidationResult());
             _mockRepositorySkill.Setup(_ => _.Query()).Returns(new List<Skill>() { new Skill() { Id = 1 } }.AsQueryable());
-            //mockMapper.Setup(_ => _.Map<Skill>(It.IsAny<UpdateSkillContract>())).Returns(new Skill());
-            //mockRepositorySkillType.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = 1, Name = testName } }.AsQueryable());
 
             var result = Assert.Throws<Model.Exceptions.Skill.InvalidSkillException>(() => _service.Update(contract));
 
