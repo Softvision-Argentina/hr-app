@@ -63,7 +63,7 @@
     <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyReaddressReason.name}}</nz-list-item>
     <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyReaddressReason.description}}
     </nz-list-item>
-    <nz-list-item><strong style="margin-right: 1%;">Type: </strong> {{emptyReaddressReason.type}}</nz-list-item>
+    <nz-list-item><strong style="margin-right: 1%;">Category: </strong> {{emptyReaddressReason.type}}</nz-list-item>
   </nz-list>
 </nz-modal>
 
@@ -100,7 +100,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Type</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Category</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
         <nz-select formControlName="type" [(ngModel)]="selectedType">
           <nz-option *ngFor="let types of readdressReasonTypes" [nzLabel]="types.name" [nzValue]="types.id">
