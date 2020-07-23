@@ -87,8 +87,8 @@
                     </nz-input-group>
                     <ng-template #phoneNumberErrorMsg>
                         <ng-container class="Error" Id="Error" Name="Error"
-                            *ngIf="candidateForm.get('phoneNumber').dirty
-                            && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
+                        *ngIf="candidateForm.get('phoneNumber').dirty
+                        && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
                             Please input a phone number!
                         </ng-container>
                     </ng-template>
@@ -100,7 +100,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedin"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
+                [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
                     LinkedIn</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" >
                     <input nz-input formControlName="linkedin" id="linkedin"

@@ -107,11 +107,33 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="uploadFile" nzNoColon="true"></nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="isEditReferral">
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
                             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
                                 <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
                             </nz-upload>
                             <p nz-typography>File size must not exceed 6Mb</p>
+                            <ng-container class="Error" Id="Error" Name="Error"
+                            *ngIf="candidateForm.get('file').dirty
+                            && (candidateForm.get('file').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
+                            Please input a CV or a LinkedIn!
+                        </ng-container>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="link">
+                            LinkedIn</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" >
+                            <input nz-input formControlName="link" id="link"
+                                placeholder="Please input the LinkedIn">
+                                <ng-template #error>
+                                    <ng-container class="Error" Id="Error" Name="Error"
+                                        *ngIf="candidateForm.get('link').dirty
+                                        && (candidateForm.get('link').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
+                                        Please input a LinkedIn!
+                                    </ng-container>
+                                </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>

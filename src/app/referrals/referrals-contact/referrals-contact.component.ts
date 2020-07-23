@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input, TemplateRef, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FacadeService } from 'src/app/services/facade.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Candidate } from 'src/entities/candidate';
 import { User } from 'src/entities/user';
 import { NzModalRef, NzModalService, NzUploadFile } from 'ng-zorro-antd';
@@ -14,6 +14,18 @@ import { BaseService } from 'src/app/services/base.service';
 import { Router } from '@angular/router';
 import { OpenPosition } from 'src/entities/open-position';
 import { UniqueEmailValidator } from 'src/app/candidates/ValidatorsCandidateForm';
+
+export function checkIfCvAndLinkedinNulll(c: AbstractControl): ValidationErrors | null {
+  if((c.get('link').value === null || c.get('link').value.length === 0)
+      && (c.get('file').value === null || c.get('file').value.length === 0)){
+      return {
+          'checkIfCvAndLinkedinNulll': true
+      };
+  };
+
+  return null;
+}
+
 
 @Component({
   selector: 'app-referrals-contact',
@@ -52,12 +64,13 @@ export class ReferralsContactComponent implements OnInit {
         asyncValidators: UniqueEmailValidator(this.facade.candidateService),
       }
     ],
+    link: [null],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [ Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
     file: [''],
     openPositionTitle:[null, {disabled: true}]
-  });
+  }, { validator: checkIfCvAndLinkedinNulll });
   visible = true;
   isNewCandidate = false;
 
@@ -101,6 +114,7 @@ export class ReferralsContactComponent implements OnInit {
       this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
       this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
       this.candidateForm.controls['email'].setValue(candidate.emailAddress);
+      this.candidateForm.controls['link'].setValue(candidate.linkedInProfile);
       this.candidateForm.controls['community'].setValue(candidate.community.id);
       this.candidateForm.controls['firstName'].disable();
       this.candidateForm.controls['lastName'].disable();
@@ -143,7 +157,7 @@ export class ReferralsContactComponent implements OnInit {
           emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
           user: null,
           contactDay: new Date(),
-          linkedInProfile: null,
+          linkedInProfile: this.candidateForm.controls['link'].value.toString() ? this.candidateForm.controls['link'].value.toString() : null,
           englishLevel: 0,
           status: 0,
           candidateSkills: null,
@@ -193,7 +207,7 @@ export class ReferralsContactComponent implements OnInit {
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
         user: null,
         contactDay: new Date(),
-        linkedInProfile: null,
+        linkedInProfile: this.candidateForm.controls['link'].value.toString() ? this.candidateForm.controls['link'].value.toString() : null,
         englishLevel: EnglishLevelEnum.None,
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
