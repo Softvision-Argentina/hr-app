@@ -108,6 +108,7 @@ export class ReferralsContactComponent implements OnInit {
 
   fillReferralForm(candidate: Candidate) {
     this.candidateForm.controls['openPositionTitle'].setValue(!!this.position ? this.position.title : null);
+    this.candidateForm.controls['community'].setValue(!!this.position ? this.position.community.id : null);
     if (this.isEditReferral) {
       this.candidateForm.controls['firstName'].setValue(candidate.name);
       this.candidateForm.controls['lastName'].setValue(candidate.lastName);
