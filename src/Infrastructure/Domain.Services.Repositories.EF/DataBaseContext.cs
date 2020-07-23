@@ -1,5 +1,6 @@
 ﻿using Domain.Model;
 using Domain.Model.Seed;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistance.EF;
 
@@ -7,6 +8,10 @@ namespace Domain.Services.Repositories.EF
 {
     public class DataBaseContext : DbContextBase
     {
+        public DataBaseContext(DbContextOptions<DataBaseContext> options, IHttpContextAccessor context) : base(options, context)
+        {
+
+        }
         public virtual DbSet<Dummy> Dummies { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<CandidateProfile> Profiles { get; set; }
@@ -46,10 +51,6 @@ namespace Domain.Services.Repositories.EF
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<OpenPosition> OpenPositions { get; set; }
         public DbSet<ReaddressStatus> ReaddressStatus { get; set; }
-
-        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
-        {
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

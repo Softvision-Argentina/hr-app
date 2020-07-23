@@ -94,9 +94,7 @@ namespace ApiServer.Controllers
         private string GetInnerException(Exception exception)
         {
             string defaultMessage = "Not expected inner exception message";
-
-            return exception.InnerException == null ? defaultMessage :
-                exception.InnerException.Message ?? defaultMessage;
+            return exception?.InnerException?.InnerException?.Message ?? defaultMessage;
         }
 
 

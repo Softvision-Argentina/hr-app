@@ -1,29 +1,62 @@
 ﻿using Core;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System;
+using Domain.Model;
 
 namespace Persistance.EF
 {
     public class DbContextBase : DbContext
     {
+        private readonly IHttpContextAccessor _context;
+        private readonly string defaultUser = "Unknown user";
+
+        public DbContextBase(DbContextOptions options, IHttpContextAccessor context) : base(options)
+        {
+            _context = context;
+        }
+
+        private string GetUserNameFromId(int userId)
+        {
+            var user = base.Set<User>().FirstOrDefault(_ => _.Id == userId);
+            bool hasValidName = (!string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName));
+            return (hasValidName && user != null) ? $"{user.FirstName} {user.LastName}" : defaultUser; 
+        }
+
+        private string GetCurrentUser()
+        {
+            string userIdString = _context?.HttpContext?.User?.Identity?.Name ?? string.Empty;
+            int userId;
+            bool idParseSuccessfully = int.TryParse(userIdString, out userId);
+            return idParseSuccessfully ? GetUserNameFromId(userId) : defaultUser;
+        }
+
         public override int SaveChanges()
         {
             ChangeTracker.DetectChanges();
 
-            var entries = ChangeTracker.Entries<IEntity>()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+            var modifiedEntities = ChangeTracker.Entries<Entity<int>>()
+                .Where(e => e.State == EntityState.Modified).ToList();
 
-            foreach (var entry in entries)
+            var addedEntities = ChangeTracker.Entries<Entity<int>>()
+                .Where(e => e.State == EntityState.Added).ToList();
+
+            modifiedEntities.ForEach((entry) =>
             {
-                var version = (long)entry.Property("Version").CurrentValue;
-                entry.Property("Version").CurrentValue = version++;
-            }
+                entry.Entity.LastModifiedBy = GetCurrentUser();
+                entry.Entity.LastModifiedDate = DateTime.UtcNow;
+                entry.Entity.Version = entry.Entity.Version++;
+            });
+
+            addedEntities.ForEach((entry) =>
+            {
+                entry.Entity.CreatedBy = GetCurrentUser();
+                entry.Entity.CreatedDate = DateTime.UtcNow;
+                entry.Entity.Version = 1;
+            });
 
             return base.SaveChanges();
-        }
-
-        public DbContextBase(DbContextOptions options) : base(options)
-        {
         }
     }
 }
