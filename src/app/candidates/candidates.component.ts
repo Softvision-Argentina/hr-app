@@ -458,6 +458,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['profile'].setValue(candidate.profile ? candidate.profile.id : null);
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
     this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
+    this.validateForm.controls['referredBy'].disable();
     this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
     this.validateForm.controls['source'].setValue(candidate.source);
     if (candidate.candidateSkills.length > 0) {
