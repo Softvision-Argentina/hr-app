@@ -2,6 +2,7 @@
 using Domain.Services.Contracts.Cv;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Services.Interfaces.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace ApiServer.Controllers
 {
@@ -23,6 +24,7 @@ namespace ApiServer.Controllers
             _cvUploadService = cvUploadService;
         }
 
+        [EnableCors()]
         [HttpPost]
         public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
