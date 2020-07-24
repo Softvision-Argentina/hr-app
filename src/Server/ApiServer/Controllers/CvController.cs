@@ -24,7 +24,6 @@ namespace ApiServer.Controllers
             _cvUploadService = cvUploadService;
         }
 
-        [EnableCors()]
         [HttpPost]
         [EnableCors("AllowAll")]
         public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
