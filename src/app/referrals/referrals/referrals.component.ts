@@ -987,9 +987,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   applyFromDescription(position: OpenPosition) {
-    this.facade.modalService.openModals[0].destroy();    
-    this.currentPosition = position;    
-    this.showContactCandidatesModal(this.newCandidate);
+    this.facade.modalService.openModals[0].destroy();
+    this.showContactCandidatesModal(this.newCandidate, position);
   }
   
   showJobDescription(position: OpenPosition, modalContent: TemplateRef<{}> ){            
