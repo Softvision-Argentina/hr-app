@@ -20,14 +20,14 @@
         [filteredPositions]="openPositions"      
         (showDeleteConfirm)="deletePositionConfirm($event)"
         (showEdit)="showEditPositionModal($event)"
-        (position)="apply($event)"
+        (position)="showContactCandidatesModal(newCandidate, $event)"
         (jobInfo)="showJobDescription($event,jobDescription)"
         (radioClick)="priorityChange($event)">        
         </app-open-positions>
       </nz-tab>
     </nz-tabset>
     <ng-template #newReferralsButton>
-      <button *ngIf="!checkHrRole()" class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate)">NEW REFERRAL</button>
+      <button *ngIf="!checkHrRole()" class="referralsButton" nz-button (click)="showContactCandidatesModal(newCandidate, null)">NEW REFERRAL</button>
     </ng-template>
     <ng-template #newPositionButton>
       <button class="referralsButton" nz-button (click)="showOpenPositionModal(newPosition)">ADD POSITION</button>

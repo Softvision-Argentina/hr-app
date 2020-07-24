@@ -187,7 +187,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
     setTimeout(() => {
       if (this.modalStart === true) {
-        this.showContactCandidatesModal(this.newCandidate);
+        this.showContactCandidatesModal(this.newCandidate, null);
       }
     }, 700);
 
@@ -731,7 +731,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  showContactCandidatesModal(modalContent: TemplateRef<{}>) {
+  showContactCandidatesModal(modalContent: TemplateRef<{}>, position: OpenPosition) {
+    this.currentPosition = position;
     const modal = this.facade.modalService.create({
       nzWrapClassName: 'modal-custom referralForm',
       nzTitle: null,
@@ -954,11 +955,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   checkHrRole() {
     return this.currentUser.role === 'HRManagement' || this.currentUser.role === 'HRUser' ? true : false;
-  }
-
-  apply(position: OpenPosition) {
-    this.currentPosition = position;
-    this.showContactCandidatesModal(this.newCandidate);
   }
 
   resetPosition() {
