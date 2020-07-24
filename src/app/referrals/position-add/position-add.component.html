@@ -4,7 +4,7 @@
           <div nz-row>
               <div nz-col nzSpan="12">
                   <nz-form-item>
-                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="title">
+                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="title" [ngClass]="{'requiredFieldLabel': isRequiredField('title')}">
                           Title
                       </nz-form-label>
                       <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="TitleError">
@@ -27,7 +27,8 @@
               </div>
               <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community">
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('community')}">
                         Community
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="CommunityError">
@@ -48,7 +49,8 @@
           <div nz-row>
               <div nz-col nzSpan="12">
                   <nz-form-item>
-                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="seniority">Seniority
+                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="seniority"
+                      [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">Seniority
                       </nz-form-label>
                       <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="SeniorityError">
                         <nz-select #seniority formControlName="seniority">
@@ -65,7 +67,8 @@
               </div>
               <div nz-col nzSpan="12">
                   <nz-form-item>
-                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="studio">Studio
+                      <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="studio"
+                      [ngClass]="{'requiredFieldLabel': isRequiredField('studio')}">Studio
                       </nz-form-label>
                       <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="StudioError">
                         <nz-select #studio formControlName="studio">
@@ -102,7 +105,8 @@
           <div nz-row>
             <div nz-col nzSpan="24">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" [nzMd]="4" nzFor="jobDescription">Job description</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" [nzMd]="4" nzFor="jobDescription"
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('jobDescription')}">Job description</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzMd]="19" [nzErrorTip]="jobDescriptionErrorMsg">
                         <app-text-editor id="openPositionTextEditor" [setContent]="jobDescriptionContent" (getContent)="getJobDescriptionContent($event)" [isToolbarActive]="true" [isEditable]="true"></app-text-editor>                        
                         <ng-template #jobDescriptionErrorMsg>

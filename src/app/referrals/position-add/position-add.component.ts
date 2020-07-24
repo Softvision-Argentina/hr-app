@@ -6,6 +6,7 @@ import { OpenPosition } from 'src/entities/open-position';
 import { SeniorityEnum } from 'src/entities/enums/seniority.enum';
 import { FacadeService } from 'src/app/services/facade.service';
 import { NzModalService } from 'ng-zorro-antd';
+import { formFieldHasRequiredValidator } from '@app/utils/utils.functions';
 
 @Component({
   selector: 'app-position-add',
@@ -58,6 +59,10 @@ export class PositionAddComponent implements OnInit {
       this.positionForm.controls['jobDescription'].setValue(openPositionToEdit.jobDescription);
       this.positionForm.controls['priority'].setValue(openPositionToEdit.priority);
     }
+  }
+
+  isRequiredField(field: string) {
+    return formFieldHasRequiredValidator(field, this.positionForm)
   }
 
   createNewPosition() {
