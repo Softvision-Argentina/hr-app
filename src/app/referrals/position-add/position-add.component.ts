@@ -27,7 +27,7 @@ export class PositionAddComponent implements OnInit {
 
   seniorityList: any[];
   jobDescriptionContent: string = "";
-
+  studios = [{name: 'Buenos Aires'}];
   positionForm: FormGroup = this.fb.group({
     title: [null, [Validators.required, Validators.maxLength(50)]],
     community: [null, [Validators.required]],

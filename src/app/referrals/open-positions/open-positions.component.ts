@@ -88,8 +88,8 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
     return item.name;
   }
 
-  emitPositionInfo(description: string){
-    this.jobInfo.emit(description);
+  emitPositionInfo(position: OpenPosition){
+    this.jobInfo.emit(position);
   }
 
   emitPosition(position: OpenPosition) {

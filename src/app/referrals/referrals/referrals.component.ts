@@ -49,10 +49,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     adaptiveHeight: true,
     arrows: true,
     infinite: false,
-    draggable: false
+    draggable: false,
+    prevArrow: '<button style="left: -45px!important;" class="slick-prev"><img style="transform: scaleX(-1);" src="../../assets/images/arrow_medium.svg"></button>',
+    nextArrow: '<button class="slick-next"><img src="../../assets/images/arrow_medium.svg"></button>'
+    
   };
 
-  @ViewChild('slickModal') slickModal: SlickCarouselComponent;
+  @ViewChild('slickJobDescription') slickJobD: SlickCarouselComponent;  
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
@@ -128,7 +131,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   referralsSubscriptions: Subscription = new Subscription();
   currentPosition: OpenPosition = null;
   jobDescriptionContent : string;
-  
+  openDesc : boolean = false;
   referralsListTabTitle: string;
 
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
@@ -194,9 +197,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngAfterViewChecked() {
-    if (this.slickModal && this.openFromEdit) {
-      this.slickModal.slickGoTo(this.stepIndex);
-      this.openFromEdit = false;
+    if (this.slickJobD && this.openDesc){
+      setTimeout(() => {
+        this.slickJobD.slickGoTo(this.openPositions.indexOf(this.currentPosition));
+      }, 50)
+      this.openDesc = false;
     }
   }
 
@@ -976,17 +981,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  showJobDescription(info: string, modalContent: TemplateRef<{}> ){        
-    this.jobDescriptionContent = info;
-    const modal = this.facade.modalService.create({
-      nzTitle: '<strong>Job Description</strong>',
-      nzContent: modalContent,
-      nzClosable: false,
-      nzWidth: '50%',
-      nzFooter: null           
-    });    
-  }
-
   priorityChange(positionToEdit: OpenPosition){        
     positionToEdit.priority = !positionToEdit.priority;    
     this.facade.openPositionService.update(positionToEdit.id, positionToEdit)
@@ -994,6 +988,29 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });    
+  }
+
+  applyFromDescription(position: OpenPosition) {
+    this.facade.modalService.openModals[0].destroy();    
+    this.currentPosition = position;    
+    this.showContactCandidatesModal(this.newCandidate);
+  }
+  
+  showJobDescription(position: OpenPosition, modalContent: TemplateRef<{}> ){            
+    this.jobDescriptionContent = position.jobDescription;
+    this.currentPosition = position;
+    this.openDesc = true;
+    const modal = this.facade.modalService.create({      
+      nzContent: modalContent,
+      nzClosable: false,
+      nzWidth: '60%',
+      nzFooter: null           
+    });    
+  }
+  
+  closeJobDModal(){
+    this.facade.modalService.openModals[0].destroy();
+    this.openDesc = false;
   }
   
   ngOnDestroy() {

@@ -114,3 +114,13 @@ nz-table img {
     font-family: "ProximaNova-Bold";
   }
 }
+
+.slick-prev:before {  
+  content: none!important;
+  margin-left: 32px!important;
+  left: -45px!important;
+}
+.slick-next:before { 
+  content: none!important;
+  margin-right: 36px!important;  
+}

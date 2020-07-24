@@ -69,8 +69,9 @@
                       </nz-form-label>
                       <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="StudioError">
                         <nz-select #studio formControlName="studio">
-                          <nz-option nzLabel="Buenos Aires" [nzValue]="1"></nz-option>
-                       </nz-select>
+                            <nz-option *ngFor="let s of studios" nzLabel="{{s.name}}" [nzValue]="s.name">
+                            </nz-option>
+                        </nz-select>
                        <ng-template #StudioError>
                             <ng-container
                                 *ngIf="positionForm.get('studio').dirty && positionForm.get('studio').errors">

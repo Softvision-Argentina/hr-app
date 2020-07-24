@@ -128,8 +128,27 @@
   <app-position-add [_communities]=communities></app-position-add>
 </ng-template>
 
-<ng-template #jobDescription>
-  <div class="jobDescription">
-    <app-text-editor [setContent]="jobDescriptionContent"></app-text-editor>
-  </div>
+<ng-template #jobDescription>  
+  <ngx-slick-carousel #slickJobDescription class="slider" [config]="slideConfig" (destroy)="closeJobDModal()">
+    <div class="eachSlide" ngxSlickItem *ngFor="let openP of openPositions">
+      <div class="headers">
+        <h1 class="headerTittle">{{ openP.title}}</h1>
+        <h3 class="headerStudio">{{ openP.studio}}</h3>
+      </div>  
+      <div class="jobDescription">
+        <app-text-editor [setContent]="openP.jobDescription"></app-text-editor>
+      </div>          
+      <div nz-row nzJustify="center">
+        <div nz-col nzSpan="18">
+            <div class="buttonsWrapper">
+                <button nz-button nzType="default"
+                    class="cancelButton" (click)="closeJobDModal()">Close</button>
+                <button *ngIf="!isUserRole(['Admin', 'HRManagement', 'HRUser', 'Recruiter'])" nz-button nzType="primary"
+                    class="saveButton" (click)="applyFromDescription(openP)">Apply referral</button>              
+            </div>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+  <img class="frame-x" (click)="closeJobDModal()" src="../../assets/images/frame_x.svg">
 </ng-template>

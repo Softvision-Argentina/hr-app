@@ -17,7 +17,7 @@
         <ng-container *ngIf="filterParameters.length === 0;">        
           <tr *ngFor="let position of positionsTable.data">
             <td >
-              <a class="title" (click)="emitPositionInfo(position.jobDescription)">
+              <a class="title" (click)="emitPositionInfo(position)">
                 {{ position.title }}
               </a>                                      
             </td>

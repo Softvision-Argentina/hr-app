@@ -59,18 +59,69 @@ nz-step {
     color: #222222;
   }
 
-  ::ng-deep .ant-btn.referralsButton {
-    width: 215px;
-    height: 40px;
-    background-image: linear-gradient(to top, #f4633a, #c800a1);
-    border: none;  
-    font-size: 20px;
-    font-family: ProximaNova-SemiBold;
-    line-height: normal;
-    letter-spacing: -0.67px;
-    color: #ffffff;
-  }
+::ng-deep .ant-btn.referralsButton {
+  width: 215px;
+  height: 40px;
+  background-image: linear-gradient(to top, #f4633a, #c800a1);
+  border: none;  
+  font-size: 20px;
+  font-family: ProximaNova-SemiBold;
+  line-height: normal;
+  letter-spacing: -0.67px;
+  color: #ffffff;
+}
 
-  .jobDescription{
-    border-style: double;    
-  }
+.jobDescription{
+  font-size: 16px;    
+  margin-top: 30px;
+  margin-left: 70px;
+  margin-right: 70px;
+  margin-bottom: 30px;
+}
+
+.headerTittle {
+  font-family: ProximaNova-Extrabold;
+  font-size: 30px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  color: #222222;
+}
+
+.headerStudio {
+  font-family: ProximaNova-Extrabold;
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -0.88px;
+  color: #222222;
+}
+
+.headers h1{
+  margin-bottom: 0;
+}
+
+.headers h3{
+  margin-top: 0;
+}
+
+.slider{
+  margin-top: 25px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.eachSlide{
+  overflow-y: auto;  
+}
+
+.frame-x{
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 10px;
+  margin-top: 10px;
+}
