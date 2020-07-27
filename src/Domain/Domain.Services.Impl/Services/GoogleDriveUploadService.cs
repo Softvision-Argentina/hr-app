@@ -73,10 +73,10 @@ namespace Domain.Services.Impl.Services
 
             var directory = GetDirectory();
             var keyFilePath = $"{directory}\\credentials.json"; 
-            var credPath = $"{directory}\\token.json"; 
-
+            var credPath = $"{directory}\\token.json";
+            _log.LogInformation($"CHECK KEYFILEPATH {keyFilePath}");
+            _log.LogInformation("LLEGO HASTA POST CHECKFILEPATH");
             UserCredential credential;
-
             using (var stream = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read))
             {
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
