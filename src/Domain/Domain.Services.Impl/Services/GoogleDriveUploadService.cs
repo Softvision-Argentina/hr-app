@@ -11,13 +11,23 @@ using System.IO;
 using System.Threading;
 using Google.Apis.Util.Store;
 using File = Google.Apis.Drive.v3.Data.File;
+using Google.Apis.Logging;
+using Core;
 
 namespace Domain.Services.Impl.Services
 {
     public class GoogleDriveUploadService : IGoogleDriveUploadService
     {
+        private readonly ILog<GoogleDriveUploadService> _log;
+        public GoogleDriveUploadService(ILog<GoogleDriveUploadService> logger)
+        {
+            _log = logger;
+        }
+
         public File Upload(DriveService service, IFormFile file)
         {
+            _log.LogInformation("Inicio: GoogleDriveUploadService.Upload");
+
             string fileName = Path.GetRandomFileName();
             fileName = fileName.Replace(".", "");
             fileName.Substring(0, 8); 
@@ -35,9 +45,12 @@ namespace Domain.Services.Impl.Services
                 file.CopyTo(stream);
                 requestAdd = service.Files.Create(fileMetadata, stream, "application/pdf");
                 requestAdd.Fields = "id";
+                _log.LogInformation("pre upload: GoogleDriveUploadService.Upload linea 48");
                 var response = requestAdd.Upload();
+            
+            _log.LogError($"request upload response exception: {response?.Exception?.Message ?? "no-exception"}");
 
-                FilesResource.ListRequest listRequest = service.Files.List();
+            FilesResource.ListRequest listRequest = service.Files.List();
                 listRequest.PageSize = 100;
                 listRequest.Fields = "nextPageToken, files(id, name, webViewLink)";
                 IList<File> files = listRequest.Execute().Files;
@@ -46,11 +59,15 @@ namespace Domain.Services.Impl.Services
 
                 stream.Close();
 
-                return webViewLink;
+            _log.LogInformation("Fin: GoogleDriveUploadService.Upload");
+
+            return webViewLink;
         }
 
         public DriveService Authorize()
         {
+            _log.LogInformation("Inicio: GoogleDriveUploadService.Authorize Linea 68");
+
             string[] Scopes = { DriveService.Scope.DriveFile, DriveService.Scope.Drive };
             string ApplicationName = "ReporteSV";
 
@@ -69,13 +86,17 @@ namespace Domain.Services.Impl.Services
                     CancellationToken.None).Result;
                     //new FileDataStore(credPath, true)).Result;
             }
+            _log.LogInformation("En el medio del logue: Linea 87");
 
-                var service = new DriveService(new BaseClientService.Initializer()
+            var service = new DriveService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
                     ApplicationName = ApplicationName,
                 });
-                return service;
+
+            _log.LogInformation("Fin: GoogleDriveUploadService.Authorize");
+
+            return service;
 
         }
 
