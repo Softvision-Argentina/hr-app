@@ -77,7 +77,7 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"CHECK KEYFILEPATH {keyFilePath}");
             _log.LogInformation("LLEGO HASTA POST CHECKFILEPATH");
             UserCredential credential;
-            using (var stream = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(@"D:\home\site\wwwroot\credentials.json", FileMode.Open, FileAccess.Read))
             {
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
