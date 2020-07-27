@@ -72,7 +72,7 @@ namespace Domain.Services.Impl.Services
             string ApplicationName = "ReporteSV";
 
             var directory = GetDirectory();
-            var keyFilePath = $@"{directory}\credentials.json"; 
+            var keyFilePath = $@"{directory}credentials.json"; 
             var credPath = $"{directory}\\token.json";
             _log.LogInformation($"CHECK KEYFILEPATH {keyFilePath}");
             _log.LogInformation("LLEGO HASTA POST CHECKFILEPATH");
