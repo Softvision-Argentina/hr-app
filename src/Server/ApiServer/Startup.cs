@@ -124,6 +124,7 @@ namespace ApiServer
 
             services.AddDomain(DatabaseConfigurations);
 
+            services.AddRouting(x => x.SuppressCheckForUnhandledSecurityMetadata = true);
 
             services.AddSwaggerGen(c =>
             {
