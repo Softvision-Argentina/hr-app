@@ -31,7 +31,7 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   priorityFilterList: any =  [ { text: 'HOT', value: 'HOT'}, { text: 'NOT HOT', value: 'NOT HOT'} ];
 
   constructor(private globals: Globals, private facade: FacadeService) {    
-    this.seniorityList = globals.seniorityList    
+    this.seniorityList = globals.seniorityListForAddPosition;    
   }
   
   ngOnInit(){

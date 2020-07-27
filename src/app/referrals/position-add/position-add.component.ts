@@ -39,7 +39,7 @@ export class PositionAddComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder, private globals: Globals, private facade: FacadeService,  private modalService: NzModalService) {
-    this.seniorityList = globals.seniorityList;
+    this.seniorityList = globals.seniorityListForAddPosition;
   }
 
   ngOnInit() {

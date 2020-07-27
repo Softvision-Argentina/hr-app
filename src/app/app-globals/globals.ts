@@ -12,6 +12,7 @@ import { OfferStatusEnum } from 'src/entities/enums/offer-status.enum';
 import { preOfferStatusEnum } from 'src/entities/enums/pre-offer-status.enum';
 import { HealthInsuranceEnum } from 'src/entities/enums/health-insurance.enum';
 import { referralCurrentStage } from 'src/entities/enums/referral-currentStage.enum';
+import { SeniorityEnumForOpenPositions } from 'src/entities/enums/seniority.enumForOpenPositions';
 @Injectable()
 export class Globals {
   seniorityList: any[] = [
@@ -21,6 +22,13 @@ export class Globals {
     { id: SeniorityEnum.SemiSenior3, name: 'Semi-Senior 3' },
     { id: SeniorityEnum.Senior1, name: 'Senior 1' }, { id: SeniorityEnum.Senior2, name: 'Senior 2' },
     { id: SeniorityEnum.Senior3, name: 'Senior 3' }
+  ];
+
+  seniorityListForAddPosition: any[] = [
+    { id: SeniorityEnumForOpenPositions.NA, name: 'NA' },
+    { id: SeniorityEnumForOpenPositions.Junior, name: 'Junior' },
+    { id: SeniorityEnumForOpenPositions.MidLevel, name: 'Mid Level' },
+    { id: SeniorityEnumForOpenPositions.Senior, name: 'Senior' }
   ];
 
   processStatusList: any[] = [
