@@ -8,6 +8,7 @@ trigger:
 
 pool:
   vmImage: 'windows-latest'
+  name: 'Self hosted agent pool'
 
 steps:
 
