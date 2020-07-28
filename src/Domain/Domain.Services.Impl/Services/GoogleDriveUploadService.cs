@@ -78,13 +78,26 @@ namespace Domain.Services.Impl.Services
             _log.LogInformation($"CHECK KEYFILEPATH {keyFilePath}");
             _log.LogInformation("LLEGO HASTA POST CHECKFILEPATH");
             UserCredential credential;
+
+            var prueba = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read);
+             _log.LogInformation($"{prueba}");
+
             using (var stream = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read))
             {
+                _log.LogInformation("LLEGO HASTA POST CHECKFILEPATH linea 83");
+                try
+                {
                     credential = (await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
                     "user",
                     CancellationToken.None));
+                }
+                catch
+                {
+                    _log.LogInformation($"ENTRO AL CATCH");
+                    throw new Exception("No se logueo");
+                }
                 //new FileDataStore(credPath, true)).Result;
                 _log.LogInformation($"check cred {credential}");
 
