@@ -58,7 +58,7 @@ export class ClientStageComponent implements OnInit {
     interviewClient: [null, [Validators.required]],
     clientInterviewer: [null],
     project: [null],
-    interviewFeedback: [null, [Validators.required, Validators.maxLength(1000)]]
+    interviewFeedback: [null, [Validators.maxLength(1000)]]
   });
   feedbackContent: string = "";
 
@@ -67,7 +67,7 @@ export class ClientStageComponent implements OnInit {
     interviewEditClient: [null, [Validators.required]],
     interviewEditInterviewer: [null],
     interviewEditProject: [null],
-    interviewEditFeedback: [null, [Validators.required, Validators.maxLength(1000)]]
+    interviewEditFeedback: [null, [Validators.maxLength(1000)]]
   });
 
   statusList: any[];
