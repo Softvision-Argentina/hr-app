@@ -27,14 +27,14 @@ Write-Host "Added start log" `n -ForegroundColor green
 $in_sql_files | ForEach-Object {
     
     $migration_content = (Get-Content $_.FullName)
-    $migration_title_start = $newline + " -- Start:" + $_.Name + $newline
-    $migration_title_end = $newline + " -- End:" + $_.Name + $newline
+    $migration_title_start = $newline + " -- Start:" + $_.Name + "migration" + $newline
+    $migration_title_end = $newline + " -- End:" + $_.Name + "migration" + $newline
 
     Add-Content -Path $master_file_path -Value $migration_title_start
     Add-Content -Path $master_file_path -Value $migration_content
     Add-Content -Path $master_file_path -Value $migration_title_end
     
-    Write-Host "Wrote " $_.Name "in master.sql" `n -ForegroundColor green
+    Write-Host "Wrote " $_.Name "migration in master.sql" `n -ForegroundColor green
 }
 
 Add-Content -Path $master_file_path -Value "--End: $(Get-Date -format 'u')"
