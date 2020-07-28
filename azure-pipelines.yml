@@ -3,14 +3,23 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- develop
+trigger: none
 
 pool:
   vmImage: 'windows-latest'
   name: 'Self hosted agent pool'
 
 steps:
+- checkout: self
+  clean: true
+  persistCredentials: true
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Write your commands here
+      
+      git status
 
 - task: CopyFiles@2
   inputs:
