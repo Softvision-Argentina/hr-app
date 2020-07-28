@@ -1,1 +1,0 @@
-ALTER TABLE [CompanyCalendar] ADD [field_migration_two] int NULL;

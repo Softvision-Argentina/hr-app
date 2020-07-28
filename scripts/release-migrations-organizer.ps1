@@ -12,7 +12,7 @@ $master_history_name = $history_masters_folder_path + "\master-" + (Get-Date -f 
 #utils
 $newline = "`n"
 
-Write-Host "################ Start Migration cleanup ################" -ForegroundColor cyan
+Write-Host "################ Start RELEASE MIGRATION ORGANIZER ################" -ForegroundColor cyan
 Write-Host $newline
 
 Write-Host "\Root folder path: " $root_folder -ForegroundColor green
