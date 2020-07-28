@@ -11,6 +11,16 @@ pool:
   name: 'Self hosted agent pool'
 
 steps:
+- checkout: self
+  clean: true
+  persistCredentials: true
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Write your commands here
+      
+      git status
 
 - task: CopyFiles@2
   inputs:
