@@ -84,7 +84,9 @@ namespace Domain.Services.Impl.Services
                     Scopes,
                     "user",
                     CancellationToken.None).Result;
-                    //new FileDataStore(credPath, true)).Result;
+                //new FileDataStore(credPath, true)).Result;
+                _log.LogInformation($"check cred {credential}");
+
             }
             _log.LogInformation("En el medio del logue: Linea 87");
 
