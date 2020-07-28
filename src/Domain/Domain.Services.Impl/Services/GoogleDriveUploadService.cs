@@ -13,6 +13,7 @@ using Google.Apis.Util.Store;
 using File = Google.Apis.Drive.v3.Data.File;
 using Google.Apis.Logging;
 using Core;
+using System.Threading.Tasks;
 
 namespace Domain.Services.Impl.Services
 {
@@ -64,7 +65,7 @@ namespace Domain.Services.Impl.Services
             return webViewLink;
         }
 
-        public DriveService Authorize()
+        public async Task<DriveService> Authorize()
         {
             _log.LogInformation("Inicio: GoogleDriveUploadService.Authorize Linea 68");
 
@@ -79,11 +80,11 @@ namespace Domain.Services.Impl.Services
             UserCredential credential;
             using (var stream = new FileStream(keyFilePath, FileMode.Open, FileAccess.Read))
             {
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    credential = (await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
                     "user",
-                    CancellationToken.None).Result;
+                    CancellationToken.None));
                 //new FileDataStore(credPath, true)).Result;
                 _log.LogInformation($"check cred {credential}");
 

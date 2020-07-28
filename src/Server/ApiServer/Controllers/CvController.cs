@@ -3,6 +3,7 @@ using Domain.Services.Contracts.Cv;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Cors;
+using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
 {
@@ -26,12 +27,12 @@ namespace ApiServer.Controllers
 
         [HttpPost]
         [EnableCors("AllowAll")]
-        public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
+        public async Task<IActionResult> AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
             var candidate = _candidateService.GetCandidate(candidateId);
             
             var file = cvContract.File;
-            var auth = _cvUploadService.Authorize();
+            var auth = await _cvUploadService.Authorize().ConfigureAwait(false);
             
             var fileUploaded = _cvUploadService.Upload(auth, file);
 
