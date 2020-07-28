@@ -20,7 +20,6 @@ namespace ApiServer.UnitTests.Controllers
     {
         private AuthController controller;
         private Mock<IUserService> mockService;
-        private Mock<IConfiguration> mockConfig;
         private Mock<IMapper> mockMapper;
         private Mock<IOptions<AppSettings>> mockAppsettings;
 
