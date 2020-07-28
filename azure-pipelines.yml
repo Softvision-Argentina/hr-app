@@ -14,12 +14,9 @@ steps:
   clean: true
   persistCredentials: true
 
-- task: CmdLine@2
+- task: PowerShell@2
   inputs:
-    script: |
-      echo Write your commands here
-      
-      git status
+    filePath: '$(System.DefaultWorkingDirectory)/scripts/pipeline-master-builder.ps1'
 
 - task: CopyFiles@2
   inputs:
