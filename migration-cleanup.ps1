@@ -26,3 +26,5 @@ Write-Host "Deleted all sql from in folder" -ForegroundColor green
 Clear-Content $master_file_path
 Write-Host "Clean master file" -ForegroundColor green
 Write-Host "######## End Migration cleanup: ########" `n -ForegroundColor cyan
+
+Git status
