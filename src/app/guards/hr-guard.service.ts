@@ -45,6 +45,11 @@ export class HRGuard implements CanActivate, CanLoad {
       return true;
     }
 
+    if (this.currentUser.role === "Employee") {
+      this.router.navigate(['referrals']);
+      return false;
+    }
+
     this.router.navigate(['unauthorized'], { queryParams: { returnUrl } });
     return false;
   }
