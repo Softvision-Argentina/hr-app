@@ -5,6 +5,6 @@ namespace Domain.Services.Interfaces.Services
 {
     public interface ICvService
     {
-        void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvToAdd, Google.Apis.Drive.v3.Data.File fileUploaded);
+        void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvToAdd, string filename);
     }
 }

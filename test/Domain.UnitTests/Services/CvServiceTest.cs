@@ -31,11 +31,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             _mockMapper.Setup(mm => mm.Map<Cv>(It.IsAny<CvContractAdd>())).Returns(new Cv());
             _mockMapper.Setup(mm => mm.Map<Candidate>(It.IsAny<Candidate>())).Returns(new Candidate());
             _mockRepositoryCv.Setup(x => x.SaveAll(It.IsAny<Cv>()));
-            var googleFile = new Google.Apis.Drive.v3.Data.File()
-            {
-                WebViewLink = "drivesdk"
-            };
-
+            var googleFile = "filename";
             _service.StoreCvAndCandidateCvId(new Candidate(), new CvContractAdd(), googleFile);
 
             _mockMapper.Verify(mm => mm.Map<Cv>(It.IsAny<CvContractAdd>()), Times.Once);

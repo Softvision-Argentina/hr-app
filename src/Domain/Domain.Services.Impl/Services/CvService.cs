@@ -16,9 +16,10 @@ namespace Domain.Services.Impl.Services
             _mapper = mapper;
         }
 
-        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, Google.Apis.Drive.v3.Data.File fileUploaded)
+        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, string filename)
         {
-            cvContract.UrlId = fileUploaded.WebViewLink.Replace("drivesdk","sharing");
+            cvContract.UrlId = filename;
+
             cvContract.CandidateId = candidate.Id;
             candidate.Cv = cvContract.UrlId;
 

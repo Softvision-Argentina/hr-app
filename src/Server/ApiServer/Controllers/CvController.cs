@@ -13,11 +13,11 @@ namespace ApiServer.Controllers
     {
         private readonly ICvService _cvService;
         private readonly ICandidateService _candidateService;
-        private readonly IGoogleDriveUploadService _cvUploadService;
+        private readonly IAzureUploadService _cvUploadService;
 
         public CvController(
             ICandidateService candidateService,
-            IGoogleDriveUploadService cvUploadService,
+            IAzureUploadService cvUploadService,
             ICvService cvService)
         {
             _cvService = cvService;
@@ -30,13 +30,11 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
             var candidate = _candidateService.GetCandidate(candidateId);
-            
             var file = cvContract.File;
-            var auth = await _cvUploadService.Authorize().ConfigureAwait(false);
-            
-            var fileUploaded = _cvUploadService.Upload(auth, file);
 
-             _cvService.StoreCvAndCandidateCvId(candidate, cvContract, fileUploaded);
+            var filename = await _cvUploadService.Upload(file, candidate);
+
+             _cvService.StoreCvAndCandidateCvId(candidate, cvContract, filename);
 
             return Ok("FileUploaded");
         }

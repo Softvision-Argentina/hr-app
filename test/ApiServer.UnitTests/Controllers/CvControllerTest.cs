@@ -18,13 +18,13 @@ namespace ApiServer.UnitTests.Controllers
         private CvController controller;
         private Mock<ICvService> mockCvService;
         private Mock<ICandidateService> mockCandidateService;
-        private Mock<IGoogleDriveUploadService> mockGoogleDrive;
+        private Mock<IAzureUploadService> mockGoogleDrive;
 
         public CvControllerTest()
         {
             mockCvService = new Mock<ICvService>();
             mockCandidateService = new Mock<ICandidateService>();
-            mockGoogleDrive = new Mock<IGoogleDriveUploadService>();
+            mockGoogleDrive = new Mock<IAzureUploadService>();
             controller = new CvController(mockCandidateService.Object, mockGoogleDrive.Object, mockCvService.Object);
         }
 

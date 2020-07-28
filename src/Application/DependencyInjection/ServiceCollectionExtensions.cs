@@ -133,7 +133,7 @@ namespace DependencyInjection
             services.AddTransient<IDeclineReasonService, DeclineReasonService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IPreOfferService, PreOfferService>();
-            services.AddTransient<IGoogleDriveUploadService, GoogleDriveUploadService>();
+            services.AddTransient<IAzureUploadService, AzureUploadService>();
             services.AddTransient<ICvService, CvService>();
             services.AddTransient<IInterviewService,InterviewService>();
             services.AddTransient<INotificationService, NotificationService>();
