@@ -17,6 +17,7 @@ using FluentValidation;
 using Domain.Model.Exceptions.Process;
 using System.Text.RegularExpressions;
 using Core.ExtensionHelpers;
+using Microsoft.Extensions.Options;
 
 namespace Domain.Services.Impl.Services
 {
@@ -44,6 +45,8 @@ namespace Domain.Services.Impl.Services
         private readonly IValidator<UpdateProcessContract> _updateProcessContractValidator;
         private readonly IValidator<CreateProcessContract> _createProcessContractValidator;
         private readonly IReaddressStatusService _readdressStatusService;
+        private readonly IOptions<AppSettings> _appSettings;
+
 
         public ProcessService(
             IMapper mapper,
@@ -69,9 +72,10 @@ namespace Domain.Services.Impl.Services
             IMailSender mailSender,
             IValidator<UpdateProcessContract> updateProcessContractValidator,
             IValidator<CreateProcessContract> createProcessContractValidator,
-            IReaddressStatusService readdressStatuService
+            IReaddressStatusService readdressStatuService,
+            IOptions<AppSettings> appSettings
             )
-            
+
         {            
             _candidateRepository = candidateRepository;
             _candidateProfileRepository = candidateProfileRepository;
@@ -95,6 +99,7 @@ namespace Domain.Services.Impl.Services
             _createProcessContractValidator = createProcessContractValidator;
             _updateProcessContractValidator = updateProcessContractValidator;
             _readdressStatusService = readdressStatuService;
+            _appSettings = appSettings;
         }
 
         public ReadedProcessContract Read(int id)
@@ -195,7 +200,7 @@ namespace Domain.Services.Impl.Services
 
             var status = process.Status;
 
-            var mailSendingEnabled = _config.GetValue<bool>("MailSending");
+            var mailSendingEnabled = _appSettings.Value.MailSending;
 
             try
             {
@@ -284,7 +289,7 @@ namespace Domain.Services.Impl.Services
 
             try
             {
-                var flag = _config.GetValue<bool>("MailSending");
+                var flag = _appSettings.Value.MailSending;
 
                 if (flag != false)
                 {
@@ -351,11 +356,11 @@ namespace Domain.Services.Impl.Services
         {
             var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
 
-            if (process.Candidate.Community.Name == "Product Delivery")
+            if (process.Candidate.Community.Name == "ProductDelivery")
             {
-                email = (process.Candidate.Profile.Name == "Project Manager") ?
-                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Project Manager") :
-                    _config.GetSection("CommunityManagerEmails").GetValue<string>("Product Delivery");
+                email = (process.Candidate.Profile.Name == "ProjectManager") ?
+                    _appSettings.Value.CommunityManagerEmails.ProjectManager :
+                    _appSettings.Value.CommunityManagerEmails.ProductDelivery;
             }
 
             var messageBody = new MessageBody();

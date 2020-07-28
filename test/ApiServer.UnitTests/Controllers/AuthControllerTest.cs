@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
+using Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace ApiServer.UnitTests.Controllers
 {
@@ -20,14 +22,19 @@ namespace ApiServer.UnitTests.Controllers
         private Mock<IUserService> mockService;
         private Mock<IConfiguration> mockConfig;
         private Mock<IMapper> mockMapper;
+        private Mock<IOptions<AppSettings>> mockAppsettings;
+
 
         public AuthControllertTest()
         {
             mockService = new Mock<IUserService>();
             mockMapper = new Mock<IMapper>();
             mockMapper.Setup(m => m.Map<ReadedUserViewModel>(It.IsAny<ReadedUserContract>())).Returns(new ReadedUserViewModel());
-            SetUpConfigMock();
-            controller = new AuthController(mockConfig.Object, mockService.Object, mockMapper.Object);
+            mockAppsettings = new Mock<IOptions<AppSettings>>();
+            AppSettings configSettings = new AppSettings();
+            IOptions<AppSettings> appSettings = Options.Create(configSettings);
+
+            controller = new AuthController(mockService.Object, mockMapper.Object, appSettings);
         }
 
         [Fact(DisplayName = "Verify that method 'Login' returns ActionResult when data is valid")]
@@ -118,14 +125,6 @@ namespace ApiServer.UnitTests.Controllers
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
             Assert.Equal(new { Status = "OK" }.ToQueryString(), (result as OkObjectResult).Value.ToQueryString());
-        }
-        private void SetUpConfigMock()
-        {
-            this.mockConfig = new Mock<IConfiguration>();
-            mockConfig.SetupGet(x => x[It.Is<string>(s => s == "jwtSettings:key")]).Returns("Eh1aFJbPXs6jTCo2JdyyR2FEUzdeiXBLA18tWG0jF7A_PFZ6qt9B6_HwkaUfgA14ErHHp-VKWBmUZTtTs7wWrcbw1rynto1RqQnKLtqM4dcOd7SKkl9wi18e-TDf8DovC7teVZQhXd2uAEZxtCI9C6YG3i6T2fXeqddf52sElqpEufpAuthnqDh35A2TVzRZr90bIhUhb6YywxWV1J0-mUxjZX-lI6tDq5d3A5jOZN2Q2STshLOAd5y5sGm1cDKCtWy3TiJ9Nxjj4_yfEABMHxm5kOrtD8gLE6Fa5VvnlKKWvW-BKJyHjv7EcWlzeQhqr_ZhTjOxK6e_7vvR8FXx0Q");
-            mockConfig.SetupGet(x => x[It.Is<string>(s => s == "jwtSettings:issuer")]).Returns("http://localhost:61059");
-            mockConfig.SetupGet(x => x[It.Is<string>(s => s == "jwtSettings:audience")]).Returns("http://localhost:61059");
-            mockConfig.SetupGet(x => x[It.Is<string>(s => s == "jwtSettings:minutesToExpiration")]).Returns("60");
         }
     }
 }
