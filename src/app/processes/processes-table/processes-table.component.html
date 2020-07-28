@@ -47,6 +47,9 @@
                 {{ process.candidate.user.lastName }}
               </a>
             </td>
+            <td scope="row">
+              {{  getSeniority(process.seniority) }}
+            </td>
             <td >
               <i nzTooltipTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit"
                 theme="outline"></i>
@@ -95,6 +98,9 @@
                 {{ process.candidate.user.firstName }}
                 {{ process.candidate.user.lastName }}
               </a>
+            </td>
+            <td scope="row">
+              {{  getSeniority(process.seniority) }}
             </td>
             <td>
               <i nzTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit"

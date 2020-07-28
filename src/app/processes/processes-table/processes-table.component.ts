@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { Community } from 'src/entities/community';
 import { ColumnItem } from 'src/entities/ColumnItem';
+import { SeniorityEnum } from 'src/entities/enums/seniority.enum';
+import { Globals } from '@app/app-globals/globals';
 
 
 @Component({
@@ -35,9 +37,13 @@ export class ProcessTableComponent implements OnChanges {
     processesAfterFilter = [];
     listOfDisplayDataAfterFilter = [];
     isFilterVisible: boolean = false;
-
+    seniorityList: any[];
     listOfColumns: ColumnItem[];
 
+    constructor(private globals: Globals ){
+        this.seniorityList = globals.seniorityList;
+
+    }
     ngOnChanges() {
         if (this.profiles && this.communities) {
             this.profiles = this.profiles.filter(profile => profile.name != 'N/A');
@@ -73,6 +79,12 @@ export class ProcessTableComponent implements OnChanges {
                     name: 'Recruiter'
                 },
                 {
+                    name: 'Seniority',
+                    listOfFilter: this.seniorityList.map((value, index) => { return { text: value.name, value: value.id } }),
+                    filterFn: (seniorityList: number[], item: any) => seniorityList.some(id => item.seniority === id)
+
+                },
+                {
                     name: 'Actions'
                 },
             ];
@@ -102,7 +114,6 @@ export class ProcessTableComponent implements OnChanges {
         return item.name;
     }
 
-    constructor() {}
 
     emitCandidateId(id) {
         this.candidateId.emit(id);
@@ -134,5 +145,8 @@ export class ProcessTableComponent implements OnChanges {
 
     getCurrentStage(cr: number): string {
         return this.currentStageList.find(st => st.id === cr).name;
+    }
+    getSeniority(id: number): string {
+        return this.seniorityList.find(seniority => seniority.id === id).name;
     }
 }
