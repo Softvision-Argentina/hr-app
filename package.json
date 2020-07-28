@@ -1,0 +1,44 @@
+{
+  "name": "RecruAutomationReport",
+  "version": "1.0.0",
+  "description": "RecruAutomationSuite",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "4.8.0",
+    "cypress-cucumber-preprocessor": "^2.5.0",
+    "chai": "^4.2.0",
+    "cucumber-html-reporter": "^5.2.0",
+    "jszip": "^3.5.0",
+    "mocha": "^8.0.1",
+    "xlsx-to-json": "^0.3.0",
+    "xpath-to-css": "^1.0.5"
+  },
+  "devDependencies": {
+    "cypress": "4.8.0",
+    "cypress-cucumber-preprocessor": "^2.5.0",
+    "chai": "^4.2.0",
+    "cucumber-html-reporter": "^5.2.0",
+    "jszip": "^3.5.0",
+    "mocha": "^8.0.1",
+    "xlsx-to-json": "^0.3.0",
+    "xpath-to-css": "^1.0.5"
+  },
+  "scripts": {
+    "setpUpTestData": "node ./utilities/testDataSetup.js",
+    "testHead": "cypress run --headed",
+    "testHeadChrome": "cypress run --browser chrome --headless",
+    "testHeadless": "cypress run",
+    "reporter": "node ./config/configreport.js",
+    "testGenerateReport": "npm run test && npm run reporter",
+    "installDependencies": "npm install"
+  },
+  "cypress-cucumber-preprocessor": {
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "reports/"
+    },
+    "nonGlobalStepDefinitions": true
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,116 @@
+[
+  {
+    "keyword": "Feature",
+    "name": "Smoke validation for Recru",
+    "line": 2,
+    "id": "smoke-validation-for-recru",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "Recru_Smoke.feature",
+    "elements": [
+      {
+        "id": "smoke-validation-for-recru;invalid-login-validation-for-role-:-\"admin\"",
+        "keyword": "Scenario",
+        "line": 18,
+        "name": "Invalid login validation for Role : \"Admin\"",
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          },
+          {
+            "name": "@smoke",
+            "line": 9
+          }
+        ],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "\"Admin\" is provided with Recru \"https://webhrappqa.azurewebsites.net/#/login\"",
+            "result": {
+              "status": "passed",
+              "duration": 14005000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "\"Admin\" should see Recru Logo",
+            "result": {
+              "status": "passed",
+              "duration": 147000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "\"Admin\" enters UserName \"kevin.zatel@softvision.com\" and Password \"99dcd4465a6017371ce6c231db4ad223\" and clicks on login button",
+            "result": {
+              "status": "passed",
+              "duration": 1218000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "\"Admin\" should check the displayed \"kevin.zatel@softvision.com\" in HomePage",
+            "result": {
+              "status": "passed",
+              "duration": 3522000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 11,
+            "name": "\"Admin\" is provided with the URL \"https://webhrappqa.azurewebsites.net/#/login\"",
+            "result": {
+              "status": "passed",
+              "duration": 627000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "\"Admin\" should see Recru Logo",
+            "result": {
+              "status": "passed",
+              "duration": 98000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "\"Admin\" enters UserName \"kevin.zatel@softvision.com\" and Password \"31e902722fb200e8f9ddc9b591bf85dd\" and clicks on login button",
+            "result": {
+              "status": "passed",
+              "duration": 1565000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "\"Admin\" validates the error message for \"Wrong Password\"",
+            "result": {
+              "status": "passed",
+              "duration": 1560000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
