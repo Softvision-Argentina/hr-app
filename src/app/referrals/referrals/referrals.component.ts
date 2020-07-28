@@ -145,6 +145,13 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngOnInit() {
+    this.getProcesses();
+    this.getCandidates();
+    this.getUsers();
+    this.getOffices();
+    this.getCommunities();
+    this.getProfiles();
+    this.getOpenPositions();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     this._referralsService._startReferralsModalSource.subscribe(
@@ -166,13 +173,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
 
     this.facade.appService.removeBgImage();
-    this.getProcesses();
-    this.getCandidates();
-    this.getUsers();
-    this.getOffices();
-    this.getCommunities();
-    this.getProfiles();
-    this.getOpenPositions();
     this.displayOpenPositions = this.openPositions;
 
     this.rejectProcessForm = this.formBuilder.group({
