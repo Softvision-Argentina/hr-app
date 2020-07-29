@@ -35,6 +35,8 @@ namespace Domain.Services.Impl.Validators.Candidate
                 RuleFor(_ => _.KnownFrom).MaximumLength(ValidationConstants.MAX_INPUT);
                 RuleFor(_ => _.LinkedInProfile).MaximumLength(ValidationConstants.MAX_INPUT);
                 RuleFor(_ => _.ReferredBy).MaximumLength(ValidationConstants.MAX_INPUT);
+
+                RuleFor(_ => _.Community).NotEmpty();
             });
         }
     }
