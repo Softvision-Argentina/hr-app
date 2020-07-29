@@ -41,6 +41,16 @@
               "node_modules/slick-carousel/slick/slick-theme.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles/abstracts/",
+                "src/styles/base/",
+                "src/styles/layout/",
+                "src/styles/themes/",
+                "src/styles/vendors/",
+                "src/styles/web-components/"
+              ]
+            },
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/slick-carousel/slick/slick.min.js"

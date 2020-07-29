@@ -18,7 +18,9 @@
     ],
     "paths": {
         "@app/*": ["src/app/*"],
-        "@environments/*": ["src/environments/*"]
+        "@environments/*": ["src/environments/*"],
+        "@shared/*": ["src/app/shared/*"],
+        "@old-architecture/*": ["src/app/old-architecture/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { GoogleSigninComponent } from './login/google-signin.component';
-import { FacadeService } from './services/facade.service';
+import { GoogleSigninComponent } from '@old-architecture/login/google-signin.component';
+import { FacadeService } from '@shared/services/facade.service';
+import { ReferralsService } from '@shared/services/referrals.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { ReferralsService } from './services/referrals.service';
 
 @Component({
   selector: 'app-root',
