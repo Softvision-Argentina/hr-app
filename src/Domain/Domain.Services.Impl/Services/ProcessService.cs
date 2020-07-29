@@ -197,18 +197,6 @@ namespace Domain.Services.Impl.Services
 
             var mailSendingEnabled = _config.GetValue<bool>("MailSending");
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.InProgress)
-            {
-                var notification = new Notification
-                {
-                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
-                };
-
-                _notificationRepository.Create(notification, process.Candidate.Id);
-
-                SendEmailNotification(process, status);
-            }
-
             try
             {
                 if (mailSendingEnabled)
@@ -294,18 +282,6 @@ namespace Domain.Services.Impl.Services
             var updatedProcess = _processRepository.Update(process);
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && (process.Status == ProcessStatus.Hired || process.Status == ProcessStatus.InProgress 
-                || process.Status == ProcessStatus.Accepted || process.Status == ProcessStatus.Recall))
-            {
-                var notification = new Notification
-                {
-                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
-                };
-                _notificationRepository.Create(notification, process.Candidate.Id);
-                SendEmailNotification(process, status);
-            }
-
-
             try
             {
                 var flag = _config.GetValue<bool>("MailSending");
@@ -355,16 +331,6 @@ namespace Domain.Services.Impl.Services
             process.Candidate.Status = SetCandidateStatus(process.Status);
             var status = process.Status;
 
-            if (process.Candidate.ReferredBy != null && process.Status == ProcessStatus.Rejected || process.Status == ProcessStatus.Declined)
-            {
-                var notification = new Notification
-                {
-                    Text = $"Your referral's {process.Candidate.Name} {process.Candidate.LastName} process status is {status}"
-                };
-                _notificationRepository.Create(notification, process.Candidate.Id);
-                SendEmailNotification(process, status);
-            }
-
             _unitOfWork.Complete();
         }
 
@@ -381,15 +347,7 @@ namespace Domain.Services.Impl.Services
             if (DNIExists) throw new Exception("DNI number already exists");
         }
 
-        private void SendEmailNotification(Process process, ProcessStatus status)
-        {
-            var email = GetUserMail(process.Candidate.ReferredBy);
-            var messageBody = $"The process status of your referral, {process.Candidate.Name} {process.Candidate.LastName}, is now {status}.";
-            var message = new Message(email, "Referral status", messageBody);
-            _mailSender.SendAsync(message);
-        }
-
-        private void SendHrStageEmailNotification(Process process)
+          private void SendHrStageEmailNotification(Process process)
         {
             var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
 
