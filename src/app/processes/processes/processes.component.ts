@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewChecked, OnDestroy, ElementRef } from '@angular/core';
 import { Process } from 'src/entities/process';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/services/facade.service';
@@ -65,6 +65,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild(PreOfferStageComponent) preOfferStage: PreOfferStageComponent;
   @ViewChild(OfferStageComponent) offerStage: OfferStageComponent;
   @ViewChild(HireStageComponent) hireStage: HireStageComponent;
+  @ViewChild('processStart') processStart: ElementRef;
+  @ViewChild('startModalButtons') startModalButtons: ElementRef;
 
   filteredProcesses: Process[] = [];
   filteredOwnProcesses: Process[] = [];
@@ -129,8 +131,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   readdressReasonTypeList: ReaddressReasonType[] = [];
   readdressStatus: ReaddressStatus = new ReaddressStatus();
   currentStage: ProcessCurrentStageEnum;
+  candidateInfo: Candidate;
 
-  preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum} = null;
+  preOfferData: { tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum } = null;
 
   constructor(
     private facade: FacadeService,
@@ -148,10 +151,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
     this._referralsService._displayNavAndSideMenuSource.subscribe(
       instruction => this.displayNavAndSideMenu = instruction
     );
+
+    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+
     this._referralsService.displayNavAndSideMenu(true);
     this.facade.appService.removeBgImage();
     this.getProcesses();
@@ -173,6 +178,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName: [null, [Validators.required]]
     });
+
+    setTimeout(() => {
+      if (this.candidateInfo) {
+        this.newProcessStart(this.processStart, this.startModalButtons);
+      }
+    });
+
     this.facade.appService.stopLoading();
   }
 
@@ -180,7 +192,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (this.slickModal && this.openFromEdit) {
       setTimeout(() => {
         this.slickModal.slickGoTo(this.stepIndex);
-      }, 500)
+      }, 500);
       this.openFromEdit = false;
     }
   }
@@ -286,8 +298,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         const result = [];
         if (!!res) {
           for (let i = 0; i < res.length; i++) {
-            if (res[i].candidate.user !== null && typeof res[i].candidate.user !== 'undefined') {
-              const sessionConsultant = res[i].candidate.user.firstName + ' ' + res[i].candidate.user.lastName;
+            if (res[i].userOwner !== null && typeof res[i].userOwner !== 'undefined') {
+              const sessionConsultant = res[i].userOwner.firstName + ' ' + res[i].userOwner.lastName;
               if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
                 result.push(res[i]);
               }
@@ -398,7 +410,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               }
             }
             if (isCompleted) {
-              const rejectionReason = "";
+              const rejectionReason = '';
               this.facade.processService.reject(processID, rejectionReason)
                 .subscribe(res => {
                   this.getCandidates();
@@ -498,7 +510,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.appService.stopLoading();
   }
 
-  newProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, candidate?: Candidate): void {
+  newProcessStart(modalContent: any, footer: any, candidate?: Candidate): void {
     this.facade.appService.startLoading();
     if (!candidate) {
       const newCandidate: Candidate = {
@@ -676,13 +688,23 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       let newProcess: Process;
       this.isLoading = true;
       newCandidate = this.candidateAdd.getFormData();
+      if (this.candidateInfo) {
+        newCandidate.id = this.candidateInfo.id;
+        newCandidate.isReferred = this.candidateInfo.isReferred;
+        newCandidate.knownFrom = this.candidateInfo.knownFrom;
+        newCandidate.referredBy = this.candidateInfo.referredBy;
+        newCandidate.cv = this.candidateInfo.cv;
+        newCandidate.source = this.candidateInfo.source;
+        newCandidate.user = this.candidateInfo.user;
+      }
+      console.log(newCandidate);
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       // temp fix, we should check if englishlevel should be in Candidate table and HrStage table
       newCandidate.englishLevel = newProcess.hrStage.englishLevel;
-      newProcess.userOwnerId = newCandidate.user.id;
+      newProcess.userOwnerId = this.currentUser.id;
       newProcess.candidate = newCandidate;
-      newProcess.offerStage.userOwnerId = newCandidate.user.id;
+      newProcess.offerStage.userOwnerId = this.currentUser.id;
       if (!this.isEdit) {
         if (!newCandidate.id) {
           this.facade.candidateService.add(newCandidate).subscribe(res => {
@@ -715,6 +737,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.isLoading = false;
               this.facade.appService.stopLoading();
               this.facade.toastrService.success('The process was successfully saved !');
+              let emptyCandidate: Candidate;
+              this._referralsService.sendCandidateInfo(emptyCandidate);
               this.createEmptyProcess(newCandidate);
               this.closeModal();
             }, err => {
@@ -773,31 +797,59 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   getProcessFormData(): Process {
     let process: Process;
-    process = {
-      id: !this.isEdit ? 0 : this.emptyProcess.id,
-      startDate: new Date(),
-      endDate: null,
-      status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
-      currentStage: ProcessCurrentStageEnum.NA,
-      candidateId: !this.isEdit ? 0 : null,
-      candidate: null,
-      userOwnerId: 0,
-      userOwner: null,
-      userDelegate: null,
-      userDelegateId: null,
-      rejectionReason: null,
-      declineReason: null,
-      actualSalary: 0,
-      wantedSalary: 0,
-      englishLevel: EnglishLevelEnum.None,
-      seniority: 0,
-      hrStage: null,
-      technicalStage: null,
-      clientStage: null,
-      preOfferStage: null,
-      offerStage: null,
-      createdDate: new Date()
-    };
+    if (this.candidateInfo) {
+      process = {
+        id: !this.isEdit ? 0 : this.emptyProcess.id,
+        startDate: new Date(),
+        endDate: null,
+        status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
+        currentStage: ProcessCurrentStageEnum.NA,
+        candidateId: this.candidateInfo.id,
+        candidate: null,
+        userOwnerId: 0,
+        userOwner: null,
+        userDelegate: null,
+        userDelegateId: null,
+        rejectionReason: null,
+        declineReason: null,
+        actualSalary: 0,
+        wantedSalary: 0,
+        englishLevel: EnglishLevelEnum.None,
+        seniority: 0,
+        hrStage: null,
+        technicalStage: null,
+        clientStage: null,
+        preOfferStage: null,
+        offerStage: null,
+        createdDate: new Date()
+      };
+    } else {
+      process = {
+        id: !this.isEdit ? 0 : this.emptyProcess.id,
+        startDate: new Date(),
+        endDate: null,
+        status: !this.isEdit ? ProcessStatusEnum.InProgress : ProcessStatusEnum[CandidateStatusEnum[this.emptyProcess.candidate.status]],
+        currentStage: ProcessCurrentStageEnum.NA,
+        candidateId: !this.isEdit ? 0 : null,
+        candidate: null,
+        userOwnerId: 0,
+        userOwner: null,
+        userDelegate: null,
+        userDelegateId: null,
+        rejectionReason: null,
+        declineReason: null,
+        actualSalary: 0,
+        wantedSalary: 0,
+        englishLevel: EnglishLevelEnum.None,
+        seniority: 0,
+        hrStage: null,
+        technicalStage: null,
+        clientStage: null,
+        preOfferStage: null,
+        offerStage: null,
+        createdDate: new Date()
+      };
+    }
 
     process.hrStage = this.hrStage.getFormData(process.id);
     process.technicalStage = this.technicalStage.getFormData(process.id);
@@ -881,7 +933,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       status: ProcessStatusEnum.NA,
       currentStage: ProcessCurrentStageEnum.NA,
       candidateId: candidate.id,
-      candidate: candidate,
+      candidate,
       userOwnerId: null,
       userOwner: candidate.user,
       userDelegateId: null,
@@ -992,12 +1044,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   declineReasonNameChanged() {
-    if (this.declineProcessForm.controls['declineReasonName'].value === -1) {
+    if (this.declineProcessForm.controls.declineReasonName.value === -1) {
       this.isDeclineReasonOther = true;
-      this.declineProcessForm.controls['declineReasonDescription'].enable();
+      this.declineProcessForm.controls.declineReasonDescription.enable();
     } else {
       this.isDeclineReasonOther = false;
-      this.declineProcessForm.controls['declineReasonDescription'].disable();
+      this.declineProcessForm.controls.declineReasonDescription.disable();
     }
   }
 
@@ -1060,6 +1112,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   clearDataAndCloseModal() {
     this.clientStage.clearInterviewOperations();
+    let emptyCandidate: Candidate;
+    this._referralsService.sendCandidateInfo(emptyCandidate);
     this.closeModal();
   }
 
@@ -1069,21 +1123,21 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(res => {
         preOffers = res;
 
-        if(preOffers && (preOffers.length > 0) && (this.emptyProcess.preOfferStage.status == StageStatusEnum.Accepted)) {
-          let mainAcceptedPreOffer = preOffers.find(_ => _.status == preOfferStatusEnum.Accepted);
-          if(mainAcceptedPreOffer) {
+        if (preOffers && (preOffers.length > 0) && (this.emptyProcess.preOfferStage.status == StageStatusEnum.Accepted)) {
+          const mainAcceptedPreOffer = preOffers.find(_ => _.status == preOfferStatusEnum.Accepted);
+          if (mainAcceptedPreOffer) {
             this.preOfferData = {
               tentativeStartDate: mainAcceptedPreOffer.tentativeStartDate,
               bonus: mainAcceptedPreOffer.bonus,
               grossSalary: mainAcceptedPreOffer.salary,
               vacationDays: mainAcceptedPreOffer.vacationDays,
               healthInsurance: mainAcceptedPreOffer.healthInsurance
-            }
-          }        
+            };
+          }
         }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
-      });    
+      });
   }
 
 }

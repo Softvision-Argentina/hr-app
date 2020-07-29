@@ -10,6 +10,8 @@ import { ReferraListItem } from 'src/entities/referral-list-item';
 import { ProcessCurrentStageEnum } from 'src/entities/enums/process-current-stage';
 import { ProcessStatusEnum } from 'src/entities/enums/process-status.enum';
 import { ColumnItem } from 'src/entities/ColumnItem';
+import { ReferralsService } from '@app/services/referrals.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-referrals-list',
   templateUrl: './referrals-list.component.html',
@@ -30,14 +32,16 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() editEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
   listOfColumns: ColumnItem[];
+  candidateInfo: Candidate;
 
-  constructor(private facade: FacadeService, private globals: Globals) {
+  constructor(private facade: FacadeService, private globals: Globals, private _referralsService: ReferralsService, private router: Router) {
     this.referralListStatus = globals.referralCurrentStage;
     this.processStatusList = globals.stageStatusList;
   }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.init();
   }
 
@@ -290,6 +294,15 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
 
   checkCV(cv) {
     return cv === null ? false : true;
+  }
+
+  playButtonTitle(status) {
+    return status === 0 ? 'Start Process' : 'Process has been created for this referral';
+  }
+
+  goToProcesses(candidate) {
+      this._referralsService.sendCandidateInfo(candidate);
+      this.router.navigateByUrl('/processes');
   }
 
   ngOnDestroy() {

@@ -52,7 +52,7 @@
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input an email">
                     <ng-template #emailErrorMsg>
-                        <ng-container>
+                        <ng-container *ngIf="!candidateInfo.isReferred; else noExistingEmailCheck">
                             <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
                             && candidateForm.hasError('emailAndPhoneValidator')">
                                 Enter a valid e-mail address
@@ -60,10 +60,25 @@
                             <ng-container *ngIf="candidateForm.get('email').hasError('email')">
                                 Enter a valid e-mail address
                             </ng-container>
-                            <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
-                                E-mail address already exists
-                            </ng-container>
+                            <span>
+                                <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
+                                    E-mail address already exists
+                                </ng-container>
+                            </span>
                         </ng-container>
+
+                        <ng-template #noExistingEmailCheck>
+                            <ng-container>
+                                <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
+                                && candidateForm.hasError('emailAndPhoneValidator')">
+                                    Enter a valid e-mail address
+                                </ng-container>
+                                <ng-container *ngIf="candidateForm.get('email').hasError('email')">
+                                    Enter a valid e-mail address
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
+
                     </ng-template>
                 </nz-form-control>
             </nz-form-item>
@@ -87,7 +102,7 @@
                     </nz-input-group>
                     <ng-template #phoneNumberErrorMsg>
                         <ng-container class="Error" Id="Error" Name="Error"
-                        *ngIf="candidateForm.get('phoneNumber').dirty
+                            *ngIf="candidateForm.get('phoneNumber').dirty
                         && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
                             Please input a phone number!
                         </ng-container>
@@ -100,9 +115,9 @@
         <div nz-col nzSpan="12">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="linkedin"
-                [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
+                    [ngClass]="{'requiredFieldLabel': isRequiredField('linkedin')}">
                     LinkedIn</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" >
+                <nz-form-control [nzSm]="14" [nzXs]="24">
                     <input nz-input formControlName="linkedin" id="linkedin"
                         placeholder="Please input the LinkedIn URL">
                 </nz-form-control>
@@ -190,8 +205,7 @@
                     Source</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
                     <nz-select formControlName="source" nzPlaceHolder="Select the source of the candidate">
-                        <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}"
-                            [nzValue]="s.name">
+                        <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}" [nzValue]="s.name">
                         </nz-option>
                     </nz-select>
                 </nz-form-control>

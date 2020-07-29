@@ -4,6 +4,7 @@ import { GoogleSigninComponent } from '../login/google-signin.component';
 import { User } from 'src/entities/user';
 import { ReferralsService } from '@app/services/referrals.service';
 import { FacadeService } from '@app/services/facade.service';
+import { Candidate } from 'src/entities/candidate';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,6 +27,7 @@ export class NavMenuComponent implements OnInit {
   search: string = '';
   searchbarPlaceholder = 'Search...';
   displayNavAndSideMenu: boolean;
+  candidateInfo: Candidate;
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -40,9 +42,12 @@ export class NavMenuComponent implements OnInit {
       this._referralsService.displayNavAndSideMenu(true);
     }
 
+    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
   }
 
   logout() {
+    let emptyCandidate: Candidate;
+    this._referralsService.sendCandidateInfo(emptyCandidate);
     this._referralsService.startReferralsModal(false);
     this.google.logout();
   }

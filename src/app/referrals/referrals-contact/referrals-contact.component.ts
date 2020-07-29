@@ -206,7 +206,7 @@ export class ReferralsContactComponent implements OnInit {
         phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
         dni: 0,
         emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-        user: null,
+        user: this.currentUser,
         contactDay: new Date(),
         linkedInProfile: this.candidateForm.controls['link'].value ? this.candidateForm.controls['link'].value : null,
         englishLevel: EnglishLevelEnum.None,

@@ -15,6 +15,7 @@ import { CandidateStatusEnum } from 'src/entities/enums/candidate-status.enum';
 import { Subscription } from 'rxjs';
 import { formFieldHasRequiredValidator } from 'src/app/utils/utils.functions';
 import { UniqueEmailValidator } from '../ValidatorsCandidateForm';
+import { ReferralsService } from '@app/services/referrals.service';
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
   if((c.get('email').value === null || c.get('email').value.length === 0)
@@ -32,6 +33,8 @@ export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors 
   styleUrls: ['./candidate-add.component.scss']
 })
 export class CandidateAddComponent implements OnInit, OnDestroy {
+  candidateInfo: Candidate;
+  skipEmailCheck = false;
 
   @Input()
     private _process: Process;
@@ -134,13 +137,14 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
-              private globals: Globals) {
+              private globals: Globals, private _referralsService: ReferralsService) {
                 this.statusList = globals.candidateStatusList;
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 this.getCandidates();
   }
 
   ngOnInit() {
+    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.fillUsers = this._users;
     this.fillUsers.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)))
     this._offices.sort((a,b) => (a.name.localeCompare(b.name)))
@@ -157,6 +161,15 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
+
+    setTimeout(() => {
+      if (this.candidateInfo) {
+        console.log(this.candidateInfo);
+        this.fillCandidateForm(this.candidateInfo);
+        this.skipEmailCheck = true;
+      }
+    });
+
   }
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
@@ -240,7 +253,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
     this.candidateForm.controls['community'].setValue(candidate.community.id);
-    this.candidateForm.controls['profile'].setValue(candidate.profile.id);
+    candidate.profile ? this.candidateForm.controls['profile'].setValue(candidate.profile.id) : null;
     this.candidateForm.controls['isReferred'].setValue(candidate.isReferred);
     this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
     this.candidateForm.controls['cv'].setValue(candidate.cv);
