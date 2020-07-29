@@ -597,7 +597,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   checkForm(form: FormGroup): FormGroup {
     for (const i in form.controls) {
-      if (form.controls[i]) {
+      if (form.controls[i] !== form.controls['email']) {
         form.controls[i].markAsDirty();
         form.controls[i].updateValueAndValidity();
       }

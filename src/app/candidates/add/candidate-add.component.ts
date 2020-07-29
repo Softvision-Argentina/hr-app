@@ -164,7 +164,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       if (this.candidateInfo) {
-        console.log(this.candidateInfo);
         this.fillCandidateForm(this.candidateInfo);
         this.skipEmailCheck = true;
       }
