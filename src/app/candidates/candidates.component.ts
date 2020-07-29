@@ -13,6 +13,7 @@ import { Community } from 'src/entities/community';
 import { CandidateProfile } from 'src/entities/Candidate-Profile';
 import { replaceAccent } from 'src/app/helpers/string-helpers';
 import { validateCandidateForm } from './ValidatorsCandidateForm';
+import { dniValidator } from 'src/app/directives/dni.validator';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -43,16 +44,16 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   searchSub: Subscription;
   candidateSubscriptions: Subscription = new Subscription();
   sourceArray = [
-    {name: 'Linkedin'},
-    {name: 'Instagram'},
-    {name: 'Facebook'},
-    {name: 'Twitter'},
-    {name: 'Event / Meetup'},
-    {name: 'Mailing'},
-    {name: 'Indeed/ Glassdoor'},
-    {name: 'A friend / colleague'},
-    {name: 'Online Ad'},
-    {name: 'Other'}
+    { name: 'Linkedin' },
+    { name: 'Instagram' },
+    { name: 'Facebook' },
+    { name: 'Twitter' },
+    { name: 'Event / Meetup' },
+    { name: 'Mailing' },
+    { name: 'Indeed/ Glassdoor' },
+    { name: 'A friend / colleague' },
+    { name: 'Online Ad' },
+    { name: 'Other' }
   ];
   // Modals
   skills: Skill[] = [];
@@ -119,8 +120,8 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getProfiles() {
     const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
-      if(!!res){
-        this.profiles = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      if (!!res) {
+        this.profiles = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
@@ -130,8 +131,8 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
-      if(!!res){
-        this.communities = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      if (!!res) {
+        this.communities = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
@@ -150,8 +151,8 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   getOffices() {
     const officesSubscription = this.facade.OfficeService.getData().subscribe(res => {
-      if(!!res){
-        this._offices = res.sort((a,b) => (a.name.localeCompare(b.name)));
+      if (!!res) {
+        this._offices = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
@@ -188,12 +189,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.validateForm = this.fb.group({
-      name: [null,Validators.required],
-      lastName: [null, Validators.required],
-      dni: [null],
+      name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      dni: [0, [Validators.required, dniValidator]],
       email: [null, [Validators.email]],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
+      phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
       linkedin: [null],
       user: [null, [Validators.required]],
       englishLevel: 'none',
@@ -207,6 +208,18 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       knownFrom: [null],
       source: null
     });
+  }
+
+  checkLength(field) {
+    let fieldName = field.attributes.id.nodeValue,
+      maxLength = Number(field.attributes.maxlength.nodeValue) || 8,
+      inputValue = this.validateForm.controls[fieldName].value;
+
+    if (inputValue == null) { return }
+
+    if (inputValue.toString().length > maxLength) {
+      this.validateForm.controls[fieldName].setValue(inputValue.toString().replace(".", "").substring(0, maxLength));
+    }
   }
 
   reset(): void {

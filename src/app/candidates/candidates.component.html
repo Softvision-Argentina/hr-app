@@ -59,11 +59,11 @@
                         <i nz-tooltip (click)="showDetailsModal(candidate.id, detailModal)" class="icon-action" nz-icon
                             nzType="info-circle" nzTooltipTitle="Details"></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i nz-tooltip (click)="showEditModal(candidateModal, candidate.id)" class="icon-action" nz-icon nzType="edit"
-                            nzTooltipTitle="Edit"></i>
+                        <i nz-tooltip (click)="showEditModal(candidateModal, candidate.id)" class="icon-action" nz-icon
+                            nzType="edit" nzTooltipTitle="Edit"></i>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon nzType="delete"
-                            nzTooltipTitle="Delete"></i>
+                        <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon
+                            nzType="delete" nzTooltipTitle="Delete"></i>
                     </td>
                 </tr>
             </tbody>
@@ -95,11 +95,20 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="dni">DNI</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
-                        <input formControlName="dni" id="dni" (change)="dniChanged()" type="number" nz-input
+                        <input (keyup)="checkLength($event.target)" maxlength="8" formControlName="dni" id="dni" (change)="dniChanged()" type="number" nz-input
                             placeholder="Please input a DNI">
                         <ng-template #dniErrorMsg>
-                            <ng-container *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">The
-                                input is not valid DNI!</ng-container>
+                            <ng-container *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">
+                                <ng-container *ngIf="validateForm.get('dni').hasError('dniTooShortError')">
+                                    DNI is too short
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('dni').hasError('emptyInputError')">
+                                    DNI is empty or invalid (only numeric characters allowed)
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('dni').hasError('dniFirstDigitError')">
+                                    DNI shouldn't start with a 0
+                                </ng-container>
+                            </ng-container>
                         </ng-template>
                     </nz-form-control>
                 </nz-form-item>
@@ -113,7 +122,10 @@
                         <ng-template #fristNameErrorMsg>
                             <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
                                 <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
-                                    Please input the name!
+                                    Please input a name!
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('name')?.hasError('pattern')">
+                                    Please input only letters and spaces
                                 </ng-container>
                             </ng-container>
                         </ng-template>
@@ -132,7 +144,10 @@
                             <ng-container
                                 *ngIf="validateForm.get('lastName').dirty && validateForm.get('lastName').errors">
                                 <ng-container *ngIf="validateForm.get('lastName')?.hasError('required')">
-                                    Please input the last name!
+                                    Please input a last name!
+                                </ng-container>
+                                <ng-container *ngIf="validateForm.get('lastName')?.hasError('pattern')">
+                                    Please input only letters and spaces
                                 </ng-container>
                             </ng-container>
                         </ng-template>
@@ -145,8 +160,12 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                         <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                         <ng-template #emailErrorMsg>
-                            <ng-container *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">
-                                The input is not valid E-mail!
+                            <ng-container
+                                *ngIf="validateForm.get('email').dirty && validateForm.hasError('emailAndPhoneValidator')">
+                                Plese enter a valid e-mail address
+                            </ng-container>
+                            <ng-container *ngIf="validateForm.get('email').hasError('email')">
+                                Please enter a valid e-mail address
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -157,7 +176,7 @@
             <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="linkedin">LinkedIn</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" >
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
                         <input nz-input formControlName="linkedin" id="linkedin"
                             placeholder="Please input the LinkedIn URL">
                     </nz-form-control>
@@ -175,12 +194,13 @@
                                     <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                                 </nz-select>
                             </ng-template>
-                            <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input placeholder="Please input a phone number">
+                            <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$"
+                                nz-input placeholder="Please input a phone number">
                         </nz-input-group>
                         <ng-template #phoneNumberErrorMsg>
                             <ng-container
                                 *ngIf="validateForm.get('phoneNumber').dirty && validateForm.get('phoneNumber').errors">
-                                Please input your phone number!
+                                Please input a phone number!
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -262,9 +282,9 @@
         <div nz-row>
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="referredBy" >Referred By</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" >
-                        <input type="text"  nz-input formControlName="referredBy" id="referredBy">
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="referredBy">Referred By</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <input type="text" nz-input formControlName="referredBy" id="referredBy">
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -284,8 +304,7 @@
                         Source</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
                         <nz-select formControlName="source" nzPlaceHolder="Select the source of the candidate">
-                            <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}"
-                                [nzValue]="s.name">
+                            <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}" [nzValue]="s.name">
                             </nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -328,7 +347,8 @@
                                 <div nz-col nzSpan="9">
                                     <nz-form-control [nzSm]="14" [nzXs]="24" class="control-errors"
                                         [nzErrorTip]="skillCommentErrorMsg">
-                                        <input type="text" nz-input formControlName="{{control.controlInstance[2]}}" placeholder="Please input a comment">
+                                        <input type="text" nz-input formControlName="{{control.controlInstance[2]}}"
+                                            placeholder="Please input a comment">
                                         <ng-template #skillCommentErrorMsg>
                                             <ng-container
                                                 *ngIf="validateForm.get(control.controlInstance[2]).dirty && validateForm.get(control.controlInstance[2]).errors">
@@ -380,7 +400,8 @@
                             <div nz-col nzSpan="9">
                                 <nz-form-control [nzSm]="14" [nzXs]="24" class="control-errors"
                                     [nzErrorTip]="commentErrorMsg">
-                                    <input type="text" nz-input formControlName="{{control.controlInstance[2]}}" placeholder="Please input a comment">
+                                    <input type="text" nz-input formControlName="{{control.controlInstance[2]}}"
+                                        placeholder="Please input a comment">
                                     <ng-template #commentErrorMsg>
                                         <ng-container
                                             *ngIf="validateForm.get(control.controlInstance[2]).dirty && validateForm.get(control.controlInstance[2]).errors">
