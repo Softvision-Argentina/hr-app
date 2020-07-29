@@ -25,7 +25,9 @@ namespace Domain.Services.Impl.Services
             CloudBlobClient blobClient = storageacc.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("contcvstore");
 
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"CV-{candidate.Name}-{candidate.LastName}.pdf");
+            var hash = file.GetHashCode() % 10000;
+            var hashForFile =  hash.ToString("0000");
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"CV-{candidate.Name}-{candidate.LastName}-{hashForFile}.pdf");
 
             var stream = new MemoryStream();
             file.CopyTo(stream);
