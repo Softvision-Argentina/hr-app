@@ -107,15 +107,17 @@ export class ReferralsContactComponent implements OnInit {
 
   fillReferralForm(candidate: Candidate) {
     this.candidateForm.controls['openPositionTitle'].setValue(!!this.position ? this.position.title : null);
-    this.candidateForm.controls['community'].setValue(!!this.position ? this.position.community.id : null);
+    if (this.position?.id){
+      this.candidateForm.controls['community'].setValue(this.position.community.id);
+    }
     if (this.isEditReferral) {
       this.candidateForm.controls['firstName'].setValue(candidate.name);
       this.candidateForm.controls['lastName'].setValue(candidate.lastName);
       this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
       this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
       this.candidateForm.controls['email'].setValue(candidate.emailAddress);
-      this.candidateForm.controls['link'].setValue(candidate.linkedInProfile);
       this.candidateForm.controls['community'].setValue(candidate.community.id);
+      this.candidateForm.controls['link'].setValue(candidate.linkedInProfile);
       this.candidateForm.controls['firstName'].disable();
       this.candidateForm.controls['lastName'].disable();
     }

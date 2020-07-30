@@ -8,7 +8,7 @@
                     <nz-form-item>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="CommunityErrorMsg">
-                            <nz-select formControlName="community" [nzDisabled]="isEditReferral">
+                            <nz-select formControlName="community" [nzDisabled]="isEditReferral || !!this.position?.title">
                                 <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
                                 </nz-option>
                             </nz-select>

@@ -746,6 +746,16 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 
   showContactReferralModal(referral: Candidate) {
+    this.currentPosition = {
+      id: null,
+      title: referral.openPositionTitle,
+      seniority: null,
+      studio: null,
+      community: null,
+      jobDescription: null,
+      priority: null,
+    };
+    
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: ReferralsContactComponent,
@@ -753,10 +763,12 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzComponentParams: {
         referralToEdit: referral,
         isEditReferral: true,
-        communities: this.communities
+        communities: this.communities,
+        position: this.currentPosition
       },
       nzWidth: '50%',
-      nzFooter: null
+      nzFooter: null,
+      nzOnCancel: () => this.currentPosition = null
     });
   }
 
