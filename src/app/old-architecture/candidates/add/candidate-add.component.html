@@ -52,7 +52,7 @@
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input an email">
                     <ng-template #emailErrorMsg>
-                        <ng-container *ngIf="!candidateInfo.isReferred; else noExistingEmailCheck">
+                        <ng-container *ngIf="!candidateInfo?.isReferred; else noExistingEmailCheck">
                             <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
                             && candidateForm.hasError('emailAndPhoneValidator')">
                                 Enter a valid e-mail address
