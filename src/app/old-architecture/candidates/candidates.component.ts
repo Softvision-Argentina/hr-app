@@ -16,6 +16,7 @@ import { AppComponent } from '@app/app.component'
 import { validateCandidateForm } from './candidate-form.validator';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { dniValidator } from '@app/shared/utils/dni.validator';
+import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
 
 @Component({
   selector: 'app-candidates',
@@ -193,7 +194,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
       lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
       dni: [0, [Validators.required, dniValidator]],
-      email: [null, [Validators.email]],
+      email: [null,
+        {
+          validators: [Validators.email],
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+          updateOn: "blur"
+        }
+      ],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
       linkedin: [null],

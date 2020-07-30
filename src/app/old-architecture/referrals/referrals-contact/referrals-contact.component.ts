@@ -61,6 +61,7 @@ export class ReferralsContactComponent implements OnInit {
       {
         validators: [Validators.email],
         asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+        updateOn: "blur"
       }
     ],
     link: [null],
@@ -131,7 +132,8 @@ export class ReferralsContactComponent implements OnInit {
       email: [null,
         {
           validators: [Validators.email],
-          asyncValidators: UniqueEmailValidator(this.facade.candidateService)
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+          updateOn: "blur"
         }
       ],
       phoneNumberPrefix: ['+54'],

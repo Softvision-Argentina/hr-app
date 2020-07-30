@@ -15,6 +15,7 @@ import { CandidateAddComponent } from '@old-architecture/candidates/add/candidat
 import { CandidateDetailsComponent } from '@old-architecture/candidates/details/candidate-details.component';
 import { ProcessesComponent } from '@old-architecture/processes/processes/processes.component';
 import { CandidateStatusEnum } from '@shared/enums/candidate-status.enum';
+import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
 
 @Component({
   selector: 'app-process-contact',
@@ -93,7 +94,13 @@ export class ProcessContactComponent implements OnInit {
     name: [''],
     firstName: [null, [Validators.required]],
     lastName: [null, [Validators.required]],
-    email: [null, [Validators.email]],
+    email: [null,
+      {
+        validators: [Validators.email],
+        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+        updateOn: "blur"
+      }
+    ],
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [Validators.pattern(/^[0-9]+$/)]],
     user: [null, [Validators.required]],
@@ -256,7 +263,13 @@ export class ProcessContactComponent implements OnInit {
       name: [''],
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      email: [null, [Validators.email]],
+      email: [null,
+        {
+          validators: [Validators.email],
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+          updateOn: "blur"
+        }
+      ],
       phoneNumberPrefix: ['+54'],
       phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
       user: [null, [Validators.required]],
