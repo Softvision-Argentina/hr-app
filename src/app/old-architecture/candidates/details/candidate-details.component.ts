@@ -52,12 +52,9 @@ export class CandidateDetailsComponent implements OnInit {
   }
 
   getRecruiterName() {
-    this.facade.userService.get()
+    this.facade.processService.getActiveProcessByCandidate(this._detailedCandidate.id)
       .subscribe(res => {
-        if (this._detailedCandidate) {
-          this.userName = res.filter(candidate => candidate.id === this._detailedCandidate.user.id)[0].firstName + ' ' +
-            res.filter(candidate => candidate.id === this._detailedCandidate.user.id)[0].lastName;
-          }
+        this.userName = res[0].userOwner.firstName + ' ' + res[0].userOwner.lastName;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
