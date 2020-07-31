@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
@@ -130,7 +130,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   readdressReasonList: ReaddressReason[] = [];
   readdressReasonTypeList: ReaddressReasonType[] = [];
-    readdressStatus: ReaddressStatus = new ReaddressStatus();
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
 
   currentStage: ProcessCurrentStageEnum;
   candidateInfo: Candidate;
@@ -1142,4 +1142,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if (event.keyCode === 27) {
+      let emptyCandidate: Candidate;
+      this._referralsService.sendCandidateInfo(emptyCandidate);
+    }
+  }
 }
