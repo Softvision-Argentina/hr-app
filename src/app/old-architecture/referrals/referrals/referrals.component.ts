@@ -51,10 +51,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     draggable: false,
     prevArrow: '<button style="left: -45px!important;" class="slick-prev"><img style="transform: scaleX(-1);" src="assets/images/arrow_medium.svg"></button>',
     nextArrow: '<button class="slick-next"><img src="assets/images/arrow_medium.svg"></button>'
-    
+
   };
 
-  @ViewChild('slickJobDescription') slickJobD: SlickCarouselComponent;  
+  @ViewChild('slickJobDescription') slickJobD: SlickCarouselComponent;
   @ViewChild('dropdown') nameDropdown;
   @ViewChild('dropdownStatus') statusDropdown;
   @ViewChild('dropdownCurrentStage') currentStageDropdown;
@@ -129,8 +129,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   declineReasons: DeclineReason[] = [];
   referralsSubscriptions: Subscription = new Subscription();
   currentPosition: OpenPosition = null;
-  jobDescriptionContent : string;
-  openDesc : boolean = false;
+  jobDescriptionContent: string;
+  openDesc: boolean = false;
   referralsListTabTitle: string;
 
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
@@ -196,7 +196,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngAfterViewChecked() {
-    if (this.slickJobD && this.openDesc){
+    if (this.slickJobD && this.openDesc) {
       setTimeout(() => {
         this.slickJobD.slickGoTo(this.openPositions.indexOf(this.currentPosition));
       }, 50)
@@ -213,7 +213,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       if (!!res) {
         this.availableCandidates = res.filter(x => x.status === CandidateStatusEnum.New || x.status === CandidateStatusEnum.Recall);
         this.candidatesFullList = res.filter(x => x.isReferred === true);
-        this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.lastName + ' ' + this.currentUser.firstName);
+        if (this.currentUser) {
+          this.candidateReferred = res.filter(x => x.referredBy === this.currentUser.username);
+        }
 
         this.facade.referralsService.updateList(this.candidateReferred);
         this.facade.referralsService.referrals.subscribe((referralList) => {
@@ -737,7 +739,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '50%',      
+      nzWidth: '50%',
       nzFooter: null,
       nzOnCancel: () => this.currentPosition = null
     });
@@ -755,7 +757,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       jobDescription: null,
       priority: null,
     };
-    
+
     const modal = this.facade.modalService.create({
       nzTitle: null,
       nzContent: ReferralsContactComponent,
@@ -772,7 +774,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
-  deleteReferral(referral: Candidate ){
+  deleteReferral(referral: Candidate) {
     this.facade.modalService.confirm({
       nzTitle: `Are you sure you want to delete ${referral.name} ${referral.lastName} ?`,
       nzContent: '',
@@ -783,16 +785,16 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
-  confirmDelete(referralId: number){
+  confirmDelete(referralId: number) {
     this.facade.appService.startLoading();
     this.facade.referralsService.delete(referralId)
-    .subscribe(() => {
-      this.facade.appService.stopLoading();
-      this.facade.toastrService.success('Referral was successfully deleted');
-    }, err => {
-      this.facade.appService.stopLoading();
-      this.facade.errorHandlerService.showErrorMessage(err, 'Referral cannot be deleted');
-    });
+      .subscribe(() => {
+        this.facade.appService.stopLoading();
+        this.facade.toastrService.success('Referral was successfully deleted');
+      }, err => {
+        this.facade.appService.stopLoading();
+        this.facade.errorHandlerService.showErrorMessage(err, 'Referral cannot be deleted');
+      });
   }
 
   showOpenPositionModal(modalContent: TemplateRef<{}>) {
@@ -988,37 +990,37 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  priorityChange(positionToEdit: OpenPosition){        
-    positionToEdit.priority = !positionToEdit.priority;    
+  priorityChange(positionToEdit: OpenPosition) {
+    positionToEdit.priority = !positionToEdit.priority;
     this.facade.openPositionService.update(positionToEdit.id, positionToEdit)
-    .subscribe(res => {
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });    
+      .subscribe(res => {
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
   applyFromDescription(position: OpenPosition) {
     this.facade.modalService.openModals[0].destroy();
     this.showContactCandidatesModal(this.newCandidate, position);
   }
-  
-  showJobDescription(position: OpenPosition, modalContent: TemplateRef<{}> ){            
+
+  showJobDescription(position: OpenPosition, modalContent: TemplateRef<{}>) {
     this.jobDescriptionContent = position.jobDescription;
     this.currentPosition = position;
     this.openDesc = true;
-    const modal = this.facade.modalService.create({      
+    const modal = this.facade.modalService.create({
       nzContent: modalContent,
       nzClosable: false,
       nzWidth: '60%',
-      nzFooter: null           
-    });    
+      nzFooter: null
+    });
   }
-  
-  closeJobDModal(){
+
+  closeJobDModal() {
     this.facade.modalService.openModals[0].destroy();
     this.openDesc = false;
   }
-  
+
   ngOnDestroy() {
     this.referralsSubscriptions.unsubscribe();
   }

@@ -249,7 +249,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.candidateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
     this.candidateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.candidateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
-    this.candidateForm.controls['user'].setValue(candidate.user.id);
+    candidate.user ? this.candidateForm.controls['user'].setValue(candidate.user.id) : null;
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
     this.candidateForm.controls['community'].setValue(candidate.community.id);
