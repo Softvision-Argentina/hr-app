@@ -22,7 +22,7 @@ namespace Domain.Services.Impl.Validators.Candidate
                 RuleFor(_ => _.EmailAddress)
                     .MaximumLength(ValidationConstants.MAX_INPUT_EMAIL)
                     .NotNull()
-                        .When(_ => string.IsNullOrEmpty(_.PhoneNumber));
+                        .When(_ => string.IsNullOrEmpty(_.PhoneNumber) || _.PhoneNumber.Length < 6);
 
                 RuleFor(_ => _.PhoneNumber)
                     .MaximumLength(ValidationConstants.MAX_PHONE_NUMBER)
