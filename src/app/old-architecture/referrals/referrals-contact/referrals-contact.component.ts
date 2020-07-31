@@ -181,6 +181,11 @@ export class ReferralsContactComponent implements OnInit {
         this.facade.referralsService.update(this.referralToEdit.id, editedCandidate)
           .subscribe(res => {
             this.facade.toastrService.success('Candidate was successfully edited !');
+            if (this.candidateForm.get('file').value) {
+              const file = new FormData();
+              file.append('file', this.candidateForm.get('file').value);
+              this.facade.referralsService.saveCv(res.id, file).subscribe()
+            }
             this.modalService.closeAll();
           }, err => {
             this.facade.errorHandlerService.showErrorMessage(err);
