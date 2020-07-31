@@ -69,7 +69,7 @@ export class ReferralsService extends BaseService<Candidate> {
   public saveCv(candidateId: number, formData: FormData): Observable<any> {
 
     const headers = { Authorization: this.headersWithAuth.get("Authorization") }
-    const cvApi = this.apiUrl.replace('Referrals', '') + 'cv/' + candidateId;
+    const cvApi = this.apiUrl.replace('Referrals', '').replace('Candidate', '') + 'cv/' + candidateId;
 
     return this.http
       .post<any>(cvApi, formData, {
