@@ -42,9 +42,9 @@
               {{ getCurrentStage(process.currentStage) }}
             </td>
             <td scope="row">
-              <a *ngIf="process.candidate.user" class="nameStyle" (click)="emitUserId(process.candidate.user.id)">
-                {{ process.candidate.user.firstName }}
-                {{ process.candidate.user.lastName }}
+              <a *ngIf="process.candidate.user" class="nameStyle" (click)="emitUserId(process.userOwner.id)">
+                {{ process.userOwner.firstName }}
+                {{ process.userOwner.lastName }}
               </a>
             </td>
             <td scope="row">
@@ -94,9 +94,9 @@
               {{ getCurrentStage(process.currentStage) }}
             </td>
             <td scope="row">
-              <a *ngIf="process.candidate.user" class="nameStyle" (click)="emitUserId(process.candidate.user.id)">
-                {{ process.candidate.user.firstName }}
-                {{ process.candidate.user.lastName }}
+              <a *ngIf="process.candidate.user" class="nameStyle" (click)="emitUserId(process.userOwner.id)">
+                {{ process.userOwner.firstName }}
+                {{ process.userOwner.lastName }}
               </a>
             </td>
             <td scope="row">
