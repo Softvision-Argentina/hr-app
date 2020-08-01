@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators, ValidatorFn } from '@angular/forms';
 import { CandidateStatusEnum } from '@app/shared/enums/candidate-status.enum';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
@@ -11,22 +11,14 @@ import { Process } from '@shared/models/process.model';
 import { Skill } from '@shared/models/skill.model';
 import { User } from '@shared/models/user.model';
 import { FacadeService } from '@shared/services/facade.service';
-import { UniqueEmailValidator } from '@shared/utils/email.validator';
+import { UniqueEmailValidator, checkIfEmailAndPhoneNulll } from '@shared/utils/email.validator';
 import { Globals } from '@shared/utils/globals';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
 import { ReferralsService } from '@shared/services/referrals.service';
 
-export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
-  if((c.get('email').value === null || c.get('email').value.length === 0)
-      && (c.get('phoneNumber').value === null || c.get('phoneNumber').value.length === 0)){
-      return {
-          'emailAndPhoneValidator': true
-      };
-  };
 
-  return null;
-}
+
 @Component({
   selector: 'candidate-add',
   templateUrl: './candidate-add.component.html',
@@ -103,15 +95,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     dni: [0],
-    email: [null,
-      {
-        validators: [Validators.email],
-        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-        updateOn: "blur"
-      }
-    ],
+    email: [null, [Validators.email]],
+
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
+    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     linkedin: [null],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
@@ -169,8 +156,8 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
         this.skipEmailCheck = true;
       }
     });
-
   }
+
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
       this.checkForm();
@@ -179,14 +166,15 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     else {
       return true;
     }
-
   }
+
   setRecruiter() {
     const currentRecruiter = this.fillUsers.find(user => user.username === this.currentUser.username);
     if(!!currentRecruiter) {
       this.candidateForm.controls['user'].setValue(currentRecruiter.id);
     }
   }
+
   checkForm() {
     for (const i in this.candidateForm.controls) {
       this.candidateForm.controls[i].markAsDirty();

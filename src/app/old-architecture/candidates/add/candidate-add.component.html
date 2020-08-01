@@ -46,18 +46,16 @@
     </div>
     <div nz-row>
         <div nz-col nzSpan="12">
-            <nz-form-item>
+            <nz-form-item
+                [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('email')}">E-mail</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input an email">
                     <ng-template #emailErrorMsg>
                         <ng-container *ngIf="!candidateInfo?.isReferred; else noExistingEmailCheck">
-                            <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
-                            && candidateForm.hasError('emailAndPhoneValidator')">
-                                Enter a valid e-mail address
-                            </ng-container>
-                            <ng-container *ngIf="candidateForm.get('email').hasError('email')">
+                            <ng-container class="ant-form-item-explain" Id="Error" Name="Error"
+                                *ngIf="candidateForm.get('email').hasError('email') && !candidateForm.get('email').hasError('emailAndPhoneValidator')">
                                 Enter a valid e-mail address
                             </ng-container>
                             <span>
@@ -69,22 +67,22 @@
 
                         <ng-template #noExistingEmailCheck>
                             <ng-container>
-                                <ng-container class="Error" Id="Error" Name="Error" *ngIf="candidateForm.get('email').dirty
-                                && candidateForm.hasError('emailAndPhoneValidator')">
-                                    Enter a valid e-mail address
-                                </ng-container>
-                                <ng-container *ngIf="candidateForm.get('email').hasError('email')">
+                                <ng-container
+                                    *ngIf="candidateForm.get('email').hasError('email') && !candidateForm.get('email').hasError('emailAndPhoneValidator')">
                                     Enter a valid e-mail address
                                 </ng-container>
                             </ng-container>
                         </ng-template>
-
                     </ng-template>
+                    <div *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator')"
+                        class="ant-form-item-explain">Please input a valid email or a valid phone number</div>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-            <nz-form-item>
+            <nz-form-item
+                [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty  || candidateForm.get('phoneNumber').dirty) && 
+            (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('phoneNumber').errors)) }">
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber"
                     [ngClass]="{'requiredFieldLabel': isRequiredField('phoneNumber')}">
                     Phone Number</nz-form-label>
@@ -97,17 +95,17 @@
                                 <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                             </nz-select>
                         </ng-template>
-                        <input formControlName="phoneNumber" id="phoneNumber" type="tel" pattern="^[0-9]+$" nz-input
+                        <input formControlName="phoneNumber" id="phoneNumber" type="text" pattern="^[0-9]+$" nz-input
                             placeholder="Please input a phone number">
                     </nz-input-group>
                     <ng-template #phoneNumberErrorMsg>
-                        <ng-container class="Error" Id="Error" Name="Error"
-                            *ngIf="candidateForm.get('phoneNumber').dirty
-                        && (candidateForm.get('phoneNumber').errors || candidateForm.hasError('emailAndPhoneValidator'))">
-                            Please input a phone number!
+                        <ng-container class="ant-form-item-explain" Id="Error" Name="Error"
+                            *ngIf="!candidateForm.get('phoneNumber').dirty || candidateForm.get('phoneNumber').errors">
+                            Please input a valid email or a valid phone number
                         </ng-container>
                     </ng-template>
                 </nz-form-control>
+
             </nz-form-item>
         </div>
     </div>

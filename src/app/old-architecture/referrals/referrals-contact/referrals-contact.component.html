@@ -6,9 +6,11 @@
             <div nz-row>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community</nz-form-label>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community
+                        </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="CommunityErrorMsg">
-                            <nz-select formControlName="community" [nzDisabled]="isEditReferral || !!this.position?.title">
+                            <nz-select formControlName="community"
+                                [nzDisabled]="isEditReferral || !!this.position?.title">
                                 <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
                                 </nz-option>
                             </nz-select>
@@ -22,10 +24,12 @@
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12" *ngIf="!!position?.title">
-                    <nz-form-item >
+                    <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Position">Position </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <input nz-input nz-tooltip nzTooltipTrigger="hover" nzTooltipPlacement="topLeft" [nzTooltipTitle]="'This cannot be changed'" formControlName="openPositionTitle" id="Position" readonly>
+                            <input nz-input nz-tooltip nzTooltipTrigger="hover" nzTooltipPlacement="topLeft"
+                                [nzTooltipTitle]="'This cannot be changed'" formControlName="openPositionTitle"
+                                id="Position" readonly>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -33,12 +37,14 @@
             <div nz-row>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name</nz-form-label>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name
+                        </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="firstNameErrorMsg">
                             <input type="text" nz-input formControlName="firstName" id="FirstName"
                                 placeholder="Please input the First Name">
                             <ng-template #firstNameErrorMsg>
-                                <ng-container *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
+                                <ng-container
+                                    *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
                                     <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
                                         Please input the First name!
                                     </ng-container>
@@ -49,12 +55,14 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name</nz-form-label>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name
+                        </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="lastNameErrorMsg">
                             <input type="text" nz-input formControlName="lastName" id="lastName"
                                 placeholder="Please input the last name">
                             <ng-template #lastNameErrorMsg>
-                                <ng-container *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
+                                <ng-container
+                                    *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
                                     <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
                                         Please input the last name!
                                     </ng-container>
@@ -66,26 +74,33 @@
             </div>
             <div nz-row>
                 <div nz-col nzSpan="12">
-                    <nz-form-item>
+                    <nz-form-item
+                        [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email" [hidden]="!visible">E-mail</nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="emailErroMsg">
                             <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                             <ng-template #emailErroMsg>
-                                <ng-container *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').hasError('email')">
+                                <ng-container
+                                    *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').hasError('email')">
                                     Enter a valid e-mail address
                                 </ng-container>
                                 <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
                                     E-mail address already exists
                                 </ng-container>
                             </ng-template>
+                            <div *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator')"
+                                class="ant-form-item-explain">Please enter a valid email or a valid phone number</div>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone</nz-form-label>
+                    <nz-form-item
+                        [ngClass]="{'ant-form-item-has-error': (candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator') }">
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone
+                        </nz-form-label>
                         <nz-form-control [nzSm]="14" [nzXs]="24"
-                            [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible" [nzErrorTip]="phoneNumberErrorMsg">
+                            [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible"
+                            [nzErrorTip]="phoneNumberErrorMsg">
                             <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
                                 <ng-template #addOnBeforeTemplate>
                                     <nz-select formControlName="phoneNumberPrefix">
@@ -93,12 +108,13 @@
                                         <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                                     </nz-select>
                                 </ng-template>
-                                <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" maxlength="13" minlength="10"
-                                    nz-input placeholder="Please input a phone number">
+                                <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$"
+                                    maxlength="13" minlength="10" nz-input placeholder="Please input a phone number">
                             </nz-input-group>
                             <ng-template #phoneNumberErrorMsg>
-                                <ng-container *ngIf="candidateForm.get('phoneNumber').dirty && candidateForm.get('phoneNumber').errors">
-                                    Please enter a valid phone number
+                                <ng-container
+                                    *ngIf="!candidateForm.get('phoneNumber').dirty || candidateForm.get('phoneNumber').errors">
+                                    Please enter a valid email or a valid phone number
                                 </ng-container>
                             </ng-template>
                         </nz-form-control>
@@ -112,11 +128,11 @@
                                 <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
                             </nz-upload>
                             <p nz-typography>File size must not exceed 6Mb</p>
-                            <ng-container class="Error" Id="Error" Name="Error"
-                            *ngIf="candidateForm.get('file').dirty
-                            && (candidateForm.get('file').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
-                            Please input a CV or a LinkedIn!
-                        </ng-container>
+                            <div style="color: red;"
+                                *ngIf="candidateForm.get('file').dirty
+                                && (candidateForm.get('file').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
+                                Please input a CV or a LinkedIn
+                            </div>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -124,16 +140,15 @@
                     <nz-form-item>
                         <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="link">
                             LinkedIn</nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" >
-                            <input nz-input formControlName="link" id="link"
-                                placeholder="Please input the LinkedIn">
-                                <ng-template #error>
-                                    <ng-container class="Error" Id="Error" Name="Error"
-                                        *ngIf="candidateForm.get('link').dirty
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="link" id="link" placeholder="Please input the LinkedIn">
+                            <ng-template #error>
+                                <ng-container class="Error" Id="Error" Name="Error"
+                                    *ngIf="candidateForm.get('link').dirty
                                         && (candidateForm.get('link').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
-                                        Please input a LinkedIn!
-                                    </ng-container>
-                                </ng-template>
+                                    Please input a LinkedIn!
+                                </ng-container>
+                            </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>

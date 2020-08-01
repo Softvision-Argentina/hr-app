@@ -684,6 +684,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   saveProcess() {
+    console.log(this.forms)
     if (this.validateForms()) {
       this.facade.appService.startLoading();
       let newCandidate: Candidate;
@@ -699,7 +700,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         newCandidate.source = this.candidateInfo.source;
         newCandidate.user = this.candidateInfo.user;
       }
-      console.log(newCandidate);
       newCandidate.candidateSkills = this.technicalStage.getFormDataSkills();
       newProcess = this.getProcessFormData();
       // temp fix, we should check if englishlevel should be in Candidate table and HrStage table

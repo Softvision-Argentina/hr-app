@@ -11,7 +11,7 @@ import { User } from '@shared/models/user.model';
 import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { BaseService } from '@shared/services/base.service';
 import { FacadeService } from '@shared/services/facade.service';
-import { UniqueEmailValidator } from '@shared/utils/email.validator';
+import { UniqueEmailValidator, checkIfEmailAndPhoneNulll } from '@shared/utils/email.validator';
 import { NzModalService, NzUploadFile } from 'ng-zorro-antd';
 
 export function checkIfCvAndLinkedinNulll(c: AbstractControl): ValidationErrors | null {
@@ -24,7 +24,6 @@ export function checkIfCvAndLinkedinNulll(c: AbstractControl): ValidationErrors 
 
   return null;
 }
-
 
 @Component({
   selector: 'app-referrals-contact',
@@ -60,8 +59,7 @@ export class ReferralsContactComponent implements OnInit {
     email: [null,
       {
         validators: [Validators.email],
-        asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-        updateOn: "blur"
+        asyncValidators: UniqueEmailValidator(this.facade.candidateService), updateOn: 'blur'
       }
     ],
     link: [null],
@@ -70,7 +68,7 @@ export class ReferralsContactComponent implements OnInit {
     community: [null, [Validators.required]],
     file: [''],
     openPositionTitle:[null, {disabled: true}]
-  }, { validator: checkIfCvAndLinkedinNulll });
+  }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll]});
   visible = true;
   isNewCandidate = false;
 
@@ -148,7 +146,7 @@ export class ReferralsContactComponent implements OnInit {
       knownFrom: [null],
       cv: [null],
       referredBy: [null]
-    });
+    }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll]    });
   }
 
     saveEdit() {
@@ -198,7 +196,11 @@ export class ReferralsContactComponent implements OnInit {
     let isCompleted = true;
 
     if (this.candidateForm.invalid) {
+        console.log(this.candidateForm.status)
+        console.log(this.candidateForm.get('email').hasError('emailAndPhoneValidator'));
         this.checkForm();
+        console.log(this.candidateForm.status);
+        console.log(this.candidateForm.get('email').hasError('emailAndPhoneValidator'));
         isCompleted = false;
       }
       else {
@@ -263,8 +265,14 @@ export class ReferralsContactComponent implements OnInit {
   checkForm() {
       for (const i in this.candidateForm.controls) {
         this.candidateForm.controls[i].markAsDirty();
-        this.candidateForm.controls[i].updateValueAndValidity();
+        if(this.candidateForm.controls[i] !== this.candidateForm.controls['email'] ||
+           this.candidateForm.controls[i] !== this.candidateForm.controls['email'] )
+        {
+          this.candidateForm.controls[i].updateValueAndValidity();
+        }
+        //this.candidateForm.controls[i].updateValueAndValidity();
       }
+      //this.candidateForm.updateValueAndValidity();
     }
 
   clearDataAndCloseModal() {
