@@ -26,7 +26,6 @@ import { ReferralsService } from '@shared/services/referrals.service';
 })
 export class CandidateAddComponent implements OnInit, OnDestroy {
   candidateInfo: Candidate;
-  skipEmailCheck = false;
 
   @Input()
     private _process: Process;
@@ -139,7 +138,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.comms = this._communities;
     this.comms.sort((a,b) => (a.name.localeCompare(b.name)));
     this.profiles = this._candidateProfiles;
-    this.profiles.sort((a,b) => (a.name.localeCompare(b.name)));
+    this.profiles.sort((a, b) => (b.id - a.id));
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {
@@ -153,7 +152,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (this.candidateInfo) {
         this.fillCandidateForm(this.candidateInfo);
-        this.skipEmailCheck = true;
       }
     });
   }

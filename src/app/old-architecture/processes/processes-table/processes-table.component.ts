@@ -42,9 +42,9 @@ export class ProcessTableComponent implements OnChanges {
         this.seniorityList = globals.seniorityList;
 
     }
+
     ngOnChanges() {
         if (this.profiles && this.communities) {
-            this.profiles = this.profiles.filter(profile => profile.name != 'N/A');
             this.communities = this.communities.filter(community => community.name != 'N/A');
             this.statusList = this.statusList.filter(status => status.name != 'N/A');
             this.currentStageList = this.currentStageList.filter(currentStage => currentStage.name != 'N/A');

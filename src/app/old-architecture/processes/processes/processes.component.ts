@@ -255,6 +255,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.candidateProfileService.get()
       .subscribe(res => {
         this.profiles = res;
+        this.profiles.sort((a, b) => (b.id - a.id));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
