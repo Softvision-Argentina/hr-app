@@ -181,8 +181,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.declineProcessForm = this.formBuilder.group({
       declineReasonDescription: [null, [Validators.required]],
       declineReasonName: [null, [Validators.required]]
-    });
-    this.getNotifications();
+    });    
 
     setTimeout(() => {
       if (this.modalStart === true) {
@@ -225,26 +224,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     }, err => {
       console.log(err);
     });
-  }
-
-  getNotifications() {
-    this.facade.NotificationSevice.getNotifications()
-      .subscribe(res => {
-        this.notis = res;
-        this.notisCount = res.length;
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-  }
-
-  readNotification(id: number) {
-    this.facade.NotificationSevice.readNotifications(id)
-      .subscribe(err => {
-        console.log(err);
-        this.visible = false;
-        this.notisCount = this.notisCount - 1;
-        this.getNotifications();
-      });
   }
 
   change(value: boolean): void {
