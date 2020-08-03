@@ -88,7 +88,7 @@ export class Globals {
   ];
 
   englishLevelList: any[] = [
-    { id: EnglishLevelEnum.None, name: 'None' }, { id: EnglishLevelEnum.LowIntermediate, name: 'Low Intermediate' },
+    { id: EnglishLevelEnum.None, name: 'N/A' }, { id: EnglishLevelEnum.LowIntermediate, name: 'Low Intermediate' },
     { id: EnglishLevelEnum.HighIntermediate, name: 'High Intermediate' }, { id: EnglishLevelEnum.Advanced, name: 'Advanced' },
   ];
 
