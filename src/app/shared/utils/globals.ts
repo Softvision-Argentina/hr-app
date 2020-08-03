@@ -16,7 +16,7 @@ import { SeniorityForOpenPositionsEnum } from '@shared/enums/seniority-for-open-
 @Injectable()
 export class Globals {
   seniorityList: any[] = [
-    { id: SeniorityEnum.NA, name: 'NA' }, { id: SeniorityEnum.Junior1, name: 'Junior 1' },
+    { id: SeniorityEnum.NA, name: 'N/A' }, { id: SeniorityEnum.Junior1, name: 'Junior 1' },
     { id: SeniorityEnum.Junior2, name: 'Junior 2' },
     { id: SeniorityEnum.SemiSenior1, name: 'Semi-Senior 1' }, { id: SeniorityEnum.SemiSenior2, name: 'Semi-Senior 2' },
     { id: SeniorityEnum.SemiSenior3, name: 'Semi-Senior 3' },
@@ -25,7 +25,7 @@ export class Globals {
   ];
 
   seniorityListForAddPosition: any[] = [
-    { id: SeniorityForOpenPositionsEnum.NA, name: 'NA' },
+    { id: SeniorityForOpenPositionsEnum.NA, name: 'N/A' },
     { id: SeniorityForOpenPositionsEnum.Junior, name: 'Junior' },
     { id: SeniorityForOpenPositionsEnum.MidLevel, name: 'Mid Level' },
     { id: SeniorityForOpenPositionsEnum.Senior, name: 'Senior' }
