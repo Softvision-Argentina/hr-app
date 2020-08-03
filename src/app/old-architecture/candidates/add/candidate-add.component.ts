@@ -121,7 +121,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   statusList: any[];
   candidates: Candidate[] = [];
   candidateSubscription: Subscription;
-  selectedValue = 1;
+  selectedValue = 3;
   selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
