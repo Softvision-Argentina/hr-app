@@ -16,6 +16,9 @@ export function UniqueEmailValidator(candidateService: CandidateService): AsyncV
 }
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
+  c.get('email').setErrors(null);
+  c.get('phoneNumber').setErrors(null);
+
   if ((c.get('email').value === null || c.get('email').value.length === 0)
     && (c.get('phoneNumber').value === null || c.get('phoneNumber').value.length === 0)) {
     c.get('email').setErrors({ emailAndPhoneValidator: true });
