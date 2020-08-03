@@ -122,7 +122,8 @@
                     [ngClass]="{'requiredFieldLabel': isRequiredField('seniority')}">
                     Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="seniorityErrorMsg">
-                    <nz-select #senioritySelect formControlName="seniority" (ngModelChange)="updateSeniority(senioritySelect.activatedValue)">
+                    <nz-select #senioritySelect formControlName="seniority" 
+                        (ngModelChange)="updateSeniority(senioritySelect.activatedValue)" nzPlaceHolder="Select a seniority level">
                         <nz-option *ngFor="let seniority of seniorityList | slice: 1" nzLabel="{{seniority.name}}"
                             [nzValue]="seniority.id">
                         </nz-option>
@@ -144,7 +145,7 @@
                     Alternative Seniority</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="alternateSeniorityErrorMsg">
                     <nz-select #alternativeSeniority formControlName="alternativeSeniority"
-                        (ngModelChange)="updateAlternativeSeniority(alternativeSeniority.activatedValue)">
+                        (ngModelChange)="updateAlternativeSeniority(alternativeSeniority.activatedValue)" nzPlaceHolder="Select a seniority level">
                         <span *ngFor="let seniority of seniorityList">
                             <nz-option *ngIf="chosenSeniority === 0 && seniority.id === 1
                                 ; else anotherChosenSeniority" nzLabel="{{seniority.name}}" [nzValue]="seniority.id">
