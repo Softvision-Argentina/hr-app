@@ -420,13 +420,17 @@
                         </div>
                     </nz-form-control>
                 </nz-form-item>
-                <nz-form-item>
-                    <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:4}">
-                        <button nz-button nzType="dashed" class="button-skills" (click)="addField($event)"><i nz-icon
-                                type="plus"></i>
-                            Add Skill</button>
-                    </nz-form-control>
-                </nz-form-item>
+                <div nz-row nzJustify="center">
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-control >
+                                <button nz-button nzType="dashed" style="width:100%" (click)="addField($event)">
+                                    <i nz-icon nzType="plus"></i>
+                                    Add Skill</button>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
