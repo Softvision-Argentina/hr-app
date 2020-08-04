@@ -13,24 +13,27 @@ using Domain.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace ApiServer.Controllers
 {
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IOptions<AppSettings> _appSettings;
 
         public AuthController(
-            IConfiguration configuration, 
             IUserService userService, 
-            IMapper mapper)
+            IMapper mapper,
+            IOptions<AppSettings> appSettings)
+
         {
-            this._configuration = configuration;
             this._userService = userService;
             this._mapper = mapper;
+            this._appSettings = appSettings;
         }
 
         [HttpPost, Route("login")]
@@ -41,10 +44,10 @@ namespace ApiServer.Controllers
 
             var jwtSettings = new JwtSettings
             {
-                Key = _configuration["jwtSettings:key"],
-                Issuer = _configuration["jwtSettings:issuer"],
-                Audience = _configuration["jwtSettings:audience"],
-                MinutesToExpiration = int.Parse(_configuration["jwtSettings:minutesToExpiration"])
+                Key = _appSettings.Value.JwtSettings.Key,
+                Issuer = _appSettings.Value.JwtSettings.Issuer,
+                Audience = _appSettings.Value.JwtSettings.Audience,
+                MinutesToExpiration = int.Parse(_appSettings.Value.JwtSettings.MinutesToExpiration)
             };
 
             var userContract = _userService.Authenticate(user.UserName, user.Password);
@@ -69,10 +72,10 @@ namespace ApiServer.Controllers
         {
             var jwtSettings = new JwtSettings
             {
-                Key = _configuration["jwtSettings:key"],
-                Issuer = _configuration["jwtSettings:issuer"],
-                Audience = _configuration["jwtSettings:audience"],
-                MinutesToExpiration = int.Parse(_configuration["jwtSettings:minutesToExpiration"])
+                Key = _appSettings.Value.JwtSettings.Key,
+                Issuer = _appSettings.Value.JwtSettings.Issuer,
+                Audience = _appSettings.Value.JwtSettings.Audience,
+                MinutesToExpiration = int.Parse(_appSettings.Value.JwtSettings.MinutesToExpiration)
             };
 
             try

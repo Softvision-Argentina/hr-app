@@ -6,16 +6,21 @@ using Core.Testing.Platform;
 using Domain.Services.ExternalServices;
 using Domain.Services.ExternalServices.Config;
 using Microsoft.Extensions.Configuration;
+using Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace ApiServer.FunctionalTests.Fixture
 {
     public class AuthControllerFixture : BaseFunctionalTestFixture
     {
         public IConfiguration Configuration { get; }
+        private readonly AppSettings _appSettings;
+
         public AuthControllerFixture()
         {
             Configuration = Server.Host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
             ControllerName = "Auth";
+            _appSettings = Configuration.Get<AppSettings>();
         }
 
         public enum TokenType
@@ -28,14 +33,14 @@ namespace ApiServer.FunctionalTests.Fixture
         {
             int GetTokenExpiration()
             {
-                return tokenType == TokenType.Valid ? int.Parse(Configuration["jwtSettings:minutesToExpiration"]) : 0;
+                return tokenType == TokenType.Valid ? int.Parse(_appSettings.JwtSettings.MinutesToExpiration) : 0;
             }
 
             var jwtSettings = new JwtSettings
             {
-                Key = Configuration["jwtSettings:key"],
-                Issuer = Configuration["jwtSettings:issuer"],
-                Audience = Configuration["jwtSettings:audience"],
+                Key = _appSettings.JwtSettings.Key,
+                Issuer = _appSettings.JwtSettings.Issuer,
+                Audience = _appSettings.JwtSettings.Audience,
                 MinutesToExpiration = GetTokenExpiration()
             };
 

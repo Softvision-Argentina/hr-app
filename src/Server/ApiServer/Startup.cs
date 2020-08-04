@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Domain.Model;
 
 namespace ApiServer
 {
@@ -39,25 +40,29 @@ namespace ApiServer
         {
             Configuration = configuration;
 
-            DatabaseConfigurations = new DatabaseConfigurations(
-                Configuration.GetValue("InMemoryDatabase", false),
-                Configuration.GetValue("RunMigrations", false),
-                Configuration.GetValue("RunSeed", false),
-                Configuration.GetConnectionString("SeedDB")
-            );
+            var appsettings = Configuration.Get<AppSettings>();
 
-            UseTestingAuthentication = Configuration.GetValue("UseTestAuthentication", false);
+            DatabaseConfigurations = new DatabaseConfigurations(
+                                 appsettings.InMemoryDatabase,
+                                 appsettings.RunMigrations,
+                                 appsettings.RunSeed,
+                                 appsettings.ConnectionStrings.SeedDB
+             );
+
+            UseTestingAuthentication = appsettings.UseTestAuthentication;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            var appsettings = Configuration.Get<AppSettings>();
+
             var jwtSettings = new JwtSettings
             {
-                Key = Configuration["jwtSettings:key"],
-                Issuer = Configuration["jwtSettings:issuer"],
-                Audience = Configuration["jwtSettings:audience"],
-                MinutesToExpiration = int.Parse(Configuration["jwtSettings:minutesToExpiration"])
+                Key = appsettings.JwtSettings.Key,
+                Issuer = appsettings.JwtSettings.Issuer,
+                Audience = appsettings.JwtSettings.Audience,
+                MinutesToExpiration = int.Parse(appsettings.JwtSettings.MinutesToExpiration)
             };
             services.AddSingleton(jwtSettings);
 
@@ -163,6 +168,7 @@ namespace ApiServer
 
             services.AddSingleton(mailConfig);
             services.AddScoped<IMailSender, MailSender>();
+            services.Configure<AppSettings>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -183,7 +189,7 @@ namespace ApiServer
             });
 
             app.UseCors((option) =>
-                option.WithOrigins(Configuration["corsWhiteList"].Split(','))
+                option.WithOrigins(Configuration["Corswhitelist"].Split(','))
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
