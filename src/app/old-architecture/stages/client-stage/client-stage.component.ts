@@ -102,7 +102,7 @@ export class ClientStageComponent implements OnInit {
 
     this.currentStageStatus = this.clientStage.status;
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
-    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
     
     this.selectedReason = undefined;
     this.readdressStatus.feedback = undefined;

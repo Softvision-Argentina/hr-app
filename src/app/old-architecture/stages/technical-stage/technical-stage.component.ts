@@ -103,7 +103,7 @@ export class TechnicalStageComponent implements OnInit {
   ngOnInit() {
     this.currentStageStatus = this.technicalStage.status;
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
-    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
 
     this.selectedReason = undefined;
     this.readdressStatus.feedback = undefined;
@@ -211,7 +211,7 @@ export class TechnicalStageComponent implements OnInit {
     //proceso por ejecutar en el onInit el fillform() adentro del subscribe de getFilteredUsersForTech,
     // lo cual dispara toda la logica adentro aun cuando el status no sufrio ningun cambio
     
-    if (status == this.technicalStage.status){
+    if (status == this.currentStageStatus){
       return;
     }
     this.readdressStatus.readdressReasonId = undefined;

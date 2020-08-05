@@ -101,8 +101,8 @@ export class PreOfferStageComponent implements OnInit {
     this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
     this.currentStageStatus = this.preOfferStage.status;
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
-    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-
+    this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    
     this.selectedReason = undefined;
     this.readdressStatus.feedback = undefined;
     this.readdressStatus.fromStatus = undefined;
