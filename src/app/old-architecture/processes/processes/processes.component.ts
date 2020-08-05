@@ -135,7 +135,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   currentStage: ProcessCurrentStageEnum;
   candidateInfo: Candidate;
 
-  preOfferData: { tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum } = null;
+  preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum, notes: String} = null;
 
   constructor(
     private facade: FacadeService,
@@ -1134,7 +1134,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               bonus: mainAcceptedPreOffer.bonus,
               grossSalary: mainAcceptedPreOffer.salary,
               vacationDays: mainAcceptedPreOffer.vacationDays,
-              healthInsurance: mainAcceptedPreOffer.healthInsurance
+              healthInsurance: mainAcceptedPreOffer.healthInsurance,
+              notes: mainAcceptedPreOffer.notes
             };
           }
         }

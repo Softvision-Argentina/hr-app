@@ -52,6 +52,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
   healthInsuranceControl: AbstractControl;
   bonusControl: AbstractControl;
   hireDateControl: AbstractControl;
+  notesControl: AbstractControl;
 
   feedbackContent:string = "";
 
@@ -66,7 +67,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
   @Input() offerStage: OfferStage;
   @Output() selectedSeniority = new EventEmitter();
 
-  @Input() preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum} = null;
+  @Input() preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum, notes: String} = null;
 
   constructor(
     private fb: FormBuilder,
@@ -95,6 +96,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
       this.remunerationOfferControl.setValue(this.preOfferData.grossSalary);
       this.vacationDaysControl.setValue(this.preOfferData.vacationDays);
       this.healthInsuranceControl.setValue(this.preOfferData.healthInsurance);
+      this.notesControl.setValue(this.preOfferData.notes);
     }
   }
 
@@ -289,5 +291,6 @@ export class OfferStageComponent implements OnInit, OnChanges {
     this.healthInsuranceControl = this.offerForm.controls["healthInsurance"];
     this.bonusControl = this.offerForm.controls["bonus"];
     this.hireDateControl = this.offerForm.controls["hireDate"];
+    this.notesControl = this.offerForm.controls["notes"];
   }
 }
