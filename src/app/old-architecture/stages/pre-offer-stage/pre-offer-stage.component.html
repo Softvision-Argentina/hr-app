@@ -93,7 +93,7 @@
                     [ngClass]="{'requiredFieldLabel': isRequiredField('date')}">
                     Birth Date</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dateOfBirthErrorMsg">
-                    <nz-date-picker style="width: 100%;" formControlName="date"></nz-date-picker>
+                    <nz-date-picker style="width: 100%;" formControlName="date" [nzDisabledDate]="disabledBirthDates"></nz-date-picker>
                     <ng-template #dateOfBirthErrorMsg>
                         <ng-container *ngIf="preOfferForm.get('date').dirty && preOfferForm.get('date').errors">
                             Please input a date

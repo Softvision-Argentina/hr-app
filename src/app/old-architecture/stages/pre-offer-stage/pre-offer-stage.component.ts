@@ -75,7 +75,7 @@ export class PreOfferStageComponent implements OnInit {
   currentReaddressDescription: string = "";
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
-  selectedReason: string;
+  selectedReason: string;  
 
   @Input() preOfferStage: PreOfferStage;
   @Input() readdressReasonList: ReaddressReason[] = [];
@@ -346,5 +346,16 @@ export class PreOfferStageComponent implements OnInit {
 
   onDescriptionChange(description: string): void {
     this.readdressStatus.feedback = description;
+  }
+
+  disabledBirthDates(current: Date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    current.setHours(0, 0, 0, 0);
+    if(current > today){
+      return true;
+    } else{
+      return false;
+    }
   }
 }
