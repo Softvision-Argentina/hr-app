@@ -26,13 +26,13 @@ export class PreOfferHistory implements OnInit, OnDestroy {
   @Input() preOfferStatus:number;
 
   editForm: FormGroup = this.fb.group({
-    preOfferDate: [new Date()],
+    preOfferDate: [],
     salary: [null, [Validators.required, Validators.min(1)]],
     vacationDays: [null, [Validators.required, Validators.min(0)]],
     healthInsurance: [0, [Validators.required, Validators.min(1)]],
     notes: [null],
     bonus: [null],
-    tentativeStartDate: [new Date()], //Check validator
+    tentativeStartDate: [], //Check validator
   });
 
   addPreOfferButton = {
@@ -53,7 +53,6 @@ export class PreOfferHistory implements OnInit, OnDestroy {
   preOfferOperations: { operation: string; data: PreOffer }[] = [];
   processSaveSubscription: Subscription;
   offerCounter:number = 0;
-  tomorrow = new Date();
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.preOfferStatusList = globals.preOfferStatusList;
     this.healthInsuranceList = globals.healthInsuranceList;
@@ -61,8 +60,6 @@ export class PreOfferHistory implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getPreOffers();
-    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
-    this.editForm.get('tentativeStartDate').setValue(this.tomorrow);
     this.processSaveSubscription = this.facade.processService.currentId.subscribe(res => this.savePreOfferInDatabase(res));
   }
 
@@ -252,8 +249,6 @@ export class PreOfferHistory implements OnInit, OnDestroy {
 
     this.editForm.reset();
     this.editForm.controls['healthInsurance'].setValue(0);
-    this.editForm.controls['preOfferDate'].setValue(new Date());
-    this.editForm.controls['tentativeStartDate'].setValue(this.tomorrow);
   }
 
   getStatusColor(status: number): string {
