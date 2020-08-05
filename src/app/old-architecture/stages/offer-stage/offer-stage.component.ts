@@ -4,6 +4,7 @@ import { HealthInsuranceEnum } from '@shared/enums/health-insurance.enum';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
 import { OfferStage } from '@shared/models/offer-stage.model';
 import { User } from '@shared/models/user.model';
+import { DefaultDate } from '@shared/models/default-date.model';
 import { ProcessService } from '@shared/services/process.service';
 import { Globals } from '@shared/utils/globals';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
@@ -14,6 +15,7 @@ import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
   styleUrls: ['./offer-stage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class OfferStageComponent implements OnInit, OnChanges {
 
   @Input()
@@ -33,13 +35,13 @@ export class OfferStageComponent implements OnInit, OnChanges {
     userDelegateId: [null],
     feedback: '',
     seniority: [0, [Validators.required]],
-    remunerationOffer: [0, [Validators.required]],
-    vacationDays: [0, [Validators.required]],
-    healthInsurance: [0, [Validators.required]],
+    remunerationOffer: [null, [Validators.required]], 
+    vacationDays: [null, [Validators.required]], 
+    healthInsurance: [0, [Validators.required, Validators.min(HealthInsuranceEnum.OSDE210)]],
     notes: '',
     firstday: [new Date(), [Validators.required]],
     bonus: '',
-    hireDate: [new Date(), [Validators.required]],
+    hireDate: [null, Validators.required], 
     backgroundCheckDone: false,
     backgroundCheckDoneDate: [new Date(), [Validators.required]],
     preocupationalDone: false,
@@ -85,7 +87,6 @@ export class OfferStageComponent implements OnInit, OnChanges {
     });
     this.changeFormStatus(false);
     if (this.offerStage) { this.fillForm(this.offerStage); }
-
     this.setAbstractControls();
   }
 
@@ -153,13 +154,13 @@ export class OfferStageComponent implements OnInit, OnChanges {
     stage.processId = processId;
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority);
-    stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer);
-    stage.vacationDays = this.getControlValue(form.controls.vacationDays);
+    stage.remunerationOffer = this.getControlValue(form.controls.remunerationOffer) === null ? 0 : this.getControlValue(form.controls.remunerationOffer);
+    stage.vacationDays = this.getControlValue(form.controls.vacationDays) === null ? 0 : this.getControlValue(form.controls.vacationDays);
     stage.healthInsurance = this.getControlValue(form.controls.healthInsurance);
     stage.notes = this.getControlValue(form.controls.notes);
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
-    stage.hireDate = this.getControlValue(form.controls.hireDate);
+    stage.hireDate = this.getControlValue(form.controls.hireDate) === null ? new DefaultDate().getDefault() : this.getControlValue(form.controls.hireDate);
     stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
     stage.backgroundCheckDoneDate = stage.backgroundCheckDone ? this.getControlValue(form.controls.backgroundCheckDoneDate) : null;
     stage.preocupationalDone = this.getControlValue(form.controls.preocupationalDone);
@@ -174,7 +175,6 @@ export class OfferStageComponent implements OnInit, OnChanges {
 
   fillForm(offerStage: OfferStage) {
     const status: number = this.statusList.filter(s => s.id === offerStage.status)[0].id;
-
     if (status === StageStatusEnum.InProgress) {
       this.changeFormStatus(true);
     }
@@ -197,8 +197,11 @@ export class OfferStageComponent implements OnInit, OnChanges {
       this.offerForm.controls['seniority'].setValue(offerStage.seniority);
     }
 
-    if (offerStage.hireDate) {
-      this.offerForm.controls['hireDate'].setValue(offerStage.hireDate);
+    if (offerStage.id !== 0 && offerStage.hireDate) {
+      const defaultDate = new DefaultDate();
+      if(!defaultDate.isEqualToDateTime2(offerStage.hireDate)){
+        this.offerForm.controls['hireDate'].setValue(offerStage.hireDate);
+      }
     }
 
     if (offerStage.feedback) {
