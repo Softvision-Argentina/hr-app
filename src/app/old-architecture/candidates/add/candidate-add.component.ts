@@ -145,6 +145,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       this.fillCandidate = this._candidate;
       this.fillCandidateForm(this._process.candidate);
       this.changeFormStatus(false);
+      this.enableEmptyFields();
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
@@ -307,6 +308,23 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.candidateSubscription.unsubscribe();
+  }
+
+  enableEmptyFields() {
+    let phoneNumberControl = this.candidateForm.controls["phoneNumber"];
+    let emailControl = this.candidateForm.controls["email"];
+
+    if(phoneNumberControl.value === null || phoneNumberControl.value === '') {
+      phoneNumberControl.enable();
+    }
+    if(emailControl.value === null) {
+      emailControl.enable();
+    }
+    
+    this.candidateForm.controls["preferredOffice"].enable();
+    this.candidateForm.controls["linkedin"].enable();
+    this.candidateForm.controls["profile"].enable();
+    this.candidateForm.controls["source"].enable();
   }
 
 }
