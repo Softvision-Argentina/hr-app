@@ -78,7 +78,7 @@ export class NavMenuComponent implements OnInit {
           case '/dashboard':
             this.searchbarPlaceholder = 'Search for a dashboard';
             break;
-          case '/':
+          case '/processes':
             this.searchbarPlaceholder = 'Search for a Process using candidate\'s name';
             break;
           case '/people':
@@ -88,7 +88,7 @@ export class NavMenuComponent implements OnInit {
             this.searchbarPlaceholder = 'Search for a Task';
             break;
           case '/daysOff':
-            this.searchbarPlaceholder = 'Search for a candidate\'s daysoff using his/her Dni';
+            this.searchbarPlaceholder = 'Search for a candidate\'s daysoff using his/her DNI';
             break;
           case '/referrals':
             this.searchbarPlaceholder = 'Search for your own referrals';

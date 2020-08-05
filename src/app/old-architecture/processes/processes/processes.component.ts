@@ -296,18 +296,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getUserProcesses() {
+    
     const userProcessesSubscription = this.facade.processService.getData()
       .subscribe(res => {
-        const result = [];
+        let result = [];
         if (!!res) {
-          for (let i = 0; i < res.length; i++) {
-            if (res[i].userOwner !== null && typeof res[i].userOwner !== 'undefined') {
-              const sessionConsultant = res[i].userOwner.firstName + ' ' + res[i].userOwner.lastName;
-              if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
-                result.push(res[i]);
+          result = res.filter(res => {
+            if (res.userOwner !== null && typeof res.userOwner !== 'undefined') {
+              if (res.userOwner.id === this.currentUser.id) {
+                return res;
               }
             }
-          }
+          });
           this.listOfDisplayOwnData = result;
           this.filteredOwnProcesses = result;
           const newProc: Process = result[result.length - 1];
@@ -339,14 +339,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
 
       this.listOfDisplayData = allProcesses;
-      this.listOfDisplayOwnData = ownProcesses.filter(res => {
-        if (res.candidate.user !== null && typeof res.candidate.user !== 'undefined') {
-          const sessionConsultant = res.candidate.user.firstName + ' ' + res.candidate.user.lastName;
-          if (sessionConsultant === this.currentUser.firstName + ' ' + this.currentUser.lastName) {
-            return res;
-          }
-        }
-      });
+      this.listOfDisplayOwnData = ownProcesses;
     });
     this.processesSubscription.add(this.searchSub);
   }
