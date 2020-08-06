@@ -37,6 +37,9 @@ Colors and decorations
 @import 'themes/summer-sunset';
 
 
-/* This file is intented to have the old global styles, 
+/* This file is intented to have the old global styles,
 but should be removed in the future and organize the styles this file has */
 @import 'globals';
+
+
+@import 'breakpoints/breakpoints.scss';
