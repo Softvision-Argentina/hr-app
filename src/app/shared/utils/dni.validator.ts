@@ -6,11 +6,6 @@ export const dniValidator: ValidatorFn = (control: FormControl): { [key: string]
     let shortNumber = /^\d{1,7}$/,
         firstDigit0 = /^[0]{1}/;
 
-    if (control.value == null) {
-        return {
-            'emptyInputError': true
-        };
-    }
     if (firstDigit0.test(control.value)) {
         return {
             'dniFirstDigitError': true

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
 import { PreOfferStage } from '@shared/models/pre-offer-stage.model';
@@ -20,7 +20,7 @@ import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.componen
   providers: [PreOfferHistory]
 })
 
-export class PreOfferStageComponent implements OnInit {
+export class PreOfferStageComponent implements OnInit, OnChanges {
 
   @Input()
   private _users: User[];
@@ -37,7 +37,7 @@ export class PreOfferStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [],
-    dni: [0, [Validators.required, dniValidator]],
+    dni: [null, [dniValidator]],
     userOwnerId: null,
     userDelegateId: [null],
     feedback: '',
@@ -126,6 +126,10 @@ export class PreOfferStageComponent implements OnInit {
     this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
   }
 
+  ngOnChanges() {
+    this.setDniValidations();
+  }
+
   updateSeniority(seniorityId) {
     this.selectedSeniority.emit(seniorityId);
   }
@@ -135,12 +139,18 @@ export class PreOfferStageComponent implements OnInit {
   }
 
   changeFormStatus(enable: boolean) {
+    const statusControl = this.preOfferForm.controls['status'];
+    const dniControl = this.preOfferForm.controls['dni'];
+
     for (const i in this.preOfferForm.controls) {
-      if (this.preOfferForm.controls[i] !== this.preOfferForm.controls['status']) {
+      if (this.preOfferForm.controls[i] !== statusControl) {
         if (enable) {
           this.preOfferForm.controls[i].enable();
         } else {
           this.preOfferForm.controls[i].disable();
+          if(this.currentStageStatus === StageStatusEnum.Accepted && this.preOfferForm.controls[i] === dniControl) {
+            this.preOfferForm.controls[i].enable();
+          }
         }
       }
     }
@@ -357,5 +367,19 @@ export class PreOfferStageComponent implements OnInit {
     } else{
       return false;
     }
+  }
+
+  setDniValidations() {
+    const dniControl = this.preOfferForm.controls['dni'];
+    const statusControl = this.preOfferForm.controls['status'];
+    statusControl.valueChanges.subscribe(status => {
+        if (status === StageStatusEnum.Accepted) {
+          dniControl.setValidators([Validators.required, dniValidator]);
+        }
+        else {
+          dniControl.setValidators([dniValidator]);
+        }
+        dniControl.updateValueAndValidity();
+      });
   }
 }

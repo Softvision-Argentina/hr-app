@@ -55,7 +55,7 @@ export class TechnicalStageComponent implements OnInit {
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
     seniority: [null, [Validators.required]],
-    alternativeSeniority: [0, [Validators.required]],
+    alternativeSeniority: [null],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
     feedback: [null],
@@ -140,24 +140,25 @@ export class TechnicalStageComponent implements OnInit {
   }
 
     updateSeniority(seniorityId: number) {
-        this.technicalForm.controls['alternativeSeniority'].enable();
-    if (this.chosenSeniority) {
-      if (this.chosenSeniority !== seniorityId + 1 && this.chosenSeniority !== seniorityId - 1) {
-        this.technicalForm.controls['alternativeSeniority'].setValue(0);
+      this.technicalForm.controls['alternativeSeniority'].enable();
+      this.technicalForm.controls["alternativeSeniority"].setValue(null);
+      if (this.chosenSeniority) {
+        if (this.chosenSeniority !== seniorityId + 1 && this.chosenSeniority !== seniorityId - 1) {
+          this.technicalForm.controls['alternativeSeniority'].setValue(0);
+        }
       }
-    }
-    this.chosenSeniority = seniorityId;
-    this.selectedSeniority.emit(seniorityId);
-    this.selectedSeniorities = [];
-    if (seniorityId !== this.seniorityList.find(
-      s => s.id === this.technicalForm.controls['alternativeSeniority'].value).id) {
-      this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
-      // N/A should be shown in offer stage?
-      this.selectedSeniorities[1] = this.seniorityList.find(s => s.id === this.technicalForm.controls['alternativeSeniority'].value);
-    } else {
-      this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
-    }
-    this.processService.changeSeniority(this.selectedSeniorities);
+      this.chosenSeniority = seniorityId;
+      this.selectedSeniority.emit(seniorityId);
+      this.selectedSeniorities = [];
+      if (seniorityId !== this.seniorityList.find(
+        s => s.id === this.technicalForm.controls['alternativeSeniority'].value).id) {
+        this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
+        // N/A should be shown in offer stage?
+        this.selectedSeniorities[1] = this.seniorityList.find(s => s.id === this.technicalForm.controls['alternativeSeniority'].value);
+      } else {
+        this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
+      }
+      this.processService.changeSeniority(this.selectedSeniorities);
   }
 
   updateAlternativeSeniority(seniorityId) {
@@ -245,7 +246,7 @@ export class TechnicalStageComponent implements OnInit {
     stage.processId = processId;
     stage.userDelegateId = this.getControlValue(form.controls.userDelegateId);
     stage.seniority = this.getControlValue(form.controls.seniority) === null ? 0 : this.getControlValue(form.controls.seniority);
-    stage.alternativeSeniority = this.getControlValue(form.controls.alternativeSeniority);
+    stage.alternativeSeniority = this.getControlValue(form.controls.alternativeSeniority) === null ? 0 : this.getControlValue(form.controls.alternativeSeniority);
     stage.client = this.getControlValue(form.controls.client);
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
     stage.sentEmail = this.getControlValue(form.controls.sentEmail);

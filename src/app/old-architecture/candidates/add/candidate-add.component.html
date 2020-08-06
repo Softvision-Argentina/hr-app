@@ -48,8 +48,7 @@
         <div nz-col nzSpan="12">
             <nz-form-item
                 [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('email')}">E-mail</nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">* E-mail</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorMsg">
                     <input nz-input formControlName="email" id="email" placeholder="Please input an email">
                     <ng-template #emailErrorMsg>
