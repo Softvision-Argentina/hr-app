@@ -1,86 +1,90 @@
-﻿using Core;
-using Domain.Services.Contracts.ReaddressReason;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="ReaddressReasonController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using Core;
+    using Domain.Services.Contracts.ReaddressReason;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ReaddressReasonController : BaseController<ReaddressReasonController>
     {
-        private readonly IReaddressReasonService _readdressReasonService;
+        private readonly IReaddressReasonService readdressReasonService;
 
         public ReaddressReasonController(
             IReaddressReasonService readdressReasonService,
             ILog<ReaddressReasonController> logger) : base(logger)
         {
-            _readdressReasonService = readdressReasonService;
+            this.readdressReasonService = readdressReasonService;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var reAddressList = _readdressReasonService.List();
-                return Accepted(reAddressList);
+                var reAddressList = this.readdressReasonService.List();
+                return this.Accepted(reAddressList);
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var readedReaddressReason = _readdressReasonService.Read(id);
+                var readedReaddressReason = this.readdressReasonService.Read(id);
 
                 if (readedReaddressReason == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(readedReaddressReason);
+                return this.Accepted(readedReaddressReason);
             });
         }
 
         [HttpPost("Filter")]
         public IActionResult Filter([FromBody] ReaddressReasonSearchModel readdressReasonSearchModel)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var readedReaddressReason = _readdressReasonService.ListBy(readdressReasonSearchModel);
-                return Accepted(readedReaddressReason);
+                var readedReaddressReason = this.readdressReasonService.ListBy(readdressReasonSearchModel);
+                return this.Accepted(readedReaddressReason);
             });
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] CreateReaddressReason createReaddressReason)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var createdReaddressReason = _readdressReasonService.Create(createReaddressReason);
-                return Created("/Post", createdReaddressReason);
+                var createdReaddressReason = this.readdressReasonService.Create(createReaddressReason);
+                return this.Created("/Post", createdReaddressReason);
             });
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UpdateReaddressReason updateReaddressReason)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _readdressReasonService.Update(id, updateReaddressReason);
-                return Accepted(new { id });
+                this.readdressReasonService.Update(id, updateReaddressReason);
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _readdressReasonService.Delete(id);
-                return Accepted();
+                this.readdressReasonService.Delete(id);
+                return this.Accepted();
             });
         }
     }

@@ -1,72 +1,73 @@
-﻿using ApiServer.Security;
-using ApiServer.Security.AuthenticationTest;
-using Core.Persistance;
-using DependencyInjection;
-using DependencyInjection.Config;
-using Domain.Services.ExternalServices.Config;
-using Mailer;
-using Mailer.Entities;
-using Mailer.Interfaces;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.Options;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using MimeKit;
-using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using Domain.Model;
-
-namespace ApiServer
+﻿namespace ApiServer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+    using ApiServer.Security;
+    using ApiServer.Security.AuthenticationTest;
+    using Core.Persistance;
+    using DependencyInjection;
+    using DependencyInjection.Config;
+    using Domain.Model;
+    using Domain.Services.ExternalServices.Config;
+    using Mailer;
+    using Mailer.Entities;
+    using Mailer.Interfaces;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.CodeAnalysis.Options;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
+    using MimeKit;
+    using Newtonsoft.Json;
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         public IConfiguration Configuration { get; }
+
         public DatabaseConfigurations DatabaseConfigurations { get; set; }
+
         public bool UseTestingAuthentication { get; set; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
 
-            var appsettings = Configuration.Get<AppSettings>();
+            var appsettings = this.Configuration.Get<AppSettings>();
 
-            DatabaseConfigurations = new DatabaseConfigurations(
+            this.DatabaseConfigurations = new DatabaseConfigurations(
                                  appsettings.InMemoryDatabase,
                                  appsettings.RunMigrations,
                                  appsettings.RunSeed,
-                                 appsettings.ConnectionStrings.SeedDB
-             );
+                                 appsettings.ConnectionStrings.SeedDB);
 
-            UseTestingAuthentication = appsettings.UseTestAuthentication;
+            this.UseTestingAuthentication = appsettings.UseTestAuthentication;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
-            var appsettings = Configuration.Get<AppSettings>();
+            var appsettings = this.Configuration.Get<AppSettings>();
 
             var jwtSettings = new JwtSettings
             {
                 Key = appsettings.JwtSettings.Key,
                 Issuer = appsettings.JwtSettings.Issuer,
                 Audience = appsettings.JwtSettings.Audience,
-                MinutesToExpiration = int.Parse(appsettings.JwtSettings.MinutesToExpiration)
+                MinutesToExpiration = int.Parse(appsettings.JwtSettings.MinutesToExpiration),
             };
             services.AddSingleton(jwtSettings);
 
-            if (UseTestingAuthentication)
+            if (this.UseTestingAuthentication)
             {
                 services
                     .AddAuthentication(TestAuthenticationOptions.AuthenticationScheme)
@@ -81,7 +82,6 @@ namespace ApiServer
                 })
                 .AddJwtBearer("JwtBearer", jwtBearerOptions =>
                 {
-
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -94,18 +94,18 @@ namespace ApiServer
                         ValidAudience = jwtSettings.Audience,
 
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(jwtSettings.MinutesToExpiration)
+                        ClockSkew = TimeSpan.FromMinutes(jwtSettings.MinutesToExpiration),
                     };
                 });
             }
 
             services.AddAuthorization(cfg =>
             {
-                cfg.AddPolicy(SecurityClaims.CAN_LIST_DUMMY, p =>
-                   p.RequireClaim(SecurityClaims.CAN_LIST_DUMMY, "true"));
+                cfg.AddPolicy(SecurityClaims.CANLISTDUMMY, p =>
+                   p.RequireClaim(SecurityClaims.CANLISTDUMMY, "true"));
 
-                cfg.AddPolicy(SecurityClaims.CAN_LIST_CANDIDATE, p =>
-                    p.RequireClaim(SecurityClaims.CAN_LIST_CANDIDATE, "true"));
+                cfg.AddPolicy(SecurityClaims.CANLISTCANDIDATE, p =>
+                    p.RequireClaim(SecurityClaims.CANLISTCANDIDATE, "true"));
             });
 
             services.AddCors();
@@ -127,7 +127,7 @@ namespace ApiServer
 
             services.AddLogging();
 
-            services.AddDomain(DatabaseConfigurations);
+            services.AddDomain(this.DatabaseConfigurations);
 
             services.AddRouting(x => x.SuppressCheckForUnhandledSecurityMetadata = true);
 
@@ -140,7 +140,7 @@ namespace ApiServer
 
                 var security = new Dictionary<string, IEnumerable<string>>
                 {
-                    {"Bearer", new string[] { }},
+                    { "Bearer", new string[] { }},
                 };
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -148,27 +148,31 @@ namespace ApiServer
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                 });
 
                 c.AddSecurityRequirement(
-                    new OpenApiSecurityRequirement {
-                        { new OpenApiSecurityScheme {
-                            Reference = new OpenApiReference {
-                                Type = ReferenceType.SecurityScheme, Id = "Bearer"
-                            }
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme, Id = "Bearer",
+                            },
                         },
-                            new string[] {}
-                        }
+                            new string[] { }
+                        },
                     });
             });
 
-            var mailConfig = Configuration.GetSection("MailSettings")
+            var mailConfig = this.Configuration.GetSection("MailSettings")
                 .Get<MailServerSettings>();
 
             services.AddSingleton(mailConfig);
             services.AddScoped<IMailSender, MailSender>();
-            services.Configure<AppSettings>(Configuration);
+            services.Configure<AppSettings>(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -189,12 +193,11 @@ namespace ApiServer
             });
 
             app.UseCors((option) =>
-                option.WithOrigins(Configuration["Corswhitelist"].Split(','))
+                option.WithOrigins(this.Configuration["Corswhitelist"].Split(','))
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .SetIsOriginAllowed((host) => true)
-            );
+                .SetIsOriginAllowed((host) => true));
 
             app.UseHttpsRedirection();
 
@@ -209,7 +212,7 @@ namespace ApiServer
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var migrator = serviceScope.ServiceProvider.GetService<IMigrator>();
-                migrator.Migrate(DatabaseConfigurations);
+                migrator.Migrate(this.DatabaseConfigurations);
             }
 
             app.UseRouting();

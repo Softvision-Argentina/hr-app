@@ -1,8 +1,12 @@
-﻿using Core;
-using System.Collections.Generic;
+﻿// <copyright file="ProcessValidationException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Process
 {
+    using System.Collections.Generic;
+    using Core;
+
     public class CreateProcessInvalidException : BusinessValidationException
     {
         protected override int SubErrorCode => (int)ProcessValidationExceptionCodes.CreateContractInvalid;

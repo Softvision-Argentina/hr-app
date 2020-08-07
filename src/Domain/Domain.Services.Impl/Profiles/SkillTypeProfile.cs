@@ -1,18 +1,22 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.SkillType;
+﻿// <copyright file="SkillTypeProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.SkillType;
+
     public class SkillTypeProfile : Profile
     {
         public SkillTypeProfile()
         {
-            CreateMap<SkillType, ReadedSkillTypeContract>();
-            CreateMap<ReadedSkillTypeContract, SkillType>();
-            CreateMap<CreateSkillTypeContract, SkillType>();
-            CreateMap<SkillType, CreatedSkillTypeContract>();
-            CreateMap<UpdateSkillTypeContract, SkillType>();
+            this.CreateMap<SkillType, ReadedSkillTypeContract>();
+            this.CreateMap<ReadedSkillTypeContract, SkillType>();
+            this.CreateMap<CreateSkillTypeContract, SkillType>();
+            this.CreateMap<SkillType, CreatedSkillTypeContract>();
+            this.CreateMap<UpdateSkillTypeContract, SkillType>();
         }
     }
 }

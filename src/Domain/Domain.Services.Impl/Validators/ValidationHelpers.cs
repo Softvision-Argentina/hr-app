@@ -1,11 +1,15 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="ValidationHelpers.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using FluentValidation;
+
     public static class ValidationHelpers
     {
         public static string ToClientMessage(this ValidationException exception)

@@ -1,22 +1,23 @@
-﻿using Domain.Model.Enum;
-using Domain.Services.Contracts.CandidateProfile;
-using Domain.Services.Contracts.CandidateSkill;
-using Domain.Services.Contracts.Community;
-using Domain.Services.Contracts.Office;
-using Domain.Services.Contracts.User;
-using System;
-using System.Collections.Generic;
+﻿// <copyright file="ReadedInterviewAppContract.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Contracts.Interview
 {
+    using System;
+
     public class ReadedInterviewAppContract
     {
         public int Id { get; set; }
-        public String Client { get; set; }
-        public String ClientInterviewer { get; set; }
+
+        public string Client { get; set; }
+
+        public string ClientInterviewer { get; set; }
+
         public DateTime InterviewDate { get; set; }
-        public String Feedback { get; set; }
-        public String Project { get; set; }
- 
+
+        public string Feedback { get; set; }
+
+        public string Project { get; set; }
     }
 }

@@ -1,33 +1,37 @@
-﻿using ApiServer.Contracts.Office;
-using ApiServer.Contracts.Room;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Services.Contracts.Office;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Xunit;
+﻿// <copyright file="OfficeControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using ApiServer.Contracts.Office;
+    using ApiServer.Contracts.Room;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.Office;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class OfficeControllerTest
     {
-        private OfficeController controller;
-        private Mock<ILog<OfficeController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IOfficeService> mockService;
+        private readonly OfficeController controller;
+        private readonly Mock<ILog<OfficeController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IOfficeService> mockService;
 
         public OfficeControllerTest()
         {
-            mockLog = new Mock<ILog<OfficeController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IOfficeService>();
-            controller = new OfficeController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<OfficeController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IOfficeService>();
+            this.controller = new OfficeController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
@@ -39,13 +43,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = 0,
                 Name = "testOffice",
                 Description = "test office",
-                RoomItems = new Collection<ReadedRoomViewModel>()
+                RoomItems = new Collection<ReadedRoomViewModel>(),
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedOfficeContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedOfficeViewModel>>(It.IsAny<IEnumerable<ReadedOfficeContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedOfficeContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedOfficeViewModel>>(It.IsAny<IEnumerable<ReadedOfficeContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -55,8 +59,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedOfficeViewModel>>(It.IsAny<IEnumerable<ReadedOfficeContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedOfficeViewModel>>(It.IsAny<IEnumerable<ReadedOfficeContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -68,13 +72,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = 0,
                 Name = "testOffice",
                 Description = "test office",
-                RoomItems = new Collection<ReadedRoomViewModel>()
+                RoomItems = new Collection<ReadedRoomViewModel>(),
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedOfficeContract());
-            mockMapper.Setup(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedOfficeContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>())).Returns(expectedValue);
 
-            var result = controller.Get(officeId);
+            var result = this.controller.Get(officeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -84,8 +88,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -94,13 +98,13 @@ namespace ApiServer.UnitTests.Controllers
             var officeId = 0;
             var expectedValue = officeId;
 
-            var result = controller.Get(officeId);
+            var result = this.controller.Get(officeId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedOfficeViewModel>(It.IsAny<ReadedOfficeContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -110,19 +114,19 @@ namespace ApiServer.UnitTests.Controllers
             {
                 Name = "testOffice",
                 Description = "test office",
-                RoomItems = new Collection<CreateRoomViewModel>()
+                RoomItems = new Collection<CreateRoomViewModel>(),
             };
 
             var expectedValue = new CreatedOfficeViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateOfficeContract>(It.IsAny<CreateOfficeViewModel>())).Returns(new CreateOfficeContract());
-            mockMapper.Setup(_ => _.Map<CreatedOfficeViewModel>(It.IsAny<CreatedOfficeContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateOfficeContract>())).Returns(new CreatedOfficeContract());
+            this.mockMapper.Setup(_ => _.Map<CreateOfficeContract>(It.IsAny<CreateOfficeViewModel>())).Returns(new CreateOfficeContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedOfficeViewModel>(It.IsAny<CreatedOfficeContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateOfficeContract>())).Returns(new CreatedOfficeContract());
 
-            var result = controller.Post(officeVM);
+            var result = this.controller.Post(officeVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -132,8 +136,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateOfficeContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedOfficeViewModel>(It.IsAny<CreatedOfficeContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateOfficeContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedOfficeViewModel>(It.IsAny<CreatedOfficeContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -143,16 +147,16 @@ namespace ApiServer.UnitTests.Controllers
             var officeToUpdate = new UpdateOfficeViewModel();
             var expectedValue = new { id = officeId };
 
-            mockMapper.Setup(_ => _.Map<UpdateOfficeContract>(It.IsAny<UpdateOfficeViewModel>())).Returns(new UpdateOfficeContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateOfficeContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateOfficeContract>(It.IsAny<UpdateOfficeViewModel>())).Returns(new UpdateOfficeContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateOfficeContract>()));
 
-            var result = controller.Put(officeId, officeToUpdate);
+            var result = this.controller.Put(officeId, officeToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateOfficeContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateOfficeContract>(It.IsAny<UpdateOfficeViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateOfficeContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateOfficeContract>(It.IsAny<UpdateOfficeViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -160,18 +164,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var officeId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(officeId);
+            var result = this.controller.Delete(officeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
+
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

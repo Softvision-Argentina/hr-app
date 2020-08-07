@@ -1,17 +1,17 @@
-﻿using Domain.Model;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Domain.Model;
+    using Xunit;
+
     public class SkillRepositoryTest : BaseRepositoryTest
     {
-        private readonly SkillRepository _repository;
+        private readonly SkillRepository repository;
 
         public SkillRepositoryTest()
         {
-            _repository = new SkillRepository(DbContext, MockUnitOfWork.Object);
+            this.repository = new SkillRepository(this.DbContext, this.MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]
@@ -19,7 +19,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             Skill expectedValue = null;
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -30,10 +30,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
         public void GivenDataInRepositorysDbcontext_WhenQuery_ThenReturnsSkill()
         {
             var expectedValue = new Skill();
-            DbContext.Skills.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Skills.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -46,12 +46,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
             var expectedValue = new Skill()
             {
                 CandidateSkills = new List<CandidateSkill>(),
-                Type = new SkillType()
+                Type = new SkillType(),
             };
-            DbContext.Skills.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Skills.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.QueryEager();
+            var actualValue = this.repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());

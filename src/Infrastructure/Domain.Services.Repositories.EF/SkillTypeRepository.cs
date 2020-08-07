@@ -1,11 +1,15 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Persistance.EF;
-using System.Linq;
+﻿// <copyright file="SkillTypeRepository.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Repositories.EF
 {
-    public class SkillTypeRepository: Repository<SkillType, DataBaseContext>
+    using System.Linq;
+    using Core.Persistance;
+    using Domain.Model;
+    using Persistance.EF;
+
+    public class SkillTypeRepository : Repository<SkillType, DataBaseContext>
     {
         public SkillTypeRepository(DataBaseContext dbContext, IUnitOfWork unitOfWork) : base(dbContext, unitOfWork)
         {
@@ -18,7 +22,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<SkillType> QueryEager()
         {
-            return Query();
+            return this.Query();
         }
     }
 }

@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.Skills;
-using AutoMapper;
-using Domain.Services.Contracts.Skill;
+﻿// <copyright file="SkillProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
-    public class SkillProfile: Profile
+    using ApiServer.Contracts.Skills;
+    using AutoMapper;
+    using Domain.Services.Contracts.Skill;
+
+    public class SkillProfile : Profile
     {
         public SkillProfile()
         {
-            CreateMap<CreateSkillViewModel, CreateSkillContract>();
-            CreateMap<CreatedSkillContract, CreatedSkillViewModel>();
-            CreateMap<ReadedSkillContract, ReadedSkillViewModel>();
-            CreateMap<UpdateSkillViewModel, UpdateSkillContract>();
+            this.CreateMap<CreateSkillViewModel, CreateSkillContract>();
+            this.CreateMap<CreatedSkillContract, CreatedSkillViewModel>();
+            this.CreateMap<ReadedSkillContract, ReadedSkillViewModel>();
+            this.CreateMap<UpdateSkillViewModel, UpdateSkillContract>();
         }
     }
 }

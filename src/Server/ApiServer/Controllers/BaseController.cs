@@ -1,67 +1,70 @@
-﻿using Core;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿// <copyright file="BaseController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using Core;
+    using Microsoft.AspNetCore.Mvc;
+
     [ApiController]
     public abstract class BaseController<TController> : Controller where TController : Controller
     {
         protected ILog<TController> Logger { get; set; }
 
-        //TODO: is not call from anywhere can we remove it?
+        // TODO: is not call from anywhere can we remove it?
         public Guid ClientSystemId { get; private set; }
 
         protected BaseController(ILog<TController> logger)
         {
-            Logger = logger;
+            this.Logger = logger;
         }
 
         protected IActionResult ApiAction(Func<IActionResult> action)
         {
-
-            if (Logger.IsDebugEnabled)
+            if (this.Logger.IsDebugEnabled)
             {
-                if (HttpContext.Request.Method == "GET")
+                if (this.HttpContext.Request.Method == "GET")
                 {
-                    if (HttpContext.Request.QueryString.HasValue)
-                        Logger.LogDebug($"GET ==== Request: {HttpContext.Request.QueryString.Value}");
+                    if (this.HttpContext.Request.QueryString.HasValue)
+                    {
+                        this.Logger.LogDebug($"GET ==== Request: {this.HttpContext.Request.QueryString.Value}");
+                    }
                 }
                 else
                 {
-                    Logger.LogDebug($"{HttpContext.Request.Method} ==== Body: @{GetRequestBody()}");
+                    this.Logger.LogDebug($"{this.HttpContext.Request.Method} ==== Body: @{this.GetRequestBody()}");
                 }
             }
+
             try
             {
                 return action();
             }
             catch (BusinessValidationException bvex)
             {
-                Logger.LogError(bvex, "Validation Error");
+                this.Logger.LogError(bvex, "Validation Error");
 
                 var exceptionData = new ExceptionData()
                 {
-                    HttpStatusCode = (int) HttpStatusCode.BadRequest,
+                    HttpStatusCode = (int)HttpStatusCode.BadRequest,
                     ErrorCode = bvex.ErrorCode,
-                    ValidationErrors = GetValidationErrors(bvex.ValidationMessages),
+                    ValidationErrors = this.GetValidationErrors(bvex.ValidationMessages),
                     ExceptionMessage = bvex.Message,
                     InnerExceptionMessage = bvex.InnerException != null ? bvex.InnerException.Message : string.Empty,
-                    AdditionalInfo = bvex.Data
+                    AdditionalInfo = bvex.Data,
                 };
 
-
-                return BadRequest(exceptionData);
+                return this.BadRequest(exceptionData);
             }
             catch (BusinessException ex)
             {
-                Logger.LogError(ex, "Business Exception");
+                this.Logger.LogError(ex, "Business Exception");
 
                 var exceptionData = new ExceptionData()
                 {
@@ -70,24 +73,24 @@ namespace ApiServer.Controllers
                     ValidationErrors = null,
                     ExceptionMessage = ex.Message ?? "Business Exception",
                     InnerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty,
-                    AdditionalInfo = ex.Data
+                    AdditionalInfo = ex.Data,
                 };
 
-                return BadRequest(exceptionData);
+                return this.BadRequest(exceptionData);
             }
             catch (Exception ex)
             {
                 var exceptionData = new ExceptionData()
                 {
-                    HttpStatusCode = (int) HttpStatusCode.InternalServerError,
-                    ErrorCode = (int) ApplicationErrorMainCodes.NotExpected,
+                    HttpStatusCode = (int)HttpStatusCode.InternalServerError,
+                    ErrorCode = (int)ApplicationErrorMainCodes.NotExpected,
                     ValidationErrors = null,
                     ExceptionMessage = ex.Message ?? "Not expected exception message",
-                    InnerExceptionMessage = GetInnerException(ex),
-                    AdditionalInfo = ex.Data
+                    InnerExceptionMessage = this.GetInnerException(ex),
+                    AdditionalInfo = ex.Data,
                 };
 
-                return StatusCode((int) HttpStatusCode.InternalServerError, exceptionData);
+                return this.StatusCode((int)HttpStatusCode.InternalServerError, exceptionData);
             }
         }
 
@@ -97,13 +100,12 @@ namespace ApiServer.Controllers
             return exception?.InnerException?.InnerException?.Message ?? defaultMessage;
         }
 
-
         private string GetRequestBody()
         {
             var jsonData = string.Empty;
             try
             {
-                using (var stream = Request.Body)
+                using (var stream = this.Request.Body)
                 {
                     if (stream.CanRead)
                     {

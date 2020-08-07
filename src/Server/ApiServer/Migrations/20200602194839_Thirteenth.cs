@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200602194839_Thirteenth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Thirteenth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

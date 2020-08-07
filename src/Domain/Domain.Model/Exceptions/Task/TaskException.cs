@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="TaskException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Task
 {
+    using System;
+    using Core;
+
     public class TaskException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Task;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Task
         public DeleteTaskNotFoundException(int taskId)
             : base($"Task not found for the TaskId: {taskId}")
         {
-            TaskId = taskId;
+            this.TaskId = taskId;
         }
 
         public int TaskId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Task
         public TaskDeletedException(int id, string name)
             : base($"The task {name} was deleted")
         {
-            TaskId = id;
-            Name = name;
+            this.TaskId = id;
+            this.Name = name;
         }
 
         public int TaskId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Task
         public UpdateTaskNotFoundException(int taskId, Guid clientSystemId)
             : base($"Task {taskId} and Client System Id {clientSystemId} was not found.")
         {
-            TaskId = taskId;
-            ClientSystemId = clientSystemId;
+            this.TaskId = taskId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int TaskId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Task
         public UpdateHasNotChangesException(int taskId, Guid clientSystemId, string name)
             : base($"Task {name} has not changes.")
         {
-            TaskId = taskId;
-            ClientSystemId = clientSystemId;
+            this.TaskId = taskId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int TaskId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.Task
 
         public TaskNotFoundException(int taskId) : base($"The Task {taskId} was not found.")
         {
-            TaskId = taskId;
+            this.TaskId = taskId;
         }
 
         public int TaskId { get; }

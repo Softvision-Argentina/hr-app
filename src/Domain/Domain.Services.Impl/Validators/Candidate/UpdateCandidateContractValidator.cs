@@ -1,45 +1,50 @@
-﻿using Domain.Services.Contracts.Candidate;
-using FluentValidation;
+﻿// <copyright file="UpdateCandidateContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Candidate
 {
+    using Domain.Services.Contracts.Candidate;
+    using FluentValidation;
+
     public class UpdateCandidateContractValidator : AbstractValidator<UpdateCandidateContract>
     {
         public UpdateCandidateContractValidator()
         {
-            RuleFor(_ => _.Name).NotEmpty()
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+            this.RuleFor(_ => _.Name).NotEmpty()
+                .MaximumLength(ValidationConstants.MAXINPUT);
 
-            RuleFor(_ => _.LastName).NotEmpty()
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+            this.RuleFor(_ => _.LastName).NotEmpty()
+                .MaximumLength(ValidationConstants.MAXINPUT);
 
-            //RuleFor(_ => _.User).NotEmpty();
-            RuleFor(_ => _.Community).NotEmpty();
-            //RuleFor(_ => _.Profile).NotEmpty();
+            // RuleFor(_ => _.User).NotEmpty();
+            this.RuleFor(_ => _.Community).NotEmpty();
 
-            RuleFor(_ => _.Cv)
+            // RuleFor(_ => _.Profile).NotEmpty();
+
+            this.RuleFor(_ => _.Cv)
                 .MaximumLength(100);
 
-            RuleFor(_ => _.EmailAddress)
-                .MaximumLength(ValidationConstants.MAX_INPUT_EMAIL);
+            this.RuleFor(_ => _.EmailAddress)
+                .MaximumLength(ValidationConstants.MAXINPUTEMAIL);
 
-            RuleFor(_ => _.EnglishLevel).IsInEnum();
+            this.RuleFor(_ => _.EnglishLevel).IsInEnum();
 
-            RuleFor(_ => _.KnownFrom)
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+            this.RuleFor(_ => _.KnownFrom)
+                .MaximumLength(ValidationConstants.MAXINPUT);
 
-            RuleFor(_ => _.LinkedInProfile)
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+            this.RuleFor(_ => _.LinkedInProfile)
+                .MaximumLength(ValidationConstants.MAXINPUT);
 
-            RuleFor(_ => _.PhoneNumber)
-                .MaximumLength(ValidationConstants.MAX_PHONE_NUMBER);
+            this.RuleFor(_ => _.PhoneNumber)
+                .MaximumLength(ValidationConstants.MAXPHONENUMBER);
 
-            RuleFor(_ => _.ReferredBy)
-                .MaximumLength(ValidationConstants.MAX_INPUT);
+            this.RuleFor(_ => _.ReferredBy)
+                .MaximumLength(ValidationConstants.MAXINPUT);
 
-            RuleFor(_ => _.Status).IsInEnum();
+            this.RuleFor(_ => _.Status).IsInEnum();
 
-            RuleFor(_ => _.DNI).LessThan(ValidationConstants.MAX_DNI);
+            this.RuleFor(_ => _.DNI).LessThan(ValidationConstants.MAXDNI);
         }
     }
 }

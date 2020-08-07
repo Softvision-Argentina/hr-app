@@ -1,20 +1,26 @@
-﻿using Domain.Model;
-using Domain.Services.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿// <copyright file="CvRepository.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Repositories.EF
 {
+    using System.Linq;
+    using Domain.Model;
+    using Domain.Services.Interfaces.Repositories;
+    using Microsoft.EntityFrameworkCore;
+
     public class CvRepository : ICvRepository
     {
-        private readonly DataBaseContext _context;
+        private readonly DataBaseContext context;
+
         public CvRepository(DataBaseContext context)
         {
-            _context = context;
+            this.context = context;
         }
+
         public Cv GetCv(int id)
         {
-            var cv = _context.Cv.FirstOrDefault(p => p.Id == id);
+            var cv = this.context.Cv.FirstOrDefault(p => p.Id == id);
 
             return cv;
         }
@@ -23,15 +29,15 @@ namespace Domain.Services.Repositories.EF
         {
             if (cv.Id == 0)
             {
-                _context.Cv.Add(cv);
+                this.context.Cv.Add(cv);
             }
             else
             {
-                _context.Cv.Attach(cv);
-                _context.Entry(cv).State = EntityState.Modified;
+                this.context.Cv.Attach(cv);
+                this.context.Entry(cv).State = EntityState.Modified;
             }
 
-            var save = _context.SaveChanges() > 0;
+            var save = this.context.SaveChanges() > 0;
             return save;
         }
     }

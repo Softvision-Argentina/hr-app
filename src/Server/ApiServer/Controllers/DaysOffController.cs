@@ -1,112 +1,116 @@
-﻿using ApiServer.Contracts.DaysOff;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.DaysOff;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="DaysOffController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using ApiServer.Contracts.DaysOff;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.DaysOff;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class DaysOffController : BaseController<DaysOffController>
     {
-        private readonly IDaysOffService _daysOffService;
-        private readonly IMapper _mapper;
+        private readonly IDaysOffService daysOffService;
+        private readonly IMapper mapper;
 
         public DaysOffController(
             IDaysOffService daysOffService,
             ILog<DaysOffController> logger,
             IMapper mapper) : base(logger)
         {
-            _daysOffService = daysOffService;
-            _mapper = mapper;
+            this.daysOffService = daysOffService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var daysOff = _daysOffService.List();
+                var daysOff = this.daysOffService.List();
 
-                return Accepted(_mapper.Map<List<ReadedDaysOffViewModel>>(daysOff));
+                return this.Accepted(this.mapper.Map<List<ReadedDaysOffViewModel>>(daysOff));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var daysOff = _daysOffService.Read(id);
+                var daysOff = this.daysOffService.Read(id);
 
                 if (daysOff == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedDaysOffViewModel>(daysOff));
+                return this.Accepted(this.mapper.Map<ReadedDaysOffViewModel>(daysOff));
             });
         }
 
         [HttpGet("GetByDni")]
-        public IActionResult GetByDni([FromQuery]int dni)
+        public IActionResult GetByDni([FromQuery] int dni)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var daysOff = _daysOffService.ReadByDni(dni);
+                var daysOff = this.daysOffService.ReadByDni(dni);
 
                 if ((daysOff == null) || (daysOff.Count() == 0))
                 {
-                    return NotFound(dni);
+                    return this.NotFound(dni);
                 }
 
-                return Accepted(_mapper.Map<List<ReadedDaysOffViewModel>>(daysOff));
+                return this.Accepted(this.mapper.Map<List<ReadedDaysOffViewModel>>(daysOff));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDaysOffViewModel createDaysOffVm)
+        public IActionResult Post([FromBody] CreateDaysOffViewModel createDaysOffVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDaysOffContract>(createDaysOffVm);
-                var returnContract = _daysOffService.Create(contract);
+                var contract = this.mapper.Map<CreateDaysOffContract>(createDaysOffVm);
+                var returnContract = this.daysOffService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedDaysOffViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedDaysOffViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDaysOffViewModel updateDaysOffVm)
+        public IActionResult Put(int id, [FromBody] UpdateDaysOffViewModel updateDaysOffVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDaysOffContract>(updateDaysOffVm);
+                var contract = this.mapper.Map<UpdateDaysOffContract>(updateDaysOffVm);
                 contract.Id = id;
-                _daysOffService.Update(contract);
+                this.daysOffService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _daysOffService.Delete(id);
-                return Accepted();
+                this.daysOffService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

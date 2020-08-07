@@ -1,7 +1,11 @@
-﻿using System;
+﻿// <copyright file="DateExtensions.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core.ExtensionHelpers
 {
+    using System;
+
     public static class DateExtensions
     {
         public static bool IsBetween(this DateTime date, DateTime min, DateTime max)

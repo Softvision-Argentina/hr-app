@@ -1,95 +1,99 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Skills;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Skill;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="SkillsController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Skills;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Skill;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class SkillsController : BaseController<SkillsController>
     {
-        private readonly ISkillService _skillService;
-        private readonly IMapper _mapper;
+        private readonly ISkillService skillService;
+        private readonly IMapper mapper;
 
         public SkillsController(
-            ISkillService skillService, 
-            ILog<SkillsController> logger, 
-            IMapper mapper): base(logger)
+            ISkillService skillService,
+            ILog<SkillsController> logger,
+            IMapper mapper) : base(logger)
         {
-            _skillService = skillService;
-            _mapper = mapper;
+            this.skillService = skillService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var skills = _skillService.List();
+                var skills = this.skillService.List();
 
-                return Accepted(_mapper.Map<List<ReadedSkillViewModel>>(skills));
+                return this.Accepted(this.mapper.Map<List<ReadedSkillViewModel>>(skills));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var skill = _skillService.Read(id);
+                var skill = this.skillService.Read(id);
 
                 if (skill == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedSkillViewModel>(skill));
+                return this.Accepted(this.mapper.Map<ReadedSkillViewModel>(skill));
             });
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] CreateSkillViewModel createSkillsVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateSkillContract>(createSkillsVm);
-                var returnContract = _skillService.Create(contract);
+                var contract = this.mapper.Map<CreateSkillContract>(createSkillsVm);
+                var returnContract = this.skillService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedSkillViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedSkillViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateSkillViewModel updateSkillsVm)
+        public IActionResult Put(int id, [FromBody] UpdateSkillViewModel updateSkillsVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateSkillContract>(updateSkillsVm);
+                var contract = this.mapper.Map<UpdateSkillContract>(updateSkillsVm);
                 contract.Id = id;
-                _skillService.Update(contract);
+                this.skillService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _skillService.Delete(id);
-                return Accepted();
+                this.skillService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

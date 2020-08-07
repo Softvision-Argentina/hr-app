@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="RoomException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Room
 {
+    using System;
+    using Core;
+
     public class RoomException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Room;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Room
         public DeleteRoomNotFoundException(int roomId)
             : base($"Room not found for the Room Id: {roomId}")
         {
-            RoomId = roomId;
+            this.RoomId = roomId;
         }
 
         public int RoomId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Room
         public RoomDeletedException(int id, string name)
             : base($"The room {name} was deleted")
         {
-            RoomId = id;
-            Name = name;
+            this.RoomId = id;
+            this.Name = name;
         }
 
         public int RoomId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Room
         public UpdateRoomNotFoundException(int roomId, Guid clientSystemId)
             : base($"Room {roomId} and Client System Id {clientSystemId} was not found.")
         {
-            RoomId = roomId;
-            ClientSystemId = clientSystemId;
+            this.RoomId = roomId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int RoomId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Room
         public UpdateHasNotChangesException(int roomId, Guid clientSystemId, string name)
             : base($"Room {name} has not changes.")
         {
-            RoomId = roomId;
-            ClientSystemId = clientSystemId;
+            this.RoomId = roomId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int RoomId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.Room
 
         public RoomNotFoundException(int roomId) : base($"The Room {roomId} was not found.")
         {
-            RoomId = roomId;
+            this.RoomId = roomId;
         }
 
         public int RoomId { get; }

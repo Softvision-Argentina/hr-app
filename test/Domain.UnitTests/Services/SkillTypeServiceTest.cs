@@ -1,37 +1,41 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Contracts.SkillType;
-using Domain.Services.Impl.Services;
-using Domain.Services.Impl.UnitTests.Dummy;
-using Domain.Services.Impl.Validators.SkillType;
-using FluentValidation;
-using FluentValidation.Results;
-using Moq;
-using Xunit;
+﻿// <copyright file="SkillTypeServiceTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Services.Contracts.SkillType;
+    using Domain.Services.Impl.Services;
+    using Domain.Services.Impl.UnitTests.Dummy;
+    using Domain.Services.Impl.Validators.SkillType;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using Moq;
+    using Xunit;
+
     public class SkillTypeServiceTest : BaseDomainTest
     {
-        private readonly SkillTypeService _service;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IRepository<SkillType>> _mockRepository;
-        private readonly Mock<ILog<SkillTypeService>> _mockLog;
-        private readonly Mock<UpdateSkillTypeContractValidator> _mockUpdateValidator;
-        private readonly Mock<CreateSkillTypeContractValidator> _mockCreateValidator;
+        private readonly SkillTypeService service;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IRepository<SkillType>> mockRepository;
+        private readonly Mock<ILog<SkillTypeService>> mockLog;
+        private readonly Mock<UpdateSkillTypeContractValidator> mockUpdateValidator;
+        private readonly Mock<CreateSkillTypeContractValidator> mockCreateValidator;
 
         public SkillTypeServiceTest()
         {
-            _mockMapper = new Mock<IMapper>();
-            _mockRepository = new Mock<IRepository<SkillType>>();
-            _mockLog = new Mock<ILog<SkillTypeService>>();
-            _mockUpdateValidator = new Mock<UpdateSkillTypeContractValidator>();
-            _mockCreateValidator = new Mock<CreateSkillTypeContractValidator>();
-            _service = new SkillTypeService(_mockMapper.Object, _mockRepository.Object, MockUnitOfWork.Object, _mockLog.Object, _mockUpdateValidator.Object, _mockCreateValidator.Object);
+            this.mockMapper = new Mock<IMapper>();
+            this.mockRepository = new Mock<IRepository<SkillType>>();
+            this.mockLog = new Mock<ILog<SkillTypeService>>();
+            this.mockUpdateValidator = new Mock<UpdateSkillTypeContractValidator>();
+            this.mockCreateValidator = new Mock<CreateSkillTypeContractValidator>();
+            this.service = new SkillTypeService(this.mockMapper.Object, this.mockRepository.Object, this.MockUnitOfWork.Object, this.mockLog.Object, this.mockUpdateValidator.Object, this.mockCreateValidator.Object);
         }
 
         [Fact(DisplayName = "Verify that create CreatedSkillTypeContract when data is valid")]
@@ -39,22 +43,22 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateSkillTypeContract()
             {
-                Name = "testName"
+                Name = "testName",
             };
             var expectedResult = new CreatedSkillTypeContract();
-            _mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult());
-            _mockMapper.Setup(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>())).Returns(expectedResult);
+            this.mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult());
+            this.mockMapper.Setup(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>())).Returns(expectedResult);
 
-            var result = _service.Create(contract);
+            var result = this.service.Create(contract);
 
             Assert.NotNull(result);
             Assert.Equal(expectedResult, result);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(4));
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Once);
-            _mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Once);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Once);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(4));
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Once);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that throws error (CreateContractInvalidException) when data for creation is invalid")]
@@ -62,22 +66,22 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateSkillTypeContract()
             {
-                Name = "testName"
+                Name = "testName",
             };
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            _mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            this.mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
 
-            var result = Assert.Throws<Model.Exceptions.Skill.CreateContractInvalidException>(() => _service.Create(contract));
+            var result = Assert.Throws<Model.Exceptions.Skill.CreateContractInvalidException>(() => this.service.Create(contract));
 
             Assert.NotNull(result);
             Assert.Equal(validationFailure.ErrorMessage, result.Message);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockCreateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Never);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Never);
-            _mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
-            _mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Never);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockCreateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Never);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Never);
+            this.mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
+            this.mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that throws error (InvalidSkillTypeException) when data for creation is invalid")]
@@ -86,36 +90,36 @@ namespace Domain.Services.Impl.UnitTests.Services
             const string testName = "testName";
             var contract = new CreateSkillTypeContract()
             {
-                Name = testName
+                Name = testName,
             };
-            _mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult());
-            _mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = 1, Name = testName } }.AsQueryable());
+            this.mockCreateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>())).Returns(new ValidationResult());
+            this.mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = 1, Name = testName } }.AsQueryable());
 
-            var result = Assert.Throws<Model.Exceptions.SkillType.InvalidSkillTypeException>(() => _service.Create(contract));
+            var result = Assert.Throws<Model.Exceptions.SkillType.InvalidSkillTypeException>(() => this.service.Create(contract));
 
             Assert.NotNull(result);
             Assert.Equal("The SkillType already exists .", result.Message);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockCreateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Never);
-            _mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
-            _mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Never);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockCreateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<CreateSkillTypeContract>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<CreateSkillTypeContract>()), Times.Never);
+            this.mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
+            this.mockMapper.Verify(_ => _.Map<CreatedSkillTypeContract>(It.IsAny<SkillType>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that delete when data is valid")]
         public void Should_Delete_When_DataIsValid()
         {
             int id = 0;
-            _mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = id } }.AsQueryable());
+            this.mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = id } }.AsQueryable());
 
-            _service.Delete(id);
+            this.service.Delete(id);
 
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(2));
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockRepository.Verify(_ => _.Delete(It.IsAny<SkillType>()), Times.Once);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(2));
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockRepository.Verify(_ => _.Delete(It.IsAny<SkillType>()), Times.Once);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that delete throws DeleteSkillNotFoundException when data is invalid")]
@@ -124,34 +128,33 @@ namespace Domain.Services.Impl.UnitTests.Services
             int id = 0;
             var expectedMessage = $"Skill not found for the skillId: {id}";
 
-            var result = Assert.Throws<Model.Exceptions.Skill.DeleteSkillNotFoundException>(() => _service.Delete(id));
+            var result = Assert.Throws<Model.Exceptions.Skill.DeleteSkillNotFoundException>(() => this.service.Delete(id));
 
             Assert.NotNull(result);
             Assert.Equal(expectedMessage, result.Message);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockRepository.Verify(_ => _.Delete(It.IsAny<SkillType>()), Times.Never);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockRepository.Verify(_ => _.Delete(It.IsAny<SkillType>()), Times.Never);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that update when data is valid")]
         public void Should_Update_When_DataIsValid()
         {
-            int id = 0;
             var contract = new UpdateSkillTypeContract()
             {
-                Name = "testName"
+                Name = "testName",
             };
-            _mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult());
+            this.mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult());
 
-            _service.Update(contract);
+            this.service.Update(contract);
 
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(3));
-            _mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Once);
-            _mockRepository.Verify(_ => _.Update(It.IsAny<SkillType>()), Times.Once);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Exactly(3));
+            this.mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Update(It.IsAny<SkillType>()), Times.Once);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that throws error (CreateContractInvalidException) when data for update is invalid")]
@@ -159,21 +162,21 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new UpdateSkillTypeContract()
             {
-                Name = "testName"
+                Name = "testName",
             };
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            _mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            this.mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
 
-            var result = Assert.Throws<Model.Exceptions.Skill.CreateContractInvalidException>(() => _service.Update(contract));
+            var result = Assert.Throws<Model.Exceptions.Skill.CreateContractInvalidException>(() => this.service.Update(contract));
 
             Assert.NotNull(result);
             Assert.Equal(validationFailure.ErrorMessage, result.Message);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Never);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Never);
-            _mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Never);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Never);
+            this.mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that throws error (InvalidSkillTypeException) when data for update is invalid")]
@@ -182,21 +185,21 @@ namespace Domain.Services.Impl.UnitTests.Services
             const string testName = "testName";
             var contract = new UpdateSkillTypeContract()
             {
-                Name = testName
+                Name = testName,
             };
-            _mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult());
-            _mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = 1, Name = testName } }.AsQueryable());
+            this.mockUpdateValidator.Setup(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>())).Returns(new ValidationResult());
+            this.mockRepository.Setup(_ => _.Query()).Returns(new List<SkillType>() { new SkillType() { Id = 1, Name = testName } }.AsQueryable());
 
-            var result = Assert.Throws<Model.Exceptions.SkillType.InvalidSkillTypeException>(() => _service.Update(contract));
+            var result = Assert.Throws<Model.Exceptions.SkillType.InvalidSkillTypeException>(() => this.service.Update(contract));
 
             Assert.NotNull(result);
             Assert.Equal("The SkillType already exists .", result.Message);
-            _mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
-            _mockRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Never);
-            _mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
-            MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
+            this.mockLog.Verify(_ => _.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockUpdateValidator.Verify(_ => _.Validate(It.IsAny<ValidationContext<UpdateSkillTypeContract>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<SkillType>(It.IsAny<UpdateSkillTypeContract>()), Times.Never);
+            this.mockRepository.Verify(_ => _.Create(It.IsAny<SkillType>()), Times.Never);
+            this.MockUnitOfWork.Verify(_ => _.Complete(), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that list when data is valid")]
@@ -204,17 +207,17 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateSkillTypeContract()
             {
-                Name = "testName"
+                Name = "testName",
             };
             var expectedResult = new List<ReadedSkillTypeContract>();
-            _mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeContract>>(It.IsAny<List<SkillType>>())).Returns(expectedResult);
+            this.mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeContract>>(It.IsAny<List<SkillType>>())).Returns(expectedResult);
 
-            var result = _service.List();
+            var result = this.service.List();
 
             Assert.NotNull(result);
             Assert.Equal(expectedResult, result);
-            _mockRepository.Verify(_ => _.QueryEager(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeContract>>(It.IsAny<List<SkillType>>()), Times.Once);
+            this.mockRepository.Verify(_ => _.QueryEager(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeContract>>(It.IsAny<List<SkillType>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that read when data is valid")]
@@ -222,15 +225,15 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             int id = 0;
             var expectedResult = new ReadedSkillTypeContract();
-            _mockRepository.Setup(_ => _.QueryEager()).Returns(new List<SkillType>() { new SkillType() { Id = id } }.AsQueryable());
-            _mockMapper.Setup(_ => _.Map<ReadedSkillTypeContract>(It.IsAny<SkillType>())).Returns(expectedResult);
+            this.mockRepository.Setup(_ => _.QueryEager()).Returns(new List<SkillType>() { new SkillType() { Id = id } }.AsQueryable());
+            this.mockMapper.Setup(_ => _.Map<ReadedSkillTypeContract>(It.IsAny<SkillType>())).Returns(expectedResult);
 
-            var result = _service.Read(id);
+            var result = this.service.Read(id);
 
             Assert.NotNull(result);
             Assert.Equal(expectedResult, result);
-            _mockRepository.Verify(_ => _.QueryEager(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedSkillTypeContract>(It.IsAny<SkillType>()), Times.Once);
+            this.mockRepository.Verify(_ => _.QueryEager(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedSkillTypeContract>(It.IsAny<SkillType>()), Times.Once);
         }
     }
 }

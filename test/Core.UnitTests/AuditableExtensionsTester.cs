@@ -1,17 +1,21 @@
-using Domain.Model;
-using System;
-using Xunit;
-using Core.ExtensionHelpers;
+// <copyright file="AuditableExtensionsTester.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core.UnitTests
 {
+    using System;
+    using Core.ExtensionHelpers;
+    using Domain.Model;
+    using Xunit;
+
     public class AuditableExtensionsTester
     {
         [Theory(DisplayName = "Verify that valid username set correctly auditable properties")]
         [InlineData("Valid Username")]
         public void GivenValidUserName_AuditCreateShouldSetProperties(string userName)
         {
-            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default(DateTime), LastModifiedBy = null, LastModifiedDate = default(DateTime)};
+            IAuditable auditable = new Cv { Id = 1, CreatedBy = null, CreatedDate = default(DateTime), LastModifiedBy = null, LastModifiedDate = default(DateTime) };
 
             auditable.AuditCreate(userName);
 

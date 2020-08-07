@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200429142405_Fourth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Fourth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

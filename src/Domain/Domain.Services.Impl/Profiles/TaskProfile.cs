@@ -1,17 +1,21 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.Task;
+﻿// <copyright file="TaskProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.Task;
+
     public class TaskProfile : Profile
     {
         public TaskProfile()
         {
-            CreateMap<Task, ReadedTaskContract>();
-            CreateMap<CreateTaskContract, Task>();
-            CreateMap<Task, CreatedTaskContract>();
-            CreateMap<UpdateTaskContract, Task>();
+            this.CreateMap<Task, ReadedTaskContract>();
+            this.CreateMap<CreateTaskContract, Task>();
+            this.CreateMap<Task, CreatedTaskContract>();
+            this.CreateMap<UpdateTaskContract, Task>();
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="EmployeeCasualtyException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.EmployeeCasualty
 {
+    using System;
+    using Core;
+
     public class EmployeeCasualtyException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.EmployeeCasualty;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
         public DeleteEmployeeCasualtyNotFoundException(int employeeCasualtyId)
             : base($"Employee casualty not found for the EmployeeCasualtyId: {employeeCasualtyId}")
         {
-            EmployeeCasualtyId = employeeCasualtyId;
+            this.EmployeeCasualtyId = employeeCasualtyId;
         }
 
         public int EmployeeCasualtyId { get; set; }
@@ -41,15 +45,18 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
         public EmployeeCasualtyDeletedException(int id, int month, int year)
             : base($"The employee casualty {year}-{month} was deleted")
         {
-            EmployeeCasualtyId = id;
-            Month = month;
-            Year = year;
+            this.EmployeeCasualtyId = id;
+            this.Month = month;
+            this.Year = year;
         }
 
         public int EmployeeCasualtyId { get; set; }
+
         public int Month { get; set; }
+
         public int Year { get; set; }
     }
+
     public class InvalidUpdateException : InvalidEmployeeCasualtyException
     {
         protected override int SubErrorCode => (int)EmployeeCasualtyErrorSubCodes.InvalidUpdate;
@@ -67,11 +74,12 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
         public UpdateSkillNotFoundException(int employeeCasualtyId, Guid clientSystemId)
             : base($"skill {employeeCasualtyId} and Client System Id {clientSystemId} was not found.")
         {
-            EmployeeCasualtyId = employeeCasualtyId;
-            ClientSystemId = clientSystemId;
+            this.EmployeeCasualtyId = employeeCasualtyId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int EmployeeCasualtyId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -82,11 +90,12 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, int month, int year)
             : base($"Employee casualty {year}-{month} has not changes.")
         {
-            EmployeeCasualtyId = skillId;
-            ClientSystemId = clientSystemId;
+            this.EmployeeCasualtyId = skillId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int EmployeeCasualtyId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -96,7 +105,7 @@ namespace Domain.Model.Exceptions.EmployeeCasualty
 
         public EmployeeCasualtyNotFoundException(int employeeCasualtyId) : base($"The employee casualty {employeeCasualtyId} was not found.")
         {
-            EmployeeCasualtyId = employeeCasualtyId;
+            this.EmployeeCasualtyId = employeeCasualtyId;
         }
 
         public int EmployeeCasualtyId { get; }

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Web;
-using System;
-
-namespace ApiServer
+﻿namespace ApiServer
 {
+    using System;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+    using NLog.Web;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -18,7 +18,7 @@ namespace ApiServer
             }
             catch (Exception exception)
             {
-                //NLog: catch setup errors
+                // NLog: catch setup errors
                 logger.Error(exception, "Stopped program because of exception");
                 throw;
             }

@@ -1,26 +1,30 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions;
-using Domain.Model.Exceptions.Skill;
-using Domain.Services.Contracts;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="DeclineReasonService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions;
+    using Domain.Model.Exceptions.Skill;
+    using Domain.Services.Contracts;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class DeclineReasonService : IDeclineReasonService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<DeclineReason> _declineReasonRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<DeclineReasonService> _log;
-        private readonly UpdateDeclineReasonContractValidator _updateSkillContractValidator;
-        private readonly CreateDeclineReasonContractValidator _createSkillContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<DeclineReason> declineReasonRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<DeclineReasonService> log;
+        private readonly UpdateDeclineReasonContractValidator updateSkillContractValidator;
+        private readonly CreateDeclineReasonContractValidator createSkillContractValidator;
 
         public DeclineReasonService(
             IMapper mapper,
@@ -28,100 +32,101 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<DeclineReasonService> log,
             UpdateDeclineReasonContractValidator updateSkillContractValidator,
-            CreateDeclineReasonContractValidator createSkillContractValidator
-            )
+            CreateDeclineReasonContractValidator createSkillContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _declineReasonRepository = declineReasonRepository;
-            _log = log;
-            _updateSkillContractValidator = updateSkillContractValidator;
-            _createSkillContractValidator = createSkillContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.declineReasonRepository = declineReasonRepository;
+            this.log = log;
+            this.updateSkillContractValidator = updateSkillContractValidator;
+            this.createSkillContractValidator = createSkillContractValidator;
         }
 
         public CreatedDeclineReasonContract Create(CreateDeclineReasonContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(0, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(0, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var declineReason = _mapper.Map<DeclineReason>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var declineReason = this.mapper.Map<DeclineReason>(contract);
 
-            var createdDeclineReason = _declineReasonRepository.Create(declineReason);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedDeclineReasonContract>(createdDeclineReason);
+            var createdDeclineReason = this.declineReasonRepository.Create(declineReason);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedDeclineReasonContract>(createdDeclineReason);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching skill {id}");
-            DeclineReason declineReason = _declineReasonRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching skill {id}");
+            DeclineReason declineReason = this.declineReasonRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (declineReason == null)
             {
                 throw new DeleteDeclineReasonNotFoundException(id);
             }
-            _log.LogInformation($"Deleting skill {id}");
-            _declineReasonRepository.Delete(declineReason);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting skill {id}");
+            this.declineReasonRepository.Delete(declineReason);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateDeclineReasonContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(contract.Id, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(contract.Id, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var declineReason = _mapper.Map<DeclineReason>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var declineReason = this.mapper.Map<DeclineReason>(contract);
 
-            var updatedSkill = _declineReasonRepository.Update(declineReason);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            var updatedSkill = this.declineReasonRepository.Update(declineReason);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedDeclineReasonContract> List()
         {
-            var declineReasonQuery = _declineReasonRepository
+            var declineReasonQuery = this.declineReasonRepository
                 .QueryEager();
 
             var declineReasonResult = declineReasonQuery.ToList();
 
-            return _mapper.Map<List<ReadedDeclineReasonContract>>(declineReasonResult);
+            return this.mapper.Map<List<ReadedDeclineReasonContract>>(declineReasonResult);
         }
 
         public IEnumerable<ReadedDeclineReasonContract> ListNamed()
         {
-            var declineReasonQuery = _declineReasonRepository
+            var declineReasonQuery = this.declineReasonRepository
                 .QueryEager();
 
             var declineReasonResult = declineReasonQuery.Where(d => !d.Name.Equals("Other"))
                 .ToList();
 
-            return _mapper.Map<List<ReadedDeclineReasonContract>>(declineReasonResult);
+            return this.mapper.Map<List<ReadedDeclineReasonContract>>(declineReasonResult);
         }
 
         public ReadedDeclineReasonContract Read(int id)
         {
-            var declineReasonQuery = _declineReasonRepository
+            var declineReasonQuery = this.declineReasonRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
             var skillResult = declineReasonQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedDeclineReasonContract>(skillResult);
+            return this.mapper.Map<ReadedDeclineReasonContract>(skillResult);
         }
 
         private void ValidateContract(CreateDeclineReasonContract contract)
         {
             try
             {
-                _createSkillContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createSkillContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -133,8 +138,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateSkillContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateSkillContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -146,8 +152,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                DeclineReason declineReason = _declineReasonRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
-                if (declineReason != null) throw new InvalidDeclineReasonException("The DeclineReason already exists .");
+                DeclineReason declineReason = this.declineReasonRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
+                if (declineReason != null)
+                {
+                    throw new InvalidDeclineReasonException("The DeclineReason already exists .");
+                }
             }
             catch (ValidationException ex)
             {

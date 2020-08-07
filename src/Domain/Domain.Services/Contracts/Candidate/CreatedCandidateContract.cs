@@ -1,4 +1,8 @@
-﻿namespace Domain.Services.Contracts.Candidate
+﻿// <copyright file="CreatedCandidateContract.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Services.Contracts.Candidate
 {
     public class CreatedCandidateContract
     {

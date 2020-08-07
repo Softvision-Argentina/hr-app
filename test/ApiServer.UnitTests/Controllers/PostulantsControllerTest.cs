@@ -1,31 +1,35 @@
-﻿using ApiServer.Contracts.Postulant;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Postulant;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="PostulantsControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Postulant;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Postulant;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class PostulantsControllerTest
     {
-        private PostulantsController controller;
-        private Mock<ILog<PostulantsController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IPostulantService> mockService;
+        private readonly PostulantsController controller;
+        private readonly Mock<ILog<PostulantsController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IPostulantService> mockService;
 
         public PostulantsControllerTest()
         {
-            mockLog = new Mock<ILog<PostulantsController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IPostulantService>();
-            controller = new PostulantsController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<PostulantsController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IPostulantService>();
+            this.controller = new PostulantsController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
@@ -38,14 +42,14 @@ namespace ApiServer.UnitTests.Controllers
                 Name = "John Doe",
                 EmailAddress = "jdoe@test.com",
                 LinkedInProfile = "testProfile",
-                Cv = "",
-                CreatedDate = DateTime.Now
+                Cv = string.Empty,
+                CreatedDate = DateTime.Now,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedPostulantContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedPostulantViewModel>>(It.IsAny<IEnumerable<ReadedPostulantContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedPostulantContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedPostulantViewModel>>(It.IsAny<IEnumerable<ReadedPostulantContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -55,8 +59,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedPostulantViewModel>>(It.IsAny<IEnumerable<ReadedPostulantContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedPostulantViewModel>>(It.IsAny<IEnumerable<ReadedPostulantContract>>()), Times.Once);
         }
     }
 }

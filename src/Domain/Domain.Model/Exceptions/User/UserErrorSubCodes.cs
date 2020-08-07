@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.User
+﻿// <copyright file="UserErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.User
 {
     public enum UserErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateUserNotFound,
         UpdateHasNotChanges,
-        UserNotFound
+        UserNotFound,
     }
 }

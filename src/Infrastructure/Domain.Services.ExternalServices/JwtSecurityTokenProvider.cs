@@ -1,25 +1,30 @@
-﻿using Core;
-using Domain.Services.ExternalServices.Config;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿// <copyright file="JwtSecurityTokenProvider.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.ExternalServices
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using Core;
+    using Domain.Services.ExternalServices.Config;
+    using Microsoft.IdentityModel.Tokens;
+
     public class JwtSecurityTokenProvider : ISecurityTokenProvider
     {
-        private readonly JwtSettings _settings;
+        private readonly JwtSettings settings;
+
         public JwtSecurityTokenProvider(JwtSettings settings)
         {
-            _settings = settings;
+            this.settings = settings;
         }
-        
+
         public string BuildSecurityToken(string userName, List<Claim> claims)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.settings.Key));
             var jwtClaims = new List<Claim>();
             jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Sub, userName));
             jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
@@ -31,11 +36,11 @@ namespace Domain.Services.ExternalServices
             }
 
             var token = new JwtSecurityToken(
-                issuer: _settings.Issuer,
-                audience: _settings.Audience,
+                issuer: this.settings.Issuer,
+                audience: this.settings.Audience,
                 claims: jwtClaims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(_settings.MinutesToExpiration),
+                expires: DateTime.UtcNow.AddMinutes(this.settings.MinutesToExpiration),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(token);

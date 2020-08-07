@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.CompanyCalendar
+﻿// <copyright file="CompanyCalendarErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.CompanyCalendar
 {
     public enum CompanyCalendarErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateCompanyCalendarNotFound,
         UpdateHasNotChanges,
-        CompanyCalendarNotFound
+        CompanyCalendarNotFound,
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core.Testing.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Persistance.EF.Extensions;
+﻿// <copyright file="BaseIntegrationTestFixture.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core.Testing.Platform
 {
@@ -11,9 +8,9 @@ namespace Core.Testing.Platform
     {
         public BaseIntegrationTestFixture()
         {
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
-               // context.ResetAllIdentitiesId();
+                // context.ResetAllIdentitiesId();
             });
         }
     }

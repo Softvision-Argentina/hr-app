@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Employee
+﻿// <copyright file="EmployeeErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Employee
 {
     public enum EmployeeErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateEmployeeNotFound,
         UpdateHasNotChanges,
-        EmployeeNotFound
+        EmployeeNotFound,
     }
 }

@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.DaysOff
+﻿// <copyright file="DaysOffErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.DaysOff
 {
     public enum DaysOffErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateDaysOffNotFound,
         UpdateHasNotChanges,
-        DaysOffNotFound
+        DaysOffNotFound,
     }
 }

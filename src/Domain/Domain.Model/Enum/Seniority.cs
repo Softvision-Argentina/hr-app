@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Enum
+﻿// <copyright file="Seniority.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Enum
 {
     public enum Seniority
     {
@@ -10,6 +14,6 @@
         SemiSenior3,
         Senior1,
         Senior2,
-        Senior3
+        Senior3,
     }
 }

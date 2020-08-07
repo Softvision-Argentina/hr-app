@@ -1,18 +1,22 @@
-﻿using ApiServer.Contracts.Stage;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Stage;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿// <copyright file="ProcessStageController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Stage;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Stage;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     public class ProcessStageController : BaseController<ProcessStageController>
     {
-        private readonly IProcessStageService _processStageService;
-        private readonly IMapper _mapper;
+        private readonly IProcessStageService processStageService;
+        private readonly IMapper mapper;
 
         public ProcessStageController(
             IProcessStageService processStageService,
@@ -20,66 +24,66 @@ namespace ApiServer.Controllers
             IMapper mapper)
             : base(logger)
         {
-            _processStageService = processStageService;
-            _mapper = mapper;
+            this.processStageService = processStageService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var stages = _processStageService.List();
+                var stages = this.processStageService.List();
 
-                return Accepted(_mapper.Map<List<ReadedStageViewModel>>(stages));
+                return this.Accepted(this.mapper.Map<List<ReadedStageViewModel>>(stages));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var stage = _processStageService.Read(id);
+                var stage = this.processStageService.Read(id);
 
-                return Accepted(_mapper.Map<ReadedStageViewModel>(stage));
+                return this.Accepted(this.mapper.Map<ReadedStageViewModel>(stage));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateStageViewModel createStageVm)
+        public IActionResult Post([FromBody] CreateStageViewModel createStageVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateStageContract>(createStageVm);
-                var returnContract = _processStageService.Create(contract);
+                var contract = this.mapper.Map<CreateStageContract>(createStageVm);
+                var returnContract = this.processStageService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedStageViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedStageViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateStageViewModel updateStageVm)
+        public IActionResult Put(int id, [FromBody] UpdateStageViewModel updateStageVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateStageContract>(updateStageVm);
+                var contract = this.mapper.Map<UpdateStageContract>(updateStageVm);
                 contract.Id = id;
 
-                _processStageService.Update(contract);
+                this.processStageService.Update(contract);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _processStageService.Delete(id);
+                this.processStageService.Delete(id);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
     }

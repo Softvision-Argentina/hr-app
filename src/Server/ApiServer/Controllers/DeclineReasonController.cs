@@ -1,106 +1,110 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="DeclineReasonController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class DeclineReasonController : BaseController<DeclineReasonController>
     {
-        private readonly IDeclineReasonService _declineReasonService;
-        private readonly IMapper _mapper;
+        private readonly IDeclineReasonService declineReasonService;
+        private readonly IMapper mapper;
 
         public DeclineReasonController(
             IDeclineReasonService declineReasonService,
             ILog<DeclineReasonController> logger,
             IMapper mapper) : base(logger)
         {
-            _declineReasonService = declineReasonService;
-            _mapper = mapper;
+            this.declineReasonService = declineReasonService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var declineReasons = _declineReasonService.List();
+                var declineReasons = this.declineReasonService.List();
 
-                return Accepted(_mapper.Map<List<ReadedDeclineReasonViewModel>>(declineReasons));
+                return this.Accepted(this.mapper.Map<List<ReadedDeclineReasonViewModel>>(declineReasons));
             });
         }
 
         [HttpGet("Named")]
         public IActionResult GetNamed()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var declineReasons = _declineReasonService.ListNamed();
+                var declineReasons = this.declineReasonService.ListNamed();
 
-                return Accepted(_mapper.Map<List<ReadedDeclineReasonViewModel>>(declineReasons));
+                return this.Accepted(this.mapper.Map<List<ReadedDeclineReasonViewModel>>(declineReasons));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var skillTpe = _declineReasonService.Read(id);
+                var skillTpe = this.declineReasonService.Read(id);
 
                 if (skillTpe == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedDeclineReasonViewModel>(skillTpe));
+                return this.Accepted(this.mapper.Map<ReadedDeclineReasonViewModel>(skillTpe));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDeclineReasonViewModel createDeclineReasonVm)
+        public IActionResult Post([FromBody] CreateDeclineReasonViewModel createDeclineReasonVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDeclineReasonContract>(createDeclineReasonVm);
-                var returnContract = _declineReasonService.Create(contract);
+                var contract = this.mapper.Map<CreateDeclineReasonContract>(createDeclineReasonVm);
+                var returnContract = this.declineReasonService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedDeclineReasonViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedDeclineReasonViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDeclineReasonViewModel updateDeclineReasonVm)
+        public IActionResult Put(int id, [FromBody] UpdateDeclineReasonViewModel updateDeclineReasonVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDeclineReasonContract>(updateDeclineReasonVm);
+                var contract = this.mapper.Map<UpdateDeclineReasonContract>(updateDeclineReasonVm);
                 contract.Id = id;
-                _declineReasonService.Update(contract);
+                this.declineReasonService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _declineReasonService.Delete(id);
-                return Accepted();
+                this.declineReasonService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

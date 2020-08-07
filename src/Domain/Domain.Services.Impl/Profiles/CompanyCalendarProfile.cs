@@ -1,17 +1,21 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.CompanyCalendar;
+﻿// <copyright file="CompanyCalendarProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
-    class CompanyCalendarProfile : Profile
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.CompanyCalendar;
+
+    internal class CompanyCalendarProfile : Profile
     {
         public CompanyCalendarProfile()
         {
-            CreateMap<CompanyCalendar, ReadedCompanyCalendarContract>();
-            CreateMap<CreateCompanyCalendarContract, CompanyCalendar>();
-            CreateMap<CompanyCalendar, CreatedCompanyCalendarContract>();
-            CreateMap<UpdateCompanyCalendarContract, CompanyCalendar>();
+            this.CreateMap<CompanyCalendar, ReadedCompanyCalendarContract>();
+            this.CreateMap<CreateCompanyCalendarContract, CompanyCalendar>();
+            this.CreateMap<CompanyCalendar, CreatedCompanyCalendarContract>();
+            this.CreateMap<UpdateCompanyCalendarContract, CompanyCalendar>();
         }
     }
 }

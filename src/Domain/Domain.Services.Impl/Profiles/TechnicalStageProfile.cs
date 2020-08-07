@@ -1,40 +1,52 @@
-﻿using ApiServer.Contracts.Stage;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Stage;
-using System;
+﻿// <copyright file="TechnicalStageProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using System;
+    using ApiServer.Contracts.Stage;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.Stage;
+
     public class TechnicalStageProfile : StageProfile
     {
         public TechnicalStageProfile()
         {
-            CreateMap<TechnicalStage, ReadedTechnicalStageContract>();
+            this.CreateMap<TechnicalStage, ReadedTechnicalStageContract>();
 
-            CreateMap<CreateTechnicalStageContract, TechnicalStage>()
-                .ForMember(destination => destination.Status,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)))
-                .ForMember(destination => destination.Seniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
-                .ForMember(destination => destination.AlternativeSeniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
-                .ForMember(destination => destination.EnglishLevel,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
+            this.CreateMap<CreateTechnicalStageContract, TechnicalStage>()
+                .ForMember(
+                    destination => destination.Status,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)))
+                .ForMember(
+                    destination => destination.Seniority,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
+                .ForMember(
+                    destination => destination.AlternativeSeniority,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
+                .ForMember(
+                    destination => destination.EnglishLevel,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
 
-            CreateMap<TechnicalStage, CreatedTechnicalStageContract>();
+            this.CreateMap<TechnicalStage, CreatedTechnicalStageContract>();
 
-            CreateMap<UpdateTechnicalStageContract, TechnicalStage>()
-                                .ForMember(destination => destination.Status,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)))
-                .ForMember(destination => destination.Seniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
-                .ForMember(destination => destination.AlternativeSeniority,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
-                .ForMember(destination => destination.EnglishLevel,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
+            this.CreateMap<UpdateTechnicalStageContract, TechnicalStage>()
+                                .ForMember(
+                                    destination => destination.Status,
+                                    opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)))
+                .ForMember(
+                    destination => destination.Seniority,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.Seniority)))
+                .ForMember(
+                    destination => destination.AlternativeSeniority,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(Seniority), source.AlternativeSeniority)))
+                .ForMember(
+                    destination => destination.EnglishLevel,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(EnglishLevel), source.EnglishLevel)));
 
-            CreateMap<UpdateTechnicalStageViewModel, UpdateTechnicalStageContract>();
+            this.CreateMap<UpdateTechnicalStageViewModel, UpdateTechnicalStageContract>();
         }
     }
 }

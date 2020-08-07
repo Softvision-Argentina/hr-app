@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="DummyException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Seed.Exceptions
 {
+    using System;
+    using Core;
+
     public class DummyException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Dummy;
@@ -28,7 +32,7 @@ namespace Domain.Model.Seed.Exceptions
         public DeleteDummyNotFoundException(Guid dummyId)
             : base($"Dummy not found for the DummyId: {dummyId}")
         {
-            DummyId = dummyId;
+            this.DummyId = dummyId;
         }
 
         public Guid DummyId { get; set; }
@@ -41,13 +45,15 @@ namespace Domain.Model.Seed.Exceptions
         public DummyDeletedException(Guid id, string name)
             : base($"The dummy {name} was deleted")
         {
-            DummyId = id;
-            Name = name;
+            this.DummyId = id;
+            this.Name = name;
         }
 
         public Guid DummyId { get; set; }
+
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidDummyException
     {
         protected override int SubErrorCode => (int)DummyErrorSubCodes.InvalidUpdate;
@@ -65,11 +71,12 @@ namespace Domain.Model.Seed.Exceptions
         public UpdateDummyNotFoundException(Guid dummyId, Guid clientSystemId)
             : base($"Dummy {dummyId} and Client System Id {clientSystemId} was not found.")
         {
-            DummyId = dummyId;
-            ClientSystemId = clientSystemId;
+            this.DummyId = dummyId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public Guid DummyId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,11 +87,12 @@ namespace Domain.Model.Seed.Exceptions
         public UpdateHasNotChangesException(Guid dummyId, Guid clientSystemId, string name)
             : base($"Dummy {name} has not changes.")
         {
-            DummyId = dummyId;
-            ClientSystemId = clientSystemId;
+            this.DummyId = dummyId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public Guid DummyId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +103,7 @@ namespace Domain.Model.Seed.Exceptions
         public DummyNotFoundException(Guid dummyId)
             : base($"The Dummy {dummyId} was not found.")
         {
-            DummyId = dummyId;
+            this.DummyId = dummyId;
         }
 
         public Guid DummyId { get; }

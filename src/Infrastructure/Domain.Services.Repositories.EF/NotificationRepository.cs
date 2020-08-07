@@ -1,53 +1,57 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Interfaces.Repositories;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="NotificationRepository.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Repositories.EF
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Services.Interfaces.Repositories;
+
     public class NotificationRepository : INotificationRepository
     {
-        private readonly DataBaseContext _context;
-        private readonly IRepository<Candidate> _cand;
+        private readonly DataBaseContext context;
+        private readonly IRepository<Candidate> cand;
 
-        public NotificationRepository(DataBaseContext context,IRepository<Candidate> cand)
+        public NotificationRepository(DataBaseContext context, IRepository<Candidate> cand)
         {
-            _context = context;
-            _cand = cand;
+            this.context = context;
+            this.cand = cand;
         }
 
         public void Create(Notification notification, int candidateId)
         {
-            var candList = GetReferralsList(candidateId);
+            var candList = this.GetReferralsList(candidateId);
             foreach (var cand in candList)
             {
                 notification.ApplicationUserId = cand.Id;
                 notification.Id = notification.Id;
                 notification.ReferredBy = cand.ReferredBy;
 
-                _context.Notifications.Add(notification);
-                _context.SaveChanges();
+                this.context.Notifications.Add(notification);
+                this.context.SaveChanges();
             }
         }
 
         private List<Candidate> GetReferralsList(int candidateId)
         {
-            return _context.Candidates.Where(w => w.Id == candidateId).ToList();
+            return this.context.Candidates.Where(w => w.Id == candidateId).ToList();
         }
 
         public List<Notification> GetUserNotifications(string notifiedUser)
         {
-            return _context.Notifications.Where(u => u.ReferredBy.Equals(notifiedUser) && !u.IsRead).ToList();
+            return this.context.Notifications.Where(u => u.ReferredBy.Equals(notifiedUser) && !u.IsRead).ToList();
         }
 
         public void ReadNotification(int notificationId, string userId)
         {
-            var notification = _context.Notifications.Find(notificationId);
+            var notification = this.context.Notifications.Find(notificationId);
 
             notification.IsRead = true;
-            _context.Notifications.Update(notification);
-            _context.SaveChanges();
+            this.context.Notifications.Update(notification);
+            this.context.SaveChanges();
         }
     }
 }

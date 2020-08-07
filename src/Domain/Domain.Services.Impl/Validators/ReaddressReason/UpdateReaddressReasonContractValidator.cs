@@ -1,16 +1,19 @@
-﻿using Domain.Services.Contracts;
-using Domain.Services.Contracts.ReaddressReason;
-using FluentValidation;
+﻿// <copyright file="UpdateReaddressReasonContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators
 {
+    using Domain.Services.Contracts.ReaddressReason;
+    using FluentValidation;
+
     public class UpdateReaddressReasonContractValidator : AbstractValidator<UpdateReaddressReason>
     {
         public UpdateReaddressReasonContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETUPDATE, () =>
             {
-                RuleFor(_ => _.Description).MaximumLength(200).NotEmpty();
+                this.RuleFor(_ => _.Description).MaximumLength(200).NotEmpty();
             });
         }
     }

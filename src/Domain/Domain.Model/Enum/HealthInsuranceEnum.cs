@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// <copyright file="HealthInsuranceEnum.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Enum
 {
@@ -11,6 +11,6 @@ namespace Domain.Model.Enum
         OSDE310,
         OSDE410,
         ContinuesWithCurrentone,
-        Other
+        Other,
     }
 }

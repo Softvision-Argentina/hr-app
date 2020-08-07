@@ -1,40 +1,44 @@
-﻿using Core;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="NotificationController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using Core;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/Notifications")]
     [ApiController]
     public class NotificationController : BaseController<NotificationController>
     {
-        private readonly INotificationService _notificationService;
+        private readonly INotificationService notificationService;
 
         public NotificationController(INotificationService notificationService, ILog<NotificationController> logger)
             : base(logger)
         {
-            _notificationService = notificationService;
+            this.notificationService = notificationService;
         }
 
         [HttpGet]
         public IActionResult GetNotification()
         {
-            return ApiAction( () =>
-            {
-                var notifications = _notificationService.GetNotification();
+            return this.ApiAction(() =>
+           {
+               var notifications = this.notificationService.GetNotification();
 
-                return Accepted(notifications);
-            });
+               return this.Accepted(notifications);
+           });
         }
 
         [HttpPut("{id}")]
         public IActionResult ReadNotification(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _notificationService.ReadNotification(id);
+                this.notificationService.ReadNotification(id);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
     }

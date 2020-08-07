@@ -1,34 +1,37 @@
-﻿using ApiServer.Contracts.Seed;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Services.Contracts.Seed;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="DummiesControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Seed;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.Seed;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class DummiesControllerTest
     {
-        private DummiesController controller;
-        private Mock<ILog<DummiesController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IDummyService> mockService;
+        private readonly DummiesController controller;
+        private readonly Mock<ILog<DummiesController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IDummyService> mockService;
 
         public DummiesControllerTest()
         {
-            mockLog = new Mock<ILog<DummiesController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IDummyService>();
-            controller = new DummiesController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<DummiesController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IDummyService>();
+            this.controller = new DummiesController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
-
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
         public void Should_Get_AllDummies()
@@ -39,13 +42,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = Guid.NewGuid(),
                 Name = "TestDeclineReason",
                 Description = "TestDeclineReason",
-                TestValue = ""
+                TestValue = string.Empty,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedDummyContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedDummyViewModel>>(It.IsAny<IEnumerable<ReadedDummyContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedDummyContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedDummyViewModel>>(It.IsAny<IEnumerable<ReadedDummyContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -55,8 +58,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedDummyViewModel>>(It.IsAny<IEnumerable<ReadedDummyContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedDummyViewModel>>(It.IsAny<IEnumerable<ReadedDummyContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -68,13 +71,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = dummyId,
                 Name = "Test",
                 Description = "Test",
-                TestValue = ""
+                TestValue = string.Empty,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<Guid>())).Returns(new ReadedDummyContract());
-            mockMapper.Setup(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<Guid>())).Returns(new ReadedDummyContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>())).Returns(expectedValue);
 
-            var result = controller.Get(dummyId);
+            var result = this.controller.Get(dummyId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -84,8 +87,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<Guid>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<Guid>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -94,13 +97,13 @@ namespace ApiServer.UnitTests.Controllers
             var dummyId = Guid.NewGuid();
             var expectedValue = dummyId;
 
-            var result = controller.Get(dummyId);
+            var result = this.controller.Get(dummyId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<Guid>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<Guid>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedDummyViewModel>(It.IsAny<ReadedDummyContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -110,18 +113,18 @@ namespace ApiServer.UnitTests.Controllers
             {
                 Name = "Test",
                 Description = "Test",
-                TestValue = ""
+                TestValue = string.Empty,
             };
             var expectedValue = new CreatedDummyViewModel
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
             };
 
-            mockMapper.Setup(_ => _.Map<CreateDummyContract>(It.IsAny<CreateDummyViewModel>())).Returns(new CreateDummyContract());
-            mockMapper.Setup(_ => _.Map<CreatedDummyViewModel>(It.IsAny<CreatedDummyContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateDummyContract>())).Returns(new CreatedDummyContract());
+            this.mockMapper.Setup(_ => _.Map<CreateDummyContract>(It.IsAny<CreateDummyViewModel>())).Returns(new CreateDummyContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedDummyViewModel>(It.IsAny<CreatedDummyContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateDummyContract>())).Returns(new CreatedDummyContract());
 
-            var result = controller.Post(dummyVM);
+            var result = this.controller.Post(dummyVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -131,8 +134,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateDummyContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedDummyViewModel>(It.IsAny<CreatedDummyContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateDummyContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedDummyViewModel>(It.IsAny<CreatedDummyContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -142,16 +145,16 @@ namespace ApiServer.UnitTests.Controllers
             var dummyToUpdate = new UpdateDummyViewModel();
             var expectedStatusCode = 202;
 
-            mockMapper.Setup(_ => _.Map<UpdateDummyContract>(It.IsAny<UpdateDummyViewModel>())).Returns(new UpdateDummyContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateDummyContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateDummyContract>(It.IsAny<UpdateDummyViewModel>())).Returns(new UpdateDummyContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateDummyContract>()));
 
-            var result = controller.Put(dummyId, dummyToUpdate);
+            var result = this.controller.Put(dummyId, dummyToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedStatusCode, (result as AcceptedResult).StatusCode);
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateDummyContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateDummyContract>(It.IsAny<UpdateDummyViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateDummyContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateDummyContract>(It.IsAny<UpdateDummyViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -159,19 +162,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var dummyId = Guid.NewGuid();
 
-            mockService.Setup(_ => _.Delete(It.IsAny<Guid>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<Guid>()));
 
-            var result = controller.Delete(dummyId);
+            var result = this.controller.Delete(dummyId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<Guid>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

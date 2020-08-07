@@ -1,25 +1,28 @@
-﻿using Core.Persistance;
-using Core.Persistance.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿// <copyright file="UnitOfWork.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Persistance.EF
 {
+    using System;
+    using Core.Persistance;
+    using Core.Persistance.Exceptions;
+    using Microsoft.EntityFrameworkCore;
+
     public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     {
-        protected TContext _dbContext { get; private set; }
+        protected TContext DbContext { get; private set; }
 
         public UnitOfWork(TContext dbContext)
         {
-            _dbContext = dbContext;
+            this.DbContext = dbContext;
         }
 
         public int Complete()
         {
             try
             {
-                return _dbContext.SaveChanges();
+                return this.DbContext.SaveChanges();
             }
             catch (Exception ex)
             {

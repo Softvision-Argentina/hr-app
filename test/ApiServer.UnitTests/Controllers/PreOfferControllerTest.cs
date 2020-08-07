@@ -1,33 +1,37 @@
-﻿using ApiServer.Contracts.PreOffer;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.PreOffer;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="PreOfferControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.PreOffer;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.PreOffer;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class PreOfferControllerTest
     {
-        private PreOfferController controller;
-        private Mock<ILog<PreOfferController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IPreOfferService> mockService;
+        private readonly PreOfferController controller;
+        private readonly Mock<ILog<PreOfferController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IPreOfferService> mockService;
 
         public PreOfferControllerTest()
         {
-            mockLog = new Mock<ILog<PreOfferController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IPreOfferService>();
-            controller = new PreOfferController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<PreOfferController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IPreOfferService>();
+            this.controller = new PreOfferController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
@@ -42,13 +46,13 @@ namespace ApiServer.UnitTests.Controllers
                 Status = PreOfferStatus.Accepted,
                 VacationDays = 10,
                 HealthInsurance = HealthInsuranceEnum.OSDE210,
-                ProcessId = 0
+                ProcessId = 0,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedPreOfferContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedPreOfferViewModel>>(It.IsAny<IEnumerable<ReadedPreOfferContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedPreOfferContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedPreOfferViewModel>>(It.IsAny<IEnumerable<ReadedPreOfferContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -58,8 +62,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedPreOfferViewModel>>(It.IsAny<IEnumerable<ReadedPreOfferContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedPreOfferViewModel>>(It.IsAny<IEnumerable<ReadedPreOfferContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -74,13 +78,13 @@ namespace ApiServer.UnitTests.Controllers
                 Status = PreOfferStatus.Accepted,
                 VacationDays = 10,
                 HealthInsurance = HealthInsuranceEnum.OSDE210,
-                ProcessId = 0
+                ProcessId = 0,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedPreOfferContract());
-            mockMapper.Setup(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedPreOfferContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>())).Returns(expectedValue);
 
-            var result = controller.Get(preOfferId);
+            var result = this.controller.Get(preOfferId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -90,8 +94,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -100,13 +104,13 @@ namespace ApiServer.UnitTests.Controllers
             var preOfferId = 0;
             var expectedValue = preOfferId;
 
-            var result = controller.Get(preOfferId);
+            var result = this.controller.Get(preOfferId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedPreOfferViewModel>(It.IsAny<ReadedPreOfferContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -119,19 +123,19 @@ namespace ApiServer.UnitTests.Controllers
                 Status = PreOfferStatus.Accepted,
                 VacationDays = 10,
                 HealthInsurance = HealthInsuranceEnum.OSDE210,
-                ProcessId = 0
+                ProcessId = 0,
             };
 
             var expectedValue = new CreatedPreOfferViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreatePreOfferContract>(It.IsAny<CreatePreOfferViewModel>())).Returns(new CreatePreOfferContract());
-            mockMapper.Setup(_ => _.Map<CreatedPreOfferViewModel>(It.IsAny<CreatedPreOfferContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreatePreOfferContract>())).Returns(new CreatedPreOfferContract());
+            this.mockMapper.Setup(_ => _.Map<CreatePreOfferContract>(It.IsAny<CreatePreOfferViewModel>())).Returns(new CreatePreOfferContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedPreOfferViewModel>(It.IsAny<CreatedPreOfferContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreatePreOfferContract>())).Returns(new CreatedPreOfferContract());
 
-            var result = controller.Post(preOfferVM);
+            var result = this.controller.Post(preOfferVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -141,8 +145,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreatePreOfferContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedPreOfferViewModel>(It.IsAny<CreatedPreOfferContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreatePreOfferContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedPreOfferViewModel>(It.IsAny<CreatedPreOfferContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -150,18 +154,18 @@ namespace ApiServer.UnitTests.Controllers
         {
             var preOfferId = 0;
             var preOfferToUpdate = new UpdatePreOfferViewModel();
-            var expectedValue = new { id = preOfferId};
+            var expectedValue = new { id = preOfferId };
 
-            mockMapper.Setup(_ => _.Map<UpdatePreOfferContract>(It.IsAny<UpdatePreOfferViewModel>())).Returns(new UpdatePreOfferContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdatePreOfferContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdatePreOfferContract>(It.IsAny<UpdatePreOfferViewModel>())).Returns(new UpdatePreOfferContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdatePreOfferContract>()));
 
-            var result = controller.Put(preOfferId, preOfferToUpdate);
+            var result = this.controller.Put(preOfferId, preOfferToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdatePreOfferContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdatePreOfferContract>(It.IsAny<UpdatePreOfferViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdatePreOfferContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdatePreOfferContract>(It.IsAny<UpdatePreOfferViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -169,19 +173,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var preOfferId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(preOfferId);
+            var result = this.controller.Delete(preOfferId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

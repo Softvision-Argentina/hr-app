@@ -1,8 +1,12 @@
-﻿using Core;
-using System.Collections.Generic;
+﻿// <copyright file="CommunityValidationException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Community
 {
+    using System.Collections.Generic;
+    using Core;
+
     public class CreateContractInvalidException : BusinessValidationException
     {
         protected override int SubErrorCode => (int)CommunityValidationExceptionCodes.CreateContractInvalid;

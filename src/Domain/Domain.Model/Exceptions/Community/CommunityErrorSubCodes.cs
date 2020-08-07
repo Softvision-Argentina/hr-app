@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// <copyright file="CommunityErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Community
 {
@@ -12,6 +12,6 @@ namespace Domain.Model.Exceptions.Community
         InvalidUpdate,
         UpdateCommunityNotFound,
         UpdateHasNotChanges,
-        CommunityNotFound
+        CommunityNotFound,
     }
 }

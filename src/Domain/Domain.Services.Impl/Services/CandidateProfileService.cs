@@ -1,27 +1,31 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.CandidateProfile;
-using Domain.Services.Contracts.CandidateProfile;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.CandidateProfile;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="CandidateProfileService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.CandidateProfile;
+    using Domain.Services.Contracts.CandidateProfile;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.CandidateProfile;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
+
     public class CandidateProfileService : ICandidateProfileService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<CandidateProfile> _candidateProfileRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<CandidateProfileService> _log;
-        private readonly UpdateCandidateProfileContractValidator _updateCandidateProfileContractValidator;
-        private readonly CreateCandidateProfileContractValidator _createCandidateProfileContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<CandidateProfile> candidateProfileRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<CandidateProfileService> log;
+        private readonly UpdateCandidateProfileContractValidator updateCandidateProfileContractValidator;
+        private readonly CreateCandidateProfileContractValidator createCandidateProfileContractValidator;
 
         public CandidateProfileService(
             IMapper mapper,
@@ -29,90 +33,90 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<CandidateProfileService> log,
             UpdateCandidateProfileContractValidator updateCandidateProfileContractValidator,
-            CreateCandidateProfileContractValidator createCandidateProfileContractValidator
-            )
+            CreateCandidateProfileContractValidator createCandidateProfileContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _candidateProfileRepository = candidateProfileRepository;
-            _log = log;
-            _updateCandidateProfileContractValidator = updateCandidateProfileContractValidator;
-            _createCandidateProfileContractValidator = createCandidateProfileContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.candidateProfileRepository = candidateProfileRepository;
+            this.log = log;
+            this.updateCandidateProfileContractValidator = updateCandidateProfileContractValidator;
+            this.createCandidateProfileContractValidator = createCandidateProfileContractValidator;
         }
 
         public CreatedCandidateProfileContract Create(CreateCandidateProfileContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(0, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(0, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var candidateProfile = _mapper.Map<CandidateProfile>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var candidateProfile = this.mapper.Map<CandidateProfile>(contract);
 
-            var createdCandidateProfile = _candidateProfileRepository.Create(candidateProfile);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedCandidateProfileContract>(createdCandidateProfile);
+            var createdCandidateProfile = this.candidateProfileRepository.Create(candidateProfile);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedCandidateProfileContract>(createdCandidateProfile);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching Candidate Profile {id}");
-            var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Id == id);
+            this.log.LogInformation($"Searching Candidate Profile {id}");
+            var candidateProfile = this.candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Id == id);
 
             if (candidateProfile == null)
             {
                 throw new DeleteCandidateProfileNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Candidate Profile {id}");
-            _candidateProfileRepository.Delete(candidateProfile);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting Candidate Profile {id}");
+            this.candidateProfileRepository.Delete(candidateProfile);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateCandidateProfileContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(contract.Id, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(contract.Id, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var candidateProfile = _mapper.Map<CandidateProfile>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var candidateProfile = this.mapper.Map<CandidateProfile>(contract);
 
-            _candidateProfileRepository.Update(candidateProfile);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            this.candidateProfileRepository.Update(candidateProfile);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
-
 
         public IEnumerable<ReadedCandidateProfileContract> List()
         {
-            var candidateProfileQuery = _candidateProfileRepository
-                .QueryEager();                 
-                
+            var candidateProfileQuery = this.candidateProfileRepository
+                .QueryEager();
+
             var candidateProfileResult = candidateProfileQuery.ToList();
 
-            return _mapper.Map<List<ReadedCandidateProfileContract>>(candidateProfileResult);
+            return this.mapper.Map<List<ReadedCandidateProfileContract>>(candidateProfileResult);
         }
 
         public ReadedCandidateProfileContract Read(int id)
         {
-            var candidateProfileQuery = _candidateProfileRepository
-                .QueryEager()                
+            var candidateProfileQuery = this.candidateProfileRepository
+                .QueryEager()
                 .Where(_ => _.Id == id);
 
             var candidateProfileResult = candidateProfileQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedCandidateProfileContract>(candidateProfileResult);
+            return this.mapper.Map<ReadedCandidateProfileContract>(candidateProfileResult);
         }
 
         private void ValidateContract(CreateCandidateProfileContract contract)
         {
             try
             {
-                _createCandidateProfileContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createCandidateProfileContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -124,8 +128,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateCandidateProfileContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateCandidateProfileContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -137,8 +142,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                var candidateProfile = _candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name && _.Id != id);
-                if (candidateProfile != null) throw new InvalidCandidateProfileException("The Profile already exists .");
+                var candidateProfile = this.candidateProfileRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name && _.Id != id);
+                if (candidateProfile != null)
+                {
+                    throw new InvalidCandidateProfileException("The Profile already exists .");
+                }
             }
             catch (ValidationException ex)
             {

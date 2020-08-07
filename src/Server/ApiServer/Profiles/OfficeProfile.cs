@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.Office;
-using AutoMapper;
-using Domain.Services.Contracts.Office;
+﻿// <copyright file="OfficeProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.Office;
+    using AutoMapper;
+    using Domain.Services.Contracts.Office;
+
     public class OfficeProfile : Profile
     {
         public OfficeProfile()
         {
-            CreateMap<CreateOfficeViewModel, CreateOfficeContract>();
-            CreateMap<CreatedOfficeContract, CreatedOfficeViewModel>();
-            CreateMap<ReadedOfficeContract, ReadedOfficeViewModel>();
-            CreateMap<UpdateOfficeViewModel, UpdateOfficeContract>();
+            this.CreateMap<CreateOfficeViewModel, CreateOfficeContract>();
+            this.CreateMap<CreatedOfficeContract, CreatedOfficeViewModel>();
+            this.CreateMap<ReadedOfficeContract, ReadedOfficeViewModel>();
+            this.CreateMap<UpdateOfficeViewModel, UpdateOfficeContract>();
         }
     }
 }

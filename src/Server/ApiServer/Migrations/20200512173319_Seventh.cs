@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200512173319_Seventh.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Seventh : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +28,7 @@ namespace ApiServer.Migrations
                     InterviewDate = table.Column<DateTime>(nullable: false),
                     Feedback = table.Column<string>(nullable: true),
                     Project = table.Column<string>(nullable: true),
-                    ClientStageId = table.Column<int>(nullable: false)
+                    ClientStageId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

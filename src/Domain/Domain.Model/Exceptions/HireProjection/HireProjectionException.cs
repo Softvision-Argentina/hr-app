@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="HireProjectionException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.HireProjection
 {
+    using System;
+    using Core;
+
     public class HireProjectionException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.HireProjection;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.HireProjection
         public DeleteHireProjectionNotFoundException(int hireProjectionId)
             : base($"Hire projection not found for the hireProjectionId: {hireProjectionId}")
         {
-            HireProjectionId = hireProjectionId;
+            this.HireProjectionId = hireProjectionId;
         }
 
         public int HireProjectionId { get; set; }
@@ -41,13 +45,15 @@ namespace Domain.Model.Exceptions.HireProjection
         public HireProjectionDeletedException(int id, int month, int year)
             : base($"The hire projection {year}-{month} was deleted")
         {
-            HireProjectionId = id;
-            Month = month;
-            Year = year;
+            this.HireProjectionId = id;
+            this.Month = month;
+            this.Year = year;
         }
 
         public int HireProjectionId { get; set; }
+
         public int Month { get; set; }
+
         public int Year { get; set; }
     }
 
@@ -64,14 +70,16 @@ namespace Domain.Model.Exceptions.HireProjection
     public class UpdateSkillNotFoundException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)HireProjectionErrorSubCodes.UpdateHireProjectionNotFound;
+
         public UpdateSkillNotFoundException(int hireProjectionId, Guid clientSystemId)
             : base($"skill {hireProjectionId} and Client System Id {clientSystemId} was not found.")
         {
-            HireProjectionId = hireProjectionId;
-            ClientSystemId = clientSystemId;
+            this.HireProjectionId = hireProjectionId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int HireProjectionId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -82,11 +90,12 @@ namespace Domain.Model.Exceptions.HireProjection
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, int month, int year)
             : base($"Hire projection {year}-{month} has not changes.")
         {
-            HireProjectionId = skillId;
-            ClientSystemId = clientSystemId;
+            this.HireProjectionId = skillId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int HireProjectionId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -96,7 +105,7 @@ namespace Domain.Model.Exceptions.HireProjection
 
         public HireProjectionNotFoundException(int hireProjectionId) : base($"The hire projection {hireProjectionId} was not found.")
         {
-            HireProjectionId = hireProjectionId;
+            this.HireProjectionId = hireProjectionId;
         }
 
         public int HireProjectionId { get; }

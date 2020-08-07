@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200618204006_Seventeenth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Seventeenth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +27,7 @@ namespace ApiServer.Migrations
                     Seniority = table.Column<int>(nullable: false),
                     Studio = table.Column<string>(nullable: true),
                     CommunityId = table.Column<int>(nullable: true),
-                    Priority = table.Column<bool>(nullable: false)
+                    Priority = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {

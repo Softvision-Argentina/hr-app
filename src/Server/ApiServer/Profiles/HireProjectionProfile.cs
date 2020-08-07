@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.HireProjection;
-using AutoMapper;
-using Domain.Services.Contracts.HireProjection;
+﻿// <copyright file="HireProjectionProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.HireProjection;
+    using AutoMapper;
+    using Domain.Services.Contracts.HireProjection;
+
     public class HireProjectionProfile : Profile
     {
         public HireProjectionProfile()
         {
-            CreateMap<CreateHireProjectionViewModel, CreateHireProjectionContract>();
-            CreateMap<CreatedHireProjectionContract, CreatedHireProjectionViewModel>();
-            CreateMap<ReadedHireProjectionContract, ReadedHireProjectionViewModel>();
-            CreateMap<UpdateHireProjectionViewModel, UpdateHireProjectionContract>();
+            this.CreateMap<CreateHireProjectionViewModel, CreateHireProjectionContract>();
+            this.CreateMap<CreatedHireProjectionContract, CreatedHireProjectionViewModel>();
+            this.CreateMap<ReadedHireProjectionContract, ReadedHireProjectionViewModel>();
+            this.CreateMap<UpdateHireProjectionViewModel, UpdateHireProjectionContract>();
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="PreOfferException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.PreOffer
 {
+    using System;
+    using Core;
+
     public class PreOfferException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.PreOffer;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.PreOffer
         public DeletePreOfferNotFoundException(int preOfferId)
             : base($"PreOffer not found for the preOfferId: {preOfferId}")
         {
-            PreOfferId = preOfferId;
+            this.PreOfferId = preOfferId;
         }
 
         public int PreOfferId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.PreOffer
         public PreOfferDeletedException(int id, string name)
             : base($"The pre-offer {name} was deleted")
         {
-            PreOfferId = id;
-            Name = name;
+            this.PreOfferId = id;
+            this.Name = name;
         }
 
         public int PreOfferId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.PreOffer
         public UpdatePreOfferNotFoundException(int preOfferId, Guid clientSystemId)
             : base($"pre-offer {preOfferId} and Client System Id {clientSystemId} was not found.")
         {
-            PreOfferId = preOfferId;
-            ClientSystemId = clientSystemId;
+            this.PreOfferId = preOfferId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int PreOfferId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.PreOffer
         public UpdateHasNotChangesException(int preOfferId, Guid clientSystemId, string name)
             : base($"Pre-offer {name} has no changes.")
         {
-            PreOfferId = preOfferId;
-            ClientSystemId = clientSystemId;
+            this.PreOfferId = preOfferId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int PreOfferId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.PreOffer
 
         public PreOfferNotFoundException(int preOfferId) : base($"The pre-offer {preOfferId} was not found.")
         {
-            PreOfferId = preOfferId;
+            this.PreOfferId = preOfferId;
         }
 
         public int PreOfferId { get; }

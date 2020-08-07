@@ -1,10 +1,14 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200318160114_First.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     [ExcludeFromCodeCoverage]
     public partial class First : Migration
     {
@@ -23,7 +27,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Type = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    Comments = table.Column<string>(nullable: true)
+                    Comments = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -45,7 +49,7 @@ namespace ApiServer.Migrations
                     LastName = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     EmailAddress = table.Column<string>(nullable: true),
-                    AdditionalInformation = table.Column<string>(nullable: true)
+                    AdditionalInformation = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -63,7 +67,7 @@ namespace ApiServer.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -82,7 +86,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -101,7 +105,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    TestValue = table.Column<string>(nullable: true)
+                    TestValue = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -121,7 +125,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Year = table.Column<int>(nullable: false),
-                    Value = table.Column<int>(nullable: false)
+                    Value = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -141,7 +145,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Year = table.Column<int>(nullable: false),
-                    Value = table.Column<int>(nullable: false)
+                    Value = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -163,7 +167,7 @@ namespace ApiServer.Migrations
                     Salary = table.Column<float>(nullable: false),
                     RejectionReason = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    ProcessId = table.Column<int>(nullable: false)
+                    ProcessId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -182,7 +186,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -203,7 +207,7 @@ namespace ApiServer.Migrations
                     Name = table.Column<string>(nullable: true),
                     EmailAddress = table.Column<string>(nullable: true),
                     LinkedInProfile = table.Column<string>(nullable: true),
-                    Cv = table.Column<string>(nullable: true)
+                    Cv = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -222,7 +226,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -241,7 +245,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    isActive = table.Column<bool>(nullable: false)
+                    isActive = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -260,7 +264,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -283,7 +287,7 @@ namespace ApiServer.Migrations
                     Username = table.Column<string>(nullable: true),
                     Token = table.Column<string>(nullable: true),
                     Role = table.Column<int>(nullable: false),
-                    Password = table.Column<string>(nullable: true)
+                    Password = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -306,7 +310,7 @@ namespace ApiServer.Migrations
                     IsNew = table.Column<bool>(nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
-                    ConsultantId = table.Column<int>(nullable: false)
+                    ConsultantId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -332,7 +336,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    OfficeId = table.Column<int>(nullable: false)
+                    OfficeId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -358,7 +362,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    ProfileId = table.Column<int>(nullable: false)
+                    ProfileId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -393,7 +397,7 @@ namespace ApiServer.Migrations
                     RecruiterId = table.Column<int>(nullable: true),
                     RoleId = table.Column<int>(nullable: true),
                     isReviewer = table.Column<bool>(nullable: false),
-                    ReviewerId = table.Column<int>(nullable: true)
+                    ReviewerId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -431,7 +435,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    TypeId = table.Column<int>(nullable: true)
+                    TypeId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -453,7 +457,7 @@ namespace ApiServer.Migrations
                     Text = table.Column<string>(nullable: true),
                     ApplicationUserId = table.Column<int>(nullable: false),
                     IsRead = table.Column<bool>(nullable: false),
-                    ReferredBy = table.Column<string>(nullable: true)
+                    ReferredBy = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -471,7 +475,7 @@ namespace ApiServer.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    DashboardId = table.Column<int>(nullable: false)
+                    DashboardId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -503,7 +507,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     Checked = table.Column<bool>(nullable: false),
-                    TaskId = table.Column<int>(nullable: false)
+                    TaskId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -531,7 +535,7 @@ namespace ApiServer.Migrations
                     SinceReservation = table.Column<DateTime>(nullable: false),
                     UntilReservation = table.Column<DateTime>(nullable: false),
                     RecruiterId = table.Column<int>(nullable: true),
-                    RoomId = table.Column<int>(nullable: false)
+                    RoomId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -579,7 +583,7 @@ namespace ApiServer.Migrations
                     Cv = table.Column<string>(nullable: true),
                     KnownFrom = table.Column<string>(nullable: true),
                     ReferredBy = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -632,7 +636,7 @@ namespace ApiServer.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     EmployeeId = table.Column<int>(nullable: false),
-                    GoogleCalendarEventId = table.Column<string>(nullable: true)
+                    GoogleCalendarEventId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -652,7 +656,7 @@ namespace ApiServer.Migrations
                     CandidateId = table.Column<int>(nullable: false),
                     SkillId = table.Column<int>(nullable: false),
                     Rate = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(nullable: true)
+                    Comment = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -684,7 +688,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     UrlId = table.Column<string>(nullable: true),
                     CandidateId = table.Column<int>(nullable: false),
-                    PublicId = table.Column<string>(nullable: true)
+                    PublicId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -716,7 +720,7 @@ namespace ApiServer.Migrations
                     DeclineReasonId = table.Column<int>(nullable: true),
                     CandidateId = table.Column<int>(nullable: true),
                     ConsultantOwnerId = table.Column<int>(nullable: true),
-                    ConsultantDelegateId = table.Column<int>(nullable: true)
+                    ConsultantDelegateId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -767,7 +771,7 @@ namespace ApiServer.Migrations
                     ConsultantDelegateId = table.Column<int>(nullable: true),
                     RejectionReason = table.Column<string>(nullable: true),
                     Interviewer = table.Column<string>(nullable: true),
-                    DelegateName = table.Column<string>(nullable: true)
+                    DelegateName = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -814,7 +818,7 @@ namespace ApiServer.Migrations
                     ActualSalary = table.Column<float>(nullable: false),
                     WantedSalary = table.Column<float>(nullable: false),
                     EnglishLevel = table.Column<int>(nullable: false),
-                    RejectionReasonsHr = table.Column<int>(nullable: false)
+                    RejectionReasonsHr = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -863,7 +867,7 @@ namespace ApiServer.Migrations
                     BackgroundCheckDone = table.Column<bool>(nullable: false),
                     BackgroundCheckDoneDate = table.Column<DateTime>(nullable: true),
                     PreocupationalDone = table.Column<bool>(nullable: false),
-                    PreocupationalDoneDate = table.Column<DateTime>(nullable: true)
+                    PreocupationalDoneDate = table.Column<DateTime>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -906,7 +910,7 @@ namespace ApiServer.Migrations
                     ProcessId = table.Column<int>(nullable: false),
                     ConsultantOwnerId = table.Column<int>(nullable: true),
                     ConsultantDelegateId = table.Column<int>(nullable: true),
-                    RejectionReason = table.Column<string>(nullable: true)
+                    RejectionReason = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -952,7 +956,7 @@ namespace ApiServer.Migrations
                     RejectionReason = table.Column<string>(nullable: true),
                     Seniority = table.Column<int>(nullable: false),
                     AlternativeSeniority = table.Column<int>(nullable: false),
-                    Client = table.Column<string>(nullable: true)
+                    Client = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -990,7 +994,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     AssociatedContent = table.Column<string>(nullable: true),
-                    StageId = table.Column<int>(nullable: false)
+                    StageId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

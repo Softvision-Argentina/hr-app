@@ -1,33 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApiServer.Contracts.Candidates;
-using ApiServer.Contracts.CandidateSkill;
-using Core.Testing.Platform;
-using Domain.Model;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿// <copyright file="CandidatesControllerFixture.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.FunctionalTests.Fixture
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using ApiServer.Contracts.Candidates;
+    using ApiServer.Contracts.CandidateSkill;
+    using Core.Testing.Platform;
+    using Domain.Model;
+    using Microsoft.EntityFrameworkCore;
+
     public class CandidatesControllerFixture : BaseFunctionalTestFixture
     {
         public CandidatesControllerFixture()
         {
-            ControllerName = "Candidates";
-            //SeedCandidate();
+            this.ControllerName = "Candidates";
+
+            // SeedCandidate();
         }
+
         public enum FilterType
         {
-            Match, //will match an entity
-            DontMatch //will not match any entity
+            Match, // will match an entity
+            DontMatch, // will not match any entity
         }
 
         public Candidate GetEager(int id)
         {
             Candidate candidate = null;
 
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
                 candidate = context.Candidates
                     .AsNoTracking()
@@ -46,33 +50,33 @@ namespace ApiServer.FunctionalTests.Fixture
             var netCommunity = new Community()
             {
                 Name = "Net",
-                Profile = new CandidateProfile() { Name = "candidate profile 1" }
+                Profile = new CandidateProfile() { Name = "candidate profile 1" },
             };
 
             var devopsCommunity = new Community()
             {
                 Name = "Net",
-                Profile = new CandidateProfile() { Name = "candidate profile 2" }
+                Profile = new CandidateProfile() { Name = "candidate profile 2" },
             };
 
             var almagroOffice = new Office()
             {
-                Name = "Almagro"
+                Name = "Almagro",
             };
 
             var vicenteLopezOffice = new Office()
             {
-                Name = "Vicente Lopez"
+                Name = "Vicente Lopez",
             };
 
             var netSkill = new Skill()
             {
-                Name = "Entity Framework"
+                Name = "Entity Framework",
             };
 
             var devopsSkill = new Skill()
             {
-                Name = "Jenkins"
+                Name = "Jenkins",
             };
 
             var expectedCandidate = new Candidate()
@@ -82,24 +86,24 @@ namespace ApiServer.FunctionalTests.Fixture
                 Community = netCommunity,
                 CandidateSkills = new List<CandidateSkill>()
                 {
-                    new CandidateSkill() {Skill = netSkill, Rate = 9}
-                }
+                    new CandidateSkill() { Skill = netSkill, Rate = 9},
+                },
             };
 
             var candidateList = new List<Candidate>()
                 {
-                    new Candidate() //skill rate is low
+                    new Candidate() // skill rate is low
                     {
                         Name = "This candidate will not meet search criteria",
                         PreferredOffice = almagroOffice,
                         Community = netCommunity,
                         CandidateSkills = new List<CandidateSkill>()
                         {
-                            new CandidateSkill() {Skill = netSkill, Rate = 1}
-                        }
+                            new CandidateSkill() { Skill = netSkill, Rate = 1},
+                        },
                     },
 
-                    new Candidate() //not the community asked
+                    new Candidate() // not the community asked
                     {
                         Name = "This candidate will not meet search criteria either",
                         PreferredOffice = vicenteLopezOffice,
@@ -107,11 +111,11 @@ namespace ApiServer.FunctionalTests.Fixture
                         Profile = new CandidateProfile(),
                         CandidateSkills = new List<CandidateSkill>()
                         {
-                            new CandidateSkill() {Skill = devopsSkill}
-                        }
+                            new CandidateSkill() { Skill = devopsSkill},
+                        },
                     },
 
-                    expectedCandidate
+                    expectedCandidate,
                 };
 
             return candidateList;
@@ -123,21 +127,20 @@ namespace ApiServer.FunctionalTests.Fixture
             int communityId = 0;
             int prefferedOfficeId = 0;
 
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
                 skillId = context.
                         Skills.
                         AsNoTracking().
                         First(_ => _.Name == "Entity Framework").Id;
-
             });
 
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
                 communityId = context.Community.First(_ => _.Name == "Net").Id;
             });
 
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
                 prefferedOfficeId = context.Office.First(_ => _.Name == "Almagro").Id;
             });
@@ -148,15 +151,15 @@ namespace ApiServer.FunctionalTests.Fixture
                 {
                     SkillId = skillId,
                     MinRate = 5,
-                    MaxRate = 10
-                }
+                    MaxRate = 10,
+                },
             };
 
             var validModel = new FilterCandidateViewModel()
             {
                 Community = communityId,
                 PreferredOffice = prefferedOfficeId,
-                SelectedSkills = validFilterCandidateSkillViewModel
+                SelectedSkills = validFilterCandidateSkillViewModel,
             };
 
             return validModel;
@@ -166,14 +169,14 @@ namespace ApiServer.FunctionalTests.Fixture
         {
             var invalidFilterCandidateSkillViewModel = new List<FilterCandidateSkillViewModel>()
             {
-                new FilterCandidateSkillViewModel() {SkillId = 999, MinRate = 999, MaxRate = 999}
+                new FilterCandidateSkillViewModel() { SkillId = 999, MinRate = 999, MaxRate = 999},
             };
 
             var invalidModel = new FilterCandidateViewModel()
             {
                 Community = 999,
                 PreferredOffice = 999,
-                SelectedSkills = invalidFilterCandidateSkillViewModel
+                SelectedSkills = invalidFilterCandidateSkillViewModel,
             };
 
             return invalidModel;
@@ -181,15 +184,13 @@ namespace ApiServer.FunctionalTests.Fixture
 
         public FilterCandidateViewModel GetFilterCandidateViewModel(FilterType filterType)
         {
-            return filterType.Equals(FilterType.Match) ? GetValidModel() : GetInvalidModel();
+            return filterType.Equals(FilterType.Match) ? this.GetValidModel() : this.GetInvalidModel();
         }
 
         public void Dispose()
         {
-            Client.Dispose();
-            Server.Dispose();
+            this.Client.Dispose();
+            this.Server.Dispose();
         }
     }
-
-
 }

@@ -1,28 +1,33 @@
-﻿using AutoMapper;
-using System;
-using Xunit;
+﻿// <copyright file="AutomapperFixture.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Dummy
 {
+    using System;
+    using AutoMapper;
+    using Xunit;
+
     public class AutomapperFixture : IDisposable
     {
         private static readonly object Sync = new object();
-        private static bool _configured;
+        private static bool configured;
 
         public AutomapperFixture()
         {
             lock (Sync)
             {
-                if (!_configured)
+                if (!configured)
                 {
-                    var config = new MapperConfiguration(cfg => cfg.AddProfiles(new[] {
+                    var config = new MapperConfiguration(cfg => cfg.AddProfiles(new[]
+                    {
                             "Domain.Services",
-                            "Domain.Services.Impl"
-                        }));
+                            "Domain.Services.Impl",
+                    }));
 
-                    Mapper = config.CreateMapper();
+                    this.Mapper = config.CreateMapper();
 
-                    _configured = true;
+                    configured = true;
                 }
             }
         }
@@ -31,13 +36,11 @@ namespace Domain.Services.Impl.UnitTests.Dummy
 
         public void Dispose()
         {
-
         }
     }
 
     [CollectionDefinition("Service Test Collection")]
     public class TestCollection : ICollectionFixture<AutomapperFixture>
     {
-
     }
 }

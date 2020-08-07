@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Room
+﻿// <copyright file="RoomErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Room
 {
     public enum RoomErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateRoomNotFound,
         UpdateHasNotChanges,
-        RoomNotFound
+        RoomNotFound,
     }
 }

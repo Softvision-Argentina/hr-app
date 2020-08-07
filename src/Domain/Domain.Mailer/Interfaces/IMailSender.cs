@@ -1,23 +1,16 @@
-﻿using Mailer.Entities;
-using System.Threading.Tasks;
+﻿// <copyright file="IMailSender.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Mailer.Interfaces
 {
+    using System.Threading.Tasks;
+    using Mailer.Entities;
+
     public interface IMailSender
     {
-        /// <summary>
-        /// Send given message
-        /// </summary>
-        /// <param name="settings">Mail Server settings</param>
-        /// <param name="message">Message</param>
         void Send(Message message);
 
-        /// <summary>
-        /// Send given message async
-        /// </summary>
-        /// <param name="settings">Mail Server settings</param>
-        /// <param name="message">Message</param>
-        /// <returns></returns>
         Task SendAsync(Message message);
     }
 }

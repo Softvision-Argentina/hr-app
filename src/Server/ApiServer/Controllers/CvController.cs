@@ -1,42 +1,41 @@
-﻿using AutoMapper;
-using Domain.Services.Contracts.Cv;
-using Microsoft.AspNetCore.Mvc;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Cors;
-using System.Threading.Tasks;
-
-namespace ApiServer.Controllers
+﻿namespace ApiServer.Controllers
 {
+    using AutoMapper;
+    using Domain.Services.Contracts.Cv;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]/{candidateId}")]
     [ApiController]
     public class CvController : ControllerBase
     {
-        private readonly ICvService _cvService;
-        private readonly ICandidateService _candidateService;
-        private readonly IAzureUploadService _cvUploadService;
+        private readonly ICvService cvService;
+        private readonly ICandidateService candidateService;
+        private readonly IGoogleDriveUploadService cvUploadService;
 
         public CvController(
             ICandidateService candidateService,
-            IAzureUploadService cvUploadService,
+            IGoogleDriveUploadService cvUploadService,
             ICvService cvService)
         {
-            _cvService = cvService;
-            _candidateService = candidateService;
-            _cvUploadService = cvUploadService;
+            this.cvService = cvService;
+            this.candidateService = candidateService;
+            this.cvUploadService = cvUploadService;
         }
 
         [HttpPost]
-        [EnableCors("AllowAll")]
-        public async Task<IActionResult> AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
+        public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
-            var candidate = _candidateService.GetCandidate(candidateId);
+            var candidate = this.candidateService.GetCandidate(candidateId);
+
             var file = cvContract.File;
+            var auth = this.cvUploadService.Authorize();
 
-            var filename = await _cvUploadService.Upload(file, candidate);
+            var fileUploaded = this.cvUploadService.Upload(auth, file);
 
-             _cvService.StoreCvAndCandidateCvId(candidate, cvContract, filename);
+            this.cvService.StoreCvAndCandidateCvId(candidate, cvContract, fileUploaded);
 
-            return Ok("FileUploaded");
+            return this.Ok("FileUploaded");
         }
     }
 }

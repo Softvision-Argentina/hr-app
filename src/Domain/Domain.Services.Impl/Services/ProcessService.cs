@@ -1,52 +1,51 @@
-﻿using AutoMapper;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Process;
-using Domain.Services.Interfaces.Repositories;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Mailer.Interfaces;
-using Mailer.Entities;
-using Domain.Services.Impl.Validators;
-using FluentValidation;
-using Domain.Model.Exceptions.Process;
-using System.Text.RegularExpressions;
-using Core.ExtensionHelpers;
-using Microsoft.Extensions.Options;
-
-namespace Domain.Services.Impl.Services
+﻿namespace Domain.Services.Impl.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using AutoMapper;
+    using Core.ExtensionHelpers;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Model.Exceptions.Process;
+    using Domain.Services.Contracts.Process;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Interfaces.Repositories;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+    using Mailer.Entities;
+    using Mailer.Interfaces;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Options;
+
     public class ProcessService : IProcessService
     {
-        private readonly IMapper _mapper;
-        private readonly IProcessRepository _processRepository;
-        private readonly IProcessStageRepository _processStageRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Community> _communityRepository;
-        private readonly IRepository<CandidateProfile> _candidateProfileRepository;
-        private readonly IRepository<Candidate> _candidateRepository;
-        private readonly IRepository<Office> _officeRepository;
-        private readonly IRepository<DeclineReason> _declineReasonRepository;
-        private readonly IHrStageRepository _hrStageRepository;
-        private readonly ITechnicalStageRepository _technicalStageRepository;
-        private readonly IClientStageRepository _clientStageRepository;
-        private readonly IOfferStageRepository _offerStageRepository;
-        private readonly IPreOfferStageRepository _preOfferStageRepository;
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IRepository<User> _userRepository;
-        private readonly IConfiguration _config;
-        private readonly IHttpContextAccessor _httpContext;
-        private readonly IMailSender _mailSender;
-        private readonly IValidator<UpdateProcessContract> _updateProcessContractValidator;
-        private readonly IValidator<CreateProcessContract> _createProcessContractValidator;
-        private readonly IReaddressStatusService _readdressStatusService;
-        private readonly IOptions<AppSettings> _appSettings;
-
+        private readonly IMapper mapper;
+        private readonly IProcessRepository processRepository;
+        private readonly IProcessStageRepository processStageRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IRepository<Community> communityRepository;
+        private readonly IRepository<CandidateProfile> candidateProfileRepository;
+        private readonly IRepository<Candidate> candidateRepository;
+        private readonly IRepository<Office> officeRepository;
+        private readonly IRepository<DeclineReason> declineReasonRepository;
+        private readonly IHrStageRepository hrStageRepository;
+        private readonly ITechnicalStageRepository technicalStageRepository;
+        private readonly IClientStageRepository clientStageRepository;
+        private readonly IOfferStageRepository offerStageRepository;
+        private readonly IPreOfferStageRepository preOfferStageRepository;
+        private readonly INotificationRepository notificationRepository;
+        private readonly IRepository<User> userRepository;
+        private readonly IConfiguration config;
+        private readonly IHttpContextAccessor httpContext;
+        private readonly IMailSender mailSender;
+        private readonly IValidator<UpdateProcessContract> updateProcessContractValidator;
+        private readonly IValidator<CreateProcessContract> createProcessContractValidator;
+        private readonly IReaddressStatusService readdressStatusService;
+        private readonly IOptions<AppSettings> appSettings;
 
         public ProcessService(
             IMapper mapper,
@@ -73,120 +72,127 @@ namespace Domain.Services.Impl.Services
             IValidator<UpdateProcessContract> updateProcessContractValidator,
             IValidator<CreateProcessContract> createProcessContractValidator,
             IReaddressStatusService readdressStatuService,
-            IOptions<AppSettings> appSettings
-            )
-
-        {            
-            _candidateRepository = candidateRepository;
-            _candidateProfileRepository = candidateProfileRepository;
-            _communityRepository = communityRepository;
-            _officeRepository = officeRepository;
-            _declineReasonRepository = declineReasonRepository;
-            _mapper = mapper;
-            _processRepository = processRepository;
-            _processStageRepository = processStageRepository;
-            _hrStageRepository = hrStageRepository;
-            _technicalStageRepository = technicalStageRepository;
-            _clientStageRepository = clientStageRepository;
-            _offerStageRepository = offerStageRepository;
-            _unitOfWork = unitOfWork;
-            _notificationRepository = notificationRepository;
-            _userRepository = userRepository;
-            _config = config;
-            _httpContext = httpContext;
-            _preOfferStageRepository = preOfferStageRepository;
-            _mailSender = mailSender;
-            _createProcessContractValidator = createProcessContractValidator;
-            _updateProcessContractValidator = updateProcessContractValidator;
-            _readdressStatusService = readdressStatuService;
-            _appSettings = appSettings;
+            IOptions<AppSettings> appSettings)
+        {
+            this.candidateRepository = candidateRepository;
+            this.candidateProfileRepository = candidateProfileRepository;
+            this.communityRepository = communityRepository;
+            this.officeRepository = officeRepository;
+            this.declineReasonRepository = declineReasonRepository;
+            this.mapper = mapper;
+            this.processRepository = processRepository;
+            this.processStageRepository = processStageRepository;
+            this.hrStageRepository = hrStageRepository;
+            this.technicalStageRepository = technicalStageRepository;
+            this.clientStageRepository = clientStageRepository;
+            this.offerStageRepository = offerStageRepository;
+            this.unitOfWork = unitOfWork;
+            this.notificationRepository = notificationRepository;
+            this.userRepository = userRepository;
+            this.config = config;
+            this.httpContext = httpContext;
+            this.preOfferStageRepository = preOfferStageRepository;
+            this.mailSender = mailSender;
+            this.createProcessContractValidator = createProcessContractValidator;
+            this.updateProcessContractValidator = updateProcessContractValidator;
+            this.readdressStatusService = readdressStatuService;
+            this.appSettings = appSettings;
         }
 
         public ReadedProcessContract Read(int id)
         {
-            var process = _processRepository
+            var process = this.processRepository
                 .QueryEager().SingleOrDefault(_ => _.Id == id);
 
-            return _mapper.Map<ReadedProcessContract>(process);
+            return this.mapper.Map<ReadedProcessContract>(process);
         }
+
         public IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community)
         {
-            var candidateQuery = _processRepository
+            var candidateQuery = this.processRepository
                 .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community));
 
             var candidateResult = candidateQuery.ToList();
 
-            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
+            return this.mapper.Map<List<ReadedProcessContract>>(candidateResult);
         }
 
         public void Delete(int id)
         {
-            var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
+            var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
 
-            process.Candidate.Status = SetCandidateStatus(ProcessStatus.Rejected);
+            process.Candidate.Status = this.SetCandidateStatus(ProcessStatus.Rejected);
 
-            _processRepository.Delete(process);
+            this.processRepository.Delete(process);
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedProcessContract> List()
         {
-            var candidateQuery = _processRepository
+            var candidateQuery = this.processRepository
                 .QueryEager().ToList();
 
             var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
 
-            return _mapper.Map<List<ReadedProcessContract>>(candidateResult);
+            return this.mapper.Map<List<ReadedProcessContract>>(candidateResult);
         }
 
         public IEnumerable<ReadedProcessContract> GetActiveByCandidateId(int candidateId)
         {
-            var process = _processRepository
-                .QueryEager().Where(_ => _.CandidateId == candidateId && (_.Status == ProcessStatus.InProgress || _.Status == ProcessStatus.Accepted || _.Status == ProcessStatus.Recall ));
+            var process = this.processRepository
+                .QueryEager().Where(_ => _.CandidateId == candidateId && (_.Status == ProcessStatus.InProgress || _.Status == ProcessStatus.Accepted || _.Status == ProcessStatus.Recall));
 
-            return _mapper.Map<IEnumerable<ReadedProcessContract>>(process);
+            return this.mapper.Map<IEnumerable<ReadedProcessContract>>(process);
         }
 
         public CreatedProcessContract Create(CreateProcessContract createProcessContract)
         {
-            ValidateContract(createProcessContract);
+            this.ValidateContract(createProcessContract);
 
-            var process = _mapper.Map<Process>(createProcessContract);
-            
-            ValidateDniExistance(process);
-            
-            AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
+            var process = this.mapper.Map<Process>(createProcessContract);
+
+            this.ValidateDniExistance(process);
+
+            this.AddOfficeToCandidate(process.Candidate, createProcessContract.Candidate.PreferredOfficeId);
 
             process.Candidate.Status = CandidateStatus.InProgress;
-            
+
             if (process.Candidate.LinkedInProfile != null)
             {
                 process.Candidate.LinkedInProfile = RegexExtensions.GetLinkedInUsername(process.Candidate.LinkedInProfile);
             }
 
-            _candidateRepository.Update(process.Candidate);
+            this.candidateRepository.Update(process.Candidate);
 
-            process.Status = SetProcessStatus(process);
-            process.CurrentStage = SetProcessCurrentStage(process);
+            process.Status = this.SetProcessStatus(process);
+            process.CurrentStage = this.SetProcessCurrentStage(process);
 
-            var userId = GetUser();
+            var userId = this.GetUser();
 
             process.UserOwnerId = userId;
 
             if (process.HrStage.ReaddressStatus != null)
-                _readdressStatusService.Create(createProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
-           
+            {
+                this.readdressStatusService.Create(createProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
+            }
+
             if (process.TechnicalStage.ReaddressStatus != null)
-                _readdressStatusService.Create(createProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
+            {
+                this.readdressStatusService.Create(createProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
+            }
 
             if (process.ClientStage.ReaddressStatus != null)
-                _readdressStatusService.Create(createProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
+            {
+                this.readdressStatusService.Create(createProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
+            }
 
             if (process.PreOfferStage.ReaddressStatus != null)
-                _readdressStatusService.Create(createProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
+            {
+                this.readdressStatusService.Create(createProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
+            }
 
-            var createdProcess = _processRepository.Create(process);
+            var createdProcess = this.processRepository.Create(process);
 
             process.HrStage.UserOwnerId = process.UserOwnerId;
             process.TechnicalStage.UserOwnerId = process.UserOwnerId;
@@ -194,13 +200,13 @@ namespace Domain.Services.Impl.Services
             process.PreOfferStage.UserOwnerId = process.UserOwnerId;
             process.OfferStage.UserOwnerId = process.UserOwnerId;
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
 
-            var createdProcessContract = _mapper.Map<CreatedProcessContract>(createdProcess);
+            var createdProcessContract = this.mapper.Map<CreatedProcessContract>(createdProcess);
 
             var status = process.Status;
 
-            var mailSendingEnabled = _appSettings.Value.MailSending;
+            var mailSendingEnabled = this.appSettings.Value.MailSending;
 
             try
             {
@@ -210,7 +216,7 @@ namespace Domain.Services.Impl.Services
                     {
                         if (process.HrStage.Status == StageStatus.Accepted && process.HrStage.UserOwner != null)
                         {
-                            SendHrStageEmailNotification(process);
+                            this.SendHrStageEmailNotification(process);
                             process.HrStage.SentEmail = true;
                         }
                     }
@@ -219,12 +225,13 @@ namespace Domain.Services.Impl.Services
                     {
                         if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback) && process.TechnicalStage.UserOwner != null && process.TechnicalStage.UserDelegate != null)
                         {
-                            SendTechnicalStageEmailNotification(process);
+                            this.SendTechnicalStageEmailNotification(process);
                             process.TechnicalStage.SentEmail = true;
                         }
                     }
                 }
-            }catch
+            }
+            catch
             {
                 throw new Exception("Mail could not been sent");
             }
@@ -234,18 +241,18 @@ namespace Domain.Services.Impl.Services
 
         public void Update(UpdateProcessContract updateProcessContract)
         {
-            ValidateContract(updateProcessContract);
-            
-            var process = _mapper.Map<Process>(updateProcessContract);
-            
-            ValidateDniExistance(process);
+            this.ValidateContract(updateProcessContract);
 
-            process.Status = SetProcessStatus(process);
-            process.CurrentStage = SetProcessCurrentStage(process);
+            var process = this.mapper.Map<Process>(updateProcessContract);
 
-            var candidate = _candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
-            candidate.EnglishLevel = process.HrStage.EnglishLevel;            
-            candidate.Status = SetCandidateStatus(process.Status);
+            this.ValidateDniExistance(process);
+
+            process.Status = this.SetProcessStatus(process);
+            process.CurrentStage = this.SetProcessCurrentStage(process);
+
+            var candidate = this.candidateRepository.QueryEager().FirstOrDefault(c => c.Id == process.Candidate.Id);
+            candidate.EnglishLevel = process.HrStage.EnglishLevel;
+            candidate.Status = this.SetCandidateStatus(process.Status);
             process.Candidate = candidate;
             candidate.DNI = process.PreOfferStage.DNI;
             process.ClientStage.UserOwnerId = process.UserOwnerId;
@@ -253,43 +260,54 @@ namespace Domain.Services.Impl.Services
             process.OfferStage.UserOwnerId = process.UserOwnerId;
 
             if (process.HrStage.ReaddressStatus != null)
-                _readdressStatusService.Update(updateProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
-            if (process.TechnicalStage.ReaddressStatus != null)
-                _readdressStatusService.Update(updateProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
-            if (process.ClientStage.ReaddressStatus != null)
-                _readdressStatusService.Update(updateProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
-            if (process.PreOfferStage.ReaddressStatus != null)
-                _readdressStatusService.Update(updateProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
+            {
+                this.readdressStatusService.Update(updateProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
+            }
 
-            _hrStageRepository.Update(process.HrStage);
-            _technicalStageRepository.Update(process.TechnicalStage);
-            _clientStageRepository.Update(process.ClientStage);
-            _preOfferStageRepository.Update(process.PreOfferStage);
-            _offerStageRepository.Update(process.OfferStage);
+            if (process.TechnicalStage.ReaddressStatus != null)
+            {
+                this.readdressStatusService.Update(updateProcessContract.TechnicalStage.ReaddressStatus.ReaddressReasonId, process.TechnicalStage.ReaddressStatus);
+            }
+
+            if (process.ClientStage.ReaddressStatus != null)
+            {
+                this.readdressStatusService.Update(updateProcessContract.ClientStage.ReaddressStatus.ReaddressReasonId, process.ClientStage.ReaddressStatus);
+            }
+
+            if (process.PreOfferStage.ReaddressStatus != null)
+            {
+                this.readdressStatusService.Update(updateProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
+            }
+
+            this.hrStageRepository.Update(process.HrStage);
+            this.technicalStageRepository.Update(process.TechnicalStage);
+            this.clientStageRepository.Update(process.ClientStage);
+            this.preOfferStageRepository.Update(process.PreOfferStage);
+            this.offerStageRepository.Update(process.OfferStage);
 
             if(process.DeclineReasonId != null)
             {
                 if (process.DeclineReason.Id == -1)
                 {
-                    process.DeclineReason = _declineReasonRepository.Create(new DeclineReason
+                    process.DeclineReason = this.declineReasonRepository.Create(new DeclineReason
                     {
                         Name = "Other",
-                        Description = updateProcessContract.DeclineReason.Description
+                        Description = updateProcessContract.DeclineReason.Description,
                     });
                     process.DeclineReasonId = process.DeclineReason.Id;
                 }
                 else
                 {
-                    process.DeclineReason = _declineReasonRepository.Get(process.DeclineReason.Id);
+                    process.DeclineReason = this.declineReasonRepository.Get(process.DeclineReason.Id);
                 }
             }
 
-            var updatedProcess = _processRepository.Update(process);
+            var updatedProcess = this.processRepository.Update(process);
             var status = process.Status;
 
             try
             {
-                var flag = _appSettings.Value.MailSending;
+                var flag = this.appSettings.Value.MailSending;
 
                 if (flag != false)
                 {
@@ -297,7 +315,7 @@ namespace Domain.Services.Impl.Services
                     {
                         if (process.HrStage.Status == StageStatus.Accepted)
                         {
-                            SendHrStageEmailNotification(process);
+                            this.SendHrStageEmailNotification(process);
                             process.HrStage.SentEmail = true;
                         }
                     }
@@ -306,94 +324,98 @@ namespace Domain.Services.Impl.Services
                     {
                         if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
                         {
-                            SendTechnicalStageEmailNotification(process);
+                            this.SendTechnicalStageEmailNotification(process);
                             process.TechnicalStage.SentEmail = true;
                         }
                     }
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw new Exception("Mail could not been sent");
             }
             finally
             {
-                _unitOfWork.Complete();
+                this.unitOfWork.Complete();
             }
         }
 
         public void Approve(int processId)
         {
-            _processRepository.Approve(processId);
-            var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
-            process.Candidate.Status = SetCandidateStatus(process.Status);
-            _unitOfWork.Complete();
+            this.processRepository.Approve(processId);
+            var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
+            process.Candidate.Status = this.SetCandidateStatus(process.Status);
+            this.unitOfWork.Complete();
         }
-         
+
         public void Reject(int id, string rejectionReason)
         {
-            _processRepository.Reject(id, rejectionReason);
-            var process = _processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
-            process.Candidate.Status = SetCandidateStatus(process.Status);
+            this.processRepository.Reject(id, rejectionReason);
+            var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == id);
+            process.Candidate.Status = this.SetCandidateStatus(process.Status);
             var status = process.Status;
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         private int GetUser()
         {
-            var getUser = _httpContext.HttpContext.User.Identity.Name;
+            var getUser = this.httpContext.HttpContext.User.Identity.Name;
             var userId = int.Parse(getUser);
             return userId;
         }
 
         private void ValidateDniExistance(Process process)
         {
-            var DNIExists = _preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
-            if (DNIExists) throw new Exception("DNI number already exists");
+            var dNIExists = this.preOfferStageRepository.Query().Any(x => x.DNI == process.PreOfferStage.DNI && process.PreOfferStage.DNI != 0 && x.ProcessId != process.Id);
+            if (dNIExists)
+            {
+                throw new Exception("DNI number already exists");
+            }
         }
 
-          private void SendHrStageEmailNotification(Process process)
+        private void SendHrStageEmailNotification(Process process)
         {
-            var email = _config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+            var email = this.config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
 
             if (process.Candidate.Community.Name == "ProductDelivery")
             {
                 email = (process.Candidate.Profile.Name == "ProjectManager") ?
-                    _appSettings.Value.CommunityManagerEmails.ProjectManager :
-                    _appSettings.Value.CommunityManagerEmails.ProductDelivery;
+                    this.appSettings.Value.CommunityManagerEmails.ProjectManager :
+                    this.appSettings.Value.CommunityManagerEmails.ProductDelivery;
             }
 
             var messageBody = new MessageBody();
             messageBody.HtmlBody = $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
-                    $"{process.Candidate.Name} {process.Candidate.LastName}, A new { process.Candidate.Profile.Name } candidate has been submitted for { process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                    $"{process.Candidate.Name} {process.Candidate.LastName}, A new {process.Candidate.Profile.Name } candidate has been submitted for {process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
                     $"Please reach out to {process.Candidate.User.FirstName} {process.Candidate.User.LastName} with Interviewer name / s and availability. <br />" +
                     "Thank you.";
             var message = new Message(email, "New candidate for Interview!", messageBody);
-            _mailSender.SendAsync(message);
+            this.mailSender.SendAsync(message);
         }
 
         private void SendTechnicalStageEmailNotification(Process process)
         {
-            var userToSend =  _userRepository.QueryEager().FirstOrDefault(x => x.Username == process.UserOwner.Username);
+            var userToSend =  this.userRepository.QueryEager().FirstOrDefault(x => x.Username == process.UserOwner.Username);
             var email = userToSend.Username;
-            var interviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
-            var delegateInterviewer = _userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
+            var interviewer = this.userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
+            var delegateInterviewer = this.userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
             var skills = process.Candidate.CandidateSkills;
             var skillsListed = skills.ToList();
 
             var messageBody = new MessageBody();
             messageBody.HtmlBody = $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
-                $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} {(delegateInterviewer != null ? "and" + delegateInterviewer.FirstName + " " + delegateInterviewer.LastName + " " : "")}on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} {(delegateInterviewer != null ? "and" + delegateInterviewer.FirstName + " " + delegateInterviewer.LastName + " " : string.Empty)}on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
                 $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
                 $"Thank you";
             var message = new Message(email, $"Feedback for {process.Candidate.Name} {process.Candidate.LastName} is now available!", messageBody);
-            _mailSender.SendAsync(message);
+            this.mailSender.SendAsync(message);
         }
 
         private string GetUserMail(string referredBy)
         {
             var referred = referredBy.Split(" ");
-            var userName = _userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
+            var userName = this.userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
             var mail = userName.Username;
 
             return mail;
@@ -401,9 +423,11 @@ namespace Domain.Services.Impl.Services
 
         private void AddOfficeToCandidate(Candidate candidate, int officeId)
         {
-            var office = _officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
+            var office = this.officeRepository.Query().Where(_ => _.Id == officeId).FirstOrDefault();
             if (office == null)
+            {
                 throw new Domain.Model.Exceptions.Office.OfficeNotFoundException(officeId);
+            }
 
             candidate.PreferredOffice = office;
         }
@@ -461,8 +485,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _createProcessContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createProcessContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -474,8 +499,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateProcessContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_UPDATE}");
+                this.updateProcessContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETUPDATE}");
             }
             catch (ValidationException ex)
             {

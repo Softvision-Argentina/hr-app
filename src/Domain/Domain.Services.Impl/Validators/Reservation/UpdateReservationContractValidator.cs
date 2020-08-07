@@ -1,16 +1,20 @@
-﻿using Domain.Services.Contracts.Reservation;
-using FluentValidation;
+﻿// <copyright file="UpdateReservationContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Reservation
 {
+    using Domain.Services.Contracts.Reservation;
+    using FluentValidation;
+
     public class UpdateReservationContractValidator : AbstractValidator<UpdateReservationContract>
     {
         public UpdateReservationContractValidator()
         {
-            RuleFor(_ => _.SinceReservation).NotNull();
-            RuleFor(_ => _.UntilReservation).NotNull();
-            RuleFor(_ => _.RoomId).NotNull();
-            RuleFor(_ => _.Description).NotEmpty();
+            this.RuleFor(_ => _.SinceReservation).NotNull();
+            this.RuleFor(_ => _.UntilReservation).NotNull();
+            this.RuleFor(_ => _.RoomId).NotNull();
+            this.RuleFor(_ => _.Description).NotEmpty();
         }
     }
 }

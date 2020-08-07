@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Skill
+﻿// <copyright file="SkillErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Skill
 {
     public enum SkillErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateSkillNotFound,
         UpdateHasNotChanges,
-        SkillNotFound
+        SkillNotFound,
     }
 }

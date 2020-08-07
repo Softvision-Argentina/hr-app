@@ -1,28 +1,32 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.ReaddressReasonType;
-using Domain.Model.Exceptions.Skill;
-using Domain.Services.Contracts.ReaddressReason;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="ReaddressReasonTypeService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.ReaddressReasonType;
+    using Domain.Model.Exceptions.Skill;
+    using Domain.Services.Contracts.ReaddressReason;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
+
     public class ReaddressReasonTypeService : IReaddressReasonTypeService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<ReaddressReasonType> _readdressReasonTypeRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<ReaddressReasonTypeService> _log;
-        private readonly UpdateReaddressReasonTypeContractValidator _updateReaddressReasonTypeContractValidator;
-        private readonly CreateReaddressReasonTypeContractValidator _createReaddressReasonTypeContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<ReaddressReasonType> readdressReasonTypeRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<ReaddressReasonTypeService> log;
+        private readonly UpdateReaddressReasonTypeContractValidator updateReaddressReasonTypeContractValidator;
+        private readonly CreateReaddressReasonTypeContractValidator createReaddressReasonTypeContractValidator;
 
         public ReaddressReasonTypeService(
             IMapper mapper,
@@ -30,124 +34,122 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<ReaddressReasonTypeService> log,
             UpdateReaddressReasonTypeContractValidator updateReaddressReasonTypeContractValidator,
-            CreateReaddressReasonTypeContractValidator createReaddressReasonTypeContractValidator
-            )
+            CreateReaddressReasonTypeContractValidator createReaddressReasonTypeContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _readdressReasonTypeRepository = readdressReasonTypeRepository;
-            _log = log;
-            _updateReaddressReasonTypeContractValidator = updateReaddressReasonTypeContractValidator;
-            _createReaddressReasonTypeContractValidator = createReaddressReasonTypeContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.readdressReasonTypeRepository = readdressReasonTypeRepository;
+            this.log = log;
+            this.updateReaddressReasonTypeContractValidator = updateReaddressReasonTypeContractValidator;
+            this.createReaddressReasonTypeContractValidator = createReaddressReasonTypeContractValidator;
         }
 
         public CreatedReaddressReasonType Create(CreateReaddressReasonType contract)
         {
             try
             {
-                _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Create");
+                this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Create");
 
-                ValidateContract(contract);
-                ValidateDoesNotExists(contract.Name);
-                var readdressReasonType = _readdressReasonTypeRepository.Create(_mapper.Map<ReaddressReasonType>(contract));
-                _unitOfWork.Complete();
+                this.ValidateContract(contract);
+                this.ValidateDoesNotExists(contract.Name);
+                var readdressReasonType = this.readdressReasonTypeRepository.Create(this.mapper.Map<ReaddressReasonType>(contract));
+                this.unitOfWork.Complete();
 
-                _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Create");
+                this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Create");
 
-                return _mapper.Map<CreatedReaddressReasonType>(readdressReasonType);
+                return this.mapper.Map<CreatedReaddressReasonType>(readdressReasonType);
             }
-
             catch (BusinessValidationException e)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Create BusinessValidationException: {e.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Create BusinessValidationException: {e.Message}");
                 throw e;
             }
             catch (Exception e)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Create Exception: {e.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Create Exception: {e.Message}");
                 throw new BusinessException($"{e.Message}");
             }
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Delete");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Delete");
 
             try
             {
-                var readdressReason = _readdressReasonTypeRepository.Get(id);
+                var readdressReason = this.readdressReasonTypeRepository.Get(id);
                 if (readdressReason != null)
                 {
-                    _readdressReasonTypeRepository.Delete(readdressReason);
-                    _unitOfWork.Complete();
+                    this.readdressReasonTypeRepository.Delete(readdressReason);
+                    this.unitOfWork.Complete();
 
-                    _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Delete");
+                    this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Delete");
                 }
                 else
                 {
-                    _log.LogError($"Exeption in {nameof(ReaddressReasonTypeService)}/Delete{id} ReaddressReasonTypeException");
+                    this.log.LogError($"Exeption in {nameof(ReaddressReasonTypeService)}/Delete{id} ReaddressReasonTypeException");
 
                     throw new ReaddressReasonTypeException($"The reason type to delete doesn't exist");
                 }
             }
             catch (BusinessValidationException e)
             {
-                _log.LogError($"Exeption in {nameof(ReaddressReasonTypeService)}/Delete{id} BusinessValidationException: {e.Message}");
+                this.log.LogError($"Exeption in {nameof(ReaddressReasonTypeService)}/Delete{id} BusinessValidationException: {e.Message}");
                 throw e;
             }
-
             catch (Exception e)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Delete{id} BusinessValidationException: {e.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Delete{id} BusinessValidationException: {e.Message}");
                 throw new BusinessException($"{e.Message}");
             }
         }
 
         public IEnumerable<ReadReaddressReasonType> List()
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/List");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/List");
 
-            var readdressRasonList = _readdressReasonTypeRepository
+            var readdressRasonList = this.readdressReasonTypeRepository
                 .Query();
 
-            _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/List");
+            this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/List");
 
-            return _mapper.Map<List<ReadReaddressReasonType>>(readdressRasonList.ToList());
+            return this.mapper.Map<List<ReadReaddressReasonType>>(readdressRasonList.ToList());
         }
 
         public ReadReaddressReasonType Read(int id)
         {
-            _log.LogInformation($"{nameof(ReaddressReasonTypeService)}/Read{id}");
+            this.log.LogInformation($"{nameof(ReaddressReasonTypeService)}/Read{id}");
 
-            return _mapper.Map<ReadReaddressReasonType>(_readdressReasonTypeRepository.Query().FirstOrDefault(_ => _.Id == id));
+            return this.mapper.Map<ReadReaddressReasonType>(this.readdressReasonTypeRepository.Query().FirstOrDefault(_ => _.Id == id));
         }
 
         public void Update(int id, UpdateReaddressReasonType contract)
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Update/{id}");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/Update/{id}");
 
             try
             {
-                ValidateContract(contract);
+                this.ValidateContract(contract);
 
-                if (!_readdressReasonTypeRepository.Exist(id))
+                if (!this.readdressReasonTypeRepository.Exist(id))
+                {
                     throw new ReaddressReasonTypeException($"The reason to update with id: {id} does not exist");
+                }
 
-                var readdressReasonTypeToUpdate = _readdressReasonTypeRepository.Query().AsNoTracking().First(_ => _.Id == id);
-                var readdressReasonTypeFromContract = _mapper.Map<ReaddressReasonType>(contract);
+                var readdressReasonTypeToUpdate = this.readdressReasonTypeRepository.Query().AsNoTracking().First(_ => _.Id == id);
+                var readdressReasonTypeFromContract = this.mapper.Map<ReaddressReasonType>(contract);
 
                 readdressReasonTypeToUpdate = readdressReasonTypeFromContract;
                 readdressReasonTypeToUpdate.Id = id;
 
-                _readdressReasonTypeRepository.Update(readdressReasonTypeToUpdate);
-                _unitOfWork.Complete();
+                this.readdressReasonTypeRepository.Update(readdressReasonTypeToUpdate);
+                this.unitOfWork.Complete();
 
-                _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Update/{id}");
+                this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/Update/{id}");
             }
-
             catch (Exception e)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Update{id} Exception: {e.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/Update{id} Exception: {e.Message}");
 
                 throw new BusinessException($"There was an unexpected error: {e.Message}");
             }
@@ -155,65 +157,70 @@ namespace Domain.Services.Impl.Services
 
         private void ValidateContract(CreateReaddressReasonType contract)
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateContract");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateContract");
 
             try
             {
-                _createReaddressReasonTypeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createReaddressReasonTypeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateContract ValidationException: {ex.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateContract ValidationException: {ex.Message}");
 
                 throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
 
-            _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateContract");
+            this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateContract");
         }
 
         private void ValidateContract(UpdateReaddressReasonType contract)
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateContract");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateContract");
 
             try
             {
-                _updateReaddressReasonTypeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_UPDATE}");
+                this.updateReaddressReasonTypeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETUPDATE}");
             }
             catch (ValidationException ex)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateContract CreateContractInvalidException: {ex.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateContract CreateContractInvalidException: {ex.Message}");
 
                 throw new CreateContractInvalidException(ex.ToListOfMessages());
             }
 
-            _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateContract");
+            this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateContract");
         }
 
         private void ValidateDoesNotExists(string name)
         {
-            _log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists");
+            this.log.LogInformation($"Start {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists");
 
             try
             {
-                var exists = _readdressReasonTypeRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name) != null;
-                if (exists) throw new ReaddressReasonTypeException($"There is already a reason with name {name}");
+                var exists = this.readdressReasonTypeRepository.Query().AsNoTracking().FirstOrDefault(_ => _.Name == name) != null;
+                if (exists)
+                {
+                    throw new ReaddressReasonTypeException($"There is already a reason with name {name}");
+                }
             }
             catch (ReaddressReasonTypeException ex)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists ReaddressReasonTypeException: {ex.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists ReaddressReasonTypeException: {ex.Message}");
 
                 throw ex;
             }
             catch (Exception e)
             {
-                _log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists Exception: {e.Message}");
+                this.log.LogError($"Exception in {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists Exception: {e.Message}");
 
                 throw new BusinessException($"There was an unexpected error: {e.Message}");
             }
 
-            _log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists");
+            this.log.LogInformation($"End {nameof(ReaddressReasonTypeService)}/ValidateDoesNotExists");
         }
     }
 }

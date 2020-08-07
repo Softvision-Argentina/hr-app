@@ -1,24 +1,28 @@
-﻿using ApiServer.Contracts.Seed;
-using ApiServer.Security;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Seed;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿// <copyright file="DummiesController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
-    //TODO:do we use actually this controller ? or we can remove it.
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Seed;
+    using ApiServer.Security;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Seed;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    // TODO:do we use actually this controller ? or we can remove it.
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class DummiesController : BaseController<DummiesController>
     {
-        private readonly IDummyService _dummyService;
-        private readonly IMapper _mapper;
+        private readonly IDummyService dummyService;
+        private readonly IMapper mapper;
 
         public DummiesController(
             IDummyService dummyService,
@@ -26,80 +30,79 @@ namespace ApiServer.Controllers
             IMapper mapper)
             : base(logger)
         {
-            _dummyService = dummyService;
-            _mapper = mapper;
+            this.dummyService = dummyService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
-        [Authorize(Policy = SecurityClaims.CAN_LIST_DUMMY)]
+        [Authorize(Policy = SecurityClaims.CANLISTDUMMY)]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var dummies = _dummyService.List();
+                var dummies = this.dummyService.List();
 
-                return Accepted(_mapper.Map<List<ReadedDummyViewModel>>(dummies));
+                return this.Accepted(this.mapper.Map<List<ReadedDummyViewModel>>(dummies));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var dummy = _dummyService.Read(id);
+                var dummy = this.dummyService.Read(id);
 
                 if (dummy == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedDummyViewModel>(dummy));
+                return this.Accepted(this.mapper.Map<ReadedDummyViewModel>(dummy));
             });
         }
 
         // POST api/dummies
         // Creation
         [HttpPost]
-        public IActionResult Post([FromBody]CreateDummyViewModel createDummyVm)
+        public IActionResult Post([FromBody] CreateDummyViewModel createDummyVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDummyContract>(createDummyVm);
-                var returnContract = _dummyService.Create(contract);
+                var contract = this.mapper.Map<CreateDummyContract>(createDummyVm);
+                var returnContract = this.dummyService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedDummyViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedDummyViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody]UpdateDummyViewModel updateDummyVm)
+        public IActionResult Put(Guid id, [FromBody] UpdateDummyViewModel updateDummyVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDummyContract>(updateDummyVm);
+                var contract = this.mapper.Map<UpdateDummyContract>(updateDummyVm);
                 contract.Id = id;
-                _dummyService.Update(contract);
+                this.dummyService.Update(contract);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _dummyService.Delete(id);
-                return Accepted();
+                this.dummyService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new PingViewModel { Status = "OK" });
+            return this.Ok(new PingViewModel { Status = "OK" });
         }
-
     }
 }

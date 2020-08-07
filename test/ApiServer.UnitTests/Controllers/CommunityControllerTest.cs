@@ -1,33 +1,36 @@
-﻿using ApiServer.Contracts.Community;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Services.Contracts.Community;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="CommunityControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Community;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.Community;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class CommunityControllerTest
     {
-        private CommunityController controller;
-        private Mock<ILog<CommunityController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<ICommunityService> mockService;
+        private readonly CommunityController controller;
+        private readonly Mock<ILog<CommunityController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ICommunityService> mockService;
 
         public CommunityControllerTest()
         {
-            mockLog = new Mock<ILog<CommunityController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<ICommunityService>();
-            controller = new CommunityController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<CommunityController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<ICommunityService>();
+            this.controller = new CommunityController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
-
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
         public void Should_Get_AllCommunities()
@@ -39,13 +42,13 @@ namespace ApiServer.UnitTests.Controllers
                 Name = "test",
                 Description = "test",
                 ProfileId = 0,
-                Profile = null
+                Profile = null,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedCommunityContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedCommunityViewModel>>(It.IsAny<IEnumerable<ReadedCommunityContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedCommunityContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedCommunityViewModel>>(It.IsAny<IEnumerable<ReadedCommunityContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -55,8 +58,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedCommunityViewModel>>(It.IsAny<IEnumerable<ReadedCommunityContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedCommunityViewModel>>(It.IsAny<IEnumerable<ReadedCommunityContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -69,13 +72,13 @@ namespace ApiServer.UnitTests.Controllers
                 Name = "test",
                 Description = "test",
                 ProfileId = 0,
-                Profile = null
+                Profile = null,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedCommunityContract());
-            mockMapper.Setup(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedCommunityContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>())).Returns(expectedValue);
 
-            var result = controller.Get(communityId);
+            var result = this.controller.Get(communityId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -85,8 +88,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -95,13 +98,13 @@ namespace ApiServer.UnitTests.Controllers
             var communityId = 0;
             var expectedValue = communityId;
 
-            var result = controller.Get(communityId);
+            var result = this.controller.Get(communityId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCommunityViewModel>(It.IsAny<ReadedCommunityContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -112,19 +115,19 @@ namespace ApiServer.UnitTests.Controllers
                 Name = "test",
                 Description = "test",
                 ProfileId = 0,
-                Profile = null
+                Profile = null,
             };
 
             var expectedValue = new CreatedCommunityViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateCommunityContract>(It.IsAny<CreateCommunityViewModel>())).Returns(new CreateCommunityContract());
-            mockMapper.Setup(_ => _.Map<CreatedCommunityViewModel>(It.IsAny<CreatedCommunityContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateCommunityContract>())).Returns(new CreatedCommunityContract());
+            this.mockMapper.Setup(_ => _.Map<CreateCommunityContract>(It.IsAny<CreateCommunityViewModel>())).Returns(new CreateCommunityContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedCommunityViewModel>(It.IsAny<CreatedCommunityContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateCommunityContract>())).Returns(new CreatedCommunityContract());
 
-            var result = controller.Post(communityVM);
+            var result = this.controller.Post(communityVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -134,8 +137,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateCommunityContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedCommunityViewModel>(It.IsAny<CreatedCommunityContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateCommunityContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedCommunityViewModel>(It.IsAny<CreatedCommunityContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -143,18 +146,18 @@ namespace ApiServer.UnitTests.Controllers
         {
             var communityId = 0;
             var communityToUpdate = new UpdateCommunityViewModel();
-            var expectedValue = new { id = communityId};
+            var expectedValue = new { id = communityId };
 
-            mockMapper.Setup(_ => _.Map<UpdateCommunityContract>(It.IsAny<UpdateCommunityViewModel>())).Returns(new UpdateCommunityContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateCommunityContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateCommunityContract>(It.IsAny<UpdateCommunityViewModel>())).Returns(new UpdateCommunityContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateCommunityContract>()));
 
-            var result = controller.Put(communityId, communityToUpdate);
+            var result = this.controller.Put(communityId, communityToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateCommunityContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateCommunityContract>(It.IsAny<UpdateCommunityViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateCommunityContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateCommunityContract>(It.IsAny<UpdateCommunityViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -162,19 +165,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var communityId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(communityId);
+            var result = this.controller.Delete(communityId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

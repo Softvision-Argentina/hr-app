@@ -1,18 +1,22 @@
-﻿using ApiServer.Contracts.CandidateSkill;
-using AutoMapper;
-using Domain.Services.Contracts.CandidateSkill;
+﻿// <copyright file="CandidateSkillProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
-    public class CandidateSkillProfile: Profile
+    using ApiServer.Contracts.CandidateSkill;
+    using AutoMapper;
+    using Domain.Services.Contracts.CandidateSkill;
+
+    public class CandidateSkillProfile : Profile
     {
         public CandidateSkillProfile()
         {
-            CreateMap<CreateCandidateSkillViewModel, CreateCandidateSkillContract>();
-            CreateMap<CreatedCandidateSkillContract, CreatedCandidateSkillViewModel>();
-            CreateMap<ReadedCandidateSkillContract, ReadedCandidateSkillViewModel>();
-            CreateMap<ReadedCandidateAppSkillContract, ReadedCandidateAppSkillViewModel>();
-            CreateMap<UpdateCandidateSkillViewModel, UpdateCandidateSkillContract>();
+            this.CreateMap<CreateCandidateSkillViewModel, CreateCandidateSkillContract>();
+            this.CreateMap<CreatedCandidateSkillContract, CreatedCandidateSkillViewModel>();
+            this.CreateMap<ReadedCandidateSkillContract, ReadedCandidateSkillViewModel>();
+            this.CreateMap<ReadedCandidateAppSkillContract, ReadedCandidateAppSkillViewModel>();
+            this.CreateMap<UpdateCandidateSkillViewModel, UpdateCandidateSkillContract>();
         }
     }
 }

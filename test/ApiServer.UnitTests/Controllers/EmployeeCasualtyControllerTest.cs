@@ -1,33 +1,36 @@
-﻿using ApiServer.Contracts.EmployeeCasualty;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Services.Contracts.EmployeeCasualty;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="EmployeeCasualtyControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.EmployeeCasualty;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.EmployeeCasualty;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class EmployeeCasualtyControllerTest
     {
-        private EmployeeCasualtyController controller;
-        private Mock<ILog<EmployeeCasualtyController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IEmployeeCasualtyService> mockService;
+        private readonly EmployeeCasualtyController controller;
+        private readonly Mock<ILog<EmployeeCasualtyController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IEmployeeCasualtyService> mockService;
 
         public EmployeeCasualtyControllerTest()
         {
-            mockLog = new Mock<ILog<EmployeeCasualtyController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IEmployeeCasualtyService>();
-            controller = new EmployeeCasualtyController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<EmployeeCasualtyController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IEmployeeCasualtyService>();
+            this.controller = new EmployeeCasualtyController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
-
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
         public void Should_Get_AllEmployeeCasualties()
@@ -38,13 +41,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = 0,
                 Month = 1,
                 Year = 2020,
-                Value = 500
+                Value = 500,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedEmployeeCasualtyContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedEmployeeCasualtyViewModel>>(It.IsAny<IEnumerable<ReadedEmployeeCasualtyContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedEmployeeCasualtyContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedEmployeeCasualtyViewModel>>(It.IsAny<IEnumerable<ReadedEmployeeCasualtyContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -54,8 +57,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedEmployeeCasualtyViewModel>>(It.IsAny<IEnumerable<ReadedEmployeeCasualtyContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedEmployeeCasualtyViewModel>>(It.IsAny<IEnumerable<ReadedEmployeeCasualtyContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -67,13 +70,13 @@ namespace ApiServer.UnitTests.Controllers
                 Id = 0,
                 Month = 1,
                 Year = 2020,
-                Value = 500
+                Value = 500,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedEmployeeCasualtyContract());
-            mockMapper.Setup(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedEmployeeCasualtyContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>())).Returns(expectedValue);
 
-            var result = controller.Get(employeeCasualtyId);
+            var result = this.controller.Get(employeeCasualtyId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -83,8 +86,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -93,13 +96,13 @@ namespace ApiServer.UnitTests.Controllers
             var employeeCasualtyId = 0;
             var expectedValue = employeeCasualtyId;
 
-            var result = controller.Get(employeeCasualtyId);
+            var result = this.controller.Get(employeeCasualtyId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedEmployeeCasualtyViewModel>(It.IsAny<ReadedEmployeeCasualtyContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -109,18 +112,18 @@ namespace ApiServer.UnitTests.Controllers
             {
                 Month = 1,
                 Year = 2020,
-                Value = 500
+                Value = 500,
             };
             var expectedValue = new CreatedEmployeeCasualtyViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateEmployeeCasualtyContract>(It.IsAny<CreateEmployeeCasualtyViewModel>())).Returns(new CreateEmployeeCasualtyContract());
-            mockMapper.Setup(_ => _.Map<CreatedEmployeeCasualtyViewModel>(It.IsAny<CreatedEmployeeCasualtyContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateEmployeeCasualtyContract>())).Returns(new CreatedEmployeeCasualtyContract());
+            this.mockMapper.Setup(_ => _.Map<CreateEmployeeCasualtyContract>(It.IsAny<CreateEmployeeCasualtyViewModel>())).Returns(new CreateEmployeeCasualtyContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedEmployeeCasualtyViewModel>(It.IsAny<CreatedEmployeeCasualtyContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateEmployeeCasualtyContract>())).Returns(new CreatedEmployeeCasualtyContract());
 
-            var result = controller.Post(employeeCasualtyVM);
+            var result = this.controller.Post(employeeCasualtyVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -130,8 +133,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateEmployeeCasualtyContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedEmployeeCasualtyViewModel>(It.IsAny<CreatedEmployeeCasualtyContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateEmployeeCasualtyContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedEmployeeCasualtyViewModel>(It.IsAny<CreatedEmployeeCasualtyContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -139,18 +142,18 @@ namespace ApiServer.UnitTests.Controllers
         {
             var employeeCasualtyId = 0;
             var employeeCasualtyToUpdate = new UpdateEmployeeCasualtyViewModel();
-            var expectedValue = new { id = employeeCasualtyId};
+            var expectedValue = new { id = employeeCasualtyId };
 
-            mockMapper.Setup(_ => _.Map<UpdateEmployeeCasualtyContract>(It.IsAny<UpdateEmployeeCasualtyViewModel>())).Returns(new UpdateEmployeeCasualtyContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateEmployeeCasualtyContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateEmployeeCasualtyContract>(It.IsAny<UpdateEmployeeCasualtyViewModel>())).Returns(new UpdateEmployeeCasualtyContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateEmployeeCasualtyContract>()));
 
-            var result = controller.Put(employeeCasualtyId, employeeCasualtyToUpdate);
+            var result = this.controller.Put(employeeCasualtyId, employeeCasualtyToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateEmployeeCasualtyContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateEmployeeCasualtyContract>(It.IsAny<UpdateEmployeeCasualtyViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateEmployeeCasualtyContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateEmployeeCasualtyContract>(It.IsAny<UpdateEmployeeCasualtyViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -158,19 +161,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var employeeCasualtyId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(employeeCasualtyId);
+            var result = this.controller.Delete(employeeCasualtyId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

@@ -1,95 +1,99 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Reservation;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Reservation;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="ReservationController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Reservation;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Reservation;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : BaseController<ReservationController>
     {
-        private readonly IReservationService _reservationService;
-        private readonly IMapper _mapper;
+        private readonly IReservationService reservationService;
+        private readonly IMapper mapper;
 
         public ReservationController(
             IReservationService reservationService,
             ILog<ReservationController> logger,
             IMapper mapper) : base(logger)
         {
-            _reservationService = reservationService;
-            _mapper = mapper;
+            this.reservationService = reservationService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var communities = _reservationService.List();
+                var communities = this.reservationService.List();
 
-                return Accepted(_mapper.Map<List<ReadedReservationViewModel>>(communities));
+                return this.Accepted(this.mapper.Map<List<ReadedReservationViewModel>>(communities));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var reservation = _reservationService.Read(id);
+                var reservation = this.reservationService.Read(id);
 
                 if (reservation == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedReservationViewModel>(reservation));
+                return this.Accepted(this.mapper.Map<ReadedReservationViewModel>(reservation));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateReservationViewModel createReservationVm)
+        public IActionResult Post([FromBody] CreateReservationViewModel createReservationVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateReservationContract>(createReservationVm);
-                var returnContract = _reservationService.Create(contract);
+                var contract = this.mapper.Map<CreateReservationContract>(createReservationVm);
+                var returnContract = this.reservationService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedReservationViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedReservationViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateReservationViewModel UpdateReservationVm)
+        public IActionResult Put(int id, [FromBody] UpdateReservationViewModel updateReservationVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateReservationContract>(UpdateReservationVm);
+                var contract = this.mapper.Map<UpdateReservationContract>(updateReservationVm);
                 contract.Id = id;
-                _reservationService.Update(contract);
+                this.reservationService.Update(contract);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _reservationService.Delete(id);
-                return Accepted();
+                this.reservationService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

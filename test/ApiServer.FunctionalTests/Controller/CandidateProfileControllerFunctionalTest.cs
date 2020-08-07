@@ -1,24 +1,28 @@
-﻿using System.Collections.Generic;
-using Xunit;
-using ApiServer.Contracts.CandidateProfile;
-using Domain.Model;
-using System.Net;
-using ApiServer.Contracts.Community;
-using ApiServer.FunctionalTests.Fixture;
-using Core.Testing.Platform;
-using Persistance.EF.Extensions;
+﻿// <copyright file="CandidateProfileControllerFunctionalTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.FunctionalTests.Controller
 {
+    using System.Collections.Generic;
+    using System.Net;
+    using ApiServer.Contracts.CandidateProfile;
+    using ApiServer.Contracts.Community;
+    using ApiServer.FunctionalTests.Fixture;
+    using Core.Testing.Platform;
+    using Domain.Model;
+    using Persistance.EF.Extensions;
+    using Xunit;
+
     [Collection(nameof(TestType.Functional))]
     public class CandidateProfileControllerFunctionalTest : IClassFixture<CandidateProfileControllerFixture>
     {
-        private readonly CandidateProfileControllerFixture _fixture;
+        private readonly CandidateProfileControllerFixture fixture;
 
         public CandidateProfileControllerFunctionalTest(CandidateProfileControllerFixture fixture)
         {
-            _fixture = fixture;
-            _fixture.ContextAction((context) =>
+            this.fixture = fixture;
+            this.fixture.ContextAction((context) =>
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -29,15 +33,15 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGet_WhenEntitiesAreFound_ShouldReturnAndAccepted202()
         {
-            //Arrange
+            // Arrange
             var profile = new CandidateProfile() { Name = "Test" };
-            _fixture.Seed(profile);
-            var candidateProfileCount = _fixture.GetCount<CandidateProfile>();
+            this.fixture.Seed(profile);
+            var candidateProfileCount = this.fixture.GetCount<CandidateProfile>();
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, $"{_fixture.ControllerName}/");
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, $"{this.fixture.ControllerName}/");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -48,13 +52,13 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGet_WhenThereAreNoEntities_ShouldReturnAccepted202AndEmptyCollection()
         {
-            //Arrange
-            await _fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, _fixture.ControllerName).ConfigureAwait(false);
+            // Arrange
+            await this.fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, this.fixture.ControllerName).ConfigureAwait(false);
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, _fixture.ControllerName).ConfigureAwait(false);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<List<ReadedCandidateProfileViewModel>>(HttpVerb.GET, this.fixture.ControllerName).ConfigureAwait(false);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -65,12 +69,12 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGetId_WhenEntityIsFound_ShouldReturnAccepted202()
         {
-            //Act
+            // Act
             var profile = new CandidateProfile() { Name = "Test" };
-            _fixture.Seed(profile);
-            var httpResultData = await _fixture.HttpCallAsync<ReadedCandidateProfileViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{profile.Id}");
+            this.fixture.Seed(profile);
+            var httpResultData = await this.fixture.HttpCallAsync<ReadedCandidateProfileViewModel>(HttpVerb.GET, $"{this.fixture.ControllerName}/{profile.Id}");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -82,30 +86,29 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileGetId_WhenEntityIsNotFound_ShouldReturnNotFound404()
         {
-            //Arrange
+            // Arrange
             var candidate = new CandidateProfile() { Id = 999, Name = "Testing" };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<ReadedCandidateProfileViewModel>(HttpVerb.GET, $"{_fixture.ControllerName}/{candidate.Id}");
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<ReadedCandidateProfileViewModel>(HttpVerb.GET, $"{this.fixture.ControllerName}/{candidate.Id}");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResultData.Response.StatusCode);
             Assert.Null(httpResultData.ResponseEntity);
             Assert.Equal("Not Found", httpResultData.Response.ReasonPhrase);
         }
 
-
         [Fact(DisplayName = "Verify api/CandidateProfile [Post] is returning Created [201] when data is valid")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsSuccesfull_ShouldReturnCreated201()
         {
-            //Arrange
+            // Arrange
             var model = new CreateCandidateProfileViewModel() { Name = "Testing", Description = "Testirino" };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, this.fixture.ControllerName, model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Created, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -119,14 +122,14 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseValidationError_ShouldReturnBadRequest400(string propertyName)
         {
-            //Arrange
+            // Arrange
             var model = DataFactory.CreateInstance<CreateCandidateProfileViewModel>()
                 .WithPropertyValue(propertyName, default(string));
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, this.fixture.ControllerName, model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -136,15 +139,15 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePost_WhenCreationIsNotSuccesfullBecauseExistenceError_ShouldReturnBadRequest()
         {
-            //Arrange
+            // Arrange
             var candidate = new CandidateProfile() { Name = "Valid model", Description = "Valid model" };
-            _fixture.Seed(candidate);
-            var model = _fixture.Get<CandidateProfile>(candidate.Id);
+            this.fixture.Seed(candidate);
+            var model = this.fixture.Get<CandidateProfile>(candidate.Id);
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, _fixture.ControllerName, model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<CreatedCandidateProfileViewModel>(HttpVerb.POST, this.fixture.ControllerName, model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -155,31 +158,32 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsSuccesfull_ShouldReturnAccepted202()
         {
-            //Arrange
+            // Arrange
             var profileInDb = new CandidateProfile()
             {
                 Name = "Test",
                 Description = "Test",
                 CommunityItems = new List<Community>()
                 {
-                    new Community() { Name = "Community", Description = "Old community description"}
-                }
+                    new Community() { Name = "Community", Description = "Old community description"},
+                },
             };
 
-            _fixture.Seed(profileInDb);
+            this.fixture.Seed(profileInDb);
 
             var updateModel = new UpdateCandidateProfileViewModel()
             {
                 Name = profileInDb.Name,
                 Description = "New description",
-                //CommunityItems =  (??)
+
+                // CommunityItems =  (??)
             };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, profileInDb.Id);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.PUT, this.fixture.ControllerName, updateModel, profileInDb.Id);
 
-            //Assert
-            var profileAfterUpdate = _fixture.GetEager(profileInDb.Id);
+            // Assert
+            var profileAfterUpdate = this.fixture.GetEager(profileInDb.Id);
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(updateModel.Description, profileAfterUpdate.Description);
         }
@@ -190,17 +194,17 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsNotSuccesfull_ShouldReturnInternalServerError500(string propertyName)
         {
-            //Arrange
+            // Arrange
             var profileInDb = new CandidateProfile() { Name = "Test", Description = "Test" };
-            _fixture.Seed(profileInDb);
-            var profile = _fixture.Get<CandidateProfile>(profileInDb.Id);
+            this.fixture.Seed(profileInDb);
+            var profile = this.fixture.Get<CandidateProfile>(profileInDb.Id);
             var updateModel = DataFactory.CreateInstance<UpdateCandidateProfileViewModel>()
                 .WithPropertyValue(propertyName, default(string));
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, profile.Id);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.PUT, this.fixture.ControllerName, updateModel, profile.Id);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
         }
@@ -209,10 +213,10 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenUpdateIsInvalid_ShouldReturnBadRequest400()
         {
-            //Arrange
+            // Arrange
             var profileInDb = new CandidateProfile() { Name = "test", Description = "test" };
-            _fixture.Seed(profileInDb);
-            var profile = _fixture.Get<CandidateProfile>(profileInDb.Id);
+            this.fixture.Seed(profileInDb);
+            var profile = this.fixture.Get<CandidateProfile>(profileInDb.Id);
             var invalidId = 999;
 
             var updateModel = new UpdateCandidateProfileViewModel()
@@ -222,14 +226,14 @@ namespace ApiServer.FunctionalTests.Controller
                 CommunityItems = new List<CreateCommunityViewModel>
                     {
                         new CreateCommunityViewModel() { Name = "Community 1", Description = "Description Community 1"},
-                        new CreateCommunityViewModel() { Name = "Community 2", Description = "Description Community 2"}
-                    }
+                        new CreateCommunityViewModel() { Name = "Community 2", Description = "Description Community 2"},
+                    },
             };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.PUT, _fixture.ControllerName, updateModel, invalidId);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.PUT, this.fixture.ControllerName, updateModel, invalidId);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -240,17 +244,17 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfilePut_WhenDeleteIsSuccesfull_ShouldReturnAccepted()
         {
-            //Arrange
+            // Arrange
             var profileInDb = new CandidateProfile() { Name = "Test", Description = "Test" };
-            _fixture.Seed(profileInDb);
-            var profile = _fixture.Get<CandidateProfile>(profileInDb.Id);
-            int countBeforeDelete = _fixture.GetCount<CandidateProfile>();
+            this.fixture.Seed(profileInDb);
+            var profile = this.fixture.Get<CandidateProfile>(profileInDb.Id);
+            int countBeforeDelete = this.fixture.GetCount<CandidateProfile>();
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, _fixture.ControllerName, null, profile.Id).ConfigureAwait(false);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.DELETE, this.fixture.ControllerName, null, profile.Id).ConfigureAwait(false);
 
-            //Assert
-            int countAfterDelete = _fixture.GetCount<CandidateProfile>();
+            // Assert
+            int countAfterDelete = this.fixture.GetCount<CandidateProfile>();
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.NotEqual(countBeforeDelete, countAfterDelete);
             Assert.Equal(0, countAfterDelete);
@@ -261,13 +265,13 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidateProfileDeleteId_WhenIdIsValid_ShouldReturnBadRequest()
         {
-            //Arrange
+            // Arrange
             int invalidId = 999;
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.DELETE, _fixture.ControllerName, null, invalidId);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.DELETE, this.fixture.ControllerName, null, invalidId);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.Equal($"Profile not found for the Profile Id: {invalidId}", httpResultData.ResponseError.ExceptionMessage);
         }

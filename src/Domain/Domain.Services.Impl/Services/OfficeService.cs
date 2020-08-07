@@ -1,121 +1,124 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Office;
-using Domain.Services.Contracts.Office;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Office;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="OfficeService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Office;
+    using Domain.Services.Contracts.Office;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Office;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class OfficeService : IOfficeService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<Office> _OfficeRepository;
-        private readonly IRepository<Model.Room> _RoomItemRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<OfficeService> _log;
-        private readonly UpdateOfficeContractValidator _updateOfficeContractValidator;
-        private readonly CreateOfficeContractValidator _createOfficeContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<Office> officeRepository;
+        private readonly IRepository<Model.Room> roomItemRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<OfficeService> log;
+        private readonly UpdateOfficeContractValidator updateOfficeContractValidator;
+        private readonly CreateOfficeContractValidator createOfficeContractValidator;
 
         public OfficeService(
             IMapper mapper,
-            IRepository<Office> OfficeRepository,
-            IRepository<Model.Room> RoomItemRepository,
+            IRepository<Office> officeRepository,
+            IRepository<Model.Room> roomItemRepository,
             IUnitOfWork unitOfWork,
             ILog<OfficeService> log,
             UpdateOfficeContractValidator updateOfficeContractValidator,
-            CreateOfficeContractValidator createOfficeContractValidator
-            )
+            CreateOfficeContractValidator createOfficeContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _OfficeRepository = OfficeRepository;
-            _RoomItemRepository = RoomItemRepository;
-            _log = log;
-            _updateOfficeContractValidator = updateOfficeContractValidator;
-            _createOfficeContractValidator = createOfficeContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.officeRepository = officeRepository;
+            this.roomItemRepository = roomItemRepository;
+            this.log = log;
+            this.updateOfficeContractValidator = updateOfficeContractValidator;
+            this.createOfficeContractValidator = createOfficeContractValidator;
         }
 
         public CreatedOfficeContract Create(CreateOfficeContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(0, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(0, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var office = _mapper.Map<Office>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var office = this.mapper.Map<Office>(contract);
 
-            var createdOffice = _OfficeRepository.Create(office);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedOfficeContract>(createdOffice);
+            var createdOffice = this.officeRepository.Create(office);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedOfficeContract>(createdOffice);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching Candidate Profile {id}");
-            Office Office = _OfficeRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching Candidate Profile {id}");
+            Office office = this.officeRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
-            if (Office == null)
+            if (office == null)
             {
                 throw new DeleteOfficeNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Candidate Profile {id}");
-            _OfficeRepository.Delete(Office);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting Candidate Profile {id}");
+            this.officeRepository.Delete(office);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateOfficeContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(contract.Id, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(contract.Id, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var Office = _mapper.Map<Office>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var office = this.mapper.Map<Office>(contract);
 
-
-            var updatedOffice = _OfficeRepository.Update(Office);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            var updatedOffice = this.officeRepository.Update(office);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
-
 
         public IEnumerable<ReadedOfficeContract> List()
         {
-            var OfficeQuery = _OfficeRepository
-                .QueryEager();                 
-                
-            var OfficeResult = OfficeQuery.ToList();
+            var officeQuery = this.officeRepository
+                .QueryEager();
 
-            return _mapper.Map<List<ReadedOfficeContract>>(OfficeResult);
+            var officeResult = officeQuery.ToList();
+
+            return this.mapper.Map<List<ReadedOfficeContract>>(officeResult);
         }
 
         public ReadedOfficeContract Read(int id)
         {
-            var OfficeQuery = _OfficeRepository
-                .QueryEager()                
+            var officeQuery = this.officeRepository
+                .QueryEager()
                 .Where(_ => _.Id == id);
 
-            var OfficeResult = OfficeQuery.SingleOrDefault();
+            var officeResult = officeQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedOfficeContract>(OfficeResult);
+            return this.mapper.Map<ReadedOfficeContract>(officeResult);
         }
 
         private void ValidateContract(CreateOfficeContract contract)
         {
             try
             {
-                _createOfficeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createOfficeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -127,8 +130,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateOfficeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateOfficeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -140,8 +144,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                Office Office = _OfficeRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
-                if (Office != null) throw new InvalidOfficeException("The Office already exists .");
+                Office office = this.officeRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
+                if (office != null)
+                {
+                    throw new InvalidOfficeException("The Office already exists .");
+                }
             }
             catch (ValidationException ex)
             {

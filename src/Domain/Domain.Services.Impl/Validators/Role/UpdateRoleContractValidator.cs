@@ -1,15 +1,19 @@
-﻿using Domain.Services.Contracts.Role;
-using FluentValidation;
+﻿// <copyright file="UpdateRoleContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Role
 {
+    using Domain.Services.Contracts.Role;
+    using FluentValidation;
+
     public class UpdateRoleContractValidator : AbstractValidator<UpdateRoleContract>
     {
         public UpdateRoleContractValidator()
         {
-            RuleFor(_ => _.Id).NotEmpty();
-            RuleFor(_ => _.Name).NotEmpty();
-            RuleFor(_ => _.isActive).NotNull();
+            this.RuleFor(_ => _.Id).NotEmpty();
+            this.RuleFor(_ => _.Name).NotEmpty();
+            this.RuleFor(_ => _.IsActive).NotNull();
         }
     }
 }

@@ -1,14 +1,18 @@
-﻿using Domain.Services.Contracts.CompanyCalendar;
-using FluentValidation;
+﻿// <copyright file="UpdateCompanyCalendarContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.CompanyCalendar
 {
+    using Domain.Services.Contracts.CompanyCalendar;
+    using FluentValidation;
+
     public class UpdateCompanyCalendarContractValidator : AbstractValidator<UpdateCompanyCalendarContract>
     {
         public UpdateCompanyCalendarContractValidator()
         {
-            RuleFor(_ => _.Type).NotEmpty();
-            RuleFor(_ => _.Date).NotEmpty();
+            this.RuleFor(_ => _.Type).NotEmpty();
+            this.RuleFor(_ => _.Date).NotEmpty();
         }
     }
 }

@@ -1,18 +1,22 @@
-﻿using Core.Testing.Platform;
+﻿// <copyright file="CommunityControllerFixture.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.FunctionalTests.Fixture
 {
+    using Core.Testing.Platform;
+
     public class CommunityControllerFixture : BaseFunctionalTestFixture
     {
         public CommunityControllerFixture()
         {
-            ControllerName = "Community";
+            this.ControllerName = "Community";
         }
 
         public void Dispose()
         {
-            Client.Dispose();
-            Server.Dispose();
+            this.Client.Dispose();
+            this.Server.Dispose();
         }
     }
 }

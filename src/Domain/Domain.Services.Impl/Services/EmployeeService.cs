@@ -1,30 +1,35 @@
-using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Employee;
-using Domain.Services.Contracts.Employee;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Employee;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+// <copyright file="EmployeeService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Employee;
+    using Domain.Services.Contracts.Employee;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Employee;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class EmployeeService : IEmployeeService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<Employee> _employeeRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<EmployeeService> _logger;
-        private readonly UpdateEmployeeContractValidator _updateEmployeeContractValidator;
-        private readonly CreateEmployeeContractValidator _createEmployeeContractValidator;
-        private readonly IRepository<User> _userRepository;
-        private readonly IRepository<Role> _roleRepository;
+        private readonly IMapper mapper;
+        private readonly IRepository<Employee> employeeRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<EmployeeService> logger;
+        private readonly UpdateEmployeeContractValidator updateEmployeeContractValidator;
+        private readonly CreateEmployeeContractValidator createEmployeeContractValidator;
+        private readonly IRepository<User> userRepository;
+        private readonly IRepository<Role> roleRepository;
 
-        public EmployeeService(IMapper mapper,
+        public EmployeeService(
+            IMapper mapper,
             IRepository<Employee> employeeRepository,
             IUnitOfWork unitOfWork,
             ILog<EmployeeService> log,
@@ -33,126 +38,132 @@ namespace Domain.Services.Impl.Services
             IRepository<User> userRepository,
             IRepository<Role> roleRepository)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _employeeRepository = employeeRepository;
-            _logger = log;
-            _updateEmployeeContractValidator = updateEmployeeContractValidator;
-            _createEmployeeContractValidator = createEmployeeContractValidator;
-            _userRepository = userRepository;
-            _roleRepository = roleRepository;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.employeeRepository = employeeRepository;
+            this.logger = log;
+            this.updateEmployeeContractValidator = updateEmployeeContractValidator;
+            this.createEmployeeContractValidator = createEmployeeContractValidator;
+            this.userRepository = userRepository;
+            this.roleRepository = roleRepository;
         }
 
         public IEnumerable<ReadedEmployeeContract> List()
         {
-            var employeeQuery = _employeeRepository.QueryEager();
+            var employeeQuery = this.employeeRepository.QueryEager();
 
             var employeeResult = employeeQuery.ToList();
 
-            return _mapper.Map<List<ReadedEmployeeContract>>(employeeResult);
+            return this.mapper.Map<List<ReadedEmployeeContract>>(employeeResult);
         }
 
         public void Delete(int id)
         {
-            _logger.LogInformation($"Searching employee {id}");
-            Employee employee = _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
+            this.logger.LogInformation($"Searching employee {id}");
+            Employee employee = this.employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
 
             if (employee == null)
             {
                 throw new DeleteEmployeeNotFoundException(id);
             }
-            _logger.LogInformation($"Deleting employee {id}");
-            _employeeRepository.Delete(employee);
 
-            _unitOfWork.Complete();
+            this.logger.LogInformation($"Deleting employee {id}");
+            this.employeeRepository.Delete(employee);
+
+            this.unitOfWork.Complete();
         }
 
         public Employee GetByDNI(int dni)
         {
-            Employee employee = _employeeRepository.Query().Where(emp => emp.DNI == dni).FirstOrDefault();
-            return _mapper.Map<Employee>(employee);
+            Employee employee = this.employeeRepository.Query().Where(emp => emp.DNI == dni).FirstOrDefault();
+            return this.mapper.Map<Employee>(employee);
         }
 
         public Employee GetByEmail(string email)
         {
-            Employee employee = _employeeRepository.Query().Where(emp => emp.EmailAddress == email).FirstOrDefault();
-            return _mapper.Map<Employee>(employee);
+            Employee employee = this.employeeRepository.Query().Where(emp => emp.EmailAddress == email).FirstOrDefault();
+            return this.mapper.Map<Employee>(employee);
         }
 
         public CreatedEmployeeContract Create(CreateEmployeeContract contract)
         {
-            _logger.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateEmailExistence(0, contract.EmailAddress);
-            ValidateDniExistence(0, contract.DNI);
-            
-            _logger.LogInformation($"Mapping contract {contract.Name}");
-            var employee = _mapper.Map<Employee>(contract);
+            this.logger.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateEmailExistence(0, contract.EmailAddress);
+            this.ValidateDniExistence(0, contract.DNI);
 
-            this.AddUserToEmployee(employee, contract.UserId);
-            this.AddRoleToEmployee(employee, contract.RoleId);
-            if(contract.ReviewerId != null)
-                this.AddReviewerToEmployee(employee, contract.ReviewerId);
-
-            var createdEmployee = _employeeRepository.Create(employee);
-            _logger.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _logger.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedEmployeeContract>(createdEmployee);
-        }
-
-        public void UpdateEmployee(UpdateEmployeeContract contract)
-        {
-            _logger.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateEmailExistence(contract.Id, contract.EmailAddress);
-            ValidateDniExistence(contract.Id, contract.DNI);
-
-            _logger.LogInformation($"Mapping contract {contract.Name}");
-            var employee = _mapper.Map<Employee>(contract);
+            this.logger.LogInformation($"Mapping contract {contract.Name}");
+            var employee = this.mapper.Map<Employee>(contract);
 
             this.AddUserToEmployee(employee, contract.UserId);
             this.AddRoleToEmployee(employee, contract.RoleId);
             if (contract.ReviewerId != null)
+            {
                 this.AddReviewerToEmployee(employee, contract.ReviewerId);
+            }
 
-            _employeeRepository.Update(employee);
+            var createdEmployee = this.employeeRepository.Create(employee);
+            this.logger.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.logger.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedEmployeeContract>(createdEmployee);
+        }
 
-            _logger.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+        public void UpdateEmployee(UpdateEmployeeContract contract)
+        {
+            this.logger.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateEmailExistence(contract.Id, contract.EmailAddress);
+            this.ValidateDniExistence(contract.Id, contract.DNI);
+
+            this.logger.LogInformation($"Mapping contract {contract.Name}");
+            var employee = this.mapper.Map<Employee>(contract);
+
+            this.AddUserToEmployee(employee, contract.UserId);
+            this.AddRoleToEmployee(employee, contract.RoleId);
+            if (contract.ReviewerId != null)
+            {
+                this.AddReviewerToEmployee(employee, contract.ReviewerId);
+            }
+
+            this.employeeRepository.Update(employee);
+
+            this.logger.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
 
         private void AddUserToEmployee(Employee employee, int userId)
         {
-
-            var user = _userRepository.Query().Where(usr => usr.Id == userId).FirstOrDefault();
+            var user = this.userRepository.Query().Where(usr => usr.Id == userId).FirstOrDefault();
             employee.User = user ?? throw new Domain.Model.Exceptions.User.UserNotFoundException(userId);
         }
 
         private void AddRoleToEmployee(Employee employee, int roleId)
         {
-
-            var role = _roleRepository.Query().Where(r => r.Id == roleId).FirstOrDefault();
+            var role = this.roleRepository.Query().Where(r => r.Id == roleId).FirstOrDefault();
             employee.Role = role ?? throw new Domain.Model.Exceptions.Role.RoleNotFoundException(roleId);
         }
 
         private void AddReviewerToEmployee(Employee employee, int? reviewerId)
         {
-
-            var Reviewer = _employeeRepository.Query().Where(e => e.Id == reviewerId).FirstOrDefault();
-            if (Reviewer != null)
+            var reviewer = this.employeeRepository.Query().Where(e => e.Id == reviewerId).FirstOrDefault();
+            if (reviewer != null)
             {
-                employee.Reviewer = Reviewer;
+                employee.Reviewer = reviewer;
             }
-             else throw new EmployeeNotFoundException(Reviewer.Id);
+            else
+            {
+                throw new EmployeeNotFoundException(reviewer.Id);
+            }
         }
 
         private void ValidateContract(CreateEmployeeContract contract)
         {
             try
             {
-                _createEmployeeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createEmployeeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -164,8 +175,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateEmployeeContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_UPDATE}");
+                this.updateEmployeeContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETUPDATE}");
             }
             catch (ValidationException ex)
             {
@@ -177,8 +189,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                Employee employee = _employeeRepository.Query().Where(emp => emp.EmailAddress == email && emp.Id != id).FirstOrDefault();
-                if (employee != null) throw new InvalidEmployeeException("The email already exists.");
+                Employee employee = this.employeeRepository.Query().Where(emp => emp.EmailAddress == email && emp.Id != id).FirstOrDefault();
+                if (employee != null)
+                {
+                    throw new InvalidEmployeeException("The email already exists.");
+                }
             }
             catch (ValidationException ex)
             {
@@ -190,8 +205,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                Employee employee = _employeeRepository.Query().Where(emp => emp.DNI == dni && emp.Id != id).FirstOrDefault();
-                if (employee != null) throw new InvalidEmployeeException("The DNI already exists.");
+                Employee employee = this.employeeRepository.Query().Where(emp => emp.DNI == dni && emp.Id != id).FirstOrDefault();
+                if (employee != null)
+                {
+                    throw new InvalidEmployeeException("The DNI already exists.");
+                }
             }
             catch (ValidationException ex)
             {
@@ -201,8 +219,8 @@ namespace Domain.Services.Impl.Services
 
         public Employee GetById(int id)
         {
-            Employee employee = _employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
-            return _mapper.Map<Employee>(employee);
+            Employee employee = this.employeeRepository.Query().Where(emp => emp.Id == id).FirstOrDefault();
+            return this.mapper.Map<Employee>(employee);
         }
     }
 }

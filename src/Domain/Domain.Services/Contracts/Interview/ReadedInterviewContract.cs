@@ -1,19 +1,28 @@
-﻿using Domain.Services.Contracts.Stage;
-using System;
-using System.Collections.Generic;
+﻿// <copyright file="ReadedInterviewContract.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Contracts.Interview
 {
+    using System;
+    using Domain.Services.Contracts.Stage;
+
     public class ReadedInterviewContract
     {
         public int Id { get; set; }
-        public String Client { get; set; }
-        public String ClientInterviewer { get; set; }
+
+        public string Client { get; set; }
+
+        public string ClientInterviewer { get; set; }
+
         public DateTime InterviewDate { get; set; }
-        public String Feedback { get; set; }
-        public String Project { get; set; }
-        public ReadedClientStageContract ClientStage  { get; set; }
+
+        public string Feedback { get; set; }
+
+        public string Project { get; set; }
+
+        public ReadedClientStageContract ClientStage { get; set; }
+
         public int ClientStageId { get; set; }
- 
     }
 }

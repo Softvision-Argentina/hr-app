@@ -1,95 +1,99 @@
-﻿using ApiServer.Contracts.HireProjection;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.HireProjection;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿// <copyright file="HireProjectionController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.HireProjection;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.HireProjection;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class HireProjectionsController : BaseController<HireProjectionsController>
     {
-        private readonly IHireProjectionService _hireProjectionService;
-        private readonly IMapper _mapper;
+        private readonly IHireProjectionService hireProjectionService;
+        private readonly IMapper mapper;
 
         public HireProjectionsController(
-            IHireProjectionService hireProjectionService, 
-            ILog<HireProjectionsController> logger, 
+            IHireProjectionService hireProjectionService,
+            ILog<HireProjectionsController> logger,
             IMapper mapper) : base(logger)
         {
-            _hireProjectionService = hireProjectionService;
-            _mapper = mapper;
+            this.hireProjectionService = hireProjectionService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var hireProjections = _hireProjectionService.List();
+                var hireProjections = this.hireProjectionService.List();
 
-                return Accepted(_mapper.Map<List<ReadedHireProjectionViewModel>>(hireProjections));
+                return this.Accepted(this.mapper.Map<List<ReadedHireProjectionViewModel>>(hireProjections));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var hireProjection = _hireProjectionService.Read(id);
+                var hireProjection = this.hireProjectionService.Read(id);
 
                 if (hireProjection == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedHireProjectionViewModel>(hireProjection));
+                return this.Accepted(this.mapper.Map<ReadedHireProjectionViewModel>(hireProjection));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateHireProjectionViewModel createHireProjectVm)
+        public IActionResult Post([FromBody] CreateHireProjectionViewModel createHireProjectVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateHireProjectionContract>(createHireProjectVm);
-                var returnContract = _hireProjectionService.Create(contract);
+                var contract = this.mapper.Map<CreateHireProjectionContract>(createHireProjectVm);
+                var returnContract = this.hireProjectionService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedHireProjectionViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedHireProjectionViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateHireProjectionViewModel updateHireProjectionVm)
+        public IActionResult Put(int id, [FromBody] UpdateHireProjectionViewModel updateHireProjectionVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateHireProjectionContract>(updateHireProjectionVm);
+                var contract = this.mapper.Map<UpdateHireProjectionContract>(updateHireProjectionVm);
                 contract.Id = id;
-                _hireProjectionService.Update(contract);
+                this.hireProjectionService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _hireProjectionService.Delete(id);
-                return Accepted();
+                this.hireProjectionService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

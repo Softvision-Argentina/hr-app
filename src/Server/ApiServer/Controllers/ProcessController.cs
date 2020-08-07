@@ -1,151 +1,150 @@
-﻿using ApiServer.Contracts.Process;
-using AutoMapper;
-using Core;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Domain.Services.Contracts.Process;
-using Microsoft.AspNetCore.Authorization;
-using Domain.Services.Interfaces.Repositories;
-using System.Linq;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿// <copyright file="ProcessController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using ApiServer.Contracts.Process;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Process;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     /// <summary>
     /// Controller that manages processes
-    /// Contains action method for approve or disapprove
+    /// Contains action method for approve or disapprove.
     /// </summary>
-    //[Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProcessController : BaseController<ProcessController>
     {
-        private readonly IProcessService _processService;
-        private readonly IMapper _mapper;
+        private readonly IProcessService processService;
+        private readonly IMapper mapper;
 
-        public ProcessController(IProcessService processService,
-            ILog<ProcessController> logger, IMapper mapper)
+        public ProcessController(IProcessService processService, ILog<ProcessController> logger, IMapper mapper)
             : base(logger)
         {
-            _processService = processService;
-            _mapper = mapper;
+            this.processService = processService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-              var processes = _processService.List();
+                var processes = this.processService.List();
 
-                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(processes));
+                return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(processes));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var process = _processService.Read(id);
+                var process = this.processService.Read(id);
 
-                return Accepted(_mapper.Map<ReadedProcessViewModel>(process));
+                return this.Accepted(this.mapper.Map<ReadedProcessViewModel>(process));
             });
         }
-        
+
         [HttpGet("com/{community}")]
         public IActionResult GetProcessesByCommunity(string community)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var process = _processService.GetProcessesByCommunity(community);
+                var process = this.processService.GetProcessesByCommunity(community);
 
-                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(process));
+                return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(process));
             });
         }
 
         [HttpGet("owner/{id}")]
         public IActionResult GetProcessesForOwner(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var processes = _processService.List().ToList().Where(process => process.UserDelegateId == id || process.UserOwnerId == id);
+                var processes = this.processService.List().ToList().Where(process => process.UserDelegateId == id || process.UserOwnerId == id);
 
-                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(processes));
+                return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(processes));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateProcessViewModel createProcessViewModel)
+        public IActionResult Post([FromBody] CreateProcessViewModel createProcessViewModel)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateProcessContract>(createProcessViewModel);
-                var returnContract = _processService.Create(contract);
-                return Created("Get", _mapper.Map<CreatedProcessViewModel>(returnContract));
+                var contract = this.mapper.Map<CreateProcessContract>(createProcessViewModel);
+                var returnContract = this.processService.Create(contract);
+                return this.Created("Get", this.mapper.Map<CreatedProcessViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateProcessViewModel updateProcessContract)
+        public IActionResult Put(int id, [FromBody] UpdateProcessViewModel updateProcessContract)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateProcessContract>(updateProcessContract);
+                var contract = this.mapper.Map<UpdateProcessContract>(updateProcessContract);
                 contract.Id = id;
 
-                _processService.Update(contract);
+                this.processService.Update(contract);
 
-                var processes = _processService.List();
+                var processes = this.processService.List();
 
-                return Accepted(_mapper.Map<List<ReadedProcessViewModel>>(processes));
+                return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(processes));
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _processService.Delete(id);
+                this.processService.Delete(id);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
-        //TODO: cant we use de convention over configuration?
+        // TODO: cant we use de convention over configuration?
         [HttpPost("Approve")]
-        public IActionResult Approve([FromBody]int id)
+        public IActionResult Approve([FromBody] int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _processService.Approve(id);
+                this.processService.Approve(id);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
         [HttpPost("Reject")]
         public IActionResult Reject([FromBody] RejectProcessViewModel rejectProcessVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _processService.Reject(rejectProcessVm.Id, rejectProcessVm.RejectionReason);
+                this.processService.Reject(rejectProcessVm.Id, rejectProcessVm.RejectionReason);
 
-                return Accepted();
+                return this.Accepted();
             });
         }
 
         [HttpGet("candidate/{candidateId}")]
         public IActionResult GetActiveProcessByCandidate(int candidateId)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var process = _processService.GetActiveByCandidateId(candidateId);
+                var process = this.processService.GetActiveByCandidateId(candidateId);
 
-                return Accepted(_mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
+                return this.Accepted(this.mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
             });
         }
     }

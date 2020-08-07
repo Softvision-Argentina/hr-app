@@ -1,26 +1,30 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Role;
-using Domain.Services.Contracts.Role;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Role;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="RoleService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
-    public class RoleService: IRoleService
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Role;
+    using Domain.Services.Contracts.Role;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Role;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
+    public class RoleService : IRoleService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<Role> _roleRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<SkillTypeService> _log;
-        private readonly UpdateRoleContractValidator _updateRoleContractValidator;
-        private readonly CreateRoleContractValidator _createRoleContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<Role> roleRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<SkillTypeService> log;
+        private readonly UpdateRoleContractValidator updateRoleContractValidator;
+        private readonly CreateRoleContractValidator createRoleContractValidator;
 
         public RoleService(
             IMapper mapper,
@@ -28,85 +32,85 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<SkillTypeService> log,
             UpdateRoleContractValidator updateRoleContractValidator,
-            CreateRoleContractValidator createRoleContractValidator
-            )
+            CreateRoleContractValidator createRoleContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _roleRepository = roleRepository;
-            _log = log;
-            _updateRoleContractValidator = updateRoleContractValidator;
-            _createRoleContractValidator = createRoleContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.roleRepository = roleRepository;
+            this.log = log;
+            this.updateRoleContractValidator = updateRoleContractValidator;
+            this.createRoleContractValidator = createRoleContractValidator;
         }
 
         public CreatedRoleContract Create(CreateRoleContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var role = _mapper.Map<Role>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var role = this.mapper.Map<Role>(contract);
 
-            var createdRole = _roleRepository.Create(role);
+            var createdRole = this.roleRepository.Create(role);
 
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
 
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedRoleContract>(createdRole);
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedRoleContract>(createdRole);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching role {id}");
-            Role role = _roleRepository.Query().Where(r => r.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching role {id}");
+            Role role = this.roleRepository.Query().Where(r => r.Id == id).FirstOrDefault();
 
             if (role == null)
             {
                 throw new DeleteRoleNotFoundException(id);
             }
-            _log.LogInformation($"Deleting role {id}");
-            _roleRepository.Delete(role);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting role {id}");
+            this.roleRepository.Delete(role);
+
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedRoleContract> List()
         {
-            var RoleQuery = _roleRepository.QueryEager();
-            var RoleList = RoleQuery.ToList();
-            return _mapper.Map<List<ReadedRoleContract>>(RoleList);
+            var roleQuery = this.roleRepository.QueryEager();
+            var roleList = roleQuery.ToList();
+            return this.mapper.Map<List<ReadedRoleContract>>(roleList);
         }
 
         public ReadedRoleContract Read(int id)
         {
-            var roleQuery = _roleRepository.QueryEager().Where(_ => _.Id == id);
+            var roleQuery = this.roleRepository.QueryEager().Where(_ => _.Id == id);
 
             var roleResult = roleQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedRoleContract>(roleResult);
+            return this.mapper.Map<ReadedRoleContract>(roleResult);
         }
 
         public void Update(UpdateRoleContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var role = _mapper.Map<Role>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var role = this.mapper.Map<Role>(contract);
 
-
-            var updatedOffice = _roleRepository.Update(role);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            var updatedOffice = this.roleRepository.Update(role);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
 
         private void ValidateContract(CreateRoleContract contract)
         {
             try
             {
-                _createRoleContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createRoleContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -118,8 +122,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateRoleContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateRoleContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {

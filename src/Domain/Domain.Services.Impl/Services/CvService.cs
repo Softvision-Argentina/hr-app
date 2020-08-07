@@ -1,32 +1,33 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.Cv;
-using Domain.Services.Interfaces.Repositories;
-using Domain.Services.Interfaces.Services;
-
-namespace Domain.Services.Impl.Services
+﻿namespace Domain.Services.Impl.Services
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.Cv;
+    using Domain.Services.Interfaces.Repositories;
+    using Domain.Services.Interfaces.Services;
+
     public class CvService : ICvService
     {
-        private readonly ICvRepository _cvRepo;
-        private readonly IMapper _mapper;
+        private readonly ICvRepository cvRepo;
+
+        private readonly IMapper mapper;
+
         public CvService(ICvRepository cvRepo, IMapper mapper)
         {
-            _cvRepo = cvRepo;
-            _mapper = mapper;
+            this.cvRepo = cvRepo;
+            this.mapper = mapper;
         }
 
-        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, string filename)
+        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, Google.Apis.Drive.v3.Data.File fileUploaded)
         {
-            cvContract.UrlId = filename;
-
+            cvContract.UrlId = fileUploaded.WebViewLink.Replace("drivesdk", "sharing");
             cvContract.CandidateId = candidate.Id;
             candidate.Cv = cvContract.UrlId;
 
-            var cv = _mapper.Map<Cv>(cvContract);
-            _mapper.Map<Candidate>(candidate);
+            var cv = this.mapper.Map<Cv>(cvContract);
+            this.mapper.Map<Candidate>(candidate);
 
-            _cvRepo.SaveAll(cv);
+            this.cvRepo.SaveAll(cv);
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using System;
+﻿// <copyright file="DummyBuilder.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy
 {
-    using Dummy = Model.Seed.Dummy;
+    using System;
+    using Dummy = Domain.Model.Seed.Dummy;
 
     internal class DummyBuilder : IBuilder<Dummy>
     {
@@ -13,20 +16,20 @@ namespace Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy
 
         public DummyBuilder()
         {
-            id = Guid.NewGuid();
-            name = $"Test {id}";
-            description = $"this is a dymmy for {name}";
-            testValue = "Test value";
+            this.id = Guid.NewGuid();
+            this.name = $"Test {this.id}";
+            this.description = $"this is a dymmy for {this.name}";
+            this.testValue = "Test value";
         }
 
         public Dummy Build()
         {
             return new Dummy()
             {
-                Id = id,
-                Name = name,
-                Description = description,
-                TestValue = testValue
+                Id = this.id,
+                Name = this.name,
+                Description = this.description,
+                TestValue = this.testValue,
             };
         }
 

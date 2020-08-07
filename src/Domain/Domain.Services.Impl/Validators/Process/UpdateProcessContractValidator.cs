@@ -1,41 +1,45 @@
-﻿using Domain.Services.Contracts.Process;
-using Domain.Services.Impl.Validators.Candidate;
-using Domain.Services.Impl.Validators.ReaddressStatus;
-using Domain.Services.Impl.Validators.Stages.ClientStage;
-using Domain.Services.Impl.Validators.Stages.HrStage;
-using Domain.Services.Impl.Validators.Stages.OfferStage;
-using Domain.Services.Impl.Validators.Stages.PreOfferStage;
-using FluentValidation;
+﻿// <copyright file="UpdateProcessContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Reservation
 {
+    using Domain.Services.Contracts.Process;
+    using Domain.Services.Impl.Validators.Candidate;
+    using Domain.Services.Impl.Validators.ReaddressStatus;
+    using Domain.Services.Impl.Validators.Stages.ClientStage;
+    using Domain.Services.Impl.Validators.Stages.HrStage;
+    using Domain.Services.Impl.Validators.Stages.OfferStage;
+    using Domain.Services.Impl.Validators.Stages.PreOfferStage;
+    using FluentValidation;
+
     public class UpdateProcessContractValidator : AbstractValidator<UpdateProcessContract>
     {
         public UpdateProcessContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETUPDATE, () =>
             {
-                RuleFor(_ => _.Candidate).SetValidator(new UpdateCandidateContractValidator(), ValidatorConstants.RULESET_DEFAULT);
-                RuleFor(_ => _.ClientStage).SetValidator(new UpdateClientStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
-                RuleFor(_ => _.OfferStage).SetValidator(new UpdateOfferStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
-                RuleFor(_ => _.PreOfferStage).SetValidator(new UpdatePreOfferStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
-                RuleFor(_ => _.HrStage).SetValidator(new UpdateHrStageContractValidator(), ValidatorConstants.RULESET_UPDATE);
+                this.RuleFor(_ => _.Candidate).SetValidator(new UpdateCandidateContractValidator(), ValidatorConstants.RULESETDEFAULT);
+                this.RuleFor(_ => _.ClientStage).SetValidator(new UpdateClientStageContractValidator(), ValidatorConstants.RULESETUPDATE);
+                this.RuleFor(_ => _.OfferStage).SetValidator(new UpdateOfferStageContractValidator(), ValidatorConstants.RULESETUPDATE);
+                this.RuleFor(_ => _.PreOfferStage).SetValidator(new UpdatePreOfferStageContractValidator(), ValidatorConstants.RULESETUPDATE);
+                this.RuleFor(_ => _.HrStage).SetValidator(new UpdateHrStageContractValidator(), ValidatorConstants.RULESETUPDATE);
 
-                RuleFor(_ => _.HrStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
-                RuleFor(_ => _.TechnicalStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
-                RuleFor(_ => _.ClientStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
-                RuleFor(_ => _.PreOfferStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESET_CREATE);
+                this.RuleFor(_ => _.HrStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESETCREATE);
+                this.RuleFor(_ => _.TechnicalStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESETCREATE);
+                this.RuleFor(_ => _.ClientStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESETCREATE);
+                this.RuleFor(_ => _.PreOfferStage.ReaddressStatus).SetValidator(new UpdateReaddressStatusValidator(), ValidatorConstants.RULESETCREATE);
 
-                RuleFor(_ => _.CurrentStage).IsInEnum();
-                RuleFor(_ => _.EnglishLevel).MaximumLength(ValidationConstants.MAX_INPUT);
-                RuleFor(_ => _.Seniority).IsInEnum();
-                RuleFor(_ => _.Status).IsInEnum();
+                this.RuleFor(_ => _.CurrentStage).IsInEnum();
+                this.RuleFor(_ => _.EnglishLevel).MaximumLength(ValidationConstants.MAXINPUT);
+                this.RuleFor(_ => _.Seniority).IsInEnum();
+                this.RuleFor(_ => _.Status).IsInEnum();
 
-                RuleFor(_ => _.Profile).MaximumLength(ValidationConstants.MAX_INPUT);
-                RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
+                this.RuleFor(_ => _.Profile).MaximumLength(ValidationConstants.MAXINPUT);
+                this.RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAXTEXTAREA);
 
-                RuleFor(_ => _.WantedSalary).LessThan(ValidationConstants.MAX_MONTHLY_INCOME);
-                RuleFor(_ => _.ActualSalary).LessThan(ValidationConstants.MAX_MONTHLY_INCOME);
+                this.RuleFor(_ => _.WantedSalary).LessThan(ValidationConstants.MAXMONTHLYINCOME);
+                this.RuleFor(_ => _.ActualSalary).LessThan(ValidationConstants.MAXMONTHLYINCOME);
             });
         }
     }

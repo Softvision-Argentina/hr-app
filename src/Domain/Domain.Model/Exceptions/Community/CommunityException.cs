@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="CommunityException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Community
 {
+    using System;
+    using Core;
+
     public class CommunityException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Community;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Community
         public DeleteCommunityNotFoundException(int communityId)
             : base($"Community not found for the CommunityId: {communityId}")
         {
-            CommunityId = communityId;
+            this.CommunityId = communityId;
         }
 
         public int CommunityId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Community
         public CommunityDeletedException(int id, string name)
             : base($"The Community {name} was deleted")
         {
-            CommunityId = id;
-            Name = name;
+            this.CommunityId = id;
+            this.Name = name;
         }
 
         public int CommunityId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,25 +71,28 @@ namespace Domain.Model.Exceptions.Community
         public UpdateCommunityNotFoundException(int communityId, Guid clientSystemId)
             : base($"Community {communityId} and Client System Id {clientSystemId} was not found.")
         {
-            CommunityId = communityId;
-            ClientSystemId = clientSystemId;
+            this.CommunityId = communityId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int CommunityId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CommunityErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int communityId, Guid clientSystemId, string name)
             : base($"Community {name} has not changes.")
         {
-            CommunityId = communityId;
-            ClientSystemId = clientSystemId;
+            this.CommunityId = communityId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int CommunityId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -94,7 +102,7 @@ namespace Domain.Model.Exceptions.Community
 
         public CommunityNotFoundException(int communityId) : base($"The Community {communityId} was not found.")
         {
-            CommunityId = communityId;
+            this.CommunityId = communityId;
         }
 
         public int CommunityId { get; }

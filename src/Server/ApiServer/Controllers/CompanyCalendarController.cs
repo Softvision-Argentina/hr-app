@@ -1,95 +1,99 @@
-﻿using ApiServer.Contracts.CompanyCalendar;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.CompanyCalendar;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿// <copyright file="CompanyCalendarController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.CompanyCalendar;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.CompanyCalendar;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyCalendarController : BaseController<CompanyCalendarController>
     {
-        private readonly ICompanyCalendarService _companyCalendarService;
-        private readonly IMapper _mapper;
+        private readonly ICompanyCalendarService companyCalendarService;
+        private readonly IMapper mapper;
 
         public CompanyCalendarController(
-            ICompanyCalendarService companyCalendarService, 
-            ILog<CompanyCalendarController> logger, 
+            ICompanyCalendarService companyCalendarService,
+            ILog<CompanyCalendarController> logger,
             IMapper mapper) : base(logger)
         {
-            _companyCalendarService = companyCalendarService;
-            _mapper = mapper;
+            this.companyCalendarService = companyCalendarService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var companyCalendar = _companyCalendarService.List();
+                var companyCalendar = this.companyCalendarService.List();
 
-                return Accepted(_mapper.Map<List<ReadedCompanyCalendarViewModel>>(companyCalendar));
+                return this.Accepted(this.mapper.Map<List<ReadedCompanyCalendarViewModel>>(companyCalendar));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var companyCalendar = _companyCalendarService.Read(id);
+                var companyCalendar = this.companyCalendarService.Read(id);
 
                 if (companyCalendar == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedCompanyCalendarViewModel>(companyCalendar));
+                return this.Accepted(this.mapper.Map<ReadedCompanyCalendarViewModel>(companyCalendar));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateCompanyCalendarViewModel createCompanyCalendarVm)
+        public IActionResult Post([FromBody] CreateCompanyCalendarViewModel createCompanyCalendarVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateCompanyCalendarContract>(createCompanyCalendarVm);
-                var returnContract = _companyCalendarService.Create(contract);
+                var contract = this.mapper.Map<CreateCompanyCalendarContract>(createCompanyCalendarVm);
+                var returnContract = this.companyCalendarService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedCompanyCalendarViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedCompanyCalendarViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateCompanyCalendarViewModel updateCompanyCalendarVm)
+        public IActionResult Put(int id, [FromBody] UpdateCompanyCalendarViewModel updateCompanyCalendarVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateCompanyCalendarContract>(updateCompanyCalendarVm);
+                var contract = this.mapper.Map<UpdateCompanyCalendarContract>(updateCompanyCalendarVm);
                 contract.Id = id;
-                _companyCalendarService.Update(contract);
+                this.companyCalendarService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _companyCalendarService.Delete(id);
-                return Accepted();
+                this.companyCalendarService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

@@ -1,96 +1,100 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Room;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Room;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="RoomController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Room;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Room;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
 
-    public class RoomController : BaseController<RoomController> {
-
-        private readonly IRoomService _roomService;
-        private readonly IMapper _mapper;
+    public class RoomController : BaseController<RoomController>
+    {
+        private readonly IRoomService roomService;
+        private readonly IMapper mapper;
 
         public RoomController(
             IRoomService roomService,
             ILog<RoomController> logger,
-            IMapper mapper): base(logger)
+            IMapper mapper) : base(logger)
         {
-            _roomService = roomService;
-            _mapper = mapper;
+            this.roomService = roomService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var rooms = _roomService.List();
+                var rooms = this.roomService.List();
 
-                return Accepted(_mapper.Map<List<ReadedRoomViewModel>>(rooms));
+                return this.Accepted(this.mapper.Map<List<ReadedRoomViewModel>>(rooms));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var room = _roomService.Read(id);
+                var room = this.roomService.Read(id);
 
                 if (room == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedRoomViewModel>(room));
+                return this.Accepted(this.mapper.Map<ReadedRoomViewModel>(room));
             });
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] CreateRoomViewModel createRoomVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateRoomContract>(createRoomVm);
-                var returnContract = _roomService.Create(contract);
+                var contract = this.mapper.Map<CreateRoomContract>(createRoomVm);
+                var returnContract = this.roomService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedRoomViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedRoomViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateRoomViewModel updateRoomVm)
+        public IActionResult Put(int id, [FromBody] UpdateRoomViewModel updateRoomVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateRoomContract>(updateRoomVm);
+                var contract = this.mapper.Map<UpdateRoomContract>(updateRoomVm);
                 contract.Id = id;
-                _roomService.Update(contract);
+                this.roomService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _roomService.Delete(id);
-                return Accepted();
+                this.roomService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

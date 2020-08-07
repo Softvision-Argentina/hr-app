@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200701204552_Fifteenth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Fifteenth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +44,7 @@ namespace ApiServer.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: true)
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -60,7 +64,7 @@ namespace ApiServer.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 200, nullable: false),
-                    TypeId = table.Column<int>(nullable: false)
+                    TypeId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -87,7 +91,7 @@ namespace ApiServer.Migrations
                     FromStatus = table.Column<int>(nullable: false),
                     ToStatus = table.Column<int>(nullable: false),
                     ReaddressReasonId = table.Column<int>(nullable: true),
-                    Feedback = table.Column<string>(nullable: true)
+                    Feedback = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {

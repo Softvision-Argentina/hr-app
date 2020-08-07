@@ -1,95 +1,99 @@
-﻿using ApiServer.Contracts.EmployeeCasualty;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.EmployeeCasualty;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿// <copyright file="EmployeeCasualtyController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.EmployeeCasualty;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.EmployeeCasualty;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeCasualtyController : BaseController<EmployeeCasualtyController>
     {
-        private readonly IEmployeeCasualtyService _employeeCasualtyService;
-        private readonly IMapper _mapper;
+        private readonly IEmployeeCasualtyService employeeCasualtyService;
+        private readonly IMapper mapper;
 
         public EmployeeCasualtyController(
-            IEmployeeCasualtyService employeeCasualtyService, 
-            ILog<EmployeeCasualtyController> logger, 
+            IEmployeeCasualtyService employeeCasualtyService,
+            ILog<EmployeeCasualtyController> logger,
             IMapper mapper) : base(logger)
         {
-            _employeeCasualtyService = employeeCasualtyService;
-            _mapper = mapper;
+            this.employeeCasualtyService = employeeCasualtyService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var employeeCasualty = _employeeCasualtyService.List();
+                var employeeCasualty = this.employeeCasualtyService.List();
 
-                return Accepted(_mapper.Map<List<ReadedEmployeeCasualtyViewModel>>(employeeCasualty));
+                return this.Accepted(this.mapper.Map<List<ReadedEmployeeCasualtyViewModel>>(employeeCasualty));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var employeeCasualty = _employeeCasualtyService.Read(id);
+                var employeeCasualty = this.employeeCasualtyService.Read(id);
 
                 if (employeeCasualty == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedEmployeeCasualtyViewModel>(employeeCasualty));
+                return this.Accepted(this.mapper.Map<ReadedEmployeeCasualtyViewModel>(employeeCasualty));
             });
         }
 
-       [HttpPost]
-        public IActionResult Post([FromBody]CreateEmployeeCasualtyViewModel createEmployeeCasualtyVm)
+        [HttpPost]
+        public IActionResult Post([FromBody] CreateEmployeeCasualtyViewModel createEmployeeCasualtyVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateEmployeeCasualtyContract>(createEmployeeCasualtyVm);
-                var returnContract = _employeeCasualtyService.Create(contract);
+                var contract = this.mapper.Map<CreateEmployeeCasualtyContract>(createEmployeeCasualtyVm);
+                var returnContract = this.employeeCasualtyService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedEmployeeCasualtyViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedEmployeeCasualtyViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateEmployeeCasualtyViewModel updateEmployeeCasualtyVm)
+        public IActionResult Put(int id, [FromBody] UpdateEmployeeCasualtyViewModel updateEmployeeCasualtyVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateEmployeeCasualtyContract>(updateEmployeeCasualtyVm);
+                var contract = this.mapper.Map<UpdateEmployeeCasualtyContract>(updateEmployeeCasualtyVm);
                 contract.Id = id;
-                _employeeCasualtyService.Update(contract);
+                this.employeeCasualtyService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _employeeCasualtyService.Delete(id);
-                return Accepted();
+                this.employeeCasualtyService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

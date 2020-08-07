@@ -1,57 +1,61 @@
-﻿using Core;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using System;
-using Domain.Model;
+﻿// <copyright file="DBContextBase.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Persistance.EF
 {
+    using System;
+    using System.Linq;
+    using Core;
+    using Domain.Model;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+
     public class DbContextBase : DbContext
     {
-        private readonly IHttpContextAccessor _context;
+        private readonly IHttpContextAccessor context;
         private readonly string defaultUser = "Unknown user";
 
         public DbContextBase(DbContextOptions options, IHttpContextAccessor context) : base(options)
         {
-            _context = context;
+            this.context = context;
         }
 
         private string GetUserNameFromId(int userId)
         {
-            var user = base.Set<User>().FirstOrDefault(_ => _.Id == userId);
-            bool hasValidName = (!string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName));
-            return (hasValidName && user != null) ? $"{user.FirstName} {user.LastName}" : defaultUser; 
+            var user = this.Set<User>().FirstOrDefault(_ => _.Id == userId);
+            bool hasValidName = !string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName);
+            return (hasValidName && user != null) ? $"{user.FirstName} {user.LastName}" : this.defaultUser;
         }
 
         private string GetCurrentUser()
         {
-            string userIdString = _context?.HttpContext?.User?.Identity?.Name ?? string.Empty;
+            string userIdString = this.context?.HttpContext?.User?.Identity?.Name ?? string.Empty;
             int userId;
             bool idParseSuccessfully = int.TryParse(userIdString, out userId);
-            return idParseSuccessfully ? GetUserNameFromId(userId) : defaultUser;
+            return idParseSuccessfully ? this.GetUserNameFromId(userId) : this.defaultUser;
         }
 
         public override int SaveChanges()
         {
-            ChangeTracker.DetectChanges();
+            this.ChangeTracker.DetectChanges();
 
-            var modifiedEntities = ChangeTracker.Entries<Entity<int>>()
+            var modifiedEntities = this.ChangeTracker.Entries<Entity<int>>()
                 .Where(e => e.State == EntityState.Modified).ToList();
 
-            var addedEntities = ChangeTracker.Entries<Entity<int>>()
+            var addedEntities = this.ChangeTracker.Entries<Entity<int>>()
                 .Where(e => e.State == EntityState.Added).ToList();
 
             modifiedEntities.ForEach((entry) =>
             {
-                entry.Entity.LastModifiedBy = GetCurrentUser();
+                entry.Entity.LastModifiedBy = this.GetCurrentUser();
                 entry.Entity.LastModifiedDate = DateTime.UtcNow;
                 entry.Entity.Version = entry.Entity.Version++;
             });
 
             addedEntities.ForEach((entry) =>
             {
-                entry.Entity.CreatedBy = GetCurrentUser();
+                entry.Entity.CreatedBy = this.GetCurrentUser();
                 entry.Entity.CreatedDate = DateTime.UtcNow;
                 entry.Entity.Version = 1;
             });

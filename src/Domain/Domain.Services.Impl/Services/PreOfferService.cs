@@ -1,124 +1,129 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.PreOffer;
-using Domain.Services.Contracts.PreOffer;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.PreOffer;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="PreOfferService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.PreOffer;
+    using Domain.Services.Contracts.PreOffer;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.PreOffer;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class PreOfferService : IPreOfferService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<PreOffer> _preOfferRepository;        
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<PreOfferService> _log;
-        private readonly UpdatePreOfferContractValidator _updatePreOfferContractValidator;
-        private readonly CreatePreOfferContractValidator _createPreOfferContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<PreOffer> preOfferRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<PreOfferService> log;
+        private readonly UpdatePreOfferContractValidator updatePreOfferContractValidator;
+        private readonly CreatePreOfferContractValidator createPreOfferContractValidator;
 
         public PreOfferService(
             IMapper mapper,
-            IRepository<PreOffer> preOfferRepository,            
+            IRepository<PreOffer> preOfferRepository,
             IUnitOfWork unitOfWork,
             ILog<PreOfferService> log,
             UpdatePreOfferContractValidator updatePreOfferContractValidator,
-            CreatePreOfferContractValidator createPreOfferContractValidator
-            )
+            CreatePreOfferContractValidator createPreOfferContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _preOfferRepository = preOfferRepository;            
-            _log = log;
-            _updatePreOfferContractValidator = updatePreOfferContractValidator;
-            _createPreOfferContractValidator = createPreOfferContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.preOfferRepository = preOfferRepository;
+            this.log = log;
+            this.updatePreOfferContractValidator = updatePreOfferContractValidator;
+            this.createPreOfferContractValidator = createPreOfferContractValidator;
         }
 
         public CreatedPreOfferContract Create(CreatePreOfferContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Status}");
-            ValidateContract(contract);            
+            this.log.LogInformation($"Validating contract {contract.Status}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Status}");
-            var preOffer = _mapper.Map<PreOffer>(contract);            
+            this.log.LogInformation($"Mapping contract {contract.Status}");
+            var preOffer = this.mapper.Map<PreOffer>(contract);
 
-            var createdPreOffer = _preOfferRepository.Create(preOffer);
-            _log.LogInformation($"Complete for {contract.Status}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Status}");
-            return _mapper.Map<CreatedPreOfferContract>(createdPreOffer);
+            var createdPreOffer = this.preOfferRepository.Create(preOffer);
+            this.log.LogInformation($"Complete for {contract.Status}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Status}");
+            return this.mapper.Map<CreatedPreOfferContract>(createdPreOffer);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching pre-offer {id}");
-            PreOffer preOffer = _preOfferRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching pre-offer {id}");
+            PreOffer preOffer = this.preOfferRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (preOffer == null)
             {
                 throw new DeletePreOfferNotFoundException(id);
             }
-            _log.LogInformation($"Deleting pre-offer {id}");
-            _preOfferRepository.Delete(preOffer);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting pre-offer {id}");
+            this.preOfferRepository.Delete(preOffer);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdatePreOfferContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Status}");
-            ValidateContract(contract);            
+            this.log.LogInformation($"Validating contract {contract.Status}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Status}");
-            var preOffer = _mapper.Map<PreOffer>(contract);            
+            this.log.LogInformation($"Mapping contract {contract.Status}");
+            var preOffer = this.mapper.Map<PreOffer>(contract);
 
-            var updatedPreOffer = _preOfferRepository.Update(preOffer);
-            _log.LogInformation($"Complete for {contract.Status}");
-            _unitOfWork.Complete();
+            var updatedPreOffer = this.preOfferRepository.Update(preOffer);
+            this.log.LogInformation($"Complete for {contract.Status}");
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedPreOfferContract> List()
         {
-            var preOfferQuery = _preOfferRepository
+            var preOfferQuery = this.preOfferRepository
                 .QueryEager();
 
             var preOfferResult = preOfferQuery.ToList();
 
-            return _mapper.Map<List<ReadedPreOfferContract>>(preOfferResult);
+            return this.mapper.Map<List<ReadedPreOfferContract>>(preOfferResult);
         }
 
         public ReadedPreOfferContract Read(int id)
         {
-            var preOfferQuery = _preOfferRepository
+            var preOfferQuery = this.preOfferRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
             var preOfferResult = preOfferQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedPreOfferContract>(preOfferResult);
+            return this.mapper.Map<ReadedPreOfferContract>(preOfferResult);
         }
 
         public IEnumerable<ReadedPreOfferContract> GetByProcessId(int id)
         {
-            var preOfferQuery = _preOfferRepository
+            var preOfferQuery = this.preOfferRepository
                 .QueryEager().Where(_ => _.ProcessId == id);
 
             var preOfferResult = preOfferQuery.ToList();
 
-            return _mapper.Map<List<ReadedPreOfferContract>>(preOfferResult);
+            return this.mapper.Map<List<ReadedPreOfferContract>>(preOfferResult);
         }
 
         private void ValidateContract(CreatePreOfferContract contract)
         {
             try
             {
-                _createPreOfferContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createPreOfferContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -130,8 +135,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updatePreOfferContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updatePreOfferContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {

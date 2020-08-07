@@ -1,8 +1,12 @@
-﻿using Core;
-using System.Collections.Generic;
+﻿// <copyright file="SkillValidationException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Skill
 {
+    using System.Collections.Generic;
+    using Core;
+
     public class CreateContractInvalidException : BusinessValidationException
     {
         protected override int SubErrorCode => (int)SkillValidationExceptionCodes.CreateContractInvalid;

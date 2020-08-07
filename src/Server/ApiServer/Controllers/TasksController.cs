@@ -1,118 +1,122 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Task;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Task;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="TasksController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Task;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Task;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class TasksController : BaseController<TasksController>
     {
-        private readonly ITaskService _taskService;
-        private readonly IMapper _mapper;
+        private readonly ITaskService taskService;
+        private readonly IMapper mapper;
 
         public TasksController(
             ITaskService taskService,
             ILog<TasksController> logger,
             IMapper mapper) : base(logger)
         {
-            _taskService = taskService;
-            _mapper = mapper;
+            this.taskService = taskService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var tasks = _taskService.List();
+                var tasks = this.taskService.List();
 
-                return Accepted(_mapper.Map<List<ReadedTaskViewModel>>(tasks));
+                return this.Accepted(this.mapper.Map<List<ReadedTaskViewModel>>(tasks));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var task = _taskService.Read(id);
+                var task = this.taskService.Read(id);
 
                 if (task == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                var vm = _mapper.Map<ReadedTaskViewModel>(task);
-                return Accepted(vm);
+                var vm = this.mapper.Map<ReadedTaskViewModel>(task);
+                return this.Accepted(vm);
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateTaskViewModel createTaskVm)
+        public IActionResult Post([FromBody] CreateTaskViewModel createTaskVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateTaskContract>(createTaskVm);
-                var returnContract = _taskService.Create(contract);
+                var contract = this.mapper.Map<CreateTaskContract>(createTaskVm);
+                var returnContract = this.taskService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedTaskViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedTaskViewModel>(returnContract));
             });
         }
 
-        //Todo: review this code
+        // Todo: review this code
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateTaskViewModel updateTaskVm)
+        public IActionResult Put(int id, [FromBody] UpdateTaskViewModel updateTaskVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateTaskContract>(updateTaskVm);
+                var contract = this.mapper.Map<UpdateTaskContract>(updateTaskVm);
                 contract.Id = id;
-                contract.IsNew = false; //Damos por sentado que ya no es nueva para que desaparezca el icono. El usuario la editó
-                _taskService.Update(contract);
-                
-                return Accepted(new { id });
+                contract.IsNew = false; // Damos por sentado que ya no es nueva para que desaparezca el icono. El usuario la editó
+                this.taskService.Update(contract);
+
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _taskService.Delete(id);
-                return Accepted();
+                this.taskService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
 
-        //Todo: convention over configuration
+        // Todo: convention over configuration
         [HttpPost("Approve/{id}")]
         public IActionResult Approve(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _taskService.Approve(id);
-                return Accepted(new { id });
+                this.taskService.Approve(id);
+                return this.Accepted(new { id });
             });
         }
 
         [HttpGet("GetByUser/{UserEmail}")]
-        public IActionResult GetByUser(string UserEmail)
+        public IActionResult GetByUser(string userEmail)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var tasks = _taskService.ListByUser(UserEmail);
-                return Accepted(_mapper.Map<List<ReadedTaskViewModel>>(tasks));
+                var tasks = this.taskService.ListByUser(userEmail);
+                return this.Accepted(this.mapper.Map<List<ReadedTaskViewModel>>(tasks));
             });
         }
     }

@@ -1,4 +1,8 @@
-﻿namespace Core
+﻿// <copyright file="ApplicationErrorMainCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Core
 {
     public enum ApplicationErrorMainCodes
     {
@@ -30,6 +34,6 @@
         ReaddressStatus = 2500,
 
         Dummy = 99999,
-        NotExpected = 999999
+        NotExpected = 999999,
     }
 }

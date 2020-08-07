@@ -1,22 +1,27 @@
-﻿using System.Net;
-using Xunit;
-using ApiServer.FunctionalTests.Fixture;
-using Core.Testing.Platform;
-using Newtonsoft.Json;
-using ApiServer.Contracts.Login;
-using Domain.Model;
-using ApiServer.Contracts.User;
+﻿// <copyright file="AuthControllerFunctionalTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.FunctionalTests.Controller
 {
+    using System.Net;
+    using ApiServer.Contracts.Login;
+    using ApiServer.Contracts.User;
+    using ApiServer.FunctionalTests.Fixture;
+    using Core.Testing.Platform;
+    using Domain.Model;
+    using Newtonsoft.Json;
+    using Xunit;
+
     [Collection(nameof(TestType.Functional))]
     public class AuthControllerFunctionalTest : IClassFixture<AuthControllerFixture>
     {
-        private readonly AuthControllerFixture _fixture;
+        private readonly AuthControllerFixture fixture;
+
         public AuthControllerFunctionalTest(AuthControllerFixture fixture)
         {
-            _fixture = fixture;
-            _fixture.ContextAction((context) =>
+            this.fixture = fixture;
+            this.fixture.ContextAction((context) =>
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -27,15 +32,15 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenValidLoginData_ShouldReturnOk()
         {
-            //Arrange
+            // Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            _fixture.Seed(user);
+            this.fixture.Seed(user);
             var model = new LoginViewModel() { UserName = user.Username, Password = "1234" /*unhashed test password*/ };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/login", model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.POST, $"{this.fixture.ControllerName}/login", model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
             Assert.NotEmpty(httpResultData.ResponseString);
@@ -45,13 +50,13 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenInvalidLoginData_ShouldReturnUnauthorized()
         {
-            //Arrange
+            // Arrange
             var model = new LoginViewModel() { UserName = "Invalid username", Password = "Invalid Password" };
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/login", model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.POST, $"{this.fixture.ControllerName}/login", model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
@@ -60,13 +65,13 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenNullLoginData_ShouldReturnBadRequest()
         {
-            //Arrange
+            // Arrange
             LoginViewModel model = null;
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/login", model);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.POST, $"{this.fixture.ControllerName}/login", model);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
@@ -75,18 +80,18 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendValidToken_ShouldReturnOk()
         {
-            //Arrange
+            // Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            _fixture.Seed(user);
+            this.fixture.Seed(user);
             const string expectedUsername = "rodrigo.ramirez@softvision.com";
             const string expectedRole = "Admin";
-            var token = _fixture.GetTestToken(AuthControllerFixture.TokenType.Valid);
+            var token = this.fixture.GetTestToken(AuthControllerFixture.TokenType.Valid);
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/loginExternal", token);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.POST, $"{this.fixture.ControllerName}/loginExternal", token);
             var successAuthData = JsonConvert.DeserializeObject<SuccessAuthData>(httpResultData.ResponseString);
 
-            //Assert
+            // Assert
             Assert.Equal(expectedUsername, successAuthData.User.Username);
             Assert.Equal(expectedRole, successAuthData.User.Role);
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
@@ -98,15 +103,15 @@ namespace ApiServer.FunctionalTests.Controller
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenLoginExternal_WhenClientSendExpiredToken_ShouldReturnUnauthorized()
         {
-            //Arrange
+            // Arrange
             var user = new User() { Username = "rodrigo.ramirez@softvision.com", Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4" };
-            _fixture.Seed(user);
-            TokenViewModel token = _fixture.GetTestToken(AuthControllerFixture.TokenType.Expired);
+            this.fixture.Seed(user);
+            TokenViewModel token = this.fixture.GetTestToken(AuthControllerFixture.TokenType.Expired);
 
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.POST, $"{_fixture.ControllerName}/loginExternal", token);
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.POST, $"{this.fixture.ControllerName}/loginExternal", token);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
@@ -116,14 +121,12 @@ namespace ApiServer.FunctionalTests.Controller
 
         public async System.Threading.Tasks.Task GivenPing_ShouldReturnOk()
         {
-            //Act
-            var httpResultData = await _fixture.HttpCallAsync<object>(HttpVerb.GET, $"{_fixture.ControllerName}/ping");
+            // Act
+            var httpResultData = await this.fixture.HttpCallAsync<object>(HttpVerb.GET, $"{this.fixture.ControllerName}/ping");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, httpResultData.Response.StatusCode);
             Assert.NotNull(httpResultData.Response);
         }
     }
 }
-
-

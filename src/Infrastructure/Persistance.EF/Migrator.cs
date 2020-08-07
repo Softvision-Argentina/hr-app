@@ -1,40 +1,44 @@
-﻿using Core.Persistance;
-using DependencyInjection.Config;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿// <copyright file="Migrator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Persistance.EF
 {
+    using System;
+    using Core.Persistance;
+    using DependencyInjection.Config;
+    using Microsoft.EntityFrameworkCore;
+
     public abstract class Migrator<TContext> : IMigrator where TContext : DbContext
     {
-        TContext _context;
+        private readonly TContext context;
 
         public Migrator(TContext context)
         {
-            _context = context;
+            this.context = context;
         }
-        
+
         public void Migrate(DatabaseConfigurations dbConfig)
         {
             var isDatabaseModified = false;
 
             if (dbConfig.RunMigrations)
             {
-                _context.Database.EnsureDeleted();
-                _context.Database.EnsureCreated();
+                this.context.Database.EnsureDeleted();
+                this.context.Database.EnsureCreated();
                 isDatabaseModified = true;
             }
 
             if (dbConfig.RunSeed)
             {
-                SeedData(_context);
+                this.SeedData(this.context);
                 isDatabaseModified = true;
             }
 
             if (isDatabaseModified)
             {
-                _context.SaveChanges();
-                _context.Dispose();
+                this.context.SaveChanges();
+                this.context.Dispose();
             }
         }
 

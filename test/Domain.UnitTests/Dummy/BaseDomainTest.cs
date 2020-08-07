@@ -1,9 +1,13 @@
-﻿using Core.Persistance;
-using Moq;
-using Xunit;
+﻿// <copyright file="BaseDomainTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Dummy
 {
+    using Core.Persistance;
+    using Moq;
+    using Xunit;
+
     [Collection("Service Test Collection")]
     public class BaseDomainTest
     {
@@ -11,8 +15,8 @@ namespace Domain.Services.Impl.UnitTests.Dummy
 
         public BaseDomainTest()
         {
-            MockUnitOfWork = new Mock<IUnitOfWork>(MockBehavior.Strict);
-            MockUnitOfWork.Setup(_ => _.Complete()).Returns(1);
+            this.MockUnitOfWork = new Mock<IUnitOfWork>(MockBehavior.Strict);
+            this.MockUnitOfWork.Setup(_ => _.Complete()).Returns(1);
         }
     }
 }

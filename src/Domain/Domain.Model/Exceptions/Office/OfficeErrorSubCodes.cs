@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Office
+﻿// <copyright file="OfficeErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Office
 {
     public enum OfficeErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateOfficeNotFound,
         UpdateHasNotChanges,
-        OfficeNotFound
+        OfficeNotFound,
     }
 }

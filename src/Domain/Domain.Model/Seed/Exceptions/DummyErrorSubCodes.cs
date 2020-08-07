@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Seed.Exceptions
+﻿// <copyright file="DummyErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Seed.Exceptions
 {
     public enum DummyErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateDummyNotFound,
         UpdateHasNotChanges,
-        DummyNotFound
+        DummyNotFound,
     }
 }

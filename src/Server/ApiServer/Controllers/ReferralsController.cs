@@ -1,51 +1,55 @@
-﻿using ApiServer.Contracts.Candidates;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Candidate;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="ReferralsController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using ApiServer.Contracts.Candidates;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Candidate;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ReferralsController : BaseController<ReferralsController>
     {
-        private readonly ICandidateService _candidateService;
-        private readonly IMapper _mapper;
+        private readonly ICandidateService candidateService;
+        private readonly IMapper mapper;
 
         public ReferralsController(
             ICandidateService candidateService,
             ILog<ReferralsController> logger,
             IMapper mapper) : base(logger)
         {
-            _candidateService = candidateService;
-            _mapper = mapper;
+            this.candidateService = candidateService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateCandidateViewModel createCandidateVm)
+        public IActionResult Post([FromBody] CreateCandidateViewModel createCandidateVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateCandidateContract>(createCandidateVm);
-                
-                var returnContract = _candidateService.Create(contract);
+                var contract = this.mapper.Map<CreateCandidateContract>(createCandidateVm);
 
-                return Created("Get", _mapper.Map<CreatedCandidateViewModel>(returnContract));
+                var returnContract = this.candidateService.Create(contract);
+
+                return this.Created("Get", this.mapper.Map<CreatedCandidateViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateCandidateViewModel vm)
+        public IActionResult Put(int id, [FromBody] UpdateCandidateViewModel vm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateCandidateContract>(vm);
+                var contract = this.mapper.Map<UpdateCandidateContract>(vm);
                 contract.Id = id;
-                _candidateService.Update(contract);
+                this.candidateService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
     }

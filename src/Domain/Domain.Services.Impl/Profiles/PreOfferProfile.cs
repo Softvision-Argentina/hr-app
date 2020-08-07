@@ -1,18 +1,22 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.PreOffer;
+﻿// <copyright file="PreOfferProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.PreOffer;
+
     public class PreOfferProfile : Profile
     {
         public PreOfferProfile()
         {
-            CreateMap<PreOffer, ReadedPreOfferContract>();
-            CreateMap<ReadedPreOfferContract, PreOffer>();
-            CreateMap<CreatePreOfferContract, PreOffer>();
-            CreateMap<DeclineReason, CreatedPreOfferContract>();
-            CreateMap<UpdatePreOfferContract, PreOffer>();
+            this.CreateMap<PreOffer, ReadedPreOfferContract>();
+            this.CreateMap<ReadedPreOfferContract, PreOffer>();
+            this.CreateMap<CreatePreOfferContract, PreOffer>();
+            this.CreateMap<DeclineReason, CreatedPreOfferContract>();
+            this.CreateMap<UpdatePreOfferContract, PreOffer>();
         }
     }
 }

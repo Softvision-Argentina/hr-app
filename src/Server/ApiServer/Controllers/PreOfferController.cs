@@ -1,67 +1,61 @@
-﻿using ApiServer.Contracts.PreOffer;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.PreOffer;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Net;
+﻿// <copyright file="PreOfferController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using System.Net;
+    using ApiServer.Contracts.PreOffer;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.PreOffer;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class PreOfferController : BaseController<PreOfferController>
     {
-        private readonly IPreOfferService _preOfferService;
-        private readonly IMapper _mapper;
+        private readonly IPreOfferService preOfferService;
+        private readonly IMapper mapper;
 
         public PreOfferController(
-            IPreOfferService preOfferService, 
-            ILog<PreOfferController> logger, 
+            IPreOfferService preOfferService,
+            ILog<PreOfferController> logger,
             IMapper mapper) : base(logger)
         {
-            _preOfferService = preOfferService;
-            _mapper = mapper;
+            this.preOfferService = preOfferService;
+            this.mapper = mapper;
         }
 
-        /// <summary>
-        /// Get All PreOffer.
-        /// </summary>
-        /// <response code="202">return a list of ReadedPreOfferViewModel.</response>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var preOffer = _preOfferService.List();
+                var preOffer = this.preOfferService.List();
 
-                return Accepted(_mapper.Map<List<ReadedPreOfferViewModel>>(preOffer));
+                return this.Accepted(this.mapper.Map<List<ReadedPreOfferViewModel>>(preOffer));
             });
         }
 
-        /// <summary>
-        /// Get PreOffer by Id.
-        /// </summary>
-        /// <param name="id">preOfferId.</param>
-        /// <response code="202">return a  ReadedPreOfferViewModel.</response>
-        /// <response code="404">if preoffer is null.</response>
         [HttpGet("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var preOffer = _preOfferService.Read(id);
+                var preOffer = this.preOfferService.Read(id);
 
                 if (preOffer == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedPreOfferViewModel>(preOffer));
+                return this.Accepted(this.mapper.Map<ReadedPreOfferViewModel>(preOffer));
             });
         }
 
@@ -71,21 +65,22 @@ namespace ApiServer.Controllers
         /// <param name="id">processId.</param>
         /// <response code="202">return a  ReadedPreOfferViewModel.</response>
         /// <response code="404">if preoffer is null.</response>
+        /// <returns> a ReadedPreOfferViewModel obj.</returns>
         [HttpGet("GetByProcess/{id}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public IActionResult GetByProcessId(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var preOffer = _preOfferService.GetByProcessId(id);
+                var preOffer = this.preOfferService.GetByProcessId(id);
 
                 if (preOffer == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<List<ReadedPreOfferViewModel>>(preOffer));
+                return this.Accepted(this.mapper.Map<List<ReadedPreOfferViewModel>>(preOffer));
             });
         }
 
@@ -98,12 +93,12 @@ namespace ApiServer.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public IActionResult Post([FromBody] CreatePreOfferViewModel createPreOfferViewModel)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreatePreOfferContract>(createPreOfferViewModel);
-                var returnContract = _preOfferService.Create(contract);
+                var contract = this.mapper.Map<CreatePreOfferContract>(createPreOfferViewModel);
+                var returnContract = this.preOfferService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedPreOfferViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedPreOfferViewModel>(returnContract));
             });
         }
 
@@ -115,15 +110,15 @@ namespace ApiServer.Controllers
         /// <response code="202">return an Id PreOffer.</response>
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
-        public IActionResult Put(int id, [FromBody]UpdatePreOfferViewModel updatePreOfferViewModel)
+        public IActionResult Put(int id, [FromBody] UpdatePreOfferViewModel updatePreOfferViewModel)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdatePreOfferContract>(updatePreOfferViewModel);
+                var contract = this.mapper.Map<UpdatePreOfferContract>(updatePreOfferViewModel);
                 contract.Id = id;
-                _preOfferService.Update(contract);
+                this.preOfferService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
@@ -136,17 +131,17 @@ namespace ApiServer.Controllers
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _preOfferService.Delete(id);
-                return Accepted();
+                this.preOfferService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

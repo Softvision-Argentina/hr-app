@@ -1,8 +1,12 @@
-﻿using Domain.Services.Contracts.Seed;
-using System;
+﻿// <copyright file="DummyContractBuilder.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy
 {
+    using System;
+    using Domain.Services.Contracts.Seed;
+
     internal class DummyContractBuilder : IBuilder<CreateDummyContract>
     {
         private string name;
@@ -12,18 +16,18 @@ namespace Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy
         public DummyContractBuilder()
         {
             var id = Guid.NewGuid();
-            name = $"Test {id}";
-            description = $"this is a dymmy for {name}";
-            testValue = "Test value";
+            this.name = $"Test {id}";
+            this.description = $"this is a dymmy for {this.name}";
+            this.testValue = "Test value";
         }
 
         public CreateDummyContract Build()
         {
             return new CreateDummyContract()
             {
-                Name = name,
-                Description = description,
-                TestValue = testValue
+                Name = this.name,
+                Description = this.description,
+                TestValue = this.testValue,
             };
         }
 

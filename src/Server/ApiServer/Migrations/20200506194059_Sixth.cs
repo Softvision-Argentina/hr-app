@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200506194059_Sixth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Sixth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

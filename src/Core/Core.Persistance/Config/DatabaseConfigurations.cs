@@ -1,12 +1,19 @@
-﻿// TODO: Change namespace to match folder/project structure
+﻿// <copyright file="DatabaseConfigurations.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
 namespace DependencyInjection.Config
 {
     public class DatabaseConfigurations
     {
         public bool InMemoryMode { get; }
+
         public bool RunMigrations { get; }
+
         public bool RunSeed { get; }
+
         public string ConnectionString { get; }
+
         public string ConnectionStringTesting { get; }
 
         public DatabaseConfigurations(
@@ -16,11 +23,11 @@ namespace DependencyInjection.Config
             string connectionString = "",
             string connectionStringTesting = "")
         {
-            InMemoryMode = inMemoryMode;
-            RunMigrations = runMigrations;
-            RunSeed = runSeed;
-            ConnectionString = connectionString;
-            ConnectionStringTesting = connectionStringTesting;
+            this.InMemoryMode = inMemoryMode;
+            this.RunMigrations = runMigrations;
+            this.RunSeed = runSeed;
+            this.ConnectionString = connectionString;
+            this.ConnectionStringTesting = connectionStringTesting;
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="DaysOffException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.DaysOff
 {
+    using System;
+    using Core;
+
     public class DaysOffException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.DaysOff;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.DaysOff
         public DeleteDaysOffNotFoundException(int daysOffId)
             : base($"Days off not found for the DaysOffId: {daysOffId}")
         {
-            DaysOffId = daysOffId;
+            this.DaysOffId = daysOffId;
         }
 
         public int DaysOffId { get; set; }
@@ -41,13 +45,15 @@ namespace Domain.Model.Exceptions.DaysOff
         public DaysOffDeletedException(int id, string name)
             : base($"The days off {name} was deleted")
         {
-            DaysOffId = id;
-            Name = name;
+            this.DaysOffId = id;
+            this.Name = name;
         }
 
         public int DaysOffId { get; set; }
+
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidDaysOffException
     {
         protected override int SubErrorCode => (int)DaysOffErrorSubCodes.InvalidUpdate;
@@ -65,11 +71,12 @@ namespace Domain.Model.Exceptions.DaysOff
         public UpdateDaysOffNotFoundException(int daysOffId, Guid clientSystemId)
             : base($"Days off {daysOffId} and Client System Id {clientSystemId} was not found.")
         {
-            DaysoffId = daysOffId;
-            ClientSystemId = clientSystemId;
+            this.DaysoffId = daysOffId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int DaysoffId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,11 +87,12 @@ namespace Domain.Model.Exceptions.DaysOff
         public UpdateHasNotChangesException(int daysOffId, Guid clientSystemId, string name)
             : base($"Days off {name} has not changes.")
         {
-            DaysOffId = daysOffId;
-            ClientSystemId = clientSystemId;
+            this.DaysOffId = daysOffId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int DaysOffId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -94,7 +102,7 @@ namespace Domain.Model.Exceptions.DaysOff
 
         public DaysOffNotFoundException(int daysOffId) : base($"The days Off {daysOffId} was not found.")
         {
-            DaysOffId = daysOffId;
+            this.DaysOffId = daysOffId;
         }
 
         public int DaysOffId { get; }

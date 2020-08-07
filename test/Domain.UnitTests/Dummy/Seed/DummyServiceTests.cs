@@ -1,11 +1,15 @@
-﻿using System;
-using System.Linq;
-using Xunit;
-using Domain.Services.Impl.UnitTests.Dummy;
-using Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy;
+﻿// <copyright file="DummyServiceTests.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Seed
 {
+    using System;
+    using System.Linq;
+    using Domain.Services.Impl.UnitTests.Dummy;
+    using Domain.Services.Impl.UnitTests.Dummy.Builders.Dummy;
+    using Xunit;
+
     public class DummyServiceTests : BaseDummyTest
     {
         public DummyServiceTests(AutomapperFixture automapperFixture) : base(automapperFixture)
@@ -16,21 +20,21 @@ namespace Domain.Services.Impl.UnitTests.Seed
         [Trait("Category", "Dummy")]
         public void When_CreateIsCall_ShouldPersistInfo()
         {
-            var result = Service.Create(new DummyContractBuilder().WithName("Test").Build());
+            var result = this.service.Create(new DummyContractBuilder().WithName("Test").Build());
 
             Assert.NotNull(result);
             Assert.NotEqual(Guid.Empty, result.Id);
-            AssertPersistanceIsCalledForCreateDummy();
+            this.AssertPersistanceIsCalledForCreateDummy();
         }
 
         [Fact(DisplayName = "Can get a dummy")]
         [Trait("Category", "Dummy")]
         public void When_GetIsCall_AndTheIdExists_ShouldReturnTheEntity()
         {
-            var existingEnitity = InMemoryDummies.First();
+            var existingEnitity = this.InMemoryDummies.First();
             var exisitingId = existingEnitity.Id;
 
-            var result = Service.Read(exisitingId);
+            var result = this.service.Read(exisitingId);
 
             Assert.NotNull(result);
             Assert.NotEqual(Guid.Empty, result.Id);

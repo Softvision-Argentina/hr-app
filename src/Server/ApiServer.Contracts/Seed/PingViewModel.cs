@@ -1,4 +1,8 @@
-﻿namespace ApiServer.Contracts.Seed
+﻿// <copyright file="PingViewModel.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace ApiServer.Contracts.Seed
 {
     public class PingViewModel
     {

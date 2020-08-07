@@ -1,19 +1,23 @@
-﻿using ApiServer.Contracts.User;
-using AutoMapper;
-using Domain.Services.Contracts.User;
+﻿// <copyright file="UserProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.User;
+    using AutoMapper;
+    using Domain.Services.Contracts.User;
+
     public class UserProfile : Profile
     {
         public UserProfile()
         {
-            CreateMap<CreateUserViewModel, CreateUserContract>();
-            CreateMap<CreatedUserContract, CreatedUserViewModel>();
-            CreateMap<ReadedUserContract, ReadedUserViewModel>();
-            CreateMap<UpdateUserViewModel, UpdateUserContract>();
-            CreateMap<ReadedUserRoleContract, ReadedUserRoleViewModel>();
-            CreateMap<ReadedUserViewModel,ReadedUserContract>();
+            this.CreateMap<CreateUserViewModel, CreateUserContract>();
+            this.CreateMap<CreatedUserContract, CreatedUserViewModel>();
+            this.CreateMap<ReadedUserContract, ReadedUserViewModel>();
+            this.CreateMap<UpdateUserViewModel, UpdateUserContract>();
+            this.CreateMap<ReadedUserRoleContract, ReadedUserRoleViewModel>();
+            this.CreateMap<ReadedUserViewModel, ReadedUserContract>();
         }
     }
 }

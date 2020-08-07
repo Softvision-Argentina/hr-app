@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.Task;
-using AutoMapper;
-using Domain.Services.Contracts.Task;
+﻿// <copyright file="TaskProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.Task;
+    using AutoMapper;
+    using Domain.Services.Contracts.Task;
+
     public class TaskProfile : Profile
     {
         public TaskProfile()
         {
-            CreateMap<CreateTaskViewModel, CreateTaskContract>();
-            CreateMap<CreatedTaskContract, CreatedTaskViewModel>();
-            CreateMap<ReadedTaskContract, ReadedTaskViewModel>();
-            CreateMap<UpdateTaskViewModel, UpdateTaskContract>();
+            this.CreateMap<CreateTaskViewModel, CreateTaskContract>();
+            this.CreateMap<CreatedTaskContract, CreatedTaskViewModel>();
+            this.CreateMap<ReadedTaskContract, ReadedTaskViewModel>();
+            this.CreateMap<UpdateTaskViewModel, UpdateTaskContract>();
         }
     }
 }

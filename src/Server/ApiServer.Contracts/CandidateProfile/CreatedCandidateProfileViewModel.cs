@@ -1,4 +1,8 @@
-﻿namespace ApiServer.Contracts.CandidateProfile
+﻿// <copyright file="CreatedCandidateProfileViewModel.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace ApiServer.Contracts.CandidateProfile
 {
     public class CreatedCandidateProfileViewModel
     {

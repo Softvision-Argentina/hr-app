@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions
+﻿// <copyright file="DeclineReasonErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions
 {
     public enum DeclineReasonErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateDeclineReasonNotFound,
         UpdateHasNotChanges,
-        DeclineReasonNotFound
+        DeclineReasonNotFound,
     }
 }

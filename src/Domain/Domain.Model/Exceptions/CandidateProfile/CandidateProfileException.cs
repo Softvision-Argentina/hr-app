@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="CandidateProfileException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.CandidateProfile
 {
+    using System;
+    using Core;
+
     public class CandidateProfileException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.CandidateProfile;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.CandidateProfile
         public DeleteCandidateProfileNotFoundException(int profileId)
             : base($"Profile not found for the Profile Id: {profileId}")
         {
-            ProfileId = profileId;
+            this.ProfileId = profileId;
         }
 
         public int ProfileId { get; set; }
@@ -41,13 +45,15 @@ namespace Domain.Model.Exceptions.CandidateProfile
         public CandidateProfileDeletedException(int id, string name)
             : base($"The profile {name} was deleted")
         {
-            ProfileId = id;
-            Name = name;
+            this.ProfileId = id;
+            this.Name = name;
         }
 
         public int ProfileId { get; set; }
+
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidCandidateProfileException
     {
         protected override int SubErrorCode => (int)CandidateProfileErrorSubCodes.InvalidUpdate;
@@ -65,11 +71,12 @@ namespace Domain.Model.Exceptions.CandidateProfile
         public UpdateCandidateProfileNotFoundException(int profileId, Guid clientSystemId)
             : base($"Profile {profileId} and Client System Id {clientSystemId} was not found.")
         {
-            ProfileId = profileId;
-            ClientSystemId = clientSystemId;
+            this.ProfileId = profileId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int ProfileId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,11 +87,12 @@ namespace Domain.Model.Exceptions.CandidateProfile
         public UpdateHasNotChangesException(int profileId, Guid clientSystemId, string name)
             : base($"Profile {name} has not changes.")
         {
-            ProfileId = profileId;
-            ClientSystemId = clientSystemId;
+            this.ProfileId = profileId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int ProfileId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -94,10 +102,9 @@ namespace Domain.Model.Exceptions.CandidateProfile
 
         public CandidateProfileNotFoundException(int profileId) : base($"The Profile {profileId} was not found.")
         {
-            ProfileId = profileId;
+            this.ProfileId = profileId;
         }
 
         public int ProfileId { get; }
     }
 }
-

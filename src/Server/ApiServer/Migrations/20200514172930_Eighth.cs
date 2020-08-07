@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200514172930_Eighth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Eighth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +39,7 @@ namespace ApiServer.Migrations
                     RemunerationOffer = table.Column<int>(nullable: false),
                     VacationDays = table.Column<int>(nullable: false),
                     Firstday = table.Column<DateTime>(nullable: false),
-                    Bonus = table.Column<string>(nullable: true)
+                    Bonus = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {

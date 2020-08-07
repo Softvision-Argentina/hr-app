@@ -1,61 +1,65 @@
-﻿using Core;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+﻿// <copyright file="MockPersistance.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Dummy
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core;
+    using Xunit;
+
     public class MockPersistance<T> where T : IEntity
     {
-        List<T> _createdButNotPersisted;
-        List<T> _updatedButNotPersisted;
-        List<T> _updatedAndPersisted;
+        private readonly List<T> createdButNotPersisted;
+        private readonly List<T> updatedButNotPersisted;
+        private readonly List<T> updatedAndPersisted;
 
-        internal int PersistanceCount => CreatedAndPersisted.Count + _updatedAndPersisted.Count;
+        internal int PersistanceCount => this.CreatedAndPersisted.Count + this.updatedAndPersisted.Count;
 
         public List<T> CreatedAndPersisted { get; set; }
 
         internal MockPersistance()
         {
-            CreatedAndPersisted = new List<T>();
-            _createdButNotPersisted = new List<T>();
-            _updatedAndPersisted = new List<T>();
-            _updatedButNotPersisted = new List<T>();
+            this.CreatedAndPersisted = new List<T>();
+            this.createdButNotPersisted = new List<T>();
+            this.updatedAndPersisted = new List<T>();
+            this.updatedButNotPersisted = new List<T>();
         }
 
         internal void Create(T entity)
         {
-            _createdButNotPersisted.Add(entity);
+            this.createdButNotPersisted.Add(entity);
         }
 
         internal void Update(T entity)
         {
-            _updatedButNotPersisted.Add(entity);
+            this.updatedButNotPersisted.Add(entity);
         }
 
         internal int Persist()
         {
-            var persistanceCount = _createdButNotPersisted.Count + _updatedButNotPersisted.Count;
-            if (_createdButNotPersisted.Any())
+            var persistanceCount = this.createdButNotPersisted.Count + this.updatedButNotPersisted.Count;
+            if (this.createdButNotPersisted.Any())
             {
-                CreatedAndPersisted.AddRange(_createdButNotPersisted);
-                _createdButNotPersisted.Clear();
+                this.CreatedAndPersisted.AddRange(this.createdButNotPersisted);
+                this.createdButNotPersisted.Clear();
             }
 
-            if (_updatedButNotPersisted.Any())
+            if (this.updatedButNotPersisted.Any())
             {
-                _updatedAndPersisted.AddRange(_updatedButNotPersisted);
-                _updatedButNotPersisted.Clear();
+                this.updatedAndPersisted.AddRange(this.updatedButNotPersisted);
+                this.updatedButNotPersisted.Clear();
             }
+
             return persistanceCount;
         }
 
         internal void AssertPersited()
         {
-            Assert.Empty(_createdButNotPersisted);
-            Assert.Empty(_updatedButNotPersisted);
-            Assert.False(CreatedAndPersisted.Any() && _updatedAndPersisted.Any(), $"The {typeof(T).Name} are not persisted.");
+            Assert.Empty(this.createdButNotPersisted);
+            Assert.Empty(this.updatedButNotPersisted);
+            Assert.False(this.CreatedAndPersisted.Any() && this.updatedAndPersisted.Any(), $"The {typeof(T).Name} are not persisted.");
         }
-
     }
 }

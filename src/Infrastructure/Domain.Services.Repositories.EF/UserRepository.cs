@@ -1,12 +1,16 @@
-﻿using Core;
-using Core.Persistance;
-using Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using Persistance.EF;
-using System.Linq;
+﻿// <copyright file="UserRepository.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Repositories.EF
 {
+    using System.Linq;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Microsoft.EntityFrameworkCore;
+    using Persistance.EF;
+
     public class UserRepository : Repository<User, DataBaseContext>
     {
         public UserRepository(DataBaseContext dbContext, IUnitOfWork unitOfWork) : base(dbContext, unitOfWork)
@@ -20,22 +24,24 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<User> QueryEager()
         {
-            return Query().Include(u => u.UserDashboards).ThenInclude(d => d.Dashboard);
+            return this.Query().Include(u => u.UserDashboards).ThenInclude(d => d.Dashboard);
         }
 
         public User Login(string username, string password)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
+            var user = this.DbContext.Users.FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
 
             if (user == null)
+            {
                 return null;
+            }
 
             return user;
         }
 
         public int GetUserId(string user)
         {
-            var userName = _dbContext.Users.Find(user);
+            var userName = this.DbContext.Users.Find(user);
             var id = userName.Id;
             return id;
         }

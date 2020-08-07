@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="DeclineReasonException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions
 {
+    using System;
+    using Core;
+
     public class DeclineReasonException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.DeclineReason;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions
         public DeleteDeclineReasonNotFoundException(int skillTypeId)
             : base($"Skill type not found for the skillTypeId: {skillTypeId}")
         {
-            DeclineReasonId = skillTypeId;
+            this.DeclineReasonId = skillTypeId;
         }
 
         public int DeclineReasonId { get; set; }
@@ -41,13 +45,15 @@ namespace Domain.Model.Exceptions
         public DeclineReasonDeletedException(int id, string name)
             : base($"The skill type {name} was deleted")
         {
-            DeclineReasonId = id;
-            Name = name;
+            this.DeclineReasonId = id;
+            this.Name = name;
         }
 
         public int DeclineReasonId { get; set; }
+
         public string Name { get; set; }
     }
+
     public class InvalidUpdateException : InvalidDeclineReasonException
     {
         protected override int SubErrorCode => (int)DeclineReasonErrorSubCodes.InvalidUpdate;
@@ -65,11 +71,12 @@ namespace Domain.Model.Exceptions
         public UpdateSkillNotFoundException(int skillTypeId, Guid clientSystemId)
             : base($"skill {skillTypeId} and Client System Id {clientSystemId} was not found.")
         {
-            DeclineReasonId = skillTypeId;
-            ClientSystemId = clientSystemId;
+            this.DeclineReasonId = skillTypeId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int DeclineReasonId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,11 +87,12 @@ namespace Domain.Model.Exceptions
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, string name)
             : base($"Skill type {name} has not changes.")
         {
-            DeclineReasonId = skillId;
-            ClientSystemId = clientSystemId;
+            this.DeclineReasonId = skillId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int DeclineReasonId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -94,7 +102,7 @@ namespace Domain.Model.Exceptions
 
         public DeclineReasonNotFoundException(int skillTypeId) : base($"The skill type {skillTypeId} was not found.")
         {
-            DeclineReasonId = skillTypeId;
+            this.DeclineReasonId = skillTypeId;
         }
 
         public int DeclineReasonId { get; }

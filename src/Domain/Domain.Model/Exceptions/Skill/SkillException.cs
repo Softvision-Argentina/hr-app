@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="SkillException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Skill
 {
+    using System;
+    using Core;
+
     public class SkillException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Skill;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Skill
         public DeleteSkillNotFoundException(int skillId)
             : base($"Skill not found for the skillId: {skillId}")
         {
-            SkillId = skillId;
+            this.SkillId = skillId;
         }
 
         public int SkillId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Skill
         public SkillDeletedException(int id, string name)
             : base($"The skill {name} was deleted")
         {
-            SkillId = id;
-            Name = name;
+            this.SkillId = id;
+            this.Name = name;
         }
 
         public int SkillId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Skill
         public UpdateSkillNotFoundException(int skillId, Guid clientSystemId)
             : base($"skill {skillId} and Client System Id {clientSystemId} was not found.")
         {
-            SkillId = skillId;
-            ClientSystemId = clientSystemId;
+            this.SkillId = skillId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int SkillId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Skill
         public UpdateHasNotChangesException(int skillId, Guid clientSystemId, string name)
             : base($"Skill {name} has not changes.")
         {
-            SkillId = skillId;
-            ClientSystemId = clientSystemId;
+            this.SkillId = skillId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int SkillId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,10 +102,9 @@ namespace Domain.Model.Exceptions.Skill
 
         public SkillNotFoundException(int skillId) : base($"The skill {skillId} was not found.")
         {
-            SkillId = skillId;
+            this.SkillId = skillId;
         }
 
         public int SkillId { get; }
     }
 }
-

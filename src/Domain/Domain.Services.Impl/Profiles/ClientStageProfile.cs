@@ -1,29 +1,35 @@
-﻿using ApiServer.Contracts.Stage;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Stage;
-using Domain.Services.Contracts.Stage.ClientStage;
-using System;
+﻿// <copyright file="ClientStageProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using System;
+    using ApiServer.Contracts.Stage;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.Stage;
+    using Domain.Services.Contracts.Stage.ClientStage;
+
     public class ClientStageProfile : StageProfile
     {
         public ClientStageProfile()
         {
-            CreateMap<ClientStage, ReadedClientStageContract>();
+            this.CreateMap<ClientStage, ReadedClientStageContract>();
 
-            CreateMap<CreateClientStageContract, ClientStage>()
-                .ForMember(destination => destination.Status,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)));
+            this.CreateMap<CreateClientStageContract, ClientStage>()
+                .ForMember(
+                    destination => destination.Status,
+                    opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)));
 
-            CreateMap<ClientStage, CreatedClientStageContract>();
+            this.CreateMap<ClientStage, CreatedClientStageContract>();
 
-            CreateMap<UpdateClientStageContract, ClientStage>()
-                            .ForMember(destination => destination.Status,
-                opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)));
+            this.CreateMap<UpdateClientStageContract, ClientStage>()
+                            .ForMember(
+                                destination => destination.Status,
+                                opt => opt.MapFrom(source => Enum.GetName(typeof(StageStatus), source.Status)));
 
-            CreateMap<UpdateClientStageViewModel, UpdateClientStageContract>();
+            this.CreateMap<UpdateClientStageViewModel, UpdateClientStageContract>();
         }
     }
 }

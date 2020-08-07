@@ -1,28 +1,41 @@
-﻿using Core;
-using Core.ExtensionHelpers;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿// <copyright file="MicrosoftMemoryCache.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.ExternalServices
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Microsoft.Extensions.Caching.Memory;
+
     public class MicrosoftMemoryCache : IMemCache
     {
-        IMemoryCache _cache;
+        private readonly IMemoryCache cache;
 
         public MicrosoftMemoryCache(IMemoryCache cache)
         {
-            _cache = cache;
+            this.cache = cache;
         }
 
-        private string GenerateCacheKey(CacheGroup group, object key) => string.Format("{0}.{1}", group.GetDescription(), key);
+        private string GenerateCacheKey(CacheGroup group, object key)
+        {
+            return string.Format("{0}.{1}", group.GetDescription(), key);
+        }
 
-        public TItem Get<TItem>(CacheGroup group, object key) => _cache.Get<TItem>(GenerateCacheKey(group, key));
+        public TItem Get<TItem>(CacheGroup group, object key)
+        {
+            return this.cache.Get<TItem>(this.GenerateCacheKey(group, key));
+        }
 
-        public bool TryGetValue<TItem>(CacheGroup group, object key, out TItem value) => _cache.TryGetValue<TItem>(GenerateCacheKey(group, key), out value);
+        public bool TryGetValue<TItem>(CacheGroup group, object key, out TItem value)
+        {
+            return this.cache.TryGetValue<TItem>(this.GenerateCacheKey(group, key), out value);
+        }
 
         public void Set(CacheGroup group, object key, object value)
         {
@@ -31,38 +44,42 @@ namespace Domain.Services.ExternalServices
 
         public void Set(CacheGroup group, object key, object value, ExpirationSettings settings)
         {
-            var cacheKey = GenerateCacheKey(group, key);
+            var cacheKey = this.GenerateCacheKey(group, key);
 
             if (settings != null)
             {
                 var options = new MemoryCacheEntryOptions();
 
                 if (settings.AbsoluteExpiration.HasValue)
+                {
                     options.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours((double)settings.AbsoluteExpiration.Value);
+                }
 
                 if (settings.SlidingExpiration.HasValue)
+                {
                     options.SlidingExpiration = TimeSpan.FromHours((double)settings.SlidingExpiration.Value);
+                }
 
-                _cache.Set(GenerateCacheKey(group, key), value, options);
+                this.cache.Set(this.GenerateCacheKey(group, key), value, options);
             }
             else
             {
-                _cache.Set(GenerateCacheKey(group, key), value);
+                this.cache.Set(this.GenerateCacheKey(group, key), value);
             }
         }
 
         public void Remove(CacheGroup group)
         {
-            foreach (var entry in _cache.GetEntriesByGroup(group))
+            foreach (var entry in this.cache.GetEntriesByGroup(group))
             {
-                _cache.Remove(entry);
+                this.cache.Remove(entry);
             }
         }
 
         public void Remove(CacheGroup group, object key)
         {
-            var cacheKey = GenerateCacheKey(group, key);
-            _cache.Remove(cacheKey);
+            var cacheKey = this.GenerateCacheKey(group, key);
+            this.cache.Remove(cacheKey);
         }
     }
 

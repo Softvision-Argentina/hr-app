@@ -1,16 +1,20 @@
-﻿using ApiServer.Contracts.User;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Services.Contracts.User;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Xunit;
+﻿// <copyright file="UserControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using ApiServer.Contracts.User;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.User;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Xunit;
+
     public class UserControllerTest
     {
         private readonly UserController controller;
@@ -20,10 +24,10 @@ namespace ApiServer.UnitTests.Controllers
 
         public UserControllerTest()
         {
-            mockService = new Mock<IUserService>();
-            mockLog = new Mock<ILog<UserController>>();
-            mockMapper = new Mock<IMapper>();
-            controller = new UserController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockService = new Mock<IUserService>();
+            this.mockLog = new Mock<ILog<UserController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.controller = new UserController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that gets role by user name returns ActionResult when data is valid")]
@@ -31,16 +35,16 @@ namespace ApiServer.UnitTests.Controllers
         {
             string username = "testUserName";
             var expectedValue = new ReadedUserRoleViewModel();
-            mockService.Setup(_ => _.GetUserRole(It.IsAny<string>())).Returns(new ReadedUserRoleContract());
-            mockMapper.Setup(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.GetUserRole(It.IsAny<string>())).Returns(new ReadedUserRoleContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>())).Returns(expectedValue);
 
-            var result = controller.GetRoleByUserName(username);
+            var result = this.controller.GetRoleByUserName(username);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue, (result as AcceptedResult).Value);
-            mockService.Verify(_ => _.GetUserRole(It.IsAny<string>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>()), Times.Once);
+            this.mockService.Verify(_ => _.GetUserRole(It.IsAny<string>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that gets role by user name returns NotFoundObjectResult when data is invalid")]
@@ -48,19 +52,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             string username = "testUserName";
 
-            var result = controller.GetRoleByUserName(username);
+            var result = this.controller.GetRoleByUserName(username);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(username, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.GetUserRole(It.IsAny<string>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>()), Times.Never);
+            this.mockService.Verify(_ => _.GetUserRole(It.IsAny<string>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserRoleViewModel>(It.IsAny<ReadedUserRoleContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that ping returns OkObjectResult")]
         public void Should_PingOkObjectResult()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

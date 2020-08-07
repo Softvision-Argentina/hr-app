@@ -1,32 +1,36 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Stage;
-using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.Stage;
-using Domain.Services.Contracts.Stage.StageItem;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Stage;
-using Domain.Services.Interfaces.Repositories;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="ProcessStageService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Stage;
+    using Domain.Services.Contracts.Process;
+    using Domain.Services.Contracts.Stage;
+    using Domain.Services.Contracts.Stage.StageItem;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Stage;
+    using Domain.Services.Interfaces.Repositories;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class ProcessStageService : IProcessStageService
     {
-        private readonly IMapper _mapper;
-        private readonly IProcessStageRepository _processStageRepository;
-        private readonly IStageItemRepository _stageItemRepository;
-        private readonly IProcessRepository _processRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<ProcessStageService> _log;
-        private readonly UpdateStageContractValidator _updateStageContractValidator;
-        private readonly CreateStageContractValidator _createStageContractValidator;
-        private readonly ProcessStatusContractValidator _processStatusContractValidator;
+        private readonly IMapper mapper;
+        private readonly IProcessStageRepository processStageRepository;
+        private readonly IStageItemRepository stageItemRepository;
+        private readonly IProcessRepository processRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<ProcessStageService> log;
+        private readonly UpdateStageContractValidator updateStageContractValidator;
+        private readonly CreateStageContractValidator createStageContractValidator;
+        private readonly ProcessStatusContractValidator processStatusContractValidator;
 
         public ProcessStageService(
             IMapper mapper,
@@ -37,118 +41,116 @@ namespace Domain.Services.Impl.Services
             ILog<ProcessStageService> log,
             UpdateStageContractValidator updateStageContractValidator,
             CreateStageContractValidator createStageContractValidator,
-            ProcessStatusContractValidator processStatusContractValidator
-            )
+            ProcessStatusContractValidator processStatusContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _processStageRepository = processStageRepository;
-            _stageItemRepository = stageItemRepository;
-            _processRepository = processRepository;
-            _log = log;
-            _updateStageContractValidator = updateStageContractValidator;
-            _createStageContractValidator = createStageContractValidator;
-            _processStatusContractValidator = processStatusContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.processStageRepository = processStageRepository;
+            this.stageItemRepository = stageItemRepository;
+            this.processRepository = processRepository;
+            this.log = log;
+            this.updateStageContractValidator = updateStageContractValidator;
+            this.createStageContractValidator = createStageContractValidator;
+            this.processStatusContractValidator = processStatusContractValidator;
         }
 
         public CreatedStageContract Create(CreateStageContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Status}");
-            ValidateContract(contract);
+            this.log.LogInformation($"Validating contract {contract.Status}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Status}");
-            var stage = _mapper.Map<Stage>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Status}");
+            var stage = this.mapper.Map<Stage>(contract);
 
-            var createdStage = _processStageRepository.Create(stage);
+            var createdStage = this.processStageRepository.Create(stage);
 
-            _log.LogInformation($"Complete for {contract.Status}");
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Complete for {contract.Status}");
+            this.unitOfWork.Complete();
 
-            var createdStageContract = _mapper.Map<CreatedStageContract>(createdStage);
+            var createdStageContract = this.mapper.Map<CreatedStageContract>(createdStage);
 
-            _log.LogInformation($"Return {contract.Status}");
+            this.log.LogInformation($"Return {contract.Status}");
             return createdStageContract;
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching Stage {id}");
+            this.log.LogInformation($"Searching Stage {id}");
 
-            var stage = ReadStage(id);
+            var stage = this.ReadStage(id);
 
-            _log.LogInformation($"Deleting stage {id}");
+            this.log.LogInformation($"Deleting stage {id}");
 
-            _processStageRepository.Delete(stage);
+            this.processStageRepository.Delete(stage);
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedStageContract> List()
         {
-            var stageQuery = _processStageRepository
+            var stageQuery = this.processStageRepository
                 .QueryEager();
 
             var stageResult = stageQuery.ToList();
 
-            return _mapper.Map<List<ReadedStageContract>>(stageResult);
+            return this.mapper.Map<List<ReadedStageContract>>(stageResult);
         }
 
         public ReadedStageContract Read(int id)
         {
-            var stageQuery = ReadStage(id);
+            var stageQuery = this.ReadStage(id);
 
-            return _mapper.Map<ReadedStageContract>(stageQuery);
+            return this.mapper.Map<ReadedStageContract>(stageQuery);
         }
 
         public void Update(UpdateStageContract contract)
-        {            
-            ValidateContract(contract);         
-            var stage = _mapper.Map<Stage>(contract);
-            var updatedStage = UpdateStage(stage);
-            _unitOfWork.Complete();
+        {
+            this.ValidateContract(contract);
+            var stage = this.mapper.Map<Stage>(contract);
+            var updatedStage = this.UpdateStage(stage);
+            this.unitOfWork.Complete();
         }
 
         public CreatedStageItemContract AddItemToStage(CreateStageItemContract createStageItemContract)
         {
-            var stageItem = _mapper.Map<StageItem>(createStageItemContract);
+            var stageItem = this.mapper.Map<StageItem>(createStageItemContract);
 
-            var createdStageItem = _stageItemRepository.Create(stageItem);
+            var createdStageItem = this.stageItemRepository.Create(stageItem);
 
-            var createdStageContract = _mapper.Map<CreatedStageItemContract>(createdStageItem);
+            var createdStageContract = this.mapper.Map<CreatedStageItemContract>(createdStageItem);
 
             return createdStageContract;
         }
 
         public void RemoveItemToStage(int stageItemId)
         {
-            _log.LogInformation($"Searching StageItem {stageItemId}");
+            this.log.LogInformation($"Searching StageItem {stageItemId}");
 
-            var stageItem = _stageItemRepository.Query().FirstOrDefault(x => x.Id == stageItemId);
+            var stageItem = this.stageItemRepository.Query().FirstOrDefault(x => x.Id == stageItemId);
 
-            _log.LogInformation($"Deleting stageItem {stageItemId}");
+            this.log.LogInformation($"Deleting stageItem {stageItemId}");
 
-            _stageItemRepository.Delete(stageItem);
+            this.stageItemRepository.Delete(stageItem);
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public void UpdateStageItem(UpdateStageItemContract updateStageItemContract)
-        {            
-            var stageItem = _mapper.Map<StageItem>(updateStageItemContract);
+        {
+            var stageItem = this.mapper.Map<StageItem>(updateStageItemContract);
 
-            var updatedStageItem = _stageItemRepository.Update(stageItem);
-         
-            _unitOfWork.Complete();
+            var updatedStageItem = this.stageItemRepository.Update(stageItem);
+
+            this.unitOfWork.Complete();
         }
-
 
         private Stage UpdateStage(Stage stage)
         {
-            var existingStage = ReadStage(stage.Id);
+            var existingStage = this.ReadStage(stage.Id);
 
             if (existingStage != null)
             {
-                _processStageRepository.UpdateStage(stage, existingStage);
+                this.processStageRepository.UpdateStage(stage, existingStage);
             }
 
             return stage;
@@ -156,7 +158,7 @@ namespace Domain.Services.Impl.Services
 
         private Stage ReadStage(int id)
         {
-            var stageQuery = _processStageRepository
+            var stageQuery = this.processStageRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
@@ -167,12 +169,13 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _createStageContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createStageContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
 
                 var process = this.GetProcess(contract.ProcessId);
-                var processContract = _mapper.Map<ReadedProcessContract>(process);
-                _processStatusContractValidator.ValidateAndThrow(processContract);
+                var processContract = this.mapper.Map<ReadedProcessContract>(process);
+                this.processStatusContractValidator.ValidateAndThrow(processContract);
             }
             catch (ValidationException ex)
             {
@@ -184,12 +187,13 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateStageContractValidator.ValidateAndThrow(contract,
-                   $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateStageContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
 
                 var process = this.GetProcess(contract.ProcessId);
-                var processContract = _mapper.Map<ReadedProcessContract>(process);
-                _processStatusContractValidator.ValidateAndThrow(processContract);
+                var processContract = this.mapper.Map<ReadedProcessContract>(process);
+                this.processStatusContractValidator.ValidateAndThrow(processContract);
             }
             catch (ValidationException ex)
             {
@@ -199,9 +203,12 @@ namespace Domain.Services.Impl.Services
 
         private Process GetProcess(int processId)
         {
-            var process = this._processRepository.Query().Where(p => p.Id == processId).FirstOrDefault();
+            var process = this.processRepository.Query().Where(p => p.Id == processId).FirstOrDefault();
             if (process == null)
+            {
                 throw new ValidationException("Process was not found");
+            }
+
             return process;
         }
     }

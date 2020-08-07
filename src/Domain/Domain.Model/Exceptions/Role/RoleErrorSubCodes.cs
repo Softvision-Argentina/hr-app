@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Role
+﻿// <copyright file="RoleErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Role
 {
     public enum RoleErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateRoleNotFound,
         UpdateHasNotChanges,
-        RoleNotFound
+        RoleNotFound,
     }
 }

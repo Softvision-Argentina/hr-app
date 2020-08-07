@@ -1,19 +1,22 @@
-﻿using Domain.Services.Contracts.Task;
-using Domain.Services.Impl.Validators.Task;
-using FluentValidation;
-using FluentValidation.TestHelper;
-using Xunit;
+﻿// <copyright file="UpdateTaskContractValidatorTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Validators.Task
 {
+    using Domain.Services.Contracts.Task;
+    using Domain.Services.Impl.Validators.Task;
+    using FluentValidation;
+    using FluentValidation.TestHelper;
+    using Xunit;
 
     public class UpdateTaskContractValidatorTest
     {
-        private UpdateTaskContractValidator validator;
+        private readonly UpdateTaskContractValidator validator;
 
         public UpdateTaskContractValidatorTest()
         {
-            validator = new UpdateTaskContractValidator();
+            this.validator = new UpdateTaskContractValidator();
         }
 
         [Fact(DisplayName = "Verify that does not throw error when data is valid")]
@@ -23,24 +26,24 @@ namespace Domain.Services.Impl.UnitTests.Validators.Task
             {
                 Title = "test tittle",
                 IsApprove = true,
-                UserId = 1
+                UserId = 1,
             };
 
-            validator.ValidateAndThrow(updateTask);
+            this.validator.ValidateAndThrow(updateTask);
 
-            //It should work fine therefore it should not throw error
+            // It should work fine therefore it should not throw error
         }
 
         [Fact(DisplayName = "Verify that throws error when Title is Empty")]
         public void Should_ThrowError_When_TitleIsEmpty()
         {
-            validator.ShouldHaveValidationErrorFor(updateTaskContract => updateTaskContract.Title, string.Empty);
+            this.validator.ShouldHaveValidationErrorFor(updateTaskContract => updateTaskContract.Title, string.Empty);
         }
 
         [Fact(DisplayName = "Verify that throws error when UserId is Empty")]
         public void Should_ThrowError_When_UserIdIsEmpty()
         {
-            validator.ShouldHaveValidationErrorFor(updateTaskContract => updateTaskContract.UserId, default(int) );
+            this.validator.ShouldHaveValidationErrorFor(updateTaskContract => updateTaskContract.UserId, default(int));
         }
     }
 }

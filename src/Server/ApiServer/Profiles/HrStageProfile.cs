@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.Stage;
-using AutoMapper;
-using Domain.Services.Contracts.Stage;
+﻿// <copyright file="HrStageProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.Stage;
+    using AutoMapper;
+    using Domain.Services.Contracts.Stage;
+
     public class HrStageProfile : Profile
     {
         public HrStageProfile()
         {
-            CreateMap<CreateHrStageViewModel, CreateHrStageContract>();
-            CreateMap<CreatedHrStageContract, CreatedHrStageViewModel>();
-            CreateMap<ReadedHrStageContract, ReadedHrStageViewModel>();
-            CreateMap<UpdateHrStageViewModel, UpdateHrStageContract>();
+            this.CreateMap<CreateHrStageViewModel, CreateHrStageContract>();
+            this.CreateMap<CreatedHrStageContract, CreatedHrStageViewModel>();
+            this.CreateMap<ReadedHrStageContract, ReadedHrStageViewModel>();
+            this.CreateMap<UpdateHrStageViewModel, UpdateHrStageContract>();
         }
     }
 }

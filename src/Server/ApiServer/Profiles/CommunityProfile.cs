@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.Community;
-using AutoMapper;
-using Domain.Services.Contracts.Community;
+﻿// <copyright file="CommunityProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.Community;
+    using AutoMapper;
+    using Domain.Services.Contracts.Community;
+
     public class CommunityProfile : Profile
     {
         public CommunityProfile()
         {
-            CreateMap<CreateCommunityViewModel, CreateCommunityContract>();
-            CreateMap<CreatedCommunityContract, CreatedCommunityViewModel>();
-            CreateMap<ReadedCommunityContract, ReadedCommunityViewModel>();
-            CreateMap<UpdateCommunityViewModel, UpdateCommunityContract>();
+            this.CreateMap<CreateCommunityViewModel, CreateCommunityContract>();
+            this.CreateMap<CreatedCommunityContract, CreatedCommunityViewModel>();
+            this.CreateMap<ReadedCommunityContract, ReadedCommunityViewModel>();
+            this.CreateMap<UpdateCommunityViewModel, UpdateCommunityContract>();
         }
     }
 }

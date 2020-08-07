@@ -1,17 +1,17 @@
-﻿using Domain.Model;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Domain.Model;
+    using Xunit;
+
     public class UserRepositoryTest : BaseRepositoryTest
     {
-        private readonly UserRepository _repository;
+        private readonly UserRepository repository;
 
         public UserRepositoryTest() : base()
         {
-            _repository = new UserRepository(DbContext, MockUnitOfWork.Object);
+            this.repository = new UserRepository(this.DbContext, this.MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]
@@ -19,7 +19,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             User expectedValue = null;
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -30,10 +30,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
         public void GivenUsersInRepositorysDbcontext_WhenQuery_ThenReturnsUser()
         {
             var expectedValue = new User();
-            DbContext.Users.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Users.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -45,12 +45,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             var expectedValue = new User()
             {
-                UserDashboards = new List<UserDashboard>() { new UserDashboard() }
+                UserDashboards = new List<UserDashboard>() { new UserDashboard() },
             };
-            DbContext.Users.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Users.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.QueryEager();
+            var actualValue = this.repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());

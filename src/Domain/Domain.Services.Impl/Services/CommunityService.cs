@@ -1,120 +1,126 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Community;
-using Domain.Services.Contracts.Community;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Community;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="CommunityService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
-    public class CommunityService: ICommunityService
-    {
-        private readonly IMapper _mapper;
-        private readonly IRepository<Community> _CommunityRepository;
-        private readonly IRepository<CandidateProfile> _CandidateProfileRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<CommunityService> _log;
-        private readonly UpdateCommunityContractValidator _updateCommunityContractValidator;
-        private readonly CreateCommunityContractValidator _createCommunityContractValidator;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Community;
+    using Domain.Services.Contracts.Community;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Community;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
 
-        public CommunityService(IMapper mapper,
-            IRepository<Community> CommunityRepository,
-            IRepository<CandidateProfile> CandidateProfileRepository,
+    public class CommunityService : ICommunityService
+    {
+        private readonly IMapper mapper;
+        private readonly IRepository<Community> communityRepository;
+        private readonly IRepository<CandidateProfile> candidateProfileRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<CommunityService> log;
+        private readonly UpdateCommunityContractValidator updateCommunityContractValidator;
+        private readonly CreateCommunityContractValidator createCommunityContractValidator;
+
+        public CommunityService(
+            IMapper mapper,
+            IRepository<Community> communityRepository,
+            IRepository<CandidateProfile> candidateProfileRepository,
             IUnitOfWork unitOfWork,
             ILog<CommunityService> log,
             UpdateCommunityContractValidator updateCommunityContractValidator,
             CreateCommunityContractValidator createCommunityContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _CommunityRepository = CommunityRepository;
-            _log = log;
-            _updateCommunityContractValidator = updateCommunityContractValidator;
-            _createCommunityContractValidator = createCommunityContractValidator;
-            _CandidateProfileRepository = CandidateProfileRepository;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.communityRepository = communityRepository;
+            this.log = log;
+            this.updateCommunityContractValidator = updateCommunityContractValidator;
+            this.createCommunityContractValidator = createCommunityContractValidator;
+            this.candidateProfileRepository = candidateProfileRepository;
         }
 
         public CreatedCommunityContract Create(CreateCommunityContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var Community = _mapper.Map<Community>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var community = this.mapper.Map<Community>(contract);
 
-            Community.Profile = _CandidateProfileRepository.Query().Where(x => x.Id == Community.ProfileId).FirstOrDefault();
+            community.Profile = this.candidateProfileRepository.Query().Where(x => x.Id == community.ProfileId).FirstOrDefault();
 
-            var createdCommunity = _CommunityRepository.Create(Community);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedCommunityContract>(createdCommunity);
+            var createdCommunity = this.communityRepository.Create(community);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedCommunityContract>(createdCommunity);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching Community {id}");
-            Community Community = _CommunityRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching Community {id}");
+            Community community = this.communityRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
-            if (Community == null)
+            if (community == null)
             {
                 throw new DeleteCommunityNotFoundException(id);
             }
-            _log.LogInformation($"Deleting Community {id}");
-            _CommunityRepository.Delete(Community);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting Community {id}");
+            this.communityRepository.Delete(community);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateCommunityContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
 
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var community = this.mapper.Map<Community>(contract);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var Community = _mapper.Map<Community>(contract);
-
-            var updatedCommunity = _CommunityRepository.Update(Community);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            var updatedCommunity = this.communityRepository.Update(community);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
-        
+
         public ReadedCommunityContract Read(int id)
         {
-            var CommunityQuery = _CommunityRepository
+            var communityQuery = this.communityRepository
                 .Query()
                 .Where(_ => _.Id == id)
                 .OrderBy(_ => _.Name);
 
-            var CommunityResult = CommunityQuery.SingleOrDefault();
+            var communityResult = communityQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedCommunityContract>(CommunityResult);
+            return this.mapper.Map<ReadedCommunityContract>(communityResult);
         }
-        
+
         public IEnumerable<ReadedCommunityContract> List()
         {
-            var CommunityQuery = _CommunityRepository
+            var communityQuery = this.communityRepository
                 .Query()
                 .OrderBy(_ => _.Name);
 
-            var CommunityResult = CommunityQuery.ToList();
+            var communityResult = communityQuery.ToList();
 
-            return _mapper.Map<List<ReadedCommunityContract>>(CommunityResult);
+            return this.mapper.Map<List<ReadedCommunityContract>>(communityResult);
         }
 
         private void ValidateContract(CreateCommunityContract contract)
         {
             try
             {
-                _createCommunityContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createCommunityContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -126,8 +132,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateCommunityContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateCommunityContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {

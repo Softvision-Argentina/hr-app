@@ -1,32 +1,33 @@
-﻿using Domain.Model;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace Domain.Services.Impl.Services
+﻿namespace Domain.Services.Impl.Services
 {
+    using System.IO;
+    using System.Threading.Tasks;
+    using Domain.Model;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.Blob;
+
     public class AzureUploadService : IAzureUploadService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration configuration;
+
         public AzureUploadService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            this.configuration = configuration;
         }
 
         public async Task<string> Upload(IFormFile file, Candidate candidate)
         {
-            var strorageconn = _configuration.GetValue<string>("AzureStorage");
+            var strorageconn = this.configuration.GetValue<string>("AzureStorage");
             CloudStorageAccount storageacc = CloudStorageAccount.Parse(strorageconn);
 
             CloudBlobClient blobClient = storageacc.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("contcvstore");
 
             var hash = file.GetHashCode() % 10000;
-            var hashForFile =  hash.ToString("0000");
+            var hashForFile = hash.ToString("0000");
             CloudBlockBlob blockBlob = container.GetBlockBlobReference($"CV-{candidate.Name}-{candidate.LastName}-{hashForFile}.pdf");
 
             var stream = new MemoryStream();

@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Enum
+﻿// <copyright file="ProcessCurrentStage.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Enum
 {
     public enum ProcessCurrentStage
     {
@@ -8,6 +12,6 @@
         ClientStage,
         PreOfferStage,
         OfferStage,
-        Finished
+        Finished,
     }
 }

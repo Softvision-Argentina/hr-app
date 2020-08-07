@@ -1,15 +1,18 @@
-﻿using Core.Persistance;
-using Domain.Model;
-using Persistance.EF;
-using System.Linq;
+﻿// <copyright file="PostulantRepository.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Repositories.EF
 {
+    using System.Linq;
+    using Core.Persistance;
+    using Domain.Model;
+    using Persistance.EF;
+
     public class PostulantRepository : Repository<Postulant, DataBaseContext>
     {
         public PostulantRepository(DataBaseContext dbContext, IUnitOfWork unitOfWork) : base(dbContext, unitOfWork)
         {
-
         }
 
         public override IQueryable<Postulant> Query()
@@ -19,7 +22,7 @@ namespace Domain.Services.Repositories.EF
 
         public override IQueryable<Postulant> QueryEager()
         {
-            return Query();
+            return this.Query();
         }
     }
 }

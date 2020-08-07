@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts.DaysOff;
-using AutoMapper;
-using Domain.Services.Contracts.DaysOff;
+﻿// <copyright file="DaysOffProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts.DaysOff;
+    using AutoMapper;
+    using Domain.Services.Contracts.DaysOff;
+
     public class DaysOffProfile : Profile
     {
         public DaysOffProfile()
         {
-            CreateMap<CreateDaysOffViewModel, CreateDaysOffContract>();
-            CreateMap<CreatedDaysOffContract, CreatedDaysOffViewModel>();
-            CreateMap<ReadedDaysOffContract, ReadedDaysOffViewModel>();
-            CreateMap<UpdateDaysOffViewModel, UpdateDaysOffContract>();
+            this.CreateMap<CreateDaysOffViewModel, CreateDaysOffContract>();
+            this.CreateMap<CreatedDaysOffContract, CreatedDaysOffViewModel>();
+            this.CreateMap<ReadedDaysOffContract, ReadedDaysOffViewModel>();
+            this.CreateMap<UpdateDaysOffViewModel, UpdateDaysOffContract>();
         }
     }
 }

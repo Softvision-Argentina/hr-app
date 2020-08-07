@@ -1,16 +1,16 @@
-﻿using Core.Persistance;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using System;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System;
+    using Core.Persistance;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+    using Moq;
+
     public class BaseRepositoryTest : IDisposable
     {
         protected readonly DataBaseContext DbContext;
         protected readonly Mock<IUnitOfWork> MockUnitOfWork;
-        protected readonly Mock<IHttpContextAccessor> _httpContext;
+        protected readonly Mock<IHttpContextAccessor> httpContext;
 
         public BaseRepositoryTest()
         {
@@ -19,14 +19,14 @@ namespace Domain.Services.Repositories.EF.UnitTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString())
                         .Options;
 
-            _httpContext = new Mock<IHttpContextAccessor>();
-            DbContext = new DataBaseContext(options, _httpContext.Object);
-            MockUnitOfWork = new Mock<IUnitOfWork>();
+            this.httpContext = new Mock<IHttpContextAccessor>();
+            this.DbContext = new DataBaseContext(options, this.httpContext.Object);
+            this.MockUnitOfWork = new Mock<IUnitOfWork>();
         }
 
         public void Dispose()
         {
-            DbContext.Dispose();
+            this.DbContext.Dispose();
         }
     }
 }

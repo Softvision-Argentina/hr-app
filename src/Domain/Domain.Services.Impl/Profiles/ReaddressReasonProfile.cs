@@ -1,28 +1,32 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.ReaddressReason;
+﻿// <copyright file="ReaddressReasonProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.ReaddressReason;
+
     public class ReaddressReasonProfile : Profile
     {
         public ReaddressReasonProfile()
         {
+            this.CreateMap<ReaddressReason, UpdateReaddressReason>().ReverseMap();
 
-            CreateMap<ReaddressReason, UpdateReaddressReason>().ReverseMap();
-
-            CreateMap<ReaddressReason, CreateReaddressReason>()
-                .ForMember(destination => destination.TypeId,
+            this.CreateMap<ReaddressReason, CreateReaddressReason>()
+                .ForMember(
+                    destination => destination.TypeId,
                     opt => opt.MapFrom(source => source.Type.Id))
                 .ReverseMap();
 
-            CreateMap<ReaddressReason, ReadReaddressReason>()
-                .ForMember(destination => destination.Type,
+            this.CreateMap<ReaddressReason, ReadReaddressReason>()
+                .ForMember(
+                    destination => destination.Type,
                     opt => opt.MapFrom(source => source.Type.Name))
                 .ReverseMap();
 
-            CreateMap<ReaddressReason, CreatedReaddressReason>().ReverseMap();
-
+            this.CreateMap<ReaddressReason, CreatedReaddressReason>().ReverseMap();
         }
     }
 }

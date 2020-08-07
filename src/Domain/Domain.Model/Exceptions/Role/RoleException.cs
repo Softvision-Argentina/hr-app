@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="RoleException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Role
 {
+    using System;
+    using Core;
+
     public class RoleException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Role;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Role
         public DeleteRoleNotFoundException(int roleId)
             : base($"Role not found for the Role Id: {roleId}")
         {
-            RoleId = roleId;
+            this.RoleId = roleId;
         }
 
         public int RoleId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Role
         public RoleDeletedException(int id, string name)
             : base($"The Role {name} was deleted")
         {
-            RoleId = id;
-            Name = name;
+            this.RoleId = id;
+            this.Name = name;
         }
 
         public int RoleId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Role
         public UpdateRoleNotFoundException(int roleId, Guid clientSystemId)
             : base($"Role {roleId} and Client System Id {clientSystemId} was not found.")
         {
-            RoleId = roleId;
-            ClientSystemId = clientSystemId;
+            this.RoleId = roleId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int RoleId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Role
         public UpdateHasNotChangesException(int roleId, Guid clientSystemId, string name)
             : base($"Role {name} has not changes.")
         {
-            RoleId = roleId;
-            ClientSystemId = clientSystemId;
+            this.RoleId = roleId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int RoleId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.Role
 
         public RoleNotFoundException(int roleId) : base($"The Role {roleId} was not found.")
         {
-            RoleId = roleId;
+            this.RoleId = roleId;
         }
 
         public int RoleId { get; }

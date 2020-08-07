@@ -1,38 +1,40 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.User;
-using Domain.Services.Interfaces.Services;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="UserService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.User;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.EntityFrameworkCore;
+
     public class UserService : IUserService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<User> _userRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper mapper;
+        private readonly IRepository<User> userRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public UserService(IMapper mapper, IRepository<User> userRepository,
-                           IUnitOfWork unitOfWork, ILog<UserService> log)
+        public UserService(IMapper mapper, IRepository<User> userRepository, IUnitOfWork unitOfWork, ILog<UserService> log)
         {
-            _mapper = mapper;
-            _userRepository = userRepository;
-            _unitOfWork = unitOfWork;
+            this.mapper = mapper;
+            this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public ReadedUserContract Authenticate(string username, string password)
         {
-            var user = Login(username, password);
+            var user = this.Login(username, password);
 
             if (user != null)
             {
-                return _mapper.Map<ReadedUserContract>(user);
+                return this.mapper.Map<ReadedUserContract>(user);
             }
             else
             {
@@ -42,26 +44,26 @@ namespace Domain.Services.Impl.Services
 
         public ReadedUserContract AuthenticateExternal(string username)
         {
-            var user = ExternalLogin(username);
-            var getUser = _userRepository.QueryEager().FirstOrDefault(x => x.Username == username);
+            var user = this.ExternalLogin(username);
+            var getUser = this.userRepository.QueryEager().FirstOrDefault(x => x.Username == username);
 
-            if(getUser == null && IsSoftvisionEmail(username))
+            if (getUser == null && this.IsSoftvisionEmail(username))
             {
                 var newUser = new User()
                 {
                     Role = Roles.Employee,
-                    Username = username
+                    Username = username,
                 };
 
-                _userRepository.Create(newUser);
+                this.userRepository.Create(newUser);
 
-                _unitOfWork.Complete();
+                this.unitOfWork.Complete();
 
-                return _mapper.Map<ReadedUserContract>(newUser);
+                return this.mapper.Map<ReadedUserContract>(newUser);
             }
-            else if(user != null)
+            else if (user != null)
             {
-                return _mapper.Map<ReadedUserContract>(user);
+                return this.mapper.Map<ReadedUserContract>(user);
             }
             else
             {
@@ -85,30 +87,30 @@ namespace Domain.Services.Impl.Services
 
         public IEnumerable<ReadedUserContract> GetAll()
         {
-            var userQuery = _userRepository.QueryEager();
+            var userQuery = this.userRepository.QueryEager();
 
             var users = userQuery.ToList();
 
-            return _mapper.Map<List<ReadedUserContract>>(users);
+            return this.mapper.Map<List<ReadedUserContract>>(users);
         }
 
         public IEnumerable<ReadedUserContract> GetFilteredForTech()
         {
             var role = Roles.TechnicalInterviewer;
-            var userQuery = _userRepository.QueryEager().Where(x => x.Role == role
+            var userQuery = this.userRepository.QueryEager().Where(x => x.Role == role
             || x.Username == "mariana.castrofreyre@softvision.com"
             || x.Username == "mauro.falduto@softvision.com"
             || x.Username == "gonzalo.vazquez@softvision.com");
 
             var users = userQuery.ToList();
 
-            return _mapper.Map<List<ReadedUserContract>>(users);
+            return this.mapper.Map<List<ReadedUserContract>>(users);
         }
 
         public IEnumerable<ReadedUserContract> GetFilteredForHr()
         {
-            var userQuery = _userRepository.QueryEager()
-                .Where(x => 
+            var userQuery = this.userRepository.QueryEager()
+                .Where(x =>
                 x.Role == Roles.HRManagement
                 || x.Role == Roles.HRUser
                 || x.Role == Roles.Recruiter
@@ -116,25 +118,25 @@ namespace Domain.Services.Impl.Services
 
             var users = userQuery.ToList();
 
-            return _mapper.Map<List<ReadedUserContract>>(users);
+            return this.mapper.Map<List<ReadedUserContract>>(users);
         }
 
         public ReadedUserContract GetById(int id)
         {
-            var user = _userRepository.Query().FirstOrDefault(x => x.Id == id);
+            var user = this.userRepository.Query().FirstOrDefault(x => x.Id == id);
 
-            return _mapper.Map<ReadedUserContract>(user);
+            return this.mapper.Map<ReadedUserContract>(user);
         }
 
         public ReadedUserRoleContract GetUserRole(string username)
         {
-            var user = _userRepository.Query().FirstOrDefault(x => x.Username.ToUpper() == username.ToUpper());
-            return _mapper.Map<ReadedUserRoleContract>(user);
+            var user = this.userRepository.Query().FirstOrDefault(x => x.Username.ToUpper() == username.ToUpper());
+            return this.mapper.Map<ReadedUserRoleContract>(user);
         }
 
         private User Login(string username, string password)
         {
-            var user = _userRepository.Query()
+            var user = this.userRepository.Query()
                 .Include(r => r.Community)
                 .FirstOrDefault(x => x.Username == username && x.Password == HashUtility.GetStringSha256Hash(password));
 
@@ -143,9 +145,9 @@ namespace Domain.Services.Impl.Services
 
         private User ExternalLogin(string username)
         {
-            var user = _userRepository.Query()
+            var user = this.userRepository.Query()
                 .Include(r => r.Community)
-                .FirstOrDefault(x => x.Username == username );
+                .FirstOrDefault(x => x.Username == username);
 
             if (user == null)
             {

@@ -1,24 +1,28 @@
-﻿using Domain.Services.Contracts.Stage;
-using FluentValidation;
+﻿// <copyright file="UpdatePreOfferStageContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Stages.PreOfferStage
 {
+    using Domain.Services.Contracts.Stage;
+    using FluentValidation;
+
     public class UpdatePreOfferStageContractValidator : AbstractValidator<UpdatePreOfferStageContract>
     {
         public UpdatePreOfferStageContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETUPDATE, () =>
             {
-                RuleFor(_ => _.Bonus).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.Notes).MaximumLength(ValidationConstants.MAX_TEXTAREA);
+                this.RuleFor(_ => _.Bonus).MaximumLength(ValidationConstants.MAXTEXTAREA);
+                this.RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAXTEXTAREA);
+                this.RuleFor(_ => _.Notes).MaximumLength(ValidationConstants.MAXTEXTAREA);
 
-                RuleFor(_ => _.DNI)
+                this.RuleFor(_ => _.DNI)
                     .GreaterThanOrEqualTo(0)
-                    .LessThan(ValidationConstants.MAX_DNI);
+                    .LessThan(ValidationConstants.MAXDNI);
 
-                RuleFor(_ => _.HealthInsurance).IsInEnum();
-                RuleFor(_ => _.Status).IsInEnum();
+                this.RuleFor(_ => _.HealthInsurance).IsInEnum();
+                this.RuleFor(_ => _.Status).IsInEnum();
             });
         }
     }

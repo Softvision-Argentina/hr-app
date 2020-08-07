@@ -1,35 +1,40 @@
-﻿using ApiServer.Contracts.Candidates;
-using ApiServer.Contracts.CandidateSkill;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Candidate;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="CandidatesControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Candidates;
+    using ApiServer.Contracts.CandidateSkill;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.Candidate;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class CandidatesControllerTest
     {
-        private CandidatesController controller;
-        private Mock<ILog<CandidatesController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<ICandidateService> mockService;
+        private readonly CandidatesController controller;
+        private readonly Mock<ILog<CandidatesController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ICandidateService> mockService;
+
         public CandidatesControllerTest()
         {
-            mockLog = new Mock<ILog<CandidatesController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<ICandidateService>();
-            controller = new CandidatesController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<CandidatesController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<ICandidateService>();
+            this.controller = new CandidatesController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
-
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
         public void Should_Get_AllCandidates()
@@ -43,7 +48,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -53,15 +58,15 @@ namespace ApiServer.UnitTests.Controllers
                 ContactDay = DateTime.Now,
                 PreferredOfficeId = 1,
                 CandidateSkills = new List<ReadedCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedCandidateContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedCandidateContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -71,8 +76,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which filters candidates) returns AcceptedResult")]
@@ -88,7 +93,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -98,15 +103,15 @@ namespace ApiServer.UnitTests.Controllers
                 ContactDay = DateTime.Now,
                 PreferredOfficeId = 1,
                 CandidateSkills = new List<ReadedCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             });
 
-            mockService.Setup(_ => _.Read(It.IsAny<Func<Candidate, bool>>())).Returns(new[] { new ReadedCandidateContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<Func<Candidate, bool>>())).Returns(new[] { new ReadedCandidateContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>())).Returns(expectedValue);
 
-            var result = controller.Get(filterData);
+            var result = this.controller.Get(filterData);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -116,8 +121,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<Func<Candidate, bool>>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<Func<Candidate, bool>>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedCandidateViewModel>>(It.IsAny<IEnumerable<ReadedCandidateContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult when data is valid")]
@@ -132,7 +137,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -142,15 +147,15 @@ namespace ApiServer.UnitTests.Controllers
                 ContactDay = DateTime.Now,
                 PreferredOfficeId = 1,
                 CandidateSkills = new List<ReadedCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedCandidateContract());
-            mockMapper.Setup(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>())).Returns(expectedValue);
 
-            var result = controller.Get(candidateId);
+            var result = this.controller.Get(candidateId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -160,8 +165,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult when data is invalid")]
@@ -170,13 +175,13 @@ namespace ApiServer.UnitTests.Controllers
             var candidateId = 0;
             var expectedValue = candidateId;
 
-            var result = controller.Get(candidateId);
+            var result = this.controller.Get(candidateId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Exists' (which receives an id) returns AcceptedResult when data is valid")]
@@ -191,7 +196,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -201,15 +206,15 @@ namespace ApiServer.UnitTests.Controllers
                 ContactDay = DateTime.Now,
                 PreferredOfficeId = 1,
                 CandidateSkills = new List<ReadedCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             };
 
-            mockService.Setup(_ => _.Exists(It.IsAny<int>())).Returns(new ReadedCandidateContract());
-            mockMapper.Setup(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Exists(It.IsAny<int>())).Returns(new ReadedCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>())).Returns(expectedValue);
 
-            var result = controller.Exists(candidateId);
+            var result = this.controller.Exists(candidateId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -219,8 +224,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Exists(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Exists(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Exists' (which receives an id) returns AcceptedResult when data is invalid")]
@@ -229,12 +234,12 @@ namespace ApiServer.UnitTests.Controllers
             var candidateId = 0;
             var expectedValue = candidateId;
 
-            var result = controller.Exists(candidateId);
+            var result = this.controller.Exists(candidateId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Exists(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Exists(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedCandidateViewModel>(It.IsAny<ReadedCandidateContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'GetCandidateApp' returns AcceptedResult")]
@@ -249,7 +254,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "test@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -259,15 +264,15 @@ namespace ApiServer.UnitTests.Controllers
                 ContactDay = DateTime.Now,
                 PreferredOffice = null,
                 CandidateSkills = new List<ReadedCandidateAppSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             });
 
-            mockService.Setup(_ => _.ListApp()).Returns(new[] { new ReadedCandidateAppContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedCandidateAppViewModel>>(It.IsAny<IEnumerable<ReadedCandidateAppContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.ListApp()).Returns(new[] { new ReadedCandidateAppContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedCandidateAppViewModel>>(It.IsAny<IEnumerable<ReadedCandidateAppContract>>())).Returns(expectedValue);
 
-            var result = controller.GetCandidateApp();
+            var result = this.controller.GetCandidateApp();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -277,8 +282,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.ListApp(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedCandidateAppViewModel>>(It.IsAny<IEnumerable<ReadedCandidateAppContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.ListApp(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedCandidateAppViewModel>>(It.IsAny<IEnumerable<ReadedCandidateAppContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -291,7 +296,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -300,21 +305,21 @@ namespace ApiServer.UnitTests.Controllers
                 IsReferred = false,
                 ContactDay = DateTime.Now,
                 CandidateSkills = new List<CreateCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             };
 
             var expectedValue = new CreatedCandidateViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateCandidateContract>(It.IsAny<CreateCandidateViewModel>())).Returns(new CreateCandidateContract());
-            mockMapper.Setup(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateCandidateContract>())).Returns(new CreatedCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<CreateCandidateContract>(It.IsAny<CreateCandidateViewModel>())).Returns(new CreateCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateCandidateContract>())).Returns(new CreatedCandidateContract());
 
-            var result = controller.Post(candidateVM);
+            var result = this.controller.Post(candidateVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -324,8 +329,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateCandidateContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateCandidateContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -333,18 +338,18 @@ namespace ApiServer.UnitTests.Controllers
         {
             var candidateId = 0;
             var candidateToUpdate = new UpdateCandidateViewModel();
-            var expectedValue = new { id = candidateId};
+            var expectedValue = new { id = candidateId };
 
-            mockMapper.Setup(_ => _.Map<UpdateCandidateContract>(It.IsAny<UpdateCandidateViewModel>())).Returns(new UpdateCandidateContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateCandidateContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateCandidateContract>(It.IsAny<UpdateCandidateViewModel>())).Returns(new UpdateCandidateContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateCandidateContract>()));
 
-            var result = controller.Put(candidateId, candidateToUpdate);
+            var result = this.controller.Put(candidateId, candidateToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateCandidateContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateCandidateContract>(It.IsAny<UpdateCandidateViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateCandidateContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateCandidateContract>(It.IsAny<UpdateCandidateViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -352,19 +357,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var candidateId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(candidateId);
+            var result = this.controller.Delete(candidateId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

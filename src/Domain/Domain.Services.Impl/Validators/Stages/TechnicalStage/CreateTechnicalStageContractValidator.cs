@@ -1,22 +1,26 @@
-﻿using Domain.Services.Contracts.Stage;
-using FluentValidation;
+﻿// <copyright file="CreateTechnicalStageContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Stages.TechnicalStage
 {
+    using Domain.Services.Contracts.Stage;
+    using FluentValidation;
+
     public class CreateTechnicalStageContractValidator : AbstractValidator<CreateTechnicalStageContract>
     {
         public CreateTechnicalStageContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_CREATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETCREATE, () =>
             {
-                RuleFor(_ => _.AlternativeSeniority).IsInEnum();
-                RuleFor(_ => _.EnglishLevel).IsInEnum();
-                RuleFor(_ => _.Seniority).IsInEnum();
-                RuleFor(_ => _.Status).IsInEnum();
+                this.RuleFor(_ => _.AlternativeSeniority).IsInEnum();
+                this.RuleFor(_ => _.EnglishLevel).IsInEnum();
+                this.RuleFor(_ => _.Seniority).IsInEnum();
+                this.RuleFor(_ => _.Status).IsInEnum();
 
-                RuleFor(_ => _.Client).MaximumLength(ValidationConstants.MAX_INPUT);
-                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAX_TEXTAREA);
+                this.RuleFor(_ => _.Client).MaximumLength(ValidationConstants.MAXINPUT);
+                this.RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAXTEXTAREA);
+                this.RuleFor(_ => _.RejectionReason).MaximumLength(ValidationConstants.MAXTEXTAREA);
             });
         }
     }

@@ -1,4 +1,8 @@
-﻿namespace Domain.Services.Contracts.Community
+﻿// <copyright file="CreatedCommunityContract.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Services.Contracts.Community
 {
     public class CreatedCommunityContract
     {

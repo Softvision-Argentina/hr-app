@@ -1,10 +1,14 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿// <copyright file="ViewModelExtensions.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core.ExtensionHelpers
 {
+    using System.Collections;
+    using System.Linq;
+    using System.Text;
+    using System.Web;
+
     public static class ViewModelExtensions
     {
         public static string ToQueryString<T>(this T model)
@@ -32,6 +36,7 @@ namespace Core.ExtensionHelpers
                 sb.Remove(sb.Length - 1, 1);
                 return sb.ToString();
             }
+
             return p.Name + "=" + HttpUtility.UrlEncode(value.ToString());
         }
     }

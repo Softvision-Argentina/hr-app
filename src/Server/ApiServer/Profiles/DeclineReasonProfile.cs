@@ -1,17 +1,21 @@
-﻿using ApiServer.Contracts;
-using AutoMapper;
-using Domain.Services.Contracts;
+﻿// <copyright file="DeclineReasonProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Profiles
 {
+    using ApiServer.Contracts;
+    using AutoMapper;
+    using Domain.Services.Contracts;
+
     public class DeclineReasonProfile : Profile
     {
         public DeclineReasonProfile()
         {
-            CreateMap<CreateDeclineReasonViewModel, CreateDeclineReasonContract>();
-            CreateMap<CreatedDeclineReasonContract, CreatedDeclineReasonViewModel>();
-            CreateMap<ReadedDeclineReasonContract, ReadedDeclineReasonViewModel>();
-            CreateMap<UpdateDeclineReasonViewModel, UpdateDeclineReasonContract>();
+            this.CreateMap<CreateDeclineReasonViewModel, CreateDeclineReasonContract>();
+            this.CreateMap<CreatedDeclineReasonContract, CreatedDeclineReasonViewModel>();
+            this.CreateMap<ReadedDeclineReasonContract, ReadedDeclineReasonViewModel>();
+            this.CreateMap<UpdateDeclineReasonViewModel, UpdateDeclineReasonContract>();
         }
     }
 }

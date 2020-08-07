@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Enum
+﻿// <copyright file="StageStatus.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Enum
 {
     public enum StageStatus
     {
@@ -10,6 +14,6 @@
         Hired,
         Recall,
         Pipeline,
-        PendingReply
+        PendingReply,
     }
 }

@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Reservation
+﻿// <copyright file="ReservationErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Reservation
 {
     public enum ReservationErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateReservationNotFound,
         UpdateHasNotChanges,
-        ReservationNotFound
+        ReservationNotFound,
     }
 }

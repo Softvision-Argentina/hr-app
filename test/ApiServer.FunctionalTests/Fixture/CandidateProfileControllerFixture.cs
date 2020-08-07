@@ -1,24 +1,26 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Core.Testing.Platform;
-using Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using Task = System.Threading.Tasks.Task;
+﻿// <copyright file="CandidateProfileControllerFixture.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.FunctionalTests.Fixture
 {
+    using System.Linq;
+    using Core.Testing.Platform;
+    using Domain.Model;
+    using Microsoft.EntityFrameworkCore;
+
     public class CandidateProfileControllerFixture : BaseFunctionalTestFixture
     {
         public CandidateProfileControllerFixture()
         {
-            ControllerName = "CandidateProfile";
+            this.ControllerName = "CandidateProfile";
         }
 
         public CandidateProfile GetEager(int id)
         {
             CandidateProfile entity = null;
 
-            ContextAction((context) =>
+            this.ContextAction((context) =>
             {
                 entity = context.Set<CandidateProfile>()
                     .Include(_ => _.CommunityItems)
@@ -31,9 +33,8 @@ namespace ApiServer.FunctionalTests.Fixture
 
         public void Dispose()
         {
-            Client.Dispose();
-            Server.Dispose();
+            this.Client.Dispose();
+            this.Server.Dispose();
         }
     }
 }
-

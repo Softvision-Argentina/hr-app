@@ -1,16 +1,16 @@
-﻿using Domain.Model;
-using System.Linq;
-using Xunit;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System.Linq;
+    using Domain.Model;
+    using Xunit;
+
     public class StageItemRepositoryTest : BaseRepositoryTest
     {
-        private readonly StageItemRepository _repository;
+        private readonly StageItemRepository repository;
 
         public StageItemRepositoryTest()
         {
-            _repository = new StageItemRepository(DbContext, MockUnitOfWork.Object);
+            this.repository = new StageItemRepository(this.DbContext, this.MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]
@@ -18,7 +18,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             StageItem expectedValue = null;
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -29,10 +29,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
         public void GivenDataInRepositorysDbcontext_WhenQuery_ThenReturnsStageItem()
         {
             var expectedValue = new StageItem();
-            DbContext.StageItems.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.StageItems.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());

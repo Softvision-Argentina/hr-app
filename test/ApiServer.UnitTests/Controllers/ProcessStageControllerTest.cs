@@ -1,31 +1,36 @@
-﻿using ApiServer.Contracts.Stage;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Stage;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="ProcessStageControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Stage;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.Stage;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class ProcessStageControllerTest
     {
-        private ProcessStageController controller;
-        private Mock<ILog<ProcessStageController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<IProcessStageService> mockService;
+        private readonly ProcessStageController controller;
+        private readonly Mock<ILog<ProcessStageController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IProcessStageService> mockService;
+
         public ProcessStageControllerTest()
         {
-            mockLog = new Mock<ILog<ProcessStageController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<IProcessStageService>();
-            controller = new ProcessStageController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<ProcessStageController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<IProcessStageService>();
+            this.controller = new ProcessStageController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
@@ -43,13 +48,13 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                RejectionReason = ""
+                RejectionReason = string.Empty,
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedStageContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedStageViewModel>>(It.IsAny<IEnumerable<ReadedStageContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedStageContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedStageViewModel>>(It.IsAny<IEnumerable<ReadedStageContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -59,8 +64,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedStageViewModel>>(It.IsAny<IEnumerable<ReadedStageContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedStageViewModel>>(It.IsAny<IEnumerable<ReadedStageContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult")]
@@ -78,13 +83,13 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                RejectionReason = ""
+                RejectionReason = string.Empty,
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedStageContract());
-            mockMapper.Setup(_ => _.Map<ReadedStageViewModel>(It.IsAny<ReadedStageContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedStageContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedStageViewModel>(It.IsAny<ReadedStageContract>())).Returns(expectedValue);
 
-            var result = controller.Get(processStageId);
+            var result = this.controller.Get(processStageId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -94,8 +99,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedStageViewModel>(It.IsAny<ReadedStageContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedStageViewModel>(It.IsAny<ReadedStageContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Post' returns CreatedResult")]
@@ -110,19 +115,19 @@ namespace ApiServer.UnitTests.Controllers
                 Feedback = "test",
                 UserOwnerId = 0,
                 UserDelegateId = 0,
-                RejectionReason = ""
+                RejectionReason = string.Empty,
             };
 
             var expectedValue = new CreatedStageViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateStageContract>(It.IsAny<CreateStageViewModel>())).Returns(new CreateStageContract());
-            mockMapper.Setup(_ => _.Map<CreatedStageViewModel>(It.IsAny<CreatedStageContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateStageContract>())).Returns(new CreatedStageContract());
+            this.mockMapper.Setup(_ => _.Map<CreateStageContract>(It.IsAny<CreateStageViewModel>())).Returns(new CreateStageContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedStageViewModel>(It.IsAny<CreatedStageContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateStageContract>())).Returns(new CreatedStageContract());
 
-            var result = controller.Post(processStageVM);
+            var result = this.controller.Post(processStageVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -132,8 +137,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateStageContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedStageViewModel>(It.IsAny<CreatedStageContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateStageContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedStageViewModel>(It.IsAny<CreatedStageContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -142,15 +147,15 @@ namespace ApiServer.UnitTests.Controllers
             var processStageId = 0;
             var processStageToUpdate = new UpdateStageViewModel();
 
-            mockMapper.Setup(_ => _.Map<UpdateStageContract>(It.IsAny<UpdateStageViewModel>())).Returns(new UpdateStageContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateStageContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateStageContract>(It.IsAny<UpdateStageViewModel>())).Returns(new UpdateStageContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateStageContract>()));
 
-            var result = controller.Put(processStageId, processStageToUpdate);
+            var result = this.controller.Put(processStageId, processStageToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateStageContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateStageContract>(It.IsAny<UpdateStageViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateStageContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateStageContract>(It.IsAny<UpdateStageViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -158,13 +163,13 @@ namespace ApiServer.UnitTests.Controllers
         {
             var processStageId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(processStageId);
+            var result = this.controller.Delete(processStageId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
     }
 }

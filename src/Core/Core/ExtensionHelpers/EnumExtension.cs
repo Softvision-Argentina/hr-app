@@ -1,14 +1,18 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+﻿// <copyright file="EnumExtension.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core.ExtensionHelpers
 {
+    using System;
+    using System.ComponentModel;
+    using System.Reflection;
+
     public static class EnumExtension
     {
         /// <summary>
         /// Code to retrieve the value in the Description attribute on an Enum member via reflection.
-        /// Source: http://goo.gl/lzDJ4Z
+        /// Source: http://goo.gl/lzDJ4Z.
         /// </summary>
         public static string GetDescription(this Enum value)
         {
@@ -20,7 +24,8 @@ namespace Core.ExtensionHelpers
                 if (field != null)
                 {
                     DescriptionAttribute attr =
-                        Attribute.GetCustomAttribute(field,
+                        Attribute.GetCustomAttribute(
+                            field,
                             typeof(DescriptionAttribute)) as DescriptionAttribute;
                     if (attr != null)
                     {
@@ -28,6 +33,7 @@ namespace Core.ExtensionHelpers
                     }
                 }
             }
+
             return null;
         }
 

@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="OfficeException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Office
 {
+    using System;
+    using Core;
+
     public class OfficeException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Office;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Office
         public DeleteOfficeNotFoundException(int officeId)
             : base($"Office not found for the Office Id: {officeId}")
         {
-            OfficeId = officeId;
+            this.OfficeId = officeId;
         }
 
         public int OfficeId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Office
         public OfficeDeletedException(int id, string name)
             : base($"The Office {name} was deleted")
         {
-            OfficeId = id;
-            Name = name;
+            this.OfficeId = id;
+            this.Name = name;
         }
 
         public int OfficeId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Office
         public UpdateOfficeNotFoundException(int officeId, Guid clientSystemId)
             : base($"Office {officeId} and Client System Id {clientSystemId} was not found.")
         {
-            OfficeId = officeId;
-            ClientSystemId = clientSystemId;
+            this.OfficeId = officeId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int OfficeId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Office
         public UpdateHasNotChangesException(int officeId, Guid clientSystemId, string name)
             : base($"Office {name} has not changes.")
         {
-            OfficeId = officeId;
-            ClientSystemId = clientSystemId;
+            this.OfficeId = officeId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int OfficeId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,10 +102,9 @@ namespace Domain.Model.Exceptions.Office
 
         public OfficeNotFoundException(int officeId) : base($"The Office {officeId} was not found.")
         {
-            OfficeId = officeId;
+            this.OfficeId = officeId;
         }
 
         public int OfficeId { get; }
     }
 }
-

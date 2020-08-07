@@ -1,25 +1,29 @@
-﻿using Core;
-using FluentValidation;
-using FluentValidation.Validators;
-using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿// <copyright file="UniqueValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using Core;
+    using FluentValidation;
+    using FluentValidation.Validators;
+
     public class UniquePropertyValidator<T, TProperty> : PropertyValidator where T : IEntity
     {
-        private readonly Func<IQueryable<T>> _collectionAccessorFunc;
+        private readonly Func<IQueryable<T>> collectionAccessorFunc;
 
         public UniquePropertyValidator(Func<IQueryable<T>> collectionAccessorFunc)
             : base("The {PropertyName} must be unique.")
         {
-            _collectionAccessorFunc = collectionAccessorFunc;
+            this.collectionAccessorFunc = collectionAccessorFunc;
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            var entities = _collectionAccessorFunc();
+            var entities = this.collectionAccessorFunc();
             Expression<Func<T, bool>> predicate = GetPropertyPredicate(context);
 
             var match = entities.Count(predicate);
@@ -32,7 +36,8 @@ namespace Domain.Services.Impl.Validators
             var arg = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(arg, context.PropertyName);
 
-            var expression = Expression.Equal(property,
+            var expression = Expression.Equal(
+                property,
                 Expression.Constant(propertyValue));
 
             var predicate = Expression.Lambda<Func<T, bool>>(expression, arg);
@@ -43,8 +48,8 @@ namespace Domain.Services.Impl.Validators
 
     public static class UniqueExtension
     {
-        public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>
-            (this IRuleBuilder<T, TProperty> ruleBuilder, Func<IQueryable<T>> collection) where T : IEntity
+        public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(
+            this IRuleBuilder<T, TProperty> ruleBuilder, Func<IQueryable<T>> collection) where T : IEntity
         {
             return ruleBuilder.SetValidator(new UniquePropertyValidator<T, TProperty>(collection));
         }

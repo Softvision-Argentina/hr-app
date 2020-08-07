@@ -1,32 +1,35 @@
-﻿using ApiServer.Contracts.SkillType;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Core.ExtensionHelpers;
-using Domain.Model;
-using Domain.Services.Contracts.SkillType;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="SkillTypesControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.SkillType;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Core.ExtensionHelpers;
+    using Domain.Services.Contracts.SkillType;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class SkillTypesControllerTest
     {
-        private SkillTypesController controller;
-        private Mock<ILog<SkillTypesController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<ISkillTypeService> mockService;
+        private readonly SkillTypesController controller;
+        private readonly Mock<ILog<SkillTypesController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ISkillTypeService> mockService;
 
         public SkillTypesControllerTest()
         {
-            mockLog = new Mock<ILog<SkillTypesController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<ISkillTypeService>();
-            controller = new SkillTypesController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<SkillTypesController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<ISkillTypeService>();
+            this.controller = new SkillTypesController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which does not receive any data) returns AcceptedResult")]
@@ -37,13 +40,13 @@ namespace ApiServer.UnitTests.Controllers
             {
                 Id = 0,
                 Name = "test",
-                Description = "test"
+                Description = "test",
             });
 
-            mockService.Setup(_ => _.List()).Returns(new[] { new ReadedSkillTypeContract() });
-            mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedSkillTypeContract() });
+            this.mockMapper.Setup(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>())).Returns(expectedValue);
 
-            var result = controller.Get();
+            var result = this.controller.Get();
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -53,8 +56,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.List(), Times.Once);
-            mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>()), Times.Once);
+            this.mockService.Verify(_ => _.List(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedSkillTypeViewModel>>(It.IsAny<IEnumerable<ReadedSkillTypeContract>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns AcceptedResult")]
@@ -65,13 +68,13 @@ namespace ApiServer.UnitTests.Controllers
             {
                 Id = 0,
                 Name = "test",
-                Description = "test"
+                Description = "test",
             };
 
-            mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedSkillTypeContract());
-            mockMapper.Setup(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Read(It.IsAny<int>())).Returns(new ReadedSkillTypeContract());
+            this.mockMapper.Setup(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>())).Returns(expectedValue);
 
-            var result = controller.Get(skillTypeId);
+            var result = this.controller.Get(skillTypeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
@@ -81,8 +84,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultDataAsJson);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Get' (which receives an id) returns NotFoundObjectResult")]
@@ -91,13 +94,13 @@ namespace ApiServer.UnitTests.Controllers
             var skillTypeId = 0;
             var expectedValue = skillTypeId;
 
-            var result = controller.Get(skillTypeId);
+            var result = this.controller.Get(skillTypeId);
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(expectedValue, (result as NotFoundObjectResult).Value);
-            mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Never);
+            this.mockService.Verify(_ => _.Read(It.IsAny<int>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedSkillTypeViewModel>(It.IsAny<ReadedSkillTypeContract>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that method 'Add' returns CreatedResult")]
@@ -106,19 +109,19 @@ namespace ApiServer.UnitTests.Controllers
             var skillTypeVM = new CreateSkillTypeViewModel
             {
                 Name = "test",
-                Description = "test"
+                Description = "test",
             };
 
             var expectedValue = new CreatedSkillTypeViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateSkillTypeContract>(It.IsAny<CreateSkillTypeViewModel>())).Returns(new CreateSkillTypeContract());
-            mockMapper.Setup(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateSkillTypeContract>())).Returns(new CreatedSkillTypeContract());
+            this.mockMapper.Setup(_ => _.Map<CreateSkillTypeContract>(It.IsAny<CreateSkillTypeViewModel>())).Returns(new CreateSkillTypeContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateSkillTypeContract>())).Returns(new CreatedSkillTypeContract());
 
-            var result = controller.Post(skillTypeVM);
+            var result = this.controller.Post(skillTypeVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -128,8 +131,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateSkillTypeContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateSkillTypeContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedSkillTypeViewModel>(It.IsAny<CreatedSkillTypeContract>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -139,16 +142,16 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValue = new { id = skillTypeId };
             var skillTypeToUpdate = new UpdateSkillTypeViewModel();
 
-            mockMapper.Setup(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>())).Returns(new UpdateSkillTypeContract());
-            mockService.Setup(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()));
+            this.mockMapper.Setup(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>())).Returns(new UpdateSkillTypeContract());
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()));
 
-            var result = controller.Put(skillTypeId, skillTypeToUpdate);
+            var result = this.controller.Put(skillTypeId, skillTypeToUpdate);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
             Assert.Equal(expectedValue.ToQueryString(), (result as AcceptedResult).Value.ToQueryString());
-            mockService.Verify(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>()), Times.Once);
+            this.mockService.Verify(_ => _.Update(It.IsAny<UpdateSkillTypeContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<UpdateSkillTypeContract>(It.IsAny<UpdateSkillTypeViewModel>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
@@ -156,19 +159,19 @@ namespace ApiServer.UnitTests.Controllers
         {
             var skillTypeId = 0;
 
-            mockService.Setup(_ => _.Delete(It.IsAny<int>()));
+            this.mockService.Setup(_ => _.Delete(It.IsAny<int>()));
 
-            var result = controller.Delete(skillTypeId);
+            var result = this.controller.Delete(skillTypeId);
 
             Assert.NotNull(result);
             Assert.IsType<AcceptedResult>(result);
-            mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
+            this.mockService.Verify(_ => _.Delete(It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Ping' returns OkObjectResult")]
         public void Should_Ping()
         {
-            var result = controller.Ping();
+            var result = this.controller.Ping();
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);

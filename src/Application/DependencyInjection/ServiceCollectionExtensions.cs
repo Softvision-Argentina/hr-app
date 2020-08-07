@@ -1,47 +1,49 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using DependencyInjection.Config;
-using Domain.Model;
-using Domain.Model.Seed;
-using Domain.Services.Contracts.Process;
-using Domain.Services.Contracts.ReaddressReason;
-using Domain.Services.Contracts.Stage.StageItem;
-using Domain.Services.ExternalServices;
-using Domain.Services.Impl.Services;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.Candidate;
-using Domain.Services.Impl.Validators.CandidateProfile;
-using Domain.Services.Impl.Validators.Community;
-using Domain.Services.Impl.Validators.CompanyCalendar;
-using Domain.Services.Impl.Validators.DaysOff;
-using Domain.Services.Impl.Validators.Employee;
-using Domain.Services.Impl.Validators.EmployeeCasualty;
-using Domain.Services.Impl.Validators.HireProjection;
-using Domain.Services.Impl.Validators.PreOffer;
-using Domain.Services.Impl.Validators.Office;
-using Domain.Services.Impl.Validators.Reservation;
-using Domain.Services.Impl.Validators.Role;
-using Domain.Services.Impl.Validators.Room;
-using Domain.Services.Impl.Validators.Seed;
-using Domain.Services.Impl.Validators.Skill;
-using Domain.Services.Impl.Validators.SkillType;
-using Domain.Services.Impl.Validators.Stage;
-using Domain.Services.Impl.Validators.Task;
-using Domain.Services.Interfaces.Repositories;
-using Domain.Services.Interfaces.Services;
-using Domain.Services.Repositories.EF;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Persistance.EF;
-using FluentValidation;
-using Domain.Services.Impl.Validators.OpenPosition;
+﻿// <copyright file="ServiceCollectionExtensions.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace DependencyInjection
 {
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using DependencyInjection.Config;
+    using Domain.Model;
+    using Domain.Model.Seed;
+    using Domain.Services.Contracts.Process;
+    using Domain.Services.Contracts.Stage.StageItem;
+    using Domain.Services.ExternalServices;
+    using Domain.Services.Impl.Services;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.Candidate;
+    using Domain.Services.Impl.Validators.CandidateProfile;
+    using Domain.Services.Impl.Validators.Community;
+    using Domain.Services.Impl.Validators.CompanyCalendar;
+    using Domain.Services.Impl.Validators.DaysOff;
+    using Domain.Services.Impl.Validators.Employee;
+    using Domain.Services.Impl.Validators.EmployeeCasualty;
+    using Domain.Services.Impl.Validators.HireProjection;
+    using Domain.Services.Impl.Validators.Office;
+    using Domain.Services.Impl.Validators.OpenPosition;
+    using Domain.Services.Impl.Validators.PreOffer;
+    using Domain.Services.Impl.Validators.Reservation;
+    using Domain.Services.Impl.Validators.Role;
+    using Domain.Services.Impl.Validators.Room;
+    using Domain.Services.Impl.Validators.Seed;
+    using Domain.Services.Impl.Validators.Skill;
+    using Domain.Services.Impl.Validators.SkillType;
+    using Domain.Services.Impl.Validators.Stage;
+    using Domain.Services.Impl.Validators.Task;
+    using Domain.Services.Interfaces.Repositories;
+    using Domain.Services.Interfaces.Services;
+    using Domain.Services.Repositories.EF;
+    using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Diagnostics;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Persistance.EF;
+
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDomain(this IServiceCollection services, DatabaseConfigurations dbConfigs)
@@ -67,7 +69,7 @@ namespace DependencyInjection
             services.AddScoped<ProcessStatusContractValidator, ProcessStatusContractValidator>();
             services.AddScoped<UpdateStageContractValidator, UpdateStageContractValidator>();
             services.AddScoped<CreatedStageItemContract, CreatedStageItemContract>();
-            services.AddScoped<ReadedProcessContract, ReadedProcessContract>();;
+            services.AddScoped<ReadedProcessContract, ReadedProcessContract>();
             services.AddScoped<CreateSkillTypeContractValidator, CreateSkillTypeContractValidator>();
             services.AddScoped<UpdateSkillTypeContractValidator, UpdateSkillTypeContractValidator>();
             services.AddScoped<CreateDeclineReasonContractValidator, CreateDeclineReasonContractValidator>();
@@ -101,7 +103,7 @@ namespace DependencyInjection
             services.AddScoped<IValidator<CreateProcessContract>, CreateProcessContractValidator>();
             services.AddScoped<IValidator<UpdateProcessContract>, UpdateProcessContractValidator>();
             services.AddScoped<CreateOpenPositionContractValidator, CreateOpenPositionContractValidator>();
-            services.AddScoped<UpdateOpenPositionContractValidator, UpdateOpenPositionContractValidator>();            
+            services.AddScoped<UpdateOpenPositionContractValidator, UpdateOpenPositionContractValidator>();
             services.AddScoped<UpdateReaddressReasonContractValidator, UpdateReaddressReasonContractValidator>();
             services.AddScoped<UpdateReaddressReasonTypeContractValidator, UpdateReaddressReasonTypeContractValidator>();
             services.AddScoped<CreateReaddressReasonContractValidator, CreateReaddressReasonContractValidator>();
@@ -135,7 +137,7 @@ namespace DependencyInjection
             services.AddTransient<IPreOfferService, PreOfferService>();
             services.AddTransient<IAzureUploadService, AzureUploadService>();
             services.AddTransient<ICvService, CvService>();
-            services.AddTransient<IInterviewService,InterviewService>();
+            services.AddTransient<IInterviewService, InterviewService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IOpenPositionService, OpenPositionService>();
         }
@@ -146,7 +148,8 @@ namespace DependencyInjection
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddSingleton(typeof(ILog<>), typeof(MicrosoftLogger<>));
             services.AddSingleton<IMemCache, MicrosoftMemoryCache>();
-            //TODO: Add a config variable and inject a mock AD in case that you're not in the domain.
+
+            // TODO: Add a config variable and inject a mock AD in case that you're not in the domain.
         }
 
         private static void AddUnitOfWork(IServiceCollection services, DatabaseConfigurations dbConfigs)
@@ -154,13 +157,16 @@ namespace DependencyInjection
             services.AddDbContext<DataBaseContext>(options =>
             {
                 if (dbConfigs.InMemoryMode)
+                {
                     options.UseInMemoryDatabase("DBInMemory");
+                }
                 else
+                {
                     options.UseSqlServer(dbConfigs.ConnectionString, b => b.MigrationsAssembly("ApiServer"));
+                }
 
-                //Use this to debug client evaluations
+                // Use this to debug client evaluations
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork<DataBaseContext>>();

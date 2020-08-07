@@ -1,18 +1,18 @@
-﻿using Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Domain.Model;
+    using Xunit;
+
     public class TaskRepositoryTest : BaseRepositoryTest
     {
-        private readonly TaskRepository _repository;
+        private readonly TaskRepository repository;
 
         public TaskRepositoryTest()
         {
-            _repository = new TaskRepository(DbContext, MockUnitOfWork.Object);
+            this.repository = new TaskRepository(this.DbContext, this.MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when Query there is no data")]
@@ -20,7 +20,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             Task expectedValue = null;
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -31,10 +31,10 @@ namespace Domain.Services.Repositories.EF.UnitTests
         public void GivenDataInRepositorysDbcontext_WhenQuery_ThenReturnsTask()
         {
             var expectedValue = new Task();
-            DbContext.Tasks.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Tasks.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.Query();
+            var actualValue = this.repository.Query();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -47,12 +47,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
             var expectedValue = new Task()
             {
                 TaskItems = new List<TaskItem>() { new TaskItem() },
-                User = new User()
+                User = new User(),
             };
-            DbContext.Tasks.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.Tasks.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.QueryEager();
+            var actualValue = this.repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -69,7 +69,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
             {
                 Title = "title1",
                 CreatedDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(1)
+                EndDate = DateTime.Today.AddDays(1),
             };
             var updateTask = new Task()
             {
@@ -82,14 +82,14 @@ namespace Domain.Services.Repositories.EF.UnitTests
                 User = new User() { Id = 1 },
                 TaskItems = new List<TaskItem>() { new TaskItem() { Id = 1 } },
             };
-            DbContext.Tasks.Add(newTask);
-            DbContext.SaveChanges();
+            this.DbContext.Tasks.Add(newTask);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.Update(updateTask);
+            var actualValue = this.repository.Update(updateTask);
 
             Assert.NotNull(actualValue);
             Assert.Equal(updateTask, actualValue);
-            Assert.Equal(1, DbContext.Tasks.Count());
+            Assert.Equal(1, this.DbContext.Tasks.Count());
         }
     }
 }

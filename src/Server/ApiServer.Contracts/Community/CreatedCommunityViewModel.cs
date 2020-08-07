@@ -1,4 +1,8 @@
-﻿namespace ApiServer.Contracts.Community
+﻿// <copyright file="CreatedCommunityViewModel.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace ApiServer.Contracts.Community
 {
     public class CreatedCommunityViewModel
     {

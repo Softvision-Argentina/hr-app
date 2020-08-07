@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="UserException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.User
 {
+    using System;
+    using Core;
+
     public class UserException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.User;
@@ -38,7 +42,7 @@ namespace Domain.Model.Exceptions.User
         public DeleteUserNotFoundException(int userId)
             : base($"User not found for the UserId: {userId}")
         {
-            UserId = userId;
+            this.UserId = userId;
         }
 
         public int UserId { get; set; }
@@ -51,11 +55,12 @@ namespace Domain.Model.Exceptions.User
         public UserDeletedException(int id, string name)
             : base($"The user {name} was deleted")
         {
-            UserId = id;
-            Name = name;
+            this.UserId = id;
+            this.Name = name;
         }
 
         public int UserId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.User
         public UpdateUserNotFoundException(int userId, Guid clientSystemId)
             : base($"User {userId} and Client System Id {clientSystemId} was not found.")
         {
-            UserId = userId;
-            ClientSystemId = clientSystemId;
+            this.UserId = userId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int UserId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,10 +86,9 @@ namespace Domain.Model.Exceptions.User
 
         public UserNotFoundException(int userId) : base($"The User {userId} was not found.")
         {
-            UserId = userId;
+            this.UserId = userId;
         }
 
         public int UserId { get; }
     }
 }
-

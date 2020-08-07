@@ -1,44 +1,47 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Contracts.Role;
-using Domain.Services.Impl.Services;
-using Domain.Services.Impl.UnitTests.Dummy;
-using Domain.Services.Impl.Validators.Role;
-using FluentValidation;
-using FluentValidation.Results;
-using Moq;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+﻿// <copyright file="RoleServiceTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Services.Contracts.Role;
+    using Domain.Services.Impl.Services;
+    using Domain.Services.Impl.UnitTests.Dummy;
+    using Domain.Services.Impl.Validators.Role;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using Moq;
+    using Xunit;
+
     public class RoleServiceTest : BaseDomainTest
     {
-        private readonly RoleService _service;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IRepository<Role>> _mockRepositoryRole;        
-        private readonly Mock<ILog<SkillTypeService>> _mockLogRoleService;
-        private readonly Mock<UpdateRoleContractValidator> _mockUpdateRoleContractValidator;
-        private readonly Mock<CreateRoleContractValidator> _mockCreateRoleContractValidator;
+        private readonly RoleService service;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IRepository<Role>> mockRepositoryRole;
+        private readonly Mock<ILog<SkillTypeService>> mockLogRoleService;
+        private readonly Mock<UpdateRoleContractValidator> mockUpdateRoleContractValidator;
+        private readonly Mock<CreateRoleContractValidator> mockCreateRoleContractValidator;
 
         public RoleServiceTest()
         {
-            _mockMapper = new Mock<IMapper>();
-            _mockRepositoryRole = new Mock<IRepository<Role>>();            
-            _mockLogRoleService = new Mock<ILog<SkillTypeService>>();
-            _mockUpdateRoleContractValidator = new Mock<UpdateRoleContractValidator>();
-            _mockCreateRoleContractValidator = new Mock<CreateRoleContractValidator>();
-            _service = new RoleService(
-                _mockMapper.Object,
-                _mockRepositoryRole.Object,
-                MockUnitOfWork.Object,                
-                _mockLogRoleService.Object,
-                _mockUpdateRoleContractValidator.Object,
-                _mockCreateRoleContractValidator.Object
-            );
+            this.mockMapper = new Mock<IMapper>();
+            this.mockRepositoryRole = new Mock<IRepository<Role>>();
+            this.mockLogRoleService = new Mock<ILog<SkillTypeService>>();
+            this.mockUpdateRoleContractValidator = new Mock<UpdateRoleContractValidator>();
+            this.mockCreateRoleContractValidator = new Mock<CreateRoleContractValidator>();
+            this.service = new RoleService(
+                this.mockMapper.Object,
+                this.mockRepositoryRole.Object,
+                this.MockUnitOfWork.Object,
+                this.mockLogRoleService.Object,
+                this.mockUpdateRoleContractValidator.Object,
+                this.mockCreateRoleContractValidator.Object);
         }
 
         [Fact(DisplayName = "Verify that create RoleService when data is valid")]
@@ -46,21 +49,21 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new CreateRoleContract();
             var expectedRole = new CreatedRoleContract();
-            _mockCreateRoleContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>())).Returns(new ValidationResult());
-            _mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>())).Returns(new Role());
-            _mockRepositoryRole.Setup(repoCom => repoCom.Create(It.IsAny<Role>())).Returns(new Role());
-            _mockMapper.Setup(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>())).Returns(expectedRole);
+            this.mockCreateRoleContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>())).Returns(new ValidationResult());
+            this.mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>())).Returns(new Role());
+            this.mockRepositoryRole.Setup(repoCom => repoCom.Create(It.IsAny<Role>())).Returns(new Role());
+            this.mockMapper.Setup(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>())).Returns(expectedRole);
 
-            var createdRole = _service.Create(contract);
+            var createdRole = this.service.Create(contract);
 
             Assert.NotNull(createdRole);
             Assert.Equal(expectedRole, createdRole);
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
-            _mockCreateRoleContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>()), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>()), Times.Once);
-            _mockRepositoryRole.Verify(mrt => mrt.Create(It.IsAny<Role>()), Times.Once);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>()), Times.Once);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(4));
+            this.mockCreateRoleContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>()), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>()), Times.Once);
+            this.mockRepositoryRole.Verify(mrt => mrt.Create(It.IsAny<Role>()), Times.Once);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that create throws error when data for creation is invalid")]
@@ -69,33 +72,33 @@ namespace Domain.Services.Impl.UnitTests.Services
             var contract = new CreateRoleContract();
             var expectedRole = new CreatedRoleContract();
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            _mockCreateRoleContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            _mockMapper.Setup(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>())).Returns(expectedRole);
+            this.mockCreateRoleContractValidator.Setup(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            this.mockMapper.Setup(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>())).Returns(expectedRole);
 
-            var exception = Assert.Throws<Model.Exceptions.Role.CreateContractInvalidException>(() => _service.Create(contract));
+            var exception = Assert.Throws<Model.Exceptions.Role.CreateContractInvalidException>(() => this.service.Create(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockCreateRoleContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>()), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>()), Times.Never);
-            _mockRepositoryRole.Verify(mrt => mrt.Create(It.IsAny<Role>()), Times.Never);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
-            _mockMapper.Verify(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>()), Times.Never);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockCreateRoleContractValidator.Verify(ctcv => ctcv.Validate(It.IsAny<ValidationContext<CreateRoleContract>>()), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<CreateRoleContract>()), Times.Never);
+            this.mockRepositoryRole.Verify(mrt => mrt.Create(It.IsAny<Role>()), Times.Never);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
+            this.mockMapper.Verify(mm => mm.Map<CreatedRoleContract>(It.IsAny<Role>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that delete RoleService when data is valid")]
         public void GivenDelete_WhenDataIsValid_DeleteRoleService()
         {
-            var Roles = new List<Role>() { new Role() { Id = 1 } }.AsQueryable();
-            _mockRepositoryRole.Setup(mrt => mrt.Query()).Returns(Roles);
+            var roles = new List<Role>() { new Role() { Id = 1 } }.AsQueryable();
+            this.mockRepositoryRole.Setup(mrt => mrt.Query()).Returns(roles);
 
-            _service.Delete(1);
+            this.service.Delete(1);
 
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
-            _mockRepositoryRole.Verify(mrt => mrt.Query(), Times.Once);
-            _mockRepositoryRole.Verify(mrt => mrt.Delete(It.IsAny<Role>()), Times.Once);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
+            this.mockRepositoryRole.Verify(mrt => mrt.Query(), Times.Once);
+            this.mockRepositoryRole.Verify(mrt => mrt.Delete(It.IsAny<Role>()), Times.Once);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that delete throws error when data for deletion is invalid")]
@@ -103,30 +106,30 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var expectedErrorMEssage = $"Role not found for the Role Id: {0}";
 
-            var exception = Assert.Throws<Model.Exceptions.Role.DeleteRoleNotFoundException>(() => _service.Delete(0));
+            var exception = Assert.Throws<Model.Exceptions.Role.DeleteRoleNotFoundException>(() => this.service.Delete(0));
 
             Assert.NotNull(exception);
             Assert.Equal(expectedErrorMEssage, exception.Message);
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockRepositoryRole.Verify(mrt => mrt.Query(), Times.Once);
-            _mockRepositoryRole.Verify(mrt => mrt.Delete(It.IsAny<Role>()), Times.Never);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockRepositoryRole.Verify(mrt => mrt.Query(), Times.Once);
+            this.mockRepositoryRole.Verify(mrt => mrt.Delete(It.IsAny<Role>()), Times.Never);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that update RoleService when data is valid")]
         public void GivenUpdate_WhenDataIsValidNotApprovedAndNew_UpdateCorrectly()
         {
             var contract = new UpdateRoleContract();
-            _mockUpdateRoleContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>())).Returns(new ValidationResult());
-            _mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>())).Returns(new Role());
+            this.mockUpdateRoleContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>())).Returns(new ValidationResult());
+            this.mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>())).Returns(new Role());
 
-            _service.Update(contract);
+            this.service.Update(contract);
 
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
-            _mockUpdateRoleContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>()), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>()), Times.Once);
-            _mockRepositoryRole.Verify(mrt => mrt.Update(It.IsAny<Role>()), Times.Once);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(3));
+            this.mockUpdateRoleContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>()), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>()), Times.Once);
+            this.mockRepositoryRole.Verify(mrt => mrt.Update(It.IsAny<Role>()), Times.Once);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that update throws error when data for updating is invalid")]
@@ -134,50 +137,50 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             var contract = new UpdateRoleContract();
             var validationFailure = new ValidationFailure("Title", "IsEmpty");
-            _mockUpdateRoleContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
-            _mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>())).Returns(new Role());
+            this.mockUpdateRoleContractValidator.Setup(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>())).Returns(new ValidationResult(new List<ValidationFailure>() { validationFailure }));
+            this.mockMapper.Setup(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>())).Returns(new Role());
 
-            var exception = Assert.Throws<Model.Exceptions.Role.CreateContractInvalidException>(() => _service.Update(contract));
+            var exception = Assert.Throws<Model.Exceptions.Role.CreateContractInvalidException>(() => this.service.Update(contract));
 
             Assert.NotNull(exception);
             Assert.Equal(validationFailure.ErrorMessage, exception.Message);
-            _mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
-            _mockUpdateRoleContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>()), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>()), Times.Never);
-            _mockRepositoryRole.Verify(mrt => mrt.Update(It.IsAny<Role>()), Times.Never);
-            MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
+            this.mockLogRoleService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Once);
+            this.mockUpdateRoleContractValidator.Verify(utcv => utcv.Validate(It.IsAny<ValidationContext<UpdateRoleContract>>()), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<Role>(It.IsAny<UpdateRoleContract>()), Times.Never);
+            this.mockRepositoryRole.Verify(mrt => mrt.Update(It.IsAny<Role>()), Times.Never);
+            this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that list returns a value")]
         public void GivenList_WhenRegularCall_ReturnsValue()
         {
-            var Roles = new List<Role>() { new Role() { Id = 1 } }.AsQueryable();
+            var roles = new List<Role>() { new Role() { Id = 1 } }.AsQueryable();
             var readedRoleList = new List<ReadedRoleContract> { new ReadedRoleContract { Id = 1 } };
-            _mockRepositoryRole.Setup(mrt => mrt.QueryEager()).Returns(Roles);
-            _mockMapper.Setup(mm => mm.Map<List<ReadedRoleContract>>(It.IsAny<List<Role>>())).Returns(readedRoleList);
+            this.mockRepositoryRole.Setup(mrt => mrt.QueryEager()).Returns(roles);
+            this.mockMapper.Setup(mm => mm.Map<List<ReadedRoleContract>>(It.IsAny<List<Role>>())).Returns(readedRoleList);
 
-            var actualResult = _service.List();
+            var actualResult = this.service.List();
 
             Assert.NotNull(actualResult);
             Assert.Equal(1, actualResult.ToList()[0].Id);
-            _mockRepositoryRole.Verify(_ => _.QueryEager(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<List<ReadedRoleContract>>(It.IsAny<List<Role>>()), Times.Once);
+            this.mockRepositoryRole.Verify(_ => _.QueryEager(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedRoleContract>>(It.IsAny<List<Role>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that read returns a value")]
         public void GivenRead_WhenRegularCall_ReturnsValue()
         {
-            var Roles = new List<Role>() { new Role() { Id = 1, Name = "Name" } }.AsQueryable();
+            var roles = new List<Role>() { new Role() { Id = 1, Name = "Name" } }.AsQueryable();
             var readedRole = new ReadedRoleContract { Id = 1, Name = "Name" };
-            _mockRepositoryRole.Setup(mrt => mrt.QueryEager()).Returns(Roles);
-            _mockMapper.Setup(mm => mm.Map<ReadedRoleContract>(It.IsAny<Role>())).Returns(readedRole);
+            this.mockRepositoryRole.Setup(mrt => mrt.QueryEager()).Returns(roles);
+            this.mockMapper.Setup(mm => mm.Map<ReadedRoleContract>(It.IsAny<Role>())).Returns(readedRole);
 
-            var actualResult = _service.Read(1);
+            var actualResult = this.service.Read(1);
 
             Assert.NotNull(actualResult);
             Assert.Equal("Name", actualResult.Name);
-            _mockRepositoryRole.Verify(_ => _.QueryEager(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedRoleContract>(It.IsAny<Role>()), Times.Once);
+            this.mockRepositoryRole.Verify(_ => _.QueryEager(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedRoleContract>(It.IsAny<Role>()), Times.Once);
         }
     }
 }

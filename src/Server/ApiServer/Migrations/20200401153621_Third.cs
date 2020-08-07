@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200401153621_Third.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Third : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -586,7 +590,7 @@ namespace ApiServer.Migrations
                     LastName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    Version = table.Column<long>(nullable: false)
+                    Version = table.Column<long>(nullable: false),
                 },
                 constraints: table =>
                 {

@@ -1,95 +1,99 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Dashboard;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Dashboard;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="DashboardController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Dashboard;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Dashboard;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : BaseController<DashboardController>
     {
-        private readonly IDashboardService _dashboardService;
-        private readonly IMapper _mapper;
+        private readonly IDashboardService dashboardService;
+        private readonly IMapper mapper;
 
         public DashboardController(
             IDashboardService dashboardService,
             ILog<DashboardController> logger,
             IMapper mapper) : base(logger)
         {
-            _dashboardService = dashboardService;
-            _mapper = mapper;
+            this.dashboardService = dashboardService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var dashboards = _dashboardService.List();
+                var dashboards = this.dashboardService.List();
 
-                return Accepted(_mapper.Map<List<ReadedDashboardViewModel>>(dashboards));
+                return this.Accepted(this.mapper.Map<List<ReadedDashboardViewModel>>(dashboards));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var dashboard = _dashboardService.Read(id);
+                var dashboard = this.dashboardService.Read(id);
 
                 if (dashboard == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedDashboardViewModel>(dashboard));
+                return this.Accepted(this.mapper.Map<ReadedDashboardViewModel>(dashboard));
             });
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] CreateDashboardViewModel createDashboardVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateDashboardContract>(createDashboardVm);
-                var returnContract = _dashboardService.Create(contract);
+                var contract = this.mapper.Map<CreateDashboardContract>(createDashboardVm);
+                var returnContract = this.dashboardService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedDashboardViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedDashboardViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateDashboardViewModel updateDashboardVm)
+        public IActionResult Put(int id, [FromBody] UpdateDashboardViewModel updateDashboardVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateDashboardContract>(updateDashboardVm);
+                var contract = this.mapper.Map<UpdateDashboardContract>(updateDashboardVm);
                 contract.Id = id;
-                _dashboardService.Update(contract);
+                this.dashboardService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _dashboardService.Delete(id);
-                return Accepted();
+                this.dashboardService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

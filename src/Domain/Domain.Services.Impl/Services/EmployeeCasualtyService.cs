@@ -1,26 +1,30 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.EmployeeCasualty;
-using Domain.Services.Contracts.EmployeeCasualty;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.EmployeeCasualty;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="EmployeeCasualtyService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.EmployeeCasualty;
+    using Domain.Services.Contracts.EmployeeCasualty;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.EmployeeCasualty;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class EmployeeCasualtyService : IEmployeeCasualtyService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<EmployeeCasualty> _employeeCasualtyRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<EmployeeCasualtyService> _log;
-        private readonly UpdateEmployeeCasualtyContractValidator _updateEmployeeCasualtyContractValidator;
-        private readonly CreateEmployeeCasualtyContractValidator _createEmployeeCasualtyContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<EmployeeCasualty> employeeCasualtyRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<EmployeeCasualtyService> log;
+        private readonly UpdateEmployeeCasualtyContractValidator updateEmployeeCasualtyContractValidator;
+        private readonly CreateEmployeeCasualtyContractValidator createEmployeeCasualtyContractValidator;
 
         public EmployeeCasualtyService(
             IMapper mapper,
@@ -28,88 +32,89 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<EmployeeCasualtyService> log,
             UpdateEmployeeCasualtyContractValidator updateEmployeeCasualtyContractValidator,
-            CreateEmployeeCasualtyContractValidator createEmployeeCasualtyContractValidator
-            )
+            CreateEmployeeCasualtyContractValidator createEmployeeCasualtyContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _employeeCasualtyRepository = employeeCasualtyRepository;
-            _log = log;
-            _updateEmployeeCasualtyContractValidator = updateEmployeeCasualtyContractValidator;
-            _createEmployeeCasualtyContractValidator = createEmployeeCasualtyContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.employeeCasualtyRepository = employeeCasualtyRepository;
+            this.log = log;
+            this.updateEmployeeCasualtyContractValidator = updateEmployeeCasualtyContractValidator;
+            this.createEmployeeCasualtyContractValidator = createEmployeeCasualtyContractValidator;
         }
 
         public IEnumerable<ReadedEmployeeCasualtyContract> List()
         {
-            var employeeCasualtyQuery = _employeeCasualtyRepository.QueryEager();
+            var employeeCasualtyQuery = this.employeeCasualtyRepository.QueryEager();
 
             var employeeCasualties = employeeCasualtyQuery.ToList();
 
-            return _mapper.Map<List<ReadedEmployeeCasualtyContract>>(employeeCasualties);
+            return this.mapper.Map<List<ReadedEmployeeCasualtyContract>>(employeeCasualties);
         }
 
         public CreatedEmployeeCasualtyContract Create(CreateEmployeeCasualtyContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Month} + {contract.Year}");
-            ValidateContract(contract);
-            ValidateExistence(0, contract.Month, contract.Year);
+            this.log.LogInformation($"Validating contract {contract.Month} + {contract.Year}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(0, contract.Month, contract.Year);
 
-            _log.LogInformation($"Mapping contract {contract.Month} + {contract.Year}");
-            var employeeCasualty = _mapper.Map<EmployeeCasualty>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Month} + {contract.Year}");
+            var employeeCasualty = this.mapper.Map<EmployeeCasualty>(contract);
 
-            var createdEmployeeCasualty = _employeeCasualtyRepository.Create(employeeCasualty);
-            _log.LogInformation($"Complete for {contract.Month} + {contract.Year}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Month} + {contract.Year}");
-            return _mapper.Map<CreatedEmployeeCasualtyContract>(createdEmployeeCasualty);
+            var createdEmployeeCasualty = this.employeeCasualtyRepository.Create(employeeCasualty);
+            this.log.LogInformation($"Complete for {contract.Month} + {contract.Year}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Month} + {contract.Year}");
+            return this.mapper.Map<CreatedEmployeeCasualtyContract>(createdEmployeeCasualty);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching casualty {id}");
-            EmployeeCasualty employeeCasualty = _employeeCasualtyRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching casualty {id}");
+            EmployeeCasualty employeeCasualty = this.employeeCasualtyRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (employeeCasualty == null)
             {
                 throw new DeleteEmployeeCasualtyNotFoundException(id);
             }
-            _log.LogInformation($"Deleting employeeCasualty {id}");
-            _employeeCasualtyRepository.Delete(employeeCasualty);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting employeeCasualty {id}");
+            this.employeeCasualtyRepository.Delete(employeeCasualty);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateEmployeeCasualtyContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Month} + {contract.Year}");
-            ValidateContract(contract);
-            ValidateExistence(contract.Id, contract.Month, contract.Year);
+            this.log.LogInformation($"Validating contract {contract.Month} + {contract.Year}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(contract.Id, contract.Month, contract.Year);
 
-            _log.LogInformation($"Mapping contract {contract.Month} + {contract.Year}");
-            var employeeCasualty = _mapper.Map<EmployeeCasualty>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Month} + {contract.Year}");
+            var employeeCasualty = this.mapper.Map<EmployeeCasualty>(contract);
 
-            var updatedEmployeeCasualty = _employeeCasualtyRepository.Update(employeeCasualty);
-            _log.LogInformation($"Complete for {contract.Month} + {contract.Year}");
-            _unitOfWork.Complete();
+            var updatedEmployeeCasualty = this.employeeCasualtyRepository.Update(employeeCasualty);
+            this.log.LogInformation($"Complete for {contract.Month} + {contract.Year}");
+            this.unitOfWork.Complete();
         }
 
         public ReadedEmployeeCasualtyContract Read(int id)
         {
-            var employeeCasualtyQuery = _employeeCasualtyRepository
+            var employeeCasualtyQuery = this.employeeCasualtyRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
             var employeeCasualtyResult = employeeCasualtyQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedEmployeeCasualtyContract>(employeeCasualtyResult);
+            return this.mapper.Map<ReadedEmployeeCasualtyContract>(employeeCasualtyResult);
         }
 
         private void ValidateContract(CreateEmployeeCasualtyContract contract)
         {
             try
             {
-                _createEmployeeCasualtyContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createEmployeeCasualtyContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -121,8 +126,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateEmployeeCasualtyContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateEmployeeCasualtyContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -134,8 +140,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                EmployeeCasualty employeeCasualty = _employeeCasualtyRepository.Query().Where(_ => _.Month == month && _.Year == year && _.Id != id).FirstOrDefault();
-                if (employeeCasualty != null) throw new InvalidEmployeeCasualtyException("The EmployeeCasualty already exists .");
+                EmployeeCasualty employeeCasualty = this.employeeCasualtyRepository.Query().Where(_ => _.Month == month && _.Year == year && _.Id != id).FirstOrDefault();
+                if (employeeCasualty != null)
+                {
+                    throw new InvalidEmployeeCasualtyException("The EmployeeCasualty already exists .");
+                }
             }
             catch (ValidationException ex)
             {

@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="CandidateException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Candidate
 {
+    using System;
+    using Core;
+
     public class CandidateException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Candidate;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Candidate
         public DeleteCandidateNotFoundException(int candidateId)
             : base($"Candidate not found for the CandidateId: {candidateId}")
         {
-            CandidateId = candidateId;
+            this.CandidateId = candidateId;
         }
 
         public int CandidateId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Candidate
         public CandidateDeletedException(int id, string name)
             : base($"The candidate {name} was deleted")
         {
-            CandidateId = id;
-            Name = name;
+            this.CandidateId = id;
+            this.Name = name;
         }
 
         public int CandidateId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Candidate
         public UpdateCandidateNotFoundException(int candidateId, Guid clientSystemId)
             : base($"Candidate {candidateId} and Client System Id {clientSystemId} was not found.")
         {
-            CandidateId = candidateId;
-            ClientSystemId = clientSystemId;
+            this.CandidateId = candidateId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int CandidateId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -82,11 +88,12 @@ namespace Domain.Model.Exceptions.Candidate
         public UpdateHasNotChangesException(int candidateId, Guid clientSystemId, string name)
             : base($"Candidate {name} has not changes.")
         {
-            CandidateId = candidateId;
-            ClientSystemId = clientSystemId;
+            this.CandidateId = candidateId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int CandidateId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -96,7 +103,7 @@ namespace Domain.Model.Exceptions.Candidate
 
         public CandidateNotFoundException(int candidateId) : base($"The Candidate {candidateId} was not found.")
         {
-            CandidateId = candidateId;
+            this.CandidateId = candidateId;
         }
 
         public int CandidateId { get; }

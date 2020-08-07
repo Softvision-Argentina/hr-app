@@ -1,17 +1,17 @@
-﻿using Domain.Model;
-using System;
-using System.Linq;
-using Xunit;
-
-namespace Domain.Services.Repositories.EF.UnitTests
+﻿namespace Domain.Services.Repositories.EF.UnitTests
 {
+    using System;
+    using System.Linq;
+    using Domain.Model;
+    using Xunit;
+
     public class TechnicalStageRepositoryTest : BaseRepositoryTest
     {
-        private readonly TechnicalStageRepository _repository;
+        private readonly TechnicalStageRepository repository;
 
         public TechnicalStageRepositoryTest()
         {
-            _repository = new TechnicalStageRepository(DbContext, MockUnitOfWork.Object);
+            this.repository = new TechnicalStageRepository(this.DbContext, this.MockUnitOfWork.Object);
         }
 
         [Fact(DisplayName = "Verify that repository returns null when QueryEager there is no data")]
@@ -19,7 +19,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
         {
             TechnicalStage expectedValue = null;
 
-            var actualValue = _repository.QueryEager();
+            var actualValue = this.repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(0, actualValue.Count());
@@ -34,12 +34,12 @@ namespace Domain.Services.Repositories.EF.UnitTests
             var expectedValue = new TechnicalStage()
             {
                 UserDelegate = userDelegate,
-                UserOwner = userOwner
+                UserOwner = userOwner,
             };
-            DbContext.TechnicalStages.Add(expectedValue);
-            DbContext.SaveChanges();
+            this.DbContext.TechnicalStages.Add(expectedValue);
+            this.DbContext.SaveChanges();
 
-            var actualValue = _repository.QueryEager();
+            var actualValue = this.repository.QueryEager();
 
             Assert.NotNull(actualValue);
             Assert.Equal(1, actualValue.Count());
@@ -72,7 +72,7 @@ namespace Domain.Services.Repositories.EF.UnitTests
                 Seniority = Model.Enum.Seniority.Junior1,
                 Status = Model.Enum.StageStatus.Accepted,
                 Type = Model.Enum.StageType.Client,
-                Version = 1
+                Version = 1,
             };
             var newStage = new TechnicalStage()
             {
@@ -95,14 +95,14 @@ namespace Domain.Services.Repositories.EF.UnitTests
                 Seniority = Model.Enum.Seniority.Junior2,
                 Status = Model.Enum.StageStatus.Declined,
                 Type = Model.Enum.StageType.Hire,
-                Version = 2
+                Version = 2,
             };
-            DbContext.TechnicalStages.Add(existingStage);
-            DbContext.SaveChanges();
+            this.DbContext.TechnicalStages.Add(existingStage);
+            this.DbContext.SaveChanges();
 
-            _repository.UpdateTechnicalStage(newStage, existingStage);
+            this.repository.UpdateTechnicalStage(newStage, existingStage);
 
-            Assert.NotNull(DbContext.Entry(existingStage));
+            Assert.NotNull(this.DbContext.Entry(existingStage));
         }
     }
 }

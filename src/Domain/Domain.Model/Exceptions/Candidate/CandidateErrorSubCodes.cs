@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Candidate
+﻿// <copyright file="CandidateErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Candidate
 {
     public enum CandidateErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateCandidateNotFound,
         UpdateHasNotChanges,
-        CandidateNotFound
+        CandidateNotFound,
     }
 }

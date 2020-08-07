@@ -1,8 +1,12 @@
-﻿using Core;
-using System.Collections.Generic;
+﻿// <copyright file="ReaddressReasonTypeException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.ReaddressReasonType
 {
+    using System.Collections.Generic;
+    using Core;
+
     public class ReaddressReasonTypeException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.ReaddressReasonType;

@@ -1,21 +1,24 @@
-﻿using Domain.Services.Contracts;
-using Domain.Services.Contracts.ReaddressReason;
-using FluentValidation;
+﻿// <copyright file="CreateReaddressReasonContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators
 {
+    using Domain.Services.Contracts.ReaddressReason;
+    using FluentValidation;
+
     public class CreateReaddressReasonContractValidator : AbstractValidator<CreateReaddressReason>
     {
         public CreateReaddressReasonContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_CREATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETCREATE, () =>
             {
-                RuleFor(_ => _.Description)
+                this.RuleFor(_ => _.Description)
                     .MaximumLength(200)
                     .NotEmpty()
                         .WithMessage("Reason needs a description defined");
-                
-                RuleFor(_ => _.TypeId)
+
+                this.RuleFor(_ => _.TypeId)
                     .NotNull()
                     .WithMessage("Reason needs a type");
             });

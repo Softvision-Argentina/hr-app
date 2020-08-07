@@ -1,33 +1,37 @@
-﻿using ApiServer.Contracts.Candidates;
-using ApiServer.Contracts.CandidateSkill;
-using ApiServer.Controllers;
-using AutoMapper;
-using Core;
-using Domain.Model.Enum;
-using Domain.Services.Contracts.Candidate;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Xunit;
+﻿// <copyright file="ReferralsControllerTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.UnitTests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Candidates;
+    using ApiServer.Contracts.CandidateSkill;
+    using ApiServer.Controllers;
+    using AutoMapper;
+    using Core;
+    using Domain.Model.Enum;
+    using Domain.Services.Contracts.Candidate;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Newtonsoft.Json;
+    using Xunit;
+
     public class ReferralsControllerTest
     {
-        private ReferralsController controller;
-        private Mock<ILog<ReferralsController>> mockLog;
-        private Mock<IMapper> mockMapper;
-        private Mock<ICandidateService> mockService;
+        private readonly ReferralsController controller;
+        private readonly Mock<ILog<ReferralsController>> mockLog;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ICandidateService> mockService;
 
         public ReferralsControllerTest()
         {
-            mockLog = new Mock<ILog<ReferralsController>>();
-            mockMapper = new Mock<IMapper>();
-            mockService = new Mock<ICandidateService>();
-            controller = new ReferralsController(mockService.Object, mockLog.Object, mockMapper.Object);
+            this.mockLog = new Mock<ILog<ReferralsController>>();
+            this.mockMapper = new Mock<IMapper>();
+            this.mockService = new Mock<ICandidateService>();
+            this.controller = new ReferralsController(this.mockService.Object, this.mockLog.Object, this.mockMapper.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'Add' returns CreatedResult")]
@@ -40,7 +44,7 @@ namespace ApiServer.UnitTests.Controllers
                 DNI = 11111111,
                 EmailAddress = "jdoe@test.com",
                 PhoneNumber = "22222222",
-                LinkedInProfile = "testprofile",                
+                LinkedInProfile = "testprofile",
                 EnglishLevel = EnglishLevel.Advanced,
                 Status = CandidateStatus.New,
                 User = null,
@@ -49,21 +53,21 @@ namespace ApiServer.UnitTests.Controllers
                 IsReferred = false,
                 ContactDay = DateTime.Now,
                 CandidateSkills = new List<CreateCandidateSkillViewModel>(),
-                Cv = "",
-                KnownFrom = "",
-                ReferredBy = ""
+                Cv = string.Empty,
+                KnownFrom = string.Empty,
+                ReferredBy = string.Empty,
             };
 
             var expectedValue = new CreatedCandidateViewModel
             {
-                Id = 0
+                Id = 0,
             };
 
-            mockMapper.Setup(_ => _.Map<CreateCandidateContract>(It.IsAny<CreateCandidateViewModel>())).Returns(new CreateCandidateContract());
-            mockMapper.Setup(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>())).Returns(expectedValue);
-            mockService.Setup(_ => _.Create(It.IsAny<CreateCandidateContract>())).Returns(new CreatedCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<CreateCandidateContract>(It.IsAny<CreateCandidateViewModel>())).Returns(new CreateCandidateContract());
+            this.mockMapper.Setup(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>())).Returns(expectedValue);
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateCandidateContract>())).Returns(new CreatedCandidateContract());
 
-            var result = controller.Post(referralVM);
+            var result = this.controller.Post(referralVM);
 
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
@@ -73,8 +77,8 @@ namespace ApiServer.UnitTests.Controllers
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
-            mockService.Verify(_ => _.Create(It.IsAny<CreateCandidateContract>()), Times.Once);
-            mockMapper.Verify(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>()), Times.Once);
+            this.mockService.Verify(_ => _.Create(It.IsAny<CreateCandidateContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedCandidateViewModel>(It.IsAny<CreatedCandidateContract>()), Times.Once);
         }
     }
 }

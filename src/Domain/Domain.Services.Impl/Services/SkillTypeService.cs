@@ -1,27 +1,31 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Skill;
-using Domain.Model.Exceptions.SkillType;
-using Domain.Services.Contracts.SkillType;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.SkillType;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="SkillTypeService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
-    public class SkillTypeService: ISkillTypeService
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Skill;
+    using Domain.Model.Exceptions.SkillType;
+    using Domain.Services.Contracts.SkillType;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.SkillType;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
+    public class SkillTypeService : ISkillTypeService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<SkillType> _skillTypeRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<SkillTypeService> _log;
-        private readonly UpdateSkillTypeContractValidator _updateSkillContractValidator;
-        private readonly CreateSkillTypeContractValidator _createSkillContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<SkillType> skillTypeRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<SkillTypeService> log;
+        private readonly UpdateSkillTypeContractValidator updateSkillContractValidator;
+        private readonly CreateSkillTypeContractValidator createSkillContractValidator;
 
         public SkillTypeService(
             IMapper mapper,
@@ -29,89 +33,90 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<SkillTypeService> log,
             UpdateSkillTypeContractValidator updateSkillContractValidator,
-            CreateSkillTypeContractValidator createSkillContractValidator
-            )
+            CreateSkillTypeContractValidator createSkillContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _skillTypeRepository = skillTypeRepository;
-            _log = log;
-            _updateSkillContractValidator = updateSkillContractValidator;
-            _createSkillContractValidator = createSkillContractValidator;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.skillTypeRepository = skillTypeRepository;
+            this.log = log;
+            this.updateSkillContractValidator = updateSkillContractValidator;
+            this.createSkillContractValidator = createSkillContractValidator;
         }
 
         public CreatedSkillTypeContract Create(CreateSkillTypeContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(0, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(0, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var skillType = _mapper.Map<SkillType>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var skillType = this.mapper.Map<SkillType>(contract);
 
-            var createdSkillType = _skillTypeRepository.Create(skillType);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
-            _log.LogInformation($"Return {contract.Name}");
-            return _mapper.Map<CreatedSkillTypeContract>(createdSkillType);
+            var createdSkillType = this.skillTypeRepository.Create(skillType);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
+            this.log.LogInformation($"Return {contract.Name}");
+            return this.mapper.Map<CreatedSkillTypeContract>(createdSkillType);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching skill {id}");
-            SkillType skillType = _skillTypeRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching skill {id}");
+            SkillType skillType = this.skillTypeRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (skillType == null)
             {
                 throw new DeleteSkillNotFoundException(id);
             }
-            _log.LogInformation($"Deleting skill {id}");
-            _skillTypeRepository.Delete(skillType);
 
-            _unitOfWork.Complete();
+            this.log.LogInformation($"Deleting skill {id}");
+            this.skillTypeRepository.Delete(skillType);
+
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateSkillTypeContract contract)
         {
-            _log.LogInformation($"Validating contract {contract.Name}");
-            ValidateContract(contract);
-            ValidateExistence(contract.Id, contract.Name);
+            this.log.LogInformation($"Validating contract {contract.Name}");
+            this.ValidateContract(contract);
+            this.ValidateExistence(contract.Id, contract.Name);
 
-            _log.LogInformation($"Mapping contract {contract.Name}");
-            var skillType = _mapper.Map<SkillType>(contract);
+            this.log.LogInformation($"Mapping contract {contract.Name}");
+            var skillType = this.mapper.Map<SkillType>(contract);
 
-            _skillTypeRepository.Update(skillType);
-            _log.LogInformation($"Complete for {contract.Name}");
-            _unitOfWork.Complete();
+            this.skillTypeRepository.Update(skillType);
+            this.log.LogInformation($"Complete for {contract.Name}");
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedSkillTypeContract> List()
         {
-            var skillTypeQuery = _skillTypeRepository
+            var skillTypeQuery = this.skillTypeRepository
                 .QueryEager();
 
             var skillTypeResult = skillTypeQuery.ToList();
 
-            return _mapper.Map<List<ReadedSkillTypeContract>>(skillTypeResult);
+            return this.mapper.Map<List<ReadedSkillTypeContract>>(skillTypeResult);
         }
 
         public ReadedSkillTypeContract Read(int id)
         {
-            var skillTypeQuery = _skillTypeRepository
+            var skillTypeQuery = this.skillTypeRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
             var skillResult = skillTypeQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedSkillTypeContract>(skillResult);
+            return this.mapper.Map<ReadedSkillTypeContract>(skillResult);
         }
 
         private void ValidateContract(CreateSkillTypeContract contract)
         {
             try
             {
-                _createSkillContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createSkillContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -123,8 +128,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateSkillContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateSkillContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -136,8 +142,11 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                SkillType skillType = _skillTypeRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
-                if (skillType != null) throw new InvalidSkillTypeException("The SkillType already exists .");
+                SkillType skillType = this.skillTypeRepository.Query().Where(_ => _.Name == name && _.Id != id).FirstOrDefault();
+                if (skillType != null)
+                {
+                    throw new InvalidSkillTypeException("The SkillType already exists .");
+                }
             }
             catch (ValidationException ex)
             {

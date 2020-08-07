@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="CompanyCalendarException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.CompanyCalendar
 {
+    using System;
+    using Core;
+
     public class CompanyCalendarException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.CompanyCalendar;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.CompanyCalendar
         public DeleteCompanyCalendarNotFoundException(int companyCalendarId)
             : base($"Company calendar not found for the Company calendar Id: {companyCalendarId}")
         {
-            CompanyCalendarId = companyCalendarId;
+            this.CompanyCalendarId = companyCalendarId;
         }
 
         public int CompanyCalendarId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.CompanyCalendar
         public CompanyCalendarDeletedException(int id, string name)
             : base($"The company calendar {name} was deleted")
         {
-            CompanyCalendarId = id;
-            Name = name;
+            this.CompanyCalendarId = id;
+            this.Name = name;
         }
 
         public int CompanyCalendarId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,25 +71,28 @@ namespace Domain.Model.Exceptions.CompanyCalendar
         public UpdateCompanyCalendarNotFoundException(int companyCalendarId, Guid clientSystemId)
             : base($"Profile {companyCalendarId} and Client System Id {clientSystemId} was not found.")
         {
-            CompanyCalendarId = companyCalendarId;
-            ClientSystemId = clientSystemId;
+            this.CompanyCalendarId = companyCalendarId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int CompanyCalendarId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
     public class UpdateHasNotChangesException : InvalidUpdateException
     {
         protected override int SubErrorCode => (int)CompanyCalendarErrorSubCodes.UpdateHasNotChanges;
+
         public UpdateHasNotChangesException(int companyCalendarId, Guid clientSystemId, string name)
             : base($"Profile {name} has not changes.")
         {
-            CompanyCalendarId = companyCalendarId;
-            ClientSystemId = clientSystemId;
+            this.CompanyCalendarId = companyCalendarId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int CompanyCalendarId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -94,7 +102,7 @@ namespace Domain.Model.Exceptions.CompanyCalendar
 
         public CompanyCalendarNotFoundException(int companyCalendarId) : base($"The Profile {companyCalendarId} was not found.")
         {
-            CompanyCalendarId = companyCalendarId;
+            this.CompanyCalendarId = companyCalendarId;
         }
 
         public int CompanyCalendarId { get; }

@@ -1,51 +1,52 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Candidates;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Candidate;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System;
-using Domain.Model;
+﻿// <copyright file="CandidatesController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using ApiServer.Contracts.Candidates;
+    using AutoMapper;
+    using Core;
+    using Domain.Model;
+    using Domain.Services.Contracts.Candidate;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
     [ApiController]
     public class CandidatesController : BaseController<CandidatesController>
     {
-        private readonly ICandidateService _candidateService;
-        private readonly IMapper _mapper;
+        private readonly ICandidateService candidateService;
+        private readonly IMapper mapper;
 
         public CandidatesController(
             ICandidateService candidateService,
             ILog<CandidatesController> logger,
             IMapper mapper) : base(logger)
         {
-            _candidateService = candidateService;
-            _mapper = mapper;
+            this.candidateService = candidateService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var candidates = _candidateService.List();
+                var candidates = this.candidateService.List();
 
-                return Accepted(_mapper.Map<List<ReadedCandidateViewModel>>(candidates));
+                return this.Accepted(this.mapper.Map<List<ReadedCandidateViewModel>>(candidates));
             });
         }
 
         [HttpPost("filter")]
         public IActionResult Get([FromBody] FilterCandidateViewModel filterData)
         {
-
             Func<Candidate, bool> filterByPrefferedOffice = candidate => filterData.PreferredOffice == null ? true : candidate.PreferredOffice.Id.Equals(filterData.PreferredOffice);
             Func<Candidate, bool> filterByCommunity = candidate => filterData.Community == null ? true : candidate.Community.Id.Equals(filterData.Community);
-
 
             Func<Candidate, bool> filter = candidate => filterByPrefferedOffice(candidate)
             && filterByCommunity(candidate)
@@ -56,113 +57,114 @@ namespace ApiServer.Controllers
             .Select(skill => skill.SkillId)
             .Contains(requiredSkill.SkillId));
 
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var candidates = _candidateService.Read(filter);
-                return Accepted(_mapper.Map<List<ReadedCandidateViewModel>>(candidates));
-
+                var candidates = this.candidateService.Read(filter);
+                return this.Accepted(this.mapper.Map<List<ReadedCandidateViewModel>>(candidates));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var candidate = _candidateService.Read(id);
+                var candidate = this.candidateService.Read(id);
 
                 if (candidate == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                var vm = _mapper.Map<ReadedCandidateViewModel>(candidate);
-                return Accepted(vm);
+                var vm = this.mapper.Map<ReadedCandidateViewModel>(candidate);
+                return this.Accepted(vm);
             });
         }
 
         [HttpGet("Exists/{id}")]
         public IActionResult Exists(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var candidate = _candidateService.Exists(id);
+                var candidate = this.candidateService.Exists(id);
 
                 if (candidate == null)
                 {
-                    return Accepted();
+                    return this.Accepted();
                 }
 
-                var readedCandidateVm = _mapper.Map<ReadedCandidateViewModel>(candidate);
-                return Accepted(readedCandidateVm);
+                var readedCandidateVm = this.mapper.Map<ReadedCandidateViewModel>(candidate);
+                return this.Accepted(readedCandidateVm);
             });
         }
 
         [HttpGet("EmailExists/{email}")]
         public IActionResult EmailExists(string email)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                if (_candidateService.Exists(email) == false)
+                if (this.candidateService.Exists(email) == false)
                 {
-                    return Ok(new { Exists = false
+                    return this.Ok(new
+                    {
+                        Exists = false,
                     });
                 }
 
-                return Ok(new { Exists = true } );
+                return this.Ok(new { Exists = true });
             });
         }
 
         [HttpGet("GetApp")]
         public IActionResult GetCandidateApp()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var candidates = _candidateService.ListApp();
+                var candidates = this.candidateService.ListApp();
 
-                return Accepted(_mapper.Map<List<ReadedCandidateAppViewModel>>(candidates));
+                return this.Accepted(this.mapper.Map<List<ReadedCandidateAppViewModel>>(candidates));
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateCandidateViewModel vm)
+        public IActionResult Post([FromBody] CreateCandidateViewModel vm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateCandidateContract>(vm);
-                var returnContract = _candidateService.Create(contract);
+                var contract = this.mapper.Map<CreateCandidateContract>(vm);
+                var returnContract = this.candidateService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedCandidateViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedCandidateViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateCandidateViewModel vm)
+        public IActionResult Put(int id, [FromBody] UpdateCandidateViewModel vm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateCandidateContract>(vm);
+                var contract = this.mapper.Map<UpdateCandidateContract>(vm);
                 contract.Id = id;
-                _candidateService.Update(contract);
+                this.candidateService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _candidateService.Delete(id);
-                return Accepted();
+                this.candidateService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

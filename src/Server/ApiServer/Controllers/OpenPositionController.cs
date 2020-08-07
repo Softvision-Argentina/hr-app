@@ -1,94 +1,94 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
-using Core;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System;
-using Domain.Model;
-using ApiServer.Contracts.OpenPosition;
-using Domain.Services.Contracts.OpenPositions;
+﻿// <copyright file="OpenPositionController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.OpenPosition;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.OpenPositions;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
     [ApiController]
     public class OpenPositionController : BaseController<OpenPositionController>
     {
-        private readonly IOpenPositionService _openPositionService;
-        private readonly IMapper _mapper;
+        private readonly IOpenPositionService openPositionService;
+        private readonly IMapper mapper;
 
         public OpenPositionController(
             IOpenPositionService openPositionService,
             ILog<OpenPositionController> logger,
             IMapper mapper) : base(logger)
         {
-            _openPositionService = openPositionService;
-            _mapper = mapper;
+            this.openPositionService = openPositionService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var openPositions = _openPositionService.Get();
+                var openPositions = this.openPositionService.Get();
 
-                return Accepted(_mapper.Map<List<ReadedOpenPositionViewModel>>(openPositions));
+                return this.Accepted(this.mapper.Map<List<ReadedOpenPositionViewModel>>(openPositions));
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var position = _openPositionService.GetById(id);
+                var position = this.openPositionService.GetById(id);
 
                 if (position == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                var vm = _mapper.Map<ReadedOpenPositionViewModel>(position);
+                var vm = this.mapper.Map<ReadedOpenPositionViewModel>(position);
 
-                return Accepted(vm);
+                return this.Accepted(vm);
             });
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]CreateOpenPositionViewModel vm)
+        public IActionResult Post([FromBody] CreateOpenPositionViewModel vm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateOpenPositionContract>(vm);
-                var returnContract = _openPositionService.Create(contract);
+                var contract = this.mapper.Map<CreateOpenPositionContract>(vm);
+                var returnContract = this.openPositionService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedOpenPositionViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedOpenPositionViewModel>(returnContract));
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UpdateOpenPositionViewModel vm)
+        public IActionResult Put(int id, [FromBody] UpdateOpenPositionViewModel vm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateOpenPositionContract>(vm);
+                var contract = this.mapper.Map<UpdateOpenPositionContract>(vm);
                 contract.Id = id;
-                _openPositionService.Update(contract);
+                this.openPositionService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _openPositionService.Delete(id);
-                return Accepted();
+                this.openPositionService.Delete(id);
+                return this.Accepted();
             });
         }
     }

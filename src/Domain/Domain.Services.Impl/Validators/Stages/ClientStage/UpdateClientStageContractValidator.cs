@@ -1,18 +1,18 @@
-﻿using Domain.Services.Contracts.Stage;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// <copyright file="UpdateClientStageContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Stages.ClientStage
 {
+    using Domain.Services.Contracts.Stage;
+    using FluentValidation;
+
     public class UpdateClientStageContractValidator : AbstractValidator<UpdateClientStageContract>
     {
         public UpdateClientStageContractValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETUPDATE, () =>
             {
-
             });
         }
     }

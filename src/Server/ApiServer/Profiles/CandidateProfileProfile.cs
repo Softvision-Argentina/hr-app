@@ -1,18 +1,21 @@
-﻿using ApiServer.Contracts.CandidateProfile;
-using ApiServer.Profiles;
-using Domain.Services.Contracts.CandidateProfile;
+﻿// <copyright file="CandidateProfileProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.CandidateProfiles
 {
+    using ApiServer.Contracts.CandidateProfile;
+    using ApiServer.Profiles;
+    using Domain.Services.Contracts.CandidateProfile;
+
     public class CandidateProfileProfile : CandidateProfile
     {
         public CandidateProfileProfile()
         {
-            CreateMap<CreateCandidateProfileViewModel, CreateCandidateProfileContract>();
-            CreateMap<CreatedCandidateProfileContract, CreatedCandidateProfileViewModel>();
-            CreateMap<ReadedCandidateProfileContract, ReadedCandidateProfileViewModel>();
-            CreateMap<UpdateCandidateProfileViewModel, UpdateCandidateProfileContract>();
+            this.CreateMap<CreateCandidateProfileViewModel, CreateCandidateProfileContract>();
+            this.CreateMap<CreatedCandidateProfileContract, CreatedCandidateProfileViewModel>();
+            this.CreateMap<ReadedCandidateProfileContract, ReadedCandidateProfileViewModel>();
+            this.CreateMap<UpdateCandidateProfileViewModel, UpdateCandidateProfileContract>();
         }
-
     }
 }

@@ -1,8 +1,12 @@
-﻿using System;
-using System.Reflection;
+﻿// <copyright file="DataFactory.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Persistance.EF.Extensions
 {
+    using System;
+    using System.Reflection;
+
     public static class DataFactory
     {
         public static bool HasProperty(this Type obj, string propertyName)
@@ -10,15 +14,15 @@ namespace Persistance.EF.Extensions
             return obj.GetProperty(propertyName) != null;
         }
 
-        private static readonly Random rnd = new Random();
+        private static readonly Random Rnd = new Random();
 
         /// <summary>
-        /// Attempts to create a valid instance of a given class T. In case it cannot resolve a 
-        /// dummy data for a given property, it set it to the default value of object (null)
+        /// Attempts to create a valid instance of a given class T. In case it cannot resolve a
+        /// dummy data for a given property, it set it to the default value of object (null).
         /// </summary>
-        /// <typeparam name="T">The type of the class to be instantiated</typeparam>
-        /// <returns>Instance of the supplied class, filled with dummy data</returns>
-        public static T  CreateInstance<T>() 
+        /// <typeparam name="T">The type of the class to be instantiated.</typeparam>
+        /// <returns>Instance of the supplied class, filled with dummy data.</returns>
+        public static T CreateInstance<T>()
         {
             try
             {
@@ -30,12 +34,13 @@ namespace Persistance.EF.Extensions
                     DataManipulator.FillObjectPropertiesWithData(typeCode, prop, ref obj);
                 }
 
-                if ((obj.GetType()).HasProperty("Id"))
+                if (obj.GetType().HasProperty("Id"))
+                {
                     obj.WithPropertyValue("Id", null);
+                }
 
                 return (T)Convert.ChangeType(obj, typeof(T));
             }
-
             catch (Exception)
             {
                 return default(T);
@@ -43,12 +48,12 @@ namespace Persistance.EF.Extensions
         }
 
         /// <summary>
-        /// Fill the given object property with specific data supplied. Can be chained up to create a specific instance of an object
+        /// Fill the given object property with specific data supplied. Can be chained up to create a specific instance of an object.
         /// </summary>
-        /// <typeparam name="T">The type of the class to be instantiated</typeparam>
-        /// <param name="obj">The object whose properties will be changed by this method</param>
-        /// <param name="propertyName">Property name of the property that would be updated with a new value</param>
-        /// <param name="propertyValue">Value that would be set</param>
+        /// <typeparam name="T">The type of the class to be instantiated.</typeparam>
+        /// <param name="obj">The object whose properties will be changed by this method.</param>
+        /// <param name="propertyName">Property name of the property that would be updated with a new value.</param>
+        /// <param name="propertyValue">Value that would be set.</param>
         /// <returns></returns>
         public static T WithPropertyValue<T>(this T obj, string propertyName, object propertyValue)
         {
@@ -61,7 +66,9 @@ namespace Persistance.EF.Extensions
 
                 var prop = obj.GetType().GetProperty(propertyName);
                 if (prop != null)
+                {
                     prop.SetValue(obj, propertyValue);
+                }
 
                 return obj;
             }
@@ -75,7 +82,6 @@ namespace Persistance.EF.Extensions
         {
             public static void FillObjectPropertiesWithData(TypeCode typeCode, PropertyInfo prop, ref object obj)
             {
-
                 switch (typeCode)
                 {
                     case TypeCode.String:
@@ -98,20 +104,24 @@ namespace Persistance.EF.Extensions
                         break;
                 }
             }
+
             public static DateTime GetValidDateTime()
             {
                 var start = new DateTime(1950, 1, 1);
                 int range = (DateTime.Today - start).Days;
-                return start.AddDays(rnd.Next(range));
+                return start.AddDays(Rnd.Next(range));
             }
+
             public static double GetValidDecimal()
             {
-                return rnd.NextDouble();
+                return Rnd.NextDouble();
             }
+
             public static int GetValidNumber()
             {
-                return rnd.Next(1, 100);
+                return Rnd.Next(1, 100);
             }
+
             public static string GetValidString()
             {
                 return $"{Guid.NewGuid()}";

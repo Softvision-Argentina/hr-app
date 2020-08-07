@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="StageException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Stage
 {
+    using System;
+    using Core;
+
     public class StageException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Stage;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Stage
         public DeleteStageNotFoundException(int stageId)
             : base($"Stage not found for the StageId: {stageId}")
         {
-            StageId = stageId;
+            this.StageId = stageId;
         }
 
         public int StageId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Stage
         public StageDeletedException(int stageId, string name)
             : base($"The stage {name} was deleted")
         {
-            StageId = stageId;
-            Name = name;
+            this.StageId = stageId;
+            this.Name = name;
         }
 
         public int StageId { get; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Stage
         public UpdateStageNotFoundException(int stageId, Guid clientSystemId)
             : base($"Stage {stageId} and Client System Id {clientSystemId} was not found.")
         {
-            StageId = stageId;
-            ClientSystemId = clientSystemId;
+            this.StageId = stageId;
+            this.ClientSystemId = clientSystemId;
         }
-  
+
         public int StageId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Stage
         public UpdateHasNotChangesException(int stageId, Guid clientSystemId, string name)
             : base($"Stage {name} has not changes.")
         {
-            StageId = stageId;
-            ClientSystemId = clientSystemId;
+            this.StageId = stageId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int StageId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.Stage
 
         public StageNotFoundException(int stageId) : base($"The Stage {stageId} was not found.")
         {
-            StageId = stageId;
+            this.StageId = stageId;
         }
 
         public int StageId { get; }

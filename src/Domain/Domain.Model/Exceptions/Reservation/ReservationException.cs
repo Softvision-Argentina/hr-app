@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="ReservationException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Reservation
 {
+    using System;
+    using Core;
+
     public class ReservationException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Reservation;
@@ -28,7 +32,7 @@ namespace Domain.Model.Exceptions.Reservation
         public DeleteReservationNotFoundException(int reservationId)
             : base($"Reservation not found for the ReservationId: {reservationId}")
         {
-            ReservationId = reservationId;
+            this.ReservationId = reservationId;
         }
 
         public int ReservationId { get; set; }
@@ -41,11 +45,12 @@ namespace Domain.Model.Exceptions.Reservation
         public ReservationDeletedException(int id, string name)
             : base($"The Reservation {name} was deleted")
         {
-            ReservationId = id;
-            Name = name;
+            this.ReservationId = id;
+            this.Name = name;
         }
 
         public int ReservationId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Reservation
         public UpdateReservationNotFoundException(int reservationId, Guid clientSystemId)
             : base($"Reservation {reservationId} and Client System Id {clientSystemId} was not found.")
         {
-            ReservationId = reservationId;
-            ClientSystemId = clientSystemId;
+            this.ReservationId = reservationId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int ReservationId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -81,11 +87,12 @@ namespace Domain.Model.Exceptions.Reservation
         public UpdateHasNotChangesException(int reservationId, Guid clientSystemId, string name)
             : base($"Reservation {name} has not changes.")
         {
-            ReservationId = reservationId;
-            ClientSystemId = clientSystemId;
+            this.ReservationId = reservationId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int ReservationId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -95,7 +102,7 @@ namespace Domain.Model.Exceptions.Reservation
 
         public ReservationNotFoundException(int reservationId) : base($"The Reservation {reservationId} was not found.")
         {
-            ReservationId = reservationId;
+            this.ReservationId = reservationId;
         }
 
         public int ReservationId { get; }

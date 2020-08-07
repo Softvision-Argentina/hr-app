@@ -1,44 +1,44 @@
-﻿using Domain.Services.Contracts.CandidateProfile;
-using Domain.Services.Contracts.Community;
-using Domain.Services.Contracts.User;
-using Domain.Services.Impl.Validators.Candidate;
-using FluentValidation.TestHelper;
-using System;
-using Xunit;
+﻿// <copyright file="UpdateCandidateContractValidatorTester.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Validators.Candidate
 {
+    using Domain.Services.Impl.Validators.Candidate;
+    using FluentValidation.TestHelper;
+    using Xunit;
+
     public class UpdateCandidateContractValidatorTester
     {
         private readonly UpdateCandidateContractValidator validator;
 
         public UpdateCandidateContractValidatorTester()
         {
-            validator = new UpdateCandidateContractValidator();
+            this.validator = new UpdateCandidateContractValidator();
         }
 
         [Fact(DisplayName = "Verify that throws error when Name string is null")]
         public void Should_Have_Error_When_Name_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, (string) null);
+            this.validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.Name, (string)null);
         }
 
         [Fact(DisplayName = "Verify that throws error when Name string is empty")]
         public void Should_Have_Error_When_Name_Is_Blank()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.Name, String.Empty);
+            this.validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.Name, string.Empty);
         }
 
         [Fact(DisplayName = "Verify that throws error when LastName string is null")]
         public void Should_Have_Error_When_LastName_Is_Null()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, (string) null);
+            this.validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.LastName, (string)null);
         }
 
         [Fact(DisplayName = "Verify that throws error when LastName string is empty")]
         public void Should_Have_Error_When_LastName_Is_Blank()
         {
-            validator.ShouldHaveValidationErrorFor(CandidateContract => CandidateContract.LastName, String.Empty);
+            this.validator.ShouldHaveValidationErrorFor(candidateContract => candidateContract.LastName, string.Empty);
         }
     }
 }

@@ -1,34 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="BusinessException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class BusinessException : Exception
     {
         protected virtual int MainErrorCode => (int)ApplicationErrorMainCodes.Generic;
 
         protected virtual int SubErrorCode => 0;
 
-        public int ErrorCode => MainErrorCode + SubErrorCode;
+        public int ErrorCode => this.MainErrorCode + this.SubErrorCode;
 
         public BusinessException(string message)
-            : base(string.IsNullOrWhiteSpace(message) ? "There is an business related error" : message) { }
+            : base(string.IsNullOrWhiteSpace(message) ? "There is an business related error" : message)
+        {
+        }
 
-        public BusinessException(string message, Exception exception) : base(message, exception) { }
+        public BusinessException(string message, Exception exception) : base(message, exception)
+        {
+        }
     }
 
     public class BusinessValidationException : BusinessException
     {
-        List<KeyValuePair<string, string>> _validationMessages;
-        public IReadOnlyList<KeyValuePair<string, string>> ValidationMessages => _validationMessages.AsReadOnly();
+        private readonly List<KeyValuePair<string, string>> validationMessages;
+
+        public IReadOnlyList<KeyValuePair<string, string>> ValidationMessages => this.validationMessages.AsReadOnly();
 
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Validation;
 
         public BusinessValidationException(IEnumerable<KeyValuePair<string, string>> validationMessages)
             : base(string.Join("\r\n", validationMessages.Select(vm => vm.Value)))
         {
-            _validationMessages = validationMessages.ToList();
+            this.validationMessages = validationMessages.ToList();
         }
     }
 }

@@ -1,29 +1,32 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Exceptions.Community;
-using Domain.Model.Exceptions.Office;
-using Domain.Services.Contracts.OpenPositions;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.OpenPosition;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="OpenPositionService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Exceptions.Community;
+    using Domain.Services.Contracts.OpenPositions;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.OpenPosition;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+
     public class OpenPositionService : IOpenPositionService
     {
-        private readonly IRepository<OpenPosition> _openPositionRepository;
-        private readonly IRepository<Community> _communityRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly ILog<OpenPosition> _log;
-        private readonly UpdateOpenPositionContractValidator _updateValidator;
-        private readonly CreateOpenPositionContractValidator _createValidator;
+        private readonly IRepository<OpenPosition> openPositionRepository;
+        private readonly IRepository<Community> communityRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+        private readonly ILog<OpenPosition> log;
+        private readonly UpdateOpenPositionContractValidator updateValidator;
+        private readonly CreateOpenPositionContractValidator createValidator;
 
         public OpenPositionService(
             IRepository<OpenPosition> openPositionRepository,
@@ -32,90 +35,90 @@ namespace Domain.Services.Impl.Services
             ILog<OpenPosition> log,
             IMapper mapper,
             UpdateOpenPositionContractValidator updateValidator,
-            CreateOpenPositionContractValidator createValidator
-            )
+            CreateOpenPositionContractValidator createValidator)
         {
-            _openPositionRepository = openPositionRepository;
-            _communityRepository = communityRepository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _log = log;
-            _updateValidator = updateValidator;
-            _createValidator = createValidator;
+            this.openPositionRepository = openPositionRepository;
+            this.communityRepository = communityRepository;
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
+            this.log = log;
+            this.updateValidator = updateValidator;
+            this.createValidator = createValidator;
         }
 
         public CreatedOpenPositionContract Create(CreateOpenPositionContract openPosition)
         {
-            _log.LogInformation($"Validating contract {openPosition.Title}");
-            ValidateContract(openPosition);
+            this.log.LogInformation($"Validating contract {openPosition.Title}");
+            this.ValidateContract(openPosition);
 
-            _log.LogInformation($"Mapping contract {openPosition.Title}");
-            var position = _mapper.Map<OpenPosition>(openPosition);
+            this.log.LogInformation($"Mapping contract {openPosition.Title}");
+            var position = this.mapper.Map<OpenPosition>(openPosition);
 
-            AddCommunityToPosition(position, openPosition.Community.Id);
+            this.AddCommunityToPosition(position, openPosition.Community.Id);
 
-            var createdPosition = _openPositionRepository.Create(position);
-            _log.LogInformation($"Complete for {openPosition.Title}");
+            var createdPosition = this.openPositionRepository.Create(position);
+            this.log.LogInformation($"Complete for {openPosition.Title}");
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
 
-            _log.LogInformation($"Return {openPosition.Title}");
+            this.log.LogInformation($"Return {openPosition.Title}");
 
-            return _mapper.Map<CreatedOpenPositionContract>(createdPosition);
+            return this.mapper.Map<CreatedOpenPositionContract>(createdPosition);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching candidate {id}");
-            var position = _openPositionRepository.Query().FirstOrDefault(p => p.Id == id);
+            this.log.LogInformation($"Searching candidate {id}");
+            var position = this.openPositionRepository.Query().FirstOrDefault(p => p.Id == id);
 
             if (position == null)
             {
                 throw new Exception("Position not found");
             }
 
-            _log.LogInformation($"Deleting position {id}");
-            _openPositionRepository.Delete(position);
+            this.log.LogInformation($"Deleting position {id}");
+            this.openPositionRepository.Delete(position);
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public IEnumerable<ReadedOpenPositionContract> Get()
         {
-            var positions = _openPositionRepository.QueryEager().ToList();
+            var positions = this.openPositionRepository.QueryEager().ToList();
 
-            return _mapper.Map<List<ReadedOpenPositionContract>>(positions);
+            return this.mapper.Map<List<ReadedOpenPositionContract>>(positions);
         }
 
         public ReadedOpenPositionContract GetById(int id)
         {
-            var position = _openPositionRepository.QueryEager().Where(c => c.Id == id).FirstOrDefault();
+            var position = this.openPositionRepository.QueryEager().Where(c => c.Id == id).FirstOrDefault();
 
-            return _mapper.Map<ReadedOpenPositionContract>(position);
+            return this.mapper.Map<ReadedOpenPositionContract>(position);
         }
 
         public void Update(UpdateOpenPositionContract openPosition)
         {
-            _log.LogInformation($"Validating contract {openPosition.Title}");
-            ValidateContract(openPosition);
+            this.log.LogInformation($"Validating contract {openPosition.Title}");
+            this.ValidateContract(openPosition);
 
-            _log.LogInformation($"Mapping contract {openPosition.Title}");
-            var position = _mapper.Map<OpenPosition>(openPosition);
+            this.log.LogInformation($"Mapping contract {openPosition.Title}");
+            var position = this.mapper.Map<OpenPosition>(openPosition);
 
-            AddCommunityToPosition(position, openPosition.Community.Id);
+            this.AddCommunityToPosition(position, openPosition.Community.Id);
 
-            _openPositionRepository.Update(position);
-            _log.LogInformation($"Complete for {openPosition.Title}");
+            this.openPositionRepository.Update(position);
+            this.log.LogInformation($"Complete for {openPosition.Title}");
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         private void ValidateContract(CreateOpenPositionContract openPosition)
         {
             try
             {
-                _createValidator.ValidateAndThrow(openPosition,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createValidator.ValidateAndThrow(
+                    openPosition,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -127,8 +130,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateValidator.ValidateAndThrow(openPosition,
-                    $"{ValidatorConstants.RULESET_UPDATE}");
+                this.updateValidator.ValidateAndThrow(
+                    openPosition,
+                    $"{ValidatorConstants.RULESETUPDATE}");
             }
             catch (ValidationException ex)
             {
@@ -138,10 +142,12 @@ namespace Domain.Services.Impl.Services
 
         private void AddCommunityToPosition(OpenPosition position, int communityId)
         {
-            var community = _communityRepository.Query().Where(c => c.Id == communityId).FirstOrDefault();
+            var community = this.communityRepository.Query().Where(c => c.Id == communityId).FirstOrDefault();
 
             if (community == null)
+            {
                 throw new CommunityNotFoundException(communityId);
+            }
 
             position.Community = community;
         }

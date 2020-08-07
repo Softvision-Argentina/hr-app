@@ -1,87 +1,91 @@
-﻿using System.Collections.Generic;
-using ApiServer.Contracts.Role;
-using AutoMapper;
-using Core;
-using Domain.Services.Contracts.Role;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="RoleController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using System.Collections.Generic;
+    using ApiServer.Contracts.Role;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Contracts.Role;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     public class RoleController : BaseController<RoleController>
     {
-        private readonly IRoleService _roleService;
-        private readonly IMapper _mapper;
+        private readonly IRoleService roleService;
+        private readonly IMapper mapper;
 
         public RoleController(
             IRoleService roleService,
             ILog<RoleController> logger,
             IMapper mapper) : base(logger)
         {
-            _roleService = roleService;
-            _mapper = mapper;
+            this.roleService = roleService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var roles = _roleService.List();
+                var roles = this.roleService.List();
 
-                return Accepted(_mapper.Map<List<ReadedRoleViewModel>>(roles));
+                return this.Accepted(this.mapper.Map<List<ReadedRoleViewModel>>(roles));
             });
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody]CreateRoleViewModel createRoleVm)
+        public IActionResult Add([FromBody] CreateRoleViewModel createRoleVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<CreateRoleContract>(createRoleVm);
-                var returnContract = _roleService.Create(contract);
+                var contract = this.mapper.Map<CreateRoleContract>(createRoleVm);
+                var returnContract = this.roleService.Create(contract);
 
-                return Created("Get", _mapper.Map<CreatedRoleViewModel>(returnContract));
+                return this.Created("Get", this.mapper.Map<CreatedRoleViewModel>(returnContract));
             });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                _roleService.Delete(id);
-                return Accepted();
+                this.roleService.Delete(id);
+                return this.Accepted();
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UpdateRoleViewModel updateRoleVm)
+        public IActionResult Update(int id, [FromBody] UpdateRoleViewModel updateRoleVm)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var contract = _mapper.Map<UpdateRoleContract>(updateRoleVm);
+                var contract = this.mapper.Map<UpdateRoleContract>(updateRoleVm);
                 contract.Id = id;
-                _roleService.Update(contract);
+                this.roleService.Update(contract);
 
-                return Accepted(new { id });
+                return this.Accepted(new { id });
             });
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var role = _roleService.Read(id);
+                var role = this.roleService.Read(id);
 
                 if (role == null)
                 {
-                    return NotFound(id);
+                    return this.NotFound(id);
                 }
 
-                return Accepted(_mapper.Map<ReadedRoleViewModel>(role));
+                return this.Accepted(this.mapper.Map<ReadedRoleViewModel>(role));
             });
         }
     }

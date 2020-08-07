@@ -1,98 +1,102 @@
-﻿using ApiServer.Contracts.User;
-using AutoMapper;
-using Core;
-using Domain.Services.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿// <copyright file="UserController.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Controllers
 {
+    using ApiServer.Contracts.User;
+    using AutoMapper;
+    using Core;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : BaseController<UserController>
     {
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+        private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public UserController(
             IUserService userService,
             ILog<UserController> logger,
             IMapper mapper) : base(logger)
         {
-            _userService = userService;
-            _mapper = mapper;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
-        //Todo: convention over configuration
+        // Todo: convention over configuration
         [HttpGet("GetRoleByUserName/{username}")]
         public IActionResult GetRoleByUserName(string username)
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var userRole = _userService.GetUserRole(username);
+                var userRole = this.userService.GetUserRole(username);
 
                 if (userRole == null)
                 {
-                    return NotFound(username);
+                    return this.NotFound(username);
                 }
 
-                var vm = _mapper.Map<ReadedUserRoleViewModel>(userRole);
-                return Accepted(vm);
+                var vm = this.mapper.Map<ReadedUserRoleViewModel>(userRole);
+                return this.Accepted(vm);
             });
         }
 
         [HttpGet("GetFilteredForTech")]
         public IActionResult GetFilteredForTech()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var users = _userService.GetFilteredForTech();
+                var users = this.userService.GetFilteredForTech();
 
                 if (users == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                return Accepted(users);
+                return this.Accepted(users);
             });
         }
 
         [HttpGet("GetFilteredForHr")]
         public IActionResult GetFilteredForHr()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var users = _userService.GetFilteredForHr();
+                var users = this.userService.GetFilteredForHr();
 
                 if (users == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                return Accepted(users);
+                return this.Accepted(users);
             });
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return ApiAction(() =>
+            return this.ApiAction(() =>
             {
-                var users = _userService.GetAll();
+                var users = this.userService.GetAll();
 
                 if (users == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
                 var vm = users;
-                return Accepted(vm);
+                return this.Accepted(vm);
             });
         }
 
         [HttpGet("Ping")]
         public IActionResult Ping()
         {
-            return Ok(new { Status = "OK" });
+            return this.Ok(new { Status = "OK" });
         }
     }
 }

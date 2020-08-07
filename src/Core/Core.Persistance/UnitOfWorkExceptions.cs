@@ -1,9 +1,11 @@
-﻿using System;
+﻿// <copyright file="UnitOfWorkExceptions.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
-// TODO: Change namespace to match folder/project structure,
-// or change location of this class to a new "Exceptions" folder or project.
 namespace Core.Persistance.Exceptions
 {
+    using System;
+
     public class UnitOfWorkException : Exception
     {
         public UnitOfWorkException()
@@ -48,7 +50,6 @@ namespace Core.Persistance.Exceptions
         public CannotOpenTransactionException()
             : base("Cannot Open Transaction", null)
         {
-
         }
     }
 

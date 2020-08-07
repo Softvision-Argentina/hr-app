@@ -1,16 +1,20 @@
-﻿using MimeKit;
+﻿// <copyright file="MessageText.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Mailer.Entities
 {
+    using MimeKit;
+
     public class MessageText : TextPart
     {
-        public MessageText() 
+        public MessageText()
         {
         }
 
-        public MessageText(string text) 
+        public MessageText(string text)
         {
-            Text = text;
+            this.Text = text;
         }
     }
 }

@@ -1,25 +1,29 @@
-﻿using AutoMapper;
-using Domain.Model;
-using Domain.Services.Contracts.OpenPositions;
+﻿// <copyright file="OpenPositionProfile.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Profiles
 {
+    using AutoMapper;
+    using Domain.Model;
+    using Domain.Services.Contracts.OpenPositions;
+
     public class OpenPositionProfile : Profile
     {
         public OpenPositionProfile()
         {
-            CreateMap<OpenPosition, ReadedOpenPositionContract>()
+            this.CreateMap<OpenPosition, ReadedOpenPositionContract>()
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community));
 
-            CreateMap<CreateOpenPositionContract, OpenPosition>()
+            this.CreateMap<CreateOpenPositionContract, OpenPosition>()
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community));
 
-            CreateMap<OpenPosition, CreateOpenPositionContract>()
+            this.CreateMap<OpenPosition, CreateOpenPositionContract>()
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community));
 
-            CreateMap<OpenPosition, CreatedOpenPositionContract>();
+            this.CreateMap<OpenPosition, CreatedOpenPositionContract>();
 
-            CreateMap<UpdateOpenPositionContract, OpenPosition>()
+            this.CreateMap<UpdateOpenPositionContract, OpenPosition>()
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community));
         }
     }

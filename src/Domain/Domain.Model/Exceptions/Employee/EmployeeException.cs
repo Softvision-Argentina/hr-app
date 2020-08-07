@@ -1,8 +1,12 @@
-﻿using Core;
-using System;
+﻿// <copyright file="EmployeeException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.Employee
 {
+    using System;
+    using Core;
+
     public class EmployeeException : BusinessException
     {
         protected override int MainErrorCode => (int)ApplicationErrorMainCodes.Employee;
@@ -38,7 +42,7 @@ namespace Domain.Model.Exceptions.Employee
         public DeleteEmployeeNotFoundException(int employeeId)
             : base($"Employee not found for the UserId: {employeeId}")
         {
-            EmployeeId = employeeId;
+            this.EmployeeId = employeeId;
         }
 
         public int EmployeeId { get; set; }
@@ -51,11 +55,12 @@ namespace Domain.Model.Exceptions.Employee
         public EmployeeDeletedException(int id, string name)
             : base($"The employee {name} was deleted")
         {
-            EmployeeId = id;
-            Name = name;
+            this.EmployeeId = id;
+            this.Name = name;
         }
 
         public int EmployeeId { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -66,11 +71,12 @@ namespace Domain.Model.Exceptions.Employee
         public UpdateEmployeeNotFoundException(int employeeId, Guid clientSystemId)
             : base($"User {employeeId} and Client System Id {clientSystemId} was not found.")
         {
-            EmployeeId = employeeId;
-            ClientSystemId = clientSystemId;
+            this.EmployeeId = employeeId;
+            this.ClientSystemId = clientSystemId;
         }
 
         public int EmployeeId { get; }
+
         public Guid ClientSystemId { get; }
     }
 
@@ -80,10 +86,9 @@ namespace Domain.Model.Exceptions.Employee
 
         public EmployeeNotFoundException(int employeeId) : base($"The Employee {employeeId} was not found.")
         {
-            EmployeeId = employeeId;
+            this.EmployeeId = employeeId;
         }
 
         public int EmployeeId { get; }
     }
-
 }

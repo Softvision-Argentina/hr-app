@@ -1,29 +1,33 @@
-﻿using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Model.Enum;
-using Domain.Model.Exceptions.DaysOff;
-using Domain.Services.Contracts.DaysOff;
-using Domain.Services.Impl.Validators;
-using Domain.Services.Impl.Validators.DaysOff;
-using Domain.Services.Interfaces.Services;
-using FluentValidation;
-using Google.Apis.Calendar.v3.Data;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="DaysOffService.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Model.Enum;
+    using Domain.Model.Exceptions.DaysOff;
+    using Domain.Services.Contracts.DaysOff;
+    using Domain.Services.Impl.Validators;
+    using Domain.Services.Impl.Validators.DaysOff;
+    using Domain.Services.Interfaces.Services;
+    using FluentValidation;
+    using Google.Apis.Calendar.v3.Data;
+
     public class DaysOffService : IDaysOffService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<DaysOff> _daysOffRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILog<DaysOffService> _log;
-        private readonly IGoogleCalendarService _googleCalendarService;
-        private readonly UpdateDaysOffContractValidator _updateDaysOffContractValidator;
-        private readonly CreateDaysOffContractValidator _createDaysOffContractValidator;
+        private readonly IMapper mapper;
+        private readonly IRepository<DaysOff> daysOffRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly ILog<DaysOffService> log;
+        private readonly IGoogleCalendarService googleCalendarService;
+        private readonly UpdateDaysOffContractValidator updateDaysOffContractValidator;
+        private readonly CreateDaysOffContractValidator createDaysOffContractValidator;
 
         public DaysOffService(
             IMapper mapper,
@@ -32,34 +36,33 @@ namespace Domain.Services.Impl.Services
             ILog<DaysOffService> log,
             IGoogleCalendarService googleCalendarService,
             UpdateDaysOffContractValidator updateDaysOffContractValidator,
-            CreateDaysOffContractValidator createDaysOffContractValidator
-            )
+            CreateDaysOffContractValidator createDaysOffContractValidator)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _daysOffRepository = daysOffRepository;
-            _log = log;
-            _updateDaysOffContractValidator = updateDaysOffContractValidator;
-            _createDaysOffContractValidator = createDaysOffContractValidator;
-            _googleCalendarService = googleCalendarService;
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
+            this.daysOffRepository = daysOffRepository;
+            this.log = log;
+            this.updateDaysOffContractValidator = updateDaysOffContractValidator;
+            this.createDaysOffContractValidator = createDaysOffContractValidator;
+            this.googleCalendarService = googleCalendarService;
         }
 
         public IEnumerable<ReadedDaysOffContract> List()
         {
-            var daysOffQuery = _daysOffRepository.QueryEager();
+            var daysOffQuery = this.daysOffRepository.QueryEager();
 
             var daysOffs = daysOffQuery.ToList();
 
-            return _mapper.Map<List<ReadedDaysOffContract>>(daysOffs);
+            return this.mapper.Map<List<ReadedDaysOffContract>>(daysOffs);
         }
 
         public CreatedDaysOffContract Create(CreateDaysOffContract contract)
         {
-            ValidateContract(contract);
+            this.ValidateContract(contract);
 
-            var daysOff = _mapper.Map<DaysOff>(contract);
+            var daysOff = this.mapper.Map<DaysOff>(contract);
 
-            var createdDaysOff = _daysOffRepository.Create(daysOff);
+            var createdDaysOff = this.daysOffRepository.Create(daysOff);
 
             if (daysOff.Status == Model.Enum.DaysOffStatus.Accepted)
             {
@@ -68,37 +71,38 @@ namespace Domain.Services.Impl.Services
                 createdDaysOff.GoogleCalendarEventId = googleCalendarEventId;
             }
 
-            _unitOfWork.Complete();
-            return _mapper.Map<CreatedDaysOffContract>(createdDaysOff);
+            this.unitOfWork.Complete();
+            return this.mapper.Map<CreatedDaysOffContract>(createdDaysOff);
         }
 
         public void Delete(int id)
         {
-            _log.LogInformation($"Searching days Off {id}");
-            DaysOff daysOff = _daysOffRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
+            this.log.LogInformation($"Searching days Off {id}");
+            DaysOff daysOff = this.daysOffRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
 
             if (daysOff == null)
             {
                 throw new DeleteDaysOffNotFoundException(id);
             }
-            _log.LogInformation($"Deleting days Off {id}");
-            _daysOffRepository.Delete(daysOff);
 
-            if (string.IsNullOrEmpty(daysOff.GoogleCalendarEventId) && !DeleteEventInGoogleCalendar(daysOff))
+            this.log.LogInformation($"Deleting days Off {id}");
+            this.daysOffRepository.Delete(daysOff);
+
+            if (string.IsNullOrEmpty(daysOff.GoogleCalendarEventId) && !this.DeleteEventInGoogleCalendar(daysOff))
             {
-                _log.LogInformation($"Could not delete google calendar event for days off {id}");
+                this.log.LogInformation($"Could not delete google calendar event for days off {id}");
             }
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public void Update(UpdateDaysOffContract contract)
         {
-            ValidateContract(contract);
+            this.ValidateContract(contract);
 
-            var daysOff = _mapper.Map<DaysOff>(contract);
+            var daysOff = this.mapper.Map<DaysOff>(contract);
 
-            var updatedDaysOff = _daysOffRepository.Update(daysOff);
+            var updatedDaysOff = this.daysOffRepository.Update(daysOff);
 
             if (daysOff.Status == Model.Enum.DaysOffStatus.Accepted)
             {
@@ -107,12 +111,12 @@ namespace Domain.Services.Impl.Services
                 updatedDaysOff.GoogleCalendarEventId = googleCalendarEventId;
             }
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public void AcceptPetition(int id)
         {
-            var daysOff = _daysOffRepository.Query().FirstOrDefault(_ => _.Id == id);
+            var daysOff = this.daysOffRepository.Query().FirstOrDefault(_ => _.Id == id);
 
             if (daysOff == null)
             {
@@ -120,40 +124,41 @@ namespace Domain.Services.Impl.Services
             }
 
             daysOff.Status = DaysOffStatus.Accepted;
-            var updatedDaysOff = _daysOffRepository.Update(daysOff);
+            var updatedDaysOff = this.daysOffRepository.Update(daysOff);
             var googleCalendarEventId = this.AddModelToGoogleCalendar(daysOff);
 
             updatedDaysOff.GoogleCalendarEventId = googleCalendarEventId;
 
-            _unitOfWork.Complete();
+            this.unitOfWork.Complete();
         }
 
         public ReadedDaysOffContract Read(int id)
         {
-            var daysOffQuery = _daysOffRepository
+            var daysOffQuery = this.daysOffRepository
                 .QueryEager()
                 .Where(_ => _.Id == id);
 
             var daysOffResult = daysOffQuery.SingleOrDefault();
 
-            return _mapper.Map<ReadedDaysOffContract>(daysOffResult);
+            return this.mapper.Map<ReadedDaysOffContract>(daysOffResult);
         }
 
         public IEnumerable<ReadedDaysOffContract> ReadByDni(int dni)
         {
-            var daysOffQuery = _daysOffRepository
+            var daysOffQuery = this.daysOffRepository
                 .QueryEager()
                 .Where(_ => _.Employee.DNI == dni).ToList();
 
-            return _mapper.Map<List<ReadedDaysOffContract>>(daysOffQuery);
+            return this.mapper.Map<List<ReadedDaysOffContract>>(daysOffQuery);
         }
 
         private void ValidateContract(CreateDaysOffContract contract)
         {
             try
             {
-                _createDaysOffContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_CREATE}");
+                this.createDaysOffContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETCREATE}");
             }
             catch (ValidationException ex)
             {
@@ -165,8 +170,9 @@ namespace Domain.Services.Impl.Services
         {
             try
             {
-                _updateDaysOffContractValidator.ValidateAndThrow(contract,
-                    $"{ValidatorConstants.RULESET_DEFAULT}");
+                this.updateDaysOffContractValidator.ValidateAndThrow(
+                    contract,
+                    $"{ValidatorConstants.RULESETDEFAULT}");
             }
             catch (ValidationException ex)
             {
@@ -181,23 +187,23 @@ namespace Domain.Services.Impl.Services
                 Summary = ((DaysOffType)daysOff.Type).ToString(),
                 Start = new EventDateTime()
                 {
-                    DateTime = new System.DateTime(daysOff.Date.Date.Year, daysOff.Date.Date.Month, daysOff.Date.Date.Day, 8, 0, 0)
+                    DateTime = new System.DateTime(daysOff.Date.Date.Year, daysOff.Date.Date.Month, daysOff.Date.Date.Day, 8, 0, 0),
                 },
                 End = new EventDateTime()
                 {
-                    DateTime = new System.DateTime(daysOff.EndDate.Date.Year, daysOff.EndDate.Date.Month, daysOff.EndDate.Date.Day, 8, 0, 0)
+                    DateTime = new System.DateTime(daysOff.EndDate.Date.Year, daysOff.EndDate.Date.Month, daysOff.EndDate.Date.Day, 8, 0, 0),
                 },
-                Attendees = new List<EventAttendee>()
+                Attendees = new List<EventAttendee>(),
             };
 
-            newEvent.Attendees.Add(new EventAttendee() { Email = daysOff.Employee.EmailAddress });            
+            newEvent.Attendees.Add(new EventAttendee() { Email = daysOff.Employee.EmailAddress });
 
-            return _googleCalendarService.CreateEvent(newEvent);
+            return this.googleCalendarService.CreateEvent(newEvent);
         }
 
         public bool DeleteEventInGoogleCalendar(DaysOff daysOff)
         {
-            return _googleCalendarService.DeleteEvent(daysOff.GoogleCalendarEventId);
+            return this.googleCalendarService.DeleteEvent(daysOff.GoogleCalendarEventId);
         }
     }
 }

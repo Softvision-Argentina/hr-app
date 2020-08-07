@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20200529175207_Tenth.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace ApiServer.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Tenth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +29,7 @@ namespace ApiServer.Migrations
                     PreOfferDate = table.Column<DateTime>(nullable: true),
                     Salary = table.Column<float>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    ProcessId = table.Column<int>(nullable: false)
+                    ProcessId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -53,7 +57,7 @@ namespace ApiServer.Migrations
                     RejectionReason = table.Column<string>(nullable: true),
                     Salary = table.Column<float>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Version = table.Column<long>(nullable: false)
+                    Version = table.Column<long>(nullable: false),
                 },
                 constraints: table =>
                 {

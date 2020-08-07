@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// <copyright file="ContextExtension.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Persistance.EF.Extensions
 {
+    using System.Linq;
+    using Microsoft.EntityFrameworkCore;
+
     public static class ContextExtension
     {
         public static readonly string DisableTablesConstraintsCommand = "EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL' ";
@@ -36,7 +39,9 @@ namespace Persistance.EF.Extensions
                 .ToList();
 
             foreach (var entry in changedEntriesCopy)
+            {
                 entry.State = EntityState.Detached;
+            }
         }
     }
 }

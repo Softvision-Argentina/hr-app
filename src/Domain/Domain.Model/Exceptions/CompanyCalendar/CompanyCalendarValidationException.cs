@@ -1,8 +1,12 @@
-﻿using Core;
-using System.Collections.Generic;
+﻿// <copyright file="CompanyCalendarValidationException.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Model.Exceptions.CompanyCalendar
 {
+    using System.Collections.Generic;
+    using Core;
+
     public class CreateContractInvalidException : BusinessValidationException
     {
         protected override int SubErrorCode => (int)CompanyCalendarValidationExceptionCodes.CreateContractInvalid;

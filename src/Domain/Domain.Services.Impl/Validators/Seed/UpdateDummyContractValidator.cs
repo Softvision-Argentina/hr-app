@@ -1,13 +1,17 @@
-﻿using Domain.Services.Contracts.Seed;
-using FluentValidation;
+﻿// <copyright file="UpdateDummyContractValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.Seed
 {
-    public class UpdateDummyContractValidator: AbstractValidator<UpdateDummyContract>
+    using Domain.Services.Contracts.Seed;
+    using FluentValidation;
+
+    public class UpdateDummyContractValidator : AbstractValidator<UpdateDummyContract>
     {
         public UpdateDummyContractValidator()
         {
-            RuleFor(_ => _.TestValue).NotEmpty();
+            this.RuleFor(_ => _.TestValue).NotEmpty();
         }
     }
 }

@@ -18,6 +18,10 @@
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.43.0.1863" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
@@ -25,5 +29,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain.Model\Domain.Model.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,32 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Core;
-using Core.Persistance;
-using Domain.Model;
-using Domain.Services.Contracts.User;
-using Domain.Services.Impl.Services;
-using Domain.Services.Impl.UnitTests.Dummy;
-using Moq;
-using Xunit;
+﻿// <copyright file="UserServiceTest.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.UnitTests.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Core.Persistance;
+    using Domain.Model;
+    using Domain.Services.Contracts.User;
+    using Domain.Services.Impl.Services;
+    using Domain.Services.Impl.UnitTests.Dummy;
+    using Moq;
+    using Xunit;
+
     public class UserServiceTest : BaseDomainTest
     {
-        private readonly UserService _service;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IRepository<User>> _mockUserRepository;
-        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
-        private readonly Mock<ILog<UserService>> _mockLog;
+        private readonly UserService service;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<IRepository<User>> mockUserRepository;
+        private readonly Mock<IUnitOfWork> mockUnitOfWork;
+        private readonly Mock<ILog<UserService>> mockLog;
 
         public UserServiceTest()
         {
-            _mockMapper = new Mock<IMapper>();
-            _mockUserRepository = new Mock<IRepository<User>>();
-            _mockLog = new Mock<ILog<UserService>>();
-            _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new UserService(_mockMapper.Object, _mockUserRepository.Object, _mockUnitOfWork.Object, _mockLog.Object);
+            this.mockMapper = new Mock<IMapper>();
+            this.mockUserRepository = new Mock<IRepository<User>>();
+            this.mockLog = new Mock<ILog<UserService>>();
+            this.mockUnitOfWork = new Mock<IUnitOfWork>();
+            this.service = new UserService(this.mockMapper.Object, this.mockUserRepository.Object, this.mockUnitOfWork.Object, this.mockLog.Object);
         }
 
         [Fact(DisplayName = "Verify that authenticate returns ReadedUserContract when user and password is valid")]
@@ -35,23 +39,24 @@ namespace Domain.Services.Impl.UnitTests.Services
             string username = "testUser";
             string password = "testPass";
             var queryValue = new List<User>()
-                { new User()
+                {
+                    new User()
                     {
                         Username = username,
-                        Password = HashUtility.GetStringSha256Hash(password)
-                    }
+                        Password = HashUtility.GetStringSha256Hash(password),
+                    },
                 }
                 .AsQueryable();
             var expectedValue = new ReadedUserContract();
-            _mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
-            _mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
+            this.mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
+            this.mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
 
-            var readedUser = _service.Authenticate(username, password);
+            var readedUser = this.service.Authenticate(username, password);
 
             Assert.NotNull(readedUser);
             Assert.Equal(expectedValue, readedUser);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that authenticate returns null when user and password is invalid")]
@@ -60,11 +65,11 @@ namespace Domain.Services.Impl.UnitTests.Services
             string username = null;
             string password = null;
 
-            var readedUser = _service.Authenticate(username, password);
+            var readedUser = this.service.Authenticate(username, password);
 
             Assert.Null(readedUser);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(mm => mm.Map<ReadedUserContract>(It.IsAny<User>()), Times.Never);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(mm => mm.Map<ReadedUserContract>(It.IsAny<User>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that authenticate returns ReadedUserContract when user is valid")]
@@ -72,22 +77,23 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser@gmail.com";
             var queryValue = new List<User>()
-                { new User()
+                {
+                    new User()
                     {
-                        Username = username
-                    }
+                        Username = username,
+                    },
                 }
                 .AsQueryable();
             var expectedValue = new ReadedUserContract();
-            _mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
-            _mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
+            this.mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
+            this.mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
 
-            var readedUser = _service.AuthenticateExternal(username);
+            var readedUser = this.service.AuthenticateExternal(username);
 
             Assert.NotNull(readedUser);
             Assert.Equal(expectedValue, readedUser);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that authenticate returns null when user is invalid")]
@@ -95,11 +101,11 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser@gmail.com";
 
-            var readedUser = _service.AuthenticateExternal(username);
+            var readedUser = this.service.AuthenticateExternal(username);
 
             Assert.Null(readedUser);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Never);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Never);
         }
 
         [Fact(DisplayName = "Verify that get all returns ReadedUserContract list")]
@@ -107,22 +113,23 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser";
             var queryValue = new List<User>()
-                { new User()
+                {
+                    new User()
                     {
-                        Username = username
-                    }
+                        Username = username,
+                    },
                 }
                 .AsQueryable();
             var expectedValues = new List<ReadedUserContract>();
-            _mockUserRepository.Setup(_ => _.QueryEager()).Returns(queryValue);
-            _mockMapper.Setup(_ => _.Map<List<ReadedUserContract>>(It.IsAny<List<User>>())).Returns(expectedValues);
+            this.mockUserRepository.Setup(_ => _.QueryEager()).Returns(queryValue);
+            this.mockMapper.Setup(_ => _.Map<List<ReadedUserContract>>(It.IsAny<List<User>>())).Returns(expectedValues);
 
-            var readedUsers = _service.GetAll();
+            var readedUsers = this.service.GetAll();
 
             Assert.NotNull(readedUsers);
             Assert.Equal(expectedValues, readedUsers);
-            _mockUserRepository.Verify(_ => _.QueryEager(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<List<ReadedUserContract>>(It.IsAny<List<User>>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.QueryEager(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<List<ReadedUserContract>>(It.IsAny<List<User>>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that get by id returns ReadedUserContract when data is valid")]
@@ -130,22 +137,23 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             int id = 0;
             var queryValue = new List<User>()
-                { new User()
+                {
+                    new User()
                     {
-                        Id = id
-                    }
+                        Id = id,
+                    },
                 }
                 .AsQueryable();
             var expectedValue = new ReadedUserContract();
-            _mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
-            _mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
+            this.mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
+            this.mockMapper.Setup(_ => _.Map<ReadedUserContract>(It.IsAny<User>())).Returns(expectedValue);
 
-            var readedUsers = _service.GetById(id);
+            var readedUsers = this.service.GetById(id);
 
             Assert.NotNull(readedUsers);
             Assert.Equal(expectedValue, readedUsers);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that get by id returns null when data is invalid")]
@@ -153,11 +161,11 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             int id = 0;
 
-            var readedUsers = _service.GetById(id);
+            var readedUsers = this.service.GetById(id);
 
             Assert.Null(readedUsers);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserContract>(It.IsAny<User>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that get user role by user name returns ReadedUserRoleContract when data is valid")]
@@ -165,22 +173,23 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser";
             var queryValue = new List<User>()
-                { new User()
+                {
+                    new User()
                     {
-                        Username= username
-                    }
+                        Username = username,
+                    },
                 }
                 .AsQueryable();
             var expectedValue = new ReadedUserRoleContract();
-            _mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
-            _mockMapper.Setup(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>())).Returns(expectedValue);
+            this.mockUserRepository.Setup(_ => _.Query()).Returns(queryValue);
+            this.mockMapper.Setup(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>())).Returns(expectedValue);
 
-            var readedUsers = _service.GetUserRole(username);
+            var readedUsers = this.service.GetUserRole(username);
 
             Assert.NotNull(readedUsers);
             Assert.Equal(expectedValue, readedUsers);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that get user role by user name returns null when data is invalid")]
@@ -188,11 +197,11 @@ namespace Domain.Services.Impl.UnitTests.Services
         {
             string username = "testUser";
 
-            var readedUsers = _service.GetUserRole(username);
+            var readedUsers = this.service.GetUserRole(username);
 
             Assert.Null(readedUsers);
-            _mockUserRepository.Verify(_ => _.Query(), Times.Once);
-            _mockMapper.Verify(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>()), Times.Once);
+            this.mockUserRepository.Verify(_ => _.Query(), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<ReadedUserRoleContract>(It.IsAny<User>()), Times.Once);
         }
     }
 }

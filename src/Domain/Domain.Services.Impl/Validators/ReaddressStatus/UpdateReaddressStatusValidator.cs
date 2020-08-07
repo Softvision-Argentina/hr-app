@@ -1,20 +1,21 @@
-﻿using Domain.Services.Contracts.ReaddressStatus;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// <copyright file="UpdateReaddressStatusValidator.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
 
 namespace Domain.Services.Impl.Validators.ReaddressStatus
 {
-    public class UpdateReaddressStatusValidator:  AbstractValidator<UpdateReaddressStatus>
+    using Domain.Services.Contracts.ReaddressStatus;
+    using FluentValidation;
+
+    public class UpdateReaddressStatusValidator : AbstractValidator<UpdateReaddressStatus>
     {
         public UpdateReaddressStatusValidator()
         {
-            RuleSet(ValidatorConstants.RULESET_UPDATE, () =>
+            this.RuleSet(ValidatorConstants.RULESETUPDATE, () =>
             {
-                RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAX_TEXTAREA);
-                RuleFor(_ => _.FromStatus).IsInEnum();
-                RuleFor(_ => _.ToStatus).IsInEnum();
+                this.RuleFor(_ => _.Feedback).MaximumLength(ValidationConstants.MAXTEXTAREA);
+                this.RuleFor(_ => _.FromStatus).IsInEnum();
+                this.RuleFor(_ => _.ToStatus).IsInEnum();
             });
         }
     }

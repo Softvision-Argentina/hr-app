@@ -1,4 +1,8 @@
-﻿namespace Domain.Model.Exceptions.Task
+﻿// <copyright file="TaskErrorSubCodes.cs" company="Softvision">
+// Copyright (c) Softvision. All rights reserved.
+// </copyright>
+
+namespace Domain.Model.Exceptions.Task
 {
     public enum TaskErrorSubCodes
     {
@@ -8,6 +12,6 @@
         InvalidUpdate,
         UpdateTaskNotFound,
         UpdateHasNotChanges,
-        TaskNotFound
+        TaskNotFound,
     }
 }
