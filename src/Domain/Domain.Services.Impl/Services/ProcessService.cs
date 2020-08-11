@@ -168,10 +168,6 @@
             process.Status = this.SetProcessStatus(process);
             process.CurrentStage = this.SetProcessCurrentStage(process);
 
-            var userId = this.GetUser();
-
-            process.UserOwnerId = userId;
-
             if (process.HrStage.ReaddressStatus != null)
             {
                 this.readdressStatusService.Create(createProcessContract.HrStage.ReaddressStatus.ReaddressReasonId, process.HrStage.ReaddressStatus);
@@ -356,13 +352,6 @@
             var status = process.Status;
 
             this.unitOfWork.Complete();
-        }
-
-        private int GetUser()
-        {
-            var getUser = this.httpContext.HttpContext.User.Identity.Name;
-            var userId = int.Parse(getUser);
-            return userId;
         }
 
         private void ValidateDniExistance(Process process)
