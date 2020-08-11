@@ -19,6 +19,7 @@ import { forkJoin, Subscription } from 'rxjs';
 })
 export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   referralsList: ReferralListItem[] = [];
+  completeReferralsList: ReferralListItem[] = [];
   processes: Process[] = [];
   candidates: Candidate[] = [];
   currentUser: User;
@@ -26,7 +27,9 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   currentProcessStatus: any[];
   processStatusList: { id: number, name: string, value: string }[] = [];
   processesSubscription: Subscription;
-  candidateSubscription: Subscription;
+  candidateSubscription: Subscription;  
+  searchSub: Subscription;
+  referralsSubscription: Subscription = new Subscription();
 
   @Input() communities;
   @Output() editEvent = new EventEmitter();
@@ -42,6 +45,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    this.getSearchInfo();
     this.init();
   }
 
@@ -158,6 +162,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
+    this.completeReferralsList = this.referralsList;
   }
 
   getCurrentStage(currentProcess: Process) {
@@ -308,5 +313,18 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.processesSubscription.unsubscribe();
     this.candidateSubscription.unsubscribe();
+    this.referralsSubscription.unsubscribe();
+  }
+
+  getSearchInfo() {
+    this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
+
+      this.referralsList = this.completeReferralsList.filter(referral => {
+        const referralFullName = referral.candidate.name + referral.candidate.lastName;
+        const value = data.toString().toUpperCase();
+        return referralFullName.toString().toUpperCase().indexOf(value) !== -1;
+      });
+    });
+    this.referralsSubscription.add(this.searchSub);
   }
 }
