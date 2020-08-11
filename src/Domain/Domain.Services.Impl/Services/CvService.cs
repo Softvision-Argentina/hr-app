@@ -9,7 +9,6 @@
     public class CvService : ICvService
     {
         private readonly ICvRepository cvRepo;
-
         private readonly IMapper mapper;
 
         public CvService(ICvRepository cvRepo, IMapper mapper)
@@ -18,9 +17,10 @@
             this.mapper = mapper;
         }
 
-        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, Google.Apis.Drive.v3.Data.File fileUploaded)
+        public void StoreCvAndCandidateCvId(Candidate candidate, CvContractAdd cvContract, string filename)
         {
-            cvContract.UrlId = fileUploaded.WebViewLink.Replace("drivesdk", "sharing");
+            cvContract.UrlId = filename;
+
             cvContract.CandidateId = candidate.Id;
             candidate.Cv = cvContract.UrlId;
 

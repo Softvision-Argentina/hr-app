@@ -18,14 +18,14 @@
         private CvController controller;
         private Mock<ICvService> mockCvService;
         private Mock<ICandidateService> mockCandidateService;
-        private Mock<IGoogleDriveUploadService> mockGoogleDrive;
+        private Mock<IAzureUploadService> mockAzure;
 
         public CvControllerTest()
         {
             this.mockCvService = new Mock<ICvService>();
             this.mockCandidateService = new Mock<ICandidateService>();
-            this.mockGoogleDrive = new Mock<IGoogleDriveUploadService>();
-            this.controller = new CvController(this.mockCandidateService.Object, this.mockGoogleDrive.Object, this.mockCvService.Object);
+            this.mockAzure = new Mock<IAzureUploadService>();
+            this.controller = new CvController(this.mockCandidateService.Object, this.mockAzure.Object, this.mockCvService.Object);
         }
 
         [Fact(DisplayName = "Verify that method 'AddCv' returns OkObjectResult")]
@@ -33,22 +33,18 @@
         {
             var candidateId = 0;
             var cvContract = new CvContractAdd();
-            var expectedValue = "FileUploaded";
 
             this.mockCandidateService.Setup(_ => _.GetCandidate(It.IsAny<int>())).Returns(new Candidate());
-            this.mockGoogleDrive.Setup(_ => _.Authorize()).Returns(new DriveService());
-            this.mockGoogleDrive.Setup(_ => _.Upload(It.IsAny<DriveService>(), It.IsAny<IFormFile>())).Returns(new File()); // Google.Apis.Drive.v3.Data.File
-            this.mockCvService.Setup(_ => _.StoreCvAndCandidateCvId(It.IsAny<Candidate>(), It.IsAny<CvContractAdd>(), It.IsAny<File>()));
+            this.mockAzure.Setup(_ => _.Upload(It.IsAny<IFormFile>(), It.IsAny<Candidate>())).ReturnsAsync(It.IsAny<string>());
+            this.mockCvService.Setup(_ => _.StoreCvAndCandidateCvId(It.IsAny<Candidate>(), It.IsAny<CvContractAdd>(), It.IsAny<string>()));
 
             var result = this.controller.AddCv(candidateId, cvContract);
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(expectedValue, (result as OkObjectResult).Value);
             this.mockCandidateService.Verify(_ => _.GetCandidate(It.IsAny<int>()), Times.Once);
-            this.mockGoogleDrive.Verify(_ => _.Authorize(), Times.Once);
-            this.mockGoogleDrive.Verify(_ => _.Upload(It.IsAny<DriveService>(), It.IsAny<IFormFile>()), Times.Once);
-            this.mockCvService.Verify(_ => _.StoreCvAndCandidateCvId(It.IsAny<Candidate>(), It.IsAny<CvContractAdd>(), It.IsAny<File>()), Times.Once);
+            this.mockAzure.Verify(_ => _.Upload(It.IsAny<IFormFile>(), It.IsAny<Candidate>()), Times.Once);
+            this.mockCvService.Verify(_ => _.StoreCvAndCandidateCvId(It.IsAny<Candidate>(), It.IsAny<CvContractAdd>(), It.IsAny<string>()), Times.Once);
         }
     }
 }

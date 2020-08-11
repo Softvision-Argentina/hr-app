@@ -1,9 +1,10 @@
 ﻿namespace ApiServer.Controllers
 {
-    using AutoMapper;
     using Domain.Services.Contracts.Cv;
-    using Domain.Services.Interfaces.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Domain.Services.Interfaces.Services;
+    using Microsoft.AspNetCore.Cors;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]/{candidateId}")]
     [ApiController]
@@ -11,11 +12,11 @@
     {
         private readonly ICvService cvService;
         private readonly ICandidateService candidateService;
-        private readonly IGoogleDriveUploadService cvUploadService;
+        private readonly IAzureUploadService cvUploadService;
 
         public CvController(
             ICandidateService candidateService,
-            IGoogleDriveUploadService cvUploadService,
+            IAzureUploadService cvUploadService,
             ICvService cvService)
         {
             this.cvService = cvService;
@@ -24,16 +25,15 @@
         }
 
         [HttpPost]
-        public IActionResult AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
+        [EnableCors("AllowAll")]
+        public async Task<IActionResult> AddCv(int candidateId, [FromForm] CvContractAdd cvContract)
         {
             var candidate = this.candidateService.GetCandidate(candidateId);
-
             var file = cvContract.File;
-            var auth = this.cvUploadService.Authorize();
 
-            var fileUploaded = this.cvUploadService.Upload(auth, file);
+            var filename = await this.cvUploadService.Upload(file, candidate);
 
-            this.cvService.StoreCvAndCandidateCvId(candidate, cvContract, fileUploaded);
+            this.cvService.StoreCvAndCandidateCvId(candidate, cvContract, filename);
 
             return this.Ok("FileUploaded");
         }
