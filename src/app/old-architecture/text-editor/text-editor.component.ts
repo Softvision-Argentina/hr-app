@@ -10,12 +10,12 @@ export class TextEditorComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor: ElementRef;
   @ViewChild('toolbar') toolbar: ElementRef<HTMLElement>;
   @ViewChild('colorContainer') colorContainer: ElementRef<HTMLElement>;
-  
+
   @Input() isToolbarActive: boolean;
   @Input() setContent: string;
   @Input() isEditable: boolean;
-  @Output() getContent: EventEmitter<string> = new EventEmitter();  
-  
+  @Output() getContent: EventEmitter<string> = new EventEmitter();
+
   isColorContainerActive: boolean = false;
   isCreateLinkModalVisible: boolean = false;
   urlProtocol: string = "http://";
@@ -27,6 +27,8 @@ export class TextEditorComponent implements OnInit {
     length: 0,
     range: new Range()
   };
+
+  hasContent: boolean;
 
   toolbarButtons = [
     { name: "Bold", tagName: "bold", enabled: true, icon: "bold" },
@@ -51,26 +53,20 @@ export class TextEditorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.wrapperStyle();
     this.followLinkHandler();
   }
 
-  ngAfterViewInit(){
-      this.editor.nativeElement.innerHTML = this.setContent;
-      this.editor.nativeElement.setAttribute("aria-disabled", "false");
+  ngAfterViewInit() {
+    this.editor.nativeElement.innerHTML = this.setContent;
+    this.editor.nativeElement.setAttribute("aria-disabled", "false");
+    this.checkForContent(); 
   }
 
-  wrapperStyle() {
-    let withinWrapper = document.querySelectorAll(".recruEdit-editor, .recruEdit-toolbar");
-
-    for (var i = 0; i < withinWrapper.length; i++) {
-      let wrapper = document.querySelector(".recruEdit-wrapper");
-      withinWrapper[i].addEventListener("focus", () => {
-        wrapper.classList.add("focus");
-      });
-      withinWrapper[i].addEventListener("blur", () => {
-        wrapper.classList.remove("focus");
-      });
+  customFocusClass(element: any, event: string) {
+    if (event == 'focus') {
+      element.parentElement.classList.add("focus")
+    } else {
+      element.parentElement.classList.remove("focus")
     }
   }
 
@@ -156,7 +152,7 @@ export class TextEditorComponent implements OnInit {
     this.isCreateLinkModalVisible = false;
   }
 
-  createLink() {    
+  createLink() {
     let fullURL = this.url.nativeElement.value;
 
     //THIS IS FOR THE NEW FUNCTIONALITY REPLACING EXECCOMAND
@@ -169,12 +165,12 @@ export class TextEditorComponent implements OnInit {
     this.selectPreviousRange();
 
     let newAnchorTag: string;
-    if (this.customSelection.range.toString() == ''){
+    if (this.customSelection.range.toString() === '') {
       newAnchorTag = `<a target="_blank" href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${fullURL}</a>`;
-    }else{
+    } else {
       newAnchorTag = `<a target="_blank" href="${fullURL}" title="${fullURL}\nCTRL + click to follow link">${this.customSelection.range.toString()}</a>`;
-    }        
-    
+    }
+
     document.execCommand('insertHTML', false, newAnchorTag);
 
     this.followLinkHandler();
@@ -191,6 +187,7 @@ export class TextEditorComponent implements OnInit {
   }
 
   saveEditor() {
+    this.checkForContent();
     this.getContent.emit(this.editor.nativeElement.innerHTML);
   }
 
@@ -232,5 +229,9 @@ export class TextEditorComponent implements OnInit {
     let selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(this.customSelection.range);
+  }
+
+  checkForContent() {
+    this.hasContent = this.setContent.length > 0;
   }
 }

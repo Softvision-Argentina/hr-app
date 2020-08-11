@@ -1,41 +1,48 @@
-
 /* Abstracts
 ------------
 Scss specific globals
 */
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
-@import 'abstracts/functions';
-@import 'abstracts/placeholders';
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+@import "abstracts/placeholders";
 
 /* Base
 ------------
 Scss specific globals
 */
-@import 'base/base';
-@import 'base/typography';
-
+@import "base/base";
+@import "base/typography";
 
 /* Components
 ------------
 All the single components(not Angular Components) of the project
 */
-@import 'web-components/buttons';
-@import 'web-components/spinner';
+@import "web-components/buttons";
+@import "web-components/divider";
+@import "web-components/hightlight-border";
+@import "web-components/modal";
+@import "web-components/steps";
+@import "web-components/spinner";
+@import "web-components/tabs";
+@import "web-components/item-list";
+@import "web-components/switch";
+@import "web-components/inputs";
+@import "web-components/slider";
 
 /* Layout
 ------------
 Single elements that makes a layout of the project
 */
-@import 'layout/forms';
-@import 'layout/grid';
+@import "layout/forms";
+@import "layout/grid";
+@import "layout/slider";
 
 /* Themes
 ------------
 Colors and decorations
 */
-@import 'themes/summer-sunset';
-
+@import "themes/carnival";
 
 /* This file is intented to have the old global styles,
 but should be removed in the future and organize the styles this file has */

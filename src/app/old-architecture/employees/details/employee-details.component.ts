@@ -45,7 +45,7 @@ export class EmployeeDetailsComponent implements OnInit {
       nzTitle: title,
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal modal-custom',
+      nzWrapClassName: 'vertical-center-modal recru-modal',
       nzFooter: null
     });
   }

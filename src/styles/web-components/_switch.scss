@@ -1,0 +1,15 @@
+.ant-switch {
+  background-color: $light-color;
+  box-shadow: 0 2px 4px 0 rgba(0, 35, 11, 0.2);
+
+  &-checked {
+    &::after {
+      background-image: $carnival-gradient;
+    }
+  }
+
+  &::after {
+    box-shadow: none;
+    background-color: $disabled-color;
+  }
+}

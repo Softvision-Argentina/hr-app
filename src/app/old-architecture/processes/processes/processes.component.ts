@@ -382,7 +382,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.rejectProcessForm.reset();
     const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal',
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
       nzContent: modalContent,
       nzFooter: [
@@ -496,11 +496,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.emptyProcess = undefined;
     }
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: footer
     });
     this.facade.appService.stopLoading();
@@ -537,11 +536,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
     this.createEmptyProcess(this.currentCandidate);
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: footer,
       nzMaskClosable: false
     });
@@ -893,11 +891,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   showContactCandidatesModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: [
         {
           label: 'Cancel',

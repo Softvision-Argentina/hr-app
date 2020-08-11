@@ -12,6 +12,7 @@ import { dniValidator, UniqueDniValidator } from '@shared/utils/dni.validator';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'pre-offer-stage',
@@ -178,7 +179,10 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
 
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-    this.readdressStatus.toStatus = this.currentStageStatus
+    this.readdressStatus.toStatus = this.currentStageStatus;
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   getFormData(processId: number): PreOfferStage {

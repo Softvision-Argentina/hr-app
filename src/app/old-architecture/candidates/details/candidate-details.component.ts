@@ -88,7 +88,7 @@ export class CandidateDetailsComponent implements OnInit {
       nzTitle: nameAndLastName,
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'vertical-center-modal modal-custom',
+      nzWrapClassName: 'vertical-center-modal recru-modal',
       nzFooter: null
     });
   }

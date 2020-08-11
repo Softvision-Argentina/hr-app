@@ -15,6 +15,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { ProcessService } from '@shared/services/process.service';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'technical-stage',
@@ -87,7 +88,7 @@ export class TechnicalStageComponent implements OnInit {
   chosenSeniority: number;
   ownerId: number;
 
-    readdressStatus: ReaddressStatus = new ReaddressStatus();
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
 
   currentReaddressDescription: string = "";
   readdressFilteredList: ReaddressReason[] = [];
@@ -111,7 +112,7 @@ export class TechnicalStageComponent implements OnInit {
     this.readdressStatus.toStatus = undefined;
     this.readdressStatus.id = undefined;
 
-    if (this.technicalStage.readdressStatus){
+    if (this.technicalStage.readdressStatus) {
       this.selectedReason = `${this.technicalStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.technicalStage.readdressStatus.feedback;
       this.readdressStatus.fromStatus = this.technicalStage.status;
@@ -187,10 +188,10 @@ export class TechnicalStageComponent implements OnInit {
           this.technicalForm.controls[i].enable();
           if (this.technicalForm.controls[i] === this.technicalForm.controls['englishLevel']) {
             this.disabled = false;
-          this.technicalForm.controls[i].enable();
+            this.technicalForm.controls[i].enable();
           }
-          if(this.technicalForm.controls[i] === this.technicalForm.controls['alternativeSeniority']) {
-            if(this.technicalForm.controls['seniority'].value === null) {
+          if (this.technicalForm.controls[i] === this.technicalForm.controls['alternativeSeniority']) {
+            if (this.technicalForm.controls['seniority'].value === null) {
               this.technicalForm.controls[i].disable();
             }
           }
@@ -207,7 +208,7 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   statusChanged(status: number) {
-    
+
     //Hago este check porque este metodo (StatusChanged()) se dispara cada vez que se abre un 
     //proceso por ejecutar en el onInit el fillform() adentro del subscribe de getFilteredUsersForTech,
     // lo cual dispara toda la logica adentro aun cuando el status no sufrio ningun cambio
@@ -230,6 +231,9 @@ export class TechnicalStageComponent implements OnInit {
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
     this.readdressStatus.toStatus = this.currentStageStatus;
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   getFormData(processId: number): TechnicalStage {
@@ -357,22 +361,21 @@ export class TechnicalStageComponent implements OnInit {
     }
 
     if (technicalStage.readdressStatus)
-      if(technicalStage.readdressStatus.feedback){
-      this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue(technicalStage.readdressStatus.feedback);
-    }
+      if (technicalStage.readdressStatus.feedback) {
+        this.technicalForm.controls['reasonDescriptionTextAreaControl'].setValue(technicalStage.readdressStatus.feedback);
+      }
   }
 
-  validatorsOnReaddressControls(flag: boolean)
-  {
+  validatorsOnReaddressControls(flag: boolean) {
     let reasonSelectControl = this.technicalForm.controls['reasonSelectControl'];
     let feedbackTextAreaControl = this.technicalForm.controls['reasonDescriptionTextAreaControl'];
 
-    function enableValidations(){
+    function enableValidations() {
       reasonSelectControl.setValidators(Validators.required);
       feedbackTextAreaControl.setValidators([Validators.required]);
     }
 
-    function disableValidations(){
+    function disableValidations() {
       reasonSelectControl.clearValidators();
       feedbackTextAreaControl.clearValidators();
     }
@@ -412,6 +415,9 @@ export class TechnicalStageComponent implements OnInit {
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   updateSkills(skillControl) {
@@ -452,6 +458,9 @@ export class TechnicalStageComponent implements OnInit {
       this.controlArray.splice(index, 1);
       for (j; j < 3; j++) { this.technicalForm.removeControl(i.controlInstance[j]); }
     }
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   getSkills() {
@@ -490,17 +499,17 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   CanShowReaddressPossibility() {
-    if (CanShowReaddressPossibility(this.currentStageStatus)){
+    if (CanShowReaddressPossibility(this.currentStageStatus)) {
       this.validatorsOnReaddressControls(true);
       return true;
     }
-    else{
+    else {
       this.validatorsOnReaddressControls(false);
       return false;
     }
   }
 
-  getSelectedReason(reason){
+  getSelectedReason(reason) {
     this.selectedReasonId = reason;
     this.readdressStatus.readdressReasonId = this.selectedReasonId;
   }

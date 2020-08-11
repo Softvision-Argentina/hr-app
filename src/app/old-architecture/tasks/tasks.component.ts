@@ -273,7 +273,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.controlArray = [];
     this.resetForm();
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--sm',
       nzTitle: 'Add New Task',
       nzContent: modalContent,
       nzClosable: true,

@@ -44,7 +44,6 @@ button.ant-modal-close.ng-star-inserted {
   outline: none;
 }
 
-
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -53,10 +52,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
-}
-
-nz-form-label.requiredFieldLabel::before {
-  content: "* ";
 }
 
 #interviewTable .ant-table-header {
@@ -68,27 +63,6 @@ nz-form-label.requiredFieldLabel::before {
 /* The following style is to fix a bug from slick slide styles overriding styles from ant design */
 nz-table img {
   display: inline-block !important;
-}
-
-.highlightedSkill {
-  box-sizing: border-box;
-  background: #fff;
-  background-clip: padding-box;
-  border: solid 5px transparent;
-  border-radius: 4px;
-}
-
-.highlightedSkill:before {
-  /*Do not edit this. This sets the highlight border*/
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: linear-gradient(to top, #f4633a, #c800a1);
 }
 
 .search-box {
@@ -109,18 +83,3 @@ nz-table img {
   margin-right: 8px;
 }
 
-.modal-custom {
-  .ant-modal-title {
-    font-family: "ProximaNova-Bold";
-  }
-}
-
-.slick-prev:before {
-  content: none!important;
-  margin-left: 32px!important;
-  left: -45px!important;
-}
-.slick-next:before {
-  content: none!important;
-  margin-right: 36px!important;
-}

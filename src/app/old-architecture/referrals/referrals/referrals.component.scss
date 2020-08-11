@@ -1,3 +1,5 @@
+@import "variables";
+
 .pop {
   height: 50px;
   width: 40%;
@@ -28,7 +30,7 @@ nz-step {
   width: 20px;
   height: 20px;
   border-radius: 10px;
-  color: white;
+  color: $light-color;
   text-align: -webkit-center;
 }
 
@@ -48,41 +50,20 @@ nz-step {
 }
 
 .headerFont {
-    display: inline-block;
-    font-family: ProximaNova-Extrabold;
-    font-size: 44px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.02;
-    letter-spacing: -0.88px;
-    color: #222222;
-  }
-
-::ng-deep .ant-btn.referralsButton {
-  width: 215px;
-  height: 40px;
-  background-image: linear-gradient(to top, #f4633a, #c800a1);
-  border: none;  
-  font-size: 20px;
-  font-family: ProximaNova-SemiBold;
-  line-height: normal;
-  letter-spacing: -0.67px;
-  color: #ffffff;
-}
-
-.jobDescription{
-  font-size: 16px;    
-  margin-top: 30px;
-  margin-left: 70px;
-  margin-right: 70px;
-  margin-bottom: 30px;
+  display: inline-block;
+  font-family: ProximaNova-Extrabold;
+  font-size: 44px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.02;
+  letter-spacing: -0.88px;
+  color: #222222;
 }
 
 .headerTittle {
   font-family: ProximaNova-Extrabold;
   font-size: 30px;
-  font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   color: #222222;
@@ -91,7 +72,6 @@ nz-step {
 .headerStudio {
   font-family: ProximaNova-Extrabold;
   font-size: 20px;
-  font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.02;
@@ -99,29 +79,37 @@ nz-step {
   color: #222222;
 }
 
-.headers h1{
+.headers h1 {
   margin-bottom: 0;
 }
 
-.headers h3{
+.headers h3 {
   margin-top: 0;
 }
 
-.slider{
-  margin-top: 25px;
-  margin-left: 40px;
-  margin-right: 40px;
+.recru-button-primary,
+.recru-button-secondary {
+  width: calc(30% + 2rem);
 }
 
-.eachSlide{
-  overflow-y: auto;  
+.slide-card {
+  ::ng-deep .slick-list {
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 6px;
+  }
+
+  ::ng-deep .slick-slide {
+    padding: 16px;
+  }
+
+  &__content {
+    padding: 8px;
+  }
 }
 
-.frame-x{
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-right: 10px;
-  margin-top: 10px;
+::ng-deep .job-description-modal {
+  .ant-modal-body {
+    background-color: $light-soft-background-color;
+  }
 }

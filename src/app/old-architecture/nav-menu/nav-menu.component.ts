@@ -54,12 +54,11 @@ export class NavMenuComponent implements OnInit {
 
   showPreferencesModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--sm',
       nzTitle: 'Manage Preferences',
       nzContent: modalContent,
       nzClosable: true,
-      nzFooter: null,
-      nzWidth: '30%'
+      nzFooter: null
     });
   }
 

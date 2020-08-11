@@ -1,0 +1,19 @@
+//Recru form grid
+.recru-col-2 {
+  width: 50%;
+}
+
+.recru-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  column-gap: 8px;
+}
+
+.recru-container {
+  padding: 4px 16px;
+}
+
+nz-form-item {
+  width: 100%;
+}

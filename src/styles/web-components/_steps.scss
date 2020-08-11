@@ -1,0 +1,64 @@
+nz-step {
+  cursor: pointer;
+}
+
+.ant-steps-item-tail::after {
+  height: 4px;
+}
+
+.ant-steps-item-process .ant-steps-item-icon {
+  background-color: $flamingo;
+  border-color: $flamingo;
+}
+
+/* línea entre stages (stage seleccionado) */
+
+.ant-steps-item-finish > .ant-steps-item-content > .ant-steps-item-title::after,
+.ant-steps-item-finish > .ant-steps-item-tail::after {
+  border-bottom: 4px solid #c800a1;
+}
+
+/* linea estre stages a seleccionar */
+
+.ant-steps-item-process
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after,
+.ant-steps-item-process > .ant-steps-item-tail::after {
+  border-bottom: 4px solid #ecebed;
+}
+
+/* icono stage seleccionado */
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: $flamingo;
+  border-color: $west-side;
+  color: $light-color;
+}
+
+/* titulo stage anterior al seleccionado */
+
+.ant-steps-item-finish > .ant-steps-item-content > .ant-steps-item-title {
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  color: $flamingo;
+}
+
+/* titulo stage seleccionado */
+
+.ant-steps-item-process > .ant-steps-item-content > .ant-steps-item-title {
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  color: $flamingo;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: $light-color;
+}
+
+.ant-steps-item-wait > .ant-steps-item-content > .ant-steps-item-title::after,
+.ant-steps-item-wait > .ant-steps-item-tail::after {
+  border-bottom: 4px solid #ecebed;
+}

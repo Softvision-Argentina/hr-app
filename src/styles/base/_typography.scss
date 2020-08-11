@@ -21,3 +21,14 @@
   src: url("~/assets/fonts/proximaNova/ProximaNova-Semibold.ttf")
     format("truetype");
 }
+
+.recru-caption {
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.section-title {
+  font-family: ProximaNova-Extrabold;
+  font-size: 44px;
+  color: $dark-color;
+}

@@ -1,12 +1,67 @@
 <br />
-<div class="cards">
-    <div class="tasks-container">
+<div class="tasks__wrapper">
+    <div class="tasks__header">
         <div nz-row>
-            <div class="studio" nz-col>B.A Studio Tasks</div>
+            <div nz-col>
+                <h1 class="section-title">
+                    B.A Studio Tasks
+                </h1>
+            </div>
         </div>
-        <div nz-row class="navOptions">
-            <div class="button" nz-col nzSpan="4">
-                <button class="newTask" (click)="showAddModal(taskModal)">NEW TASK</button>
+
+        <div class="recru-row">
+            <div class="tasks__menu">
+                <div class="tasks__main-button">
+                    <button class="recru-button-cta recru-button-cta--large" nz-button nzType="primary"
+                        (click)="showAddModal(taskModal)">NEW TASK</button>
+                </div>
+                <div class="tasks__switch">
+                    <span class="title" *ngIf="canAssign()">Showing:</span>
+                    <nz-switch class="switch" *ngIf="canAssign()" [(ngModel)]="showAllTasks" ngDefaultControl
+                        (click)="filterTasks()">
+                    </nz-switch>
+                </div>
+                <div class="tasks__orderby">
+                    <a nz-dropdown nzTrigger="hover" class="orderby__button" [nzDropdownMenu]="orderByFilter">
+                        <span>
+                            {{orderBy}}
+                        </span>
+                        <i nz-icon nzType="caret-down"></i>
+                    </a>
+                    <nz-dropdown-menu #orderByFilter="nzDropdownMenu">
+                        <ul nz-menu nzSelectable>
+                            <li nz-menu-item>
+                                <a (click)="orderTasksBy('urgent')">Urgent</a>
+                            </li>
+                            <li nz-menu-item>
+                                <a (click)="orderTasksBy('new')">Newest</a>
+                            </li>
+                            <li nz-menu-item>
+                                <a (click)="orderTasksBy('old')">Oldest</a>
+                            </li>
+                        </ul>
+                    </nz-dropdown-menu>
+                </div>
+                <div class="tasks__filter">
+                    <nz-radio-group [ngModel]="'ALL'">
+                        <label nz-radio-button [nzValue]="'ALL'" (click)="showToDoList('ALL')">
+                            <span>All</span>
+                        </label>
+                        <label nz-radio-button [nzValue]="'OPEN'" (click)="showToDoList('OPEN')">
+                            <span>Open</span>
+                        </label>
+                        <label nz-radio-button [nzValue]="'CLOSED'" (click)="showToDoList('CLOSED')">
+                            <span>Closed</span>
+                        </label>
+                    </nz-radio-group>
+                </div>
+            </div>
+        </div>
+        <!-- 
+        <div nz-row>
+            <div nz-col nzSpan="24">
+                <button class="recru-button-cta newTask" nz-button nzType="primary"
+                    (click)="showAddModal(taskModal)">NEW TASK</button>
             </div>
             <div nz-col nzSpan="3" nzOffset="10">
                 <span class="showing" *ngIf="canAssign()">Showing: </span>
@@ -15,10 +70,11 @@
             </div>
             <div class="div-dropdown" nz-col nzSpan="2">
                 <a nz-dropdown nzTrigger="hover" [nzDropdownMenu]="orderByFilter">
-                    <button class="orderBy" nz-button nz-dropdown>{{orderBy}}</button>
+                    {{orderBy}}
+                    <i nz-icon nzType="caret-down"></i>
                 </a>
                 <nz-dropdown-menu #orderByFilter="nzDropdownMenu">
-                    <ul nz-menu>
+                    <ul nz-menu nzSelectable>
                         <li nz-menu-item>
                             <a (click)="orderTasksBy('urgent')">Urgent</a>
                         </li>
@@ -32,17 +88,23 @@
                 </nz-dropdown-menu>
             </div>
             <div nz-col nzSpan="4">
+                <nz-radio-group *recruInput="'Filter'" (change)="showToDoList($event)">
+                    <label nz-radio-button [nzValue]="'ALL'"><span>All</span></label>
+                    <label nz-radio-button [nzValue]="'OPEN'"><span>Open</span></label>
+                    <label nz-radio-button [nzValue]="'CLOSED'"><span>Closed</span></label>
+                </nz-radio-group>
                 <nz-button-group>
                     <button class="options" nz-button nzType="default" (click)="showToDoList('ALL')">All</button>
                     <button class="options" nz-button nzType="default" (click)="showToDoList('OPEN')">Open</button>
                     <button class="options" nz-button nzType="default" (click)="showToDoList('CLOSED')">Closed</button>
                 </nz-button-group>
             </div>
-        </div>
+        </div> -->
     </div>
+
     <div *ngFor="let toDo of toDoListDisplay | filter:searchTitle:'title'">
-        <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1"
-            [nzNotFoundImage]="'assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
+        <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1" [nzNotFoundImage]="'assets/images/InboxEmpty.png'"
+            [nzNotFoundContent]="noContent"></nz-empty>
     </div>
     <div *ngIf="toDoListDisplay && toDoListDisplay.length != 0" nz-row nzAlign="top" [nzGutter]="16">
         <div class="task-boxes" *ngFor="let toDo of toDoListDisplay | filter : searchTitle:'title' | sort">
@@ -50,7 +112,8 @@
                 [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
 
                 <ng-template #titleTemplate>
-                    <span class="card-title" nz-popover [nzPopoverContent]="toDo.title" nzTooltipContent="top">{{toDo.title}}</span>
+                    <span class="card-title" nz-popover [nzPopoverContent]="toDo.title"
+                        nzTooltipContent="top">{{toDo.title}}</span>
                     <br />
                     <span class="card-subtitle" *ngIf="canAssign() && !isCurrentUser(toDo)">Owner:
                         {{toDo.user.firstName}} {{toDo.user.lastName}}</span>
@@ -60,14 +123,16 @@
                 <ng-template #extraTemplate>
                     <i *ngIf="shouldShowDeadlineIcon(toDo) && !toDo.isApprove" nz-icon [nzType]="'fire'"
                         class="ant-scroll-number-custom-component font-size-large" [nzTheme]="'twotone'"
-                        [nzTwotoneColor]="'red'" nz-popover [nzPopoverContent]="datesTemplate" nzPopoverContent="topLeft"></i>
+                        [nzTwotoneColor]="'red'" nz-popover [nzPopoverContent]="datesTemplate"
+                        nzPopoverContent="topLeft"></i>
                     <i *ngIf="!shouldShowDeadlineIcon(toDo) && shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon
                         [nzType]="'alert'" class="ant-scroll-number-custom-component font-size-large"
                         [nzTheme]="'twotone'" [nzTwotoneColor]="'green'" nz-popover [nzPopoverContent]="datesTemplate"
                         nzPopoverContent="topLeft"></i>
                     <i *ngIf="!shouldShowDeadlineIcon(toDo) && !shouldShowNewIcon(toDo) && !toDo.isApprove" nz-icon
                         [nzType]="'info-circle'" class="ant-scroll-number-custom-component font-size-large primary"
-                        [nzTheme]="'outline'" nz-popover [nzPopoverContent]="datesTemplate" nzPopoverContent="topLeft"></i>
+                        [nzTheme]="'outline'" nz-popover [nzPopoverContent]="datesTemplate"
+                        nzPopoverContent="topLeft"></i>
                     <i *ngIf="toDo.isApprove" nz-icon [nzType]="'check'"
                         class="ant-scroll-number-custom-component font-size-large success" [nzTheme]="'outline'"
                         nz-popover [nzPopoverContent]="datesTemplate" nzPopoverContent="topLeft"></i>
@@ -118,7 +183,7 @@
                             <ng-template #text><i class="add-item plus" nz-icon nzType="plus">
                                 </i>
                                 <span class="add-item">
-                                    Add Item
+                                    Add item
                                 </span>
                             </ng-template>
                         </nz-divider>
@@ -151,101 +216,92 @@
 </div>
 
 <ng-template #taskModal>
-    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
-        <div nz-row>
-            <div nz-col nzSpan="22">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title">Title</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="titleErrorMsg">
-                        <input type="text" nz-input formControlName="title" id="title"
-                            placeholder="Please input the Title of the task">
-                        <ng-template #titleErrorMsg>
-                            <ng-container *ngIf="validateForm.get('title').dirty && validateForm.get('title').errors">
-                                <ng-container *ngIf="validateForm.get('title')?.hasError('required')">
-                                    Please input the title!
-                                </ng-container>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'" class="recru-container">
+
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="titleErrorMsg">
+                    <input *recruInput="'Title'" type="text" nz-input formControlName="title" id="title">
+                    <ng-template #titleErrorMsg>
+                        <ng-container *ngIf="validateForm.get('title').dirty && validateForm.get('title').errors">
+                            <ng-container *ngIf="validateForm.get('title')?.hasError('required')">
+                                Please input the title
                             </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
         </div>
-        <div nz-row *ngIf="canAssign()">
-            <div nz-col nzSpan="22">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user">User</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="userErrorMsg">
-                        <div class="display-flex">
-                            <nz-select formControlName="user" [attr.id]="user" id="user" nzShowSearch nzAllowClear
-                                nzPlaceHolder="Select a user">
-                                <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}"
-                                    nzValue="{{user.id}}">
-                                </nz-option>
-                            </nz-select>
-                            <button nz-button nzType="primary" nz-tooltip nzTooltipTitle="Assign to me"
-                                (click)="assignToMe()">
-                                <i nz-icon nzType="user" nzTheme="outline"></i>
-                            </button>
-                        </div>
-                        <ng-template #userErrorMsg>
-                            <ng-container
-                                *ngIf="validateForm.get('user')?.dirty && validateForm.get('user')?.hasError('required')">
-                                Please select a user
-                            </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-        <div nz-row>
-            <div nz-col nzSpan="22">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">End date</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="endDateErrorMsg">
-                        <nz-date-picker formControlName="endDate"></nz-date-picker>
-                        <ng-template #endDateErrorMsg>
-                            <ng-container
-                                *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
-                                <ng-container *ngIf="validateForm.get('endDate')?.hasError('required')">
-                                    Please input the date
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('endDate')?.hasError('pastDateError')">
-                                    Please input a date greater than today
-                                </ng-container>
-                            </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-        <div nz-row>
-            <div nz-col nzSpan="22">
-                <nz-form-item *ngFor="let control of controlArray; let i = index">
-                    <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i == 0" [nzFor]="control.controlInstance">
-                        Items</nz-form-label>
-                    <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i == 0 ? 0 : 4"
-                        [nzErrorTip]="taskItemsErrorMsg">
-                        <input nz-input style="width: 85%; margin-right:8px;" placeholder="Input your task items here"
-                            [attr.id]="control.id" [formControlName]="control.controlInstance" />
-                        <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
-                            (click)="removeField(control, $event)"></i>
-                        <ng-template #taskItemsErrorMsg>
-                            <ng-container
-                                *ngIf="getFormControl(control.controlInstance)?.dirty && getFormControl(control.controlInstance)?.hasError('required')">
-                                Please input any text or delete this field.
-                            </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
-                    <nz-form-control style="margin-left: 25% !important;" [nzXs]="{ span: 24, offset: 0 }"
-                        [nzSm]="{ span: 20, offset: 4 }">
-                        <button nz-button nzType="dashed" style="width:60%" (click)="addField($event)">
-                            <i nz-icon nzType="plus"></i>
-                            Add field
+
+        <div class="recru-row" *ngIf="canAssign()">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="userErrorMsg">
+                    <div class="select-user">
+                        <nz-select *recruInput="'User'" formControlName="user" [attr.id]="user" id="user" nzShowSearch
+                            nzAllowClear nzPlaceHolder="Select a user">
+                            <nz-option *ngFor="let user of users;" nzLabel="{{user.firstName}} {{user.lastName}}"
+                                nzValue="{{user.id}}">
+                            </nz-option>
+                        </nz-select>
+                        <button nz-button nzType="primary" nz-tooltip nzTooltipTitle="Assign to me"
+                            (click)="assignToMe()">
+                            <i nz-icon nzType="user" nzTheme="outline"></i>
                         </button>
-                    </nz-form-control>
-                </nz-form-item>
+                    </div>
+                    <ng-template #userErrorMsg>
+                        <ng-container
+                            *ngIf="validateForm.get('user')?.dirty && validateForm.get('user')?.hasError('required')">
+                            Please select a user
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="endDateErrorMsg">
+                    <nz-date-picker *recruInput="'End date'" formControlName="endDate"></nz-date-picker>
+                    <ng-template #endDateErrorMsg>
+                        <ng-container *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
+                            <ng-container *ngIf="validateForm.get('endDate')?.hasError('required')">
+                                Please input the date
+                            </ng-container>
+                            <ng-container *ngIf="validateForm.get('endDate')?.hasError('pastDateError')">
+                                Please input a date greater than today
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div class="recru-row">
+            <div class="recru-custom-items-list">
+                <nz-divider nzText="Items" nzOrientation="left"></nz-divider>
+                <div class="recru-custom-items-list__wrapper" *ngFor="let control of controlArray; let i = index">
+                    <nz-form-item>
+                        <nz-form-control [nzErrorTip]="taskItemsErrorMsg">
+                            <input *recruInput="'Items'" nz-input [attr.id]="control.id"
+                                [formControlName]="control.controlInstance" />
+                            <ng-template #taskItemsErrorMsg>
+                                <ng-container
+                                    *ngIf="getFormControl(control.controlInstance)?.dirty && getFormControl(control.controlInstance)?.hasError('required')">
+                                    Please input any text or delete this field.
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item class="recru-custom-items-list__button">
+                        <a class="recru-button-center-self" (click)="removeField(control ,$event)">
+                            <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button"></i>
+                        </a>
+                    </nz-form-item>
+                </div>
+                <button nz-button nzType="dashed" class="recru-button-center-self" (click)="addField($event)">
+                    <i nz-icon nzType="plus"></i>
+                    Add item
+                </button>
             </div>
         </div>
     </form>

@@ -1,173 +1,138 @@
-<div nz-row>
+<form nz-form [formGroup]="candidateForm" [nzLayout]="'horizontal'" class="recru-container">
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="CommunityErrorMsg">
+                <nz-select *recruInput="'Community'" formControlName="community"
+                    [nzDisabled]="isEditReferral || !!this.position?.title">
+                    <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #CommunityErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">
+                        Please input the community
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!!position?.title" class="recru-col-2 ">
+            <nz-form-control>
+                <input *recruInput="'Position'" nz-input nz-tooltip nzTooltipTrigger="hover"
+                    nzTooltipPlacement="topLeft" nzTooltipTitle="This cannot be changed"
+                    formControlName="openPositionTitle" id="Position" readonly>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="firstNameErrorMsg">
+                <input *recruInput="'First Name'" type="text" nz-input formControlName="firstName" id="FirstName">
+                <ng-template #firstNameErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
+                        <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
+                            Please input the First name
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="lastNameErrorMsg">
+                <input *recruInput="'Last Name'" type="text" nz-input formControlName="lastName" id="lastName">
+                <ng-template #lastNameErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
+                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
+                            Please input the last name
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 " [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="emailErroMsg">
+                <input *recruInput="'E-mail'" nz-input formControlName="email" id="email">
+                <ng-template #emailErroMsg>
+                    <ng-container
+                        *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').hasError('email')">
+                        Enter a valid e-mail address
+                    </ng-container>
+                    <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
+                        E-mail address already exists
+                    </ng-container>
+                </ng-template>
+                <div *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator')"
+                    class="ant-form-item-explain">Please enter a valid email or a valid phone number</div>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 " [ngClass]="{'ant-form-item-has-error': (candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator') }">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible" [nzErrorTip]="phoneNumberErrorMsg">
+                <nz-input-group *recruInput="'Phone Number'" [nzAddOnBefore]="addOnBeforeTemplate">
+                    <ng-template #addOnBeforeTemplate>
+                        <nz-select formControlName="phoneNumberPrefix">
+                            <nz-option nzLabel="+54" nzValue="+54"></nz-option>
+                            <nz-option nzLabel="+1" nzValue="+1"></nz-option>
+                        </nz-select>
+                    </ng-template>
+                    <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" maxlength="13"
+                        minlength="10" nz-input>
+                </nz-input-group>
+                <ng-template #phoneNumberErrorMsg>
+                    <ng-container
+                        *ngIf="!candidateForm.get('phoneNumber').dirty || candidateForm.get('phoneNumber').errors">
+                        Please enter a valid email or a valid phone number
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="uploadCvErrorMsg">
+                <nz-upload *recruInput="'Upload CV'" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                    <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
+                </nz-upload>
+                <ng-template #uploadCvErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('file').dirty
+                    && (candidateForm.get('file').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
+                        Please input a CV or a LinkedIn
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="linkedInErrorMsg">
+                <input *recruInput="'LinkedIn'" nz-input formControlName="link" id="link">
+                <ng-template #linkedInErrorMsg>
+                    <ng-container
+                        *ngIf="candidateForm.get('link').dirty && (candidateForm.get('link').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
+                        Please input a LinkedIn
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</form>
+
+<div nz-row nzJustify="center">
     <div nz-col nzSpan="24">
-        <h1 class="title"> <strong> Submit your referral</strong></h1>
-        <form nz-form [formGroup]="candidateForm" [nzLayout]="'horizontal'">
-            <br />
-            <div nz-row>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="community" [hidden]="!visible">Community
-                        </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="CommunityErrorMsg">
-                            <nz-select formControlName="community"
-                                [nzDisabled]="isEditReferral || !!this.position?.title">
-                                <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
-                                </nz-option>
-                            </nz-select>
-                            <ng-template #CommunityErrorMsg>
-                                <ng-container
-                                    *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">
-                                    Please input the community
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12" *ngIf="!!position?.title">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Position">Position </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <input nz-input nz-tooltip nzTooltipTrigger="hover" nzTooltipPlacement="topLeft"
-                                [nzTooltipTitle]="'This cannot be changed'" formControlName="openPositionTitle"
-                                id="Position" readonly>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-            <div nz-row>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="firstName" [hidden]="!visible">First Name
-                        </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="firstNameErrorMsg">
-                            <input type="text" nz-input formControlName="firstName" id="FirstName"
-                                placeholder="Please input the First Name">
-                            <ng-template #firstNameErrorMsg>
-                                <ng-container
-                                    *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
-                                    <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
-                                        Please input the First name!
-                                    </ng-container>
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastName" [hidden]="!visible">Last Name
-                        </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="lastNameErrorMsg">
-                            <input type="text" nz-input formControlName="lastName" id="lastName"
-                                placeholder="Please input the last name">
-                            <ng-template #lastNameErrorMsg>
-                                <ng-container
-                                    *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
-                                    <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
-                                        Please input the last name!
-                                    </ng-container>
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-            <div nz-row>
-                <div nz-col nzSpan="12">
-                    <nz-form-item
-                        [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="email" [hidden]="!visible">E-mail</nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24" [hidden]="!visible" [nzErrorTip]="emailErroMsg">
-                            <input nz-input formControlName="email" id="email" placeholder="Please input the email">
-                            <ng-template #emailErroMsg>
-                                <ng-container
-                                    *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').hasError('email')">
-                                    Enter a valid e-mail address
-                                </ng-container>
-                                <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
-                                    E-mail address already exists
-                                </ng-container>
-                            </ng-template>
-                            <div *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator')"
-                                class="ant-form-item-explain">Please enter a valid email or a valid phone number</div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item
-                        [ngClass]="{'ant-form-item-has-error': (candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator') }">
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="phoneNumber" [hidden]="!visible">Phone
-                        </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24"
-                            [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible"
-                            [nzErrorTip]="phoneNumberErrorMsg">
-                            <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
-                                <ng-template #addOnBeforeTemplate>
-                                    <nz-select formControlName="phoneNumberPrefix">
-                                        <nz-option nzLabel="+54" nzValue="+54"></nz-option>
-                                        <nz-option nzLabel="+1" nzValue="+1"></nz-option>
-                                    </nz-select>
-                                </ng-template>
-                                <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$"
-                                    maxlength="13" minlength="10" nz-input placeholder="Please input a phone number">
-                            </nz-input-group>
-                            <ng-template #phoneNumberErrorMsg>
-                                <ng-container
-                                    *ngIf="!candidateForm.get('phoneNumber').dirty || candidateForm.get('phoneNumber').errors">
-                                    Please enter a valid email or a valid phone number
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="uploadFile" nzNoColon="true"></nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-                                <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
-                            </nz-upload>
-                            <p nz-typography>File size must not exceed 6Mb</p>
-                            <div style="color: red;"
-                                *ngIf="candidateForm.get('file').dirty
-                                && (candidateForm.get('file').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
-                                Please input a CV or a LinkedIn
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="link">
-                            LinkedIn</nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
-                            <input nz-input formControlName="link" id="link" placeholder="Please input the LinkedIn">
-                            <ng-template #error>
-                                <ng-container class="Error" Id="Error" Name="Error"
-                                    *ngIf="candidateForm.get('link').dirty
-                                        && (candidateForm.get('link').errors || candidateForm.hasError('checkIfCvAndLinkedinNulll'))">
-                                    Please input a LinkedIn!
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <nz-divider></nz-divider>
-            </div>
-
-
-        </form>
-        <div nz-row nzJustify="center">
-            <div nz-col nzSpan="18">
-                <div class="buttonsWrapper">
-                    <button nz-button nzType="default" (click)="clearDataAndCloseModal()"
-                        class="cancelButton">Cancel</button>
-                    <button nz-button nzType="primary" [hidden]="isEditReferral" (click)="createNewCandidate()"
-                        class="saveButton">SAVE</button>
-                    <button nz-button nzType="primary" [hidden]="!isEditReferral" (click)="saveEdit()"
-                        class="saveButton">EDIT</button>
-                </div>
-            </div>
+        <nz-divider class="custom-divider"></nz-divider>
+        <div class="recru-control-buttons__wrapper">
+            <button nz-button nzType="default" class="recru-button-secondary"
+                (click)="clearDataAndCloseModal()">Cancel</button>
+            <button nz-button nzType="primary" class="recru-button-primary" [hidden]="isEditReferral"
+                (click)="createNewCandidate()">
+                Save
+            </button>
+            <button nz-button nzType="primary" class="recru-button-primary" [hidden]="!isEditReferral"
+                (click)="saveEdit()">
+                Edit
+            </button>
         </div>
     </div>
 </div>

@@ -1,0 +1,20 @@
+.ant-tabs-nav .ant-tabs-tab-active {
+  color: black;
+  font-weight: 900;
+}
+
+.ant-tabs-ink-bar {
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  height: 2px;
+  background-color: #c800a1;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: #c800a1;
+}

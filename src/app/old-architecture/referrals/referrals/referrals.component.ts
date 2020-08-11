@@ -49,9 +49,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     arrows: true,
     infinite: false,
     draggable: false,
-    prevArrow: '<button style="left: -45px!important;" class="slick-prev"><img style="transform: scaleX(-1);" src="assets/images/arrow_medium.svg"></button>',
-    nextArrow: '<button class="slick-next"><img src="assets/images/arrow_medium.svg"></button>'
-
+    prevArrow: '<div class="slick-prev"><img style="transform: scaleX(-1);" src="assets/images/arrow_medium.svg"></div>',
+    nextArrow: '<div class="slick-next"><img src="assets/images/arrow_medium.svg"></div>',
+    accessibility: false
   };
 
   @ViewChild('slickJobDescription') slickJobD: SlickCarouselComponent;
@@ -89,7 +89,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   availableCandidates: Candidate[] = [];
   candidatesFullList: Candidate[] = [];
   candidateReferred: Candidate[] = [];
-
+  isEditable: boolean = false;
   users: User[] = [];
 
   profileSearch = 0;
@@ -439,11 +439,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.emptyProcess.currentStage === ProcessCurrentStageEnum.Finished ? this.stepIndex = ProcessCurrentStageEnum.OfferStage : this.stepIndex = this.emptyProcess.currentStage;
     }
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: footer,
 
     });
@@ -457,11 +456,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.currentCandidate = candidate;
 
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: null,
       nzContent: modalContent,
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: footer
     });
     this.facade.appService.stopLoading();
@@ -714,11 +712,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   showContactCandidatesModal(modalContent: TemplateRef<{}>, position?: OpenPosition) {
     this.currentPosition = position;
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom referralForm',
-      nzTitle: null,
+      nzTitle: 'Submit your referral',
       nzContent: modalContent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
       nzClosable: false,
-      nzWidth: '50%',
       nzFooter: null,
       nzOnCancel: () => this.currentPosition = null
     });
@@ -738,8 +735,9 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     };
 
     const modal = this.facade.modalService.create({
-      nzTitle: null,
+      nzTitle: 'Submit your referral',
       nzContent: ReferralsContactComponent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
       nzClosable: false,
       nzComponentParams: {
         referralToEdit: referral,
@@ -747,7 +745,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
         communities: this.communities,
         position: this.currentPosition
       },
-      nzWidth: '50%',
       nzFooter: null,
       nzOnCancel: () => this.currentPosition = null
     });
@@ -778,25 +775,25 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   showOpenPositionModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzTitle: '<h1 class="title"> <strong> Add open position</strong></h1>',
+      nzTitle: 'Add open position',
       nzContent: modalContent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
       nzClosable: false,
-      nzWidth: '90%',
       nzFooter: null
     });
   }
 
   showEditPositionModal(positionToEdit: OpenPosition) {
     const modal = this.facade.modalService.create({
-      nzTitle: '<h1 class="title"> <strong> Edit open position</strong></h1>',
+      nzTitle: 'Edit open position',
       nzContent: PositionAddComponent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
       nzClosable: false,
       nzComponentParams: {
         positionToEdit: positionToEdit,
         isEditPosition: true,
         communities: this.communities
       },
-      nzWidth: '90%',
       nzFooter: null
     });
   }
@@ -989,10 +986,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.openDesc = true;
     const modal = this.facade.modalService.create({
       nzContent: modalContent,
-      nzClosable: false,
-      nzWidth: '60%',
-      nzFooter: null
-    });
+      nzTitle: 'Open position',
+      nzWrapClassName: 'recru-modal recru-modal--md job-description-modal',
+      nzClosable: true,
+      nzFooter: null           
+    });    
   }
 
   closeJobDModal() {

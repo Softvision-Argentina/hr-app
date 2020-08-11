@@ -8,6 +8,7 @@ import { DefaultDate } from '@shared/models/default-date.model';
 import { ProcessService } from '@shared/services/process.service';
 import { Globals } from '@shared/utils/globals';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'offer-stage',
@@ -21,10 +22,10 @@ export class OfferStageComponent implements OnInit, OnChanges {
   @Input()
   private _users: User[];
   public get users(): User[] {
-      return this._users.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
+    return this._users.sort((a, b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
   }
   public set users(value: User[]) {
-      this._users = value;
+    this._users = value;
   }
 
   offerForm: FormGroup = this.fb.group({
@@ -56,7 +57,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
   hireDateControl: AbstractControl;
   notesControl: AbstractControl;
 
-  feedbackContent:string = "";
+  feedbackContent: string = "";
 
   statusList: any[];
   seniorityList: any[];
@@ -91,7 +92,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if(this.preOfferData && (this.offerForm.controls['status'].value === StageStatusEnum.NA)) {
+    if (this.preOfferData && (this.offerForm.controls['status'].value === StageStatusEnum.NA)) {
       this.hireDateControl.setValue(this.preOfferData.tentativeStartDate);
       this.bonusControl.setValue(this.preOfferData.bonus);
       this.remunerationOfferControl.setValue(this.preOfferData.grossSalary);
@@ -116,8 +117,8 @@ export class OfferStageComponent implements OnInit, OnChanges {
   changeFormStatus(enable: boolean) {
     for (const i in this.offerForm.controls) {
       if (this.offerForm.controls[i] !== this.offerForm.controls['status'] &&
-      this.offerForm.controls[i] !== this.offerForm.controls.backgroundCheckDoneDate &&
-      this.offerForm.controls[i] !== this.offerForm.controls.preocupationalDoneDate) {
+        this.offerForm.controls[i] !== this.offerForm.controls.backgroundCheckDoneDate &&
+        this.offerForm.controls[i] !== this.offerForm.controls.preocupationalDoneDate) {
         if (enable) {
           this.offerForm.controls[i].enable();
         } else {
@@ -134,11 +135,14 @@ export class OfferStageComponent implements OnInit, OnChanges {
 
   statusChanged() {
     if (this.offerForm.controls['status'].value === StageStatusEnum.InProgress) {
-       this.changeFormStatus(true);
-       this.offerForm.markAsTouched();
+      this.changeFormStatus(true);
+      this.offerForm.markAsTouched();
     } else {
-       this.changeFormStatus(false);
+      this.changeFormStatus(false);
     }
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   getFormData(processId: number): OfferStage {
@@ -219,7 +223,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
     if (offerStage.healthInsurance) {
       this.offerForm.controls['healthInsurance'].setValue(offerStage.healthInsurance);
     }
-    
+
     if (offerStage.notes) {
       this.offerForm.controls['notes'].setValue(offerStage.notes);
     }

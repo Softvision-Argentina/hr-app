@@ -140,11 +140,10 @@ export class ProcessDetailComponent implements OnInit {
     this.stageForm.controls['status'].setValue('3');
 
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: 'Add new stage',
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '90%',
       nzFooter: [
         {
           label: 'Cancel',

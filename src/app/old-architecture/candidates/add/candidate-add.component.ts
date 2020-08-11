@@ -104,7 +104,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     englishLevel: 'none',
     status: CandidateStatusEnum.New,
     contacDay : [null],
-    profile: [4],
+    profile: [null],
     community: [null, [Validators.required]],
     isReferred: [null],
     cv: [null],

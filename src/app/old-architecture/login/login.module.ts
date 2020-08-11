@@ -7,6 +7,7 @@ import { CSoftComponent } from './csoft-signin.component';
 import { GoogleSigninComponent } from './google-signin.component';
 import { LoginComponent } from './login.component';
 import { LoginRoutes } from './login.routing';
+import { SharedModule } from '@app/shared/shared.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { LoginRoutes } from './login.routing';
     NzFormModule,
     NzCardModule,
     NzDividerModule,
-    NzInputModule
+    NzInputModule,
+    SharedModule
   ],
   exports: [
     LoginComponent,

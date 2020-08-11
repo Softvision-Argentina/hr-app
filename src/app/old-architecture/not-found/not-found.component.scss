@@ -1,15 +1,17 @@
+@import 'variables';
+
 h1 {
   font-size: 10em;
-  color: white !important;
+  color: $light-color !important;
 }
 
 h3 {
   font-size: 4em;
-  color: white !important;
+  color: $light-color !important;
 }
 
 h5 {
-  color: white !important;
+  color: $light-color !important;
 }
 
 .divider {

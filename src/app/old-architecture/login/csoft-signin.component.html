@@ -2,10 +2,8 @@
 
   <nz-form-item class="login-input-container">
     <nz-form-control [nzErrorTip]="usernameErrorMsg">
-      <label class="login-input-group">
-        <input required nz-input nzSize="large" type="text" formControlName="userName" maxlength="64"/>
-        <span>Username</span>
-      </label>
+      <input *recruInput="'Username'" id="username" nz-input nzSize="large" type="text" formControlName="userName"
+        maxlength="64" />
       <ng-template #usernameErrorMsg>
         <ng-container *ngIf="checkDirtyandErrors('userName')">
           Please input your username!
@@ -16,10 +14,8 @@
 
   <nz-form-item class="login-input-container">
     <nz-form-control [nzErrorTip]="passwordErrorMsg">
-      <label class="login-input-group">
-        <input required nz-input nzSize="large" type="password" formControlName="password" maxlength="64" />
-        <span>Password</span>
-      </label>
+      <input *recruInput="'Password'" id="password" nz-input nzSize="large" type="password" formControlName="password"
+        maxlength="64" />
       <ng-template #passwordErrorMsg>
         <ng-container *ngIf="checkDirtyandErrors('password')">
           Please input your Password!

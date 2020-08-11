@@ -1,4 +1,4 @@
-@import "../../styles/abstracts/variables";
+@import 'variables';
 
 .csoft-login-form ::ng-deep .ng-trigger {
   padding: 5px;
@@ -17,51 +17,18 @@
 
 .login-input-container {
   margin-bottom: 1.25rem;
-}
 
-.login-input-group {
-  width: 100%;
-  display: flex;
-  position: relative;
-  flex: 1 0 0;
-  padding: 0;
-  height: 2.5rem;
-  align-items: center;
-
-  span {
-    position: absolute;
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-    overflow: hidden;
-    pointer-events: none;
-    text-overflow: ellipsis;
-    user-select: none;
-    white-space: nowrap;
-    z-index: 100;
-    left: 12px;
-    color: $input-primary-color;
-    line-height: normal;
-    font-size: 16px;
-    padding: 0 5px;
-  }
-
-  input {
-    height: 100%;
-
-    &:focus,
-    &:valid {
-      padding: 0px 18px;
-      font-size: 14px;
-    }
-
-    &:focus + span,
-    &:hover + span {
-      color: $primary-color;
-    }
-
-    &:focus + span,
-    &:valid + span {
-      transform: scale(0.83333) translateY(-25px) translateX(-6px);
-      background: $light-color;
+  ::ng-deep .recru-input-group {
+    height: 2.5rem;
+    
+    input {
+      &:focus ~ span.recru-input-label,
+      &:disabled ~ span.recru-input-label,
+      &:not([disabled]):not(:placeholder-shown) ~ span.recru-input-label {
+        transform: scale(0.85) translateY(-160%) translateX(-0px);
+        background: $light-color;
+        border-radius: 5px;
+      }
     }
   }
 }

@@ -1,4 +1,16 @@
-body{
-    // compatibility form <b> for chrome in Mac Os
-    -webkit-font-smoothing: antialiased;
+body {
+  // compatibility form <b> for chrome in Mac Os
+  -webkit-font-smoothing: antialiased;
+}
+
+nz-date-picker,
+nz-month-picker {
+  width: 100%;
+}
+
+nz-upload {
+  .ant-upload,
+  button {
+    width: 100%;
+  }
 }

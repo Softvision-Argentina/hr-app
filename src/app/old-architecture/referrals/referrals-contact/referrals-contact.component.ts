@@ -15,11 +15,11 @@ import { UniqueEmailValidator, checkIfEmailAndPhoneNulll } from '@shared/utils/e
 import { NzModalService, NzUploadFile } from 'ng-zorro-antd';
 
 export function checkIfCvAndLinkedinNulll(c: AbstractControl): ValidationErrors | null {
-  if((c.get('link').value === null || c.get('link').value.length === 0)
-      && (c.get('file').value === null || c.get('file').value.length === 0)){
-      return {
-          'checkIfCvAndLinkedinNulll': true
-      };
+  if ((c.get('link').value === null || c.get('link').value.length === 0)
+    && (c.get('file').value === null || c.get('file').value.length === 0)) {
+    return {
+      'checkIfCvAndLinkedinNulll': true
+    };
   };
 
   return null;
@@ -64,11 +64,11 @@ export class ReferralsContactComponent implements OnInit {
     ],
     link: [null],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [ Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
+    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
     community: [null, [Validators.required]],
     file: [''],
-    openPositionTitle:[null, {disabled: true}]
-  }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll]});
+    openPositionTitle: [null, { disabled: true }]
+  }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll] });
   visible = true;
   isNewCandidate = false;
 
@@ -106,7 +106,7 @@ export class ReferralsContactComponent implements OnInit {
 
   fillReferralForm(candidate: Candidate) {
     this.candidateForm.controls['openPositionTitle'].setValue(!!this.position ? this.position.title : null);
-    if (this.position?.id){
+    if (this.position?.id) {
       this.candidateForm.controls['community'].setValue(this.position.community.id);
     }
     if (this.isEditReferral) {
@@ -146,49 +146,58 @@ export class ReferralsContactComponent implements OnInit {
       knownFrom: [null],
       cv: [null],
       referredBy: [null]
-    }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll]    });
+    }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll] });
   }
 
-    saveEdit() {
-        const editedCandidate = {
-          id: this.referralToEdit.id,
-          name: this.candidateForm.controls['firstName'].value.toString(),
-          lastName: this.candidateForm.controls['lastName'].value.toString(),
-          phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
-          dni: 0,
-          emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
-          user: null,
-          contactDay: new Date(),
-          linkedInProfile: this.candidateForm.controls['link'].value ? this.candidateForm.controls['link'].value : null,
-          englishLevel: 0,
-          status: 0,
-          candidateSkills: null,
-          preferredOfficeId: 1,
-          profile: null,
-          community: new Community(this.candidateForm.controls['community'].value),
-          isReferred: true,
-          cv: this.referralToEdit.cv,
-          knownFrom: null,
-          referredBy: this.currentUser.username,
-          source: 'A friend / colleague'
-        };
-        if (this.candidateForm.controls['phoneNumber'].value) {
-          editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
-        }
-
-        this.facade.referralsService.update(this.referralToEdit.id, editedCandidate)
-          .subscribe(res => {
-            this.facade.toastrService.success('Candidate was successfully edited !');
-            if (this.candidateForm.get('file').value) {
-              const file = new FormData();
-              file.append('file', this.candidateForm.get('file').value);
-              this.facade.referralsService.saveCv(res.id, file).subscribe()
-            }
-            this.modalService.closeAll();
-          }, err => {
-            this.facade.errorHandlerService.showErrorMessage(err);
-          });
+  saveEdit() {
+    let isCompleted;
+    if (this.candidateForm.invalid) {
+      this.checkForm();
+      isCompleted = false;
     }
+    else {
+      isCompleted = true;
+    }
+    if (isCompleted) {
+      const editedCandidate = {
+        id: this.referralToEdit.id,
+        name: this.candidateForm.controls['firstName'].value.toString(),
+        lastName: this.candidateForm.controls['lastName'].value.toString(),
+        phoneNumber: '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')',
+        dni: 0,
+        emailAddress: this.candidateForm.controls['email'].value ? this.candidateForm.controls['email'].value.toString() : null,
+        user: null,
+        contactDay: new Date(),
+        linkedInProfile: this.candidateForm.controls['link'].value ? this.candidateForm.controls['link'].value : null,
+        englishLevel: 0,
+        status: 0,
+        candidateSkills: null,
+        preferredOfficeId: 1,
+        profile: null,
+        community: new Community(this.candidateForm.controls['community'].value),
+        isReferred: true,
+        cv: this.referralToEdit.cv,
+        knownFrom: null,
+        referredBy: this.currentUser.username,
+        source: 'A friend / colleague'
+      };
+      if (this.candidateForm.controls['phoneNumber'].value) {
+        editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
+      }
+      this.facade.referralsService.update(this.referralToEdit.id, editedCandidate)
+        .subscribe(res => {
+          this.facade.toastrService.success('Candidate was successfully edited !');
+          if (this.candidateForm.get('file').value) {
+            const file = new FormData();
+            file.append('file', this.candidateForm.get('file').value);
+            this.facade.referralsService.saveCv(res.id, file).subscribe()
+          }
+          this.modalService.closeAll();
+        }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+        });
+    }
+  }
 
 
   createNewCandidate() {
@@ -196,17 +205,13 @@ export class ReferralsContactComponent implements OnInit {
     let isCompleted = true;
 
     if (this.candidateForm.invalid) {
-        console.log(this.candidateForm.status)
-        console.log(this.candidateForm.get('email').hasError('emailAndPhoneValidator'));
-        this.checkForm();
-        console.log(this.candidateForm.status);
-        console.log(this.candidateForm.get('email').hasError('emailAndPhoneValidator'));
-        isCompleted = false;
-      }
-      else {
-        isCompleted = true;
-      }
-    
+      this.checkForm();
+      isCompleted = false;
+    }
+    else {
+      isCompleted = true;
+    }
+
     if (isCompleted) {
 
       const newCandidate: Candidate = {
@@ -263,17 +268,17 @@ export class ReferralsContactComponent implements OnInit {
   }
 
   checkForm() {
-      for (const i in this.candidateForm.controls) {
-        this.candidateForm.controls[i].markAsDirty();
-        if(this.candidateForm.controls[i] !== this.candidateForm.controls['email'] ||
-           this.candidateForm.controls[i] !== this.candidateForm.controls['email'] )
-        {
-          this.candidateForm.controls[i].updateValueAndValidity();
-        }
-        //this.candidateForm.controls[i].updateValueAndValidity();
+    for (const i in this.candidateForm.controls) {
+      this.candidateForm.controls[i].markAsDirty();
+      if (this.candidateForm.controls[i] !== this.candidateForm.controls['email'] ||
+        this.candidateForm.controls[i] !== this.candidateForm.controls['email']) {
+        this.candidateForm.controls[i].updateValueAndValidity();
       }
-      //this.candidateForm.updateValueAndValidity();
+      //this.candidateForm.controls[i].updateValueAndValidity();
     }
+    //this.candidateForm.updateValueAndValidity();
+  }
+
 
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();

@@ -11,7 +11,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { AppComponent } from '@app/app.component';
-
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 @Component({
   selector: 'hr-stage',
   templateUrl: './hr-stage.component.html',
@@ -49,9 +49,9 @@ export class HrStageComponent implements OnInit {
     reasonDescriptionTextAreaControl: [null]
   });
 
-  feedbackContent:string = "";
+  feedbackContent: string = "";
 
-  statusList: any[] ;
+  statusList: any[];
   englishLevelList: any[];
 
   currentStageStatus: StageStatusEnum;
@@ -66,31 +66,30 @@ export class HrStageComponent implements OnInit {
   selectedReasonId: number;
   selectedReason: string;
   constructor(private fb: FormBuilder, private facade: FacadeService,
-     private globals: Globals, private _appComponent: AppComponent) {
+    private globals: Globals, private _appComponent: AppComponent) {
 
     this.statusList = globals.hrStageStatusList;
     this.englishLevelList = globals.englishLevelList;
   }
 
   ngOnInit() {
+    this.currentStageStatus = this.hrStage.status;
+    let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
+    this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
 
-  this.currentStageStatus = this.hrStage.status;
-	let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
-  this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.selectedReason = undefined;
+    this.readdressStatus.feedback = undefined;
+    this.readdressStatus.fromStatus = undefined;
+    this.readdressStatus.toStatus = undefined;
+    this.readdressStatus.id = undefined;
 
-  this.selectedReason = undefined;
-  this.readdressStatus.feedback = undefined;
-  this.readdressStatus.fromStatus = undefined;
-  this.readdressStatus.toStatus = undefined;
-  this.readdressStatus.id = undefined;
-
-  if (this.hrStage.readdressStatus){
-    this.selectedReason = `${this.hrStage.readdressStatus.readdressReasonId}`;
-    this.readdressStatus.feedback = this.hrStage.readdressStatus.feedback;
-    this.readdressStatus.fromStatus = this.hrStage.status;
-    this.readdressStatus.toStatus = this.hrStage.readdressStatus.toStatus;
-    this.readdressStatus.id = this.hrStage.readdressStatus.id
-  }
+    if (this.hrStage.readdressStatus) {
+      this.selectedReason = `${this.hrStage.readdressStatus.readdressReasonId}`;
+      this.readdressStatus.feedback = this.hrStage.readdressStatus.feedback;
+      this.readdressStatus.fromStatus = this.hrStage.status;
+      this.readdressStatus.toStatus = this.hrStage.readdressStatus.toStatus;
+      this.readdressStatus.id = this.hrStage.readdressStatus.id
+    }
 
     this.changeFormStatus(false);
     if (this.hrStage) { this.fillForm(this.hrStage); }
@@ -140,22 +139,24 @@ export class HrStageComponent implements OnInit {
       this.changeFormStatus(true);
       this.hrForm.markAsTouched();
     }
-     else {
+    else {
       this.changeFormStatus(false);
     }
 
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
-     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-     this.readdressStatus.toStatus = this.currentStageStatus;
-  }
+    this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
+    this.readdressStatus.toStatus = this.currentStageStatus;
 
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
+  }
 
   getFormData(processId: number): HrStage {
     const hrStage: HrStage = new HrStage();
 
     hrStage.id = this.getControlValue(this.hrForm.controls.id);
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
-    hrStage.feedback =  this.feedbackContent;
+    hrStage.feedback = this.feedbackContent;
     hrStage.status = this.getControlValue(this.hrForm.controls.status);
     hrStage.userOwnerId = this.getControlValue(this.hrForm.controls.userOwnerId);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
@@ -229,8 +230,8 @@ export class HrStageComponent implements OnInit {
     if (hrStage.sentEmail) {
       this.hrForm.controls['sentEmail'].setValue(hrStage.sentEmail);
     }
-    if (hrStage.readdressStatus){
-      if(hrStage.readdressStatus.feedback)
+    if (hrStage.readdressStatus) {
+      if (hrStage.readdressStatus.feedback)
         this.hrForm.controls['reasonDescriptionTextAreaControl'].setValue(hrStage.readdressStatus.feedback);
     }
   }
@@ -244,17 +245,16 @@ export class HrStageComponent implements OnInit {
     return formFieldHasRequiredValidator(field, this.hrForm);
   }
 
-  validatorsOnReaddressControls(flag: boolean)
-  {
+  validatorsOnReaddressControls(flag: boolean) {
     let reasonSelectControl = this.hrForm.controls['reasonSelectControl'];
     let feedbackTextAreaControl = this.hrForm.controls['reasonDescriptionTextAreaControl'];
 
-    function enableValidations(){
+    function enableValidations() {
       reasonSelectControl.setValidators(Validators.required);
       feedbackTextAreaControl.setValidators([Validators.required]);
     }
 
-    function disableValidations(){
+    function disableValidations() {
       reasonSelectControl.clearValidators();
       feedbackTextAreaControl.clearValidators();
     }
@@ -264,17 +264,17 @@ export class HrStageComponent implements OnInit {
   }
 
   CanShowReaddressPossibility() {
-    if (CanShowReaddressPossibility(this.currentStageStatus)){
+    if (CanShowReaddressPossibility(this.currentStageStatus)) {
       this.validatorsOnReaddressControls(true);
       return true;
     }
-    else{
+    else {
       this.validatorsOnReaddressControls(false);
       return false;
     }
   }
 
-  getSelectedReason(reason){
+  getSelectedReason(reason) {
     this.selectedReasonId = reason;
     this.readdressStatus.readdressReasonId = this.selectedReasonId;
   }

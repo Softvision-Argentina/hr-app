@@ -1,31 +1,161 @@
+// CTA button
+.recru-button-cta {
+  height: 35px;
+  background-image: $carnival-gradient;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.67px;
+  color: $light-color;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-image: $carnival-gradient;
+    color: $light-color;
+  }
+}
+
+.recru-button-cta--large {
+  width: 215px;
+  height: 40px;
+  font-size: 20px;
+}
+
+.buttonDiv {
+  margin-left: 10px;
+}
+
+//Button positioning
+.recru-button-center-self {
+  display: block;
+  margin: auto;
+}
+
 .buttonsWrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.recru-control-buttons {
+  &__wrapper {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    column-gap: 12px;
+  }
 }
 
-.cancelButton {
-    width: 171px;
-    height: 45px;
-    border-radius: 2px;
-    border: solid 3px #ff8f1c;
-    font-size: 20px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    color: #ff8f1c;
+/* save button */
+.ant-modal-footer button + button,
+.recru-button-primary {
+  width: calc(20% + 2rem);
+  height: 45px;
+  border-radius: 2px;
+  background-image: $carnival-gradient;
+  border: none;
+  color: $light-color;
+  font-size: 20px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  transition: all 0.3s ease-in-out;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-image: $carnival-gradient;
+  }
 }
 
-.saveButton {
-    width: 171px;
-    height: 45px;
-    border-radius: 2px;
-    background-image: linear-gradient(to top, #f4633a, #c800a1);
-    border: none;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+/* cancel button */
+.ant-modal-footer button,
+.recru-button-secondary {
+  width: calc(20% + 2rem);
+  height: 45px;
+  border-radius: 2px;
+  border: solid 3px $west-side;
+  font-size: 20px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  color: $west-side;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: $west-side;
+    border-color: $west-side;
+    color: $light-color;
+  }
+}
+
+/* Radio group buttons */
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  z-index: 1;
+  color: $light-color;
+  border-color: none;
+  background-image: $carnival-gradient2;
+  border-radius: 4px;
+
+  &::before {
+    background-color: none;
+  }
+
+  &:hover {
+    color: $light-color;
+  }
+}
+
+.ant-radio-button-wrapper {
+  position: relative;
+  display: flex;
+  height: 34px;
+  margin: 0;
+  padding: 0 15px;
+  color: rgba(0, 0, 0, 0.65);
+  line-height: 32px;
+  background: $light-color;
+  cursor: pointer;
+  border: none;
+  transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  justify-content: center;
+  flex: 1 1;
+
+  &:hover:not(.ant-radio-button-wrapper-disabled):not(.ant-radio-button-wrapper-checked) {
+    color: $flamingo;
+  }
+}
+
+.ant-radio-button-wrapper:first-child {
+  border-left: none;
+  border-radius: 4px;
+}
+
+.ant-radio-group {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: "tnum";
+  display: flex;
+  line-height: unset;
+  flex-flow: row wrap;
+  box-shadow: 0 0 5px -2px;
+  border-radius: 4px;
+  justify-content: space-around;
+}
+
+.ant-radio-button-wrapper:not(:first-child)::before {
+  width: 0;
+  height: 0;
 }

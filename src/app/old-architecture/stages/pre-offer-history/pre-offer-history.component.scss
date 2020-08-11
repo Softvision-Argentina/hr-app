@@ -7,6 +7,19 @@
   text-align: center;
 }
 
-.addPreOffer {
+.add-pre-offer-history {
   margin-bottom: 1rem;
+}
+
+.pre-offer-history-table ::ng-deep {
+  .ant-table-thead > tr > th {
+    text-align: center;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 14px 3px;
+  }
 }

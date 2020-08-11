@@ -11,6 +11,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { Observable, Subscription } from 'rxjs';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'client-stage',
@@ -83,7 +84,7 @@ export class ClientStageComponent implements OnInit {
   processSaveSubscription: Subscription;
 
   currentStageStatus: StageStatusEnum;
-    readdressStatus: ReaddressStatus = new ReaddressStatus();
+  readdressStatus: ReaddressStatus = new ReaddressStatus();
 
   @Input() readdressReasonList: ReaddressReason[] = [];
   @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
@@ -109,8 +110,8 @@ export class ClientStageComponent implements OnInit {
     this.readdressStatus.fromStatus = undefined;
     this.readdressStatus.toStatus = undefined;
     this.readdressStatus.id = undefined;
-  
-    if (this.clientStage.readdressStatus){
+
+    if (this.clientStage.readdressStatus) {
       this.selectedReason = `${this.clientStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.clientStage.readdressStatus.feedback;
       this.readdressStatus.fromStatus = this.clientStage.status;
@@ -191,7 +192,7 @@ export class ClientStageComponent implements OnInit {
     this.readdressStatus.feedback = undefined;
     this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue("");
     this.currentStageStatus = this.clientForm.controls['status'].value;
-    
+
     if (this.clientForm.controls['status'].value === 1) {
       this.changeFormStatus(true);
       this.clientForm.markAsTouched();
@@ -201,7 +202,10 @@ export class ClientStageComponent implements OnInit {
 
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
-    this.readdressStatus.toStatus = this.currentStageStatus
+    this.readdressStatus.toStatus = this.currentStageStatus;
+
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 
   getFormData(processId: number): ClientStage {
@@ -263,30 +267,29 @@ export class ClientStageComponent implements OnInit {
     if (clientStage.rejectionReason) {
       this.clientForm.controls['rejectionReason'].setValue(clientStage.rejectionReason);
     }
-    if (clientStage.readdressStatus){
+    if (clientStage.readdressStatus) {
       if (clientStage.readdressStatus.feedback)
-      this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue(clientStage.readdressStatus.feedback);
+        this.clientForm.controls['reasonDescriptionTextAreaControl'].setValue(clientStage.readdressStatus.feedback);
     }
   }
 
-  validatorsOnReaddressControls(flag: boolean)
-  {
+  validatorsOnReaddressControls(flag: boolean) {
     let reasonSelectControl = this.clientForm.controls['reasonSelectControl'];
     let feedbackTextAreaControl = this.clientForm.controls['reasonDescriptionTextAreaControl'];
 
-    function enableValidations(){
+    function enableValidations() {
       reasonSelectControl.setValidators(Validators.required);
       feedbackTextAreaControl.setValidators([Validators.required]);
     }
 
-    function disableValidations(){
+    function disableValidations() {
       reasonSelectControl.clearValidators();
       feedbackTextAreaControl.clearValidators();
     }
 
     flag == true ? enableValidations() : disableValidations();
   }
-  
+
 
 
   isRequiredField(field: string) {
@@ -327,7 +330,7 @@ export class ClientStageComponent implements OnInit {
       this.interviewClient.nativeElement.value = '';
       this.clientInterviewer.nativeElement.value = '';
       this.project.nativeElement.value = '';
-      this.feedbackContent= '';
+      this.feedbackContent = '';
 
       this.updateEditCache();
     }
@@ -354,16 +357,16 @@ export class ClientStageComponent implements OnInit {
   }
 
   deleteInterview(interviewId: number) {
-      const addOperation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
-      this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
+    const addOperation = this.interviewOperations.find(o => o.data.id === interviewId && o.operation === "add");
+    this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== interviewId);
 
-        if (!addOperation) {
-            this.interviewOperations.push(
-                {
-                    operation: "delete",
-                    data: this.interviews.find(interview => interview.id === interviewId)
-                });
-        }
+    if (!addOperation) {
+      this.interviewOperations.push(
+        {
+          operation: "delete",
+          data: this.interviews.find(interview => interview.id === interviewId)
+        });
+    }
     this.interviews = [...this.interviews.filter(interview => interview.id !== interviewId)];
   }
 
@@ -387,6 +390,8 @@ export class ClientStageComponent implements OnInit {
     this.interviewTableRowEdit.controls['interviewEditFeedback'].setValue(this.editCache[id].data['feedback']);
     this.interviewTableRowEdit.controls['interviewEditInterviewer'].setValue(this.editCache[id].data['clientInterviewer']);
     this.interviewTableRowEdit.controls['interviewEditProject'].setValue(this.editCache[id].data['project']);
+
+    resizeModal();
   }
 
   cancelEdit(id: number): void {
@@ -395,6 +400,8 @@ export class ClientStageComponent implements OnInit {
       data: { ...this.interviews[index] },
       edit: false
     };
+ 
+    resizeModal();
   }
 
   saveEdit(id: number): void {
@@ -402,7 +409,7 @@ export class ClientStageComponent implements OnInit {
     const index = this.interviews.findIndex(item => item.id === id);
     this.interviewOperations = this.interviewOperations.filter(o => o.data.id !== id);
 
-    if (addOperation) {      
+    if (addOperation) {
       this.interviewOperations.push(
         {
           operation: "add",
@@ -417,10 +424,10 @@ export class ClientStageComponent implements OnInit {
     }
 
     Object.assign(this.interviews[index], this.editCache[id].data);
-    this.editCache[id].edit = false;  
+    this.editCache[id].edit = false;
   }
 
-  getFeedbackToCache(content: string, id: number){
+  getFeedbackToCache(content: string, id: number) {
     this.editCache[id].data.feedback = content
   }
 
@@ -434,22 +441,22 @@ export class ClientStageComponent implements OnInit {
   }
 
   CanShowReaddressPossibility() {
-    if (CanShowReaddressPossibility(this.currentStageStatus)){
+    if (CanShowReaddressPossibility(this.currentStageStatus)) {
       this.validatorsOnReaddressControls(true);
       return true;
     }
-    else{
+    else {
       this.validatorsOnReaddressControls(false);
       return false;
     }
   }
 
-  getSelectedReason(reason){
+  getSelectedReason(reason) {
     this.selectedReasonId = reason;
     this.readdressStatus.readdressReasonId = this.selectedReasonId;
   }
 
-  onDescriptionChange(description: string): void {  
+  onDescriptionChange(description: string): void {
     this.readdressStatus.feedback = description;
   }
 
@@ -471,11 +478,18 @@ export class ClientStageComponent implements OnInit {
     }
     return true
   }
-  
+
   editInterview(interviewId: number) {
     if (this.validateInterviewEditForm()) {
       this.saveEdit(interviewId);
       this.facade.toastrService.success('Interview modified!');
     }
+
+    resizeModal();
+  }
+
+  resizeModal() {
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 }

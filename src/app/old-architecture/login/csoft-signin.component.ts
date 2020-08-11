@@ -33,6 +33,7 @@ export class CSoftComponent {
 
   ngAfterViewInit() {
     this.isUserAuthenticated();
+    document.getElementById('username').focus();
   }
 
   submitForm(): void {

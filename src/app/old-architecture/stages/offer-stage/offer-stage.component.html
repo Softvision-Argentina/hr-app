@@ -1,155 +1,124 @@
-<form nz-form [formGroup]="offerForm" [nzLayout]="'horizontal'">
+<form nz-form [formGroup]="offerForm" [nzLayout]="'horizontal'" class="recru-container">
     <nz-divider nzText="OFFER STAGE"></nz-divider>
-    <br />
+
     <nz-form-item hidden>
         <nz-form-control>
             <input type="hidden" formControlName="id">
         </nz-form-control>
     </nz-form-item>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('status')}">
-                    Status</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
-                    <nz-select formControlName="status" (ngModelChange)="statusChanged()">
-                        <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
-                        </nz-option>
-                    </nz-select>
-                    <ng-template #statusErrorMsg>
-                        <ng-container *ngIf="offerForm.get('status').dirty && offerForm.get('status').errors">
-                            Please select a status
-                        </ng-container>
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-    </div>
-    <div nz-row [ngStyle]="{'display': 'none'}">
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userOwnerId')}">
-                    Responsible</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="responsibleErrorMsg">
-                    <nz-select formControlName="userOwnerId" nzPlaceHolder="Select the owner of the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
-                    <ng-template #responsibleErrorMsg>
-                        <ng-container *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">
-                            Please input a user
-                        </ng-container>
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDelegateId"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('userDelegateId')}">
-                    Delegate</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <nz-select formControlName="userDelegateId" nzPlaceHolder="Select a delegate for the process">
-                        <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
-                        </nz-option>
-                    </nz-select>
 
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+    <div class="recru-row">
+        <nz-form-item>
+            <nz-form-control [nzErrorTip]="statusErrorMsg">
+                <nz-select *recruInput="'Status'" formControlName="status" (ngModelChange)="statusChanged()">
+                    <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}" [nzValue]="status.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #statusErrorMsg>
+                    <ng-container *ngIf="offerForm.get('status').dirty && offerForm.get('status').errors">
+                        Please select a status
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="hireDate"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('hireDate')}">
-                    Hire Date</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="hireDateErrorMsg">
-                    <nz-date-picker style="width: 100%;" formControlName="hireDate"></nz-date-picker>
-                    <ng-template #hireDateErrorMsg>
-                        <ng-container *ngIf="offerForm.get('hireDate').dirty && offerForm.get('hireDate').errors">
-                            Please input a hire date
-                        </ng-container>
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="bonus">Bonus</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" >
-                    <textarea rows="1" id="bonus" nz-input formControlName="bonus"
-                        placeholder="Input any additional information if necessary"></textarea>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+
+    <div class="recru-row" hidden>
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="responsibleErrorMsg">
+                <nz-select *recruInput="'Responsible'" formControlName="userOwnerId"
+                    nzPlaceHolder="Select the owner of the process">
+                    <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #responsibleErrorMsg>
+                    <ng-container *ngIf="offerForm.get('userOwnerId').dirty && offerForm.get('userOwnerId').errors">
+                        Please input a user
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control>
+                <nz-select *recruInput="'Delegate'" formControlName="userDelegateId"
+                    nzPlaceHolder="Select a delegate for the process">
+                    <nz-option *ngFor="let c of users" nzLabel="{{c.firstName}} {{c.lastName}}" [nzValue]="c.id">
+                    </nz-option>
+                </nz-select>
+
+            </nz-form-control>
+        </nz-form-item>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="remunerationOffer"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('remunerationOffer')}">Final Gross Salary
-                </nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="finalGrossSalaryErrorMsg">
-                    <input type="number" nz-input formControlName="remunerationOffer" id="remunerationOffer"
-                        placeholder="Please input the final gross remuneration offer" pattern="[0-9]+([\.,][0-9]+)?">
-                    <ng-template #finalGrossSalaryErrorMsg>
-                        <ng-container
-                            *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
-                            Please input a final gross remuneration offer
-                        </ng-container>
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="vacationDays">Vacation days *</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="vacationDaysErrorMsg">
-                    <input type="number" nz-input formControlName="vacationDays" id="vacationDays"
-                        placeholder="Please input the vacation days" pattern="[0-9]+([\.,][0-9]+)?">
-                        <ng-template #vacationDaysErrorMsg>
-                            <ng-container
-                                *ngIf="offerForm.get('vacationDays').dirty && offerForm.get('vacationDays').errors">
-                                Please input vacation days
-                            </ng-container>
-                        </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="hireDateErrorMsg">
+                <nz-date-picker *recruInput="'Hire Date'" formControlName="hireDate" style="width: 100%;">
+                </nz-date-picker>
+                <ng-template #hireDateErrorMsg>
+                    <ng-container *ngIf="offerForm.get('hireDate').dirty && offerForm.get('hireDate').errors">
+                        Please input a hire date
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control>
+                <input *recruInput="'Bonus'" id="bonus" nz-input formControlName="bonus">
+            </nz-form-control>
+        </nz-form-item>
     </div>
-    <div nz-row>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="healthInsurance"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('healthInsurance')}">
-                    Health insurance</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="healthInsuranceErrorMsg">
-                    <nz-select formControlName="healthInsurance">
-                        <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
-                            [nzValue]="insurance.id">
-                        </nz-option>
-                    </nz-select>
-                    <ng-template #healthInsuranceErrorMsg>
-                        <ng-container
-                            *ngIf="offerForm.get('healthInsurance').dirty && offerForm.get('healthInsurance').errors">
-                            Please input the health insurance
-                        </ng-container>
-                    </ng-template>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-            <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="notes"
-                    [ngClass]="{'requiredFieldLabel': isRequiredField('notes')}">
-                    Notes</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
-                    <input type="text" nz-input formControlName="notes" id="notes" placeholder="Please input the notes">
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="finalGrossSalaryErrorMsg">
+                <input *recruInput="'Final Gross Salary'" type="number" nz-input formControlName="remunerationOffer"
+                    id="remunerationOffer" pattern="[0-9]+([\.,][0-9]+)?">
+                <ng-template #finalGrossSalaryErrorMsg>
+                    <ng-container
+                        *ngIf="offerForm.get('remunerationOffer').dirty && offerForm.get('remunerationOffer').errors">
+                        Please input a final gross remuneration offer
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="vacationDaysErrorMsg">
+                <input *recruInput="'Vacation days'" type="number" nz-input formControlName="vacationDays" id="vacationDays" pattern="[0-9]+([\.,][0-9]+)?">
+                <ng-template #vacationDaysErrorMsg>
+                    <ng-container
+                        *ngIf="offerForm.get('vacationDays').dirty && offerForm.get('vacationDays').errors">
+                        Please input vacation days
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control [nzErrorTip]="healthInsuranceErrorMsg">
+                <nz-select *recruInput="'Health insurance'" formControlName="healthInsurance">
+                    <nz-option *ngFor="let insurance of healthInsuranceList" nzLabel="{{insurance.name}}"
+                        [nzValue]="insurance.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #healthInsuranceErrorMsg>
+                    <ng-container
+                        *ngIf="offerForm.get('healthInsurance').dirty && offerForm.get('healthInsurance').errors">
+                        Please input the health insurance
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-col-2 ">
+            <nz-form-control>
+                <input *recruInput="'Notes'" type="text" nz-input formControlName="notes" id="notes">
+            </nz-form-control>
+        </nz-form-item>
     </div>
 </form>

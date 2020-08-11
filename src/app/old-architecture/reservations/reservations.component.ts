@@ -113,8 +113,8 @@ export class ReservationsComponent implements OnInit {
     this.endValue = null;
     const modal: NzModalRef = this.modalService.create({
       nzTitle: 'New Reservation',
+      nzWrapClassName: ' recru-modal recru-modal--lg',
       nzContent: modalContent,
-      nzWidth: '50%',
       nzFooter: [
         {
           label: 'New',
@@ -134,11 +134,10 @@ export class ReservationsComponent implements OnInit {
   showEditModal(reservation: Reservation, modalContent: TemplateRef<{}>) {
     this.fillEditReservationForm(reservation);
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: 'Edit Reservation',
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '50%',
       nzFooter: [
         {
           label: 'Cancel',

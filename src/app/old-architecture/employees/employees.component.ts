@@ -141,11 +141,10 @@ export class EmployeesComponent implements OnInit {
     this.employeeForm.reset();
     this.fillEmployeeForm();
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: 'Add New Employee',
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '70%',
       nzFooter: [
         {
           label: 'Cancel',
@@ -205,11 +204,10 @@ export class EmployeesComponent implements OnInit {
     this.editEmployee = editEmployee;
     this.fillEditEmployeeForm(editEmployee);
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: "Edit " + editEmployee.name + ' ' + editEmployee.lastName,
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '90%',
       nzFooter: [
         {
           label: 'Cancel',
@@ -378,7 +376,7 @@ export class EmployeesComponent implements OnInit {
 
   showNewReviewerModal(modalContent: TemplateRef<{}>) {
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal',
       nzTitle: "New Reviewer",
       nzContent: modalContent,
       nzClosable: true,
@@ -423,7 +421,7 @@ export class EmployeesComponent implements OnInit {
 
   showNoReviewersAvailablesModal() {
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal',
       nzTitle: "New Reviewer",
       nzContent: "There are no availables reviewers to reeplace " + this.editEmployee.name + " " + this.editEmployee.lastName + " as reviewer.",
       nzClosable: true,

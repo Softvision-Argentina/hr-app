@@ -1,0 +1,28 @@
+.recru-custom-items-list {
+  width: 100%;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    column-gap: 8px;
+    align-items: center;
+    width: 100%;
+
+    &:not(.highlight-border) {
+      padding: 5px 5px 0 12px;
+    }
+  }
+
+  &__item {
+    flex-basis: 30%;
+  }
+
+  &__button {
+    flex-basis: 4%;
+  }
+
+  nz-divider {
+    margin: 0 0 10px 0;
+  }
+}

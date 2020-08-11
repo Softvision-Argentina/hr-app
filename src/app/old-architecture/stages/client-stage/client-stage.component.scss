@@ -1,18 +1,25 @@
 .addInterview {
-    margin-bottom: 1rem;
-  }
+  margin-bottom: 1rem;
+}
 
-.interviewEditor ::ng-deep .ant-table-tbody > tr > td, .ant-table-thead > tr > th{ 
-    padding: 10px; 
+.interviewEditor ::ng-deep .ant-table-tbody > tr > td,
+.ant-table-thead > tr > th {
+  padding: 10px;
 }
+
 .action-btn {
-    color:inherit;
+  color: inherit;
 }
+
 .client-table__row {
-    width: 500px;
+  width: 500px;
 }
 
 .interviewEditor ::ng-deep .recruEdit-editor {
-    max-height: 60px;
-    height: auto;
+  max-height: 60px;
+  height: auto;
+}
+
+.interviewEditor nz-form-item {
+  margin-bottom: 0;
 }

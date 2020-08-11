@@ -1,3 +1,5 @@
+@import 'variables';
+
 .side-menu{
   position: fixed;
   display: flex;
@@ -7,7 +9,7 @@
   width: 140px;
   padding: 24px 18px 0px 0px;
   z-index: 1;
-  background-color: white;
+  background-color: $light-color;
   top: 0;
   left:0;
 }
@@ -66,7 +68,7 @@
 }
 
 .active .gradient-border{
-  background-image: linear-gradient(#F4633A, #C800A1);
+  background-image: linear-gradient($flamingo, #C800A1);
 }
 
 .hideReferrals {

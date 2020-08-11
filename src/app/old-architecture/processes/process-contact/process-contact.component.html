@@ -10,7 +10,7 @@
                     <ng-template #nameErrorMsg>
                         <ng-container *ngIf="candidateForm.get('name').dirty && candidateForm.get('name').errors">
                             <ng-container *ngIf="candidateForm.get('name')?.hasError('required')">
-                                Please input the name!
+                                Please input the name
                             </ng-container>
                         </ng-container>
                     </ng-template>
@@ -32,7 +32,7 @@
                         <ng-container
                             *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
                             <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
-                                Please input the First name!
+                                Please input the First name
                             </ng-container>
                         </ng-container>
                     </ng-template>
@@ -49,7 +49,7 @@
                         <ng-container
                             *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
                             <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
-                                Please input the last name!
+                                Please input the last name
                             </ng-container>
                         </ng-container>
                     </ng-template>
@@ -74,7 +74,7 @@
                     <input nz-input formControlName="email" id="email" placeholder="Please input the email">
                     <ng-template #emailErrorMsg>
                         <ng-container *ngIf="candidateForm.get('email').dirty && candidateForm.get('email').errors">
-                            The input is not valid E-mail!
+                            The input is not valid E-mail
                         </ng-container>
                     </ng-template>
                 </nz-form-control>

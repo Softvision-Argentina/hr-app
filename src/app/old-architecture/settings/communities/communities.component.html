@@ -1,0 +1,84 @@
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <button nz-button class="recru-button-cta" nzType="primary" (click)="showAddModal(communityModal)"
+            nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new community</button>
+    </div>
+</div>
+
+<br />
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <nz-table #communityTable [nzData]="detailedCommunity" [nzPageSize]="10">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Profile</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let community of communityTable.data">
+                    <td>{{ community.name }}</td>
+                    <td>{{ community.description }}</td>
+                    <td>{{ getCProfileNameByID(community.profileId) }}</td>
+                    <td>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(communityModal, community.id)" style="cursor: pointer;" nz-icon
+                            nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(community.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #communityModal>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'" class="recru-container">
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="nameErrorMsg">
+                    <input *recruInput="'Name'" type="text" nz-input formControlName="name" id="name">
+                    <ng-template #nameErrorMsg>
+                        <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
+                            <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
+                                Please input the name
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="descriptionErrorMsg">
+                    <input *recruInput="'Description'" type="text" nz-input formControlName="description"
+                        id="description">
+                    <ng-template #descriptionErrorMsg>
+                        <ng-container
+                            *ngIf="validateForm.get('description').dirty && validateForm.get('description').errors">
+                            <ng-container *ngIf="validateForm.get('description')?.hasError('required')">
+                                Please input the description.
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control>
+                    <nz-select *recruInput="'Candidate profile'" formControlName="profileId">
+                        <nz-option *ngFor="let candidate of candidateprofiles" [nzLabel]="candidate.name"
+                            [nzValue]="candidate.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+</ng-template>

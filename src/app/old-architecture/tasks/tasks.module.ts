@@ -6,6 +6,7 @@ import { NzButtonModule, NzCardModule, NzCheckboxModule, NzDatePickerModule, NzD
 import { PipesModule } from '@app/shared/pipes/pipes.module';
 import { TasksComponent } from './tasks.component';
 import { TasksRoutes } from './tasks.routing';
+import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
   declarations: [TasksComponent],
@@ -29,7 +30,8 @@ import { TasksRoutes } from './tasks.routing';
     NzFormModule,
     NzSelectModule,
     NzDatePickerModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    SharedModule
   ],
   exports: [
     TasksComponent,

@@ -1,0 +1,20 @@
+.ant-slider {
+  &:hover {
+    .ant-slider-track {
+      background-color: $flamingo;
+    }
+  }
+
+  .ant-slider-track {
+    background-color: $flamingo;
+  }
+
+  .ant-slider-handle {
+    border: none;
+    background-image: $carnival-gradient;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}

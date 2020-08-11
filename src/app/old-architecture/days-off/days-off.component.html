@@ -1,8 +1,9 @@
-<br/>
-<br/>
+<br />
+<br />
 <div nz-row>
     <div nz-col nzSpan="12">
-        <button nz-button nzType="primary" (click)="showAddModal(DaysOffModal)" nzShape="round">
+        <button class="recru-button-cta" nz-button nzType="primary" (click)="showAddModal(DaysOffModal)"
+            nzShape="round">
             <i nz-icon nzType="plus" theme="outline"></i>
             Add new day/s off
         </button>
@@ -14,7 +15,7 @@
         <nz-table #daysOffTable class="daysOffTable" [nzData]="listOfDaysOff" [nzPageSize]="10" nzShowSizeChanger>
             <thead>
                 <tr>
-                    <th nzCustomFilter>D.N.I.
+                    <th nzCustomFilter>DNI
                         <nz-filter-trigger #dropdown [nzDropdownMenu]="dniFilter">
                             <i nz-icon nzType="search"></i>
                         </nz-filter-trigger>
@@ -104,115 +105,99 @@
 </div>
 
 <ng-template #DaysOffModal>
-    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
-        <div nz-row>
-            <div nz-col nzSpan="24">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="DNI">D.N.I.</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="dniErrorMsg">
-                        <input #DNI type="number" nz-input formControlName="DNI" id="DNI"
-                            placeholder="Please input the DNI">
-                        <ng-template #dniErrorMsg>
-                            <ng-container *ngIf="validateForm.get('DNI').dirty && validateForm.get('DNI').errors">
-                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('required')">
-                                    Please input the DNI!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooLongError')">
-                                    The DNI has more than 8 characters!
-                                </ng-container>
-                                <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooShortError')">
-                                    The DNI shouldn't be less than zero!
-                                </ng-container>
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'" class="recru-container">
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="dniErrorMsg">
+                    <input *recruInput="'DNI'" #DNI type="number" nz-input formControlName="DNI" id="DNI">
+                    <ng-template #dniErrorMsg>
+                        <ng-container *ngIf="validateForm.get('DNI').dirty && validateForm.get('DNI').errors">
+                            <ng-container *ngIf="validateForm.get('DNI')?.hasError('required')">
+                                Please input the DNI
                             </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+                            <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooLongError')">
+                                The DNI has more than 8 characters
+                            </ng-container>
+                            <ng-container *ngIf="validateForm.get('DNI')?.hasError('dniTooShortError')">
+                                The DNI shouldn't be less than zero
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
         </div>
-        <div nz-row>
-            <div nz-col nzSpan="24">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type">Reason</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="reasonErrorMsg">
-                        <nz-select formControlName="type" id="idType">
-                            <nz-option *ngFor="let reason of reasons" nzLabel="{{reason.name}}" [nzValue]="reason.id">
-                            </nz-option>
-                        </nz-select>
-                        <ng-template #reasonErrorMsg>
-                            <ng-container *ngIf="validateForm.get('type').dirty && validateForm.get('type').errors">
-                                <ng-container *ngIf="validateForm.get('type')?.hasError('required')">
-                                    Please input the reason!
-                                </ng-container>
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="reasonErrorMsg">
+                    <nz-select *recruInput="'Reason'" formControlName="type" id="idType">
+                        <nz-option *ngFor="let reason of reasons" nzLabel="{{reason.name}}" [nzValue]="reason.id">
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #reasonErrorMsg>
+                        <ng-container *ngIf="validateForm.get('type').dirty && validateForm.get('type').errors">
+                            <ng-container *ngIf="validateForm.get('type')?.hasError('required')">
+                                Please input the reason
                             </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
         </div>
-        <div nz-row>
-            <div nz-col nzSpan="12">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="12" [nzXs]="24" nzFor="date">Date</nz-form-label>
-                    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="dateErrorMsg">
-                        <div *ngIf="!isHr">
-                            <nz-date-picker style="width: 100%;" formControlName="date" nzFormat="yyyy-MM-dd"
-                                [nzDisabledDate]="disabledDate">
-                            </nz-date-picker>
-                        </div>
-                        <div *ngIf="isHr">
-                            <nz-date-picker style="width: 100%;" formControlName="date" nzFormat="yyyy-MM-dd">
-                            </nz-date-picker>
-                        </div>
-                        <ng-template #dateErrorMsg>
-                            <ng-container *ngIf="validateForm.get('date').dirty && validateForm.get('date').errors">
-                                Please input a date
-                            </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="12">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="4" [nzXs]="2" nzFor="endDate">To</nz-form-label>
-                    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="toDateErrorMsg">
-                        <div *ngIf="!isHr">
-                            <nz-date-picker style="width: 100%;" formControlName="endDate" nzFormat="yyyy-MM-dd"
-                                [nzDisabledDate]="disabledDate">
-                            </nz-date-picker>
-                        </div>
-                        <div *ngIf="isHr">
-                            <nz-date-picker style="width: 100%;" formControlName="endDate" nzFormat="yyyy-MM-dd">
-                            </nz-date-picker>
-                        </div>
-                        <ng-template #toDateErrorMsg>
-                            <ng-container
-                                *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
-                                Please input a final date
-                            </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+        <div class="recru-row">
+            <nz-form-item class="recru-col-2 ">
+                <nz-form-control [nzErrorTip]="dateErrorMsg">
+                    <div *ngIf="!isHr">
+                        <nz-date-picker *recruInput="'Date'" formControlName="date" nzFormat="yyyy-MM-dd"
+                            [nzDisabledDate]="disabledDate">
+                        </nz-date-picker>
+                    </div>
+                    <div *ngIf="isHr">
+                        <nz-date-picker *recruInput="'Date'" formControlName="date" nzFormat="yyyy-MM-dd">
+                        </nz-date-picker>
+                    </div>
+                    <ng-template #dateErrorMsg>
+                        <ng-container *ngIf="validateForm.get('date').dirty && validateForm.get('date').errors">
+                            Please input a date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="recru-col-2 ">
+                <nz-form-control [nzErrorTip]="toDateErrorMsg">
+                    <div *ngIf="!isHr">
+                        <nz-date-picker *recruInput="'To'" formControlName="endDate" nzFormat="yyyy-MM-dd"
+                            [nzDisabledDate]="disabledDate">
+                        </nz-date-picker>
+                    </div>
+                    <div *ngIf="isHr">
+                        <nz-date-picker *recruInput="'To'" formControlName="endDate" nzFormat="yyyy-MM-dd">
+                        </nz-date-picker>
+                    </div>
+                    <ng-template #toDateErrorMsg>
+                        <ng-container *ngIf="validateForm.get('endDate').dirty && validateForm.get('endDate').errors">
+                            Please input a final date
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
         </div>
-        <div nz-row *ngIf="isHr">
-            <div nz-col nzSpan="24">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status">Status</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="statusErrorMsg">
-                        <nz-radio-group formControlName="status">
-                            <label *ngFor="let status of statusList" nz-radio-button
-                                [nzValue]="status.id"><span>{{ status.name }}</span></label>
-                        </nz-radio-group>
-                        <ng-template #statusErrorMsg>
-                            <ng-container>
-                                <ng-container *ngIf="validateForm.get('status')?.hasError('required')">
-                                    Please input the status!
-                                </ng-container>
+        <div class="recru-row" *ngIf="isHr">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="statusErrorMsg">
+                    <nz-radio-group *recruInput="'Status'" formControlName="status">
+                        <label *ngFor="let status of statusList" nz-radio-button
+                            [nzValue]="status.id"><span>{{ status.name }}</span></label>
+                    </nz-radio-group>
+                    <ng-template #statusErrorMsg>
+                        <ng-container>
+                            <ng-container *ngIf="validateForm.get('status')?.hasError('required')">
+                                Please input the status
                             </ng-container>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
         </div>
     </form>
 </ng-template>

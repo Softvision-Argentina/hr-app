@@ -1,3 +1,5 @@
+@import 'variables';
+
 .container {
     position: fixed;
     left: 36%;
@@ -45,11 +47,11 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.67px;
-    color: #ffffff;
+    color: $light-color;
     width: 215px;
     height: 40px;
     object-fit: contain;
-    background-image: linear-gradient(to top, #f4633a, #c800a1);
+    background-image: $carnival-gradient;
     border: none;
 }
 
@@ -64,7 +66,7 @@
     line-height: normal;
     letter-spacing: normal;
     color: #c800a1;
-    background-color: white;
+    background-color: $light-color;
     border: none;
     margin-left: 51px;
 }

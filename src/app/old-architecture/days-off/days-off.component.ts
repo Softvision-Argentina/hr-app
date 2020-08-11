@@ -124,7 +124,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
       nzTitle: 'Add new day off',
       nzContent: modalContent,
       nzClosable: true,
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--sm',
       nzFooter: [
         {  label: 'Cancel', onClick: () => modal.destroy() },
         {
@@ -190,7 +190,7 @@ export class DaysOffComponent implements OnInit, OnDestroy {
     let editedDayOff: DaysOff = this.listOfDaysOff.filter(_ => _.id === id)[0];
     this.fillForm(editedDayOff);
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--sm',
       nzTitle: 'Edit day off',
       nzContent: modalContent,
       nzClosable: true,

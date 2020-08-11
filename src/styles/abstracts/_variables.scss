@@ -1,11 +1,14 @@
 //Colors
 $hollywood-cerise: #c800a1;
 $flamingo: #f4633a;
+$sunset-orange: #ff4d4f;
+$west-side: #ff8f1c;
 
 $silver: #c4c4c4;
+$athens-gray: #ecebed;
 $wild-sand: #f4f4f4;
 
-$black: #000000;
+$black: #222222;
 $white: #ffffff;
 
 //Roles
@@ -15,11 +18,27 @@ $secondary-color: $flamingo;
 $dark-color: $black;
 $light-color: $white;
 
+$disabled-color: $athens-gray;
+
+$error-color: $sunset-orange;
+
+$light-soft-background-color: $wild-sand;
+
+$carnival-gradient: linear-gradient(to right, $flamingo, $hollywood-cerise);
+$carnival-gradient-reverse: linear-gradient(
+  to right,
+  $hollywood-cerise,
+  $flamingo
+);
+$carnival-gradient2: linear-gradient(to right, $west-side, $flamingo);
+
 //Inputs
 $input-primary-color: $silver;
 
+//Forms
+
 //Login
-$form-border: $silver;
+$login-form-border: $silver;
 $login-main-container: $wild-sand;
 $login-waves-image: "../../../assets/images/pattern-waves.png";
 $login-hero-image: "../../../assets/images/image-header-min.jpg";

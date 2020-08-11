@@ -1,0 +1,67 @@
+.recru-modal {
+  .ant-modal-title {
+    font-family: "ProximaNova-Bold";
+  }
+
+  &--sm {
+    .ant-modal {
+      width: 320px !important;
+    }
+
+    .ant-modal-footer button,
+    .ant-modal-footer button + button {
+      width: calc(25% + 2rem);
+    }
+  }
+
+  &--md {
+    .ant-modal {
+      width: 570 !important;
+    }
+  }
+
+  &--lg {
+    .ant-modal {
+      width: 95% !important;
+    }
+  }
+
+  &--title-lg{
+    .ant-modal-title {
+      font-size: 36px;
+      line-height: 36px;
+    }
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .recru-modal {
+    &--sm {
+      .ant-modal {
+        width: 425px !important;
+      }
+    }
+
+    &--lg {
+      .ant-modal {
+        width: 565px !important;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 786px) {
+  .recru-modal {
+    &--lg {
+      .ant-modal {
+        width: 770px !important;
+      }
+    }
+  }
+}
+
+/* footer */
+.ant-modal-footer {
+  text-align: center;
+  border-top: 0;
+}

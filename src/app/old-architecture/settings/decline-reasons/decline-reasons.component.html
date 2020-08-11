@@ -1,0 +1,87 @@
+<div nz-row>
+    <div nz-col nzSpan="23">
+        <button nz-button class="recru-button-cta" nzType="primary" (click)="showAddModal(declineReasonModal)"
+            nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new decline reason</button>
+    </div>
+</div>
+<br />
+<div nz-row>
+    <div nz-col nzSpan="23">
+        <nz-table #declineReasonTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+            <thead>
+                <tr>
+                    <th nzCustomFilter>Name
+                        <nz-filter-trigger #dropdown [nzDropdownMenu]="nameFilter">
+                            <i nz-icon nzType="search"></i>
+                        </nz-filter-trigger>
+                        <nz-dropdown-menu #nameFilter="nzDropdownMenu">
+                            <div class="ant-table-filter-dropdown">
+                                <div class="search-box">
+                                    <input nz-input #focusInput type="text" placeholder="Search name"
+                                        [(ngModel)]="searchValue" (keyup.enter)="search()">
+                                    <button nz-button nzSize="small" nzType="primary" (click)="search()"
+                                        class="search-button">Search</button>
+                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+                                </div>
+                            </div>
+                        </nz-dropdown-menu>
+                    </th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let declineReason of declineReasonTable.data">
+                    <td>{{ declineReason.name }}</td>
+                    <td>{{ declineReason.description }}</td>
+                    <td>
+                        <i (click)="showDetailsModal(declineReason.id)" style="cursor: pointer;" nz-icon
+                            nzType="info-circle" theme="outline" nzTooltipTitle="Details" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(declineReasonModal, declineReason.id)" style="cursor: pointer;"
+                            nz-icon nzType="edit" theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(declineReason.id)" style="cursor: pointer;" nz-icon
+                            nzType="delete" theme="outline" nzTooltipTitle="Delete" nz-tooltip hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Skill type Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
+    <nz-list nzBordered nzSize="large" *ngIf="emptyDeclineReason">
+        <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyDeclineReason.name}}</nz-list-item>
+        <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyDeclineReason.description}}
+        </nz-list-item>
+    </nz-list>
+</nz-modal>
+
+<ng-template #declineReasonModal>
+    <form nz-form [formGroup]="validateForm" class="recru-container">
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="nameErrorMsg">
+                    <input *recruInput="'Name'" type="text" nz-input formControlName="name" id="name">
+                    <ng-template #nameErrorMsg>
+                        <ng-container
+                            *ngIf="validateForm.get('name').dirty && validateForm.get('name')?.hasError('required')">
+                            Please input the name
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control>
+                    <input *recruInput="'Description'" type="text" nz-input formControlName="description"
+                        id="description">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+</ng-template>

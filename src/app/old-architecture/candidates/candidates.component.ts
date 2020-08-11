@@ -17,6 +17,7 @@ import { validateCandidateForm } from './candidate-form.validator';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { dniValidator } from '@app/shared/utils/dni.validator';
 import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'app-candidates',
@@ -278,11 +279,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     let editedCandidate: Candidate = this.filteredCandidates.filter(candidate => candidate.id === id)[0];
     this.fillCandidateForm(editedCandidate);
     const modal = this.facade.modalService.create({
-      nzWrapClassName: 'modal-custom',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzTitle: 'Edit Candidate',
       nzContent: modalContent,
       nzClosable: true,
-      nzWidth: '90%',
       nzFooter: [
         {
           label: 'Cancel',
@@ -518,5 +518,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.candidateSubscriptions.unsubscribe();
+  }
+
+  statusChanged() {
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
   }
 }

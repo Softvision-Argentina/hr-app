@@ -7,6 +7,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { Globals } from '@shared/utils/globals';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { Subscription } from 'rxjs';
+import { resizeModal } from '@app/shared/utils/resize-modal.util';
 
 @Component({
   selector: 'pre-offer-history',
@@ -23,7 +24,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
   public set processId(value: number) {
     this._processId = value;
   }
-  @Input() preOfferStatus:number;
+  @Input() preOfferStatus: number;
 
   editForm: FormGroup = this.fb.group({
     preOfferDate: [],
@@ -52,7 +53,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
   preOffers: PreOffer[] = [];
   preOfferOperations: { operation: string; data: PreOffer }[] = [];
   processSaveSubscription: Subscription;
-  offerCounter:number = 0;
+  offerCounter: number = 0;
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals) {
     this.preOfferStatusList = globals.preOfferStatusList;
     this.healthInsuranceList = globals.healthInsuranceList;
@@ -66,9 +67,9 @@ export class PreOfferHistory implements OnInit, OnDestroy {
   getPreOffers() {
     this.facade.preOfferService.get()
       .subscribe(res => {
-        if(res.length > 0){
+        if (res.length > 0) {
           this.offerCounter = res.reduce((ac, cu) => ac.id > cu.id ? ac : cu).id + 1;
-        } else{
+        } else {
           this.offerCounter = 1;
         }
         this.preOffers = res.filter(x => x.processId === this.processId);
@@ -91,8 +92,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
       nzTitle: 'Pre-Offer history',
       nzContent: modalContent,
       nzClosable: false,
-      nzWrapClassName: 'vertical-center-modal modal-custom',
-      nzWidth: '60%',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzFooter: null
     });
   }
@@ -102,9 +102,9 @@ export class PreOfferHistory implements OnInit, OnDestroy {
     tomorrow.setHours(0, 0, 0, 0);
     tomorrow.setDate(tomorrow.getDate() + 1);
     current.setHours(0, 0, 0, 0);
-    if(current < tomorrow){
+    if (current < tomorrow) {
       return true;
-    } else{
+    } else {
       return false;
     }
   }
@@ -120,7 +120,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
 
   addPreOffer() {
     this.validateEditForm();
-    if(this.editForm.valid) {
+    if (this.editForm.valid) {
       const currentPreOffer = new PreOffer();
       currentPreOffer.id = this.offerCounter;
       currentPreOffer.preOfferDate = this.editForm.controls['preOfferDate'].value;
@@ -129,7 +129,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
       currentPreOffer.healthInsurance = this.editForm.controls['healthInsurance'].value;
       currentPreOffer.notes = this.editForm.controls['notes'].value;
       currentPreOffer.vacationDays = this.editForm.controls['vacationDays'].value;
-      if(this.editForm.controls['bonus'].value === null) {
+      if (this.editForm.controls['bonus'].value === null) {
         currentPreOffer.bonus = 0;
       } else {
         currentPreOffer.bonus = this.editForm.controls['bonus'].value;
@@ -148,30 +148,30 @@ export class PreOfferHistory implements OnInit, OnDestroy {
     }
 
   }
-  savePreOfferInDatabase(processId: number){
+  savePreOfferInDatabase(processId: number) {
     this.preOfferOperations.forEach(preOfferOperation => {
       preOfferOperation.data.processId = processId;
       switch (preOfferOperation.operation) {
         case 'add':
           this.facade.preOfferService.add(preOfferOperation.data)
-          .subscribe(() =>{
-          }, err => {
-            this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
-          });
+            .subscribe(() => {
+            }, err => {
+              this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
+            });
           break;
         case 'edit':
           this.facade.preOfferService.update(preOfferOperation.data.id, preOfferOperation.data)
-          .subscribe(() => {
-          }, err =>{
-            this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
-          });
+            .subscribe(() => {
+            }, err => {
+              this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
+            });
           break;
         case 'delete':
           this.facade.preOfferService.delete(preOfferOperation.data.id)
-          .subscribe(() => {
-          }, err => {
-            this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
-          });
+            .subscribe(() => {
+            }, err => {
+              this.facade.errorHandlerService.showErrorMessage(err, 'An error ocurred while adding pre offer');
+            });
           break;
         default:
           break;
@@ -189,10 +189,10 @@ export class PreOfferHistory implements OnInit, OnDestroy {
     this.facade.modalService.confirm({
       nzTitle: message,
       nzContent: '',
+      nzWrapClassName: 'recru-modal recru-modal--lg',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzWidth: '50%',
       nzOnOk: () => {
         let editedPreOfferOp = this.preOfferOperations.find(preOfferOperation => preOfferOperation.data.id === id);
         const editedPreOffer = this.preOffers.find(preOffer => preOffer.id === id);
@@ -205,14 +205,16 @@ export class PreOfferHistory implements OnInit, OnDestroy {
               preOfferOp.data.status = newStatus;
             }
           })
-        } else{
-          editedPreOfferOp = {operation: 'edit', data: this.preOffers.find(preOfferOp => preOfferOp.id === id)};
+        } else {
+          editedPreOfferOp = { operation: 'edit', data: this.preOffers.find(preOfferOp => preOfferOp.id === id) };
           editedPreOfferOp.data.status = newStatus;
           this.preOfferOperations.push(editedPreOfferOp);
         }
         this.validateAddPreOffers();
       }
     });
+
+    resizeModal();
   }
 
   getStatusName(status: number): string {
@@ -221,12 +223,12 @@ export class PreOfferHistory implements OnInit, OnDestroy {
 
   showDeleteConfirm(id: number): void {
     this.facade.modalService.confirm({
+      nzWrapClassName: 'recru-modal recru-modal--sm',
       nzTitle: 'Are you sure to delete?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzWidth: '50%',
       nzOnOk: () => {
 
         const preOfferOp = this.preOfferOperations.find(po => po.data.id === id);
@@ -239,7 +241,7 @@ export class PreOfferHistory implements OnInit, OnDestroy {
             data: deletedPreOffer
           });
         }
-        this.preOffers = this.preOffers.filter(preOffer => preOffer.id !== id );
+        this.preOffers = this.preOffers.filter(preOffer => preOffer.id !== id);
         this.validateAddPreOffers();
       }
     });
@@ -288,4 +290,8 @@ export class PreOfferHistory implements OnInit, OnDestroy {
 
   }
 
+  resizeModal() {
+    //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
+    resizeModal();
+  }
 }

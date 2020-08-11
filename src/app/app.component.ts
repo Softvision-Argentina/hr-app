@@ -39,7 +39,9 @@ export class AppComponent   {
       this.showBigImage = value;
     });
 
-    this._referralsService._displayNavAndSideMenuSource.subscribe(instruction => this.displayNavAndSideMenu = instruction);
+    this._referralsService._displayNavAndSideMenuSource.pipe(
+      debounceTime(100)
+    ).subscribe(instruction => this.displayNavAndSideMenu = instruction);
   }
 
   changeBg() {

@@ -1,0 +1,24 @@
+.highlight-border {
+    box-sizing: border-box;
+    position: relative;
+    background: $light-color;
+    border-radius: 4px;
+    background-clip: padding-box;
+    padding: 24px 0px 0 8px;
+    border: 5px solid transparent;
+    margin-bottom: 12px;
+  
+    &::before {
+      /*Do not edit this. This sets the highlight border*/
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: -5px;
+      background: $carnival-gradient;
+      border-radius: inherit;
+      z-index: -1;
+    }
+  }

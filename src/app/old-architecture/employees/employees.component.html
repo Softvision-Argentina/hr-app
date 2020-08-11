@@ -61,7 +61,7 @@
                         <ng-template #firstNameErrorMsg>
                             <ng-container *ngIf="employeeForm.get('name').dirty && employeeForm.get('name').errors">
                                 <ng-container *ngIf="employeeForm.get('name')?.hasError('required')">
-                                    Please input the name!
+                                    Please input the name
                                 </ng-container>
                             </ng-container>
                         </ng-template>
@@ -78,7 +78,7 @@
                             <ng-container
                                 *ngIf="employeeForm.get('lastName').dirty && employeeForm.get('lastName').errors">
                                 <ng-container *ngIf="employeeForm.get('lastName')?.hasError('required')">
-                                    Please input the last name!
+                                    Please input the last name
                                 </ng-container>
                             </ng-container>
                         </ng-template>
@@ -94,7 +94,7 @@
                         <input formControlName="dni" id="'dni'" type="number" nz-input placeholder="Please input a DNI">
                         <ng-template #dniErrorMsg>
                             <ng-container *ngIf="employeeForm.get('dni').dirty && employeeForm.get('dni').errors">
-                                Please input the DNI!
+                                Please input the DNI
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -111,7 +111,7 @@
                         <ng-template #emailErrorMsg>
                             <ng-container
                                 *ngIf="employeeForm.get('emailAddress').dirty && employeeForm.get('emailAddress').errors">
-                                The input is not valid E-mail!
+                                The input is not valid E-mail
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -134,7 +134,7 @@
                         <ng-template #phoneNumberErrorMsg>
                             <ng-container
                                 *ngIf="employeeForm.get('phoneNumber').dirty && employeeForm.get('phoneNumber').errors">
-                                Please input your phone number!
+                                Please input your phone number
                             </ng-container>
                         </ng-template>
                     </nz-form-control>
@@ -162,7 +162,7 @@
                         <ng-template #roleErrorMsg>
                             <ng-container *ngIf="employeeForm.get('roleId').dirty && employeeForm.get('roleId').errors">
                                 <ng-container *ngIf="employeeForm.get('roleId')?.hasError('required')">
-                                    Please input the role!
+                                    Please input the role
                                 </ng-container>
                             </ng-container>
                         </ng-template>
@@ -217,10 +217,10 @@
                             <nz-autocomplete [nzDataSource]="filteredReviewersNames" #auto> </nz-autocomplete>
                             <ng-template #reviewerErrorMsg style="color: #f5222d">
                                 <ng-container *ngIf="showInputReviewerMessage">
-                                    Please input the Reviewer!
+                                    Please input the Reviewer
                                 </ng-container>
                                 <ng-container *ngIf="showReviewerNotFoundMessage">
-                                    Reviewer not found!
+                                    Reviewer not found.
                                 </ng-container>
                             </ng-template>
                         </nz-form-control>
@@ -252,10 +252,10 @@
             <nz-autocomplete [nzDataSource]="filteredEditReviewersNames" #auto> </nz-autocomplete>
             <ng-template #editReviewerErrorMsg style="color: #f5222d">
                 <ng-container *ngIf="showInputReviewerMessage">
-                    Please input the Reviewer!
+                    Please input the Reviewer
                 </ng-container>
                 <ng-container *ngIf="showReviewerNotFoundMessage">
-                    Reviewer not found!
+                    Reviewer not found.
                 </ng-container>
             </ng-template>
         </nz-form-control>
@@ -282,7 +282,7 @@
                 <ng-container
                     *ngIf="newReviewerForm.get('reviewerId').dirty && newReviewerForm.get('reviewerId').errors">
                     <ng-container *ngIf="newReviewerForm.get('reviewerId')?.hasError('required')">
-                        Please input the reviewer!
+                        Please input the reviewer
                     </ng-container>
                 </ng-container>
             </ng-template>

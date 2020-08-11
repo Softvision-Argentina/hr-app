@@ -1,0 +1,27 @@
+.slick-prev:before {
+  content: none !important;
+  margin-left: 32px !important;
+  left: -45px !important;
+}
+.slick-next:before {
+  content: none !important;
+  margin-right: 36px !important;
+}
+
+.carousel.slick-slider {
+  display: flex;
+  column-gap: 16px;
+
+  .slick-next,
+  .slick-prev {
+    width: 4rem;
+    display: flex;
+    position: initial;
+    transform: none;
+    height: auto;
+
+    img {
+      width: 100%;
+    }
+  }
+}

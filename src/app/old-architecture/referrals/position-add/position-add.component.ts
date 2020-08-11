@@ -13,7 +13,7 @@ import { NzModalService } from 'ng-zorro-antd';
   styleUrls: ['./position-add.component.scss']
 })
 export class PositionAddComponent implements OnInit {
-
+  
   @Input() private _communities: Community[];
   public get communities(): Community[] {
     return this._communities;

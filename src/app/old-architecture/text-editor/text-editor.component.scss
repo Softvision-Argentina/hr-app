@@ -1,22 +1,12 @@
+@import 'variables';
+
 .text-editor {
   display: flex;
   flex-direction: column;
   line-height: 1.5;
 }
 
-.recruEdit-wrapper-noteditable{
-  display: flex;
-  flex: 1;
-  flex-basis: auto;
-  flex-direction: column;
-  position: relative;
-  height: auto;
-  border-radius: 4px;
-  outline: none;  
-  transition: all 0.3s;
-}
-
-.recruEdit-wrapper {
+.recruEdit-wrapper-noteditable {
   display: flex;
   flex: 1;
   flex-basis: auto;
@@ -25,8 +15,30 @@
   height: auto;
   border-radius: 4px;
   outline: none;
+  transition: all 0.3s;
+}
+
+.recruEdit-wrapper {
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+  border-radius: 4px;
+  outline: none;
   border: 1px solid #d9d9d9;
   transition: all 0.3s;
+  background-color: $light-color;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+
+  &.focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba(200, 0, 161, 0.2);
+    border-right-width: 1px !important;
+  }
 }
 
 .recruEdit-editor {
@@ -34,22 +46,11 @@
   padding: 4px 11px;
   height: 100px;
   overflow-y: auto;
-  background-color: white;  
   word-break: break-all;
 }
 
 .recruEdit-editor:focus {
   outline: 0;
-}
-
-.recruEdit-wrapper.focus {
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-}
-
-.recruEdit-wrapper.focus,
-.recruEdit-wrapper.hover {
-  border-color: #40a9ff;
-  border-right-width: 1px !important;
 }
 
 .recruEdit-toolbar {
@@ -80,15 +81,15 @@
 
 .recruEdit-color-container {
   position: absolute;
-  top: 90px;
+  top: 135px;
   left: 132px;
-  z-index: 100;
+  z-index: 500;
 }
 
 .recruEdit-color-list {
   margin: 0;
   padding: 4px;
-  background-color: white;
+  background-color: $light-color;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
@@ -127,8 +128,8 @@
   border: 1px solid #d9d9d9;
 }
 
-[name="Remove link"]::after{
-  content: '✛';
+[name="Remove link"]::after {
+  content: "✛";
   color: red;
   font-size: smaller;
   font-weight: bolder;
@@ -137,4 +138,3 @@
   right: calc(50% - 10px);
   transform: rotate(45deg);
 }
-

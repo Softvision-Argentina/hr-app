@@ -51,12 +51,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'candidates-profile',
-    loadChildren: () => import('@old-architecture/candidates-profile/candidates-profile.module').then(m => m.CandidatesProfileModule),
+    loadChildren: () => import('@old-architecture/settings/candidates-profile/candidates-profile.module').then(m => m.CandidatesProfileModule),
     canLoad: [HRGuard]
   },
   {
     path: 'communities',
-    loadChildren: () => import('@old-architecture/communities/communities.module').then(m => m.CommunitiesModule),
+    loadChildren: () => import('@old-architecture/settings/communities/communities.module').then(m => m.CommunitiesModule),
     canLoad: [HRGuard]
   },
   {
