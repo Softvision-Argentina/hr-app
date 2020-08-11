@@ -83,7 +83,7 @@
                     <ng-container
                         *ngIf="positionForm.get('jobDescription').dirty && positionForm.get('jobDescription').errors">
                         <ng-container *ngIf="positionForm.get('jobDescription')?.hasError('required')">
-                            Field required
+                            Please input the job description
                         </ng-container>
                         <ng-container *ngIf="positionForm.get('jobDescription')?.hasError('maxlength')">
                             The maximun length is 1000
@@ -102,11 +102,11 @@
             <button nz-button nzType="default" class="recru-button-secondary"
                 (click)="clearDataAndCloseModal()">Cancel</button>
             <button nz-button nzType="primary" class="recru-button-primary" [hidden]="isEditPosition"
-                (click)="createNewPosition()">
+                (click)="createNewPosition('new')">
                 Save
             </button>
             <button nz-button nzType="primary" class="recru-button-primary" [hidden]="!isEditPosition"
-                (click)="saveEdit()">
+                (click)="createNewPosition('edit')">
                 Edit
             </button>
         </div>

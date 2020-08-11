@@ -64,7 +64,7 @@ export class PositionAddComponent implements OnInit {
     return formFieldHasRequiredValidator(field, this.positionForm)
   }
 
-  createNewPosition() {
+  createNewPosition(action : string) {
     this.facade.appService.startLoading();
     let isCompleted = true;
 
@@ -87,36 +87,27 @@ export class PositionAddComponent implements OnInit {
         priority: this.positionForm.controls['priority'].value
       };
 
-      this.facade.openPositionService.add(newPosition)
+      if(action='new'){
+        this.facade.openPositionService.add(newPosition)
         .subscribe(res => {
-          this.facade.toastrService.success('Position was successfully created !');
-          this.facade.appService.stopLoading();
+          this.facade.toastrService.success('Position was successfully created !');          
           this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
           this.facade.appService.stopLoading();
         });
+      }else{
+        this.facade.openPositionService.update(this.positionToEdit.id, newPosition)
+        .subscribe(res => {
+          this.facade.toastrService.success('Position was successfully edited !');
+          this.modalService.closeAll();
+        }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+          this.facade.appService.stopLoading();
+        });
+      }
     }
     this.facade.appService.stopLoading();
-  }
-
-  saveEdit() {
-    const editedPosition = {
-      id: this.positionToEdit.id,
-      title: this.positionForm.controls['title'].value.toString(),
-      studio: this.positionForm.controls['studio'].value.toString(),
-      community: new Community(this.positionForm.controls['community'].value),
-      seniority: this.positionForm.controls['seniority'].value,
-      priority: this.positionForm.controls['priority'].value,
-      jobDescription: this.positionForm.controls['jobDescription'].value
-    };
-    this.facade.openPositionService.update(this.positionToEdit.id, editedPosition)
-      .subscribe(res => {
-        this.facade.toastrService.success('Position was successfully edited !');
-        this.modalService.closeAll();
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
   }
 
   clearDataAndCloseModal() {
