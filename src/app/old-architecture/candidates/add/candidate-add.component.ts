@@ -138,7 +138,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.comms = this._communities;
     this.comms.sort((a,b) => (a.name.localeCompare(b.name)));
     this.profiles = this._candidateProfiles;
-    this.profiles.sort((a, b) => (b.id - a.id));
+    this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
+    for (let i = 0; i < this.profiles.length; i++) {
+      if (this.profiles[i].name === 'N/A') {
+        const NA = this.profiles.splice(i, 1);
+        this.profiles.unshift(NA[0]);
+      }
+    }
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {
