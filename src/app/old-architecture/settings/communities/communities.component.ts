@@ -69,6 +69,12 @@ export class CommunitiesComponent implements OnInit {
     this.facade.candidateProfileService.get()
       .subscribe(res => {
         this.candidateprofiles = res.sort((a, b) => (a.name).localeCompare(b.name));
+        for (let i = 0; i < this.candidateprofiles.length; i++) {
+          if (this.candidateprofiles[i].name === 'N/A') {
+            const NA = this.candidateprofiles.splice(i, 1);
+            this.candidateprofiles.unshift(NA[0]);
+          }
+        }
         this.facade.appService.stopLoading();
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);

@@ -125,6 +125,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     const profilesSubscription = this.facade.candidateProfileService.getData().subscribe(res => {
       if (!!res) {
         this.profiles = res.sort((a, b) => (a.name.localeCompare(b.name)));
+        for (let i = 0; i < this.profiles.length; i++) {
+          if (this.profiles[i].name === 'N/A') {
+            const NA = this.profiles.splice(i, 1);
+            this.profiles.unshift(NA[0]);
+          }
+        }
       }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
