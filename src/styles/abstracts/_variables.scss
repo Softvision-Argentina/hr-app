@@ -42,3 +42,17 @@ $login-form-border: $silver;
 $login-main-container: $wild-sand;
 $login-waves-image: "../../../assets/images/pattern-waves.png";
 $login-hero-image: "../../../assets/images/image-header-min.jpg";
+
+
+// Small tablets and large smartphones (landscape view)
+$screen-sm-min: 576px;
+
+// Small tablets (portrait view)
+$screen-md-min: 768px;
+
+// Tablets and small desktops
+$screen-lg-min: 992px;
+
+// Large tablets and desktops
+$screen-xl-min: 1024px;
+

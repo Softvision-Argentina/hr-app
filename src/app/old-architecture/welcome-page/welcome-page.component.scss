@@ -1,15 +1,12 @@
+@import '_mixins';
 @import 'variables';
 
 .container {
-    position: fixed;
-    left: 36%;
-    top: 25%;
-    transform: translateX(-50%, -50%);
+    max-width: 600px;
+    margin: auto;
 }
 
 .helloMessage {
-    width: 616px;
-    height: 128px;
     font-family: ProximaNova;
     font-size: 64px;
     font-weight: 800;
@@ -18,13 +15,9 @@
     line-height: 1;
     letter-spacing: -2px;
     color: #000000;
-    margin-top: 58px;
-    margin-bottom: 49px;
 }
 
 .paragraphMessage {
-    width: 616px;
-    height: 93px;
     font-family: ProximaNova;
     font-size: 20px;
     font-weight: normal;
@@ -32,14 +25,13 @@
     font-style: normal;
     line-height: 1.5;
     letter-spacing: normal;
-    color: #c800a1;
-    margin-bottom: 81px;
+    color: #C800A1;
 }
 
 .referButton {
     width: 215px;
-    height: 20px;
-    -webkit-text-stroke: 0 #c4c4c4;
+    height: 40px;
+    -webkit-text-stroke: 0 #C4C4C4;
     font-family: ProximaNova-Bold;
     font-size: 20px;
     font-weight: 600;
@@ -48,13 +40,30 @@
     line-height: normal;
     letter-spacing: -0.67px;
     color: $light-color;
-    width: 215px;
-    height: 40px;
     object-fit: contain;
     background-image: $carnival-gradient;
     border: none;
+    @include sm {
+        width: 100%;
+        height: 40px;
+    }
+    @include md {
+        width: 215px;
+        height: 40px;
+        -webkit-text-stroke: 0 #C4C4C4;
+        font-family: ProximaNova-Bold;
+        font-size: 20px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: -0.67px;
+        color: $light-color;
+        object-fit: contain;
+        background-image: linear-gradient(to top, #f4633a, #c800a1);
+        border: none;
 }
-
+}
 .openPositionsButton {
     width: 173px;
     height: 22px;
@@ -65,10 +74,30 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #c800a1;
+    color: #C800A1;
     background-color: $light-color;
     border: none;
     margin-left: 51px;
+    @include sm {
+            width: 100%;
+            height: 40px;
+            margin-left: 0;
+    }
+    @include md {
+        width: 173px;
+        height: 22px;
+        font-family: ProximaNova;
+        font-size: 16px;
+        font-weight: 900;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #C800A1;
+        background-color: $light-color;
+        border: none;
+        margin-left: 51px;
+}
 }
 
 img {
@@ -76,8 +105,13 @@ img {
     height: 143px;
 }
 
-@media (max-height: 1024px) {
-    .container {
-        top: 10%;
+.buttonContainer{
+    @include xl{
+        display: flex;
+        justify-content: space-around;
+    }
+    @include sm {
+        display: flex;
+    flex-direction: column;
     }
 }
