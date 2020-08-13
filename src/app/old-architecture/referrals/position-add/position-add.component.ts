@@ -87,7 +87,7 @@ export class PositionAddComponent implements OnInit {
         priority: this.positionForm.controls['priority'].value
       };
 
-      if(action='new'){
+      if(action === 'new'){
         this.facade.openPositionService.add(newPosition)
         .subscribe(res => {
           this.facade.toastrService.success('Position was successfully created !');          
