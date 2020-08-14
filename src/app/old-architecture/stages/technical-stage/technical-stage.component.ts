@@ -55,7 +55,7 @@ export class TechnicalStageComponent implements OnInit {
     id: [0],
     status: [0, [Validators.required]],
     date: [new Date(), [Validators.required]],
-    seniority: [null, [Validators.required]],
+    seniority: [null],
     alternativeSeniority: [null],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
