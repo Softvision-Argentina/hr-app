@@ -94,6 +94,10 @@ namespace Domain.Services.Repositories.EF
 
         public DbSet<ReaddressStatus> ReaddressStatus { get; set; }
 
+        public DbSet<ProfileCommunity> ProfilesByCommunity { get; set; }
+
+        public DbSet<SkillProfile> SkillProfile { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CandidateSkill>()
@@ -141,6 +145,19 @@ namespace Domain.Services.Repositories.EF
                 .HasMany(_ => _.Reasons)
                 .WithOne(_ => _.Type)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SkillProfile>()
+                .HasKey(x => new { x.SkillId, x.ProfileId });
+
+            modelBuilder.Entity<SkillProfile>()
+                .HasOne<SkillType>(s => s.Skill)
+                .WithMany(u => u.SkillProfiles)
+                .HasForeignKey(ud => ud.SkillId);
+
+            modelBuilder.Entity<SkillProfile>()
+                .HasOne<CandidateProfile>(x => x.Profile)
+                .WithMany(x => x.SkillProfiles)
+                .HasForeignKey(x => x.ProfileId);
         }
     }
 }

@@ -10,7 +10,7 @@ dotnet_diagnostic.SA1028.severity = error
 dotnet_diagnostic.SA1516.severity = error
 
 # SA1101: Prefix local calls with this
-dotnet_diagnostic.SA1101.severity = error
+dotnet_diagnostic.SA1101.severity = none
 
 # SA1200: Using directives should be placed correctly
 dotnet_diagnostic.SA1200.severity = error
@@ -31,7 +31,7 @@ dotnet_diagnostic.SA1123.severity = error
 dotnet_diagnostic.SA1122.severity = error
 
 # SA1309: Field names should not begin with underscore
-dotnet_diagnostic.SA1309.severity = error
+dotnet_diagnostic.SA1309.severity = none
 
 # SA1413: Use trailing comma in multi-line initializers
 dotnet_diagnostic.SA1413.severity = error

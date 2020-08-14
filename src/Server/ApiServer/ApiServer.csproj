@@ -27,6 +27,30 @@
     <Compile Remove="Migrations\20200529173242_tenth.Designer.cs" />
     <Compile Remove="Migrations\20200529174830_Tenth.cs" />
     <Compile Remove="Migrations\20200529174830_Tenth.Designer.cs" />
+    <Compile Remove="Migrations\20200806184020_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806184020_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200806184844_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806184844_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200806192556_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806192556_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200806200249_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806200249_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200806200605_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806200605_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200806201651_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200806201651_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200807133617_twentysecondth.cs" />
+    <Compile Remove="Migrations\20200807133617_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200807133956_Twentysecondth.cs" />
+    <Compile Remove="Migrations\20200807133956_twentysecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200807184659_test.cs" />
+    <Compile Remove="Migrations\20200807184659_test.Designer.cs" />
+    <Compile Remove="Migrations\20200810140724_TwentySecondth.cs" />
+    <Compile Remove="Migrations\20200810140724_TwentySecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200810165415_TwentySecondth.cs" />
+    <Compile Remove="Migrations\20200810165415_TwentySecondth.Designer.cs" />
+    <Compile Remove="Migrations\20200810170137_TwentySecondth.cs" />
+    <Compile Remove="Migrations\20200810170137_TwentySecondth.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis" Version="1.43.0" />

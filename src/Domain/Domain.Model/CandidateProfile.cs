@@ -10,5 +10,7 @@ namespace Domain.Model
     public class CandidateProfile : DescriptiveEntity<int>
     {
         public IList<Community> CommunityItems { get; set; }
+
+        public IList<SkillProfile> SkillProfiles { get; set; }
     }
 }

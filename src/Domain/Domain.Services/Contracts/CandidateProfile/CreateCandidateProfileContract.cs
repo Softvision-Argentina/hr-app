@@ -6,6 +6,7 @@ namespace Domain.Services.Contracts.CandidateProfile
 {
     using System.Collections.Generic;
     using Domain.Services.Contracts.Community;
+    using Domain.Services.Contracts.SkillProfile;
 
     public class CreateCandidateProfileContract
     {

@@ -10,5 +10,7 @@ namespace Domain.Model
     public class SkillType : DescriptiveEntity<int>
     {
         public ICollection<Skill> Skills { get; set; }
+
+        public IList<SkillProfile> SkillProfiles { get; set; }
     }
 }

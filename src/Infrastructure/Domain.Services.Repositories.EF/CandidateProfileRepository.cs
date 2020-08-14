@@ -28,8 +28,8 @@ namespace Domain.Services.Repositories.EF
 
         public override CandidateProfile Update(CandidateProfile entity)
         {
-            var previousItems = this.DbContext.Community.Where(t => t.ProfileId == entity.Id);
-            this.DbContext.Community.RemoveRange(previousItems);
+            var previousCommunity = this.DbContext.Community.Where(t => t.ProfileId == entity.Id);
+            this.DbContext.Community.RemoveRange(previousCommunity);
 
             foreach (var item in entity.CommunityItems)
             {

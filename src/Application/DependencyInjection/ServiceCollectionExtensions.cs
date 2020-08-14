@@ -140,6 +140,8 @@ namespace DependencyInjection
             services.AddTransient<IInterviewService, InterviewService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IOpenPositionService, OpenPositionService>();
+            services.AddTransient<IProfileCommunityService, ProfileCommunityService>();
+            services.AddTransient<ISkillProfileService, SkillProfileService>();
         }
 
         private static void AddExternalServices(IServiceCollection services)
@@ -215,6 +217,8 @@ namespace DependencyInjection
             services.AddScoped<IRepository<ReaddressStatus>, ReaddressStatusRepository>();
             services.AddTransient<IMigrator, SeedMigrator>();
             services.AddScoped<IRepository<OpenPosition>, OpenPositionRepository>();
+            services.AddScoped<IRepository<ProfileCommunity>, ProfileCommunityRepository>();
+            services.AddScoped<ISkillProfileRepository, SkillProfileRepository>();
         }
     }
 }
