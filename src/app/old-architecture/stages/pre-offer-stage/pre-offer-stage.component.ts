@@ -128,7 +128,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.setDniValidations();
+    this.setFieldValidations();
   }
 
   updateSeniority(seniorityId) {
@@ -142,6 +142,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   changeFormStatus(enable: boolean) {
     const statusControl = this.preOfferForm.controls['status'];
     const dniControl = this.preOfferForm.controls['dni'];
+    const birthDateControl = this.preOfferForm.controls['date'];
 
     for (const i in this.preOfferForm.controls) {
       if (this.preOfferForm.controls[i] !== statusControl) {
@@ -149,7 +150,8 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
           this.preOfferForm.controls[i].enable();
         } else {
           this.preOfferForm.controls[i].disable();
-          if(this.currentStageStatus === StageStatusEnum.Accepted && this.preOfferForm.controls[i] === dniControl) {
+          if(this.currentStageStatus === StageStatusEnum.Accepted && 
+              (this.preOfferForm.controls[i] === dniControl || this.preOfferForm.controls[i] === birthDateControl)) {
             this.preOfferForm.controls[i].enable();
           }
         }
@@ -373,17 +375,21 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     }
   }
 
-  setDniValidations() {
+  setFieldValidations() {
     const dniControl = this.preOfferForm.controls['dni'];
+    const birthDateControl = this.preOfferForm.controls["date"];
     const statusControl = this.preOfferForm.controls['status'];
     statusControl.valueChanges.subscribe(status => {
         if (status === StageStatusEnum.Accepted) {
           dniControl.setValidators([Validators.required, dniValidator]);
+          birthDateControl.setValidators([Validators.required]);
         }
         else {
           dniControl.setValidators([dniValidator]);
+          birthDateControl.setValidators([]);
         }
         dniControl.updateValueAndValidity();
+        birthDateControl.updateValueAndValidity();
       });
   }
 }
