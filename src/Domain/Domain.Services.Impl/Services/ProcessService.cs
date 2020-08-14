@@ -216,15 +216,6 @@
                             process.HrStage.SentEmail = true;
                         }
                     }
-
-                    if (!process.TechnicalStage.SentEmail)
-                    {
-                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback) && process.TechnicalStage.UserOwner != null && process.TechnicalStage.UserDelegate != null)
-                        {
-                            this.SendTechnicalStageEmailNotification(process);
-                            process.TechnicalStage.SentEmail = true;
-                        }
-                    }
                 }
             }
             catch
@@ -315,15 +306,6 @@
                             process.HrStage.SentEmail = true;
                         }
                     }
-
-                    if (!process.TechnicalStage.SentEmail)
-                    {
-                        if (!string.IsNullOrEmpty(process.TechnicalStage.Feedback))
-                        {
-                            this.SendTechnicalStageEmailNotification(process);
-                            process.TechnicalStage.SentEmail = true;
-                        }
-                    }
                 }
             }
             catch (Exception)
@@ -365,49 +347,25 @@
 
         private void SendHrStageEmailNotification(Process process)
         {
-            var email = this.config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
-
-            if (process.Candidate.Community.Name == "ProductDelivery")
+            if (!string.IsNullOrEmpty(process.Candidate.Community.Name) && process.Candidate.Community.Id > 0)
             {
-                email = (process.Candidate.Profile.Name == "ProjectManager") ?
-                    this.appSettings.Value.CommunityManagerEmails.ProjectManager :
-                    this.appSettings.Value.CommunityManagerEmails.ProductDelivery;
+                var email = this.config.GetSection("CommunityManagerEmails").GetValue<string>(process.Candidate.Community.Name);
+
+                if (process.Candidate.Community.Name == "ProductDelivery")
+                {
+                    email = (process.Candidate.Profile.Name == "ProjectManager") ?
+                        this.appSettings.Value.CommunityManagerEmails.ProjectManager :
+                        this.appSettings.Value.CommunityManagerEmails.ProductDelivery;
+                }
+
+                var messageBody = new MessageBody();
+                messageBody.HtmlBody = $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
+                        $"{process.Candidate.Name} {process.Candidate.LastName}, A new candidate has been submitted for {process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
+                        $"Please reach out to {process.UserOwner.FirstName} {process.UserOwner.LastName} with Interviewer name / s and availability. <br />" +
+                        "Thank you.";
+                var message = new Message(email, "New candidate for Interview!", messageBody);
+                this.mailSender.SendAsync(message);
             }
-
-            var messageBody = new MessageBody();
-            messageBody.HtmlBody = $"Dear {process.Candidate.Community.Name}'s community manager, <br />" +
-                    $"{process.Candidate.Name} {process.Candidate.LastName}, A new {process.Candidate.Profile.Name } candidate has been submitted for {process.Candidate.Community.Name } Community and is waiting for a Technical Interview on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
-                    $"Please reach out to {process.Candidate.User.FirstName} {process.Candidate.User.LastName} with Interviewer name / s and availability. <br />" +
-                    "Thank you.";
-            var message = new Message(email, "New candidate for Interview!", messageBody);
-            this.mailSender.SendAsync(message);
-        }
-
-        private void SendTechnicalStageEmailNotification(Process process)
-        {
-            var userToSend =  this.userRepository.QueryEager().FirstOrDefault(x => x.Username == process.UserOwner.Username);
-            var email = userToSend.Username;
-            var interviewer = this.userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserOwnerId);
-            var delegateInterviewer = this.userRepository.QueryEager().FirstOrDefault(x => x.Id == process.TechnicalStage.UserDelegateId);
-            var skills = process.Candidate.CandidateSkills;
-            var skillsListed = skills.ToList();
-
-            var messageBody = new MessageBody();
-            messageBody.HtmlBody = $"Dear {process.Candidate.User.FirstName} {process.Candidate.User.LastName}, <br />" +
-                $"A technical feedback of {process.Candidate.Name} {process.Candidate.LastName}, interviewed by {interviewer.FirstName} {interviewer.LastName} {(delegateInterviewer != null ? "and" + delegateInterviewer.FirstName + " " + delegateInterviewer.LastName + " " : string.Empty)}on {process.TechnicalStage.Date} is now available on <a href='https://recruiting.softvision-ar.com/'>RECRU</a>. <br />" +
-                $"You can find some information about the technical stage: Status: {process.TechnicalStage.Status}, Seniority: {process.TechnicalStage.Seniority} and Alternative Seniority: {process.TechnicalStage.AlternativeSeniority}. <br />" +
-                $"Thank you";
-            var message = new Message(email, $"Feedback for {process.Candidate.Name} {process.Candidate.LastName} is now available!", messageBody);
-            this.mailSender.SendAsync(message);
-        }
-
-        private string GetUserMail(string referredBy)
-        {
-            var referred = referredBy.Split(" ");
-            var userName = this.userRepository.Query().FirstOrDefault(x => x.FirstName == referred[0] && x.LastName == referred[1]);
-            var mail = userName.Username;
-
-            return mail;
         }
 
         private void AddOfficeToCandidate(Candidate candidate, int officeId)
