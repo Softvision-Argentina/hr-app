@@ -21,8 +21,8 @@
           </td>
 
           <td>
-            <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
-              (click)="showContactReferralModal(referralItem.candidate)"></i>
+            <i *ngIf="!referralItem.currentStatus.status" nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
+              nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>
             <nz-divider nzType="vertical"></nz-divider>
           </td>
         </tr>
@@ -66,12 +66,12 @@
               </span>
               {{ referralItem.candidate.openPositionTitle }}</td>
             <td>
-              <i *ngIf="!referralItem.currentStatus.status; else createdProcess" nzTooltipTitle="Start Process" nz-tooltip
-                nz-icon style="cursor: pointer;" nzType="play-circle" nzTheme="outline"
+              <i *ngIf="!referralItem.currentStatus.status; else createdProcess" nzTooltipTitle="Start Process"
+                nz-tooltip nz-icon style="cursor: pointer;" nzType="play-circle" nzTheme="outline"
                 (click)="goToProcesses(referralItem.candidate)"></i>
               <ng-template #createdProcess>
-                <i nzTooltipTitle="A process has already been created for this referral" nz-tooltip nz-icon style="cursor: pointer;"
-                  nzType="play-circle" nzTheme="outline"></i>
+                <i nzTooltipTitle="A process has already been created for this referral" nz-tooltip nz-icon
+                  style="cursor: pointer;" nzType="play-circle" nzTheme="outline"></i>
               </ng-template>
               <nz-divider nzType="vertical"></nz-divider>
               <i *ngIf="checkCV(referralItem.candidate.cv); else noCV" nzTooltipTitle="Open CV" nz-tooltip nz-icon
@@ -81,12 +81,14 @@
                 <i nzTooltipTitle="No CV available" nz-tooltip nz-icon style="cursor: pointer;" nzType="file-pdf"
                   nzTheme="outline"></i>
               </ng-template>
-              <nz-divider nzType="vertical"></nz-divider>
-              <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit" nzTheme="outline"
-                (click)="showContactReferralModal(referralItem.candidate)"></i>
-              <nz-divider nzType="vertical"></nz-divider>
-              <i nzTooltipTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete" nzTheme="outline"
-                (click)="deleteEvent.emit(referralItem.candidate)"></i>
+              <span *ngIf="!referralItem.currentStatus.status">
+                <nz-divider nzType="vertical"></nz-divider>
+                <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
+                  nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>
+                <nz-divider nzType="vertical"></nz-divider>
+                <i nzTooltipTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete"
+                  nzTheme="outline" (click)="deleteEvent.emit(referralItem.candidate)"></i>
+              </span>
             </td>
           </tr>
         </tbody>
