@@ -13,4 +13,8 @@ export class CandidateProfileService extends BaseService<CandidateProfile> {
     this.apiUrl += 'CandidateProfile';
   }
 
+  getProfileByCommunity(communityId: number){
+    const profileByCommunityApi = this.apiUrl.replace('CandidateProfile', `ProfileCommunity/${communityId}`);
+    return this.http.get<any>(profileByCommunityApi);
+  }
 }

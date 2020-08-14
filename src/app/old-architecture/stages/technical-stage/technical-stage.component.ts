@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
@@ -16,6 +16,7 @@ import { ProcessService } from '@shared/services/process.service';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { resizeModal } from '@app/shared/utils/resize-modal.util';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'technical-stage',
@@ -23,7 +24,7 @@ import { resizeModal } from '@app/shared/utils/resize-modal.util';
   styleUrls: ['./technical-stage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalStageComponent implements OnInit {
+export class TechnicalStageComponent implements OnInit, OnDestroy {
 
   @Input()
   private _users: User[];
@@ -94,6 +95,7 @@ export class TechnicalStageComponent implements OnInit {
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
   selectedReason: string;
+  subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService) {
     this.statusList = globals.stageStatusList.filter(x => x.id !== StageStatusEnum.Hired);
@@ -131,13 +133,14 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   getFilteredUsersForTech() {
-    this.facade.userService.getFilteredForTech()
+    const techSubscription = this.facade.userService.getFilteredForTech()
       .subscribe(res => {
         this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
         if (this.technicalStage) { this.fillForm(this.technicalStage, this._process.candidate); }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.subscriptions.push(techSubscription);
   }
 
     updateSeniority(seniorityId: number) {
@@ -355,6 +358,34 @@ export class TechnicalStageComponent implements OnInit {
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
       });
+    } else if (candidate.profile && candidate.profile.id){
+      let skillCounter = 0;
+      const skillsByProfile = this.facade.skillService.getSkills(candidate.profile.id)
+      .subscribe(data => {
+        let availableSkills: Skill[] = [];
+        for (const i in data){
+          const skills = this.skills.filter(skill => skill.id === data[i]?.skillId);
+          if(skills.length > 0){
+            availableSkills = [...availableSkills, ...skills];
+          }
+        }
+        availableSkills = availableSkills.sort((a , b) => a.name.localeCompare(b.name));
+        availableSkills.forEach(skill => {
+          const id = skillCounter;
+
+          const control = {
+            id,
+            controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
+          };
+          const index = this.controlArray.push(control);
+          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(skill.id.toString()));
+          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(0));
+          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
+          skillCounter++;
+        });
+      });
+      this.subscriptions.push(skillsByProfile);
+      
     }
     if (technicalStage.sentEmail) {
       this.technicalForm.controls['sentEmail'].setValue(technicalStage.sentEmail);
@@ -464,12 +495,14 @@ export class TechnicalStageComponent implements OnInit {
   }
 
   getSkills() {
-    this.facade.skillService.get()
+
+    const skills = this.facade.skillService.get()
       .subscribe(res => {
         this.skills = res.sort((a, b) => (a.name.localeCompare(b.name)));
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
+    this.subscriptions.push(skills);
   }
 
   isRequiredField(field: string): boolean {
@@ -516,5 +549,11 @@ export class TechnicalStageComponent implements OnInit {
 
   onDescriptionChange(description: string): void {
     this.readdressStatus.feedback = description;
+  }
+
+  ngOnDestroy(){
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

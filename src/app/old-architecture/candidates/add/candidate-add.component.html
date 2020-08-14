@@ -111,7 +111,7 @@
     <div class="recru-row">
         <nz-form-item class="recru-col-2 ">
             <nz-form-control [nzErrorTip]="communityErrorMsg">
-                <nz-select *recruInput="'Community'" formControlName="community" nzPlaceHolder="Select community">
+                <nz-select *recruInput="'Community'" formControlName="community" nzPlaceHolder="Select community" (ngModelChange)="getProfile()">
                     <nz-option *ngFor="let c of comms" nzLabel="{{c.name}}" [nzValue]="c.id">
                     </nz-option>
                 </nz-select>
@@ -126,7 +126,7 @@
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
                 <nz-select *recruInput="'Profile'" formControlName="profile" nzPlaceHolder="Select profile">
-                    <nz-option *ngFor="let p of profiles" nzLabel="{{p.name}}" [nzValue]="p.id">
+                    <nz-option *ngFor="let p of availableProfiles" nzLabel="{{p.name}}" [nzValue]="p.id">
                     </nz-option>
                 </nz-select>
             </nz-form-control>

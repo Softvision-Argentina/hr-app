@@ -16,6 +16,7 @@ import { Globals } from '@shared/utils/globals';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
 import { ReferralsService } from '@shared/services/referrals.service';
+import { Profile } from '@app/shared/models/profile.model';
 
 
 
@@ -88,6 +89,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   comms: Community[] =[];
   isInputSelected = false;
   profiles: CandidateProfile[] = [];
+  availableProfiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
   currentUser: User;
   candidateForm: FormGroup = this.fb.group({
@@ -119,7 +121,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   statusList: any[];
   candidates: Candidate[] = [];
-  candidateSubscription: Subscription;
+  candidateSubscriptions: Subscription[] = [];
   selectedValue = 3;
   selectedId = '';
 
@@ -188,12 +190,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   }
 
   getCandidates(){
-    this.candidateSubscription = this.facade.candidateService.getData()
+    const candidateSub = this.facade.candidateService.getData()
     .subscribe(res => {
       this.candidates = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
+    this.candidateSubscriptions.push(candidateSub);
   }
 
   changeFormStatus(enable: boolean) {
@@ -235,6 +238,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   }
 
   fillCandidateForm(candidate: Candidate) {
+    this.availableProfiles = this.profiles.filter(profile => profile.id === candidate.profile?.id);
     this.candidateForm.controls['dni'].setValue(candidate.dni);
     this.candidateForm.controls['name'].setValue(candidate.name);
     this.candidateForm.controls['lastName'].setValue(candidate.lastName);
@@ -246,12 +250,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.candidateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
     this.candidateForm.controls['status'].setValue(candidate.status);
     this.candidateForm.controls['community'].setValue(candidate.community.id);
-    candidate.profile ? this.candidateForm.controls['profile'].setValue(candidate.profile.id) : null;
     this.candidateForm.controls['isReferred'].setValue(candidate.isReferred);
     this.candidateForm.controls['referredBy'].setValue(candidate.referredBy);
     this.candidateForm.controls['cv'].setValue(candidate.cv);
     this.candidateForm.controls['knownFrom'].setValue(candidate.knownFrom);
     this.candidateForm.controls['source'].setValue(candidate.source);
+    this.getProfile();
+    candidate.profile ? this.candidateForm.controls['profile'].setValue(candidate.profile.id) : null;
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = skill.skillId || skill.skill.id;
@@ -266,6 +271,32 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
         this.candidateForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
         this.candidateForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, Validators.required));
       });
+    }
+  }
+
+  getProfile(){
+    const communityId = this.candidateForm.get('community').value;
+    const communityIndex = this.communities.findIndex(community => community.id === communityId);
+    this.candidateForm.get('profile').setValue(null);
+    this.availableProfiles = [];
+    if (!this.communities[communityIndex].profiles){
+      const profileCommunitySub = this.facade.candidateProfileService.getProfileByCommunity(communityId)
+      .subscribe(data => {
+        let profiles: CandidateProfile[] = [];
+        if (data.length > 0){
+          for (const algo in data){
+            profiles.push(data[algo].profile);
+          }
+          this.communities[communityIndex].profiles = profiles;
+          this.availableProfiles = profiles;
+          this.facade.communityService.data.next(this.communities);
+        } else {
+          this.availableProfiles = this.profiles;
+        }
+      });
+      this.candidateSubscriptions.push(profileCommunitySub);
+    } else{
+      this.availableProfiles = this.communities[communityIndex].profiles;
     }
   }
 
@@ -313,7 +344,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.candidateSubscription.unsubscribe();
+    this.candidateSubscriptions.forEach(sub => sub.unsubscribe());
   }
 
   enableEmptyFields() {

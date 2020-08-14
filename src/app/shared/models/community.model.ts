@@ -1,4 +1,5 @@
 import { CandidateProfile } from './candidate-profile.model';
+import { Profile } from './profile.model';
 
 export class Community {
   constructor(id?: number) {
@@ -10,4 +11,5 @@ export class Community {
   description: string;
   profileId: number;
   profile: CandidateProfile;
+  profiles?: CandidateProfile[];
 }

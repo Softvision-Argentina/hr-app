@@ -13,4 +13,8 @@ export class SkillService extends BaseService<Skill> {
     this.apiUrl += 'Skills';
   }
 
+  getSkills(profileId: number){
+    const skillsByProfileApi = this.apiUrl.replace('Skills', `SkillProfile/${profileId}`);
+    return this.http.get<any>(skillsByProfileApi);
+  }
 }
