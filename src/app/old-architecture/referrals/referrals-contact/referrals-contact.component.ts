@@ -90,6 +90,8 @@ export class ReferralsContactComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  checkedTerms = false;
+
   constructor(private fb: FormBuilder, private facade: FacadeService,
     private modalService: NzModalService, private b: BaseService<Cv>, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));

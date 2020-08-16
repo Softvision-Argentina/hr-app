@@ -52,7 +52,8 @@
     </div>
 
     <div class="recru-row">
-        <nz-form-item class="recru-col-2 " [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
+        <nz-form-item class="recru-col-2 "
+            [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
             <nz-form-control [hidden]="!visible" [nzErrorTip]="emailErroMsg">
                 <input *recruInput="'E-mail'" nz-input formControlName="email" id="email">
                 <ng-template #emailErroMsg>
@@ -69,8 +70,10 @@
             </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item class="recru-col-2 " [ngClass]="{'ant-form-item-has-error': (candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator') }">
-            <nz-form-control [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible" [nzErrorTip]="phoneNumberErrorMsg">
+        <nz-form-item class="recru-col-2 "
+            [ngClass]="{'ant-form-item-has-error': (candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneValidator') }">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['phoneNumber']" [hidden]="!visible"
+                [nzErrorTip]="phoneNumberErrorMsg">
                 <nz-input-group *recruInput="'Phone Number'" [nzAddOnBefore]="addOnBeforeTemplate">
                     <ng-template #addOnBeforeTemplate>
                         <nz-select formControlName="phoneNumberPrefix">
@@ -104,7 +107,7 @@
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
-        
+
         <nz-form-item class="recru-col-2 ">
             <nz-form-control [nzErrorTip]="linkedInErrorMsg">
                 <input *recruInput="'LinkedIn'" nz-input formControlName="link" id="link">
@@ -119,16 +122,22 @@
     </div>
 </form>
 
+<div nz-row nzJustify="center" [hidden]="isEditReferral">
+    <label nz-checkbox [(ngModel)]="checkedTerms">I accept the </label> <a
+        href="/terms-and-conditions" target="_blank">
+        Terms and Conditions
+    </a>
+</div>
+<nz-divider></nz-divider>
+
 <div nz-row nzJustify="center">
     <div nz-col nzSpan="24">
         <nz-divider class="custom-divider"></nz-divider>
         <div class="recru-control-buttons__wrapper">
             <button nz-button nzType="default" class="recru-button-secondary"
                 (click)="clearDataAndCloseModal()">Cancel</button>
-            <button nz-button nzType="primary" class="recru-button-primary" [hidden]="isEditReferral"
-                (click)="createNewCandidate()">
-                Save
-            </button>
+            <button [disabled]="!checkedTerms" nz-button nzType="primary" [hidden]="isEditReferral"
+                (click)="createNewCandidate()" class="recru-button-primary">SAVE</button>
             <button nz-button nzType="primary" class="recru-button-primary" [hidden]="!isEditReferral"
                 (click)="saveEdit()">
                 Edit

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { en_US, NzAvatarModule, NzStepsModule, NzTableModule, NzToolTipModule, NZ_I18N } from 'ng-zorro-antd';
+import { en_US, NzAvatarModule, NzStepsModule, NzTableModule, NzToolTipModule, NZ_I18N, NzCheckboxModule } from 'ng-zorro-antd';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { SharedModule } from '@app/shared/shared.module';
 import { PipesModule } from '@app/shared/pipes/pipes.module';
@@ -32,7 +32,8 @@ import { ReferralsRoutes } from './referrals.routing';
         NzAvatarModule,
         NzStepsModule,
         NzToolTipModule,
-        NzTableModule
+        NzTableModule,
+        NzCheckboxModule
     ],
     entryComponents: [ ReferralsContactComponent, PositionAddComponent ],
     exports: [

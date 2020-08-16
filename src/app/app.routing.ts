@@ -26,7 +26,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'welcome',
-    loadChildren: () => import ('@old-architecture/welcome-page/welcome-page.module').then(m => m.WelcomePageModule),
+    loadChildren: () => import('@old-architecture/welcome-page/welcome-page.module').then(m => m.WelcomePageModule),
     canActivate: [CommonGuard]
   },
   {
@@ -101,6 +101,10 @@ export const appRoutes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('@old-architecture/login/login.module').then(m => m.LoginModule)
+  },
+  {
+    path: 'terms-and-conditions',
+    loadChildren: () => import('@old-architecture/terms-and-conditions/terms-and-conditions.module').then(m => m.TermsAndConditionsModule)
   },
   {
     path: 'unauthorized',

@@ -1,0 +1,54 @@
+@import "_variables";
+
+.termsHeaderFont {
+    display: inline-block;
+    font-family: ProximaNova-Extrabold;
+    font-size: 44px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.02;
+    letter-spacing: -0.88px;
+    color: #222222;
+  }
+
+  .termsContainer {
+      width: 85%;
+      margin: 0 auto;
+  }
+
+  .terms__waves {
+    background-image: url($login-waves-image);
+    background-repeat: no-repeat;
+    background-size: cover;
+    pointer-events: none;
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    z-index: -10;
+  }
+
+  .terms-hero-text__subtitle::after {
+    content: "";
+    width: 6rem;
+    height: 16px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+      to right,
+      $secondary-color,
+      $primary-color
+    );
+  }
+
+  .terms-hero-text__subtitle {
+    position: relative;
+    padding-bottom: 1rem;
+  }
+
+  p {
+      font-family: ProximaNova;
+      font-weight: bold;
+  }
+ 
