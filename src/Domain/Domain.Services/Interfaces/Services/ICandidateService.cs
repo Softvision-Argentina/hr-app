@@ -17,7 +17,7 @@ namespace Domain.Services.Interfaces.Services
 
         ReadedCandidateContract Exists(int id);
 
-        bool Exists(string email);
+        bool Exists(string email, int id);
 
         void Update(UpdateCandidateContract contract);
 

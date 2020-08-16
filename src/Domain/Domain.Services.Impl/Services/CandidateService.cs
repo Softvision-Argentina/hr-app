@@ -192,14 +192,9 @@ namespace Domain.Services.Impl.Services
             return this.mapper.Map<ReadedCandidateContract>(candidateResult);
         }
 
-        public bool Exists(string email)
+        public bool Exists(string email, int id)
         {
-            if (this.candidateRepository.QueryEager().FirstOrDefault(c => c.EmailAddress == email) == null)
-            {
-                return false;
-            }
-
-            return true;
+            return this.candidateRepository.QueryEager().Any(c => c.EmailAddress == email && c.Id != id);
         }
 
         public IEnumerable<ReadedCandidateContract> List()

@@ -98,17 +98,16 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("EmailExists/{email}")]
-        public IActionResult EmailExists(string email)
+        [HttpGet("EmailExists/{email}/{id}")]
+        public IActionResult EmailExists(string email, int id)
         {
             return this.ApiAction(() =>
             {
-                if (this.candidateService.Exists(email) == false)
+                var candidate = this.candidateService.Exists(email, id);
+
+                if (candidate == null)
                 {
-                    return this.Ok(new
-                    {
-                        Exists = false,
-                    });
+                    return this.NotFound(new { Exists = false });
                 }
 
                 return this.Ok(new { Exists = true });
