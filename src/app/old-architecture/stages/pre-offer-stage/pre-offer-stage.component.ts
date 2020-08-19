@@ -48,9 +48,9 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     firstday: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
     bonus: '', // should be removed because it's in pre-offer-history
     hireDate: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
-    backgroundCheckDone: false,
+    backgroundCheckDone: null,
     backgroundCheckDoneDate: [],
-    preocupationalDone: false,
+    preocupationalDone: null,
     preocupationalDoneDate: [],
     rejectionReason: [null],
     reasonSelectControl: [null],
