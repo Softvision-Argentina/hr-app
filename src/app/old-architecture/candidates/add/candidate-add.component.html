@@ -66,7 +66,7 @@
             <nz-form-control [nzValidateStatus]="candidateForm.controls['phoneNumber']"
                 [nzErrorTip]="phoneNumberErrorMsg">
                 <nz-input-group *recruInput="'Phone Number'" [nzAddOnBefore]="addOnBeforeTemplate">
-                    <input formControlName="phoneNumber" placeholder=" " id="phoneNumber" type="tel" pattern="^[0-9]+$"
+                    <input formControlName="phoneNumber" placeholder=" " id="phoneNumber" maxlength="11" type="tel" pattern="^[0-9]+$"
                         nz-input>
                     <ng-template #addOnBeforeTemplate>
                         <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
