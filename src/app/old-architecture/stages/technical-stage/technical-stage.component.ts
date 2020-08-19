@@ -302,7 +302,11 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     }
 
     if (technicalStage.userOwnerId) {
-      this.technicalForm.controls['userOwnerId'].setValue(technicalStage.userOwnerId);
+      if (technicalStage.status === StageStatusEnum.NA) {
+        this.technicalForm.controls['userOwnerId'].setValue(null);
+      } else {
+        this.technicalForm.controls['userOwnerId'].setValue(technicalStage.userOwnerId);
+      }
     }
 
     if (technicalStage.userDelegateId) {
