@@ -27,9 +27,9 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   currentProcessStatus: any[];
   processStatusList: { id: number, name: string, value: string }[] = [];
   processesSubscription: Subscription;
-  candidateSubscription: Subscription;  
+  candidateSubscription: Subscription;
   searchSub: Subscription;
-  referralsSubscription: Subscription = new Subscription();
+  referralsSubscriptions: Subscription[] = [];
 
   @Input() communities;
   @Output() editEvent = new EventEmitter();
@@ -37,7 +37,11 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   listOfColumns: ColumnItem[];
   candidateInfo: Candidate;
 
-  constructor(private facade: FacadeService, private globals: Globals, private _referralsService: ReferralsService, private router: Router) {
+  constructor(
+    private facade: FacadeService,
+    private globals: Globals,
+    private _referralsService: ReferralsService,
+    private router: Router) {
     this.referralListStatus = globals.referralCurrentStage;
     this.processStatusList = globals.stageStatusList;
   }
@@ -46,7 +50,8 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.getSearchInfo();
-    this.init();
+    this.getReferrals();
+    this.onReferralsListChange();
   }
 
   ngOnChanges() {
@@ -106,153 +111,43 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     return item.name;
   }
 
-  init() {
-    forkJoin(
-      this.facade.candidateService.get(),
-      this.facade.processService.get()
-    )
-      .subscribe(([candidates, processes]: [Candidate[], Process[]]) => {
-        this.candidates = candidates;
-        this.processes = processes;
-        this.candidateSubscription = this.facade.referralsService.candidateAdded
-          .subscribe(() => {
-            this.facade.candidateService.get()
-              .subscribe(cand => {
-                this.candidates = cand;
-                this.getReferralsList();
-              });
-          });
-        this.processesSubscription = this.facade.processService.getData()
-          .subscribe(proc => {
-            this.processes = proc;
-            this.getReferralsList();
-          });
-        this.getReferralsList();
+  getReferrals() {
+    const referralSubs = this.facade.referralsService.get()
+    .subscribe(res => {
+      res.forEach(referralItem => {
+        this.referralsList = [
+          ...this.referralsList,
+          new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus),
+        ];
       });
+    });
+    this.referralsSubscriptions.push(referralSubs);
   }
 
-  getReferralsList() {
-    this.referralsList = [];
-    if (!!this.candidates && !!this.processes) {
-      const referredCandidates: Candidate[] = this.candidates.filter(candidate => {
-        if (candidate.referredBy && candidate.referredBy.length > 0) {
-          const fullName = this.currentUser.username;
-          if (this.currentUser.role === 'HRUser' || this.currentUser.role === 'HRManagement' || this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
-            return candidate;
-          } else {
-            if (candidate.referredBy === fullName) {
-              return candidate;
-            }
-          }
-
-        }
-      });
-      referredCandidates.map(candidate => {
-        const relatedProcess = this.processes.find(process => process.candidateId === candidate.id);
-        if (relatedProcess) {
-          this.referralsList = [
-            ...this.referralsList,
-            { candidate: { ...candidate }, currentStatus: this.getCurrentStatus(relatedProcess, this.getCurrentStage(relatedProcess)) }
-          ];
-        } else {
-          this.referralsList = [
-            ...this.referralsList,
-            { candidate: { ...candidate }, currentStatus: this.getCurrentStatus(null, this.getCurrentStage(null)) }
-          ];
-        }
-      });
-    }
-    this.completeReferralsList = this.referralsList;
-  }
-
-  getCurrentStage(currentProcess: Process) {
-    if (currentProcess) {
-      switch (currentProcess.currentStage) {
-        case ProcessCurrentStageEnum.HrStage:
-          return {
-            stage: ProcessCurrentStageEnum.HrStage,
-            message: 'Hr Stage: '
-          };
-        case ProcessCurrentStageEnum.TechnicalStage:
-          return {
-            stage: ProcessCurrentStageEnum.TechnicalStage,
-            message: 'Technical Stage: '
-          }
-        case ProcessCurrentStageEnum.ClientStage:
-          return {
-            stage: ProcessCurrentStageEnum.ClientStage,
-            message: 'Client Stage: '
-          };
-        case ProcessCurrentStageEnum.PreOfferStage:
-          return {
-            stage: ProcessCurrentStageEnum.PreOfferStage,
-            message: 'PreOffer Stage: '
-          };
-        case ProcessCurrentStageEnum.OfferStage:
-          return {
-            stage: ProcessCurrentStageEnum.OfferStage,
-            message: 'Offer Stage: '
-          };
-        case ProcessCurrentStageEnum.Finished:
-          return {
-            stage: ProcessCurrentStageEnum.Finished,
-            status: referralCurrentStage.contracted,
-            //???? should say this message?
-            message: 'Finished: Congratulations! Your candidate will be part of our team. HR will let you know next steps if a bonus is applied to this referral.'
-          };
-        case ProcessCurrentStageEnum.Pipeline:
-          return {
-            stage: ProcessCurrentStageEnum.Pipeline,
-            status: referralCurrentStage.pipeline,
-            //????? should say this message?
-            message: 'Pipeline: Will be belonging to our database for current or future searchings.'
-          }
-        default:
-          return {
-            stage: "brokn",
-            message: "ritoto"
-          };
-          break;
+  onReferralsListChange(){
+    const newCandidateSubs = this.facade.referralsService.candidateAdded
+    .subscribe(candidate =>{
+      const candidateId = this.referralsList.findIndex(referralItem => referralItem.candidate.id === candidate.id);
+      if (candidateId === -1){
+        const newReferralItem = new ReferralListItem(candidate, 0, 0, 0);
+        this.referralsList = [
+          ...this.referralsList,
+          newReferralItem
+        ];
+      } else{
+        this.referralsList[candidateId].candidate = candidate;
       }
-    } else {
-      return {
-        stage: null,
-        status: referralCurrentStage.new,
-        message: 'New: There\'s not an ongoing process for this referral yet'
-      }
-    }
+    });
+    this.referralsSubscriptions.push(newCandidateSubs);
+
+    const deleteCandidateSubs = this.facade.referralsService.candidateDelete
+    .subscribe(candidateId =>{
+      this.referralsList = this.referralsList.filter(referralItem => referralItem.candidate.id !== candidateId);
+    });
+    this.referralsSubscriptions.push(deleteCandidateSubs);
   }
 
-  getCurrentStatus(currentProcess: Process, currentStatus: any) {
-    if (currentProcess) {
-      const processStatus = this.processStatusList.find(st => st.id === currentProcess.status);
-      if (currentProcess.currentStage === ProcessCurrentStageEnum.OfferStage) {
-        if (currentProcess.status === ProcessStatusEnum.Hired) {
-          return {
-            ...currentStatus,
-            status: referralCurrentStage.contracted,
-            message: 'Finished: Congratulations! Your candidate will be part of our team. HR will let you know next steps if a bonus is applied to this referral.'
-          };
-        } else if (currentProcess.status === ProcessStatusEnum.Declined || currentProcess.status === ProcessStatusEnum.Rejected) {
-          return {
-            ...currentStatus,
-            status: referralCurrentStage.pipeline,
-            message: 'Pipeline: Will be belonging to our database for current or future searchings'
-          };
-        }
-      } else if (currentProcess.currentStage !== ProcessCurrentStageEnum.Finished && currentProcess.currentStage !== ProcessCurrentStageEnum.Pipeline) {
-        return {
-          ...currentStatus,
-          status: referralCurrentStage.onProcess,
-          message: currentStatus.message + processStatus.name,
-        };
-      } else {
-        return currentStatus;
-      }
-    } else {
-      return currentStatus;
-    }
-  }
+
 
 
   getTextColor(referralItem: ReferralListItem) {
@@ -263,7 +158,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
       { 'color': '#32a852' }, // green
       { 'color': '#348ceb' }, // blue
     ];
-    switch (referralItem.currentStatus.status) {
+    switch (referralItem.status) {
       case referralCurrentStage.new:
         return color[0];
       case referralCurrentStage.onProcess:
@@ -311,9 +206,9 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.processesSubscription.unsubscribe();
-    this.candidateSubscription.unsubscribe();
-    this.referralsSubscription.unsubscribe();
+    this.referralsSubscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   getSearchInfo() {
@@ -325,6 +220,6 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
         return referralFullName.toString().toUpperCase().indexOf(value) !== -1;
       });
     });
-    this.referralsSubscription.add(this.searchSub);
+    this.referralsSubscriptions.push(this.searchSub);
   }
 }

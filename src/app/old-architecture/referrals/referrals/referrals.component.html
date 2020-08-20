@@ -30,82 +30,10 @@
   </ng-template>
 </div>
 
-<ng-template #candidateDetailModal>
-  <candidate-details [_detailedCandidate]="emptyCandidate"></candidate-details>
-</ng-template>
 
-<ng-template #userDetailModal>
-  <user-details [_detailedUser]="emptyUser"></user-details>
-</ng-template>
 
-<ng-template #rejectProcessModal>
-  <form nz-form [formGroup]="rejectProcessForm" [nzLayout]="'horizontal'" class="recru-container">
-    <div class="recru-row">
-      <nz-form-item class="recru-col-2 ">
-        <nz-form-control [nzErrorTip]="rejectionReasonErrorMsg">
-          <input *recruInput="'Rejection reason'" nz-input formControlName="rejectionReasonDescription">
-          <ng-template #rejectionReasonErrorMsg>
-            <ng-container
-              *ngIf="rejectProcessForm.get('rejectionReasonDescription').dirty && rejectProcessForm.get('rejectionReasonDescription').errors">
-              Please specify why the process is rejected
-            </ng-container>
-          </ng-template>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </form>
-</ng-template>
 
-<ng-template #processStart>
-  <div nz-col nzSpan="24">
-    <nz-steps [nzCurrent]="stepIndex">
-      <nz-step nzTitle="Candidate" id="candidateButton"
-        (click)="slickModal.slickGoTo(0);wishedStage(0, $event.currentTarget.id)">
-      </nz-step>
-      <nz-step nzTitle="HR" id="hrButton" (click)="slickModal.slickGoTo(1);wishedStage(1, $event.currentTarget.id)">
-      </nz-step>
-      <nz-step nzTitle="Technical" id="technicalButton"
-        (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)">
-      </nz-step>
-      <nz-step *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])" nzTitle="Client" id="clientButton"
-        (click)="slickModal.slickGoTo(2);wishedStage(2, $event.currentTarget.id)"></nz-step>
-      <nz-step *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])" nzTitle="Offer" id="prePreOfferButton"
-        (click)="slickModal.slickGoTo(3);wishedStage(3, $event.currentTarget.id)"></nz-step>
-      <nz-step *ngIf="isUserRole(['Admin', 'HRManagement', 'HRUser'])" nzTitle="Offer" id="PreOfferButton"
-        (click)="slickModal.slickGoTo(4);wishedStage(4, $event.currentTarget.id)"></nz-step>
-    </nz-steps>
-  </div>
-  <br />
-  <br />
-  <ngx-slick-carousel #slickModal='slick-carousel' class="carousel" [config]="slideConfig" (destroy)="closeModal()">
-    <div ngxSlickItem>
-      <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess" [_users]="users"
-        [_candidate]="currentCandidate" [_offices]="offices">
-      </candidate-add>
-    </div>
-    <div ngxSlickItem>
-      <hr-stage [_users]="users" [hrStage]="emptyProcess.hrStage"></hr-stage>
-    </div>
-    <div ngxSlickItem>
-      <technical-stage [_process]="emptyProcess" [_users]="users" [technicalStage]="emptyProcess.technicalStage"
-        (selectedSeniority)="updateSeniority($event)"></technical-stage>
-    </div>
-    <div ngxSlickItem>
-      <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"></client-stage>
-    </div>
-    <div ngxSlickItem>
-      <offer-stage [_users]="users" [offerStage]="emptyProcess.offerStage"
-        (selectedSeniority)="updateSeniority($event)"></offer-stage>
-    </div>
-  </ngx-slick-carousel>
-</ng-template>
 
-<ng-template #startModalButtons>
-  <div nz-row>
-    <button nz-button nzType="default" class="recru-button-secondary" (click)="closeModal()">Cancel</button>
-    <button nz-button nzType="primary" class="recru-button-primary" (click)="saveProcess()">Save</button>
-  </div>
-</ng-template>
 
 <ng-template #newCandidate>
   <app-referrals-contact [position]=currentPosition [_visible]=true [communities]=communities></app-referrals-contact>

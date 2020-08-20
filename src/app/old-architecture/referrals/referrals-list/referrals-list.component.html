@@ -17,11 +17,11 @@
           <td>{{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
 
           <td [ngStyle]="getTextColor(referralItem)">
-            {{ referralItem.currentStatus.message }}
+            {{ referralItem.message }}
           </td>
 
           <td>
-            <i *ngIf="!referralItem.currentStatus.status" nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
+            <i *ngIf="!referralItem.processStatus" nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
               nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>
             <nz-divider nzType="vertical"></nz-divider>
           </td>
@@ -46,27 +46,27 @@
         </thead>
         <tbody>
           <tr *ngFor="let referralItem of referralsTable.data">
-            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)" class="HRCandidateColumnColor">
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.status)" class="HRCandidateColumnColor">
               {{ referralItem.candidate.name }}
               {{ referralItem.candidate.lastName }}</td>
-            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               {{ referralItem.candidate.referredBy }}</td>
-            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               {{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
-            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               {{ referralItem.candidate.community.name }} </td>
             <td [ngStyle]="getTextColor(referralItem)">
-              <span [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
-                {{ referralItem.currentStatus.message }}
+              <span [ngStyle]="fontWeightForNewReferral(referralItem.status)">
+                {{ referralItem.message }}
               </span>
             </td>
-            <td [ngStyle]="fontWeightForNewReferral(referralItem.currentStatus.status)">
+            <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               <span *ngIf="referralItem.candidate.openPosition && referralItem.candidate.openPosition.priority">
                 <img src="assets/images/vector.svg" class="vector">&nbsp;&nbsp;
               </span>
               {{ referralItem.candidate.openPositionTitle }}</td>
             <td>
-              <i *ngIf="!referralItem.currentStatus.status; else createdProcess" nzTooltipTitle="Start Process"
+              <i *ngIf="!referralItem.processStatus; else createdProcess" nzTooltipTitle="Start Process"
                 nz-tooltip nz-icon style="cursor: pointer;" nzType="play-circle" nzTheme="outline"
                 (click)="goToProcesses(referralItem.candidate)"></i>
               <ng-template #createdProcess>
@@ -81,7 +81,7 @@
                 <i nzTooltipTitle="No CV available" nz-tooltip nz-icon style="cursor: pointer;" nzType="file-pdf"
                   nzTheme="outline"></i>
               </ng-template>
-              <span *ngIf="!referralItem.currentStatus.status">
+              <span *ngIf="!referralItem.processStatus">
                 <nz-divider nzType="vertical"></nz-divider>
                 <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
                   nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>

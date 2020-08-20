@@ -6,9 +6,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from '@shared/models/candidate.model';
+import { ICandidate } from '../interfaces/ICandidate.service';
 
 @Injectable()
-export class CandidateService extends BaseService<Candidate> {
+export class CandidateService extends BaseService<Candidate> implements ICandidate {
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);

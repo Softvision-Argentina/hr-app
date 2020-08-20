@@ -6,9 +6,10 @@ import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from '@shared/models/candidate.model';
+import { ICandidate } from '../interfaces/ICandidate.service';
 
 @Injectable()
-export class ReferralsService extends BaseService<Candidate> {
+export class ReferralsService extends BaseService<Candidate> implements ICandidate{
   currentReferralList: Candidate[] = [];
   emptyReferredInfo: Candidate;
 
@@ -27,12 +28,25 @@ export class ReferralsService extends BaseService<Candidate> {
   public _candidateInfoSource = new BehaviorSubject<Candidate>(this.emptyReferredInfo);
   _candidateInfo$ = this._candidateInfoSource.asObservable();
 
-  candidateAdded = new Subject<boolean>();
+  candidateAdded = new Subject<Candidate>();
+  candidateDelete = new Subject<number>();
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
     this.apiUrl += 'Referrals';
   }
 
+  public exists(email: string, id: number): Observable<any> {
+    const candidateApi = this.apiUrl.replace('Referrals', 'Candidates');
+    return this.http.get(candidateApi + '/EmailExists/' + email + '/' + id, {
+      headers: this.headersWithAuth,
+      observe: 'response'
+    })
+      .pipe(
+        tap(data => { }),
+        catchError(this.handleErrors)
+      );
+  }
+  
   public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
@@ -61,7 +75,10 @@ export class ReferralsService extends BaseService<Candidate> {
         headers: this.headersWithAuth,
       })
       .pipe(
-        tap(res => this.candidateAdded.next(true)),
+        tap(res => { 
+          this.candidateAdded.next(newCandidate);
+          this.data.next([...this.data.value, newCandidate]);
+        } ),
         catchError(this.handleErrors)
       );
   }
@@ -76,9 +93,8 @@ export class ReferralsService extends BaseService<Candidate> {
         headers: headers
       })
       .pipe(
-        tap(res => this.candidateAdded.next(true)),
-        catchError(this.handleErrors));
-
+        catchError(this.handleErrors)
+      );
   }
   public addNew(newReferral: Candidate): void {
     this.currentReferralList = this.referralList.getValue();
@@ -105,17 +121,25 @@ export class ReferralsService extends BaseService<Candidate> {
   public update(referralId: number, newCandidate: Candidate): Observable<Candidate> {
     return super.update(referralId, newCandidate)
       .pipe(
-        tap(res => this.candidateAdded.next(true))
+        tap(res => this.candidateAdded.next(newCandidate))
       );
   }
 
-  public delete(referralId: number): Observable<Candidate> {
-    //Should we keep using candidate endpoint?
-    this.apiUrl = this.apiUrl.replace('Referrals', 'Candidates');
-    return super.delete(referralId)
+  public get(): Observable<any>{
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return this.http.get(this.apiUrl + `/${currentUser.id}`)
       .pipe(
-        tap(res => this.candidateAdded.next(true))
+        tap(res => this.data.next(res.map(e => e.candidate)))
       );
+  }
+
+  public delete(referralId: number): Observable<any> {
+    // Should we keep using candidate endpoint?
+    const referralApi  = this.apiUrl.replace('Referrals', `Candidates/${referralId}`);
+    return this.http.delete<any>(referralApi)
+    .pipe(
+      tap(res => this.candidateDelete.next(referralId))
+    );
   }
 
   public sendCandidateInfo(info: Candidate) {

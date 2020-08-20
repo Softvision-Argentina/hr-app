@@ -50,6 +50,7 @@ export class ReferralsContactComponent implements OnInit {
     email: [null,
       {
         validators: [Validators.email],
+        updateOn: "blur"
       }
     ],
     link: [null],
@@ -95,9 +96,9 @@ export class ReferralsContactComponent implements OnInit {
     this.isNewCandidate = this.visible;
     if (this.referralToEdit) {
       this.referralId = this.referralToEdit.id;
-      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService, this.referralId));
+      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.referralsService, this.referralId));
     } else {
-      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
+      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.referralsService));
     }
     this.fillReferralForm(this.referralToEdit);
   }
@@ -255,6 +256,7 @@ export class ReferralsContactComponent implements OnInit {
             this.facade.referralsService.saveCv(res.id, file).subscribe()
           }
           this.facade.appService.stopLoading();
+          newCandidate.id = res.id;
           this.facade.referralsService.addNew(newCandidate);
           this.modalService.closeAll();
         }, err => {
