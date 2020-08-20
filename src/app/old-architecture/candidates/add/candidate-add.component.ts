@@ -16,9 +16,7 @@ import { Globals } from '@shared/utils/globals';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
 import { ReferralsService } from '@shared/services/referrals.service';
-import { Profile } from '@app/shared/models/profile.model';
-
-
+import { customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
 
 @Component({
   selector: 'candidate-add',
@@ -113,7 +111,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     knownFrom: [null],
     referredBy: [null],
     source: [null]
-  }, { validator: checkIfEmailAndPhoneNulll });
+  }, { validator: customEmailAndPhoneNumberValidator });
 
   controlArray: Array<{ id: number, controlInstance: string[] }> = [];
   skills: Skill[] = [];
@@ -152,12 +150,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     if (this.isEdit) {
       this.fillCandidate = this._candidate;
       this.fillCandidateForm(this._process.candidate);
+      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService, this._process.candidate.id));
       this.changeFormStatus(false);
       this.enableEmptyFields();
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
-
+    this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
     setTimeout(() => {
       if (this.candidateInfo) {
         this.fillCandidateForm(this.candidateInfo);

@@ -35,7 +35,8 @@
     </div>
 
     <div class="recru-row">
-        <nz-form-item class="recru-col-2 " [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
+        <nz-form-item class="recru-col-2 "
+            [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
             <nz-form-control [nzErrorTip]="emailErrorMsg">
                 <input *recruInput="'E-mail'" nz-input formControlName="email" id="email">
                 <ng-template #emailErrorMsg>
@@ -46,6 +47,10 @@
                         </ng-container>
                         <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
                             E-mail address already exists
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneEmpty')">
+                            Please enter a valid email or phone number
                         </ng-container>
                     </ng-container>
                     <ng-template #noExistingEmailCheck>
@@ -94,7 +99,8 @@
 
         <nz-form-item class="recru-col-2 ">
             <nz-form-control [nzErrorTip]="preferredOfficeErrorMsg">
-                <nz-select *recruInput="'Office'" formControlName="preferredOffice" nzPlaceHolder="Select preferred office">
+                <nz-select *recruInput="'Office'" formControlName="preferredOffice"
+                    nzPlaceHolder="Select preferred office">
                     <nz-option *ngFor="let o of _offices" nzLabel="{{o.name}}" [nzValue]="o.id">
                     </nz-option>
                 </nz-select>
@@ -151,7 +157,8 @@
 
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
-                <nz-select *recruInput="'Source'" formControlName="source" nzPlaceHolder="Select the source of the candidate">
+                <nz-select *recruInput="'Source'" formControlName="source"
+                    nzPlaceHolder="Select the source of the candidate">
                     <nz-option *ngFor="let s of sourceArray" nzLabel="{{s.name}}" [nzValue]="s.name">
                     </nz-option>
                 </nz-select>

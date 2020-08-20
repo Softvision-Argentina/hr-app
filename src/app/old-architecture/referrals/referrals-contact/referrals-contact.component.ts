@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { customCvAndLinkedInValidator, customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
+import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { CandidateStatusEnum } from '@shared/enums/candidate-status.enum';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
 import { Candidate } from '@shared/models/candidate.model';
@@ -8,22 +10,10 @@ import { Community } from '@shared/models/community.model';
 import { Cv } from '@shared/models/cv.model';
 import { OpenPosition } from '@shared/models/open-position.model';
 import { User } from '@shared/models/user.model';
-import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { BaseService } from '@shared/services/base.service';
 import { FacadeService } from '@shared/services/facade.service';
-import { UniqueEmailValidator, checkIfEmailAndPhoneNulll } from '@shared/utils/email.validator';
+import { UniqueEmailValidator } from '@shared/utils/email.validator';
 import { NzModalService, NzUploadFile } from 'ng-zorro-antd';
-
-export function checkIfCvAndLinkedinNulll(c: AbstractControl): ValidationErrors | null {
-  if ((c.get('link').value === null || c.get('link').value.length === 0)
-    && (c.get('file').value === null || c.get('file').value.length === 0)) {
-    return {
-      'checkIfCvAndLinkedinNulll': true
-    };
-  };
-
-  return null;
-}
 
 @Component({
   selector: 'app-referrals-contact',
@@ -46,6 +36,7 @@ export class ReferralsContactComponent implements OnInit {
     this.visible = value;
   }
 
+  referralId;
 
   @Input()
   communities: Community[];
@@ -59,7 +50,6 @@ export class ReferralsContactComponent implements OnInit {
     email: [null,
       {
         validators: [Validators.email],
-        asyncValidators: UniqueEmailValidator(this.facade.candidateService), updateOn: 'blur'
       }
     ],
     link: [null],
@@ -68,7 +58,7 @@ export class ReferralsContactComponent implements OnInit {
     community: [null, [Validators.required]],
     file: [''],
     openPositionTitle: [null, { disabled: true }]
-  }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll] });
+  }, { validators: [customCvAndLinkedInValidator, customEmailAndPhoneNumberValidator] });
   visible = true;
   isNewCandidate = false;
 
@@ -103,6 +93,12 @@ export class ReferralsContactComponent implements OnInit {
     }
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
+    if (this.referralToEdit) {
+      this.referralId = this.referralToEdit.id;
+      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService, this.referralId));
+    } else {
+      this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
+    }
     this.fillReferralForm(this.referralToEdit);
   }
 
@@ -127,13 +123,11 @@ export class ReferralsContactComponent implements OnInit {
   resetForm() {
     this.candidateForm = this.fb.group({
       name: [''],
-      firstName: [null, [Validators.required]],
-      lastName: [null, [Validators.required]],
+      firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
       email: [null,
         {
-          validators: [Validators.email],
-          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
-          updateOn: "blur"
+          validators: [Validators.email]
         }
       ],
       phoneNumberPrefix: ['+54'],
@@ -148,10 +142,11 @@ export class ReferralsContactComponent implements OnInit {
       knownFrom: [null],
       cv: [null],
       referredBy: [null]
-    }, { validators: [checkIfCvAndLinkedinNulll, checkIfEmailAndPhoneNulll] });
+    }, { validators: [customEmailAndPhoneNumberValidator, customCvAndLinkedInValidator] });
   }
 
   saveEdit() {
+    this.referralId = this.referralToEdit.id;
     let isCompleted;
     if (this.candidateForm.invalid) {
       this.checkForm();
@@ -160,6 +155,7 @@ export class ReferralsContactComponent implements OnInit {
     else {
       isCompleted = true;
     }
+
     if (isCompleted) {
       const editedCandidate = {
         id: this.referralToEdit.id,
@@ -186,6 +182,7 @@ export class ReferralsContactComponent implements OnInit {
       if (this.candidateForm.controls['phoneNumber'].value) {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
+
       this.facade.referralsService.update(this.referralToEdit.id, editedCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully edited !');
@@ -280,7 +277,6 @@ export class ReferralsContactComponent implements OnInit {
     }
     //this.candidateForm.updateValueAndValidity();
   }
-
 
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();

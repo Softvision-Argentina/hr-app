@@ -14,35 +14,35 @@ export class CandidateService extends BaseService<Candidate> {
     super(router, config, http);
     this.apiUrl += 'Candidates';
   }
-  
-  public idExists(id: number): Observable<any>{
+
+  public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
     })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
 
-  public exists(email: string): Observable<any>{
-    return this.http.get(this.apiUrl + '/EmailExists/' + email, {
+  public exists(email: string, id: number): Observable<any> {
+    return this.http.get(this.apiUrl + '/EmailExists/' + email + '/' + id, {
       headers: this.headersWithAuth,
-      observe: "response"
+      observe: 'response'
     })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
 
-  public getCandidatesBySkills(candidatesFilters): Observable<any>{
+  public getCandidatesBySkills(candidatesFilters): Observable<any> {
 
-    return this.http.post(this.apiUrl + '/filter/' , candidatesFilters ,{
+    return this.http.post(this.apiUrl + '/filter/', candidatesFilters, {
       headers: this.headersWithAuth
     })
       .pipe(
-        tap(data => {}),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }

@@ -1,14 +1,25 @@
 import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CandidateService } from '../services/candidate.service';
 import { map } from 'rxjs/operators';
 
-export function UniqueEmailValidator(candidateService: CandidateService): AsyncValidatorFn {
+export function UniqueEmailValidator(candidateService: CandidateService, id = 0): AsyncValidatorFn {
+  let referrals = candidateService.data.value;
+  if (id) {
+    referrals = candidateService.data.value.filter(referral => referral.id !== id)
+  }
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
     if (control.value !== null && control.value !== '') {
-      return candidateService.exists(control.value).pipe(
-        map(result => result.body.exists ? { emailExists: true } : null)
-      );
+      const emailExists = referrals.some(referral => referral.emailAddress === control.value);
+      if (emailExists) {
+        return of({ emailExists: true });
+      } else {
+        return candidateService.exists(control.value, id)
+          .pipe(
+            map(result => !result.body.exists ?
+              { emailExists: true } : null)
+          );
+      }
     } else {
       return new Observable(null);
     }
@@ -16,8 +27,6 @@ export function UniqueEmailValidator(candidateService: CandidateService): AsyncV
 }
 
 export function checkIfEmailAndPhoneNulll(c: AbstractControl): ValidationErrors | null {
-  c.get('email').setErrors(null);
-  c.get('phoneNumber').setErrors(null);
 
   if ((c.get('email').value === null || c.get('email').value.length === 0)
     && (c.get('phoneNumber').value === null || c.get('phoneNumber').value.length === 0)) {
