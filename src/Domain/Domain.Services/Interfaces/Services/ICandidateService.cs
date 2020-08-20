@@ -30,5 +30,7 @@ namespace Domain.Services.Interfaces.Services
         IEnumerable<ReadedCandidateContract> Read(Func<Candidate, bool> filter);
 
         Candidate GetCandidate(int id);
+
+        IEnumerable<CandidateForReferralsContract> GetCandidatesForReferralComponent(int id);
     }
 }

@@ -105,9 +105,9 @@ namespace ApiServer.Controllers
             {
                 var candidate = this.candidateService.Exists(email, id);
 
-                if (candidate == null)
+                if (!candidate)
                 {
-                    return this.NotFound(new { Exists = false });
+                    return this.Ok(new { Exists = false });
                 }
 
                 return this.Ok(new { Exists = true });

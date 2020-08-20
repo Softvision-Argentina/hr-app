@@ -12,6 +12,7 @@ namespace Domain.Services.Impl.Services
     using Core.ExtensionHelpers;
     using Core.Persistance;
     using Domain.Model;
+    using Domain.Model.Enum;
     using Domain.Model.Exceptions.Candidate;
     using Domain.Services.Contracts.Candidate;
     using Domain.Services.Impl.Validators;
@@ -225,6 +226,52 @@ namespace Domain.Services.Impl.Services
             var candidateResult = candidateQuery.SingleOrDefault();
 
             return candidateResult;
+        }
+
+        public IEnumerable<CandidateForReferralsContract> GetCandidatesForReferralComponent(int id)
+        {
+            var candidates = new List<Candidate>();
+            var role = this.userRepository.QueryEager().Where(x => x.Id == id).FirstOrDefault().Role;
+            if (role == Roles.Employee)
+            {
+                candidates = this.candidateRepository.QueryEager().Where(x => x.ReferredBy != null && x.User.Id == id).ToList();
+            }
+            else
+            {
+                candidates = this.candidateRepository.QueryEager().Where(x => x.ReferredBy != null).ToList();
+            }
+
+            var contracts = new List<CandidateForReferralsContract>();
+
+            foreach (var candidate in candidates)
+            {
+                var process = this.processRepository.QueryEager().Where(x => x.CandidateId == candidate.Id).FirstOrDefault();
+                var candidateContract = this.mapper.Map<ReadedCandidateContract>(candidate);
+
+                if (process != null)
+                {
+                    var contract = new CandidateForReferralsContract()
+                    {
+                        Candidate = candidateContract,
+                        ProcessId = process.Id,
+                        ProcessCurrentStage = process.CurrentStage,
+                        ProcessStatus = process.Status,
+                    };
+
+                    contracts.Add(contract);
+                }
+                else
+                {
+                    var contract = new CandidateForReferralsContract()
+                    {
+                        Candidate = candidateContract,
+                    };
+
+                    contracts.Add(contract);
+                }
+            }
+
+            return contracts;
         }
 
         private void ValidateContract(CreateCandidateContract contract)

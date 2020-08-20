@@ -5,6 +5,7 @@
 namespace ApiServer.Controllers
 {
     using ApiServer.Contracts.Candidates;
+    using ApiServer.Contracts.User;
     using AutoMapper;
     using Core;
     using Domain.Services.Contracts.Candidate;
@@ -50,6 +51,17 @@ namespace ApiServer.Controllers
                 this.candidateService.Update(contract);
 
                 return this.Accepted(new { id });
+            });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCandidatesForReferralComponent(int id)
+        {
+            return this.ApiAction(() =>
+            {
+                var candidates = this.candidateService.GetCandidatesForReferralComponent(id);
+
+                return this.Accepted(candidates);
             });
         }
     }
