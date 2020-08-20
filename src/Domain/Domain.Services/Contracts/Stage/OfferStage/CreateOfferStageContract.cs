@@ -31,11 +31,11 @@ namespace Domain.Services.Contracts.Stage
 
         public Seniority Seniority { get; set; }
 
-        public bool BackgroundCheckDone { get; set; }
+        public bool? BackgroundCheckDone { get; set; }
 
         public DateTime? BackgroundCheckDoneDate { get; set; }
 
-        public bool PreocupationalDone { get; set; }
+        public bool? PreocupationalDone { get; set; }
 
         public DateTime? PreocupationalDoneDate { get; set; }
 

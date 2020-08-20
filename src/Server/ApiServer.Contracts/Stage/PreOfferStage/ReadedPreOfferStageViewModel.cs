@@ -31,11 +31,11 @@ namespace ApiServer.Contracts.Stage
 
         public int DNI { get; set; }
 
-        public bool BackgroundCheckDone { get; set; }
+        public bool? BackgroundCheckDone { get; set; }
 
         public DateTime? BackgroundCheckDoneDate { get; set; }
 
-        public bool PreocupationalDone { get; set; }
+        public bool? PreocupationalDone { get; set; }
 
         public DateTime? PreocupationalDoneDate { get; set; }
 
