@@ -270,17 +270,13 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
       this.preOfferForm.controls['firstday'].setValue(preOfferStage.firstday);
     }
 
-    if (preOfferStage.backgroundCheckDone) {
-      this.preOfferForm.controls['backgroundCheckDone'].setValue(preOfferStage.backgroundCheckDone);
-    }
+    this.preOfferForm.controls['backgroundCheckDone'].setValue(preOfferStage.backgroundCheckDone);
 
     if (this.preOfferStage.backgroundCheckDone && preOfferStage.backgroundCheckDoneDate) {
       this.preOfferForm.controls['backgroundCheckDoneDate'].setValue(preOfferStage.backgroundCheckDoneDate);
     }
 
-    if (preOfferStage.preocupationalDone) {
-      this.preOfferForm.controls['preocupationalDone'].setValue(preOfferStage.preocupationalDone);
-    }
+    this.preOfferForm.controls['preocupationalDone'].setValue(preOfferStage.preocupationalDone);
 
     if (this.preOfferStage.preocupationalDone && preOfferStage.preocupationalDoneDate) {
       this.preOfferForm.controls['preocupationalDoneDate'].setValue(preOfferStage.preocupationalDoneDate);

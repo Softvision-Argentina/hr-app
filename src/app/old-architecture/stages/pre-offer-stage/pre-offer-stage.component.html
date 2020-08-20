@@ -84,6 +84,7 @@
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
                 <nz-select *recruInput="'Background Check'" formControlName="backgroundCheckDone" nzPlaceHolder="Select an option">
+                    <nz-option nzLabel="N/A" [nzValue]="null"></nz-option>
                     <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
                     <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
                 </nz-select>
@@ -108,6 +109,7 @@
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
                 <nz-select *recruInput="'Medical Check'" formControlName="preocupationalDone" nzPlaceHolder="Select an option">
+                    <nz-option nzLabel="N/A" [nzValue]="null"></nz-option>
                     <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
                     <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
                 </nz-select>
