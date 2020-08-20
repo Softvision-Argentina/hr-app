@@ -42,6 +42,9 @@ Add-Content -Path $master_file_path -Value "    COMMIT`r`n `nEND TRY`nBEGIN CATC
 Add-Content -Path $master_file_path -Value "--End: $(Get-Date -format 'u')"
 Write-Host "Added end log" `n -ForegroundColor green
 
+(Get-Content -path $master_file_path) -replace "^GO.*", "`n" | Set-Content -path $master_file_path
+Write-Host "Removed GOs" `n -ForegroundColor green
+
 Write-Host "master.sql to execute on release:"
 Get-Content $master_file_path
 
