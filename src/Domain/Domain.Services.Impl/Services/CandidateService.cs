@@ -66,6 +66,12 @@ namespace Domain.Services.Impl.Services
         public CreatedCandidateContract Create(CreateCandidateContract contract)
         {
             this.log.LogInformation($"Validating contract {contract.Name}");
+
+            if (string.IsNullOrWhiteSpace(contract.EmailAddress))
+            {
+                contract.EmailAddress = null;
+            }
+
             this.ValidateContract(contract);
             this.ValidateExistence(contract.EmailAddress, contract.PhoneNumber);
 
@@ -123,6 +129,12 @@ namespace Domain.Services.Impl.Services
         public void Update(UpdateCandidateContract contract)
         {
             this.log.LogInformation($"Validating contract {contract.Name}");
+
+            if (string.IsNullOrWhiteSpace(contract.EmailAddress))
+            {
+                contract.EmailAddress = null;
+            }
+
             this.ValidateContract(contract);
 
             this.log.LogInformation($"Mapping contract {contract.Name}");
