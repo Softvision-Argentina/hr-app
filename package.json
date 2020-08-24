@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:aot": "ng serve --aot",
     "build": "ng build",
     "build:prod": "ng run recru-webapp:build:production",
     "build:qa": "ng run recru-webapp:build:qa",

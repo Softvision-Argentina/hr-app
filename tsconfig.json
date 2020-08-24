@@ -17,10 +17,10 @@
       "dom"
     ],
     "paths": {
-        "@app/*": ["src/app/*"],
-        "@environments/*": ["src/environments/*"],
-        "@shared/*": ["src/app/shared/*"],
-        "@old-architecture/*": ["src/app/old-architecture/*"]
+      "@shared/*": ["src/app/shared/*"],
+      "@environments/*": ["src/environments/*"],
+      "@old-architecture/*": ["src/app/old-architecture/*"],
+      "@app/*": ["src/app/*"]
     }
   },
   "angularCompilerOptions": {
