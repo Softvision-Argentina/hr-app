@@ -12,7 +12,7 @@ export function validateCandidateForm(form: FormGroup) {
         for (const i in form.controls) {
             form.controls[i].markAsDirty();
             form.controls[i].updateValueAndValidity();
-            if ((!form.controls[i].valid) && (form.controls[i] !== form.controls['phoneNumberPrefix'])) {
+            if ((form.controls[i].invalid) && (form.controls[i] !== form.controls['phoneNumberPrefix']) && (form.controls[i] !== form.controls['referredBy'])) {
                 isValid = false;
                 break;
             }

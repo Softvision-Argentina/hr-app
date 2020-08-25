@@ -91,7 +91,7 @@
             <nz-form-item class="recru-col-2 ">
                 <nz-form-control [nzErrorTip]="dniErrorMsg">
                     <input *recruInput="'DNI'" (keyup)="checkLength($event.target)" maxlength="8" formControlName="dni"
-                        id="dni" (change)="dniChanged()" type="number" nz-input>
+                        id="dni" type="number" nz-input>
                     <ng-template #dniErrorMsg>
                         <ng-container *ngIf="validateForm.get('dni').dirty && validateForm.get('dni').errors">
                             <ng-container *ngIf="validateForm.get('dni').hasError('dniTooShortError')">

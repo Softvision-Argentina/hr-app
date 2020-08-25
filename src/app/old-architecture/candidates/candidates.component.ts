@@ -74,6 +74,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   searchValueStatus = '';
   statusList: any[];
   englishLevelList: any[];
+  referredBy: string;
 
   constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -219,7 +220,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       community: [null, [Validators.required]],
       profile: [null],
       isReferred: [null],
-      referredBy: [null],
       knownFrom: [null],
       source: null
     });
@@ -325,7 +325,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 };
                 candidateSkills.push(skill);
               });
-              const referredBy = this.validateForm.controls['referredBy'].value;
               let knownFrom;
               knownFrom = this.validateForm.controls['knownFrom'].value;
               editedCandidate = {
@@ -348,7 +347,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
                 isReferred: this.validateForm.controls['isReferred'].value,
                 cv: null,
                 knownFrom: knownFrom,
-                referredBy: referredBy,
+                referredBy: this.referredBy,
                 source: this.validateForm.controls['source'].value
               };
               if (this.validateForm.controls['phoneNumber'].value) {
@@ -484,8 +483,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.validateForm.controls['community'].setValue(candidate.community.id);
     this.validateForm.controls['profile'].setValue(candidate.profile ? candidate.profile.id : null);
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
-    this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
-    this.validateForm.controls['referredBy'].disable();
+    this.referredBy = candidateReferredBy;
+    
+  
     this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
     this.validateForm.controls['source'].setValue(candidate.source);
     if (candidate.candidateSkills.length > 0) {
@@ -502,10 +502,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           new FormControl(skill.comment, Validators.required));
       });
     }
-  }
-
-  dniChanged() {
-    this.changeFormStatus(false);
   }
 
   changeFormStatus(enable: boolean) {
