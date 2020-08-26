@@ -499,7 +499,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[0], new FormControl(skill.skill.name));
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[1], new FormControl(skill.rate));
         this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[2],
-          new FormControl(skill.comment, Validators.required));
+          new FormControl(skill.comment));
       });
     }
   }
