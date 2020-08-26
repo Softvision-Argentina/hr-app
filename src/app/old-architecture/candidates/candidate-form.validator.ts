@@ -1,30 +1,14 @@
 import { FormGroup } from '@angular/forms';
 
 export function validateCandidateForm(form: FormGroup) {
-    let isValid = true;
-    if(form.get('isReferred')) {
-        if (form.controls['isReferred'].value === true && form.controls['referredBy'].invalid) {
-            isValid = false;
-        }
-    }
-    if (form.get('phoneNumberPrefix')) {
-        // tslint:disable-next-line: forin
-        for (const i in form.controls) {
+
+    for (const i in form.controls) {
+        if (form.controls[i]) {
+          if (form.controls[i] !== form.controls['email']) {
             form.controls[i].markAsDirty();
             form.controls[i].updateValueAndValidity();
-            if ((form.controls[i].invalid) && (form.controls[i] !== form.controls['phoneNumberPrefix']) && (form.controls[i] !== form.controls['referredBy'])) {
-                isValid = false;
-                break;
-            }
+          }
         }
-    } else {
-        // tslint:disable-next-line: forin
-        for (const i in form.controls){
-            form.controls[i].markAsDirty();
-            form.controls[i].updateValueAndValidity();
-            isValid = false;
-            break;
-        }
-    }
-    return isValid;
+      }
+    return form.status === 'VALID' ? true : false;
 }

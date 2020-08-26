@@ -11,8 +11,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { Globals } from '@shared/utils/globals';
 import { replaceAccent } from '@shared/utils/replace-accent.util';
 import { Subscription } from 'rxjs';
-import { AppComponent } from '@app/app.component'
-;
+import { AppComponent } from '@app/app.component';
 import { validateCandidateForm } from './candidate-form.validator';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
 import { dniValidator } from '@app/shared/utils/dni.validator';
@@ -197,7 +196,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetForm() {
+  resetForm(id:number = 0) {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
       lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
@@ -205,7 +204,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       email: [null,
         {
           validators: [Validators.email],
-          asyncValidators: UniqueEmailValidator(this.facade.candidateService),
+          asyncValidators: UniqueEmailValidator(this.facade.candidateService, id),
           updateOn: "blur"
         }
       ],
@@ -275,7 +274,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   showEditModal(modalContent: TemplateRef<{}>, id: number): void {
-    this.resetForm();
+    this.resetForm(id);
     this.getSkills();
     if (this.completeSkillList.length === 0) { this.skills.forEach(sk => this.completeSkillList.push(sk)); }
     this.editingCandidateId = id;
