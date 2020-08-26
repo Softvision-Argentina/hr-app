@@ -50,7 +50,7 @@ export class ReferralsContactComponent implements OnInit {
     email: [null,
       {
         validators: [Validators.email],
-        updateOn: "blur"
+        updateOn: 'blur'
       }
     ],
     link: [null],

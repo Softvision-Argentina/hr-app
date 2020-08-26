@@ -17,12 +17,13 @@ import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { resizeModal } from '@app/shared/utils/resize-modal.util';
 import { Subscription } from 'rxjs';
+import { ProcessStatusEnum } from '@app/shared/enums/process-status.enum';
 
 @Component({
   selector: 'technical-stage',
   templateUrl: './technical-stage.component.html',
   styleUrls: ['./technical-stage.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class TechnicalStageComponent implements OnInit, OnDestroy {
 
@@ -95,6 +96,7 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
   selectedReason: string;
+  currentProfileId: number;
   subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private globals: Globals, private processService: ProcessService) {
@@ -113,13 +115,13 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     this.readdressStatus.fromStatus = undefined;
     this.readdressStatus.toStatus = undefined;
     this.readdressStatus.id = undefined;
-
+    this.getCurrentCandidateProfile();
     if (this.technicalStage.readdressStatus) {
       this.selectedReason = `${this.technicalStage.readdressStatus.readdressReasonId}`;
       this.readdressStatus.feedback = this.technicalStage.readdressStatus.feedback;
       this.readdressStatus.fromStatus = this.technicalStage.status;
       this.readdressStatus.toStatus = this.technicalStage.readdressStatus.toStatus;
-      this.readdressStatus.id = this.technicalStage.readdressStatus.id
+      this.readdressStatus.id = this.technicalStage.readdressStatus.id;
     }
 
     this.processService.selectedSeniorities.subscribe(sr => this.selectedSeniorities = sr);
@@ -142,8 +144,19 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.push(techSubscription);
   }
+  getCurrentCandidateProfile(){
+    const candidateProfileSubscription = this.facade.candidateProfileService.currentCandidateProfileId.subscribe(newProfileId => {
+      if (newProfileId){
+        if (this.currentProfileId !== newProfileId){
+          this.getAvailablesSkills(this._process.candidate, newProfileId);
+        }
+      }
+      this.currentProfileId = newProfileId;
+    });
+    this.subscriptions.push(candidateProfileSubscription);
+  }
 
-    updateSeniority(seniorityId: number) {
+  updateSeniority(seniorityId: number) {
       this.technicalForm.controls['alternativeSeniority'].enable();
       this.technicalForm.controls["alternativeSeniority"].setValue(null);
       if (this.chosenSeniority) {
@@ -235,6 +248,12 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     this.readdressFilteredList = this.readdressReasonList.filter((reason) => { return reason.type.toLowerCase() == stageName });
     this.readdressStatus.toStatus = this.currentStageStatus;
 
+    if (status === ProcessStatusEnum.InProgress){
+      if(this._process.candidate.profile && this._process.candidate.profile.id){
+        this.getAvailablesSkills(this._process.candidate, this._process.candidate.profile.id);
+      }
+
+    }
     //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
     resizeModal();
   }
@@ -357,39 +376,12 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
           id,
           controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
         };
-        const index = this.controlArray.push(control);
+        this.controlArray = [...this.controlArray, control];
+        const index = this.controlArray.length;
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(id.toString()));
         this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(skill.rate));
-        this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
+        this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(skill.comment, [Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
       });
-    } else if (candidate.profile && candidate.profile.id){
-      let skillCounter = 0;
-      const skillsByProfile = this.facade.skillService.getSkills(candidate.profile.id)
-      .subscribe(data => {
-        let availableSkills: Skill[] = [];
-        for (const i in data){
-          const skills = this.skills.filter(skill => skill.id === data[i]?.skillId);
-          if(skills.length > 0){
-            availableSkills = [...availableSkills, ...skills];
-          }
-        }
-        availableSkills = availableSkills.sort((a , b) => a.name.localeCompare(b.name));
-        availableSkills.forEach(skill => {
-          const id = skillCounter;
-
-          const control = {
-            id,
-            controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
-          };
-          const index = this.controlArray.push(control);
-          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(skill.id.toString()));
-          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(0));
-          this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
-          skillCounter++;
-        });
-      });
-      this.subscriptions.push(skillsByProfile);
-      
     }
     if (technicalStage.sentEmail) {
       this.technicalForm.controls['sentEmail'].setValue(technicalStage.sentEmail);
@@ -401,6 +393,53 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
       }
   }
 
+  getAvailablesSkills(candidate: Candidate, profileId: number){
+    if (candidate.candidateSkills.length === 0){
+        let skillCounter = 0;
+        let skillFieldsLength = this.controlArray.length;
+        const skillsByProfile = this.facade.skillService.getSkills(profileId)
+        .subscribe(data => {
+          let availableSkills: Skill[] = [];
+          for (const i in data){
+            const skills = this.skills.filter(skill => skill.id === data[i]?.skillId);
+            if(skills.length > 0){
+              availableSkills = [...availableSkills, ...skills];
+            }
+          }
+          while (skillFieldsLength !== 0){
+            this.technicalForm.removeControl(this.controlArray[skillFieldsLength - 1].controlInstance[0]);
+            this.technicalForm.removeControl(this.controlArray[skillFieldsLength - 1].controlInstance[1]);
+            this.technicalForm.removeControl(this.controlArray[skillFieldsLength - 1].controlInstance[2]);
+            this.controlArray.pop();
+            skillFieldsLength = skillFieldsLength - 1;
+          }
+          
+          availableSkills = availableSkills.sort((a , b) => a.name.localeCompare(b.name));
+          availableSkills.forEach(skill => {
+            const id = skillCounter;
+            const control = {
+              id,
+              controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
+            };
+            this.controlArray = [...this.controlArray, control];
+            const index = this.controlArray.length;
+            if (this.technicalForm.get(`${this.controlArray[index - 1].controlInstance[0]}`)){
+              this.technicalForm.get(`${this.controlArray[index - 1].controlInstance[0]}`).setValue(skill.id.toString());
+              this.technicalForm.get(`${this.controlArray[index - 1].controlInstance[0]}`).setValue(0);
+              this.technicalForm.get(`${this.controlArray[index - 1].controlInstance[0]}`).setValue('');
+            } else {
+              this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(skill.id.toString()));
+              this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(0));
+              this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl('', [Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
+            }
+            
+            skillCounter++;
+          });
+        });
+        this.subscriptions.push(skillsByProfile);
+        
+    }
+  }
   validatorsOnReaddressControls(flag: boolean) {
     let reasonSelectControl = this.technicalForm.controls['reasonSelectControl'];
     let feedbackTextAreaControl = this.technicalForm.controls['reasonDescriptionTextAreaControl'];
@@ -449,7 +488,7 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     const index = this.controlArray.push(control);
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[0], new FormControl(null, Validators.required));
     this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[1], new FormControl(10));
-    this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
+    this.technicalForm.addControl(this.controlArray[index - 1].controlInstance[2], new FormControl(null, [Validators.pattern(/^[a-zA-Z0-9\s]*$/)]));
 
     //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
     resizeModal();
@@ -559,5 +598,6 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
+    this.facade.candidateProfileService.currentCandidateProfileId.next(null);
   }
 }

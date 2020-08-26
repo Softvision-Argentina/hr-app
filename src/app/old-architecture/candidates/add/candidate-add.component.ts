@@ -94,7 +94,12 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     dni: [0],
-    email: [null, [Validators.email]],
+    email: [null,
+      {
+        validators: [Validators.email],
+        updateOn: 'blur'
+      }
+    ],
 
     phoneNumberPrefix: ['+54'],
     phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
@@ -180,7 +185,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       this.candidateForm.controls['user'].setValue(currentRecruiter.id);
     }
   }
-
+  
   checkForm() {
     for (const i in this.candidateForm.controls) {
       this.candidateForm.controls[i].markAsDirty();
@@ -297,6 +302,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     } else{
       this.availableProfiles = this.communities[communityIndex].profiles;
     }
+  }
+  setCurrentProfile(){
+    const profileId = this.candidateForm.get('profile').value;
+    this.facade.candidateProfileService.currentCandidateProfileId.next(profileId);
   }
 
   getFormControl(name: string): AbstractControl {

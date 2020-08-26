@@ -37,7 +37,7 @@
     <div class="recru-row">
         <nz-form-item class="recru-col-2 "
             [ngClass]="{'ant-form-item-has-error': ((candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && (candidateForm.get('email').hasError('emailAndPhoneValidator') || candidateForm.get('email').hasError('email'))) }">
-            <nz-form-control [nzErrorTip]="emailErrorMsg">
+            <nz-form-control [nzErrorTip]="emailErrorMsg" [nzValidateStatus]="candidateForm.controls['email']">
                 <input *recruInput="'E-mail'" nz-input formControlName="email" id="email">
                 <ng-template #emailErrorMsg>
                     <ng-container *ngIf="!candidateInfo?.isReferred; else noExistingEmailCheck">
@@ -131,7 +131,7 @@
 
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
-                <nz-select *recruInput="'Profile'" formControlName="profile" nzPlaceHolder="Select profile">
+                <nz-select *recruInput="'Profile'" formControlName="profile" nzPlaceHolder="Select profile" (ngModelChange)="setCurrentProfile()">
                     <nz-option *ngFor="let p of availableProfiles" nzLabel="{{p.name}}" [nzValue]="p.id">
                     </nz-option>
                 </nz-select>
