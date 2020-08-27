@@ -152,7 +152,7 @@ import { SideMenuComponent } from './old-architecture/side-menu/side-menu.compon
     InterviewService,
     OpenPositionService,
     { provide: NZ_I18N, useValue: en_US },
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent]
 })

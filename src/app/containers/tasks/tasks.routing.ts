@@ -7,4 +7,3 @@ export const TasksRoutes: Routes = [
         component: TasksComponent
     }
 ];
-
