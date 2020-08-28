@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
@@ -66,7 +66,8 @@ export class HrStageComponent implements OnInit {
   selectedReasonId: number;
   selectedReason: string;
   constructor(private fb: FormBuilder, private facade: FacadeService,
-    private globals: Globals, private _appComponent: AppComponent) {
+    private globals: Globals, private _appComponent: AppComponent,
+    private cdr: ChangeDetectorRef) {
 
     this.statusList = globals.hrStageStatusList;
     this.englishLevelList = globals.englishLevelList;
@@ -99,7 +100,8 @@ export class HrStageComponent implements OnInit {
   getFilteredUsersForHr() {
     this.facade.userService.getFilteredForHr()
       .subscribe(res => {
-        this.usersFiltered = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
+        this.usersFiltered = [...res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)))];
+        this.cdr.detectChanges();
       }, err => {
         console.log(err);
       });
@@ -165,7 +167,6 @@ export class HrStageComponent implements OnInit {
     hrStage.actualSalary = this.getControlValue(this.hrForm.controls.actualSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.actualSalary);
     hrStage.wantedSalary = this.getControlValue(this.hrForm.controls.wantedSalary) == null ? 0 : this.getControlValue(this.hrForm.controls.wantedSalary);
     hrStage.additionalInformation = this.getControlValue(this.hrForm.controls.additionalInformation);
-    hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
     hrStage.rejectionReason = this.getControlValue(this.hrForm.controls.rejectionReason);
     hrStage.rejectionReasonsHr = this.getControlValue(this.hrForm.controls.rejectionReasonsHr);
     hrStage.sentEmail = this.getControlValue(this.hrForm.controls.sentEmail);
