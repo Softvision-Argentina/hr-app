@@ -102,7 +102,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     ],
 
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
+    phoneNumber: [null, [Validators.pattern(/^\+?[1-9]\d{9,11}$/), Validators.minLength(10), Validators.maxLength(12)]],
     linkedin: [null],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],

@@ -177,13 +177,13 @@
                                 <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                             </nz-select>
                         </ng-template>
-                        <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input
-                            placeholder="Please input a phone number">
+                        <input formControlName="phoneNumber" id="'phoneNumber'" type="number" minlength="10" maxlength="12" 
+                            pattern="^\+?[1-9]\d{9,11}$" nz-input  placeholder="Please input a phone number">
                     </nz-input-group>
                     <ng-template #phoneNumberErrorMsg>
                         <ng-container
                             *ngIf="validateForm.get('phoneNumber').dirty && validateForm.get('phoneNumber').errors">
-                            Please input a phone number
+                            Please input a valid phone number
                         </ng-container>
                     </ng-template>
                 </nz-form-control>

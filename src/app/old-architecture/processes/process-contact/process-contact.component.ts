@@ -102,7 +102,7 @@ export class ProcessContactComponent implements OnInit {
       }
     ],
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/)]],
+    phoneNumber: [null, [Validators.pattern(/^\+?[1-9]\d{9,11}$/), Validators.minLength(10), Validators.maxLength(12)]],
     user: [null, [Validators.required]],
     contactDay: [new Date(), [Validators.required]],
     community: [null, [Validators.required]],
