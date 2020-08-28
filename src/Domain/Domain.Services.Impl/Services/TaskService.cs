@@ -10,6 +10,7 @@ namespace Domain.Services.Impl.Services
     using Core;
     using Core.Persistance;
     using Domain.Model;
+    using Domain.Model.Enum;
     using Domain.Model.Exceptions.Task;
     using Domain.Services.Contracts.Task;
     using Domain.Services.Impl.Validators;
@@ -25,12 +26,14 @@ namespace Domain.Services.Impl.Services
         private readonly ILog<TaskService> log;
         private readonly UpdateTaskContractValidator updateTaskContractValidator;
         private readonly CreateTaskContractValidator createTaskContractValidator;
+        private readonly IRepository<User> userRepository;
 
         public TaskService(
             IMapper mapper,
             IRepository<Task> taskRepository,
             IUnitOfWork unitOfWork,
             ILog<TaskService> log,
+            IRepository<User> userRepository,
             UpdateTaskContractValidator updateTaskContractValidator,
             CreateTaskContractValidator createTaskContractValidator)
         {
@@ -40,6 +43,7 @@ namespace Domain.Services.Impl.Services
             this.log = log;
             this.updateTaskContractValidator = updateTaskContractValidator;
             this.createTaskContractValidator = createTaskContractValidator;
+            this.userRepository = userRepository;
         }
 
         public CreatedTaskContract Create(CreateTaskContract contract)
@@ -130,16 +134,29 @@ namespace Domain.Services.Impl.Services
             return this.mapper.Map<ReadedTaskContract>(taskResult);
         }
 
-        public IEnumerable<ReadedTaskContract> List()
+        public IEnumerable<ReadedTaskContract> List(int id)
         {
-            var taskQuery = this.taskRepository
+            var role = this.userRepository.QueryEager().Where(x => x.Id == id).FirstOrDefault().Role;
+            var taskQuery = new List<Task>();
+            if (role == Roles.HRManagement || role == Roles.Admin || role == Roles.Recruiter)
+            {
+                taskQuery = this.taskRepository
                 .QueryEager()
                 .OrderBy(_ => _.Title)
-                .ThenBy(_ => _.CreationDate);
+                .ThenBy(_ => _.CreationDate)
+                .ToList();
+            }
+            else
+            {
+                taskQuery = this.taskRepository
+                .QueryEager()
+                .Where(x => x.UserId == id)
+                .OrderBy(_ => _.Title)
+                .ThenBy(_ => _.CreationDate)
+                .ToList();
+            }
 
-            var taskResult = taskQuery.ToList();
-
-            return this.mapper.Map<List<ReadedTaskContract>>(taskResult);
+            return this.mapper.Map<List<ReadedTaskContract>>(taskQuery);
         }
 
         public IEnumerable<ReadedTaskContract> ListByUser(string userEmail)
