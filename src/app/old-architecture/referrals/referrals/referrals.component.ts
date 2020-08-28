@@ -102,8 +102,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngOnInit() {
+    this.getOpenPositions();    
     this.getCommunities();
-    this.getOpenPositions();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     this._referralsService._startReferralsModalSource.subscribe(
@@ -167,8 +167,11 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
       this.communities = res;
+      if(res)
+        this.facade.appService.stopLoading();
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
+      this.facade.appService.stopLoading();
     });
     this.referralsSubscriptions.add(communitiesSubscription);
   }
