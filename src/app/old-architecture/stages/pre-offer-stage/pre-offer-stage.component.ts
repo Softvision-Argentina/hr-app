@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
+import { CheckedEnum } from '@shared/enums/checked.enum';
 import { PreOfferStage } from '@shared/models/pre-offer-stage.model';
 import { ReaddressReasonType } from '@shared/models/readdress-reason-type.model';
 import { ReaddressReason } from '@shared/models/readdress-reason.model';
@@ -9,6 +10,7 @@ import { User } from '@shared/models/user.model';
 import { FacadeService } from '@shared/services/facade.service';
 import { ProcessService } from '@shared/services/process.service';
 import { dniValidator, UniqueDniValidator } from '@shared/utils/dni.validator';
+import { checkDateIsnotEmpty } from '@shared/utils/forms.validators';
 import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
@@ -48,10 +50,14 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     firstday: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
     bonus: '', // should be removed because it's in pre-offer-history
     hireDate: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
-    backgroundCheckDone: null,
-    backgroundCheckDoneDate: [],
-    preocupationalDone: null,
-    preocupationalDoneDate: [],
+    backgroundCheck: this.fb.group({
+      done: null,
+      date: null,
+    }, {validator: checkDateIsnotEmpty }),
+    preocupational: this.fb.group({
+      done: null,
+      date: null,
+    }, { validator: checkDateIsnotEmpty }),
     rejectionReason: [null],
     reasonSelectControl: [null],
     reasonDescriptionTextAreaControl: [null]
@@ -73,11 +79,11 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   currentStageStatus: StageStatusEnum;
   readdressStatus: ReaddressStatus = new ReaddressStatus();
 
-  currentReaddressDescription: string = "";
+  currentReaddressDescription: string = '';
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
-  selectedReason: string;  
-
+  selectedReason: string;
+  checkedEnum = CheckedEnum;
   @Input() preOfferStage: PreOfferStage;
   @Input() readdressReasonList: ReaddressReason[] = [];
   @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
@@ -190,7 +196,8 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   getFormData(processId: number): PreOfferStage {
     const stage: PreOfferStage = new PreOfferStage();
     const form = this.preOfferForm;
-
+    const backgroundCheckDone = this.getControlValue(form.get('backgroundCheck.done'));
+    const preocupationalDone = this.getControlValue(form.get('preocupational.done'));
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
     stage.dni = this.getControlValue(form.controls.dni) || 0;
@@ -206,10 +213,21 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     stage.firstday = this.getControlValue(form.controls.firstday);
     stage.bonus = this.getControlValue(form.controls.bonus);
     stage.hireDate = this.getControlValue(form.controls.hireDate);
-    stage.backgroundCheckDone = this.getControlValue(form.controls.backgroundCheckDone);
-    stage.backgroundCheckDoneDate = stage.backgroundCheckDone ? this.getControlValue(form.controls.backgroundCheckDoneDate) : null;
-    stage.preocupationalDone = this.getControlValue(form.controls.preocupationalDone);
-    stage.preocupationalDoneDate = stage.preocupationalDone ? this.getControlValue(form.controls.preocupationalDoneDate) : null;
+
+    if (backgroundCheckDone === null || backgroundCheckDone === this.checkedEnum.NA){
+      stage.backgroundCheckDone = null;
+      stage.backgroundCheckDoneDate = null;
+    } else {
+      stage.backgroundCheckDone = backgroundCheckDone;
+      stage.backgroundCheckDoneDate = this.getControlValue(form.get('backgroundCheck.date'));
+    }
+    if (preocupationalDone === null || preocupationalDone === this.checkedEnum.NA){
+      stage.preocupationalDone = null;
+      stage.preocupationalDoneDate = null;
+    } else {
+      stage.preocupationalDone = preocupationalDone;
+      stage.preocupationalDoneDate = this.getControlValue(form.get('preocupational.date'));
+    }
     stage.rejectionReason = this.getControlValue(form.controls.rejectionReason);
     stage.readdressStatus = this.readdressStatus;
     return stage;
@@ -269,18 +287,17 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     if (preOfferStage.firstday) {
       this.preOfferForm.controls['firstday'].setValue(preOfferStage.firstday);
     }
-
-    this.preOfferForm.controls['backgroundCheckDone'].setValue(preOfferStage.backgroundCheckDone);
-
-    if (this.preOfferStage.backgroundCheckDone && preOfferStage.backgroundCheckDoneDate) {
-      this.preOfferForm.controls['backgroundCheckDoneDate'].setValue(preOfferStage.backgroundCheckDoneDate);
+    if (preOfferStage.backgroundCheckDoneDate) {
+      const backgroundCheck: number = +preOfferStage.backgroundCheckDone;
+      this.preOfferForm.get('backgroundCheck.done').setValue(backgroundCheck);
+      this.preOfferForm.get('backgroundCheck.date').setValue(preOfferStage.backgroundCheckDoneDate);
+    }
+    if (preOfferStage.preocupationalDoneDate) {
+      const preocupational: number = +preOfferStage.preocupationalDone;
+      this.preOfferForm.get('preocupational.done').setValue(preocupational);
+      this.preOfferForm.get('preocupational.date').setValue(preOfferStage.preocupationalDoneDate);
     }
 
-    this.preOfferForm.controls['preocupationalDone'].setValue(preOfferStage.preocupationalDone);
-
-    if (this.preOfferStage.preocupationalDone && preOfferStage.preocupationalDoneDate) {
-      this.preOfferForm.controls['preocupationalDoneDate'].setValue(preOfferStage.preocupationalDoneDate);
-    }
 
     if (preOfferStage.rejectionReason) {
       this.preOfferForm.controls['rejectionReason'].setValue(preOfferStage.rejectionReason);
@@ -387,5 +404,12 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
         dniControl.updateValueAndValidity();
         birthDateControl.updateValueAndValidity();
       });
+  }
+
+  cleanDate(formGroupName: string){
+    const control = this.preOfferForm.get(formGroupName);
+    if (control.get('done').value === this.checkedEnum.NA) {
+      control.get('date').setValue(null);
+    }
   }
 }

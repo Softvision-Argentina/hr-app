@@ -80,24 +80,24 @@
     </div>
 
 
-    <div class="recru-row">
+    <div class="recru-row" formGroupName="backgroundCheck">
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
-                <nz-select *recruInput="'Background Check'" formControlName="backgroundCheckDone" nzPlaceHolder="Select an option">
-                    <nz-option nzLabel="N/A" [nzValue]="null"></nz-option>
-                    <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
-                    <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                <nz-select *recruInput="'Background Check'" formControlName="done" nzPlaceHolder="Select an option" (ngModelChange)="cleanDate('backgroundCheck')">
+                    <nz-option nzLabel="N/A" [nzValue]="checkedEnum.NA"></nz-option>
+                    <nz-option nzLabel="Rejected" [nzValue]="checkedEnum.Rejected"></nz-option>
+                    <nz-option nzLabel="Accepted" [nzValue]="checkedEnum.Accepted"></nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
 
         <nz-form-item class="recru-col-2 ">
-            <nz-form-control [nzErrorTip]="backgroundCheckDoneDateErrorMsg">
+            <nz-form-control [nzValidateStatus]="preOfferForm.controls['backgroundCheck']" [nzErrorTip]="backgroundCheckDoneDateErrorMsg">
                 <nz-date-picker *recruInput="'Done Date'" style="width: 100%;"
-                    formControlName="backgroundCheckDoneDate"></nz-date-picker>
+                    formControlName="date"></nz-date-picker>
                 <ng-template #backgroundCheckDoneDateErrorMsg>
                     <ng-container
-                        *ngIf="preOfferForm.get('backgroundCheckDoneDate').dirty && preOfferForm.get('backgroundCheckDoneDate').errors">
+                        *ngIf="preOfferForm.get('backgroundCheck').errors">
                         Please input a date
                     </ng-container>
                 </ng-template>
@@ -105,25 +105,25 @@
         </nz-form-item>
     </div>
 
-    <div class="recru-row">
+    <div class="recru-row" formGroupName="preocupational">
         <nz-form-item class="recru-col-2 ">
             <nz-form-control>
-                <nz-select *recruInput="'Medical Check'" formControlName="preocupationalDone" nzPlaceHolder="Select an option">
-                    <nz-option nzLabel="N/A" [nzValue]="null"></nz-option>
-                    <nz-option nzLabel="Rejected" [nzValue]="false"></nz-option>
-                    <nz-option nzLabel="Accepted" [nzValue]="true"></nz-option>
+                <nz-select *recruInput="'Medical Check'" formControlName="done" nzPlaceHolder="Select an option" (ngModelChange)="cleanDate('preocupational')">
+                    <nz-option nzLabel="N/A" [nzValue]="checkedEnum.NA"></nz-option>
+                    <nz-option nzLabel="Rejected" [nzValue]="checkedEnum.Rejected"></nz-option>
+                    <nz-option nzLabel="Accepted" [nzValue]="checkedEnum.Accepted"></nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
 
         <nz-form-item class="recru-col-2 ">
-            <nz-form-control [nzErrorTip]="preocupationalDoneDateErrorMsg">
-                <nz-date-picker *recruInput="'Done Date'" style="width: 100%;" formControlName="preocupationalDoneDate">
+            <nz-form-control [nzValidateStatus]="preOfferForm.controls['preocupational']" [nzErrorTip]="preocupationalDoneDateErrorMsg">
+                <nz-date-picker *recruInput="'Done Date'" style="width: 100%;" formControlName="date">
                 </nz-date-picker>
                 <ng-template #preocupationalDoneDateErrorMsg>
                     <ng-container
-                        *ngIf="preOfferForm.get('preocupationalDoneDate').dirty && preOfferForm.get('preocupationalDoneDate').errors">
-                        Please input a Preocupational Done Date
+                        *ngIf="preOfferForm.get('preocupational').errors">
+                        Please input a date
                     </ng-container>
                 </ng-template>
             </nz-form-control>

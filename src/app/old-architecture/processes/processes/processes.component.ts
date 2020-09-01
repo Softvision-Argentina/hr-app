@@ -1007,10 +1007,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         firstday: new Date(),
         bonus: '',
         hireDate: new Date(),
-        backgroundCheckDone: false,
-        backgroundCheckDoneDate: new Date(),
-        preocupationalDone: false,
-        preocupationalDoneDate: new Date(),
+        backgroundCheckDone: null,
+        backgroundCheckDoneDate: null,
+        preocupationalDone: null,
+        preocupationalDoneDate: null,
         readdressStatus: null
       },
       offerStage: {
