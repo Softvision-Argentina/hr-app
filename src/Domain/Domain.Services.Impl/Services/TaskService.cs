@@ -134,6 +134,18 @@ namespace Domain.Services.Impl.Services
             return this.mapper.Map<ReadedTaskContract>(taskResult);
         }
 
+        public IEnumerable<ReadedTaskContract> List()
+        {
+            var taskQuery = this.taskRepository
+                .QueryEager()
+                .OrderBy(_ => _.Title)
+                .ThenBy(_ => _.CreationDate);
+
+            var taskResult = taskQuery.ToList();
+
+            return this.mapper.Map<List<ReadedTaskContract>>(taskResult);
+        }
+
         public IEnumerable<ReadedTaskContract> List(int id)
         {
             var role = this.userRepository.QueryEager().Where(x => x.Id == id).FirstOrDefault().Role;

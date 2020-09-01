@@ -28,6 +28,17 @@ namespace ApiServer.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return this.ApiAction(() =>
+            {
+                var tasks = this.taskService.List();
+
+                return this.Accepted(this.mapper.Map<List<ReadedTaskViewModel>>(tasks));
+            });
+        }
+
         [HttpGet("{userId}")]
         public IActionResult GetTaskByUserId(int userId)
         {

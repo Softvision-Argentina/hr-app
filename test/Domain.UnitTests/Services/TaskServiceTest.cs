@@ -15,6 +15,7 @@ namespace Domain.Services.Impl.UnitTests.Services
     using Domain.Services.Impl.Services;
     using Domain.Services.Impl.UnitTests.Dummy;
     using Domain.Services.Impl.Validators.Task;
+    using Domain.Services.Repositories.EF;
     using FluentValidation;
     using FluentValidation.Results;
     using Moq;
@@ -29,6 +30,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<ILog<TaskService>> mockLogTaskService;
         private readonly Mock<UpdateTaskContractValidator> mockUpdateTaskContractValidator;
         private readonly Mock<CreateTaskContractValidator> mockCreateTaskContractValidator;
+        private readonly Mock<IRepository<User>> userRepository;
 
         public TaskServiceTest()
         {
@@ -38,7 +40,8 @@ namespace Domain.Services.Impl.UnitTests.Services
             this.mockLogTaskService = new Mock<ILog<TaskService>>();
             this.mockUpdateTaskContractValidator = new Mock<UpdateTaskContractValidator>();
             this.mockCreateTaskContractValidator = new Mock<CreateTaskContractValidator>();
-            this.service = new TaskService(this.mockMapper.Object, this.mockRepositoryTask.Object, this.MockUnitOfWork.Object, this.mockLogTaskService.Object, this.mockUpdateTaskContractValidator.Object, this.mockCreateTaskContractValidator.Object);
+            this.userRepository = new Mock<IRepository<User>>();
+            this.service = new TaskService(this.mockMapper.Object, this.mockRepositoryTask.Object, this.MockUnitOfWork.Object, this.mockLogTaskService.Object, this.userRepository.Object, this.mockUpdateTaskContractValidator.Object, this.mockCreateTaskContractValidator.Object);
         }
 
         [Fact(DisplayName = "Verify that create TaskService when data is valid")]
