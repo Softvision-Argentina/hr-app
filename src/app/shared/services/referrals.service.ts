@@ -11,7 +11,6 @@ import { ICandidate } from '../interfaces/ICandidate.service';
 @Injectable()
 export class ReferralsService extends BaseService<Candidate> implements ICandidate{
   currentReferralList: Candidate[] = [];
-  emptyReferredInfo: Candidate;
 
   private referralList = new BehaviorSubject<Candidate[]>(this.currentReferralList);
   referrals = this.referralList.asObservable();
@@ -24,9 +23,6 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
 
   public _createNewReferralSource = new BehaviorSubject<boolean>(false);
   _createNewReferral$ = this._createNewReferralSource.asObservable();
-
-  public _candidateInfoSource = new BehaviorSubject<Candidate>(this.emptyReferredInfo);
-  _candidateInfo$ = this._candidateInfoSource.asObservable();
 
   candidateAdded = new Subject<Candidate>();
   candidateDelete = new Subject<number>();
@@ -141,9 +137,4 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
       tap(res => this.candidateDelete.next(referralId))
     );
   }
-
-  public sendCandidateInfo(info: Candidate) {
-    this._candidateInfoSource.next(info);
-  }
-
 }

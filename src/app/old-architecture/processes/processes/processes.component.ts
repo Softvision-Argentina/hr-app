@@ -31,6 +31,7 @@ import { ReaddressReason } from '@shared/models/readdress-reason.model';
 import { ReaddressStatus } from '@shared/models/readdress-status.model';
 import { Stage } from '@shared/models/stage.model';
 import { User } from '@shared/models/user.model';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { FacadeService } from '@shared/services/facade.service';
 import { ReferralsService } from '@shared/services/referrals.service';
 import { Globals } from '@shared/utils/globals';
@@ -145,6 +146,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     private userDetailsModal: UserDetailsComponent,
     private router: Router,
     private _referralsService: ReferralsService,
+    private _candidateInfoService : CandidateInfoService,
     private globals: Globals) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
@@ -157,7 +159,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       instruction => this.displayNavAndSideMenu = instruction
     );
 
-    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    const CandidateSub = this._candidateInfoService._candidateInfoSource.subscribe(info =>
+        {
+         this.candidateInfo = info;
+        }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.processesSubscription.add(CandidateSub);
 
     this._referralsService.displayNavAndSideMenu(true);
     this.facade.appService.removeBgImage();
@@ -740,7 +748,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               this.facade.appService.stopLoading();
               this.facade.toastrService.success('The process was successfully saved !');
               let emptyCandidate: Candidate;
-              this._referralsService.sendCandidateInfo(emptyCandidate);
+              this._candidateInfoService.sendCandidateInfo(emptyCandidate);
               this.createEmptyProcess(newCandidate);
               this.closeModal();
             }, err => {
@@ -1114,7 +1122,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   clearDataAndCloseModal() {
     this.clientStage.clearInterviewOperations();
     let emptyCandidate: Candidate;
-    this._referralsService.sendCandidateInfo(emptyCandidate);
+    this._candidateInfoService.sendCandidateInfo(emptyCandidate);
     this.closeModal();
   }
 
@@ -1145,7 +1153,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.keyCode === 27) {
       let emptyCandidate: Candidate;
-      this._referralsService.sendCandidateInfo(emptyCandidate);
+      this._candidateInfoService.sendCandidateInfo(emptyCandidate);
     }
   }
 }

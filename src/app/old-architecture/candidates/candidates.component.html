@@ -56,6 +56,17 @@
                     <td>{{ candidate.phoneNumber }}</td>
                     <td>{{ getStatus(candidate.status) }}</td>
                     <td *ngIf="candidate.id">
+                        <!-- here start the cv  -->
+                        <nz-divider nzType="vertical"></nz-divider>
+                         <i *ngIf="checkCV(candidate.cv); else noCV" nzTooltipTitle="Open CV" nz-tooltip nz-icon
+                         class="icon-action" nzType="file-pdf" nzTheme="outline"
+                        (click)="openCV(candidate.cv)"></i>
+                        <ng-template #noCV>
+                            <i nzTooltipTitle="No CV available" nz-tooltip nz-icon class="icon-action" nzType="file-pdf"
+                            nzTheme="outline"></i>
+                        </ng-template>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <!-- Here end the Cv -->
                         <i nz-tooltip (click)="showDetailsModal(candidate.id, detailModal)" class="icon-action" nz-icon
                             nzType="info-circle" nzTooltipTitle="Details"></i>
                         <nz-divider nzType="vertical"></nz-divider>
@@ -64,6 +75,13 @@
                         <nz-divider nzType="vertical"></nz-divider>
                         <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon
                             nzType="delete" nzTooltipTitle="Delete"></i>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <i nzTooltipTitle="Start Process" nz-tooltip nz-icon
+                            class="icon-action" nzType="play-circle" nzTheme="outline" (click)="goToProcesses(candidate)" *ngIf="!candidate.status;else candidateWithProcess"></i>
+                            <ng-template #candidateWithProcess>
+                                <i nzTooltipTitle="A process has already been created for this candidate" nz-tooltip nz-icon
+                                class="icon-action" nzType="play-circle" nzTheme="outline"></i>
+                            </ng-template>
                     </td>
                 </tr>
             </tbody>

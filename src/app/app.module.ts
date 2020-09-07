@@ -65,6 +65,7 @@ import { NavMenuComponent } from './old-architecture/nav-menu/nav-menu.component
 import { PreferencesComponent } from './old-architecture/preferences/preferences.component';
 import { ReferralsModule } from './old-architecture/referrals/referrals/referrals.module';
 import { SideMenuComponent } from './old-architecture/side-menu/side-menu.component';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
 
 
 @NgModule({
@@ -151,6 +152,7 @@ import { SideMenuComponent } from './old-architecture/side-menu/side-menu.compon
     ReaddressReasonTypeService,
     InterviewService,
     OpenPositionService,
+    CandidateInfoService,
     { provide: NZ_I18N, useValue: en_US },
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
