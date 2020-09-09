@@ -58,5 +58,7 @@ namespace Domain.Services.Contracts.Candidate
         public string OpenPositionTitle { get; set; }
 
         public string Source { get; set; }
+
+        public Seniority? Seniority { get; set; }
     }
 }

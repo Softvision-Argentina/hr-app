@@ -217,7 +217,9 @@ namespace Domain.Services.Impl.Services
 
             var candidateResult = candidateQuery.ToList();
 
-            return this.mapper.Map<List<ReadedCandidateContract>>(candidateResult);
+            var candidatesList = AddSeniority(candidateResult);
+
+            return candidatesList;
         }
 
         public IEnumerable<ReadedCandidateAppContract> ListApp()
@@ -407,6 +409,20 @@ namespace Domain.Services.Impl.Services
 
             candidate.OpenPosition = position;
             candidate.PositionTitle = position.Title;
+        }
+
+        private List<ReadedCandidateContract> AddSeniority (List<Candidate> candidates)
+        {
+            var candidatesList = this.mapper.Map<List<ReadedCandidateContract>>(candidates);
+            var processesList = this.processRepository.QueryEager().ToList();
+
+            foreach (var c in candidatesList)
+            {
+                var process = processesList.Where(_ => _.Candidate.Id == c.Id).FirstOrDefault();
+                c.Seniority = process == null ? c.Seniority = Seniority.NA : c.Seniority = process.Seniority;
+            }
+
+            return candidatesList;
         }
     }
 }
