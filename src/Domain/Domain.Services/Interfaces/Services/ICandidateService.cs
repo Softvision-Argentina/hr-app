@@ -8,6 +8,7 @@ namespace Domain.Services.Interfaces.Services
     using System.Collections.Generic;
     using Domain.Model;
     using Domain.Services.Contracts.Candidate;
+    using Microsoft.AspNetCore.Http;
 
     public interface ICandidateService
     {
@@ -32,5 +33,7 @@ namespace Domain.Services.Interfaces.Services
         Candidate GetCandidate(int id);
 
         IEnumerable<CandidateForReferralsContract> GetCandidatesForReferralComponent(int id);
+
+        public void BulkCreate(IFormFile file, int communityId, string source);
     }
 }
