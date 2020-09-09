@@ -61,7 +61,7 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
     alternativeSeniority: [null],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
-    feedback: [null],
+    feedback: [null, [Validators.maxLength(10000)]],
     englishLevel: EnglishLevelEnum.None,
     client: [null, Validators.pattern(/^[a-zA-Z0-9\s]*$/)],
     rejectionReason: [null],

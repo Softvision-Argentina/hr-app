@@ -46,7 +46,7 @@ export class ClientStageComponent implements OnInit {
     userOwnerId: [null],
     interviewer: [null],
     userDelegateId: [null],
-    feedback: [null],
+    feedback: [null, [Validators.maxLength(10000)]],
     delegateName: [null],
     rejectionReason: [null],
     interviews: [null],

@@ -139,10 +139,18 @@
 
     <div class="recru-row">
         <nz-form-item class="recru-col-2 ">
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="feedbackErrorMsg">
                 <app-text-editor *recruInput="'Feedback'" [setContent]="feedbackContent"
                     (getContent)="getFeedbackContent($event)" [isToolbarActive]="true" [isEditable]="true">
                 </app-text-editor>
+                <ng-template #feedbackErrorMsg>
+                    <ng-container
+                        *ngIf="technicalForm.get('feedback').dirty && technicalForm.get('feedback').errors">
+                        <ng-container *ngIf="technicalForm.get('feedback')?.hasError('maxlength')">
+                            The maximum length is 10000
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
             </nz-form-control>
         </nz-form-item>
 

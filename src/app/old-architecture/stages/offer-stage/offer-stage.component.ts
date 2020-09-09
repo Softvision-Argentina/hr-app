@@ -34,7 +34,7 @@ export class OfferStageComponent implements OnInit, OnChanges {
     date: [new Date(), [Validators.required]],
     userOwnerId: null,
     userDelegateId: [null],
-    feedback: '',
+    feedback: ['', [Validators.maxLength(10000)]],
     seniority: [0, [Validators.required]],
     remunerationOffer: [null, [Validators.required]], 
     vacationDays: [null, [Validators.required]], 

@@ -39,7 +39,7 @@ export class HrStageComponent implements OnInit {
     wantedSalary: [null],
     userOwnerId: [],
     userDelegateId: [null],
-    feedback: [null, []],
+    feedback: [null, [Validators.maxLength(10000)]],
     additionalInformation: [null],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null],
