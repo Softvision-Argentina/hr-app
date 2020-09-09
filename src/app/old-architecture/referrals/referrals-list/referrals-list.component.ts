@@ -118,10 +118,15 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     const referralSubs = this.facade.referralsService.get()
     .subscribe(res => {
       res.forEach(referralItem => {
+        const newReferralItem = new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus);
         this.referralsList = [
           ...this.referralsList,
-          new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus),
+          newReferralItem
         ];
+        this.completeReferralsList = [
+          ...this.completeReferralsList,
+          newReferralItem
+        ]
       });
     });
     this.referralsSubscriptions.push(referralSubs);
@@ -137,6 +142,10 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
           ...this.referralsList,
           newReferralItem
         ];
+        this.completeReferralsList = [
+          ...this.completeReferralsList,
+          newReferralItem
+        ]
       } else{
         this.referralsList[candidateId].candidate = candidate;
       }
