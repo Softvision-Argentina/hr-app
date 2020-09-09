@@ -12,6 +12,7 @@ namespace Domain.Services.Impl.Validators.Stage
         public CreateStageContractValidator()
         {
             this.RuleFor(_ => _.Status).NotEmpty();
+            this.RuleFor(_ => _.Feedback).NotEmpty();
         }
     }
 }
