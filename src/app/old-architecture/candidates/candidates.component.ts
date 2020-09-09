@@ -17,6 +17,7 @@ import { CandidateDetailsComponent } from './details/candidate-details.component
 import { dniValidator } from '@app/shared/utils/dni.validator';
 import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
 import { resizeModal } from '@app/shared/utils/resize-modal.util';
+import { SeniorityEnum } from '@shared/enums/seniority.enum';
 import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { Router } from '@angular/router';
 
@@ -77,11 +78,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   englishLevelList: any[];
   candidateInfo : Candidate ;
   referredBy: string;
+  seniorityList: any[];
 
   constructor(private router : Router,private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals , private _candidateInfoService : CandidateInfoService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.statusList = globals.candidateStatusList;
     this.englishLevelList = globals.englishLevelList;
+    this.seniorityList = globals.seniorityList;    
   }
 
   ngOnInit() {
@@ -116,6 +119,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         this.filteredCandidates = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
           : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+          this.listOfDisplayData.forEach(x=> { x.source == null ? x.source ='N/A' : x.source});
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -197,7 +201,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.candidateSubscriptions.add(this.searchSub);
   }
 
-  private handleCandidateResponse(res: Candidate[]) {
+    private handleCandidateResponse(res: Candidate[]) {
     if (res) {
       this.filteredCandidates = res;
       this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
@@ -553,7 +557,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     resizeModal();
   }
 
-    openCV(cv) {
+  getSeniorityName(id: number): string {
+    return this.seniorityList.filter(x => x.id === id)[0].name;
+  }
+
+  openCV(cv) {
     window.open(cv);
   }
 
