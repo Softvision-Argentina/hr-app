@@ -131,7 +131,7 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackContent(content: string): void {
-    this.feedbackContent = content;
+    this.technicalForm.controls["feedback"].setValue(content);
   }
 
   getFilteredUsersForTech() {
@@ -261,10 +261,11 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
   getFormData(processId: number): TechnicalStage {
     const stage: TechnicalStage = new TechnicalStage();
     const form = this.technicalForm;
+    const feedback = this.getControlValue(form.controls.feedback);
 
     stage.id = this.getControlValue(form.controls.id);
     stage.date = this.getControlValue(form.controls.date);
-    stage.feedback = this.feedbackContent;
+    stage.feedback = feedback ? feedback : this.feedbackContent;
     stage.englishLevel = this.getControlValue(form.controls.englishLevel);
     stage.status = this.getControlValue(form.controls.status);
     stage.userOwnerId = this.getControlValue(form.controls.userOwnerId);
