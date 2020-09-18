@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-
+import { CheckedEnum } from '@shared/enums/checked.enum';
 export function customEmailAndPhoneNumberValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.get('email').value) {
         if (control.get('phoneNumber').value === null || control.get('phoneNumber').value.length === 0 || control.get('phoneNumber').invalid) {
@@ -37,5 +37,14 @@ export function customCvAndLinkedInValidator(control: AbstractControl): Validati
         }
     }
 
+    return null;
+}
+
+export function checkDateIsnotEmpty(control: AbstractControl): ValidationErrors | null {
+    if (control.get('done').value !== CheckedEnum.NA){
+        if (!control.get('date').value) {
+            return { invalidDate: true };
+        }
+    }
     return null;
 }

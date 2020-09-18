@@ -82,7 +82,7 @@ export const appRoutes: Routes = [
 
   {
     path: 'tasks',
-    loadChildren: () => import('@old-architecture/tasks/tasks.module').then(m => m.TasksModule),
+    loadChildren: () => import('@app/containers/tasks/tasks.module').then(m => m.TasksModule),
     canLoad: [HRGuard]
   },
   {

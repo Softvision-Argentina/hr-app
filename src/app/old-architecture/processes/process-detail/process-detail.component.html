@@ -210,6 +210,10 @@
                             <ng-container *ngIf="stageForm.get('feedback').dirty && stageForm.get('feedback').errors">
                                 Please input the feedback for the stage
                             </ng-container>
+                            <ng-container
+                                *ngIf="stageForm.get('feedback')?.hasError('maxlength')">
+                                The maximum length is 10000
+                            </ng-container>
                         </ng-template>
                     </nz-form-control>
                 </nz-form-item>

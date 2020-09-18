@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-text-editor',
   templateUrl: './text-editor.component.html',
   styleUrls: ['./text-editor.component.scss']
 })
-export class TextEditorComponent implements OnInit {
+export class TextEditorComponent implements OnInit, OnChanges {
   @ViewChild('url') url: ElementRef;
   @ViewChild('editor', { static: false }) editor: ElementRef;
   @ViewChild('toolbar') toolbar: ElementRef<HTMLElement>;
@@ -60,6 +60,13 @@ export class TextEditorComponent implements OnInit {
     this.editor.nativeElement.innerHTML = this.setContent;
     this.editor.nativeElement.setAttribute("aria-disabled", "false");
     this.checkForContent(); 
+    this.setEditorText();
+  }
+
+  ngOnChanges() {
+    if(this.editor) {
+      this.setEditorText();
+    }   
   }
 
   customFocusClass(element: any, event: string) {
@@ -232,6 +239,11 @@ export class TextEditorComponent implements OnInit {
   }
 
   checkForContent() {
-    this.hasContent = this.setContent.length > 0;
+    this.hasContent = this.setContent?.length > 0;
+  }
+
+  setEditorText() {
+    this.editor.nativeElement.innerHTML = this.setContent;
+    this.checkForContent();
   }
 }

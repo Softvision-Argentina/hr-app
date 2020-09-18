@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
 import { ReferralsService } from '@shared/services/referrals.service';
 import { customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
 
 @Component({
   selector: 'candidate-add',
@@ -102,7 +103,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     ],
 
     phoneNumberPrefix: ['+54'],
-    phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
+    phoneNumber: [null, [Validators.pattern(/^\+?[1-9]\d{9,11}$/), Validators.minLength(10), Validators.maxLength(12)]],
     linkedin: [null],
     user: [null, [Validators.required]],
     preferredOffice: [null, [Validators.required]],
@@ -129,14 +130,20 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
-              private globals: Globals, private _referralsService: ReferralsService) {
+              private globals: Globals , private _candidateInfoService: CandidateInfoService) {
                 this.statusList = globals.candidateStatusList;
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 this.getCandidates();
   }
 
   ngOnInit() {
-    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    const infoSub =  this._candidateInfoService._candidateInfoSource
+    .subscribe(info => {
+      this.candidateInfo = info;
+    }, err => {
+      this.facade.errorHandlerService.showErrorMessage(err);
+    });
+    this.candidateSubscriptions.push(infoSub);
     this.fillUsers = this._users;
     this.fillUsers.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)))
     this._offices.sort((a,b) => (a.name.localeCompare(b.name)))

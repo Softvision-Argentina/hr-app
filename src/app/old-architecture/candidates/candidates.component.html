@@ -20,42 +20,36 @@
                             </div>
                         </nz-dropdown-menu>
                     </th>
-                    <th>DNI</th>
-                    <th>E-mail</th>
-                    <th>Phone</th>
-                    <th nzCustomFilter>Status
-                        <nz-filter-trigger #dropdown [nzDropdownMenu]="statusFilter">
-                            <i nz-icon nzType="search"></i>
-                        </nz-filter-trigger>
-                        <nz-dropdown-menu #statusFilter="nzDropdownMenu" nzPlacement="bottomRight">
-                            <div class="ant-table-filter-dropdown">
-                                <div class="search-box">
-                                    <div>
-                                        <nz-select placeholder="Search status" [(ngModel)]="searchValueStatus"
-                                            class="search-select">
-                                            <nz-option *ngFor="let status of statusList" nzLabel="{{status.name}}"
-                                                [nzValue]="status.id">
-                                            </nz-option>
-                                        </nz-select>
-                                    </div>
-                                    <button nz-button nzSize="small" nzType="primary" (click)="searchStatus()"
-                                        class="search-button">Search</button>
-                                    <button nz-button nzSize="small" (click)="reset()">Reset</button>
-                                </div>
-                            </div>
-                        </nz-dropdown-menu>
-                    </th>
+                    <th>Community</th>
+                    <th>Profile</th>
+                    <th>Seniority</th>
+                    <th>Processes</th>
+                    <th>Source</th>
+                    <th>Recruiter</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let candidate of candidateTable.data">
                     <td>{{ candidate.name }} {{ candidate.lastName }}</td>
-                    <td>{{ candidate.dni }}</td>
-                    <td>{{ candidate.emailAddress }}</td>
-                    <td>{{ candidate.phoneNumber }}</td>
+                    <td>{{ candidate.community.name }}</td>
+                    <td>{{ candidate.profile?.name }}</td>
+                    <td> {{getSeniorityName(candidate.seniority)}} </td>
                     <td>{{ getStatus(candidate.status) }}</td>
+                    <td>{{ candidate.source }}</td>
+                    <td>{{ candidate.user.firstName }} {{ candidate.user.lastName }}</td>
                     <td *ngIf="candidate.id">
+                        <!-- here start the cv  -->
+                        <nz-divider nzType="vertical"></nz-divider>
+                         <i *ngIf="checkCV(candidate.cv); else noCV" nzTooltipTitle="Open CV" nz-tooltip nz-icon
+                         class="icon-action" nzType="file-pdf" nzTheme="outline"
+                        (click)="openCV(candidate.cv)"></i>
+                        <ng-template #noCV>
+                            <i nzTooltipTitle="No CV available" nz-tooltip nz-icon class="icon-action" nzType="file-pdf"
+                            nzTheme="outline"></i>
+                        </ng-template>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <!-- Here end the Cv -->
                         <i nz-tooltip (click)="showDetailsModal(candidate.id, detailModal)" class="icon-action" nz-icon
                             nzType="info-circle" nzTooltipTitle="Details"></i>
                         <nz-divider nzType="vertical"></nz-divider>
@@ -64,6 +58,13 @@
                         <nz-divider nzType="vertical"></nz-divider>
                         <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon
                             nzType="delete" nzTooltipTitle="Delete"></i>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <i nzTooltipTitle="Start Process" nz-tooltip nz-icon
+                            class="icon-action" nzType="play-circle" nzTheme="outline" (click)="goToProcesses(candidate)" *ngIf="!candidate.status;else candidateWithProcess"></i>
+                            <ng-template #candidateWithProcess>
+                                <i nzTooltipTitle="A process has already been created for this candidate" nz-tooltip nz-icon
+                                class="icon-action" nzType="play-circle" nzTheme="outline"></i>
+                            </ng-template>
                     </td>
                 </tr>
             </tbody>
@@ -177,13 +178,13 @@
                                 <nz-option nzLabel="+1" nzValue="+1"></nz-option>
                             </nz-select>
                         </ng-template>
-                        <input formControlName="phoneNumber" id="'phoneNumber'" type="tel" pattern="^[0-9]+$" nz-input
-                            placeholder="Please input a phone number">
+                        <input formControlName="phoneNumber" id="'phoneNumber'" type="number" minlength="10" maxlength="12" 
+                            pattern="^\+?[1-9]\d{9,11}$" nz-input  placeholder="Please input a phone number">
                     </nz-input-group>
                     <ng-template #phoneNumberErrorMsg>
                         <ng-container
                             *ngIf="validateForm.get('phoneNumber').dirty && validateForm.get('phoneNumber').errors">
-                            Please input a phone number
+                            Please input a valid phone number
                         </ng-container>
                     </ng-template>
                 </nz-form-control>

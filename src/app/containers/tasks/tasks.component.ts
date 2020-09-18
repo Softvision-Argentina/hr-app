@@ -7,7 +7,8 @@ import { FacadeService } from '@shared/services/facade.service';
 import { SearchbarService } from '@shared/services/searchbar.service';
 import { AppConfig } from '@shared/utils/app.config';
 import { dateValidator } from '@shared/utils/date.validator';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { TasksSandbox } from './tasks.sandbox';
 
 @Component({
   selector: 'tasks',
@@ -25,18 +26,22 @@ export class TasksComponent implements OnInit, OnDestroy {
   toDoList: Task[] = [];
   searchSub: Subscription;
   orderBy = 'Order by';
-  toDoListDisplay: any = [...this.toDoList];
   dummyTask: Task;
   showAllTasks = true;
   currentUser: User;
   user: User;
   tasksSubscription: Subscription = new Subscription();
+  toDoListDisplay: Task[];
 
   ngOnInit() {
     this.facade.appService.startLoading();
     this.facade.appService.removeBgImage();
+    this.tasksSandbox.loadTasks(this.user.id);
+    this.tasksSandbox.tasks$.subscribe(tasks => {
+      this.toDoListDisplay = tasks;
+      this.toDoList = tasks;
+    });
     this.getUsers();
-    this.getTasks();
     this.resetForm();
     this.loading = false;
     this.facade.appService.stopLoading();
@@ -50,7 +55,8 @@ export class TasksComponent implements OnInit, OnDestroy {
     private search: SearchbarService,
     private facade: FacadeService,
     private fb: FormBuilder,
-    private config: AppConfig
+    private config: AppConfig,
+    public tasksSandbox: TasksSandbox
   ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
@@ -63,26 +69,6 @@ export class TasksComponent implements OnInit, OnDestroy {
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
-  }
-
-  getTasks() {
-    if (this.facade.appService.isUserRole(['HRManagement', 'Admin', 'Recruiter'])) {
-      this.facade.taskService.get()
-        .subscribe(res => {
-          this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
-          this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
-        }, err => {
-          this.facade.errorHandlerService.showErrorMessage(err);
-        });
-    } else {
-      this.facade.taskService.getByUser(this.user.username)
-        .subscribe(res => {
-          this.toDoList = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
-          this.toDoListDisplay = res.sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
-        }, err => {
-          this.facade.errorHandlerService.showErrorMessage(err);
-        });
-    }
   }
 
   checkAll(id: number) {
@@ -115,18 +101,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       nzOkType: 'danger',
       nzCancelText: 'No',
       nzOnOk: () => {
-        const updateTask = this.toDoList.find(this.findTaskIndex, id);
-        const index: number = this.toDoList.indexOf(updateTask);
-        const displayIndex: number = this.toDoListDisplay.indexOf(updateTask);
-
-        this.facade.taskService.delete(id)
-          .subscribe(() => {
-            if (index !== -1 && displayIndex !== -1) {
-              this.toDoList.splice(index, 1);
-            }
-          }, err => {
-            this.facade.errorHandlerService.showErrorMessage(err);
-          });
+        this.tasksSandbox.remove(id);
       }
     });
   }
@@ -340,19 +315,15 @@ export class TasksComponent implements OnInit, OnDestroy {
                 });
               }
 
-              this.facade.taskService.add(newTask)
-                .subscribe(res => {
-                  newTask.id = res.id;
-                  this.toDoList.push(newTask);
-                  this.facade.toastrService.success('Task was successfully created !');
-                  modal.destroy();
-                }, err => {
-                  this.facade.errorHandlerService.showErrorMessage(err);
-                });
+              this.tasksSandbox.add(newTask);
+              this.toDoList.push(newTask);
+              this.facade.toastrService.success('Task was successfully created !');
+              modal.destroy();
             }
           }
         }]
     });
+
   }
 
   resetForm() {

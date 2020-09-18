@@ -1,5 +1,5 @@
 <br />
-<div class="tasks__wrapper">
+<div class="tasks__wrapper" *ngIf="toDoListDisplay">
     <div class="tasks__header">
         <div nz-row>
             <div nz-col>
@@ -103,14 +103,14 @@
     </div>
 
     <div *ngFor="let toDo of toDoListDisplay | filter:searchTitle:'title'">
-        <nz-empty *ngIf="toDoListDisplay.length == 0 || toDo === -1" [nzNotFoundImage]="'assets/images/InboxEmpty.png'"
-            [nzNotFoundContent]="noContent"></nz-empty>
+        <nz-empty *ngIf="!toDoListDisplay || toDo === -1"
+            [nzNotFoundImage]="'assets/images/InboxEmpty.png'" [nzNotFoundContent]="noContent"></nz-empty>
     </div>
-    <div *ngIf="toDoListDisplay && toDoListDisplay.length != 0" nz-row nzAlign="top" [nzGutter]="16">
-        <div class="task-boxes" *ngFor="let toDo of toDoListDisplay | filter : searchTitle:'title' | sort">
+    <div *ngIf="toDoListDisplay" nz-row nzAlign="top" [nzGutter]="16">
+        <div class="task-boxes"
+            *ngFor="let toDo of toDoListDisplay">
             <nz-card class="card-style" [nzBordered]="true" [nzHoverable]="true" [nzExtra]="extraTemplate"
                 [nzTitle]="titleTemplate" [ngStyle]="{'background-color': !toDo.isApprove ? '#fafafa' : '#ccff90'    }">
-
                 <ng-template #titleTemplate>
                     <span class="card-title" nz-popover [nzPopoverContent]="toDo.title"
                         nzTooltipContent="top">{{toDo.title}}</span>

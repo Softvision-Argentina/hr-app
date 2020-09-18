@@ -17,6 +17,9 @@ import { CandidateDetailsComponent } from './details/candidate-details.component
 import { dniValidator } from '@app/shared/utils/dni.validator';
 import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
 import { resizeModal } from '@app/shared/utils/resize-modal.util';
+import { SeniorityEnum } from '@shared/enums/seniority.enum';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-candidates',
@@ -73,15 +76,19 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   searchValueStatus = '';
   statusList: any[];
   englishLevelList: any[];
+  candidateInfo : Candidate ;
   referredBy: string;
+  seniorityList: any[];
 
-  constructor(private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals) {
+  constructor(private router : Router,private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals , private _candidateInfoService : CandidateInfoService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.statusList = globals.candidateStatusList;
     this.englishLevelList = globals.englishLevelList;
+    this.seniorityList = globals.seniorityList;    
   }
 
   ngOnInit() {
+    this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.facade.appService.startLoading();
     this.facade.appService.removeBgImage();
     this.getCandidates();
@@ -95,6 +102,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.facade.appService.stopLoading();
   }
 
+  goToProcesses(candidate) {
+    this._candidateInfoService.sendCandidateInfo(candidate);
+    this.router.navigateByUrl('/processes');
+}
+
   setFocusTrue() {
     setTimeout(() => {
       this.inputFocus.nativeElement.focus();
@@ -107,6 +119,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         this.filteredCandidates = res;
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
           : (b[this.sortName] > a[this.sortName] ? 1 : -1));
+          this.listOfDisplayData.forEach(x=> { x.source == null ? x.source ='N/A' : x.source});
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -188,13 +201,14 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.candidateSubscriptions.add(this.searchSub);
   }
 
-  private handleCandidateResponse(res: Candidate[]) {
+    private handleCandidateResponse(res: Candidate[]) {
     if (res) {
       this.filteredCandidates = res;
       this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
         : (b[this.sortName] > a[this.sortName] ? 1 : -1));
     }
   }
+  
 
   resetForm(id:number = 0) {
     this.validateForm = this.fb.group({
@@ -209,7 +223,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         }
       ],
       phoneNumberPrefix: ['+54'],
-      phoneNumber: [null, [Validators.pattern(/^[0-9]+$/), Validators.maxLength(13), Validators.minLength(10)]],
+      phoneNumber: [null, [Validators.pattern(/^\+?[1-9]\d{9,11}$/), Validators.minLength(10), Validators.maxLength(12)]],
       linkedin: [null],
       user: [null, [Validators.required]],
       englishLevel: 'none',
@@ -220,6 +234,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       profile: [null],
       isReferred: [null],
       knownFrom: [null],
+      referredBy: [null],
       source: null
     });
   }
@@ -469,24 +484,37 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     const candidateReferredBy = candidate.referredBy !== null ? candidate.referredBy : '';
     const candidateKnownFrom = candidate.knownFrom !== null ? candidate.knownFrom : '';
     this.validateForm.controls['dni'].setValue(candidate.dni);
+    this.validateForm.controls['dni'].disable();
     this.validateForm.controls['name'].setValue(candidate.name);
+    this.validateForm.controls['name'].disable();
     this.validateForm.controls['lastName'].setValue(candidate.lastName);
+    this.validateForm.controls['lastName'].disable();
     this.validateForm.controls['email'].setValue(candidate.emailAddress);
     this.validateForm.controls['linkedin'].setValue(candidate.linkedInProfile);
+    this.validateForm.controls['linkedin'].disable();
     this.validateForm.controls['phoneNumberPrefix'].setValue(candidate.phoneNumber.substring(1, candidate.phoneNumber.indexOf(')')));
     this.validateForm.controls['phoneNumber'].setValue(candidate.phoneNumber.split(')')[1]);
     this.validateForm.controls['user'].setValue(candidate.user ? candidate.user.id : null);
+    this.validateForm.controls['user'].disable();
     this.validateForm.controls['preferredOffice'].setValue(candidate.preferredOfficeId);
+    this.validateForm.controls['preferredOffice'].disable();
     this.validateForm.controls['englishLevel'].setValue(candidate.englishLevel);
+    this.validateForm.controls['englishLevel'].disable();
     this.validateForm.controls['status'].setValue(candidate.status);
+    this.validateForm.controls['status'].disable();
     this.validateForm.controls['community'].setValue(candidate.community.id);
+    this.validateForm.controls['community'].disable();
     this.validateForm.controls['profile'].setValue(candidate.profile ? candidate.profile.id : null);
+    this.validateForm.controls['profile'].disable();
     this.validateForm.controls['isReferred'].setValue(candidate.isReferred);
+    this.validateForm.controls['isReferred'].disable();
+    this.validateForm.controls['referredBy'].setValue(candidateReferredBy);
+    this.validateForm.controls['referredBy'].disable();
     this.referredBy = candidateReferredBy;
-    
-  
     this.validateForm.controls['knownFrom'].setValue(candidateKnownFrom);
+    this.validateForm.controls['knownFrom'].disable();
     this.validateForm.controls['source'].setValue(candidate.source);
+    this.validateForm.controls['source'].disable();
     if (candidate.candidateSkills.length > 0) {
       candidate.candidateSkills.forEach(skill => {
         const id = (this.controlEditArray.length > 0) ? this.controlEditArray[this.controlEditArray.length - 1].id + 1 : 0;
@@ -495,10 +523,13 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           controlInstance: [`skillEdit${id}`, `slidderEdit${id}`, `commentEdit${id}`]
         };
         const index = this.controlEditArray.push(control);
-        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[0], new FormControl(skill.skill.name));
-        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[1], new FormControl(skill.rate));
-        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[2],
-          new FormControl(skill.comment));
+        this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[0],
+          new FormControl({value: skill.skill.name, disabled: true}));
+          this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[1],
+            new FormControl({value: skill.rate, disabled: true}));
+          this.validateForm.addControl(this.controlEditArray[index - 1].controlInstance[2],
+            new FormControl({value: skill.comment, disabled: true}));
+
       });
     }
   }
@@ -524,5 +555,17 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   statusChanged() {
     //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
     resizeModal();
+  }
+
+  getSeniorityName(id: number): string {
+    return this.seniorityList.filter(x => x.id === id)[0].name;
+  }
+
+  openCV(cv) {
+    window.open(cv);
+  }
+
+  checkCV(cv) {
+    return (!!cv);
   }
 }

@@ -12,6 +12,7 @@ import { FacadeService } from '@shared/services/facade.service';
 import { ReferralsService } from '@shared/services/referrals.service';
 import { Globals } from '@shared/utils/globals';
 import { forkJoin, Subscription } from 'rxjs';
+import {CandidateInfoService} from '@shared/services/candidate-info.service';
 @Component({
   selector: 'app-referrals-list',
   templateUrl: './referrals-list.component.html',
@@ -40,7 +41,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private facade: FacadeService,
     private globals: Globals,
-    private _referralsService: ReferralsService,
+    private _candidateInfoService : CandidateInfoService,
     private router: Router) {
     this.referralListStatus = globals.referralCurrentStage;
     this.processStatusList = globals.stageStatusList;
@@ -48,7 +49,9 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    this.referralsSubscriptions.push(this._candidateInfoService._candidateInfoSource
+      .subscribe(info => this.candidateInfo = info)
+    );
     this.getSearchInfo();
     this.getReferrals();
     this.onReferralsListChange();
@@ -115,10 +118,15 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
     const referralSubs = this.facade.referralsService.get()
     .subscribe(res => {
       res.forEach(referralItem => {
+        const newReferralItem = new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus);
         this.referralsList = [
           ...this.referralsList,
-          new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus),
+          newReferralItem
         ];
+        this.completeReferralsList = [
+          ...this.completeReferralsList,
+          newReferralItem
+        ]
       });
     });
     this.referralsSubscriptions.push(referralSubs);
@@ -134,6 +142,10 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
           ...this.referralsList,
           newReferralItem
         ];
+        this.completeReferralsList = [
+          ...this.completeReferralsList,
+          newReferralItem
+        ]
       } else{
         this.referralsList[candidateId].candidate = candidate;
       }
@@ -201,7 +213,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToProcesses(candidate) {
-      this._referralsService.sendCandidateInfo(candidate);
+      this._candidateInfoService.sendCandidateInfo(candidate);
       this.router.navigateByUrl('/processes');
   }
 
