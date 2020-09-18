@@ -19,5 +19,6 @@ namespace Domain.Services.Impl.Validators
         internal const int MAXMONTHLYINCOME = 1000000;
         internal const int MAXDNI = 999999999;
         internal const int MAXPHONENUMBER = 16;
+        internal const int MAXTEXTINTERVIEWFEEDBACK = 1000;
     }
 }

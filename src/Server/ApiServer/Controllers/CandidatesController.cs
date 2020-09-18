@@ -165,5 +165,12 @@ namespace ApiServer.Controllers
         {
             return this.Ok(new { Status = "OK" });
         }
+
+        [HttpPost("BulkAdd")]
+        public IActionResult BulkAdd([FromForm] BulkAddCandidatesContract contract)
+        {
+            this.candidateService.BulkCreate(contract.File, contract.CommunityId, contract.Source);
+            return this.Accepted();
+        }
     }
 }

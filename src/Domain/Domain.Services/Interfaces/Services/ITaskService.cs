@@ -22,5 +22,7 @@ namespace Domain.Services.Interfaces.Services
         void Delete(int id);
 
         IEnumerable<ReadedTaskContract> List();
+
+        IEnumerable<ReadedTaskContract> List(int id);
     }
 }

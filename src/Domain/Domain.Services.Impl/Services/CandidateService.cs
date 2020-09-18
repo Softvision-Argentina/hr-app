@@ -6,6 +6,7 @@ namespace Domain.Services.Impl.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using AutoMapper;
     using Core;
@@ -19,6 +20,8 @@ namespace Domain.Services.Impl.Services
     using Domain.Services.Impl.Validators.Candidate;
     using Domain.Services.Interfaces.Services;
     using FluentValidation;
+    using Microsoft.AspNetCore.Http;
+    using OfficeOpenXml;
 
     public class CandidateService : ICandidateService
     {
@@ -217,7 +220,9 @@ namespace Domain.Services.Impl.Services
 
             var candidateResult = candidateQuery.ToList();
 
-            return this.mapper.Map<List<ReadedCandidateContract>>(candidateResult);
+            var candidatesList = AddSeniority(candidateResult);
+
+            return candidatesList;
         }
 
         public IEnumerable<ReadedCandidateAppContract> ListApp()
@@ -284,6 +289,39 @@ namespace Domain.Services.Impl.Services
             }
 
             return contracts;
+        }
+
+        public void BulkCreate(IFormFile file, int communityId, string source)
+        {
+            using (var package = new ExcelPackage(file.OpenReadStream()))
+            {
+                var sheet = package.Workbook.Worksheets[0];
+                int r = 2;
+                var value = sheet.Cells[r, 1].GetValue<string>();
+                while (!string.IsNullOrEmpty(value))
+                {
+                    var candidate = new CreateCandidateContract
+                    {
+                        Name = sheet.Cells[r, 1].GetValue<string>(),
+                        LastName = sheet.Cells[r, 2].GetValue<string>(),
+                        EmailAddress = sheet.Cells[r, 3].GetValue<string>(),
+                        PhoneNumber = sheet.Cells[r, 4].GetValue<string>(),
+                        Source = source,
+                        Community = new Contracts.Community.ReadedCommunityContract() { Id = communityId },
+                    };
+
+                    try
+                    {
+                        Create(candidate);
+                    }
+                    catch (InvalidCandidateException)
+                    {
+                    }
+
+                    r++;
+                    value = sheet.Cells[r, 1].GetValue<string>();
+                }
+            }
         }
 
         private void ValidateContract(CreateCandidateContract contract)
@@ -407,6 +445,20 @@ namespace Domain.Services.Impl.Services
 
             candidate.OpenPosition = position;
             candidate.PositionTitle = position.Title;
+        }
+
+        private List<ReadedCandidateContract> AddSeniority (List<Candidate> candidates)
+        {
+            var candidatesList = this.mapper.Map<List<ReadedCandidateContract>>(candidates);
+            var processesList = this.processRepository.QueryEager().ToList();
+
+            foreach (var c in candidatesList)
+            {
+                var process = processesList.Where(_ => _.Candidate.Id == c.Id).FirstOrDefault();
+                c.Seniority = process == null ? c.Seniority = Seniority.NA : c.Seniority = process.Seniority;
+            }
+
+            return candidatesList;
         }
     }
 }

@@ -39,7 +39,18 @@ namespace ApiServer.Controllers
             });
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
+        public IActionResult GetTaskByUserId(int userId)
+        {
+            return this.ApiAction(() =>
+            {
+                var tasks = this.taskService.List(userId);
+
+                return this.Accepted(this.mapper.Map<List<ReadedTaskViewModel>>(tasks));
+            });
+        }
+
+        [HttpGet("getById/{id}")]
         public IActionResult Get(int id)
         {
             return this.ApiAction(() =>
