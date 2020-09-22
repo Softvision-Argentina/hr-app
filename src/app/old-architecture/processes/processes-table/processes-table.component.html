@@ -27,8 +27,11 @@
                 {{ process.candidate.name }} {{ process.candidate.lastName }}
               </a>
             </td>
-            <td scope="row">
-              {{ process.candidate.profile?.name }}
+            <td scope="row" *ngIf="process.candidate.profile === null">
+              N/A
+            </td>
+            <td scope="row" *ngIf="process.candidate.profile !== null">
+              {{ process.candidate.profile.name }}
             </td>
             <td scope="row">
               {{ process.candidate.community.name }}
@@ -79,7 +82,10 @@
                 {{ process.candidate.name }} {{ process.candidate.lastName }}
               </a>
             </td>
-            <td scope="row">
+            <td scope="row" *ngIf="process.candidate.profile === null">
+              N/A
+            </td>
+            <td scope="row" *ngIf="process.candidate.profile !== null">
               {{ process.candidate.profile.name }}
             </td>
             <td scope="row">

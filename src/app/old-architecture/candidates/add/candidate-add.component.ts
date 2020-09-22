@@ -91,6 +91,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   availableProfiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
   currentUser: User;
+  naProfile : CandidateProfile; 
   candidateForm: FormGroup = this.fb.group({
     name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
     lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
@@ -151,12 +152,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.comms.sort((a,b) => (a.name.localeCompare(b.name)));
     this.profiles = this._candidateProfiles;
     this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
-    for (let i = 0; i < this.profiles.length; i++) {
-      if (this.profiles[i].name === 'N/A') {
-        const NA = this.profiles.splice(i, 1);
-        this.profiles.unshift(NA[0]);
-      }
-    }
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {
@@ -300,14 +295,19 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
           }
           this.communities[communityIndex].profiles = profiles;
           this.availableProfiles = profiles;
+          this.addNaProfileToProfileList();
           this.facade.communityService.data.next(this.communities);
         } else {
           this.availableProfiles = this.profiles;
+          this.addNaProfileToProfileList();
+
         }
       });
       this.candidateSubscriptions.push(profileCommunitySub);
     } else{
       this.availableProfiles = this.communities[communityIndex].profiles;
+      this.addNaProfileToProfileList();
+
     }
   }
   setCurrentProfile(){
@@ -343,7 +343,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
-      profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
+      profile: this.candidateForm.controls['profile'].value === null ||  this.candidateForm.controls['profile'].value === this.naProfile.id ? null:new CandidateProfile(this.candidateForm.controls['profile'].value),
       community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
       isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
       cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
@@ -377,6 +377,17 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.candidateForm.controls["linkedin"].enable();
     this.candidateForm.controls["profile"].enable();
     this.candidateForm.controls["source"].enable();
+  }
+
+  addNaProfileToProfileList(){
+    if( !this.availableProfiles.some(x=>x.name === 'N/A')){
+    this.naProfile = new CandidateProfile();
+    let maxId = Math.max.apply(null, this.availableProfiles.map(i => i.id))
+    this.naProfile.id= this.availableProfiles.length > 0 ? ++ maxId : 1;
+    this.naProfile.name = 'N/A';
+    this.naProfile.description = 'Not Applicable';
+    this.availableProfiles.unshift(this.naProfile);
+    }
   }
 
 }
