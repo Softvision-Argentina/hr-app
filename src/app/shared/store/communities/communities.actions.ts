@@ -3,8 +3,8 @@ import { Community } from '@shared/models/community.model';
 
 export const communitiesActions = {
     add: createAction('[Community] add', props<{ community: Community }>()),
-    addSuccess: createAction('[Coimmunity] addSuccess', props<{ community: Community, communityId: number }>()),
-    addFailed: createAction('[Commnuty] addFailed', props<{ errorMsg: any }>()),
+    addSuccess: createAction('[Community] addSuccess', props<Community>()),
+    addFailed: createAction('[Community] addFailed', props<{ errorMsg: any }>()),
 
     load: createAction('[Community] load'),
     loadSuccess: createAction('[Community] loadSuccess', props<{ communities: Community[] }>()),
@@ -17,4 +17,6 @@ export const communitiesActions = {
     remove: createAction('[Community] remove', props<{ communityId: number }>()),
     removeSuccess: createAction('[Community] removeSuccess', props<{ communityId: number }>()),
     removeFailed: createAction('[Community] removeFailed', props<{ errorMsg: any }>()),
-}
+
+    resetFailed: createAction('[Community] resetFailed'),
+};

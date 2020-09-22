@@ -27,7 +27,7 @@ export class CommunitiesEffects {
             exhaustMap(action =>
                 this.communityService.add(action.community)
                     .pipe(
-                        map((community: { id: number }) => communitiesActions.addSuccess({ community: action.community, communityId: community.id })),
+                        map((community: { id: number }) => communitiesActions.addSuccess({ ...action.community, id: community.id })),
                         catchError((errorMsg: any) => of(communitiesActions.addFailed({ errorMsg })))
                     )
             )
@@ -36,12 +36,12 @@ export class CommunitiesEffects {
 
     editCommunity$ = createEffect(() =>
         this.action$.pipe(
-            ofType(communitiesActions.add),
+            ofType(communitiesActions.edit),
             exhaustMap(action =>
                 this.communityService.update(action.community.id, action.community)
                     .pipe(
-                        map((community: { id: number }) => communitiesActions.addSuccess({ community: action.community, communityId: community.id })),
-                        catchError((errorMsg: any) => of(communitiesActions.addFailed({ errorMsg })))
+                        map(() => communitiesActions.editSuccess({ community: action.community })),
+                        catchError((errorMsg: any) => of(communitiesActions.editFailed({ errorMsg })))
                     )
             )
         )

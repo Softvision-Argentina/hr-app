@@ -50,16 +50,6 @@ export const appRoutes: Routes = [
     canActivate: [CommonGuard]
   },
   {
-    path: 'candidates-profile',
-    loadChildren: () => import('@old-architecture/settings/candidates-profile/candidates-profile.module').then(m => m.CandidatesProfileModule),
-    canLoad: [HRGuard]
-  },
-  {
-    path: 'communities',
-    loadChildren: () => import('@old-architecture/settings/communities/communities.module').then(m => m.CommunitiesModule),
-    canLoad: [HRGuard]
-  },
-  {
     path: 'people',
     loadChildren: () => import('@old-architecture/people/people.module').then(m => m.PeopleModule),
     canLoad: [HRGuard]
@@ -76,7 +66,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'settings',
-    loadChildren: () => import('@old-architecture/settings/settings.module').then(m => m.SettingsModule),
+    loadChildren: () => import('@app/containers/settings/settings.module').then(m => m.SettingsModule),
     canLoad: [ManagementGuard]
   },
 

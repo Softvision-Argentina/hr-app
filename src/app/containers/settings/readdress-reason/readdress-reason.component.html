@@ -1,0 +1,112 @@
+<div nz-row>
+    <div nz-col nzSpan="23">
+      <button nz-button class="recru-button-cta" nzType="primary" (click)="showAddModal(readdressReasonModal)"
+        nzShape="round">
+        <i nz-icon nzType="plus" theme="outline"></i>Add new reason</button>
+    </div>
+  </div>
+  <br />
+  <div nz-row>
+    <div nz-col nzSpan="23">
+      <nz-table #readdressReasonTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
+        <thead>
+          <tr>
+            <th nzCustomFilter>Name
+            </th>
+            <th nzCustomFilter>Description
+            </th>
+            <th nzCustomFilter>Category
+              <nz-filter-trigger #dropdown [nzDropdownMenu]="yearFilter">
+                <i nz-icon nzType="caret-down" nzTheme="outline"></i>
+              </nz-filter-trigger>
+              <nz-dropdown-menu #yearFilter="nzDropdownMenu">
+                <div class="ant-table-filter-dropdown">
+                  <ul nz-menu class="filterList">
+                    <li nz-menu-item (click)="filterReaddressReason('ALL')">
+                      <label>All</label>
+                    </li>
+                    <li nz-menu-divider></li>
+                    <li nz-menu-item *ngFor="let readdressReasonType of readdressReasonTypes" #profileId
+                      (click)="filterReaddressReason(readdressReasonType.name)">
+                      <label>{{readdressReasonType.name}}</label>
+                    </li>
+                  </ul>
+                </div>
+              </nz-dropdown-menu>
+            </th>
+            <th [style.text-align]="'center'">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let readdressReason of readdressReasonTable.data">
+            <td>{{ readdressReason.name }}</td>
+            <td>{{ readdressReason.description }}</td>
+            <td>{{ readdressReason.type }}</td>
+            <td [style.text-align]="'center'">
+              <i (click)="showDetailsModal(readdressReason.id)" style="cursor: pointer;" nz-icon nzType="info-circle"
+                theme="outline" nzTitle="Details" nz-tooltip></i>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i (click)="showEditModal(readdressReasonModal, readdressReason.id)" style="cursor: pointer;" nz-icon
+                nzType="edit" theme="outline" nzTitle="Edit" nz-tooltip></i>
+              <nz-divider nzType="vertical"></nz-divider>
+              <i (click)="showDeleteConfirm(readdressReason.id)" style="cursor: pointer;" nz-icon nzType="delete"
+                theme="outline" nzTitle="Delete" nz-tooltip></i>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  
+  <nz-modal [(nzVisible)]="isDetailsVisible" nzWrapClassName="vertical-center-modal" nzTitle="Reason Details"
+    [nzFooter]="null" (nzOnCancel)="handleCancel()">
+    <nz-list nzBordered nzSize="large" *ngIf="emptyReaddressReason">
+      <nz-list-item><strong style="margin-right: 1%;">Name: </strong> {{emptyReaddressReason.name}}</nz-list-item>
+      <nz-list-item><strong style="margin-right: 1%;">Description: </strong> {{emptyReaddressReason.description}}
+      </nz-list-item>
+      <nz-list-item><strong style="margin-right: 1%;">Category: </strong> {{emptyReaddressReason.type}}</nz-list-item>
+    </nz-list>
+  </nz-modal>
+  
+  <ng-template #readdressReasonModal>
+    <form nz-form [formGroup]="validateForm" class="recru-container">
+      <div class="recru-row">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="nameErrorMsg">
+            <input *recruInput="'Name'" type="text" nz-input formControlName="name" id="name">
+            <ng-template #nameErrorMsg>
+              <ng-container *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">
+                <ng-container *ngIf="validateForm.get('name')?.hasError('required')">
+                  Please input a name
+                </ng-container>
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="recru-row">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="descriptionErrorMsg">
+            <input *recruInput="'Description'" type="text" nz-input formControlName="description" id="description">
+            <ng-template #descriptionErrorMsg>
+              <ng-container *ngIf="validateForm.get('description').dirty && validateForm.get('description').errors">
+                <ng-container *ngIf="validateForm.get('description')?.hasError('required')">
+                  Please input a description.
+                </ng-container>
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="recru-row">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select *recruInput="'Category'" formControlName="type" [(ngModel)]="selectedType">
+              <nz-option *ngFor="let types of readdressReasonTypes" [nzLabel]="types.name" [nzValue]="types.id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </ng-template>

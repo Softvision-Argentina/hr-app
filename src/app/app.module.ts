@@ -54,6 +54,7 @@ import { TaskService } from '@shared/services/task.service';
 import { UserService } from '@shared/services/user.service';
 import { reducers } from '@shared/store';
 import { CommunitiesEffects } from '@shared/store/communities/communities.effects';
+import { CandidateProfileEffects } from '@shared/store/candidates-profile/candidates-profile.effects';
 import { AppConfig } from '@shared/utils/app.config';
 import { Globals } from '@shared/utils/globals';
 import { en_US, NzAvatarModule, NzCalendarModule, NzCardModule, NzListModule, NzModalModule, NzSwitchModule, NZ_I18N } from 'ng-zorro-antd';
@@ -65,7 +66,14 @@ import { NavMenuComponent } from './old-architecture/nav-menu/nav-menu.component
 import { PreferencesComponent } from './old-architecture/preferences/preferences.component';
 import { ReferralsModule } from './old-architecture/referrals/referrals/referrals.module';
 import { SideMenuComponent } from './old-architecture/side-menu/side-menu.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { OfficeEffects } from '@shared/store/office/office.effects';
+import { SkillsEffects } from '@shared/store/skills/skills.effects';
 import { CandidateInfoService } from '@shared/services/candidate-info.service';
+import { SkillTypesEffects } from '@shared/store/skill-type/skill-type.effects';
+import { ReaddressReasonEffects } from '@shared/store/readdress-reason/readdress-reason.effects';
+import { ReaddressReasonTypesEffects } from '@shared/store/readdress-reason-type/readdress-reason-type.effects';
+import { RoomEffects } from '@shared/store/room/room.effects';
 
 
 @NgModule({
@@ -113,7 +121,8 @@ import { CandidateInfoService } from '@shared/services/candidate-info.service';
     NzModalModule,
     ReferralsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([CommunitiesEffects])
+    StoreDevtoolsModule.instrument({ maxAge: 25 }),
+    EffectsModule.forRoot([OfficeEffects,RoomEffects,CommunitiesEffects, CandidateProfileEffects, SkillsEffects, SkillTypesEffects, ReaddressReasonEffects, ReaddressReasonTypesEffects])
   ],
   providers: [
     Globals,

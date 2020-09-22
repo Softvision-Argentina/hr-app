@@ -1,0 +1,68 @@
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <button nz-button class="recru-button-cta" nzType="primary" (click)="showAddModal(roleModal)" nzShape="round">
+            <i nz-icon nzType="plus" theme="outline"></i>Add new role</button>
+    </div>
+</div>
+
+<br />
+<div nz-row>
+    <div nz-col nzSpan="22">
+        <nz-table #RoleTable [nzData]="roles" [nzPageSize]="10" *ngIf="roles.length > 0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let role of RoleTable.data">
+                    <td>{{ role.name }}</td>
+                    <td *ngIf="role.isActive; else Inactive">Active</td>
+                    <td>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showEditModal(roleModal, role)" style="cursor: pointer;" nz-icon nzType="edit"
+                            theme="outline" nzTooltipTitle="Edit" nz-tooltip></i>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <i (click)="showDeleteConfirm(role)" style="cursor: pointer;" nz-icon nzType="delete"
+                            theme="outline" nzTooltipTitle="Delete" nz-tooltip ></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #Inactive>
+    <td>Inactive</td>
+</ng-template>
+
+<ng-template #roleModal>
+    <form nz-form [formGroup]="roleForm" class="recru-container">
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="nameErrorMsg">
+                    <input *recruInput="'Name'" type="text" nz-input formControlName="name" id="name">
+                    <ng-template #nameErrorMsg>
+                        <ng-container *ngIf="roleForm.get('name').dirty && roleForm.get('name').errors">
+                            <ng-container *ngIf="roleForm.get('name')?.hasError('required')">
+                                Please input the name
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="recru-row">
+            <nz-form-item>
+                <nz-form-control>
+                    <nz-select *recruInput="'Status'" formControlName="isActive">
+                        <nz-option nzLabel="Active" nzValue="true"></nz-option>
+                        <nz-option nzLabel="Inactive" nzValue="false"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+</ng-template>
