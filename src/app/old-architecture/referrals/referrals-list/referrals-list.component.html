@@ -66,21 +66,16 @@
               </span>
               {{ referralItem.candidate.openPositionTitle }}</td>
             <td>
-              <i *ngIf="!referralItem.processStatus; else createdProcess" nzTooltipTitle="Start Process"
+              <i *ngIf="referralItem.candidate.status === 0" nzTooltipTitle="Start Process"
                 nz-tooltip nz-icon style="cursor: pointer;" nzType="play-circle" nzTheme="outline"
                 (click)="goToProcesses(referralItem.candidate)"></i>
-              <ng-template #createdProcess>
-                <i nzTooltipTitle="A process has already been created for this referral" nz-tooltip nz-icon
-                  style="cursor: pointer;" nzType="play-circle" nzTheme="outline"></i>
-              </ng-template>
-              <nz-divider nzType="vertical"></nz-divider>
-              <i *ngIf="checkCV(referralItem.candidate.cv); else noCV" nzTooltipTitle="Open CV" nz-tooltip nz-icon
-                style="cursor: pointer;" nzType="file-pdf" nzTheme="outline"
-                (click)="openCV(referralItem.candidate.cv)"></i>
-              <ng-template #noCV>
-                <i nzTooltipTitle="No CV available" nz-tooltip nz-icon style="cursor: pointer;" nzType="file-pdf"
-                  nzTheme="outline"></i>
-              </ng-template>
+                <span *ngIf="checkCV(referralItem.candidate.cv)">
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <i nzTooltipTitle="Open CV" nz-tooltip nz-icon
+                    style="cursor: pointer;" nzType="file-pdf" nzTheme="outline"
+                    (click)="openCV(referralItem.candidate.cv)"></i>
+                  
+                </span>
               <span *ngIf="!referralItem.processStatus">
                 <nz-divider nzType="vertical"></nz-divider>
                 <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
