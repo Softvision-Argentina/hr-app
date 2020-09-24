@@ -124,8 +124,19 @@ namespace Domain.Services.Impl.Services
             }
 
             this.log.LogInformation($"Deleting candidate {id}");
-            this.candidateRepository.Delete(candidate);
+            candidate.Status = CandidateStatus.Eliminated;
+            this.candidateRepository.Update(candidate);
 
+            this.unitOfWork.Complete();
+        }
+
+        public void Reactivate(int id)
+        {
+            var candidate = this.candidateRepository.Query().FirstOrDefault(_ => _.Id == id);
+            var currentProcess = this.processRepository.Query().Where(p => p.CandidateId == candidate.Id && p.Status != Model.Enum.ProcessStatus.Hired).FirstOrDefault();
+
+            candidate.Status = currentProcess != null ? (currentProcess.Status == Model.Enum.ProcessStatus.Eliminated ? CandidateStatus.Rejected : this.mapper.Map<CandidateStatus>(currentProcess.Status)) : CandidateStatus.Pipeline;
+            this.candidateRepository.Update(candidate);
             this.unitOfWork.Complete();
         }
 

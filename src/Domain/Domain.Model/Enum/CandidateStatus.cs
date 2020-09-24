@@ -15,5 +15,6 @@ namespace Domain.Model.Enum
         Recall,
         Pipeline,
         PendingReply,
+        Eliminated,
     }
 }

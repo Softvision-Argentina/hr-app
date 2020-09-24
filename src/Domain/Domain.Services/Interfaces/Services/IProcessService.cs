@@ -23,7 +23,11 @@ namespace Domain.Services.Interfaces.Services
 
         IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community);
 
+        IEnumerable<ReadedProcessContract> GetDeletedProcesses();
+
         void Approve(int processID);
+
+        void Reactivate(int processID);
 
         void Reject(int id, string rejectionReason);
     }

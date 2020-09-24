@@ -110,7 +110,7 @@
         public IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community)
         {
             var candidateQuery = this.processRepository
-                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community));
+                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community) && pro.Status != ProcessStatus.Eliminated);
 
             var candidateResult = candidateQuery.ToList();
 
@@ -123,7 +123,9 @@
 
             process.Candidate.Status = this.SetCandidateStatus(ProcessStatus.Rejected);
 
-            this.processRepository.Delete(process);
+            process.Status = ProcessStatus.Eliminated;
+
+            this.processRepository.Update(process);
 
             this.unitOfWork.Complete();
         }
@@ -131,7 +133,17 @@
         public IEnumerable<ReadedProcessContract> List()
         {
             var candidateQuery = this.processRepository
-                .QueryEager().ToList();
+                .QueryEager().Where(_ => _.Status != ProcessStatus.Eliminated).ToList();
+
+            var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
+
+            return this.mapper.Map<List<ReadedProcessContract>>(candidateResult);
+        }
+
+        public IEnumerable<ReadedProcessContract> GetDeletedProcesses()
+        {
+            var candidateQuery = this.processRepository
+                    .QueryEager().Where(_ => _.Status == ProcessStatus.Eliminated);
 
             var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
 
@@ -333,6 +345,16 @@
             process.Candidate.Status = this.SetCandidateStatus(process.Status);
             var status = process.Status;
 
+            this.unitOfWork.Complete();
+        }
+
+        public void Reactivate(int processId)
+        {
+            var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
+
+            process.Status = SetProcessStatus(process);
+            process.Candidate.Status = process.Candidate.Status == CandidateStatus.Rejected || process.Candidate.Status == CandidateStatus.Eliminated ? SetCandidateStatus(process.Status) : process.Candidate.Status;
+            this.processRepository.Update(process);
             this.unitOfWork.Complete();
         }
 

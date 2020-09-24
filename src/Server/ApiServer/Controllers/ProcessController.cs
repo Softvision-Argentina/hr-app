@@ -126,6 +126,17 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpPost("Reactivate")]
+        public IActionResult Reactivate([FromBody] int id)
+        {
+            return this.ApiAction(() =>
+            {
+                this.processService.Reactivate(id);
+
+                return this.Accepted();
+            });
+        }
+
         [HttpPost("Reject")]
         public IActionResult Reject([FromBody] RejectProcessViewModel rejectProcessVm)
         {
@@ -143,6 +154,17 @@ namespace ApiServer.Controllers
             return this.ApiAction(() =>
             {
                 var process = this.processService.GetActiveByCandidateId(candidateId);
+
+                return this.Accepted(this.mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
+            });
+        }
+
+        [HttpGet("DeletedProcesses")]
+        public IActionResult GetDeletedProcesses()
+        {
+            return this.ApiAction(() =>
+            {
+                var process = this.processService.GetDeletedProcesses();
 
                 return this.Accepted(this.mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
             });

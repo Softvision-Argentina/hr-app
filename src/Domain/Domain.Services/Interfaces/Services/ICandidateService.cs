@@ -24,6 +24,8 @@ namespace Domain.Services.Interfaces.Services
 
         void Delete(int id);
 
+        void Reactivate(int id);
+
         IEnumerable<ReadedCandidateContract> List();
 
         IEnumerable<ReadedCandidateAppContract> ListApp();

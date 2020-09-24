@@ -150,6 +150,17 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpPost("Reactivate")]
+        public IActionResult Reactivate([FromBody] int id)
+        {
+            return this.ApiAction(() =>
+            {
+                this.candidateService.Reactivate(id);
+
+                return this.Accepted();
+            });
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
