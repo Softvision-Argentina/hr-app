@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
 import { ReferralsService } from '@shared/services/referrals.service';
 import { customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
-import { CandidateInfoService } from '@shared/services/candidate-info.service';
 
 @Component({
   selector: 'candidate-add',
@@ -131,20 +130,14 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
-              private globals: Globals , private _candidateInfoService: CandidateInfoService) {
+              private globals: Globals, private _referralsService: ReferralsService) {
                 this.statusList = globals.candidateStatusList;
                 this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 this.getCandidates();
   }
 
   ngOnInit() {
-    const infoSub =  this._candidateInfoService._candidateInfoSource
-    .subscribe(info => {
-      this.candidateInfo = info;
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });
-    this.candidateSubscriptions.push(infoSub);
+    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.fillUsers = this._users;
     this.fillUsers.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)))
     this._offices.sort((a,b) => (a.name.localeCompare(b.name)))

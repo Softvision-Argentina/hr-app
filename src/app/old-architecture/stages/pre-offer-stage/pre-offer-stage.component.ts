@@ -43,7 +43,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     dni: [null, [dniValidator]],
     userOwnerId: null,
     userDelegateId: [null],
-    feedback: ['', [Validators.maxLength(10000)]],
+    feedback: '',
     seniority: [0, [Validators.required]],
     remunerationOffer: [0, [Validators.required]],
     notes: '', // should be removed because it's in pre-offer-history

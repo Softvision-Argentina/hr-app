@@ -37,6 +37,16 @@ export class CandidateService extends BaseService<Candidate> implements ICandida
       );
   }
 
+  public reactivate(id: number): Observable<any> {
+    return this.http.post(this.apiUrl + '/Reactivate/', id, {
+      headers: this.headersWithAuth, observe: 'response'
+    })
+      .pipe(
+        tap(() => this.get().subscribe()),
+        catchError(this.handleErrors)
+      );
+  }
+
   public getCandidatesBySkills(candidatesFilters): Observable<any> {
 
     return this.http.post(this.apiUrl + '/filter/', candidatesFilters, {

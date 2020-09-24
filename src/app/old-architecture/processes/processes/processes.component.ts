@@ -72,6 +72,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   filteredProcesses: Process[] = [];
   filteredOwnProcesses: Process[] = [];
+  filteredDeletedProcesses: Process[] = [];
 
   searchValue = '';
   searchRecruiterValue = '';
@@ -80,6 +81,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   listOfSearchProcesses = [];
   listOfDisplayData = [...this.filteredProcesses];
   listOfDisplayOwnData = [...this.filteredOwnProcesses];
+  listOfDeletedDisplayData = [...this.filteredDeletedProcesses];
   currentUser: User;
   sortName = null;
   sortValue = null;
@@ -171,6 +173,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.facade.appService.removeBgImage();
     this.getProcesses();
     this.getUserProcesses();
+    this.getDeletedProcesses();
     this.getCandidates();
     this.getUsers();
     this.getOffices();
@@ -309,6 +312,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.processesSubscription.add(processesSubscription);
   }
 
+  getDeletedProcesses(){    
+    const userProcessesSubscription = this.facade.processService.getDeletedProcesses()
+      .subscribe(res => {
+        let result = [];
+        if (!!res) {
+          this.listOfDeletedDisplayData = res;
+          this.filteredDeletedProcesses = res;
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
+    this.processesSubscription.add(userProcessesSubscription);
+  }
+
   getUserProcesses() {
     
     const userProcessesSubscription = this.facade.processService.getData()
@@ -340,6 +357,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
       this.listOfDisplayData = this.filteredProcesses;
       this.listOfDisplayOwnData = this.filteredOwnProcesses;
+      this.listOfDeletedDisplayData = this.filteredDeletedProcesses;
 
       const allProcesses = this.listOfDisplayData.filter(process => {
         const fullName = process.candidate.name + process.candidate.lastName;
@@ -352,8 +370,15 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         return fullName.toString().toUpperCase().indexOf(value) !== -1;
       });
 
+      const deletedProcesses = this.listOfDeletedDisplayData.filter(process => {
+        const fullName = process.candidate.name + process.candidate.lastName;
+        const value = data.toString().toUpperCase();
+        return fullName.toString().toUpperCase().indexOf(value) !== -1;
+      });
+
       this.listOfDisplayData = allProcesses;
       this.listOfDisplayOwnData = ownProcesses;
+      this.listOfDeletedDisplayData = deletedProcesses;
     });
     this.processesSubscription.add(this.searchSub);
   }
@@ -440,6 +465,27 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
+  reactivateProcess(processID: number){
+      const process: Process = this.listOfDeletedDisplayData.find(p => p.id === processID);
+      const processText = process.candidate.name.concat(' ').concat(process.candidate.lastName);
+      this.facade.modalService.confirm({
+        nzTitle: 'Are you sure you want to reactivate the process for ' + processText + ' ?',
+        nzContent: '',
+        nzOkText: 'Yes',
+        nzOkType: 'danger',
+        nzCancelText: 'No',
+        nzOnOk: () => this.facade.processService.reactivate(processID)
+          .subscribe(res => {
+            this.getDeletedProcesses();
+            this.getProcesses();
+            this.getCandidates();
+            this.facade.toastrService.success('Process was reactivated!');
+          }, err => {
+            this.facade.toastrService.error(err.message);
+          })
+      });
+  }
+
   reset(): void {
     this.searchValue = '';
     this.search();
@@ -490,6 +536,10 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   searchAllProcess() {
     this.getProcesses();
     this.isOwnedProcesses = false;
+  }
+
+  searchDeletedProcesses(){
+    this.getDeletedProcesses();
   }
 
   showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {

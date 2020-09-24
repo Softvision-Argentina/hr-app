@@ -26,6 +26,8 @@ export class ProcessTableComponent implements OnChanges {
     @Output() showDeleteConfirm = new EventEmitter();
     @Output() showApproveProcessConfirm = new EventEmitter();
     @Output() rejectProcess = new EventEmitter();
+    @Output() reactivateProcess = new EventEmitter();
+
 
     selectedProfiles = [];
     selectedCommunities = [];
@@ -40,6 +42,7 @@ export class ProcessTableComponent implements OnChanges {
 
     constructor(private globals: Globals ){
         this.seniorityList = globals.seniorityList;
+        this.statusList = globals.processStatusList;
 
     }
 
@@ -135,6 +138,10 @@ export class ProcessTableComponent implements OnChanges {
 
     emitReject(id) {
         this.rejectProcess.emit(id);
+    }
+
+    emitReactivate(id){
+        this.reactivateProcess.emit(id);
     }
 
     getStatus(status: number): string {

@@ -39,6 +39,15 @@ export class ProcessService extends BaseService<Process> {
       );
   }
 
+  public getDeletedProcesses(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/DeletedProcesses/`,
+      {headers: this.headersWithAuth, observe: 'body'})
+      .pipe(
+        tap(data => { }),
+        catchError(this.handleErrors)
+      );
+  }
+
   public getProcessByUserRole(currentUser: User): Observable<any> {
     if (currentUser.role === "CommunityManager") {
       return this.http.get(`${this.apiUrl}/com/${currentUser.community.name}`,
@@ -61,6 +70,16 @@ export class ProcessService extends BaseService<Process> {
   }
   public approve(processID: number): Observable<any> {
     return this.http.post(this.apiUrl + '/Approve', processID, {
+      headers: this.headersWithAuth, observe: 'response'
+    })
+      .pipe(
+        tap(() => this.get().subscribe()),
+        catchError(this.handleErrors)
+      );
+  }
+
+  public reactivate(processID: number): Observable<any> {
+    return this.http.post(this.apiUrl + '/Reactivate', processID, {
       headers: this.headersWithAuth, observe: 'response'
     })
       .pipe(

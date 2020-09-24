@@ -40,7 +40,8 @@ export class Globals {
     { id: ProcessStatusEnum.Hired, name: 'Hired' },
     { id: ProcessStatusEnum.Recall, name: 'Recall' },
     { id: ProcessStatusEnum.Pipeline, name: 'Pipeline' },
-    { id: ProcessStatusEnum.PendingReply, name: 'Pending Reply' }
+    { id: ProcessStatusEnum.PendingReply, name: 'Pending Reply' },
+    { id: ProcessStatusEnum.Eliminated, name: 'Eliminated' }
 
   ];
 
@@ -75,7 +76,8 @@ export class Globals {
     { id: CandidateStatusEnum.Accepted, name: 'Accepted' },
     { id: CandidateStatusEnum.Declined, name: 'Declined' },
     { id: CandidateStatusEnum.PendingReply, name: 'Pending Reply' },
-    { id: CandidateStatusEnum.Pipeline, name: 'Pipeline' }
+    { id: CandidateStatusEnum.Pipeline, name: 'Pipeline' },
+    { id: CandidateStatusEnum.Eliminated, name: 'Eliminated' }
   ];
 
   profileList: any[] = [

@@ -38,7 +38,7 @@
                     <td>{{ getStatus(candidate.status) }}</td>
                     <td>{{ candidate.source }}</td>
                     <td>{{ candidate.user.firstName }} {{ candidate.user.lastName }}</td>
-                    <td *ngIf="candidate.id">
+                    <td *ngIf="candidate.id && candidate.status !== 9">
                         <!-- here start the cv  -->
                         <span *ngIf="checkCV(candidate.cv)" >
                             <i nzTooltipTitle="Open CV" nz-tooltip nz-icon
@@ -61,6 +61,10 @@
                                 class="icon-action" nzType="play-circle" nzTheme="outline" (click)="goToProcesses(candidate)"></i>
                             </span>
                     </td>
+                    <td *ngIf="candidate.status === 9">
+                    <i nzTooltipTitle="Reactivate Candidate" nzTooltipContent="topLeft" nz-tooltip style="cursor: pointer;"
+             nz-icon nzType="redo" nzTheme="outline" (click)="reactivateCandidate(candidate.id)"></i>
+            </td>
                 </tr>
             </tbody>
         </nz-table>

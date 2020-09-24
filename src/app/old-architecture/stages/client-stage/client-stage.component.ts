@@ -21,6 +21,11 @@ import { resizeModal } from '@app/shared/utils/resize-modal.util';
 })
 export class ClientStageComponent implements OnInit {
 
+  @ViewChild('interviewClient') interviewClient;
+  @ViewChild('clientInterviewer') clientInterviewer;
+  @ViewChild('project') project;
+  @ViewChild('interviewFeedback') interviewFeedback;
+
   @Input()
   private _users: User[];
   public get users(): User[] {
@@ -41,7 +46,7 @@ export class ClientStageComponent implements OnInit {
     userOwnerId: [null],
     interviewer: [null],
     userDelegateId: [null],
-    feedback: [null, [Validators.maxLength(10000)]],
+    feedback: [null],
     delegateName: [null],
     rejectionReason: [null],
     interviews: [null],
@@ -321,14 +326,11 @@ export class ClientStageComponent implements OnInit {
       )
 
       this.facade.toastrService.success('Interview added!');
-
-      this.interviewForm.controls["interviewClient"].setValue(null);
-      this.interviewForm.controls["clientInterviewer"].setValue(null);
-      this.interviewForm.controls["project"].setValue(null);      
-      this.interviewForm.controls["interviewDate"].setValue(null);
-      this.interviewForm.controls["interviewDate"].setErrors(null);
-      this.interviewForm.controls["interviewClient"].setErrors(null);
-      this.feedbackContent = null;
+      this.resetInterviewDate = new Date();
+      this.interviewClient.nativeElement.value = '';
+      this.clientInterviewer.nativeElement.value = '';
+      this.project.nativeElement.value = '';
+      this.feedbackContent = '';
 
       this.updateEditCache();
     }

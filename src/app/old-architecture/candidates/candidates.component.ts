@@ -20,6 +20,8 @@ import { resizeModal } from '@app/shared/utils/resize-modal.util';
 import { SeniorityEnum } from '@shared/enums/seniority.enum';
 import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { Router } from '@angular/router';
+import { ProcessStatusEnum } from '@shared/enums/process-status.enum';
+import { CandidateStatusEnum } from '@shared/enums/candidate-status.enum';
 
 @Component({
   selector: 'app-candidates',
@@ -79,6 +81,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   candidateInfo : Candidate ;
   referredBy: string;
   seniorityList: any[];
+  candidateStatus: CandidateStatusEnum;
 
   constructor(private router : Router,private facade: FacadeService, private fb: FormBuilder, private detailsModal: CandidateDetailsComponent, private globals: Globals , private _candidateInfoService : CandidateInfoService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -116,10 +119,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getCandidates() {
     this.facade.candidateService.get()
       .subscribe(res => {
-        this.filteredCandidates = res;
+        this.filteredCandidates = this.currentUser.role === 'Admin' ? res : res.filter(x=>x.status !== CandidateStatusEnum.Eliminated);
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
           : (b[this.sortName] > a[this.sortName] ? 1 : -1));
           this.listOfDisplayData.forEach(x=> { x.source == null ? x.source ='N/A' : x.source});
+          this.listOfDisplayData = this.currentUser.role == 'Admin' ? this.listOfDisplayData : this.listOfDisplayData.filter(x=>x.status != CandidateStatusEnum.Eliminated) ;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -401,6 +405,24 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         .subscribe(res => {
           this.getCandidates();
           this.facade.toastrService.success('Candidate was deleted !');
+        }, err => {
+          this.facade.errorHandlerService.showErrorMessage(err);
+        })
+    });
+  }
+
+  reactivateCandidate(candidateID: number): void {
+    const candidateDelete: Candidate = this.filteredCandidates.filter(candidate => candidate.id === candidateID)[0];
+    this.facade.modalService.confirm({
+      nzTitle: 'Are you sure you want to reactivate ' + candidateDelete.lastName + ', ' + candidateDelete.name + ' ?',
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzCancelText: 'No',
+      nzOnOk: () => this.facade.candidateService.reactivate(candidateID)
+        .subscribe(res => {
+          this.getCandidates();
+          this.facade.toastrService.success('Candidate was reactivated!');
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
         })

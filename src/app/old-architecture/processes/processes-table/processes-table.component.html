@@ -53,7 +53,7 @@
             <td scope="row">
               {{  getSeniority(process.seniority) }}
             </td>
-            <td >
+            <td *ngIf="process.status !== 9">
               <i nzTooltipTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit"
                 theme="outline"></i>
               <nz-divider nzType="vertical"></nz-divider>
@@ -69,6 +69,11 @@
                 *ngIf="process && process.status != 4" nz-icon nzType="close" nzTheme="outline"
                 (click)="emitReject(process.id)"></i>
             </td>
+            <td *ngIf="process.status === 9">
+            <i nzTooltipTitle="Reactivate process" nzTooltipContent="topLeft" nz-tooltip style="cursor: pointer;"
+             nz-icon nzType="redo" nzTheme="outline"
+            (click)="emitReactivate(process.id)"></i>
+          </td>
 
           </tr>
 

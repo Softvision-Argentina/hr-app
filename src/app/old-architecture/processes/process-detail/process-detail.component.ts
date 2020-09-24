@@ -77,7 +77,7 @@ export class ProcessDetailComponent implements OnInit {
       startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       description: [null, [Validators.required]],
-      feedback: [null, [Validators.required, Validators.maxLength(10000)]],
+      feedback: [null, [Validators.required]],
       status: [null, [Validators.required]],
       userOwnerId: [null, [Validators.required]],
       userDelegateId: [null, [Validators.required]]

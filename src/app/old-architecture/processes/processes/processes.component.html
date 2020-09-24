@@ -36,6 +36,16 @@
           (rejectProcess)="rejectProcess($event, rejectProcessModal)">
         </app-processes-table>
       </nz-tab>
+
+        <nz-tab nzTitle="DELETED PROCESSES" (nzClick)="searchDeletedProcesses()" *ngIf="isUserRole(['Admin'])">
+        <app-processes-table #processTable [profiles]="profiles" [communities]="communities"
+          [listOfDisplayData]="listOfDeletedDisplayData" [filteredProcesses]="filteredDeletedProcesses" [statusList]="statusList"
+          [currentStageList]="currentStageList" [emptyProcess]="emptyProcess"
+          (candidateId)="showCandidateDetailsModal($event, candidateDetailModal)"
+          (userId)="showUserDetailsModal($event, userDetailModal)"
+          (reactivateProcess)="reactivateProcess($event)">
+        </app-processes-table>
+      </nz-tab>
     </nz-tabset>
 
     
