@@ -156,11 +156,13 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
-    this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
     setTimeout(() => {
       if (this.candidateInfo) {
         this.fillCandidateForm(this.candidateInfo);
+      }else{
+        this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
       }
+      
     });
   }
 
