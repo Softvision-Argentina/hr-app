@@ -14,12 +14,14 @@ import { PreOfferStageComponent } from '@old-architecture/stages/pre-offer-stage
 import { TechnicalStageComponent } from '@old-architecture/stages/technical-stage/technical-stage.component';
 import { TextEditorComponent } from '@old-architecture/text-editor/text-editor.component';
 import { UserDetailsComponent } from '@old-architecture/users/details/user-details.component';
-import { en_US, NzBadgeModule, NzButtonModule, NzCardModule, NzCollapseModule, NzDatePickerModule, NzDividerModule, NzDropDownModule, NzFormModule, NzInputModule, NzLayoutModule, NzListModule, NzMenuModule, NzModalModule, NzPopoverModule, NzRadioModule, NzSelectModule, NzSliderModule, NzStatisticModule, NzTableModule, NzTabsModule, NzTagModule, NzTypographyModule, NzUploadModule, NZ_I18N } from 'ng-zorro-antd';
+import { en_US, NzBadgeModule, NzButtonModule, NzCardModule, NzCollapseModule, NzDatePickerModule, NzDividerModule, NzDropDownModule, NzFormModule, NzInputModule, NzLayoutModule, NzListModule, NzMenuModule, NzModalModule, NzPopoverModule, NzRadioModule, NzSelectModule, NzSliderModule, NzStatisticModule, NzTableModule, NzTabsModule, NzTagModule, NzTypographyModule, NzUploadModule, NZ_I18N, NzCheckboxModule } from 'ng-zorro-antd';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { FileUploadModule } from 'ng2-file-upload';
 import { RecruInputDirective } from './directives/recru-input.directive';
 import { IconsProviderModule } from './icons-provider.module';
 import { PipesModule } from './pipes/pipes.module';
+import { ReferralsContactComponent } from '@old-architecture/referrals/referrals-contact/referrals-contact.component';
+
 import { CommunitiesSandbox } from '@app/containers/settings/communities/communities.sandbox';
 import { OfficeSandbox } from '@app/containers/settings/office/office.sandbox';
 import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
@@ -55,7 +57,8 @@ import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
         NzButtonModule,
         NzTypographyModule,
         NzUploadModule,
-        NzSpaceModule
+        NzSpaceModule,
+        NzCheckboxModule
     ],
     declarations: [
         CandidateDetailsComponent,
@@ -71,7 +74,8 @@ import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
         ProcessContactComponent,
         TextEditorComponent,
         OpenPositionsComponent,
-        RecruInputDirective
+        RecruInputDirective,
+        ReferralsContactComponent
     ],
     exports: [
         CommonModule,
@@ -115,7 +119,8 @@ import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
         NzTypographyModule,
         NzUploadModule,
         NzSpaceModule,
-        RecruInputDirective
+        RecruInputDirective,
+        ReferralsContactComponent
     ],
     providers: [CommunitiesSandbox,OfficeSandbox,RoomSandbox, { provide: NZ_I18N, useValue: en_US }]
 })

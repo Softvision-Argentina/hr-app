@@ -36,7 +36,8 @@
 
 
 <ng-template #newCandidate>
-  <app-referrals-contact [position]=currentPosition [_visible]=true [communities]=communities></app-referrals-contact>
+  <app-referrals-contact [position]=currentPosition [_visible]=true [communities]=communities 
+    [isReferral]=true (refreshTableAction)="refreshReferralsTable($event)"></app-referrals-contact>
 </ng-template>
 
 <ng-template #newPosition>

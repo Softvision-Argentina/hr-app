@@ -18,7 +18,6 @@ import { ReferralsRoutes } from './referrals.routing';
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
-        ReferralsContactComponent,
         PositionAddComponent
     ],
     imports: [
@@ -40,7 +39,6 @@ import { ReferralsRoutes } from './referrals.routing';
         ReferralsComponent,
         ReferralsCardComponent,
         ReferralsListComponent,
-        ReferralsContactComponent,
         PositionAddComponent,
         NzAvatarModule,
         NzStepsModule,

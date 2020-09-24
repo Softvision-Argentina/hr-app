@@ -8,3 +8,18 @@
 .icon-action {
   cursor: pointer;
 }
+
+//massive upload button
+div > button.recru-button-cta--large.recru-button-secondary.ant-btn
+{
+width:215px;
+height: 34px;
+margin-right: 15px;
+}
+
+//new candidate button
+div > button.recru-button-cta.recru-button-cta--large.ant-btn.ant-btn-primary
+{
+    height: 34px;
+    margin-right: 4vw;
+}

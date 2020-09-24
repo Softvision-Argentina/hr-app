@@ -38,12 +38,17 @@ export class ReferralsContactComponent implements OnInit {
 
   referralId;
 
+  @Input() isReferral: boolean;
+  @Input() candidateSources = [];
+
   @Input()
   communities: Community[];
   filteredCommunity: Community[] = [];
   currentUser: User;
   @Input() position: OpenPosition = null;
   @Output() previousPosition = new EventEmitter<OpenPosition>();
+  @Output() refreshTableAction = new EventEmitter<Candidate>();
+
   candidateForm: FormGroup = this.fb.group({
     firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
@@ -58,8 +63,10 @@ export class ReferralsContactComponent implements OnInit {
     phoneNumber: [null, [Validators.pattern(/^\+?[1-9]\d{9,11}$/), Validators.minLength(10), Validators.maxLength(12)]],
     community: [null, [Validators.required]],
     file: [''],
-    openPositionTitle: [null, { disabled: true }]
+    openPositionTitle: [null, { disabled: true }],
+    source: null
   }, { validators: [customCvAndLinkedInValidator, customEmailAndPhoneNumberValidator] });
+
   visible = true;
   isNewCandidate = false;
 
@@ -83,6 +90,8 @@ export class ReferralsContactComponent implements OnInit {
 
   checkedTerms = false;
 
+  service = null;
+
   constructor(private fb: FormBuilder, private facade: FacadeService,
     private modalService: NzModalService, private b: BaseService<Cv>, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -91,6 +100,11 @@ export class ReferralsContactComponent implements OnInit {
   ngOnInit() {
     if (this.communities) {
       this.filteredCommunity = this.communities.sort((a, b) => (a.name.localeCompare(b.name)));
+    }
+    if(this.isReferral) {
+      this.service = this.facade.referralsService;
+    } else {
+      this.service = this.facade.candidateService;
     }
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
@@ -119,31 +133,6 @@ export class ReferralsContactComponent implements OnInit {
       this.candidateForm.controls['firstName'].disable();
       this.candidateForm.controls['lastName'].disable();
     }
-  }
-
-  resetForm() {
-    this.candidateForm = this.fb.group({
-      name: [''],
-      firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      email: [null,
-        {
-          validators: [Validators.email]
-        }
-      ],
-      phoneNumberPrefix: ['+54'],
-      phoneNumber: [null, Validators.pattern(/^[0-9]+$/)],
-      user: [null, [Validators.required]],
-      contactDay: [null, [Validators.required]],
-      community: [null, [Validators.required]],
-      profile: [null, [Validators.required]],
-      linkedInProfile: [null],
-      isReferred: false,
-      id: [null],
-      knownFrom: [null],
-      cv: [null],
-      referredBy: [null]
-    }, { validators: [customEmailAndPhoneNumberValidator, customCvAndLinkedInValidator] });
   }
 
   saveEdit() {
@@ -184,7 +173,7 @@ export class ReferralsContactComponent implements OnInit {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
 
-      this.facade.referralsService.update(this.referralToEdit.id, editedCandidate)
+      this.service.update(this.referralToEdit.id, editedCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully edited !');
           if (this.candidateForm.get('file').value) {
@@ -199,9 +188,7 @@ export class ReferralsContactComponent implements OnInit {
     }
   }
 
-
   createNewCandidate() {
-    this.facade.appService.startLoading();
     let isCompleted = true;
 
     if (this.candidateForm.invalid) {
@@ -213,6 +200,7 @@ export class ReferralsContactComponent implements OnInit {
     }
 
     if (isCompleted) {
+      this.facade.appService.startLoading();
 
       const newCandidate: Candidate = {
         id: 0,
@@ -228,15 +216,15 @@ export class ReferralsContactComponent implements OnInit {
         status: CandidateStatusEnum.New,
         preferredOfficeId: null,
         candidateSkills: [],
-        isReferred: true,
+        isReferred: this.isReferral,
         community: new Community(this.candidateForm.controls['community'].value),
         profile: null,
         cv: null,
         knownFrom: null,
-        referredBy: this.currentUser.username,
+        referredBy: this.isReferral ? this.currentUser.username : null,
         openPositionTitle: this.position ? this.position.title : null,
         openPosition: this.position ? this.position : null,
-        source: 'A friend / colleague'
+        source: this.isReferral ? 'A friend / colleague' : this.candidateForm.controls["source"].value
       };
 
       if (this.candidateForm.controls['phoneNumber'].value) {
@@ -244,7 +232,7 @@ export class ReferralsContactComponent implements OnInit {
       }
 
 
-      this.facade.referralsService.add(newCandidate)
+      this.service.add(newCandidate)
         .subscribe(res => {
           this.facade.toastrService.success('Candidate was successfully created !');
           this.isNewCandidate = false;
@@ -257,15 +245,13 @@ export class ReferralsContactComponent implements OnInit {
           }
           this.facade.appService.stopLoading();
           newCandidate.id = res.id;
-          this.facade.referralsService.addNew(newCandidate);
+          this.refreshTableAction.emit(newCandidate);
           this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
           this.facade.appService.stopLoading();
         });
     }
-
-    this.facade.appService.stopLoading();
   }
 
   checkForm() {

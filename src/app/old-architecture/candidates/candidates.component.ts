@@ -94,7 +94,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.facade.appService.startLoading();
     this.facade.appService.removeBgImage();
-    this.getCandidates();
     this.getUsers();
     this.getProfiles();
     this.getCommunities();
@@ -102,7 +101,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     this.getSkills();
     this.resetForm();
     this.getSearchInfo();
-    this.facade.appService.stopLoading();
+    this.getCandidates();
   }
 
   goToProcesses(candidate) {
@@ -121,9 +120,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.filteredCandidates = this.currentUser.role === 'Admin' ? res : res.filter(x=>x.status !== CandidateStatusEnum.Eliminated);
         this.listOfDisplayData = res.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1)
-          : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-          this.listOfDisplayData.forEach(x=> { x.source == null ? x.source ='N/A' : x.source});
-          this.listOfDisplayData = this.currentUser.role == 'Admin' ? this.listOfDisplayData : this.listOfDisplayData.filter(x=>x.status != CandidateStatusEnum.Eliminated) ;
+          : (b[this.sortName] > a[this.sortName] ? 1 : -1));        
+        this.facade.appService.stopLoading();
+        this.listOfDisplayData.forEach(x=> { x.source == null ? x.source ='N/A' : x.source});
+        this.listOfDisplayData = this.currentUser.role == 'Admin' ? this.listOfDisplayData : this.listOfDisplayData.filter(x=>x.status != CandidateStatusEnum.Eliminated) ;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
       });
@@ -577,6 +577,21 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   statusChanged() {
     //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
     resizeModal();
+  }
+
+  showCandidateAddModal(modalContent: TemplateRef<{}>) {
+    const modal = this.facade.modalService.create({
+      nzTitle: 'Add a Candidate',
+      nzContent: modalContent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
+      nzClosable: false,      
+      nzFooter: null
+    });
+  }
+
+  refreshPeopleTable() {
+    this.facade.appService.startLoading();
+    this.getCandidates();
   }
 
   getSeniorityName(id: number): string {

@@ -393,4 +393,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngOnDestroy() {
     this.referralsSubscriptions.unsubscribe();
   }
+
+  refreshReferralsTable(candidate: Candidate) {
+    this.facade.referralsService.addNew(candidate);
+  }
 }
