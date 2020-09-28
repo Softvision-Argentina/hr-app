@@ -1,7 +1,8 @@
 <div nz-row>
     <div nz-col nzSpan="24">
-        <div class="button-container" style="display: flex; justify-content: flex-end;">
-            <button nz-button nzType="default" class="recru-button-cta--large recru-button-secondary">Massive Upload</button>
+        <div class="button-container" style="display: flex; justify-content: flex-end; margin-bottom: 1.5%;">
+            <button nz-button nzType="default" class="recru-button-cta--large recru-button-secondary"
+            (click)="showBulkAddModal(bulkAddModal)">MASSIVE UPLOAD</button>
             <button nz-button nzType="primary" class="recru-button-cta recru-button-cta--large" 
                 (click)="showCandidateAddModal(newCandidateModal)"> NEW CANDIDATE </button>
         </div>
@@ -392,6 +393,11 @@
             </div>
         </div>
     </form>
+</ng-template>
+
+<ng-template #bulkAddModal>
+    <app-bulk-add [_visible]=true [communities]=communities
+    [candidateSources]="sourceArray" (refreshTableAction)="refreshPeopleTable()"></app-bulk-add>
 </ng-template>
 
 <ng-template #newCandidateModal>

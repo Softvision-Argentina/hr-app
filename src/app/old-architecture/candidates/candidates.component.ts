@@ -126,6 +126,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         this.listOfDisplayData = this.currentUser.role == 'Admin' ? this.listOfDisplayData : this.listOfDisplayData.filter(x=>x.status != CandidateStatusEnum.Eliminated) ;
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);
+        this.facade.appService.stopLoading();
       });
   }
 
@@ -185,6 +186,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     });
     this.candidateSubscriptions.add(officesSubscription);
   }
+
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
       if (isNaN(Number(data))) {
@@ -374,7 +376,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
               this.facade.candidateService.update(id, editedCandidate)
                 .subscribe(res => {
                   this.getCandidates();
-                  this.facade.appService.stopLoading();
                   this.facade.toastrService.success('Candidate was successfully edited !');
                   modal.destroy();
                 }, err => {
@@ -577,6 +578,16 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   statusChanged() {
     //Temporal fix to make modal reize when the form creates new items dinamically that exceeds the height of the modal.
     resizeModal();
+  }
+
+  showBulkAddModal(modalContent: TemplateRef<{}>) {
+    const modal = this.facade.modalService.create({
+      nzTitle: 'Add candidates',
+      nzContent: modalContent,
+      nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
+      nzClosable: false,
+      nzFooter: null
+    });
   }
 
   showCandidateAddModal(modalContent: TemplateRef<{}>) {

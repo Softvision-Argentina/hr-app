@@ -20,9 +20,10 @@ import { PipesModule } from '@app/shared/pipes/pipes.module';
 import { CandidatesComponent } from './candidates.component';
 import { CandidatesRoutes } from './candidates.routing';
 import { CandidateDetailsComponent } from './details/candidate-details.component';
+import { BulkAddComponent } from './bulk-add/bulk-add.component';
 
 @NgModule({
-    declarations: [CandidatesComponent],
+    declarations: [CandidatesComponent, BulkAddComponent],
     imports: [
         RouterModule.forChild(CandidatesRoutes),
         CommonModule,

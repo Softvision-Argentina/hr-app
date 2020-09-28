@@ -57,4 +57,15 @@ export class CandidateService extends BaseService<Candidate> implements ICandida
         catchError(this.handleErrors)
       );
   }
+  
+  public bulkAdd(data): Observable<any>{
+    const headers = { Authorization: this.headersWithAuth.get("Authorization") }
+    return this.http.post<any>(this.apiUrl + '/BulkAdd', data , {
+      headers: headers
+    })
+    .pipe(
+      tap(data => {}),
+      catchError(this.handleErrors)
+    )
+  }
 }
