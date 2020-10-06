@@ -20,6 +20,7 @@ namespace Domain.Services.Impl.UnitTests.Services
     using Domain.Services.Impl.Validators.Candidate;
     using FluentValidation;
     using FluentValidation.Results;
+    using Microsoft.AspNetCore.Http;
     using Moq;
     using Xunit;
 
@@ -37,6 +38,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<ILog<CandidateService>> mockLogCandidateService;
         private readonly Mock<UpdateCandidateContractValidator> mockUpdateCandidateContractValidator;
         private readonly Mock<CreateCandidateContractValidator> mockCreateCandidateContractValidator;
+        private readonly Mock<IHttpContextAccessor> httpContext;
 
         public CandidateServiceTest()
         {
@@ -51,6 +53,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             this.mockLogCandidateService = new Mock<ILog<CandidateService>>();
             this.mockUpdateCandidateContractValidator = new Mock<UpdateCandidateContractValidator>();
             this.mockCreateCandidateContractValidator = new Mock<CreateCandidateContractValidator>();
+            this.httpContext = new Mock<IHttpContextAccessor>();
             this.service = new CandidateService(
                 this.mockMapper.Object,
                 this.mockRepoCandidate.Object,
@@ -63,7 +66,8 @@ namespace Domain.Services.Impl.UnitTests.Services
                 this.MockUnitOfWork.Object,
                 this.mockLogCandidateService.Object,
                 this.mockUpdateCandidateContractValidator.Object,
-                this.mockCreateCandidateContractValidator.Object);
+                this.mockCreateCandidateContractValidator.Object,
+                this.httpContext.Object);
         }
 
         [Fact(DisplayName = "Verify that create CandidateService when data is valid")]
