@@ -118,7 +118,7 @@
   </div>
   <ngx-slick-carousel #slickModal='slick-carousel' class="carousel" [config]="slideConfig" (destroy)="closeModal()">
        <div ngxSlickItem>
-          <candidate-add [_candidateProfiles]=profiles [_communities]=communities [_process]="emptyProcess"
+          <candidate-add [_communities]=communities [_process]="emptyProcess"
             [_users]="users" [_candidate]="currentCandidate" [_offices]="offices">
           </candidate-add>
           <hr-stage [_users]="users" [readdressReasonTypeList]= "readdressReasonTypeList" [readdressReasonList]="readdressReasonList" [hrStage]="emptyProcess.hrStage"></hr-stage>

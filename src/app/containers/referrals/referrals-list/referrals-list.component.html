@@ -22,7 +22,7 @@
 
           <td>
             <i *ngIf="!referralItem.processStatus" nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
-              nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>
+              nzTheme="outline" (click)="showContactReferralModal(referralItem)"></i>
             <nz-divider nzType="vertical"></nz-divider>
           </td>
         </tr>
@@ -55,11 +55,18 @@
               {{ referralItem.candidate.contactDay | date: 'dd/MM/yyyy' }} </td>
             <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               {{ referralItem.candidate.community.name }} </td>
-            <td [ngStyle]="getTextColor(referralItem)">
+            <td *ngIf="!referralItem.processStatus; else statusMessage" [ngStyle]="getTextColor(referralItem)">
               <span [ngStyle]="fontWeightForNewReferral(referralItem.status)">
                 {{ referralItem.message }}
               </span>
             </td>
+            <ng-template #statusMessage>
+              <td [ngStyle]="getTextColor(referralItem)">
+                <span [ngStyle]="fontWeightForNewReferral(referralItem.status)">
+                  {{ referralItem.statusMessage[referralItem.processStatus] }}
+                </span>
+              </td>
+            </ng-template>
             <td [ngStyle]="fontWeightForNewReferral(referralItem.status)">
               <span *ngIf="referralItem.candidate.openPosition && referralItem.candidate.openPosition.priority">
                 <img src="assets/images/vector.svg" class="vector">&nbsp;&nbsp;
@@ -79,7 +86,7 @@
               <span *ngIf="!referralItem.processStatus">
                 <nz-divider nzType="vertical"></nz-divider>
                 <i nzTooltipTitle="Edit referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="edit"
-                  nzTheme="outline" (click)="showContactReferralModal(referralItem.candidate)"></i>
+                  nzTheme="outline" (click)="showContactReferralModal(referralItem)"></i>
                 <nz-divider nzType="vertical"></nz-divider>
                 <i nzTooltipTitle="Remove referral" nz-tooltip nz-icon style="cursor: pointer;" nzType="delete"
                   nzTheme="outline" (click)="deleteEvent.emit(referralItem.candidate)"></i>

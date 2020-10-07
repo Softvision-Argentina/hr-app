@@ -31,12 +31,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'referrals/:openpositions',
-    loadChildren: () => import('@old-architecture/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
+    loadChildren: () => import('./containers/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {
     path: 'referrals',
-    loadChildren: () => import('@old-architecture/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
+    loadChildren: () => import('./containers/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {

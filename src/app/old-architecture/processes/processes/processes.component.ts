@@ -197,7 +197,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.newProcessStart(this.processStart, this.startModalButtons);
       }
     });
-
     this.facade.appService.stopLoading();
   }
 

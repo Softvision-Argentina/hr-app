@@ -14,6 +14,9 @@ import { BaseService } from '@shared/services/base.service';
 import { FacadeService } from '@shared/services/facade.service';
 import { UniqueEmailValidator } from '@shared/utils/email.validator';
 import { NzModalService, NzUploadFile } from 'ng-zorro-antd';
+import { ReferralsSandbox } from '../referrals/referral.sandbox';
+import { ReferralsService } from '@shared/services/referrals.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-referrals-contact',
@@ -38,7 +41,7 @@ export class ReferralsContactComponent implements OnInit {
 
   referralId;
 
-  @Input() isReferral: boolean;
+  isReferral: boolean;
   @Input() candidateSources = [];
 
   @Input()
@@ -73,14 +76,17 @@ export class ReferralsContactComponent implements OnInit {
   @Input()
   isEditReferral = false;
 
-  @Input()
   referralToEdit: Candidate;
+
+  @Input()
+  referralSelected: any;
 
   searchValue = '';
   listOfSearchProcesses = [];
 
   filteredCandidate: Candidate[] = [];
   listOfDisplayData = [...this.filteredCandidate];
+
 
   emptyCandidate: Candidate;
   emptyUser: User;
@@ -92,23 +98,25 @@ export class ReferralsContactComponent implements OnInit {
 
   service = null;
 
-  constructor(private fb: FormBuilder, private facade: FacadeService,
-    private modalService: NzModalService, private b: BaseService<Cv>, private router: Router) {
+  constructor(private fb: FormBuilder,
+    private facade: FacadeService,
+    private modalService: NzModalService,
+    private b: BaseService<Cv>,
+    private router: Router,
+    private referralsSandbox: ReferralsSandbox,
+    public _referralsService: ReferralsService) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   ngOnInit() {
+    this._referralsService._isReferralSource.subscribe(referral => this.isReferral = referral);
     if (this.communities) {
-      this.filteredCommunity = this.communities.sort((a, b) => (a.name.localeCompare(b.name)));
-    }
-    if(this.isReferral) {
-      this.service = this.facade.referralsService;
-    } else {
-      this.service = this.facade.candidateService;
+      this.filteredCommunity = this.communities.slice().sort((a, b) => (a.name.localeCompare(b.name)));
     }
     this.visible = this._visible;
     this.isNewCandidate = this.visible;
-    if (this.referralToEdit) {
+    if (this.referralSelected) {
+      this.referralToEdit = this.referralSelected.candidate;
       this.referralId = this.referralToEdit.id;
       this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.referralsService, this.referralId));
     } else {
@@ -173,18 +181,27 @@ export class ReferralsContactComponent implements OnInit {
         editedCandidate.phoneNumber += this.candidateForm.controls['phoneNumber'].value.toString();
       }
 
-      this.service.update(this.referralToEdit.id, editedCandidate)
-        .subscribe(res => {
-          this.facade.toastrService.success('Candidate was successfully edited !');
-          if (this.candidateForm.get('file').value) {
-            const file = new FormData();
-            file.append('file', this.candidateForm.get('file').value);
-            this.facade.referralsService.saveCv(res.id, file).subscribe()
+      let referralForStore = { ...this.referralSelected, candidate: editedCandidate };
+      this.referralsSandbox.edit(referralForStore, this.referralToEdit.id, this.candidateForm.get('file').value);
+      const errorSubscription = this.referralsSandbox.referralsLoadingError$
+        .subscribe((res) => {
+          if (!res) {
+            this.facade.toastrService.success('Candidate was successfully edited !');
+            this.isNewCandidate = false;
+            this.visible = false;
+            this.previousPosition.emit(null);
+            this.facade.appService.stopLoading();
+            this.modalService.closeAll();
+          } else {
+            this.facade.errorHandlerService.showErrorMessage(null);
+            this.facade.appService.stopLoading();
           }
-          this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
+          this.facade.appService.stopLoading();
         });
+
+      errorSubscription.unsubscribe();
     }
   }
 
@@ -232,25 +249,26 @@ export class ReferralsContactComponent implements OnInit {
       }
 
 
-      this.service.add(newCandidate)
-        .subscribe(res => {
-          this.facade.toastrService.success('Candidate was successfully created !');
-          this.isNewCandidate = false;
-          this.visible = false;
-          this.previousPosition.emit(null);
-          if (this.candidateForm.get('file').value) {
-            const file = new FormData();
-            file.append('file', this.candidateForm.get('file').value);
-            this.facade.referralsService.saveCv(res.id, file).subscribe()
+      this.referralsSandbox.add(newCandidate, this.candidateForm.get('file').value);
+      const errorSubscription = this.referralsSandbox.referralsLoadingError$
+        .subscribe((res) => {
+          if (!res) {
+            this.facade.toastrService.success('Candidate was successfully created !');
+            this.isNewCandidate = false;
+            this.visible = false;
+            this.previousPosition.emit(null);
+            this.facade.appService.stopLoading();
+            this.modalService.closeAll();
+          } else {
+            this.facade.errorHandlerService.showErrorMessage(null);
+            this.facade.appService.stopLoading();
           }
-          this.facade.appService.stopLoading();
-          newCandidate.id = res.id;
-          this.refreshTableAction.emit(newCandidate);
-          this.modalService.closeAll();
         }, err => {
           this.facade.errorHandlerService.showErrorMessage(err);
           this.facade.appService.stopLoading();
         });
+
+      errorSubscription.unsubscribe();
     }
   }
 
@@ -269,6 +287,7 @@ export class ReferralsContactComponent implements OnInit {
   clearDataAndCloseModal() {
     this.facade.modalService.openModals[0].destroy();
     this.previousPosition.emit(null);
+    this._referralsService.resetIsReferral();
   }
 
 
@@ -287,5 +306,4 @@ export class ReferralsContactComponent implements OnInit {
 
     return false;
   };
-
 }

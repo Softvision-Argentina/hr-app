@@ -18,6 +18,7 @@ import { AppComponent } from '@app/app.component';
 import { UserDetailsComponent } from '@old-architecture/users/details/user-details.component';
 import { PositionAddComponent } from '../position-add/position-add.component';
 import { ReferralsContactComponent } from '../referrals-contact/referrals-contact.component';
+import { ReferralsSandbox } from './referral.sandbox';
 
 @Component({
   selector: 'app-referrals',
@@ -91,18 +92,20 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   openDesc: boolean = false;
   communities: Community[] = [];
   referralsListTabTitle: string;
+  isReferral = { isReferral: true };
 
   constructor(private facade: FacadeService, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userDetailsModal: UserDetailsComponent,
     private globals: Globals, private _referralsService: ReferralsService,
-    private router: Router) {
+    private router: Router,
+    private referralsSandbox: ReferralsSandbox) {
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
     this.tabIndex = this.route.snapshot.params['openpositions'] ? 1 : 0;
   }
 
   ngOnInit() {
-    this.getOpenPositions();    
+    this.getOpenPositions();
     this.getCommunities();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -165,9 +168,10 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   getCommunities() {
-    const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
+    this.referralsSandbox.loadCommunities();
+    const communitiesSubscription = this.referralsSandbox.communities$.subscribe(res => {
       this.communities = res;
-      if(res)
+      if (res)
         this.facade.appService.stopLoading();
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
@@ -246,6 +250,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   showContactReferralModal(referral: Candidate) {
+    this._referralsService.setIsReferral();
     this.currentPosition = {
       id: null,
       title: referral.openPositionTitle,
@@ -262,7 +267,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzWrapClassName: 'recru-modal recru-modal--md recru-modal--title-lg',
       nzClosable: false,
       nzComponentParams: {
-        referralToEdit: referral,
+        referralSelected: referral,
         isEditReferral: true,
         communities: this.communities,
         position: this.currentPosition
@@ -285,10 +290,15 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   confirmDelete(referralId: number) {
     this.facade.appService.startLoading();
-    this.facade.referralsService.delete(referralId)
-      .subscribe(() => {
+    this.referralsSandbox.remove(referralId)
+    this.referralsSandbox.referralsLoadingError$
+      .subscribe((res) => {
         this.facade.appService.stopLoading();
-        this.facade.toastrService.success('Referral was successfully deleted');
+        if (!res) {
+          this.facade.toastrService.success('Referral was successfully deleted');
+        } else {
+          this.facade.errorHandlerService.showErrorMessage(null, 'Referral cannot be deleted');
+        }
       }, err => {
         this.facade.appService.stopLoading();
         this.facade.errorHandlerService.showErrorMessage(err, 'Referral cannot be deleted');
@@ -381,8 +391,8 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzTitle: 'Open position',
       nzWrapClassName: 'recru-modal recru-modal--md job-description-modal',
       nzClosable: true,
-      nzFooter: null           
-    });    
+      nzFooter: null
+    });
   }
 
   closeJobDModal() {

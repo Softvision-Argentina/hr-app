@@ -42,13 +42,10 @@ export class PositionAddComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.communities) {
-      this.communities = this.communities.sort((a, b) => (a.name.localeCompare(b.name)));
-    }
     this.fillPositionForm(this.positionToEdit);
   }
 
-  fillPositionForm(openPositionToEdit : OpenPosition){
+  fillPositionForm(openPositionToEdit: OpenPosition) {
     if(this.isEditPosition){
       this.positionForm.controls['title'].setValue(openPositionToEdit.title);
       this.positionForm.controls['studio'].setValue(openPositionToEdit.studio);

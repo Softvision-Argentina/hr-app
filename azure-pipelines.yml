@@ -4,7 +4,7 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 trigger:
-  - develop
+  - master
 
 steps:
   - task: NodeTool@0
@@ -14,8 +14,8 @@ steps:
 
   - script: |
       npm install
-      npm run build:qa
-    displayName: 'Running npm install and build for qa'
+      npm run build:prod
+    displayName: 'Running npm install and build for prod'
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(System.DefaultWorkingDirectory)/dist'

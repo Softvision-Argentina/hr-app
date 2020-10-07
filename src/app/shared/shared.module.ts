@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { CandidateDetailsComponent } from '@old-architecture/candidates/details/candidate-details.component';
 import { ProcessContactComponent } from '@old-architecture/processes/process-contact/process-contact.component';
-import { OpenPositionsComponent } from '@old-architecture/referrals/open-positions/open-positions.component';
+import { OpenPositionsComponent } from '../containers/referrals/open-positions/open-positions.component';
 import { ClientStageComponent } from '@old-architecture/stages/client-stage/client-stage.component';
 import { HireStageComponent } from '@old-architecture/stages/hire-stage/hire-stage.component';
 import { HrStageComponent } from '@old-architecture/stages/hr-stage/hr-stage.component';
@@ -20,7 +20,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { RecruInputDirective } from './directives/recru-input.directive';
 import { IconsProviderModule } from './icons-provider.module';
 import { PipesModule } from './pipes/pipes.module';
-import { ReferralsContactComponent } from '@old-architecture/referrals/referrals-contact/referrals-contact.component';
+import { ReferralsContactComponent } from '@app/containers/referrals/referrals-contact/referrals-contact.component';
 
 import { CommunitiesSandbox } from '@app/containers/settings/communities/communities.sandbox';
 import { OfficeSandbox } from '@app/containers/settings/office/office.sandbox';

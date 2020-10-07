@@ -8,10 +8,13 @@ import { ColumnItem } from '@shared/models/column-item.model';
 import { Process } from '@shared/models/process.model';
 import { ReferralListItem } from '@shared/models/referral-list-item.model';
 import { User } from '@shared/models/user.model';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { FacadeService } from '@shared/services/facade.service';
 import { ReferralsService } from '@shared/services/referrals.service';
 import { Globals } from '@shared/utils/globals';
 import { forkJoin, Subscription } from 'rxjs';
+import { ReferralsSandbox } from '../referrals/referral.sandbox';
+
 @Component({
   selector: 'app-referrals-list',
   templateUrl: './referrals-list.component.html',
@@ -40,18 +43,18 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private facade: FacadeService,
     private globals: Globals,
-    private _referralsService: ReferralsService,
-    private router: Router) {
+    private _candidateInfoService: CandidateInfoService,
+    private router: Router,
+    private referralSandbox: ReferralsSandbox) {
     this.referralListStatus = globals.referralCurrentStage;
     this.processStatusList = globals.stageStatusList;
   }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.getSearchInfo();
     this.getReferrals();
-    this.onReferralsListChange();
   }
 
   ngOnChanges() {
@@ -112,42 +115,13 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getReferrals() {
-    const referralSubs = this.facade.referralsService.get()
+    this.referralSandbox.loadReferrals();
+    const referralSubs = this.referralSandbox.referrals$
     .subscribe(res => {
-      res.forEach(referralItem => {
-        this.referralsList = [
-          ...this.referralsList,
-          new ReferralListItem(referralItem.candidate, referralItem.processId, referralItem.processCurrentStage, referralItem.processStatus),
-        ];
-      });
+      this.referralsList = res;
     });
     this.referralsSubscriptions.push(referralSubs);
   }
-
-  onReferralsListChange(){
-    const newCandidateSubs = this.facade.referralsService.candidateAdded
-    .subscribe(candidate =>{
-      const candidateId = this.referralsList.findIndex(referralItem => referralItem.candidate.id === candidate.id);
-      if (candidateId === -1){
-        const newReferralItem = new ReferralListItem(candidate, 0, 0, 0);
-        this.referralsList = [
-          ...this.referralsList,
-          newReferralItem
-        ];
-      } else{
-        this.referralsList[candidateId].candidate = candidate;
-      }
-    });
-    this.referralsSubscriptions.push(newCandidateSubs);
-
-    const deleteCandidateSubs = this.facade.referralsService.candidateDelete
-    .subscribe(candidateId =>{
-      this.referralsList = this.referralsList.filter(referralItem => referralItem.candidate.id !== candidateId);
-    });
-    this.referralsSubscriptions.push(deleteCandidateSubs);
-  }
-
-
 
 
   getTextColor(referralItem: ReferralListItem) {
@@ -201,7 +175,7 @@ export class ReferralsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToProcesses(candidate) {
-      this._referralsService.sendCandidateInfo(candidate);
+    this._candidateInfoService.sendCandidateInfo(candidate);
       this.router.navigateByUrl('/processes');
   }
 

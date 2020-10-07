@@ -12,6 +12,11 @@ import { ReferralsContactComponent } from '../referrals-contact/referrals-contac
 import { ReferralsListComponent } from '../referrals-list/referrals-list.component';
 import { ReferralsComponent } from './referrals.component';
 import { ReferralsRoutes } from './referrals.routing';
+import { StoreModule } from '@ngrx/store';
+import { ReferralsSandbox } from './referral.sandbox';
+import { EffectsModule } from '@ngrx/effects';
+import { ReferralsEffects } from '../store/referrals.effects';
+import { referralsReducer } from '../store/referrals.reducers';
 
 @NgModule({
     declarations: [
@@ -32,7 +37,9 @@ import { ReferralsRoutes } from './referrals.routing';
         NzStepsModule,
         NzToolTipModule,
         NzTableModule,
-        NzCheckboxModule
+        NzCheckboxModule,
+        StoreModule.forFeature('referrals',  referralsReducer),
+        EffectsModule.forFeature([ReferralsEffects])
     ],
     entryComponents: [ ReferralsContactComponent, PositionAddComponent ],
     exports: [
@@ -44,7 +51,9 @@ import { ReferralsRoutes } from './referrals.routing';
         NzStepsModule,
         NzToolTipModule
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US } ]
+    providers: [
+        ReferralsSandbox,
+        { provide: NZ_I18N, useValue: en_US } ]
 })
 
 export class ReferralsModule { }
