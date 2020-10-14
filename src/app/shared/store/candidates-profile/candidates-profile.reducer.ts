@@ -50,6 +50,7 @@ export const reducer = createReducer(initialState,
     on(
         candidateProfilesActions.loadSuccess,
         (state, { candidateProfiles }) => {
+            
             const profiles = candidateProfiles.slice().sort((a, b) => (a.name).localeCompare(b.name));
             for (let i = 0; i < profiles.length; i++) {
                 if (profiles[i].name === 'N/A') {

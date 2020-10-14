@@ -38,6 +38,8 @@ import { Globals } from '@shared/utils/globals';
 import { replaceAccent } from '@shared/utils/replace-accent.util';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { Subject, Subscription } from 'rxjs';
+import { ProcessSandbox } from '@app/containers/processes/processes.sandbox';
+import { ProcessTableView } from '@shared/models/process-tableView.model';
 
 @Component({
   selector: 'app-processes',
@@ -70,18 +72,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('processStart') processStart: ElementRef;
   @ViewChild('startModalButtons') startModalButtons: ElementRef;
 
-  filteredProcesses: Process[] = [];
-  filteredOwnProcesses: Process[] = [];
-  filteredDeletedProcesses: Process[] = [];
+  filteredProcesses: ProcessTableView[] = [];
+  filteredOwnProcesses: ProcessTableView[] = [];
+  filteredDeletedProcesses: ProcessTableView[];
 
   searchValue = '';
   searchRecruiterValue = '';
   searchValueStatus = '';
   searchValueCurrentStage = '';
   listOfSearchProcesses = [];
-  listOfDisplayData = [...this.filteredProcesses];
-  listOfDisplayOwnData = [...this.filteredOwnProcesses];
-  listOfDeletedDisplayData = [...this.filteredDeletedProcesses];
+  listOfDisplayData: ProcessTableView[];
+  listOfDisplayOwnData: ProcessTableView[];
+  listOfDeletedDisplayData: ProcessTableView[];
   currentUser: User;
   sortName = null;
   sortValue = null;
@@ -123,10 +125,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   isDeclineReasonOther = false;
   isOwnedProcesses = false;
   forms: FormGroup[] = [];
-  isLoading = false;
   processId: number;
   displayNavAndSideMenu: boolean;
-
+  successMessage: string = null;
   searchSub: Subscription = new Subscription();
   processesSubscription: Subscription = new Subscription();
   saveEventSubject: Subject<number> = new Subject<number>();
@@ -138,17 +139,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   currentStage: ProcessCurrentStageEnum;
   candidateInfo: Candidate;
 
-  preOfferData: {tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum, notes: String} = null;
+  preOfferData: { tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum, notes: String } = null;
 
   constructor(
     private facade: FacadeService,
+    public processesSandbox: ProcessSandbox,
     private formBuilder: FormBuilder,
     private candidateDetailsModal: CandidateDetailsComponent,
     private app: AppComponent,
     private userDetailsModal: UserDetailsComponent,
     private router: Router,
     private _referralsService: ReferralsService,
-    private _candidateInfoService : CandidateInfoService,
+    private _candidateInfoService: CandidateInfoService,
     private globals: Globals) {
     this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
@@ -161,29 +163,31 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       instruction => this.displayNavAndSideMenu = instruction
     );
 
-    const CandidateSub = this._candidateInfoService._candidateInfoSource.subscribe(info =>
-        {
-         this.candidateInfo = info;
-        }, err => {
+    const CandidateSub = this._candidateInfoService._candidateInfoSource.subscribe(info => {
+      this.candidateInfo = info;
+    }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
     });
     this.processesSubscription.add(CandidateSub);
 
     this._referralsService.displayNavAndSideMenu(true);
     this.facade.appService.removeBgImage();
-    this.getProcesses();
-    this.getUserProcesses();
+    this.processesSandbox.loadCommunities();
+    this.processesSandbox.loadProcess();
+    this.processesSandbox.loadDeletedProcess();
     this.getDeletedProcesses();
     this.getCandidates();
     this.getUsers();
     this.getOffices();
-    this.getCommunities();
     this.getProfiles();
     this.getDeclineReasons();
     this.getSearchInfo();
     this.getReaddressReasonList();
     this.getReaddressReasonTypeList();
-
+    this.isLoading();
+    this.isSuccessful();
+    this.getError();
+    this.getProcesses();
     this.rejectProcessForm = this.formBuilder.group({
       rejectionReasonDescription: [null]
     });
@@ -196,7 +200,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       if (this.candidateInfo) {
         this.newProcessStart(this.processStart, this.startModalButtons);
       }
-    });
+    }, 1000);
+
     this.facade.appService.stopLoading();
   }
 
@@ -226,6 +231,80 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.processesSubscription.add(candidatesSubscription);
   }
 
+  isLoading() {
+    const isLoadSub = this.processesSandbox.isLoading$.subscribe(isLoading => {
+      if (isLoading) {
+        this.facade.appService.startLoading();
+      }
+    });
+    this.processesSubscription.add(isLoadSub);
+  }
+
+  isSuccessful() {
+    const successfulSub = this.processesSandbox.isSuccessful$.subscribe(isSuccessful => {
+      if (isSuccessful) {
+        if (this.successMessage) {
+          this.facade.toastrService.success(this.successMessage);
+          this._candidateInfoService.sendCandidateInfo(null);
+        }
+        this.facade.appService.stopLoading();
+        this.successMessage = null;
+        this.facade.modalService.closeAll();
+      }
+    });
+    this.processesSubscription.add(successfulSub);
+  }
+
+  getError() {
+    const errorSub = this.processesSandbox.getError$.subscribe(error => {
+      if (error) {
+        this.facade.toastrService.error(error);
+      }
+      this.facade.appService.stopLoading();
+    });
+    this.processesSubscription.add(errorSub);
+  }
+
+  getProcesses() {
+    const processesSubscription = this.processesSandbox.processes$.subscribe(processes => {
+      if (processes && processes.length > 0) {
+        this.listOfDisplayData = this.getAllProcesses(processes);
+        this.listOfDisplayOwnData = this.getOwnProcesses(processes);
+        this.filteredProcesses = this.getAllProcesses(processes);
+        this.filteredOwnProcesses = this.getOwnProcesses(processes);
+      }
+    });
+    this.processesSubscription.add(processesSubscription);
+  }
+
+  getDeletedProcesses() {
+    const deletedProcessesSubscription = this.processesSandbox.deletedProcesses$.subscribe(processes => {
+      if (processes && processes.length > 0) {
+        this.listOfDeletedDisplayData = processes;
+        this.filteredDeletedProcesses = processes;
+      }
+    });
+    this.processesSubscription.add(deletedProcessesSubscription);
+  }
+
+  getAllProcesses(processes: ProcessTableView[]) {
+    if (this.currentUser.role === 'CommunityManager') {
+      return processes.filter(process => process.candidate.community.id === this.currentUser.community.id);
+    } else {
+      return processes;
+    }
+  }
+
+  getOwnProcesses(processes: ProcessTableView[]) {
+    return processes.filter(process => {
+      if (process.userOwner !== null && typeof process.userOwner !== 'undefined') {
+        if (process.userOwner.id === this.currentUser.id) {
+          return process;
+        }
+      }
+    });
+  }
+
   getUsers() {
     const userSubscription = this.facade.userService.getData()
       .subscribe(res => {
@@ -249,16 +328,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   getCommunity(community: number): string {
     return this.communities.find(x => x.id === community).name;
-  }
-
-  getCommunities() {
-    const communitiesSubscription = this.facade.communityService.getData()
-      .subscribe(res => {
-        this.communities = res;
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-    this.processesSubscription.add(communitiesSubscription);
   }
 
   getProfiles() {
@@ -286,77 +355,11 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
-  getProcesses() {
-    const processesSubscription = this.facade.processService.getData()
-      .subscribe(res => {
-        let processes: Process[] = [];
-        if (!!res) {
-          if (this.currentUser.role === 'CommunityManager') {
-            const processesByUserRole = res.filter(process => process.candidate.community.id === this.currentUser.community.id);
-            processes = res;
-          } else {
-            processes = res;
-          }
-          this.filteredProcesses = processes;
-          this.listOfDisplayData = processes;
-          const newProc: Process = processes[processes.length - 1];
-          if (newProc && newProc.candidate) {
-            this.candidatesFullList.push(newProc.candidate);
-          }
-        }
-
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-    this.processesSubscription.add(processesSubscription);
-  }
-
-  getDeletedProcesses(){    
-    const userProcessesSubscription = this.facade.processService.getDeletedProcesses()
-      .subscribe(res => {
-        let result = [];
-        if (!!res) {
-          this.listOfDeletedDisplayData = res;
-          this.filteredDeletedProcesses = res;
-        }
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-    this.processesSubscription.add(userProcessesSubscription);
-  }
-
-  getUserProcesses() {
-    
-    const userProcessesSubscription = this.facade.processService.getData()
-      .subscribe(res => {
-        let result = [];
-        if (!!res) {
-          result = res.filter(res => {
-            if (res.userOwner !== null && typeof res.userOwner !== 'undefined') {
-              if (res.userOwner.id === this.currentUser.id) {
-                return res;
-              }
-            }
-          });
-          this.listOfDisplayOwnData = result;
-          this.filteredOwnProcesses = result;
-          const newProc: Process = result[result.length - 1];
-
-          if (newProc && newProc.candidate) {
-            this.candidatesFullList.push(newProc.candidate);
-          }
-        }
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-    this.processesSubscription.add(userProcessesSubscription);
-  }
   getSearchInfo() {
     this.searchSub = this.facade.searchbarService.searchChanged.subscribe(data => {
 
       this.listOfDisplayData = this.filteredProcesses;
       this.listOfDisplayOwnData = this.filteredOwnProcesses;
-      this.listOfDeletedDisplayData = this.filteredDeletedProcesses;
 
       const allProcesses = this.listOfDisplayData.filter(process => {
         const fullName = process.candidate.name + process.candidate.lastName;
@@ -369,22 +372,15 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
         return fullName.toString().toUpperCase().indexOf(value) !== -1;
       });
 
-      const deletedProcesses = this.listOfDeletedDisplayData.filter(process => {
-        const fullName = process.candidate.name + process.candidate.lastName;
-        const value = data.toString().toUpperCase();
-        return fullName.toString().toUpperCase().indexOf(value) !== -1;
-      });
-
       this.listOfDisplayData = allProcesses;
       this.listOfDisplayOwnData = ownProcesses;
-      this.listOfDeletedDisplayData = deletedProcesses;
     });
     this.processesSubscription.add(this.searchSub);
   }
 
-  showApproveProcessConfirm(processID: number): void {
-    const procesToApprove: Process = this.filteredProcesses.find(p => p.id === processID);
-    const processText = procesToApprove.candidate.name.concat(' ').concat(procesToApprove.candidate.lastName);
+  showApproveProcessConfirm(process: Process): void {
+
+    const processText = process.candidate.name.concat(' ').concat(process.candidate.lastName);
     const title = 'Are you sure you want to approve the process for ' +
       processText + '? This will approve all stages associated with the process';
     this.facade.modalService.confirm({
@@ -393,22 +389,13 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.approveProcess(processID)
+      nzOnOk: () => this.approveProcess(process.id)
     });
   }
 
-  approveProcess(processID: number) {
-    this.facade.appService.startLoading();
-    this.facade.processService.approve(processID)
-      .subscribe(res => {
-        this.getProcesses();
-        this.getCandidates();
-        this.facade.appService.stopLoading();
-        this.facade.toastrService.success('Process approved!');
-      }, err => {
-        this.facade.appService.stopLoading();
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
+  approveProcess(processId: number) {
+    this.successMessage = 'Process approved';
+    this.processesSandbox.approveProcess(processId);
   }
 
   showStepsModal(process: Process): void {
@@ -416,9 +403,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.isDetailsVisible = true;
   }
 
-  rejectProcess(processID: number, modalContent: TemplateRef<{}>) {
+  rejectProcess(process: Process, modalContent: TemplateRef<{}>) {
     this.rejectProcessForm.reset();
-    const process: Process = this.filteredProcesses.filter(p => p.id === processID)[0];
     const modal = this.facade.modalService.create({
       nzWrapClassName: 'recru-modal',
       nzTitle: 'Are you sure you want to reject the process for ' + process.candidate.name + ' ' + process.candidate.lastName + '?',
@@ -444,55 +430,34 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
               }
             }
             if (isCompleted) {
-              const rejectionReason = '';
-              this.facade.processService.reject(processID, rejectionReason)
-                .subscribe(res => {
-                  this.getCandidates();
-                  this.getProcesses();
-                  this.facade.appService.stopLoading();
-                  modal.destroy();
-                  this.facade.toastrService.success('Process and associated candidate were rejected');
-                }, err => {
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err.message);
-                });
+              const rejectionReason = this.rejectProcessForm.get('rejectionReasonDescription').value;
+              this.successMessage = 'Process and associated candidate were rejected';
+              this.processesSandbox.rejectProcess(process.id, rejectionReason);
             }
-            this.facade.appService.stopLoading();
           }
         }
       ]
     });
   }
 
-  reactivateProcess(processID: number){
-      const process: Process = this.listOfDeletedDisplayData.find(p => p.id === processID);
-      const processText = process.candidate.name.concat(' ').concat(process.candidate.lastName);
-      this.facade.modalService.confirm({
-        nzTitle: 'Are you sure you want to reactivate the process for ' + processText + ' ?',
-        nzContent: '',
-        nzOkText: 'Yes',
-        nzOkType: 'danger',
-        nzCancelText: 'No',
-        nzOnOk: () => this.facade.processService.reactivate(processID)
-          .subscribe(res => {
-            this.getDeletedProcesses();
-            this.getProcesses();
-            this.getCandidates();
-            this.facade.toastrService.success('Process was reactivated!');
-          }, err => {
-            this.facade.toastrService.error(err.message);
-          })
-      });
+  reactivateProcess(processID: number) {
+    const process: ProcessTableView = this.listOfDeletedDisplayData.find(p => p.id === processID);
+    const processText = process.candidate.name.concat(' ').concat(process.candidate.lastName);
+    this.facade.modalService.confirm({
+      nzTitle: 'Are you sure you want to reactivate the process for ' + processText + ' ?',
+      nzContent: '',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzCancelText: 'No',
+      nzOnOk: () => {
+        this.processesSandbox.reactivate(processID);
+      }
+    });
   }
 
   reset(): void {
     this.searchValue = '';
     this.search();
-  }
-
-  resetRecruiter(): void {
-    this.searchRecruiterValue = '';
-    this.searchRecruiter();
   }
 
   triggerSearch(val) {
@@ -511,42 +476,20 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.nameDropdown.nzVisible = false;
   }
 
-  triggerSearchRecruiter(val) {
-    this.searchRecruiterValue = val;
-    this.searchRecruiter();
+  getFullProcess(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number) {
+    this.processesSandbox.getProcessById(processId)
+      .subscribe(process => {
+        this.showProcessStart(modalContent, footer, process);
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
-  searchRecruiter(): void {
-    // tslint:disable-next-line:max-line-length
-    const data = this.filteredProcesses.filter(item => item.userDelegateId === this.currentUser.id || item.userOwnerId === this.currentUser.id);
-    this.listOfDisplayOwnData = data.sort((a, b) => (this.sortValue === 'ascend') ? (a[this.sortName] > b[this.sortName] ? 1 : -1) : (b[this.sortName] > a[this.sortName] ? 1 : -1));
-    this.communitySearchName = 'ALL';
-    this.profileSearchName = 'ALL';
-  }
-
-  // This function is called when user clicks MY PROCESSES tab, it fetch processes that are created by the user.
-  searchOwnRecruiter(): void {
-    this.searchRecruiterValue = this.currentUser.firstName + ' ' + this.currentUser.lastName;
-    this.getUserProcesses();
-    this.isOwnedProcesses = true;
-  }
-
-  // This function is called when user clicks BA STUDIO tab, it fetch all processes.
-  searchAllProcess() {
-    this.getProcesses();
-    this.isOwnedProcesses = false;
-  }
-
-  searchDeletedProcesses(){
-    this.getDeletedProcesses();
-  }
-
-  showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, processId: number): void {
-    this.processId = processId;
+  showProcessStart(modalContent: TemplateRef<{}>, footer: TemplateRef<{}>, process: Process): void {
+    this.emptyProcess = process;
     this.facade.appService.startLoading();
     this.preOfferData = null;
-    if (processId > -1) {
-      this.emptyProcess = this.filteredProcesses.filter(p => p.id === processId)[0];
+    if (this.emptyProcess.id > -1) {
       this.isEdit = true;
       this.openFromEdit = true;
       if (this.currentUser.role === 'Admin' || this.currentUser.role === 'Recruiter') {
@@ -554,7 +497,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       } else {
         this.stepIndex = 0;
       }
-      this.getPreOfferData(processId);
+      this.getPreOfferData(this.emptyProcess.id);
     } else {
       this.emptyProcess = undefined;
     }
@@ -620,22 +563,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.userDetailsModal.showModal(modalContent, this.emptyUser.firstName);
   }
 
-  showDeleteConfirm(processID: number): void {
-    const procesDelete: Process = this.filteredProcesses.find(p => p.id === processID);
-    const processText = procesDelete.candidate.name.concat(' ').concat(procesDelete.candidate.lastName);
+  showDeleteConfirm(processDelete: Process): void {
+    this.successMessage = 'Process was deleted';
+    const processText = processDelete.candidate.name.concat(' ').concat(processDelete.candidate.lastName);
     this.facade.modalService.confirm({
       nzTitle: 'Are you sure you want to delete the process for ' + processText + ' ?',
       nzContent: '',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzCancelText: 'No',
-      nzOnOk: () => this.facade.processService.delete(processID)
-        .subscribe(res => {
-          this.getProcesses();
-          this.facade.toastrService.success('Process was deleted !');
-        }, err => {
-          this.facade.toastrService.error(err.message);
-        })
+      nzOnOk: () => {
+        this.processesSandbox.deleteProcess(processDelete.id);
+      }
     });
   }
 
@@ -746,7 +685,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.facade.appService.startLoading();
       let newCandidate: Candidate;
       let newProcess: Process;
-      this.isLoading = true;
       newCandidate = this.candidateAdd.getFormData();
       if (this.candidateInfo) {
         newCandidate.id = this.candidateInfo.id;
@@ -766,89 +704,29 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       newProcess.offerStage.userOwnerId = this.currentUser.id;
       if (!this.isEdit) {
         if (!newCandidate.id) {
+          this.successMessage = 'The process was successfully saved';
           this.facade.candidateService.add(newCandidate).subscribe(res => {
             newProcess.candidate.id = res.id;
-            this.currentCandidate.id = res.id;
-            this.facade.processService.add(newProcess)
-              .subscribe(() => {
-                this.saveEventSubject.next(res.id);
-                this.isLoading = false;
-                this.facade.appService.stopLoading();
-                this.facade.toastrService.success('The process was successfully saved !');
-                this.createEmptyProcess(newCandidate);
-                this.closeModal();
-              }, err => {
-                this.isEdit = true;
-                this.isLoading = false;
-                this.facade.appService.stopLoading();
-                this.facade.toastrService.error(err);
-              });
+            this.processesSandbox.addProcess(newProcess);
           }, err => {
-            this.isLoading = false;
             this.facade.appService.stopLoading();
             this.facade.errorHandlerService.showErrorMessage(err);
           });
         } else {
-          this.facade.processService.add(newProcess)
-            .subscribe(res => {
-              newCandidate.status = CandidateStatusEnum.InProgress;
-              this.saveEventSubject.next(res.id);
-              this.isLoading = false;
-              this.facade.appService.stopLoading();
-              this.facade.toastrService.success('The process was successfully saved !');
-              let emptyCandidate: Candidate;
-              this._candidateInfoService.sendCandidateInfo(emptyCandidate);
-              this.createEmptyProcess(newCandidate);
-              this.closeModal();
-            }, err => {
-              this.isLoading = false;
-              this.facade.appService.stopLoading();
-              this.facade.toastrService.error(err);
-            });
+          // Save only new process (new referral)
+          this.successMessage = 'Process was successfully saved';
+          this._candidateInfoService.sendCandidateInfo(null);
+          this.processesSandbox.addProcess(newProcess);
         }
       } else {
+        // Update process
+        this.successMessage = 'Process was successfully updated';
         this.facade.candidateService.update(newCandidate.id, newCandidate)
           .subscribe(() => {
-            this.isLoading = false;
+            this.processesSandbox.updateProcess(newProcess);
           }, err => {
-            this.isLoading = false;
             this.facade.appService.stopLoading();
             this.facade.errorHandlerService.showErrorMessage(err);
-          });
-        this.facade.processService.getByID(newProcess.id)
-          .subscribe(res => {
-            if (!res || newProcess.id == 0) {
-              this.facade.processService.add(newProcess)
-                .subscribe(() => {
-                  this.saveEventSubject.next(newCandidate.id);
-                  this.isLoading = false;
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.success('The process was successfully saved !');
-                  this.createEmptyProcess(newCandidate);
-                  this.closeModal();
-                }, err => {
-                  this.isLoading = false;
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err);
-                });
-            } else {
-              this.facade.processService.update(newProcess.id, newProcess)
-                .subscribe(() => {
-                  this.isLoading = false;
-                  this.saveEventSubject.next(newProcess.id);
-                  this.facade.processService.currentId.next(newProcess.id);
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.success('The process was successfully saved !');
-                  this.createEmptyProcess(newCandidate);
-                  this.closeModal();
-                }, err => {
-                  this.facade.appService.stopLoading();
-                  this.facade.toastrService.error(err.message);
-                });
-            }
-          }, err => {
-            this.facade.appService.stopLoading();
-            this.facade.toastrService.error(err.message);
           });
       }
     }
@@ -971,7 +849,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   refreshTable() {
-    this.getProcesses();
     this.getCandidates();
   }
 
@@ -1163,13 +1040,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
-
-  ngOnDestroy() {
-    this.processesSubscription.unsubscribe();
-  }
-
   clearDataAndCloseModal() {
-    this.clientStage.clearInterviewOperations();
     let emptyCandidate: Candidate;
     this._candidateInfoService.sendCandidateInfo(emptyCandidate);
     this.closeModal();
@@ -1204,5 +1075,9 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       let emptyCandidate: Candidate;
       this._candidateInfoService.sendCandidateInfo(emptyCandidate);
     }
+  }
+
+  ngOnDestroy() {
+    this.processesSubscription.unsubscribe();
   }
 }

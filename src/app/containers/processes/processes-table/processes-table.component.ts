@@ -3,6 +3,7 @@ import { CandidateProfile } from '@shared/models/candidate-profile.model';
 import { ColumnItem } from '@shared/models/column-item.model';
 import { Community } from '@shared/models/community.model';
 import { Globals } from '@shared/utils/globals';
+import { Process } from '@shared/models/process.model';
 
 @Component({
     selector: 'app-processes-table',
@@ -13,21 +14,20 @@ import { Globals } from '@shared/utils/globals';
 export class ProcessTableComponent implements OnChanges {
 
     @Input() listOfDisplayData;
-    @Input() filteredProcesses;
     @Input() profiles: CandidateProfile[];
     @Input() communities: Community[];
     @Input() statusList;
     @Input() currentStageList;
     @Input() emptyProcess;
+    @Input() filteredProcesses;
 
     @Output() candidateId = new EventEmitter();
     @Output() userId = new EventEmitter();
-    @Output() showProcessStart = new EventEmitter();
-    @Output() showDeleteConfirm = new EventEmitter();
-    @Output() showApproveProcessConfirm = new EventEmitter();
-    @Output() rejectProcess = new EventEmitter();
+    @Output() showProcessStart = new EventEmitter<number>();
+    @Output() showDeleteConfirm = new EventEmitter<Process>();
+    @Output() showApproveProcessConfirm = new EventEmitter<Process>();
+    @Output() rejectProcess = new EventEmitter<Process>();
     @Output() reactivateProcess = new EventEmitter();
-
 
     selectedProfiles = [];
     selectedCommunities = [];
@@ -40,13 +40,14 @@ export class ProcessTableComponent implements OnChanges {
     seniorityList: any[];
     listOfColumns: ColumnItem[];
 
-    constructor(private globals: Globals ){
+    constructor(private globals: Globals) {
         this.seniorityList = globals.seniorityList;
         this.statusList = globals.processStatusList;
 
     }
 
     ngOnChanges() {
+
         if (this.profiles && this.communities) {
             this.communities = this.communities.filter(community => community.name != 'N/A');
             this.statusList = this.statusList.filter(status => status.name != 'N/A');
@@ -124,28 +125,28 @@ export class ProcessTableComponent implements OnChanges {
         this.userId.emit(id);
     }
 
-    emitEdit(id) {
-        this.showProcessStart.emit(id);
+    emitEdit(processId: number) {
+        this.showProcessStart.emit(processId);
     }
 
-    emitDelete(id) {
-        this.showDeleteConfirm.emit(id);
+    emitDelete(process: Process) {
+        this.showDeleteConfirm.emit(process);
     }
 
-    emitApproval(id) {
-        this.showApproveProcessConfirm.emit(id);
+    emitApproval(process: Process) {
+        this.showApproveProcessConfirm.emit(process);
     }
 
-    emitReject(id) {
-        this.rejectProcess.emit(id);
+    emitReject(process: Process) {
+        this.rejectProcess.emit(process);
     }
 
-    emitReactivate(id){
+    emitReactivate(id) {
         this.reactivateProcess.emit(id);
     }
 
     getStatus(status: number): string {
-        return this.statusList.find(st => st.id === status).name;        
+        return this.statusList.find(st => st.id === status).name;
     }
 
     getCurrentStage(cr: number): string {
@@ -153,5 +154,15 @@ export class ProcessTableComponent implements OnChanges {
     }
     getSeniority(id: number): string {
         return this.seniorityList.find(seniority => seniority.id === id).name;
+    }
+
+    getCommunityName(communityId: number) {
+        const community = this.communities.find(comm => comm.id === communityId);
+        return community ? community.name : null;
+    }
+
+    getProfileName(profileId) {
+        const profile = this.profiles.find(prof => prof.id === profileId);
+        return profile ? profile.name : null;
     }
 }

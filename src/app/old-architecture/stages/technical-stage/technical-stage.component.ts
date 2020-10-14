@@ -168,7 +168,7 @@ export class TechnicalStageComponent implements OnInit, OnDestroy {
       this.selectedSeniority.emit(seniorityId);
       this.selectedSeniorities = [];
       if (seniorityId !== this.seniorityList.find(
-        s => s.id === this.technicalForm.controls['alternativeSeniority'].value).id) {
+        s => s.id === this.technicalForm.controls['alternativeSeniority'].value)?.id) {
         this.selectedSeniorities[0] = this.seniorityList.find(s => s.id === seniorityId);
         // N/A should be shown in offer stage?
         this.selectedSeniorities[1] = this.seniorityList.find(s => s.id === this.technicalForm.controls['alternativeSeniority'].value);

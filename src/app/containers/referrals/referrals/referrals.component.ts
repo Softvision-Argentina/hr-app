@@ -156,7 +156,6 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   change(value: boolean): void {
-    console.log(value);
   }
 
   clickMe(): void {

@@ -111,7 +111,12 @@ export class ReferralsContactComponent implements OnInit {
   ngOnInit() {
     this._referralsService._isReferralSource.subscribe(referral => this.isReferral = referral);
     if (this.communities) {
-      this.filteredCommunity = this.communities.slice().sort((a, b) => (a.name.localeCompare(b.name)));
+      this.filteredCommunity = this.communities;
+    }
+    if (this.isReferral) {
+      this.service = this.facade.referralsService;
+    } else {
+      this.service = this.facade.candidateService;
     }
     this.visible = this._visible;
     this.isNewCandidate = this.visible;

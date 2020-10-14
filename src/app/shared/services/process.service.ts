@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '@shared/utils/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { catchError, tap } from 'rxjs/operators';
 import { Process } from '@shared/models/process.model';
 import { Candidate } from '@shared/models/candidate.model';
 import { Globals } from '../utils/globals';
 import { User } from '@shared/models/user.model';
+import { ProcessTableView } from '@shared/models/process-tableView.model';
 
 @Injectable()
 export class ProcessService extends BaseService<Process> {
@@ -32,7 +33,7 @@ export class ProcessService extends BaseService<Process> {
 
   public getActiveProcessByCandidate(candidateId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/candidate/${candidateId}`,
-      {headers: this.headersWithAuth, observe: 'body'})
+      { headers: this.headersWithAuth, observe: 'body' })
       .pipe(
         tap(data => { }),
         catchError(this.handleErrors)
@@ -41,7 +42,7 @@ export class ProcessService extends BaseService<Process> {
 
   public getDeletedProcesses(): Observable<any> {
     return this.http.get(`${this.apiUrl}/DeletedProcesses/`,
-      {headers: this.headersWithAuth, observe: 'body'})
+      { headers: this.headersWithAuth, observe: 'body' })
       .pipe(
         tap(data => { }),
         catchError(this.handleErrors)
@@ -56,7 +57,7 @@ export class ProcessService extends BaseService<Process> {
           tap(data => { }),
           catchError(this.handleErrors)
         );
-    }      
+    }
     if (currentUser.role === "Interviewer") {
       return this.http.get(`${this.apiUrl}/owner/${currentUser.id}`,
         { headers: this.headersWithAuth, observe: "body" })
@@ -66,24 +67,19 @@ export class ProcessService extends BaseService<Process> {
         );
     }
     return this.get();
-    
   }
-  public approve(processID: number): Observable<any> {
-    return this.http.post(this.apiUrl + '/Approve', processID, {
-      headers: this.headersWithAuth, observe: 'response'
-    })
-      .pipe(
-        tap(() => this.get().subscribe()),
-        catchError(this.handleErrors)
-      );
+  public approve(processID: number) {
+    return this.http.post<ProcessTableView>(this.apiUrl + '/Approve', processID, {
+      headers: this.headersWithAuth
+    });
   }
 
   public reactivate(processID: number): Observable<any> {
     return this.http.post(this.apiUrl + '/Reactivate', processID, {
-      headers: this.headersWithAuth, observe: 'response'
+      headers: this.headersWithAuth, observe: 'body'
     })
       .pipe(
-        tap(() => this.get().subscribe()),
+        tap(data => { }),
         catchError(this.handleErrors)
       );
   }
@@ -104,7 +100,7 @@ export class ProcessService extends BaseService<Process> {
 
   public updateProcessCandidate(processID: number, process: Process, candidateID: number, candidate: Candidate): Observable<any> {
     const processUrl = `${this.apiUrl}/${processID.toString()}`;
-    const candidateUrl =  `${this.candidatesUrl}/${candidateID.toString()}`;
+    const candidateUrl = `${this.candidatesUrl}/${candidateID.toString()}`;
 
     const processCall = this.http.put(processUrl, process, {
       headers: this.headersWithAuth
@@ -121,5 +117,19 @@ export class ProcessService extends BaseService<Process> {
     );
 
     return forkJoin([processCall, candidateCall]);
+  }
+
+  public getTableView() {
+    const url = this.apiUrl + '/tableView';
+    return this.http.get<ProcessTableView[]>(url, {
+      headers: this.headersWithAuth
+    });
+  }
+
+  public addProcess(process: Process) {
+    const url = this.apiUrl + '/tableView';
+    return this.http.post<ProcessTableView>(url, process, {
+      headers: this.headersWithAuth
+    });
   }
 }

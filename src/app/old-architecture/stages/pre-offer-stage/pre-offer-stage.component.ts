@@ -15,6 +15,7 @@ import { Globals } from '@shared/utils/globals';
 import { CanShowReaddressPossibility, formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { PreOfferHistory } from '../pre-offer-history/pre-offer-history.component';
 import { resizeModal } from '@app/shared/utils/resize-modal.util';
+import { Process } from '@shared/models/process.model';
 
 @Component({
   selector: 'pre-offer-stage',
@@ -87,7 +88,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   @Input() preOfferStage: PreOfferStage;
   @Input() readdressReasonList: ReaddressReason[] = [];
   @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
-
+  @Input() processes: Process[] = [];
   @ViewChild(PreOfferHistory) preOfferHistory: PreOfferHistory;
   @Output() selectedSeniority = new EventEmitter();
   constructor(
@@ -105,7 +106,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
+    this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.processes, this.processId));
     this.currentStageStatus = this.preOfferStage.status;
     let stageName = StageStatusEnum[this.currentStageStatus].toLowerCase();
     this.readdressFilteredList = this.readdressReasonList?.filter((reason) => { return reason.type.toLowerCase() == stageName });
@@ -121,7 +122,7 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
       this.readdressStatus.feedback = this.preOfferStage.readdressStatus.feedback;
       this.readdressStatus.fromStatus = this.preOfferStage.status;
       this.readdressStatus.toStatus = this.preOfferStage.readdressStatus.toStatus;
-      this.readdressStatus.id = this.preOfferStage.readdressStatus.id
+      this.readdressStatus.id = this.preOfferStage.readdressStatus.id;
     }
 
     this.processService.selectedSeniorities.subscribe(sr => {
@@ -130,8 +131,8 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     });
     this.changeFormStatus(false);
     if (this.preOfferStage) { this.fillForm(this.preOfferStage); }
-    this.preOfferForm.controls['dni'].setAsyncValidators(UniqueDniValidator(this.facade.processService.data.value, this.processId));
   }
+
 
   ngOnChanges() {
     this.setFieldValidations();

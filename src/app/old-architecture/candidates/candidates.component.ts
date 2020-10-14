@@ -159,7 +159,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   getCommunities() {
     const communitiesSubscription = this.facade.communityService.getData().subscribe(res => {
       if (!!res) {
-        this.communities = res.sort((a, b) => (a.name.localeCompare(b.name)));
+        this.communities = res.slice().sort((a, b) => (a.name.localeCompare(b.name)));
       }
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);

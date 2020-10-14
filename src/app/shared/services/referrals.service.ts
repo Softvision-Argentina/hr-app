@@ -139,11 +139,7 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
       tap(res => this.candidateDelete.next(referralId))
     );
   }
-
-  public sendCandidateInfo(info: Candidate) {
-    this._candidateInfoSource.next(info);
-  }
-
+  
   public setIsReferral() {
     this._isReferralSource.next(true);
   }

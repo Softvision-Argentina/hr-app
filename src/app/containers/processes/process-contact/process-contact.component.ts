@@ -13,7 +13,7 @@ import { tap } from 'rxjs/operators';
 import { AppComponent } from '@app/app.component';
 import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { CandidateDetailsComponent } from '@old-architecture/candidates/details/candidate-details.component';
-import { ProcessesComponent } from '@old-architecture/processes/processes/processes.component';
+import { ProcessesComponent } from '@app/containers/processes/processes/processes.component';
 import { CandidateStatusEnum } from '@shared/enums/candidate-status.enum';
 import { UniqueEmailValidator } from '@app/shared/utils/email.validator';
 

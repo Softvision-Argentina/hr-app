@@ -11,17 +11,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'processes',
-    loadChildren: () => import('@old-architecture/processes/processes/processes.module').then(m => m.ProcessesModule),
+    loadChildren: () => import('@app/containers/processes/processes/processes.module').then(m => m.ProcessesModule),
     canLoad: [HRGuard]
   },
   {
     path: 'process-details/:id',
-    loadChildren: () => import('@old-architecture/processes/process-detail/processes-detail.module').then(m => m.ProcessDetailModule),
-    canLoad: [HRGuard]
-  },
-  {
-    path: 'process-steps/:id',
-    loadChildren: () => import('@old-architecture/processes/process-steps/process-steps.module').then(m => m.ProcessStepsModule),
+    loadChildren: () => import('@app/containers/processes/process-detail/processes-detail.module').then(m => m.ProcessDetailModule),
     canLoad: [HRGuard]
   },
   {

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CandidateStatusEnum } from '@app/shared/enums/candidate-status.enum';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
@@ -61,15 +61,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   public set communities(value: Community[]) {
     this.comms = value;
   }
-
-  // @Input()
-  // private _candidateProfiles: CandidateProfile[];
-  // public get candidateProfiles(): CandidateProfile[] {
-  //   return this._candidateProfiles;
-  // }
-  // public set candidateProfiles(value: CandidateProfile[]) {
-  //   this.profiles = value;
-  // }
 
   profiles: CandidateProfile[];;
 
@@ -157,14 +148,15 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
+
     setTimeout(() => {
       if (this.candidateInfo) {
         this.fillCandidateForm(this.candidateInfo);
       } else {
         this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
       }
-
     });
+
   }
 
   getProfiles() {
@@ -312,13 +304,11 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
           } else {
             this.availableProfiles = this.profiles;
             this.addNaProfileToProfileList();
-
           }
         });
       this.candidateSubscriptions.push(profileCommunitySub);
     } else {
       this.availableProfiles = this.communities[communityIndex].profiles;
-      console.log(this.availableProfiles)
       this.addNaProfileToProfileList();
 
     }
@@ -330,6 +320,20 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   getFormControl(name: string): AbstractControl {
     return this.candidateForm.controls[name];
+  }
+
+  setProfile() {
+    if (this.naProfile) {
+      if (this.candidateForm.controls.profile.value === this.naProfile.id) {
+        return null;
+      }
+    }
+
+    if (this.candidateForm.controls.profile.value) {
+      return new CandidateProfile(this.candidateForm.controls.profile.value);
+    } else {
+      return null;
+    }
   }
 
   getFormData(): Candidate {
@@ -353,10 +357,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       candidateSkills: null,
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
-      user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
+      user: this.currentUser,
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
-      profile: this.candidateForm.controls['profile'].value === null || this.candidateForm.controls['profile'].value === this.naProfile.id ? null : new CandidateProfile(this.candidateForm.controls['profile'].value),
+      profile: this.setProfile(),
       community: this.candidateForm.controls['community'].value === null ? null : new Community(this.candidateForm.controls['community'].value),
       isReferred: this.candidateForm.controls['isReferred'].value === null ? false : this.candidateForm.controls['community'].value,
       cv: this.candidateForm.controls['cv'].value === null ? null : this.candidateForm.controls['cv'].value,

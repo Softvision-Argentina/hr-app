@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { CandidateDetailsComponent } from '@old-architecture/candidates/details/candidate-details.component';
-import { ProcessContactComponent } from '@old-architecture/processes/process-contact/process-contact.component';
 import { OpenPositionsComponent } from '../containers/referrals/open-positions/open-positions.component';
 import { ClientStageComponent } from '@old-architecture/stages/client-stage/client-stage.component';
 import { HireStageComponent } from '@old-architecture/stages/hire-stage/hire-stage.component';
@@ -21,10 +20,12 @@ import { RecruInputDirective } from './directives/recru-input.directive';
 import { IconsProviderModule } from './icons-provider.module';
 import { PipesModule } from './pipes/pipes.module';
 import { ReferralsContactComponent } from '@app/containers/referrals/referrals-contact/referrals-contact.component';
-
 import { CommunitiesSandbox } from '@app/containers/settings/communities/communities.sandbox';
 import { OfficeSandbox } from '@app/containers/settings/office/office.sandbox';
 import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
+import { CandidatesProfileComponent } from '@app/containers/settings/candidates-profile/candidates-profile.component';
+import { CommunitiesComponent } from '@app/containers/settings/communities/communities.component';
+import { ProcessContactComponent } from '@app/containers/processes/process-contact/process-contact.component';
 
 @NgModule({
     imports: [
@@ -122,6 +123,6 @@ import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
         RecruInputDirective,
         ReferralsContactComponent
     ],
-    providers: [CommunitiesSandbox,OfficeSandbox,RoomSandbox, { provide: NZ_I18N, useValue: en_US }]
+    providers: [CommunitiesSandbox, OfficeSandbox , RoomSandbox, { provide: NZ_I18N, useValue: en_US }]
 })
 export class SharedModule { }

@@ -263,5 +263,8 @@
       }
     }
   },
-  "defaultProject": "recru-webapp"
+  "defaultProject": "recru-webapp",
+  "cli": {
+    "analytics": false
+  }
 }

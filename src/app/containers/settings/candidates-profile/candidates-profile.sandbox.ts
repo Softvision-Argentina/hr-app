@@ -33,7 +33,7 @@ export class CandidateProfilesSandbox extends Sandbox {
     }
 
     editCandidateProfile(candidateProfile: CandidateProfile) {
-        this.appState$.dispatch(candidateProfilesActions.edit({ candidateProfile: candidateProfile }));
+        this.appState$.dispatch(candidateProfilesActions.edit({ candidateProfile }));
     }
 
     resetFailed() {
