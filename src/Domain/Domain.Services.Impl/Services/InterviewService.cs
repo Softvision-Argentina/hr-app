@@ -41,7 +41,6 @@ namespace Domain.Services.Impl.Services
         public void Delete(int id)
         {
             Interview interview = this.interviewRepository.Query().Where(_ => _.Id == id).FirstOrDefault();
-
             this.interviewRepository.Delete(interview);
             this.unitOfWork.Complete();
         }
@@ -51,6 +50,22 @@ namespace Domain.Services.Impl.Services
             var interview = this.mapper.Map<Interview>(contract);
 
             var updatedInterview = this.interviewRepository.Update(interview);
+            this.unitOfWork.Complete();
+        }
+
+        public void UpdateMany(int clientStageId, List<CreateInterviewContract> contracts)
+        {
+            foreach (var interview in this.interviewRepository.Query().Where(_ => _.ClientStageId == clientStageId))
+            {
+                this.interviewRepository.Delete(interview);
+            }
+
+            foreach (var contract in contracts)
+            {
+                var interview = this.mapper.Map<Interview>(contract);
+                this.interviewRepository.Create(interview);
+            }
+
             this.unitOfWork.Complete();
         }
 
