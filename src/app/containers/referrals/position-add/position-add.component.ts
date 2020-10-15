@@ -34,7 +34,7 @@ export class PositionAddComponent implements OnInit {
     seniority: [null, [Validators.required]],
     studio: ['',[Validators.required, Validators.maxLength(40)]],
     priority: [false],
-    jobDescription: [null, [Validators.required, Validators.maxLength(1000)]]
+    jobDescription: [null, [Validators.required, Validators.maxLength(10000)]]
   });
 
   constructor(private fb: FormBuilder, private globals: Globals, private facade: FacadeService,  private modalService: NzModalService) {
