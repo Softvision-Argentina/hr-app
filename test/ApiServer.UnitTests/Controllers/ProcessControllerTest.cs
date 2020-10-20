@@ -210,10 +210,8 @@ namespace ApiServer.UnitTests.Controllers
             };
 
             this.mockMapper.Setup(_ => _.Map<CreateProcessContract>(It.IsAny<CreateProcessViewModel>())).Returns(new CreateProcessContract());
-            this.mockMapper.Setup(_ => _.Map<CreatedProcessViewModel>(It.IsAny<CreatedProcessContract>())).Returns(expectedValue);
-            // Tuve que cambiar 'new CreatedProcessContract()' a 'new Process()' porque ese es el tipo que tendría que ir como parámetro.
-            // No se cómo es que compilaba antes. No sé de tests así que alguien que sepa que se fije bien por favor. -Teo Benavides
             this.mockService.Setup(_ => _.Create(It.IsAny<CreateProcessContract>())).Returns(new Process());
+            this.mockMapper.Setup(_ => _.Map<CreatedProcessViewModel>(It.IsAny<Process>())).Returns(expectedValue);
 
             var result = this.controller.Post(processVM);
 
@@ -226,7 +224,7 @@ namespace ApiServer.UnitTests.Controllers
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
             this.mockService.Verify(_ => _.Create(It.IsAny<CreateProcessContract>()), Times.Once);
-            this.mockMapper.Verify(_ => _.Map<CreatedProcessViewModel>(It.IsAny<CreatedProcessContract>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<CreatedProcessViewModel>(It.IsAny<Process>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Put' returns AcceptedResult")]
@@ -234,52 +232,25 @@ namespace ApiServer.UnitTests.Controllers
         {
             var processId = 0;
             var processToUpdate = new UpdateProcessViewModel();
-            var expectedValue = new List<ReadedProcessViewModel>();
-            expectedValue.Add(new ReadedProcessViewModel
-            {
-                Id = 0,
-                CreatedDate = DateTime.Now,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(1),
-                Status = ProcessStatus.InProgress,
-                CurrentStage = ProcessCurrentStage.HrStage,
-                RejectionReason = string.Empty,
-                DeclineReason = null,
-                CandidateId = 0,
-                Candidate = null,
-                Postulant = null,
-                UserOwnerId = 0,
-                UserOwner = null,
-                UserDelegateId = 0,
-                UserDelegate = null,
-                EnglishLevel = EnglishLevel.Advanced,
-                Seniority = Seniority.Senior3,
-                HireDate = DateTime.Now.AddMonths(1),
-                HrStage = null,
-                TechnicalStage = null,
-                ClientStage = null,
-                OfferStage = null,
-            });
+            var expectedValue = new TableProcessViewModel();
 
             this.mockMapper.Setup(_ => _.Map<UpdateProcessContract>(It.IsAny<UpdateProcessViewModel>())).Returns(new UpdateProcessContract());
-            this.mockMapper.Setup(_ => _.Map<List<ReadedProcessViewModel>>(It.IsAny<IEnumerable<ReadedProcessContract>>())).Returns(expectedValue);
-            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateProcessContract>()));
-            this.mockService.Setup(_ => _.List()).Returns(new[] { new ReadedProcessContract() });
+            this.mockService.Setup(_ => _.Update(It.IsAny<UpdateProcessContract>())).Returns(new Process());
+            this.mockMapper.Setup(_ => _.Map<TableProcessViewModel>(It.IsAny<Process>())).Returns(new TableProcessViewModel());
 
             var result = this.controller.Put(processId, processToUpdate);
 
             Assert.NotNull(result);
-            Assert.IsType<AcceptedResult>(result);
+            Assert.IsType<CreatedResult>(result);
 
-            var resultData = (result as AcceptedResult).Value as List<ReadedProcessViewModel>;
+            var resultData = (result as CreatedResult).Value as TableProcessViewModel;
             var resultAsJson = JsonConvert.SerializeObject(resultData);
             var expectedValueAsJson = JsonConvert.SerializeObject(expectedValue);
 
             Assert.Equal(expectedValueAsJson, resultAsJson);
             this.mockService.Verify(_ => _.Update(It.IsAny<UpdateProcessContract>()), Times.Once);
-            this.mockService.Verify(_ => _.List(), Times.Once);
             this.mockMapper.Verify(_ => _.Map<UpdateProcessContract>(It.IsAny<UpdateProcessViewModel>()), Times.Once);
-            this.mockMapper.Verify(_ => _.Map<List<ReadedProcessViewModel>>(It.IsAny<IEnumerable<ReadedProcessContract>>()), Times.Once);
+            this.mockMapper.Verify(_ => _.Map<TableProcessViewModel>(It.IsAny<Process>()), Times.Once);
         }
 
         [Fact(DisplayName = "Verify that method 'Delete' returns AcceptedResult")]
