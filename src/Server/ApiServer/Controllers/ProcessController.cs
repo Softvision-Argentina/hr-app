@@ -6,7 +6,9 @@ namespace ApiServer.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ApiServer.Contracts.Candidates;
     using ApiServer.Contracts.Process;
+    using ApiServer.Contracts.User;
     using AutoMapper;
     using Core;
     using Domain.Services.Contracts.Process;
@@ -40,6 +42,17 @@ namespace ApiServer.Controllers
                 var processes = this.processService.List();
 
                 return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(processes));
+            });
+        }
+
+        [HttpGet("tableView")]
+        public IActionResult GetTableView()
+        {
+            return this.ApiAction(() =>
+            {
+                var processes = this.processService.List();
+
+                return this.Accepted(this.mapper.Map<List<TableProcessViewModel>>(processes));
             });
         }
 
@@ -87,6 +100,17 @@ namespace ApiServer.Controllers
             });
         }
 
+        [HttpPost("tableView")]
+        public IActionResult PostTableView([FromBody] CreateProcessViewModel createProcessViewModel)
+        {
+            return this.ApiAction(() =>
+            {
+                var contract = this.mapper.Map<CreateProcessContract>(createProcessViewModel);
+                var returnContract = this.processService.Create(contract);
+                return this.Created("Get", this.mapper.Map<TableProcessViewModel>(returnContract));
+            });
+        }
+
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UpdateProcessViewModel updateProcessContract)
         {
@@ -94,12 +118,8 @@ namespace ApiServer.Controllers
             {
                 var contract = this.mapper.Map<UpdateProcessContract>(updateProcessContract);
                 contract.Id = id;
-
-                this.processService.Update(contract);
-
-                var processes = this.processService.List();
-
-                return this.Accepted(this.mapper.Map<List<ReadedProcessViewModel>>(processes));
+                var returnContract = this.processService.Update(contract);
+                return this.Created("Get", this.mapper.Map<TableProcessViewModel>(returnContract));
             });
         }
 
@@ -120,9 +140,19 @@ namespace ApiServer.Controllers
         {
             return this.ApiAction(() =>
             {
-                this.processService.Approve(id);
+                var returnContract = this.processService.Approve(id);
+                return this.Accepted(this.mapper.Map<TableProcessViewModel>(returnContract));
+            });
+        }
 
-                return this.Accepted();
+        [HttpPost("Reactivate")]
+        public IActionResult Reactivate([FromBody] int id)
+        {
+            return this.ApiAction(() =>
+            {
+                var process = this.processService.Reactivate(id);
+
+                return this.Accepted(this.mapper.Map<TableProcessViewModel>(process));
             });
         }
 
@@ -143,6 +173,17 @@ namespace ApiServer.Controllers
             return this.ApiAction(() =>
             {
                 var process = this.processService.GetActiveByCandidateId(candidateId);
+
+                return this.Accepted(this.mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
+            });
+        }
+
+        [HttpGet("DeletedProcesses")]
+        public IActionResult GetDeletedProcesses()
+        {
+            return this.ApiAction(() =>
+            {
+                var process = this.processService.GetDeletedProcesses();
 
                 return this.Accepted(this.mapper.Map<IEnumerable<ReadedProcessViewModel>>(process));
             });

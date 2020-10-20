@@ -29,11 +29,9 @@ namespace Domain.Services.Repositories.EF
             var profile1 = new CandidateProfile { Name = "Devs", Description = "Developers" };
             var profile2 = new CandidateProfile { Name = "RRHH", Description = "Recursos Humanos" };
             var profile3 = new CandidateProfile { Name = "MKT", Description = "Marketing" };
-            var profile4 = new CandidateProfile { Name = "N/A", Description = "Not Applicable" };
             context.Profiles.Add(profile1);
             context.Profiles.Add(profile2);
             context.Profiles.Add(profile3);
-            context.Profiles.Add(profile4);
             context.SaveChanges();
             var community1 = new Community { Name = "Enterprise .NET", Description = "Comunidad de .Net", ProfileId = 1, Profile = profile1 };
             var community2 = new Community { Name = "Enterprise Coffee", Description = "Comunidad de Java", ProfileId = 1, Profile = profile1 };

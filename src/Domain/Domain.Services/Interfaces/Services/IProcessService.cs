@@ -5,15 +5,16 @@
 namespace Domain.Services.Interfaces.Services
 {
     using System.Collections.Generic;
+    using Domain.Model;
     using Domain.Services.Contracts.Process;
 
     public interface IProcessService
     {
-        CreatedProcessContract Create(CreateProcessContract contract);
+        Process Create(CreateProcessContract contract);
 
         ReadedProcessContract Read(int id);
 
-        void Update(UpdateProcessContract contract);
+        Process Update(UpdateProcessContract contract);
 
         void Delete(int id);
 
@@ -23,7 +24,11 @@ namespace Domain.Services.Interfaces.Services
 
         IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community);
 
-        void Approve(int processID);
+        Process Approve(int processID);
+
+        IEnumerable<ReadedProcessContract> GetDeletedProcesses();
+
+        ReadedProcessContract Reactivate(int processID);
 
         void Reject(int id, string rejectionReason);
     }

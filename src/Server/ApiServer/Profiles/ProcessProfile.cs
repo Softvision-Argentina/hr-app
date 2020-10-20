@@ -16,6 +16,7 @@ namespace ApiServer.Profiles
             this.CreateMap<CreateProcessViewModel, CreateProcessContract>();
             this.CreateMap<CreatedProcessContract, CreatedProcessViewModel>();
             this.CreateMap<UpdateProcessViewModel, UpdateProcessContract>();
+            this.CreateMap<ReadedProcessContract, TableProcessViewModel>();
         }
     }
 }

@@ -439,7 +439,7 @@ namespace ApiServer.FunctionalTests.Controller
             Assert.Equal(HttpStatusCode.BadRequest, httpResultData.Response.StatusCode);
         }
 
-        [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Accepted [202] and deletes the entity when is found")]
+        [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning Accepted [202] and only soft deletes the entity when is found")]
         [Trait("Category", "Functional-Test")]
         public async System.Threading.Tasks.Task GivenCandidatesDeleteId_WhenEntityIsFound_ShouldDeleteEntityAndReturnAccepted202()
         {
@@ -455,8 +455,8 @@ namespace ApiServer.FunctionalTests.Controller
             // Assert
             Assert.Equal(HttpStatusCode.Accepted, httpResultData.Response.StatusCode);
             Assert.Equal(1, entityCountBeforeDelete);
-            Assert.Equal(0, entityCountAfterDelete);
-            Assert.NotEqual(entityCountBeforeDelete, entityCountAfterDelete);
+            Assert.Equal(1, entityCountAfterDelete);
+            Assert.Equal(entityCountBeforeDelete, entityCountAfterDelete);
         }
 
         [Fact(DisplayName = "Verify api/Candidates [Delete/{id}] is returning bad request when id is not found")]

@@ -90,5 +90,15 @@ namespace ApiServer.Controllers
                 return this.Accepted();
             });
         }
+
+        [HttpPut("Update/{clientStageId}")]
+        public IActionResult Update(int clientStageId, [FromBody] List<CreateInterviewContract> contracts)
+        {
+            return this.ApiAction(() =>
+            {
+                this.interviewService.UpdateMany(clientStageId, contracts);
+                return this.Accepted();
+            });
+        }
     }
 }

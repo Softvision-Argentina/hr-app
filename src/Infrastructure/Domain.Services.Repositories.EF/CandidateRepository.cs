@@ -8,6 +8,7 @@ namespace Domain.Services.Repositories.EF
     using System.Linq;
     using Core.Persistance;
     using Domain.Model;
+    using Domain.Model.Enum;
     using Microsoft.EntityFrameworkCore;
     using Persistance.EF;
 
@@ -38,9 +39,12 @@ namespace Domain.Services.Repositories.EF
             var previousSkills = this.DbContext.CandidateSkills.Where(cs => cs.CandidateId == entity.Id);
             this.DbContext.CandidateSkills.RemoveRange(previousSkills);
 
-            foreach (var item in entity.CandidateSkills)
+            if (entity.CandidateSkills != null && entity.Status != CandidateStatus.Eliminated)
             {
-                this.DbContext.CandidateSkills.Add(item);
+                foreach (var item in entity.CandidateSkills)
+                {
+                    this.DbContext.CandidateSkills.Add(item);
+                }
             }
 
             return base.Update(entity);

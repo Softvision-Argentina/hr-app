@@ -5,6 +5,7 @@
 namespace Domain.Services.Impl.Profiles
 {
     using System;
+    using ApiServer.Contracts.Candidates;
     using AutoMapper;
     using Domain.Model;
     using Domain.Model.Enum;
@@ -55,6 +56,9 @@ namespace Domain.Services.Impl.Profiles
                 .ForMember(x => x.Community, opt => opt.MapFrom(r => r.Community))
                 .ForMember(x => x.Profile, opt => opt.MapFrom(r => r.Profile))
                 .ForMember(x => x.OpenPosition, opt => opt.Ignore());
+
+            this.CreateMap<Candidate, ReadedCandidateViewModel>()
+                    .ForMember(x => x.Seniority, opt => opt.Ignore());
         }
     }
 }

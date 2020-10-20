@@ -110,7 +110,7 @@
         public IEnumerable<ReadedProcessContract> GetProcessesByCommunity(string community)
         {
             var candidateQuery = this.processRepository
-                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community));
+                .QueryEager().Where(pro => pro.Candidate.Community.Name.Equals(community) && pro.Status != ProcessStatus.Eliminated);
 
             var candidateResult = candidateQuery.ToList();
 
@@ -123,7 +123,9 @@
 
             process.Candidate.Status = this.SetCandidateStatus(ProcessStatus.Rejected);
 
-            this.processRepository.Delete(process);
+            process.Status = ProcessStatus.Eliminated;
+
+            this.processRepository.Update(process);
 
             this.unitOfWork.Complete();
         }
@@ -131,7 +133,17 @@
         public IEnumerable<ReadedProcessContract> List()
         {
             var candidateQuery = this.processRepository
-                .QueryEager().ToList();
+                .QueryEager().Where(_ => _.Status != ProcessStatus.Eliminated).ToList();
+
+            var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
+
+            return this.mapper.Map<List<ReadedProcessContract>>(candidateResult);
+        }
+
+        public IEnumerable<ReadedProcessContract> GetDeletedProcesses()
+        {
+            var candidateQuery = this.processRepository
+                    .QueryEager().Where(_ => _.Status == ProcessStatus.Eliminated);
 
             var candidateResult = candidateQuery.OrderByDescending(x => x.StartDate).ToList();
 
@@ -146,7 +158,7 @@
             return this.mapper.Map<IEnumerable<ReadedProcessContract>>(process);
         }
 
-        public CreatedProcessContract Create(CreateProcessContract createProcessContract)
+        public Process Create(CreateProcessContract createProcessContract)
         {
             this.ValidateContract(createProcessContract);
 
@@ -188,6 +200,8 @@
                 this.readdressStatusService.Create(createProcessContract.PreOfferStage.ReaddressStatus.ReaddressReasonId, process.PreOfferStage.ReaddressStatus);
             }
 
+            // process.Candidate.Community = this.AddCommunityToProcess(process.Candidate.Community.Id);
+            // process.Candidate.Profile = this.AddProfileToProcess(process.Candidate.Profile.Id);
             var createdProcess = this.processRepository.Create(process);
 
             process.HrStage.UserOwnerId = process.UserOwnerId;
@@ -198,7 +212,7 @@
 
             this.unitOfWork.Complete();
 
-            var createdProcessContract = this.mapper.Map<CreatedProcessContract>(createdProcess);
+            // var createdProcessContract = this.mapper.Map<CreatedProcessContract>(createdProcess);
 
             var status = process.Status;
 
@@ -223,10 +237,10 @@
                 throw new Exception("Mail could not been sent");
             }
 
-            return createdProcessContract;
+            return createdProcess;
         }
 
-        public void Update(UpdateProcessContract updateProcessContract)
+        public Process Update(UpdateProcessContract updateProcessContract)
         {
             this.ValidateContract(updateProcessContract);
 
@@ -316,14 +330,17 @@
             {
                 this.unitOfWork.Complete();
             }
+
+            return updatedProcess;
         }
 
-        public void Approve(int processId)
+        public Process Approve(int processId)
         {
             this.processRepository.Approve(processId);
             var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
             process.Candidate.Status = this.SetCandidateStatus(process.Status);
             this.unitOfWork.Complete();
+            return process;
         }
 
         public void Reject(int id, string rejectionReason)
@@ -334,6 +351,17 @@
             var status = process.Status;
 
             this.unitOfWork.Complete();
+        }
+
+        public ReadedProcessContract Reactivate(int processId)
+        {
+            var process = this.processRepository.QueryEager().FirstOrDefault(p => p.Id == processId);
+            process.Status = SetProcessStatus(process);
+            process.Candidate.Status = process.Candidate.Status == CandidateStatus.Rejected || process.Candidate.Status == CandidateStatus.Eliminated ? SetCandidateStatus(process.Status) : process.Candidate.Status;
+            this.processRepository.Update(process);
+            this.unitOfWork.Complete();
+            // return process;
+            return this.mapper.Map<ReadedProcessContract>(process);
         }
 
         private void ValidateDniExistance(Process process)
@@ -454,6 +482,28 @@
             {
                 throw new UpdateProcessInvalidException(ex.ToListOfMessages());
             }
+        }
+
+        private Community AddCommunityToProcess(int communityId)
+        {
+            var community = this.communityRepository.Query().Where(_ => _.Id == communityId).FirstOrDefault();
+            if (community == null)
+            {
+                throw new Domain.Model.Exceptions.Community.CommunityNotFoundException(communityId);
+            }
+
+            return community;
+        }
+
+        private CandidateProfile AddProfileToProcess(int profileId)
+        {
+            var profile = this.candidateProfileRepository.Query().Where(_ => _.Id == profileId).FirstOrDefault();
+            if (profile == null)
+            {
+                throw new Domain.Model.Exceptions.CandidateProfile.CandidateProfileNotFoundException(profileId);
+            }
+
+            return profile;
         }
     }
 }

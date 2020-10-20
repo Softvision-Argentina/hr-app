@@ -20,6 +20,7 @@ namespace Domain.Services.Impl.UnitTests.Services
     using Domain.Services.Impl.Validators.Candidate;
     using FluentValidation;
     using FluentValidation.Results;
+    using Microsoft.AspNetCore.Http;
     using Moq;
     using Xunit;
 
@@ -37,6 +38,7 @@ namespace Domain.Services.Impl.UnitTests.Services
         private readonly Mock<ILog<CandidateService>> mockLogCandidateService;
         private readonly Mock<UpdateCandidateContractValidator> mockUpdateCandidateContractValidator;
         private readonly Mock<CreateCandidateContractValidator> mockCreateCandidateContractValidator;
+        private readonly Mock<IHttpContextAccessor> httpContext;
 
         public CandidateServiceTest()
         {
@@ -51,6 +53,7 @@ namespace Domain.Services.Impl.UnitTests.Services
             this.mockLogCandidateService = new Mock<ILog<CandidateService>>();
             this.mockUpdateCandidateContractValidator = new Mock<UpdateCandidateContractValidator>();
             this.mockCreateCandidateContractValidator = new Mock<CreateCandidateContractValidator>();
+            this.httpContext = new Mock<IHttpContextAccessor>();
             this.service = new CandidateService(
                 this.mockMapper.Object,
                 this.mockRepoCandidate.Object,
@@ -63,7 +66,8 @@ namespace Domain.Services.Impl.UnitTests.Services
                 this.MockUnitOfWork.Object,
                 this.mockLogCandidateService.Object,
                 this.mockUpdateCandidateContractValidator.Object,
-                this.mockCreateCandidateContractValidator.Object);
+                this.mockCreateCandidateContractValidator.Object,
+                this.httpContext.Object);
         }
 
         [Fact(DisplayName = "Verify that create CandidateService when data is valid")]
@@ -120,17 +124,16 @@ namespace Domain.Services.Impl.UnitTests.Services
             this.mockMapper.Verify(mm => mm.Map<CreatedCandidateContract>(It.IsAny<Candidate>()), Times.Never);
         }
 
-        [Fact(DisplayName = "Verify that delete CandidateService when data is valid")]
+        [Fact(DisplayName = "Verify that soft delete only updates CandidateService when data is valid")]
         public void GivenDelete_WhenDataIsValid_DeleteCandidateService()
         {
-            var communities = new List<Candidate>() { new Candidate() { Id = 1 } }.AsQueryable();
-            this.mockRepoCandidate.Setup(mrt => mrt.Query()).Returns(communities);
-
+            var candidates = new List<Candidate>() { new Candidate() { Id = 1 } }.AsQueryable();
+            this.mockRepoCandidate.Setup(mrt => mrt.Query()).Returns(candidates);
             this.service.Delete(1);
 
             this.mockLogCandidateService.Verify(mlts => mlts.LogInformation(It.IsAny<string>()), Times.Exactly(2));
             this.mockRepoCandidate.Verify(mrt => mrt.Query(), Times.Once);
-            this.mockRepoCandidate.Verify(mrt => mrt.Delete(It.IsAny<Candidate>()), Times.Once);
+            this.mockRepoCandidate.Verify(mrt => mrt.Update(It.IsAny<Candidate>()), Times.Once);
             this.MockUnitOfWork.Verify(uow => uow.Complete(), Times.Once);
         }
 

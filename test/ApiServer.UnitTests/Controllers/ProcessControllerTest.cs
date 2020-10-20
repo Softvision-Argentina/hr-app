@@ -10,6 +10,7 @@ namespace ApiServer.UnitTests.Controllers
     using ApiServer.Controllers;
     using AutoMapper;
     using Core;
+    using Domain.Model;
     using Domain.Model.Enum;
     using Domain.Services.Contracts.Process;
     using Domain.Services.Interfaces.Services;
@@ -54,8 +55,6 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                ActualSalary = 500,
-                WantedSalary = 1000,
                 EnglishLevel = EnglishLevel.Advanced,
                 Seniority = Seniority.Senior3,
                 HireDate = DateTime.Now.AddMonths(1),
@@ -103,8 +102,6 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                ActualSalary = 500,
-                WantedSalary = 1000,
                 EnglishLevel = EnglishLevel.Advanced,
                 Seniority = Seniority.Senior3,
                 HireDate = DateTime.Now.AddMonths(1),
@@ -153,8 +150,6 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                ActualSalary = 500,
-                WantedSalary = 1000,
                 EnglishLevel = EnglishLevel.Advanced,
                 Seniority = Seniority.Senior3,
                 HireDate = DateTime.Now.AddMonths(1),
@@ -216,7 +211,9 @@ namespace ApiServer.UnitTests.Controllers
 
             this.mockMapper.Setup(_ => _.Map<CreateProcessContract>(It.IsAny<CreateProcessViewModel>())).Returns(new CreateProcessContract());
             this.mockMapper.Setup(_ => _.Map<CreatedProcessViewModel>(It.IsAny<CreatedProcessContract>())).Returns(expectedValue);
-            this.mockService.Setup(_ => _.Create(It.IsAny<CreateProcessContract>())).Returns(new CreatedProcessContract());
+            // Tuve que cambiar 'new CreatedProcessContract()' a 'new Process()' porque ese es el tipo que tendría que ir como parámetro.
+            // No se cómo es que compilaba antes. No sé de tests así que alguien que sepa que se fije bien por favor. -Teo Benavides
+            this.mockService.Setup(_ => _.Create(It.IsAny<CreateProcessContract>())).Returns(new Process());
 
             var result = this.controller.Post(processVM);
 
@@ -255,8 +252,6 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                ActualSalary = 500,
-                WantedSalary = 1000,
                 EnglishLevel = EnglishLevel.Advanced,
                 Seniority = Seniority.Senior3,
                 HireDate = DateTime.Now.AddMonths(1),
@@ -355,8 +350,6 @@ namespace ApiServer.UnitTests.Controllers
                 UserOwner = null,
                 UserDelegateId = 0,
                 UserDelegate = null,
-                ActualSalary = 500,
-                WantedSalary = 1000,
                 EnglishLevel = EnglishLevel.Advanced,
                 Seniority = Seniority.Senior3,
                 HireDate = DateTime.Now.AddMonths(1),

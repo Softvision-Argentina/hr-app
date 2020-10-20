@@ -16,6 +16,7 @@ namespace Domain.Services.Impl.Services
     using Domain.Model.Enum;
     using Domain.Model.Exceptions.Candidate;
     using Domain.Services.Contracts.Candidate;
+    using Domain.Services.Contracts.User;
     using Domain.Services.Impl.Validators;
     using Domain.Services.Impl.Validators.Candidate;
     using Domain.Services.Interfaces.Services;
@@ -37,6 +38,7 @@ namespace Domain.Services.Impl.Services
         private readonly ILog<CandidateService> log;
         private readonly UpdateCandidateContractValidator updateCandidateContractValidator;
         private readonly CreateCandidateContractValidator createCandidateContractValidator;
+        private readonly IHttpContextAccessor httpContext;
 
         public CandidateService(
             IMapper mapper,
@@ -50,7 +52,8 @@ namespace Domain.Services.Impl.Services
             IUnitOfWork unitOfWork,
             ILog<CandidateService> log,
             UpdateCandidateContractValidator updateCandidateContractValidator,
-            CreateCandidateContractValidator createCandidateContractValidator)
+            CreateCandidateContractValidator createCandidateContractValidator,
+            IHttpContextAccessor httpContext)
         {
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
@@ -64,6 +67,7 @@ namespace Domain.Services.Impl.Services
             this.log = log;
             this.updateCandidateContractValidator = updateCandidateContractValidator;
             this.createCandidateContractValidator = createCandidateContractValidator;
+            this.httpContext = httpContext;
         }
 
         public CreatedCandidateContract Create(CreateCandidateContract contract)
@@ -124,8 +128,19 @@ namespace Domain.Services.Impl.Services
             }
 
             this.log.LogInformation($"Deleting candidate {id}");
-            this.candidateRepository.Delete(candidate);
+            candidate.Status = CandidateStatus.Eliminated;
+            this.candidateRepository.Update(candidate);
 
+            this.unitOfWork.Complete();
+        }
+
+        public void Reactivate(int id)
+        {
+            var candidate = this.candidateRepository.Query().FirstOrDefault(_ => _.Id == id);
+            var currentProcess = this.processRepository.Query().Where(p => p.CandidateId == candidate.Id && p.Status != Model.Enum.ProcessStatus.Hired).FirstOrDefault();
+
+            candidate.Status = currentProcess != null ? (currentProcess.Status == Model.Enum.ProcessStatus.Eliminated ? CandidateStatus.Rejected : this.mapper.Map<CandidateStatus>(currentProcess.Status)) : CandidateStatus.Pipeline;
+            this.candidateRepository.Update(candidate);
             this.unitOfWork.Complete();
         }
 
@@ -308,6 +323,7 @@ namespace Domain.Services.Impl.Services
                         PhoneNumber = sheet.Cells[r, 4].GetValue<string>(),
                         Source = source,
                         Community = new Contracts.Community.ReadedCommunityContract() { Id = communityId },
+                        User = this.GetCurrentUserAsContract(),
                     };
 
                     try
@@ -459,6 +475,14 @@ namespace Domain.Services.Impl.Services
             }
 
             return candidatesList;
+        }
+
+        private ReadedUserContract GetCurrentUserAsContract()
+        {
+            var userId = int.Parse(this.httpContext.HttpContext.User.Identity.Name);
+            var user = this.userRepository.Query().FirstOrDefault(x => x.Id == userId);
+
+            return mapper.Map<ReadedUserContract>(user);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Domain.Services.Interfaces.Services
 
         void Update(UpdateInterviewContract contract);
 
+        void UpdateMany(int clientStageId, List<CreateInterviewContract> contracts);
+
         void Delete(int id);
 
         IEnumerable<ReadedInterviewContract> List();

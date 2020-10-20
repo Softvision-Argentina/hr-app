@@ -44,10 +44,6 @@ namespace ApiServer.Contracts.Process
 
         public ReadedUserViewModel UserDelegate { get; set; }
 
-        public float? ActualSalary { get; set; }
-
-        public float? WantedSalary { get; set; }
-
         public EnglishLevel EnglishLevel { get; set; }
 
         public Seniority Seniority { get; set; }
