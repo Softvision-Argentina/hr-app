@@ -57,9 +57,11 @@ export class TextEditorComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.editor.nativeElement.innerHTML = this.setContent;
-    this.editor.nativeElement.setAttribute("aria-disabled", "false");
-    this.checkForContent(); 
+    setTimeout(() => {
+      this.editor.nativeElement.innerHTML = this.setContent;
+      this.editor.nativeElement.setAttribute("aria-disabled", "false");
+      this.checkForContent(); 
+    }, 1000);    
   }
 
   customFocusClass(element: any, event: string) {
