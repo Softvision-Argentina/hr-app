@@ -35,34 +35,13 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     this._users = value;
   }
 
-  @Input() processId: number;
-
-  preOfferForm: FormGroup = this.fb.group({
-    id: [0],
-    status: [0, [Validators.required]],
-    date: [],
-    dni: [null, [dniValidator]],
-    userOwnerId: null,
-    userDelegateId: [null],
-    feedback: '',
-    seniority: [0, [Validators.required]],
-    remunerationOffer: [0, [Validators.required]],
-    notes: '', // should be removed because it's in pre-offer-history
-    firstday: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
-    bonus: '', // should be removed because it's in pre-offer-history
-    hireDate: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
-    backgroundCheck: this.fb.group({
-      done: null,
-      date: null,
-    }, {validator: checkDateIsnotEmpty }),
-    preocupational: this.fb.group({
-      done: null,
-      date: null,
-    }, { validator: checkDateIsnotEmpty }),
-    rejectionReason: [null],
-    reasonSelectControl: [null],
-    reasonDescriptionTextAreaControl: [null]
-  });
+  @Input() processId: number; 
+  @Input() preOfferStage: PreOfferStage;
+  @Input() readdressReasonList: ReaddressReason[] = [];
+  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
+  @Input() processes: Process[] = [];
+  @ViewChild(PreOfferHistory) preOfferHistory: PreOfferHistory;
+  @Output() selectedSeniority = new EventEmitter();
 
   statusList: any[];
   seniorityList: any[];
@@ -84,13 +63,35 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
   readdressFilteredList: ReaddressReason[] = [];
   selectedReasonId: number;
   selectedReason: string;
-  checkedEnum = CheckedEnum;
-  @Input() preOfferStage: PreOfferStage;
-  @Input() readdressReasonList: ReaddressReason[] = [];
-  @Input() readdressReasonTypeList: ReaddressReasonType[] = [];
-  @Input() processes: Process[] = [];
-  @ViewChild(PreOfferHistory) preOfferHistory: PreOfferHistory;
-  @Output() selectedSeniority = new EventEmitter();
+  checkedEnum = CheckedEnum;  
+
+  preOfferForm: FormGroup = this.fb.group({
+    id: [0],
+    status: [0, [Validators.required]],
+    date: [],
+    dni: [null, [dniValidator]],
+    userOwnerId: null,
+    userDelegateId: [null],
+    feedback: '',
+    seniority: [0, [Validators.required]],
+    remunerationOffer: [0, [Validators.required]],
+    notes: '', // should be removed because it's in pre-offer-history
+    firstday: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
+    bonus: '', // should be removed because it's in pre-offer-history
+    hireDate: [new Date(), [Validators.required]],  // should be removed because it's in pre-offer-history
+    backgroundCheck: this.fb.group({
+      done: this.checkedEnum.NA,
+      date: null,
+    }, {validator: checkDateIsnotEmpty }),
+    preocupational: this.fb.group({
+      done: this.checkedEnum.NA,
+      date: null,
+    }, { validator: checkDateIsnotEmpty }),
+    rejectionReason: [null],
+    reasonSelectControl: [null],
+    reasonDescriptionTextAreaControl: [null]
+  });
+
   constructor(
     private fb: FormBuilder,
     private globals: Globals,
@@ -288,17 +289,18 @@ export class PreOfferStageComponent implements OnInit, OnChanges {
     if (preOfferStage.firstday) {
       this.preOfferForm.controls['firstday'].setValue(preOfferStage.firstday);
     }
+
     if (preOfferStage.backgroundCheckDoneDate) {
       const backgroundCheck: number = +preOfferStage.backgroundCheckDone;
       this.preOfferForm.get('backgroundCheck.done').setValue(backgroundCheck);
       this.preOfferForm.get('backgroundCheck.date').setValue(preOfferStage.backgroundCheckDoneDate);
     }
+    
     if (preOfferStage.preocupationalDoneDate) {
       const preocupational: number = +preOfferStage.preocupationalDone;
       this.preOfferForm.get('preocupational.done').setValue(preocupational);
       this.preOfferForm.get('preocupational.date').setValue(preOfferStage.preocupationalDoneDate);
     }
-
 
     if (preOfferStage.rejectionReason) {
       this.preOfferForm.controls['rejectionReason'].setValue(preOfferStage.rejectionReason);
