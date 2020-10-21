@@ -72,18 +72,10 @@
     <div class="recru-row">
 
         <nz-form-item hidden>
-            <nz-form-control [nzErrorTip]="stageFeedbackErrorMsg">
+            <nz-form-control [nzErrorTip]="feedbackErrorMsg">
                 <app-text-editor *recruInput="'Feedback'" [setContent]="feedbackContent"
                     (getContent)="getFeedbackContent($event)">
                 </app-text-editor>
-                <ng-template #stageFeedbackErrorMsg>
-                    <ng-container
-                        *ngIf="clientForm.get('feedback').dirty && clientForm.get('feedback').errors">
-                        <ng-container *ngIf="clientForm.get('feedback')?.hasError('maxlength')">
-                            The maximum length is 10000
-                        </ng-container>
-                    </ng-container>
-                </ng-template>
             </nz-form-control>
         </nz-form-item>
 
@@ -156,7 +148,7 @@
                                         Field required
                                     </ng-container>
                                     <ng-container *ngIf="interviewForm.get('interviewFeedback')?.hasError('maxlength')">
-                                        The maximum length is 10000
+                                        The maximun length is 1000
                                     </ng-container>
                                 </ng-container>
                             </ng-template>
@@ -254,7 +246,7 @@
                                             </ng-container>
                                             <ng-container
                                                 *ngIf="interviewForm.get('interviewEditFeedback')?.hasError('maxlength')">
-                                                The maximum length is 10000
+                                                The maximun length is 1000
                                             </ng-container>
                                         </ng-container>
                                     </ng-template>

@@ -11,17 +11,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'processes',
-    loadChildren: () => import('@old-architecture/processes/processes/processes.module').then(m => m.ProcessesModule),
+    loadChildren: () => import('@app/containers/processes/processes/processes.module').then(m => m.ProcessesModule),
     canLoad: [HRGuard]
   },
   {
     path: 'process-details/:id',
-    loadChildren: () => import('@old-architecture/processes/process-detail/processes-detail.module').then(m => m.ProcessDetailModule),
-    canLoad: [HRGuard]
-  },
-  {
-    path: 'process-steps/:id',
-    loadChildren: () => import('@old-architecture/processes/process-steps/process-steps.module').then(m => m.ProcessStepsModule),
+    loadChildren: () => import('@app/containers/processes/process-detail/processes-detail.module').then(m => m.ProcessDetailModule),
     canLoad: [HRGuard]
   },
   {
@@ -31,12 +26,12 @@ export const appRoutes: Routes = [
   },
   {
     path: 'referrals/:openpositions',
-    loadChildren: () => import('@old-architecture/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
+    loadChildren: () => import('./containers/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {
     path: 'referrals',
-    loadChildren: () => import('@old-architecture/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
+    loadChildren: () => import('./containers/referrals/referrals/referrals.module').then(m => m.ReferralsModule),
     canActivate: [CommonGuard]
   },
   {
@@ -48,16 +43,6 @@ export const appRoutes: Routes = [
     path: 'stage-edit/:id',
     loadChildren: () => import('@old-architecture/stages/stage-edit/stage-edit.module').then(m => m.StageEditModule),
     canActivate: [CommonGuard]
-  },
-  {
-    path: 'candidates-profile',
-    loadChildren: () => import('@old-architecture/settings/candidates-profile/candidates-profile.module').then(m => m.CandidatesProfileModule),
-    canLoad: [HRGuard]
-  },
-  {
-    path: 'communities',
-    loadChildren: () => import('@old-architecture/settings/communities/communities.module').then(m => m.CommunitiesModule),
-    canLoad: [HRGuard]
   },
   {
     path: 'people',
@@ -76,7 +61,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'settings',
-    loadChildren: () => import('@old-architecture/settings/settings.module').then(m => m.SettingsModule),
+    loadChildren: () => import('@app/containers/settings/settings.module').then(m => m.SettingsModule),
     canLoad: [ManagementGuard]
   },
 

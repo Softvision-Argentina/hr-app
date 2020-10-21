@@ -29,5 +29,4 @@ export interface Candidate {
   openPosition?: OpenPosition;
   openPositionTitle?: string;
   source: string;
-  seniority?: string;
 }

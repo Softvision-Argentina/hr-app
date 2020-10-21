@@ -3,10 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CandidateAddComponent } from '@old-architecture/candidates/add/candidate-add.component';
 import { CandidateDetailsComponent } from '@old-architecture/candidates/details/candidate-details.component';
-import { ProcessContactComponent } from '@old-architecture/processes/process-contact/process-contact.component';
-import { OpenPositionsComponent } from '@old-architecture/referrals/open-positions/open-positions.component';
-import { CandidatesProfileComponent } from '@old-architecture/settings/candidates-profile/candidates-profile.component';
-import { CommunitiesComponent } from '@old-architecture/settings/communities/communities.component';
+import { OpenPositionsComponent } from '../containers/referrals/open-positions/open-positions.component';
 import { ClientStageComponent } from '@old-architecture/stages/client-stage/client-stage.component';
 import { HireStageComponent } from '@old-architecture/stages/hire-stage/hire-stage.component';
 import { HrStageComponent } from '@old-architecture/stages/hr-stage/hr-stage.component';
@@ -16,13 +13,19 @@ import { PreOfferStageComponent } from '@old-architecture/stages/pre-offer-stage
 import { TechnicalStageComponent } from '@old-architecture/stages/technical-stage/technical-stage.component';
 import { TextEditorComponent } from '@old-architecture/text-editor/text-editor.component';
 import { UserDetailsComponent } from '@old-architecture/users/details/user-details.component';
-import { en_US, NzBadgeModule, NzButtonModule, NzCardModule, NzCollapseModule, NzDatePickerModule, NzDividerModule, NzDropDownModule, NzFormModule, NzInputModule, NzLayoutModule, NzListModule, NzMenuModule, NzModalModule, NzPopoverModule, NzRadioModule, NzSelectModule, NzSliderModule, NzStatisticModule, NzTableModule, NzTabsModule, NzTagModule, NzTypographyModule, NzUploadModule, NZ_I18N } from 'ng-zorro-antd';
+import { en_US, NzBadgeModule, NzButtonModule, NzCardModule, NzCollapseModule, NzDatePickerModule, NzDividerModule, NzDropDownModule, NzFormModule, NzInputModule, NzLayoutModule, NzListModule, NzMenuModule, NzModalModule, NzPopoverModule, NzRadioModule, NzSelectModule, NzSliderModule, NzStatisticModule, NzTableModule, NzTabsModule, NzTagModule, NzTypographyModule, NzUploadModule, NZ_I18N, NzCheckboxModule } from 'ng-zorro-antd';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { FileUploadModule } from 'ng2-file-upload';
 import { RecruInputDirective } from './directives/recru-input.directive';
 import { IconsProviderModule } from './icons-provider.module';
 import { PipesModule } from './pipes/pipes.module';
-
+import { ReferralsContactComponent } from '@app/containers/referrals/referrals-contact/referrals-contact.component';
+import { CommunitiesSandbox } from '@app/containers/settings/communities/communities.sandbox';
+import { OfficeSandbox } from '@app/containers/settings/office/office.sandbox';
+import { RoomSandbox } from '@app/containers/settings/room/room.sandbox';
+import { CandidatesProfileComponent } from '@app/containers/settings/candidates-profile/candidates-profile.component';
+import { CommunitiesComponent } from '@app/containers/settings/communities/communities.component';
+import { ProcessContactComponent } from '@app/containers/processes/process-contact/process-contact.component';
 
 @NgModule({
     imports: [
@@ -55,7 +58,8 @@ import { PipesModule } from './pipes/pipes.module';
         NzButtonModule,
         NzTypographyModule,
         NzUploadModule,
-        NzSpaceModule
+        NzSpaceModule,
+        NzCheckboxModule
     ],
     declarations: [
         CandidateDetailsComponent,
@@ -69,11 +73,10 @@ import { PipesModule } from './pipes/pipes.module';
         PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,
-        CommunitiesComponent,
-        CandidatesProfileComponent,
         TextEditorComponent,
         OpenPositionsComponent,
-        RecruInputDirective
+        RecruInputDirective,
+        ReferralsContactComponent
     ],
     exports: [
         CommonModule,
@@ -88,8 +91,6 @@ import { PipesModule } from './pipes/pipes.module';
         PreOfferStageComponent,
         OfferStageComponent,
         ProcessContactComponent,
-        CommunitiesComponent,
-        CandidatesProfileComponent,
         FileUploadModule,
         TextEditorComponent,
         OpenPositionsComponent,
@@ -119,8 +120,9 @@ import { PipesModule } from './pipes/pipes.module';
         NzTypographyModule,
         NzUploadModule,
         NzSpaceModule,
-        RecruInputDirective
+        RecruInputDirective,
+        ReferralsContactComponent
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US }]
+    providers: [CommunitiesSandbox, OfficeSandbox , RoomSandbox, { provide: NZ_I18N, useValue: en_US }]
 })
 export class SharedModule { }

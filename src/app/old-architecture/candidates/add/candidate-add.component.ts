@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CandidateStatusEnum } from '@app/shared/enums/candidate-status.enum';
 import { formFieldHasRequiredValidator } from '@shared/utils/utils.functions';
 import { EnglishLevelEnum } from '@shared/enums/english-level.enum';
@@ -11,13 +11,12 @@ import { Process } from '@shared/models/process.model';
 import { Skill } from '@shared/models/skill.model';
 import { User } from '@shared/models/user.model';
 import { FacadeService } from '@shared/services/facade.service';
-import { UniqueEmailValidator, checkIfEmailAndPhoneNulll } from '@shared/utils/email.validator';
+import { UniqueEmailValidator } from '@shared/utils/email.validator';
 import { Globals } from '@shared/utils/globals';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '@app/app.component';
-import { ReferralsService } from '@shared/services/referrals.service';
-import { customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
 import { CandidateInfoService } from '@shared/services/candidate-info.service';
+import { customEmailAndPhoneNumberValidator } from '@app/shared/utils/forms.validators';
 
 @Component({
   selector: 'candidate-add',
@@ -28,72 +27,67 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   candidateInfo: Candidate;
 
   @Input()
-    private _process: Process;
-    public get process(): Process {
-        return this._process;
-    }
-    public set process(value: Process) {
-        this._process = value;
-    }
+  private _process: Process;
+  public get process(): Process {
+    return this._process;
+  }
+  public set process(value: Process) {
+    this._process = value;
+  }
 
-    @Input()
-    private _users: User[];
-    public get users(): User[] {
-        return this._users;
-    }
-    public set users(value: User[]) {
-        this.fillUsers = value;
-    }
+  @Input()
+  private _users: User[];
+  public get users(): User[] {
+    return this._users;
+  }
+  public set users(value: User[]) {
+    this.fillUsers = value;
+  }
 
-    @Input()
-    private _candidate: Candidate;
-    public get candidate(): Candidate {
-        return this._candidate;
-    }
-    public set candidate(value: Candidate) {
-        this.fillCandidate = value;
-    }
+  @Input()
+  private _candidate: Candidate;
+  public get candidate(): Candidate {
+    return this._candidate;
+  }
+  public set candidate(value: Candidate) {
+    this.fillCandidate = value;
+  }
 
-    @Input()
-    private _communities: Community[];
-    public get communities(): Community[] {
-      return this._communities;
-    }
-    public set communities(value: Community[]) {
-      this.comms = value;
-    }
+  @Input()
+  private _communities: Community[];
+  public get communities(): Community[] {
+    return this._communities;
+  }
+  public set communities(value: Community[]) {
+    this.comms = value;
+  }
 
-    @Input()
-    private _candidateProfiles: CandidateProfile[];
-    public get candidateProfiles(): CandidateProfile[] {
-      return this._candidateProfiles;
-    }
-    public set candidateProfiles(value: CandidateProfile[]) {
-      this.profiles = value;
-    }
+  profiles: CandidateProfile[];;
+
   sourceArray = [
-      {name: 'Linkedin'},
-      {name: 'Instagram'},
-      {name: 'Facebook'},
-      {name: 'Twitter'},
-      {name: 'Event / Meetup'},
-      {name: 'Mailing'},
-      {name: 'Indeed/ Glassdoor'},
-      {name: 'A friend / colleague'},
-      {name: 'Online Ad'},
-      {name: 'Other'}
-    ];
+    { name: 'Linkedin' },
+    { name: 'Instagram' },
+    { name: 'Facebook' },
+    { name: 'Twitter' },
+    { name: 'Event / Meetup' },
+    { name: 'Mailing' },
+    { name: 'Indeed/ Glassdoor' },
+    { name: 'A friend / colleague' },
+    { name: 'Online Ad' },
+    { name: 'Other' }
+  ];
   fillCandidate: Candidate;
   fillUsers: User[] = [];
-  comms: Community[] =[];
+  comms: Community[] = [];
   isInputSelected = false;
   profiles: CandidateProfile[] = [];
   availableProfiles: CandidateProfile[] = [];
   @Input() _offices: Office[] = [];
   currentUser: User;
+  naProfile: CandidateProfile;
   candidateForm: FormGroup = this.fb.group({
-    name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
-    lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)] ],
+    name: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+    lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
     dni: [0],
     email: [null,
       {
@@ -109,7 +103,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     preferredOffice: [null, [Validators.required]],
     englishLevel: 'none',
     status: CandidateStatusEnum.New,
-    contacDay : [null],
+    contacDay: [null],
     profile: [null],
     community: [null, [Validators.required]],
     isReferred: [null],
@@ -130,33 +124,19 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
   selectedId = '';
 
   constructor(private fb: FormBuilder, private facade: FacadeService, private app: AppComponent,
-              private globals: Globals , private _candidateInfoService: CandidateInfoService) {
-                this.statusList = globals.candidateStatusList;
-                this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                this.getCandidates();
+    private globals: Globals, private _candidateInfoService: CandidateInfoService) {
+    this.statusList = globals.candidateStatusList;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.getCandidates();
   }
 
   ngOnInit() {
-    const infoSub =  this._candidateInfoService._candidateInfoSource
-    .subscribe(info => {
-      this.candidateInfo = info;
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });
-    this.candidateSubscriptions.push(infoSub);
+    this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.fillUsers = this._users;
-    this.fillUsers.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)))
-    this._offices.sort((a,b) => (a.name.localeCompare(b.name)))
     this.comms = this._communities;
-    this.comms.sort((a,b) => (a.name.localeCompare(b.name)));
-    this.profiles = this._candidateProfiles;
+    this.comms.slice().sort((a, b) => (a.name.localeCompare(b.name)));
+    this.getProfiles();
     this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
-    for (let i = 0; i < this.profiles.length; i++) {
-      if (this.profiles[i].name === 'N/A') {
-        const NA = this.profiles.splice(i, 1);
-        this.profiles.unshift(NA[0]);
-      }
-    }
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {
@@ -168,12 +148,31 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     } else if (!!this._candidate.id) {
       this.fillCandidateForm(this._candidate);
     }
-    this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
+
     setTimeout(() => {
       if (this.candidateInfo) {
         this.fillCandidateForm(this.candidateInfo);
+      } else {
+        this.candidateForm.get('email').setAsyncValidators(UniqueEmailValidator(this.facade.candidateService));
       }
     });
+
+  }
+
+  getProfiles() {
+    this.facade.candidateProfileService.get()
+      .subscribe(res => {
+        this.profiles = res;
+        this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
+        for (let i = 0; i < this.profiles.length; i++) {
+          if (this.profiles[i].name === 'N/A') {
+            const NA = this.profiles.splice(i, 1);
+            this.profiles.unshift(NA[0]);
+          }
+        }
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
   }
 
   onCheckAndSave(): boolean {
@@ -188,11 +187,11 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   setRecruiter() {
     const currentRecruiter = this.fillUsers.find(user => user.username === this.currentUser.username);
-    if(!!currentRecruiter) {
+    if (!!currentRecruiter) {
       this.candidateForm.controls['user'].setValue(currentRecruiter.id);
     }
   }
-  
+
   checkForm() {
     for (const i in this.candidateForm.controls) {
       this.candidateForm.controls[i].markAsDirty();
@@ -200,29 +199,29 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCandidates(){
+  getCandidates() {
     const candidateSub = this.facade.candidateService.getData()
-    .subscribe(res => {
-      this.candidates = res;
-    }, err => {
-      this.facade.errorHandlerService.showErrorMessage(err);
-    });
+      .subscribe(res => {
+        this.candidates = res;
+      }, err => {
+        this.facade.errorHandlerService.showErrorMessage(err);
+      });
     this.candidateSubscriptions.push(candidateSub);
   }
 
   changeFormStatus(enable: boolean) {
     for (const i in this.candidateForm.controls) {
-      if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni'])){
-        if (enable){
+      if ((this.candidateForm.controls[i] != this.candidateForm.controls['dni'])) {
+        if (enable) {
           this.candidateForm.controls[i].enable();
-        }else{
+        } else {
           this.candidateForm.controls[i].disable();
         }
       }
     }
   }
 
-  checkID(id:number) {
+  checkID(id: number) {
     this.facade.processService.getActiveProcessByCandidate(id)
       .subscribe((res: Process[]) => {
         if (res.length > 0) {
@@ -285,32 +284,36 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProfile(){
+  getProfile() {
     const communityId = this.candidateForm.get('community').value;
     const communityIndex = this.communities.findIndex(community => community.id === communityId);
     this.candidateForm.get('profile').setValue(null);
     this.availableProfiles = [];
-    if (!this.communities[communityIndex].profiles){
+    if (!this.communities[communityIndex].profiles) {
       const profileCommunitySub = this.facade.candidateProfileService.getProfileByCommunity(communityId)
-      .subscribe(data => {
-        let profiles: CandidateProfile[] = [];
-        if (data.length > 0){
-          for (const algo in data){
-            profiles.push(data[algo].profile);
+        .subscribe(data => {
+          let profiles: CandidateProfile[] = [];
+          if (data.length > 0) {
+            for (const algo in data) {
+              profiles.push(data[algo].profile);
+            }
+            this.communities[communityIndex].profiles = profiles;
+            this.availableProfiles = profiles;
+            this.addNaProfileToProfileList();
+            this.facade.communityService.data.next(this.communities);
+          } else {
+            this.availableProfiles = this.profiles;
+            this.addNaProfileToProfileList();
           }
-          this.communities[communityIndex].profiles = profiles;
-          this.availableProfiles = profiles;
-          this.facade.communityService.data.next(this.communities);
-        } else {
-          this.availableProfiles = this.profiles;
-        }
-      });
+        });
       this.candidateSubscriptions.push(profileCommunitySub);
-    } else{
+    } else {
       this.availableProfiles = this.communities[communityIndex].profiles;
+      this.addNaProfileToProfileList();
+
     }
   }
-  setCurrentProfile(){
+  setCurrentProfile() {
     const profileId = this.candidateForm.get('profile').value;
     this.facade.candidateProfileService.currentCandidateProfileId.next(profileId);
   }
@@ -319,15 +322,29 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     return this.candidateForm.controls[name];
   }
 
+  setProfile() {
+    if (this.naProfile) {
+      if (this.candidateForm.controls.profile.value === this.naProfile.id) {
+        return null;
+      }
+    }
+
+    if (this.candidateForm.controls.profile.value) {
+      return new CandidateProfile(this.candidateForm.controls.profile.value);
+    } else {
+      return null;
+    }
+  }
+
   getFormData(): Candidate {
     let pn = this.candidateForm.controls['phoneNumber'].value == undefined
-    || this.candidateForm.controls['phoneNumber'].value == null ? ''
-    : this.candidateForm.controls['phoneNumber'].value.toString();
+      || this.candidateForm.controls['phoneNumber'].value == null ? ''
+      : this.candidateForm.controls['phoneNumber'].value.toString();
 
 
     let prefix = this.candidateForm.controls['phoneNumberPrefix'].value == undefined
-    || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
-    : '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')';
+      || this.candidateForm.controls['phoneNumberPrefix'].value == null ? ''
+      : '(' + this.candidateForm.controls['phoneNumberPrefix'].value.toString() + ')';
 
     let newCandidate: Candidate = {
       id: !this.isEdit ? this._candidate.id : this._process.candidate.id,
@@ -340,14 +357,14 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
       candidateSkills: null,
       englishLevel: EnglishLevelEnum.None,
       status: this.candidateForm.controls['status'].value === null ? null : this.candidateForm.controls['status'].value,
-      user: !this.candidateForm.controls['user'].value ? null : new User(this.candidateForm.controls['user'].value, null),
+      user: this.currentUser,
       preferredOfficeId: this.candidateForm.controls['preferredOffice'].value === null ? null : this.candidateForm.controls['preferredOffice'].value,
       contactDay: new Date(),
-      profile: this.candidateForm.controls['profile'].value===null?null:new CandidateProfile(this.candidateForm.controls['profile'].value),
-      community: this.candidateForm.controls['community'].value===null?null: new Community(this.candidateForm.controls['community'].value),
-      isReferred: this.candidateForm.controls['isReferred'].value === null?false:this.candidateForm.controls['community'].value,
-      cv: this.candidateForm.controls['cv'].value===null?null:this.candidateForm.controls['cv'].value,
-      knownFrom: this.candidateForm.controls['knownFrom'].value===null?null:this.candidateForm.controls['knownFrom'].value,
+      profile: this.setProfile(),
+      community: this.candidateForm.controls['community'].value === null ? null : new Community(this.candidateForm.controls['community'].value),
+      isReferred: this.candidateForm.controls['isReferred'].value === null ? false : this.candidateForm.controls['community'].value,
+      cv: this.candidateForm.controls['cv'].value === null ? null : this.candidateForm.controls['cv'].value,
+      knownFrom: this.candidateForm.controls['knownFrom'].value === null ? null : this.candidateForm.controls['knownFrom'].value,
       referredBy: !this.candidateForm.controls['referredBy'].value ? null : this.candidateForm.controls['referredBy'].value,
       source: !this.candidateForm.controls['source'].value ? null : this.candidateForm.controls['source'].value
     }
@@ -366,17 +383,28 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     let phoneNumberControl = this.candidateForm.controls["phoneNumber"];
     let emailControl = this.candidateForm.controls["email"];
 
-    if(phoneNumberControl.value === null || phoneNumberControl.value === '') {
+    if (phoneNumberControl.value === null || phoneNumberControl.value === '') {
       phoneNumberControl.enable();
     }
-    if(emailControl.value === null) {
+    if (emailControl.value === null) {
       emailControl.enable();
     }
-    
+
     this.candidateForm.controls["preferredOffice"].enable();
     this.candidateForm.controls["linkedin"].enable();
     this.candidateForm.controls["profile"].enable();
     this.candidateForm.controls["source"].enable();
+  }
+
+  addNaProfileToProfileList() {
+    if (!this.availableProfiles.some(x => x.name === 'N/A')) {
+      this.naProfile = new CandidateProfile();
+      let maxId = Math.max.apply(null, this.availableProfiles.map(i => i.id))
+      this.naProfile.id = this.availableProfiles.length > 0 ? ++maxId : 1;
+      this.naProfile.name = 'N/A';
+      this.naProfile.description = 'Not Applicable';
+      this.availableProfiles.unshift(this.naProfile);
+    }
   }
 
 }

@@ -15,7 +15,7 @@ export const initialState: State = {
     communities: [],
     errorMsg: null,
     loading: false,
-    failed: false
+    failed: null
 }
 
 export const reducer = createReducer(initialState,
@@ -31,30 +31,41 @@ export const reducer = createReducer(initialState,
 
     on(
         communitiesActions.addSuccess,
-        (state, { community, communityId }) => ({
-            ...state,
-            communities: [...state.communities, { community, id: communityId }],
-            loading: false,
-            failed: false
-        })
+        (state, community) => {
+            const sortedCommunities = [...state.communities, community].sort((a, b) => (a.name.localeCompare(b.name)));
+
+            return {
+                ...state,
+                communities: sortedCommunities,
+                loading: false,
+                failed: false
+            };
+        }
     ),
     on(
         communitiesActions.loadSuccess,
-        (state, { communities }) => ({
-            ...state,
-            communities,
-            loading: false,
-            failed: false
-        })
+        (state, { communities }) => {
+            const sortedCommunities = communities.slice().sort((a, b) => (a.name.localeCompare(b.name)));
+            return {
+                ...state,
+                communities: sortedCommunities,
+                loading: false,
+                failed: false
+            };
+        }
     ),
     on(
         communitiesActions.editSuccess,
-        (state, { community }) => ({
-            ...state,
-            communities: [...state.communities.filter((value) => value.id !== community.id), community],
-            loading: false,
-            failed: false
-        })
+        (state, { community }) => {
+            const updatedCommunities = [...state.communities.filter((value) => value.id !== community.id), community];
+            updatedCommunities.sort((a, b) => (a.name.localeCompare(b.name)));
+            return ({
+                ...state,
+                communities: updatedCommunities,
+                loading: false,
+                failed: false
+            })
+        }
     ),
     on(
         communitiesActions.removeSuccess,
@@ -65,7 +76,6 @@ export const reducer = createReducer(initialState,
             failed: false
         })
     ),
-
     on(
         communitiesActions.loadFailed,
         communitiesActions.addFailed,
@@ -77,8 +87,16 @@ export const reducer = createReducer(initialState,
             loading: false,
             failed: true
         })
+    ),
+    on(
+        communitiesActions.resetFailed,
+        (state) => ({
+            ...state,
+            loading: true,
+            failed: null
+        })
     )
-)
+);
 
 export const selectCommunities = (state: State) => state.communities;
 export const selectCommunitiesErrorMsg = (state: State) => state.errorMsg;

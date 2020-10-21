@@ -1,5 +1,11 @@
 <div nz-row>
     <div nz-col nzSpan="24">
+        <div class="button-container" style="display: flex; justify-content: flex-end; margin-bottom: 1.5%;">
+            <button nz-button nzType="default" class="recru-button-cta--large recru-button-secondary"
+            (click)="showBulkAddModal(bulkAddModal)">MASSIVE UPLOAD</button>
+            <button nz-button nzType="primary" class="recru-button-cta recru-button-cta--large" 
+                (click)="showCandidateAddModal(newCandidateModal)"> NEW CANDIDATE </button>
+        </div>
         <nz-table #candidateTable [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
             <thead>
                 <tr>
@@ -38,17 +44,14 @@
                     <td>{{ getStatus(candidate.status) }}</td>
                     <td>{{ candidate.source }}</td>
                     <td>{{ candidate.user.firstName }} {{ candidate.user.lastName }}</td>
-                    <td *ngIf="candidate.id">
+                    <td *ngIf="candidate.id && candidate.status !== 9">
                         <!-- here start the cv  -->
-                        <nz-divider nzType="vertical"></nz-divider>
-                         <i *ngIf="checkCV(candidate.cv); else noCV" nzTooltipTitle="Open CV" nz-tooltip nz-icon
-                         class="icon-action" nzType="file-pdf" nzTheme="outline"
-                        (click)="openCV(candidate.cv)"></i>
-                        <ng-template #noCV>
-                            <i nzTooltipTitle="No CV available" nz-tooltip nz-icon class="icon-action" nzType="file-pdf"
-                            nzTheme="outline"></i>
-                        </ng-template>
-                        <nz-divider nzType="vertical"></nz-divider>
+                        <span *ngIf="checkCV(candidate.cv)" >
+                            <i nzTooltipTitle="Open CV" nz-tooltip nz-icon
+                            class="icon-action" nzType="file-pdf" nzTheme="outline"
+                           (click)="openCV(candidate.cv)"></i>
+                           <nz-divider nzType="vertical"></nz-divider>
+                        </span>
                         <!-- Here end the Cv -->
                         <i nz-tooltip (click)="showDetailsModal(candidate.id, detailModal)" class="icon-action" nz-icon
                             nzType="info-circle" nzTooltipTitle="Details"></i>
@@ -58,14 +61,16 @@
                         <nz-divider nzType="vertical"></nz-divider>
                         <i nz-tooltip (click)="showDeleteConfirm(candidate.id)" class="icon-action" nz-icon
                             nzType="delete" nzTooltipTitle="Delete"></i>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <i nzTooltipTitle="Start Process" nz-tooltip nz-icon
-                            class="icon-action" nzType="play-circle" nzTheme="outline" (click)="goToProcesses(candidate)" *ngIf="!candidate.status;else candidateWithProcess"></i>
-                            <ng-template #candidateWithProcess>
-                                <i nzTooltipTitle="A process has already been created for this candidate" nz-tooltip nz-icon
-                                class="icon-action" nzType="play-circle" nzTheme="outline"></i>
-                            </ng-template>
+                            <span *ngIf="candidate.status === 0"> 
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <i nzTooltipTitle="Start Process" nz-tooltip nz-icon
+                                class="icon-action" nzType="play-circle" nzTheme="outline" (click)="goToProcesses(candidate)"></i>
+                            </span>
                     </td>
+                    <td *ngIf="candidate.status === 9">
+                    <i nzTooltipTitle="Reactivate Candidate" nzTooltipContent="topLeft" nz-tooltip style="cursor: pointer;"
+             nz-icon nzType="redo" nzTheme="outline" (click)="reactivateCandidate(candidate.id)"></i>
+            </td>
                 </tr>
             </tbody>
         </nz-table>
@@ -388,4 +393,14 @@
             </div>
         </div>
     </form>
+</ng-template>
+
+<ng-template #bulkAddModal>
+    <app-bulk-add [_visible]=true [communities]=communities
+    [candidateSources]="sourceArray" (refreshTableAction)="refreshPeopleTable()"></app-bulk-add>
+</ng-template>
+
+<ng-template #newCandidateModal>
+    <app-referrals-contact [_visible]=true [communities]=communities 
+        [candidateSources]="sourceArray" (refreshTableAction)="refreshPeopleTable()"></app-referrals-contact>
 </ng-template>

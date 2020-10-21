@@ -6,6 +6,7 @@ import { AppConfig } from '@shared/utils/app.config';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ErrorResponse } from '@shared/models/error-response.model';
+import { handleError } from '@shared/utils/utils.functions';
 
 @Injectable()
 export class BaseService<T> {
@@ -48,7 +49,7 @@ export class BaseService<T> {
         tap((res) => {
           this.data.next(res);
         }),
-        catchError(this.handleErrors)
+        catchError((errorResponse) => handleError(errorResponse, throwError))
       );
   }
 
@@ -58,7 +59,7 @@ export class BaseService<T> {
       .get<T>(url, {
         headers: this.headersWithAuth,
       })
-      .pipe(catchError(this.handleErrors));
+      .pipe(catchError((errorResponse) => handleError(errorResponse, throwError)));
   }
 
   public add(entity: T): Observable<T> {
@@ -70,7 +71,8 @@ export class BaseService<T> {
         tap(res => {
           this.get().subscribe();
         }),
-        catchError(this.handleErrors));
+        catchError((errorResponse) => handleError(errorResponse, throwError))
+      );
   }
 
   public update(id, entity: T): Observable<any> {
@@ -81,7 +83,7 @@ export class BaseService<T> {
       })
       .pipe(
         tap(res => this.get().subscribe()),
-        catchError(this.handleErrors)
+        catchError((errorResponse) => handleError(errorResponse, throwError))
       );
   }
 
@@ -92,10 +94,12 @@ export class BaseService<T> {
         headers: this.headersWithAuth,
       })
       .pipe(
-        tap(res => this.get().subscribe()),
-        catchError(this.handleErrors));
+        catchError((errorResponse) => handleError(errorResponse, throwError))
+      );
   }
 
+  // Need to be replaced with function 'handleError' in utils/utils.function.ts
+  
   public handleErrors = (httpErrorResponse) => {
 
     let errorObject: ErrorResponse = httpErrorResponse.error;
@@ -122,6 +126,5 @@ export class BaseService<T> {
     else {
       return throwError([this.defaultServerErrorMessage]);
     }
-
   }
 }

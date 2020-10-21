@@ -1,0 +1,161 @@
+<form nz-form [formGroup]="candidateForm" [nzLayout]="'horizontal'" class="recru-container">
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="CommunityErrorMsg">
+                <nz-select *recruInput="'Community'" formControlName="community"
+                    [nzDisabled]="isEditReferral || !!this.position?.title">
+                    <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #CommunityErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('community').dirty && candidateForm.get('community').errors">
+                        Please input the community
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!!position?.title" class="recru-item-half">
+            <nz-form-control>
+                <input *recruInput="'Position'" nz-input nz-tooltip nzTooltipTrigger="hover"
+                    nzTooltipPlacement="topLeft" nzTooltipTitle="This cannot be changed"
+                    formControlName="openPositionTitle" id="Position" readonly>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!isReferral" class="recru-item-half">
+            <nz-form-control>
+                <nz-select *recruInput="'Source'" formControlName="source"
+                    nzPlaceHolder="Select candidate source">
+                    <nz-option *ngFor="let s of candidateSources" nzLabel="{{s.name}}" [nzValue]="s.name">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="firstNameErrorMsg">
+                <input *recruInput="'First Name'" type="text" nz-input formControlName="firstName" id="FirstName">
+                <ng-template #firstNameErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('firstName').dirty && candidateForm.get('firstName').errors">
+                        <ng-container *ngIf="candidateForm.get('firstName')?.hasError('required')">
+                            Please input the First name
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [hidden]="!visible" [nzErrorTip]="lastNameErrorMsg">
+                <input *recruInput="'Last Name'" type="text" nz-input formControlName="lastName" id="lastName">
+                <ng-template #lastNameErrorMsg>
+                    <ng-container *ngIf="candidateForm.get('lastName').dirty && candidateForm.get('lastName').errors">
+                        <ng-container *ngIf="candidateForm.get('lastName')?.hasError('required')">
+                            Please input the last name
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['email']" [nzErrorTip]="emailErrorMsg">
+                <input *recruInput="'E-mail'" nz-input formControlName="email" id="email">
+                <ng-template #emailErrorMsg>
+                    <ng-container>
+                        <ng-container
+                            *ngIf="candidateForm.get('email').hasError('email') && !candidateForm.get('email').hasError('emailAndPhoneEmpty')">
+                            Enter a valid e-mail address
+                        </ng-container>
+                        <ng-container *ngIf="candidateForm.get('email').hasError('emailExists')">
+                            E-mail address already exists
+                        </ng-container>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('email').hasError('emailAndPhoneEmpty')">
+                        Please enter a valid email or phone number
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['phoneNumber']"
+                [nzErrorTip]="phoneNumberErrorMsg">
+                <nz-input-group *recruInput="'Phone Number'" [nzAddOnBefore]="addOnBeforeTemplate">
+                    <input formControlName="phoneNumber" id="'phoneNumber'" type="number" minlength="10" maxlength="12" 
+                        pattern="^\+?[1-9]\d{9,11}$" nz-input >
+                    <ng-template #addOnBeforeTemplate>
+                        <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
+                            <nz-option nzLabel="+54" nzValue="+54"></nz-option>
+                            <nz-option nzLabel="+1" nzValue="+1"></nz-option>
+                        </nz-select>
+                    </ng-template>
+                </nz-input-group>
+                <ng-template #phoneNumberErrorMsg>
+                    <ng-container
+                        *ngIf="candidateForm.get('phoneNumber').errors && !candidateForm.get('phoneNumber').hasError('emailAndPhoneEmpty')">
+                        Please enter a valid phone number
+                    </ng-container>
+                    <ng-container
+                        *ngIf="(candidateForm.get('email').dirty || candidateForm.get('phoneNumber').dirty) && candidateForm.get('phoneNumber').hasError('emailAndPhoneEmpty')">
+                        Please enter a valid email or phone number
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['file']" [nzErrorTip]="uploadCvErrorMsg">
+                <nz-upload *recruInput="'Upload CV'" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                    <button nz-button><i nz-icon nzType="upload"></i>Choose a file</button>
+                </nz-upload>
+                <ng-template #uploadCvErrorMsg>
+                    <ng-container
+                        *ngIf="candidateForm.get('file').dirty && (candidateForm.get('file').errors || candidateForm.hasError('cvAndLinkedInEmpty'))">
+                        Please input a CV or a LinkedIn
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzValidateStatus]="candidateForm.controls['link']" [nzErrorTip]="linkedInErrorMsg">
+                <input *recruInput="'LinkedIn'" nz-input formControlName="link" id="link">
+                <ng-template #linkedInErrorMsg>
+                    <ng-container
+                        *ngIf="candidateForm.get('link').dirty && (candidateForm.get('link').errors || candidateForm.hasError('cvAndLinkedInEmpty'))">
+                        Please input a LinkedIn
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</form>
+
+<div nz-row nzJustify="center" [hidden]="isEditReferral || !isReferral">
+    <label nz-checkbox [(ngModel)]="checkedTerms">I accept the </label> <a
+        href="/#/terms-and-conditions" target="_blank">
+        Terms and Conditions
+    </a>
+</div>
+
+<div nz-row nzJustify="center">
+    <div nz-col nzSpan="24">
+        <nz-divider class="custom-divider"></nz-divider>
+        <div class="recru-control-buttons__wrapper">
+            <button nz-button nzType="default" class="recru-button-secondary"
+                (click)="clearDataAndCloseModal()">Cancel</button>
+                <button [disabled]="!checkedTerms && isReferral" nz-button nzType="primary" [hidden]="isEditReferral"
+                (click)="createNewCandidate()" class="recru-button-primary">SAVE</button>
+            <button nz-button nzType="primary" class="recru-button-primary" [hidden]="!isEditReferral"
+                (click)="saveEdit()">
+                Edit
+            </button>
+        </div>
+    </div>
+</div>

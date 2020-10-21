@@ -1,0 +1,58 @@
+<form nz-form [formGroup]="form" [nzLayout]="'horizontal'" class="recru-container">
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzErrorTip]="communityError">
+                <nz-select *recruInput="'Community'" formControlName="community" nzPlaceHolder="Select community">
+                    <nz-option *ngFor="let c of filteredCommunity" nzLabel="{{c.name}}" [nzValue]="c.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #communityError>
+                    <ng-container *ngIf="form.get('community').dirty && form.get('community').errors">
+                        Please select a community
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzErrorTip]="sourceError">
+                <nz-select *recruInput="'Source'" formControlName="source"
+                    nzPlaceHolder="Select candidate source">
+                    <nz-option *ngFor="let s of candidateSources" nzLabel="{{s.name}}" [nzValue]="s.name">
+                    </nz-option>
+                </nz-select>
+                <ng-template #sourceError>
+                    <ng-container *ngIf="form.get('community').dirty && form.get('community').errors">
+                        Please select a community
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <div class="recru-row">
+        <nz-form-item class="recru-item-half">
+            <nz-form-control [nzValidateStatus]="form.controls['file']" [nzErrorTip]="uploadCvErrorMsg">
+                <nz-upload *recruInput="'Submit Excel file'" [nzBeforeUpload]="beforeUpload">
+                    <button nz-button><i nz-icon nzType="upload"></i>{{filename ? filename : "Choose a file"}}</button>
+                </nz-upload>
+                <ng-template #uploadCvErrorMsg>
+                    <ng-container
+                        *ngIf="form.get('file').dirty && (form.get('file').errors)">
+                        Please submit a valid file.
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</form>
+<div nz-row nzJustify="center">
+    <div nz-col nzSpan="24">
+        <nz-divider class="custom-divider"></nz-divider>
+        <div class="recru-control-buttons__wrapper">
+            <button nz-button nzType="default" class="recru-button-secondary"
+                (click)="clearDataAndCloseModal()">Cancel</button>
+            <button nz-button nzType="primary"
+                (click)="saveEdit()" class="recru-button-primary">SAVE</button>
+        </div>
+    </div>
+</div>

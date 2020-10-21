@@ -7,5 +7,6 @@ export enum ProcessStatusEnum {
     Hired = 5,
     Recall = 6,
     Pipeline = 7,
-    PendingReply = 8
+    PendingReply = 8,
+    Eliminated = 9
 }

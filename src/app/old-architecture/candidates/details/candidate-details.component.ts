@@ -75,7 +75,7 @@ export class CandidateDetailsComponent implements OnInit {
     this.facade.candidateProfileService.get()
       .subscribe(res => {
         if (this._detailedCandidate) {
-          this.profileName = res.filter(profile => profile.id === this._detailedCandidate.profile.id)[0].name;
+          this.profileName = this._detailedCandidate.profile === null ? 'N/A' : res.filter(profile => profile.id === this._detailedCandidate.profile.id)[0].name;
         }
       }, err => {
         this.facade.errorHandlerService.showErrorMessage(err);

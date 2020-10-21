@@ -11,6 +11,8 @@ import { ICandidate } from '../interfaces/ICandidate.service';
 @Injectable()
 export class ReferralsService extends BaseService<Candidate> implements ICandidate{
   currentReferralList: Candidate[] = [];
+  emptyReferredInfo: Candidate;
+  isReferral = false;
 
   private referralList = new BehaviorSubject<Candidate[]>(this.currentReferralList);
   referrals = this.referralList.asObservable();
@@ -23,6 +25,12 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
 
   public _createNewReferralSource = new BehaviorSubject<boolean>(false);
   _createNewReferral$ = this._createNewReferralSource.asObservable();
+
+  public _candidateInfoSource = new BehaviorSubject<Candidate>(this.emptyReferredInfo);
+  _candidateInfo$ = this._candidateInfoSource.asObservable();
+
+  public _isReferralSource = new BehaviorSubject<boolean>(this.isReferral);
+  _isReferral$ = this._isReferralSource.asObservable();
 
   candidateAdded = new Subject<Candidate>();
   candidateDelete = new Subject<number>();
@@ -55,6 +63,7 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
 
   public getCandidatesBySkills(candidatesFilters): Observable<any> {
 
+
     return this.http.post(this.apiUrl + '/filter/', candidatesFilters, {
       headers: this.headersWithAuth
     })
@@ -70,14 +79,7 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
       .post<Candidate>(this.apiUrl, newCandidate, {
         headers: this.headersWithAuth,
       })
-      .pipe(
-        tap(res => { 
-          this.candidateAdded.next(newCandidate);
-          this.data.next([...this.data.value, newCandidate]);
-        } ),
-        catchError(this.handleErrors)
-      );
-  }
+  };
 
   public saveCv(candidateId: number, formData: FormData): Observable<any> {
 
@@ -137,4 +139,13 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
       tap(res => this.candidateDelete.next(referralId))
     );
   }
+  
+  public setIsReferral() {
+    this._isReferralSource.next(true);
+  }
+
+  public resetIsReferral() {
+    this._isReferralSource.next(false);
+  }
+
 }

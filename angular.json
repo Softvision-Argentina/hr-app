@@ -24,7 +24,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
+            "aot":  true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -263,5 +263,8 @@
       }
     }
   },
-  "defaultProject": "recru-webapp"
+  "defaultProject": "recru-webapp",
+  "cli": {
+    "analytics": false
+  }
 }

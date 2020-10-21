@@ -39,7 +39,7 @@ export class HrStageComponent implements OnInit {
     wantedSalary: [null],
     userOwnerId: [],
     userDelegateId: [null],
-    feedback: [null, [Validators.maxLength(10000)]],
+    feedback: [null, []],
     additionalInformation: [null],
     englishLevel: EnglishLevelEnum.None,
     rejectionReason: [null],
@@ -155,11 +155,10 @@ export class HrStageComponent implements OnInit {
 
   getFormData(processId: number): HrStage {
     const hrStage: HrStage = new HrStage();
-    const feedback = this.getControlValue(this.hrForm.controls.feedback);
 
     hrStage.id = this.getControlValue(this.hrForm.controls.id);
     hrStage.date = this.getControlValue(this.hrForm.controls.date);
-    hrStage.feedback = feedback ? feedback : this.feedbackContent
+    hrStage.feedback = this.feedbackContent;
     hrStage.status = this.getControlValue(this.hrForm.controls.status);
     hrStage.userOwnerId = this.getControlValue(this.hrForm.controls.userOwnerId);
     hrStage.userDelegateId = this.getControlValue(this.hrForm.controls.userDelegateId);
@@ -176,7 +175,7 @@ export class HrStageComponent implements OnInit {
   }
 
   getFeedbackContent(content: string): void {
-    this.hrForm.controls["feedback"].setValue(content);
+    this.feedbackContent = content;
   }
 
   getControlValue(control: any): any {

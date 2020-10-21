@@ -37,10 +37,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.facade.appService.startLoading();
     this.facade.appService.removeBgImage();
     this.tasksSandbox.loadTasks(this.user.id);
-    this.tasksSandbox.tasks$.subscribe(tasks => {
-      this.toDoListDisplay = tasks;
-      this.toDoList = tasks;
-    });
+    this.tasksSandbox.tasks$.subscribe(tasks => this.toDoListDisplay = tasks);
     this.getUsers();
     this.resetForm();
     this.loading = false;
