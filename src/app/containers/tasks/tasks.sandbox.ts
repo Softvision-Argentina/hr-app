@@ -38,8 +38,8 @@ export class TasksSandbox {
         this.tasksState$.dispatch(tasksActions.remove({ taskId }));
     }
 
-    loadTasks(userId: number) {
-        this.tasksState$.dispatch(tasksActions.load({ userId }));
+    loadTasks(userRole, userEmail) {
+        this.tasksState$.dispatch(tasksActions.load({userRole, userEmail}));
     }
 
     toogleModal() {

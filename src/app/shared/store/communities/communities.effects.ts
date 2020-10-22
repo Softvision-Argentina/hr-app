@@ -12,7 +12,7 @@ export class CommunitiesEffects {
         this.action$.pipe(
             ofType(communitiesActions.load),
             switchMap(() =>
-                this.communityService.get()
+                this.communityService.getCommunities()
                     .pipe(
                         map((communities: Community[]) => communitiesActions.loadSuccess({ communities })),
                         catchError((errorMsg: any) => of(communitiesActions.loadFailed({ errorMsg })))

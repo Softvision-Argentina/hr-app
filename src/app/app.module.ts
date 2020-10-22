@@ -54,6 +54,7 @@ import { TaskService } from '@shared/services/task.service';
 import { UserService } from '@shared/services/user.service';
 import { reducers } from '@shared/store';
 import { CommunitiesEffects } from '@shared/store/communities/communities.effects';
+import { CandidateProfileEffects } from '@shared/store/candidates-profile/candidates-profile.effects'
 import { AppConfig } from '@shared/utils/app.config';
 import { Globals } from '@shared/utils/globals';
 import { en_US, NzAvatarModule, NzCalendarModule, NzCardModule, NzListModule, NzModalModule, NzSwitchModule, NZ_I18N } from 'ng-zorro-antd';
@@ -67,7 +68,12 @@ import { ReferralsModule } from '@app/containers/referrals/referrals/referrals.m
 import { SideMenuComponent } from './old-architecture/side-menu/side-menu.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { CandidateInfoService } from '@shared/services/candidate-info.service';
-
+import { OfficeEffects } from '@shared/store/office/office.effects';
+import { ReaddressReasonEffects } from '@shared/store/readdress-reason/readdress-reason.effects';
+import { ReaddressReasonTypesEffects } from '@shared/store/readdress-reason-type/readdress-reason-type.effects';
+import { RoomEffects } from '@shared/store/room/room.effects';
+import { SkillTypesEffects } from '@shared/store/skill-type/skill-type.effects';
+import { SkillsEffects } from '@shared/store/skills/skills.effects';
 
 @NgModule({
   declarations: [
@@ -117,7 +123,7 @@ import { CandidateInfoService } from '@shared/services/candidate-info.service';
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
     }),
-    EffectsModule.forRoot([CommunitiesEffects])
+    EffectsModule.forRoot([CommunitiesEffects, CandidateProfileEffects, OfficeEffects, ReaddressReasonEffects, ReaddressReasonTypesEffects, RoomEffects, SkillTypesEffects, SkillsEffects])
   ],
   providers: [
     Globals,

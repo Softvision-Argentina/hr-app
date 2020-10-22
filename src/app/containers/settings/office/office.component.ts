@@ -40,7 +40,7 @@ export class OfficeComponent implements OnInit {
       this.offices = res;
     }, err => {
       this.facade.errorHandlerService.showErrorMessage(err);
-    })
+    });
 
   }
 

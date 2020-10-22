@@ -6,7 +6,7 @@ export const tasksActions = {
     addSuccess: createAction('[TaskComponent] addSuccess', props<{ task: any }>()),
     addFailed: createAction('[TaskComponent] addFailed'),
     toogleModal: createAction('[TaskComponent] toogleModal'),
-    load: createAction('[TaskComponent] load', props<{ userId: number }>()),
+    load: createAction('[TaskComponent] load', props<{ userRole: string, userEmail: string }>()),
     loadSuccess: createAction('[TaskComponent] loadSuccess', props<{ tasks: any }>()),
     loadFailed: createAction('[TaskComponent] loadFailed'),
     remove: createAction('[TaskComponent] remove', props<{ taskId: number }>()),

@@ -12,9 +12,8 @@ import { taskReducer } from './store/task.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { TasksEffects } from './store/tasks.effects';
 import { TasksSandbox } from './tasks.sandbox';
-import { TasksService } from './tasks.service';
+import { TaskService } from '@shared/services/task.service';
 
-//borrar uno de los tasksService!!!!!
 
 @NgModule({
     declarations: [TasksComponent],
@@ -63,7 +62,7 @@ import { TasksService } from './tasks.service';
     ],
     providers: [
         TasksSandbox,
-        TasksService
+        TaskService
     ],
     entryComponents: [TasksComponent]
 })

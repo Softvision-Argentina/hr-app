@@ -19,15 +19,9 @@ import { ProcessCurrentStageEnum } from '@shared/enums/process-current-stage.enu
 import { ProcessStatusEnum } from '@shared/enums/process-status.enum';
 import { SeniorityEnum } from '@shared/enums/seniority.enum';
 import { StageStatusEnum } from '@shared/enums/stage-status.enum';
-import { CandidateProfile } from '@shared/models/candidate-profile.model';
 import { Candidate } from '@shared/models/candidate.model';
-import { Community } from '@shared/models/community.model';
-import { DeclineReason } from '@shared/models/decline-reason.model';
-import { Office } from '@shared/models/office.model';
 import { PreOffer } from '@shared/models/pre-offer.model';
 import { Process } from '@shared/models/process.model';
-import { ReaddressReasonType } from '@shared/models/readdress-reason-type.model';
-import { ReaddressReason } from '@shared/models/readdress-reason.model';
 import { ReaddressStatus } from '@shared/models/readdress-status.model';
 import { Stage } from '@shared/models/stage.model';
 import { User } from '@shared/models/user.model';
@@ -40,6 +34,7 @@ import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { Subject, Subscription } from 'rxjs';
 import { ProcessSandbox } from '@app/containers/processes/processes.sandbox';
 import { ProcessTableView } from '@shared/models/process-tableView.model';
+import { CandidateProfile } from '@shared/models/candidate-profile.model';
 
 @Component({
   selector: 'app-processes',
@@ -97,10 +92,7 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   profileSearch = 0;
   profileSearchName = 'ALL';
   communitySearchName = 'ALL';
-  profileList: any[];
   statusList: any[];
-  displayedOwnStatusList: any[];
-  displayedStatusList: any[];
   currentStageList: any[];
   displayedOwnCurrentStageList: any[];
   displayedCurrentStageList: any[];
@@ -113,17 +105,8 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   lastComponent: string;
   times = 0;
   selectedSeniority: SeniorityEnum;
-  offices: Office[] = [];
-  communities: Community[] = [];
-  displayedCommunities: Community[] = [];
-  displayedOwnCommunities: Community[] = [];
-  profiles: CandidateProfile[] = [];
-  displayedProfiles: CandidateProfile[] = [];
-  displayedOwnProfiles: CandidateProfile[] = [];
   stepIndex = 0;
-  declineReasons: DeclineReason[] = [];
   isDeclineReasonOther = false;
-  isOwnedProcesses = false;
   forms: FormGroup[] = [];
   processId: number;
   displayNavAndSideMenu: boolean;
@@ -132,12 +115,12 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
   processesSubscription: Subscription = new Subscription();
   saveEventSubject: Subject<number> = new Subject<number>();
 
-  readdressReasonList: ReaddressReason[] = [];
-  readdressReasonTypeList: ReaddressReasonType[] = [];
   readdressStatus: ReaddressStatus = new ReaddressStatus();
 
   currentStage: ProcessCurrentStageEnum;
   candidateInfo: Candidate;
+  profiles: CandidateProfile[];
+  getCandidateProfiles: any;
 
   preOfferData: { tentativeStartDate: Date, bonus: number, grossSalary: number, vacationDays: number, healthInsurance: HealthInsuranceEnum, notes: String } = null;
 
@@ -152,7 +135,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     private _referralsService: ReferralsService,
     private _candidateInfoService: CandidateInfoService,
     private globals: Globals) {
-    this.profileList = globals.profileList;
     this.statusList = globals.processStatusList;
     this.currentStageList = globals.processCurrentStageList;
   }
@@ -175,15 +157,15 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.processesSandbox.loadCommunities();
     this.processesSandbox.loadProcess();
     this.processesSandbox.loadDeletedProcess();
+    this.processesSandbox.loadCandidateProfiles();
+    this.getCandidateProfiles = this.processesSandbox.candidateProfiles$.subscribe(profiles => this.profiles = profiles);
+    this.processesSandbox.loadReaddressReasonTypes();
+    this.processesSandbox.loadOffices();
+    this.processesSandbox.loadReaddressReasons();
     this.getDeletedProcesses();
     this.getCandidates();
     this.getUsers();
-    this.getOffices();
-    this.getProfiles();
-    this.getDeclineReasons();
     this.getSearchInfo();
-    this.getReaddressReasonList();
-    this.getReaddressReasonTypeList();
     this.isLoading();
     this.isSuccessful();
     this.getError();
@@ -267,22 +249,18 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   getProcesses() {
     const processesSubscription = this.processesSandbox.processes$.subscribe(processes => {
-      if (processes && processes.length > 0) {
         this.listOfDisplayData = this.getAllProcesses(processes);
         this.listOfDisplayOwnData = this.getOwnProcesses(processes);
         this.filteredProcesses = this.getAllProcesses(processes);
         this.filteredOwnProcesses = this.getOwnProcesses(processes);
-      }
     });
     this.processesSubscription.add(processesSubscription);
   }
 
   getDeletedProcesses() {
     const deletedProcessesSubscription = this.processesSandbox.deletedProcesses$.subscribe(processes => {
-      if (processes && processes.length > 0) {
         this.listOfDeletedDisplayData = processes;
         this.filteredDeletedProcesses = processes;
-      }
     });
     this.processesSubscription.add(deletedProcessesSubscription);
   }
@@ -314,45 +292,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
 
     this.processesSubscription.add(userSubscription);
-  }
-
-  getOffices() {
-    const officeSubscription = this.facade.OfficeService.getData()
-      .subscribe(res => {
-        this.offices = res;
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-    this.processesSubscription.add(officeSubscription);
-  }
-
-  getCommunity(community: number): string {
-    return this.communities.find(x => x.id === community).name;
-  }
-
-  getProfiles() {
-    this.facade.candidateProfileService.get()
-      .subscribe(res => {
-        this.profiles = res;
-        this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
-        for (let i = 0; i < this.profiles.length; i++) {
-          if (this.profiles[i].name === 'N/A') {
-            const NA = this.profiles.splice(i, 1);
-            this.profiles.unshift(NA[0]);
-          }
-        }
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-  }
-
-  getDeclineReasons() {
-    this.facade.declineReasonService.get('Named')
-      .subscribe(res => {
-        this.declineReasons = res.sort((a, b) => (a.name.localeCompare(b.name)));
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
   }
 
   getSearchInfo() {
@@ -1022,24 +961,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.currentStage = value;
   }
 
-  getReaddressReasonList() {
-    this.facade.readdressReasonService.getData()
-      .subscribe(res => {
-        this.readdressReasonList = res;
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  getReaddressReasonTypeList() {
-    this.facade.readdressReasonTypeService.getData()
-      .subscribe(res => {
-        this.readdressReasonTypeList = res;
-      }, err => {
-        console.log(err);
-      });
-  }
-
   clearDataAndCloseModal() {
     let emptyCandidate: Candidate;
     this._candidateInfoService.sendCandidateInfo(emptyCandidate);
@@ -1079,5 +1000,6 @@ export class ProcessesComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnDestroy() {
     this.processesSubscription.unsubscribe();
+    this.getCandidateProfiles.unsubscribe();
   }
 }

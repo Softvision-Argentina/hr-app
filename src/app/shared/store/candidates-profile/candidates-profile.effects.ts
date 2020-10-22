@@ -12,7 +12,7 @@ export class CandidateProfileEffects {
         this.action$.pipe(
             ofType(candidateProfilesActions.load),
             switchMap(() =>
-                this.candidateProfileService.get()
+                this.candidateProfileService.getCandidateProfiles()
                     .pipe(
                         map((candidateProfiles: CandidateProfile[]) => candidateProfilesActions.loadSuccess({ candidateProfiles })
                         ),

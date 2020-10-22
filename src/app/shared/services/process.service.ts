@@ -3,18 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '@shared/utils/app.config';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, timer } from 'rxjs';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, shareReplay, switchMap } from 'rxjs/operators';
 import { Process } from '@shared/models/process.model';
 import { Candidate } from '@shared/models/candidate.model';
 import { Globals } from '../utils/globals';
 import { User } from '@shared/models/user.model';
 import { ProcessTableView } from '@shared/models/process-tableView.model';
 
+const CACHE_SIZE = 1;
+const REFRESH_INTERVAL = 300000;
 @Injectable()
 export class ProcessService extends BaseService<Process> {
-
+  private cache$: Observable<ProcessTableView[]>;
+  private deletedProcessesCache$: Observable<ProcessTableView[]>;
   private selectedSenioritysSource: BehaviorSubject<any[]>;
   selectedSeniorities: Observable<any[]>;
   candidatesUrl = '';
@@ -33,15 +36,6 @@ export class ProcessService extends BaseService<Process> {
 
   public getActiveProcessByCandidate(candidateId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/candidate/${candidateId}`,
-      { headers: this.headersWithAuth, observe: 'body' })
-      .pipe(
-        tap(data => { }),
-        catchError(this.handleErrors)
-      );
-  }
-
-  public getDeletedProcesses(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/DeletedProcesses/`,
       { headers: this.headersWithAuth, observe: 'body' })
       .pipe(
         tap(data => { }),
@@ -120,10 +114,31 @@ export class ProcessService extends BaseService<Process> {
   }
 
   public getTableView() {
-    const url = this.apiUrl + '/tableView';
-    return this.http.get<ProcessTableView[]>(url, {
-      headers: this.headersWithAuth
-    });
+    if (!this.cache$) {
+      const url = this.apiUrl + '/tableView';
+      const timer$ = timer(0, REFRESH_INTERVAL);
+      this.cache$ = timer$.pipe(
+        switchMap(_ => this.http.get<ProcessTableView[]>(url, {
+          headers: this.headersWithAuth
+        })),
+        shareReplay(CACHE_SIZE)
+      );
+    }
+    return this.cache$;
+  }
+
+  public getDeletedProcesses(): Observable<any> {
+    if (!this.deletedProcessesCache$) {
+      const url = `${this.apiUrl}/DeletedProcesses/`;
+      const timer$ = timer(0, REFRESH_INTERVAL);
+      this.deletedProcessesCache$ = timer$.pipe(
+        switchMap(_ => this.http.get<ProcessTableView[]>(url, {
+          headers: this.headersWithAuth
+        })),
+        shareReplay(CACHE_SIZE)
+      );
+      return this.deletedProcessesCache$;
+    }
   }
 
   public addProcess(process: Process) {
@@ -133,3 +148,5 @@ export class ProcessService extends BaseService<Process> {
     });
   }
 }
+
+

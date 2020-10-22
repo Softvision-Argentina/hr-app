@@ -68,7 +68,7 @@ const _taskReducer = createReducer(initialState,
         failed: true,
         onAddLoading: false,
     })),
-    on(tasksActions.load, (state, { userId }) => ({
+    on(tasksActions.load, (state, { userRole, userEmail }) => ({
         ...state,
         loading: true,
         failed: false

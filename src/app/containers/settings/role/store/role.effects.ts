@@ -12,7 +12,7 @@ export class RoleEffects {
         this.action$.pipe(
             ofType(roleActions.load),
             switchMap(() =>
-                this.roleService.get()
+                this.roleService.getRoles()
                     .pipe(
                         map((roles: Role[]) => roleActions.loadSuccess({ roles })),
                         catchError((errorMsg: any) => of(roleActions.loadFailed({ errorMsg })))

@@ -12,7 +12,7 @@ export class OfficeEffects {
         this.action$.pipe(
             ofType(officeActions.load),
             switchMap(() =>
-                this.officeService.get()
+                this.officeService.getOffices()
                     .pipe(
                         map((offices: Office[]) => officeActions.loadSuccess({ offices })),
                         catchError((errorMsg: any) => of(officeActions.loadFailed({ errorMsg })))

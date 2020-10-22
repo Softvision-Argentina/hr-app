@@ -62,7 +62,15 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this.comms = value;
   }
 
-  profiles: CandidateProfile[];;
+
+  @Input()
+  private _profiles: CandidateProfile[];
+  public get candidateProfiles(): CandidateProfile[] {
+    return this._profiles;
+  }
+  public set candidateProfiles(value: CandidateProfile[]) {
+    this.profiles = value;
+  }
 
   sourceArray = [
     { name: 'Linkedin' },
@@ -134,9 +142,7 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
     this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
     this.fillUsers = this._users;
     this.comms = this._communities;
-    this.comms.slice().sort((a, b) => (a.name.localeCompare(b.name)));
-    this.getProfiles();
-    this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
+    this.profiles = this._profiles;
     this.isEdit = this._process.id !== 0;
     this.setRecruiter();
     if (this.isEdit) {
@@ -159,22 +165,6 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   }
 
-  getProfiles() {
-    this.facade.candidateProfileService.get()
-      .subscribe(res => {
-        this.profiles = res;
-        this.profiles.sort((a, b) => (a.name.localeCompare(b.name)));
-        for (let i = 0; i < this.profiles.length; i++) {
-          if (this.profiles[i].name === 'N/A') {
-            const NA = this.profiles.splice(i, 1);
-            this.profiles.unshift(NA[0]);
-          }
-        }
-      }, err => {
-        this.facade.errorHandlerService.showErrorMessage(err);
-      });
-  }
-
   onCheckAndSave(): boolean {
     if (this.candidateForm.invalid) {
       this.checkForm();
@@ -194,8 +184,10 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   checkForm() {
     for (const i in this.candidateForm.controls) {
-      this.candidateForm.controls[i].markAsDirty();
-      this.candidateForm.controls[i].updateValueAndValidity();
+      if (this.candidateForm.controls[i]) {
+        this.candidateForm.controls[i].markAsDirty();
+        this.candidateForm.controls[i].updateValueAndValidity();
+      }
     }
   }
 
@@ -398,12 +390,14 @@ export class CandidateAddComponent implements OnInit, OnDestroy {
 
   addNaProfileToProfileList() {
     if (!this.availableProfiles.some(x => x.name === 'N/A')) {
-      this.naProfile = new CandidateProfile();
+      this.naProfile = new CandidateProfile;
       let maxId = Math.max.apply(null, this.availableProfiles.map(i => i.id))
       this.naProfile.id = this.availableProfiles.length > 0 ? ++maxId : 1;
       this.naProfile.name = 'N/A';
       this.naProfile.description = 'Not Applicable';
-      this.availableProfiles.unshift(this.naProfile);
+      const allProfiles = this.availableProfiles.slice();
+      allProfiles.unshift(this.naProfile)
+      this.availableProfiles = allProfiles;
     }
   }
 

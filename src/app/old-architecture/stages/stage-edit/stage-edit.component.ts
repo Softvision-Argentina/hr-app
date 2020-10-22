@@ -62,7 +62,7 @@ export class StageEditComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.users = res;
       }, err => {

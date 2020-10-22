@@ -95,26 +95,26 @@
   </div>
   <ngx-slick-carousel #slickModal='slick-carousel' class="carousel" [config]="slideConfig" (destroy)="closeModal()">
     <div ngxSlickItem>
-      <candidate-add [_communities]="processesSandbox.communities$ | async"
-        [_process]="emptyProcess" [_users]="users" [_candidate]="currentCandidate" [_offices]="offices">
+      <candidate-add [_profiles]="profiles" [_communities]="processesSandbox.communities$ | async"
+        [_process]="emptyProcess" [_users]="users" [_candidate]="currentCandidate" [_offices]="processesSandbox.offices$ | async">
       </candidate-add>
-      <hr-stage [_users]="users" [readdressReasonTypeList]="readdressReasonTypeList"
-        [readdressReasonList]="readdressReasonList" [hrStage]="emptyProcess.hrStage"></hr-stage>
+      <hr-stage [_users]="users" [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async"
+        [readdressReasonList]="processesSandbox.readdressReasons$ | async" [hrStage]="emptyProcess.hrStage"></hr-stage>
     </div>
     <div ngxSlickItem>
-      <technical-stage [_process]="emptyProcess" [_users]="users" [readdressReasonTypeList]="readdressReasonTypeList"
-        [readdressReasonList]="readdressReasonList" [technicalStage]="emptyProcess.technicalStage"
+      <technical-stage [_process]="emptyProcess" [_users]="users" [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async"
+        [readdressReasonList]="processesSandbox.readdressReasons$ | async" [technicalStage]="emptyProcess.technicalStage"
         (selectedSeniority)="updateSeniority($event)"></technical-stage>
     </div>
     <div ngxSlickItem>
       <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"
-        [readdressReasonTypeList]="readdressReasonTypeList" [readdressReasonList]="readdressReasonList"
+        [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async" [readdressReasonList]="processesSandbox.readdressReasons$ | async"
         [processSaveEvent]="processesSandbox.currentProcessId$"></client-stage>
     </div>
     <div ngxSlickItem>
       <pre-offer-stage [_users]="users" [processes]="processesSandbox.processes$ | async"
-        [preOfferStage]="emptyProcess.preOfferStage" [readdressReasonTypeList]="readdressReasonTypeList"
-        [readdressReasonList]="readdressReasonList" [processId]="processId"
+        [preOfferStage]="emptyProcess.preOfferStage" [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async"
+        [readdressReasonList]="processesSandbox.readdressReasons$ | async" [processId]="processId"
         (selectedSeniority)="updateSeniority($event)"></pre-offer-stage>
     </div>
     <div ngxSlickItem>

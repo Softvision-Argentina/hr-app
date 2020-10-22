@@ -66,7 +66,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   getUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.fillUsers = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {

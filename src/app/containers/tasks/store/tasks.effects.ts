@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType, act } from '@ngrx/effects';
-import { TasksService } from '../tasks.service';
+import { TaskService } from '@shared/services/task.service';
 import { tasksActions } from './tasks.actions';
 import { mergeMap, map, catchError, tap } from 'rxjs/operators';
 import { of } from "rxjs";
@@ -23,7 +23,7 @@ export class TasksEffects {
         this.action$.pipe(
             ofType(tasksActions.load),
             mergeMap((action) =>
-                this.tasksService.get(action.userId)
+                this.tasksService.getTasks(action.userRole, action.userEmail)
                     .pipe(
                         map((tasks) => tasksActions.loadSuccess({ tasks })),
                         catchError(() => of(tasksActions.loadFailed()))
@@ -47,6 +47,6 @@ export class TasksEffects {
 
     constructor(
         private action$: Actions,
-        private tasksService: TasksService
+        private tasksService: TaskService
     ) { }
 }

@@ -163,7 +163,7 @@ export class ProcessContactComponent implements OnInit {
   }
 
   getUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.fillUsers = res;
       }, err => {

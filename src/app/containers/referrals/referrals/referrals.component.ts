@@ -289,7 +289,7 @@ export class ReferralsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   confirmDelete(referralId: number) {
     this.facade.appService.startLoading();
-    this.referralsSandbox.remove(referralId)
+    this.referralsSandbox.remove(referralId);
     this.referralsSandbox.referralsLoadingError$
       .subscribe((res) => {
         this.facade.appService.stopLoading();

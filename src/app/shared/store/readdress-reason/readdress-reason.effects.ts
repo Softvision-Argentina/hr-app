@@ -12,7 +12,7 @@ export class ReaddressReasonEffects {
         this.action$.pipe(
             ofType(readdressReasonActions.load),
             switchMap(() =>
-                this.readdressReasonService.get()
+                this.readdressReasonService.getReasons()
                     .pipe(
                         map((readdressReasons: ReaddressReason[]) => readdressReasonActions.loadSuccess({ readdressReasons })),
                         catchError((errorMsg: any) => of(readdressReasonActions.loadFailed({ errorMsg })))

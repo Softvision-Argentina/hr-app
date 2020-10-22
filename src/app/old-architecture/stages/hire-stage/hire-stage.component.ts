@@ -36,7 +36,7 @@ export class HireStageComponent implements OnInit {
     date: [new Date(), [Validators.required]],
     userOwnerId: [null, [Validators.required]],
     userDelegateId: [null],
-    feedback: [null]
+    feedback: [null, [Validators.maxLength(10000)]]
   });
 
   feedbackContent:string = "";

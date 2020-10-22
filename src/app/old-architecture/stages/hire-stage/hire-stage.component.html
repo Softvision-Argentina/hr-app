@@ -76,9 +76,20 @@
         <div nz-col nzSpan="11">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="feedback">Feedback</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="feedbackErrorMsg">
                     <app-text-editor [setContent]="feedbackContent" (getContent)="getFeedbackContent($event)">
                     </app-text-editor>
+                    <ng-template #feedbackErrorMsg>
+                        <ng-container
+                            *ngIf="hireForm.get('feedback').dirty && hireForm.get('feedback').errors">
+                            <ng-container *ngIf="hireForm.get('feedback')?.hasError('required')">
+                                Field required
+                            </ng-container>
+                            <ng-container *ngIf="hireForm.get('feedback')?.hasError('maxlength')">
+                                The maximum length is 10000
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
                 </nz-form-control>
             </nz-form-item>
         </div>

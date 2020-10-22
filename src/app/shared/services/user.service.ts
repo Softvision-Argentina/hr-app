@@ -6,13 +6,29 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '@shared/models/user.model';
+import { shareReplay } from 'rxjs/operators';
 
+const CACHE_SIZE = 1;
 @Injectable()
 export class UserService extends BaseService<User> {
+  cache$: Observable<Array<User>>;
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
     this.apiUrl += 'User';
+  }
+
+  getUsers(): Observable<User[]> {
+    if (!this.cache$) {
+      this.cache$ = this.get().pipe(
+        shareReplay(CACHE_SIZE)
+      );
+    }
+    return this.cache$;
+  }
+
+  emptyCache() {
+    this.cache$ = null;
   }
 
   public getRoleByUserName(userName: string): Observable<string> {

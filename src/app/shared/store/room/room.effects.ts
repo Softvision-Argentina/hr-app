@@ -12,7 +12,7 @@ export class RoomEffects {
         this.action$.pipe(
             ofType(roomActions.load),
             switchMap(() =>
-                this.roomService.get()
+                this.roomService.getRooms()
                     .pipe(
                         map((rooms: Room[]) => roomActions.loadSuccess({ rooms })),
                         catchError((errorMsg: any) => of(roomActions.loadFailed({ errorMsg })))

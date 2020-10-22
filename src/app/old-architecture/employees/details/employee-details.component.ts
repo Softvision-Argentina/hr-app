@@ -30,7 +30,7 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   getRecruiterName() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.userName = res.filter(r => r.id === this._detailedEmployee.userId)[0].firstName
           + res.filter(r => r.id === this._detailedEmployee.userId)[0].lastName;

@@ -12,7 +12,7 @@ export class DeclineReasonEffects {
         this.action$.pipe(
             ofType(declineReasonActions.load),
             switchMap(() =>
-                this.declineReasonService.get('named')
+                this.declineReasonService.getDeclineReasons('named')
                     .pipe(
                         map((reasons: DeclineReason[]) => declineReasonActions.loadSuccess({ reasons })),
                         catchError((errorMsg: any) => of(declineReasonActions.loadFailed({ errorMsg })))

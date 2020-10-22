@@ -77,7 +77,7 @@ export class ProcessDetailComponent implements OnInit {
       startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       description: [null, [Validators.required]],
-      feedback: [null, [Validators.required]],
+      feedback: [null, [Validators.required, Validators.maxLength(10000)]],
       status: [null, [Validators.required]],
       userOwnerId: [null, [Validators.required]],
       userDelegateId: [null, [Validators.required]]
@@ -107,7 +107,7 @@ export class ProcessDetailComponent implements OnInit {
   }
 
   getUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.users = res.sort((a,b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {

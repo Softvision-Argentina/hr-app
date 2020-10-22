@@ -12,7 +12,7 @@ export class CompanyCalendarEffects {
         this.action$.pipe(
             ofType(companyCalendarActions.load),
             switchMap(() =>
-                this.companyCalendarService.get()
+                this.companyCalendarService.getEvents()
                     .pipe(
                         map((events: CompanyCalendar[]) => companyCalendarActions.loadSuccess({ events })),
                         catchError((errorMsg: any) => of(companyCalendarActions.loadFailed({ errorMsg })))

@@ -3,17 +3,31 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AppConfig } from '@shared/utils/app.config';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
+import { tap, catchError, shareReplay, switchMap } from 'rxjs/operators';
 import { Candidate } from '@shared/models/candidate.model';
 import { ICandidate } from '../interfaces/ICandidate.service';
 
+const CACHE_SIZE = 1;
+const REFRESH_INTERVAL = 3600000;
 @Injectable()
 export class CandidateService extends BaseService<Candidate> implements ICandidate {
+  private cache$: Observable<Array<Candidate>>;
 
   constructor(router: Router, config: AppConfig, http: HttpClient) {
     super(router, config, http);
     this.apiUrl += 'Candidates';
+  }
+
+  public getCandidates(): Observable<Candidate[]> {
+    if (!this.cache$) {
+      const timer$ = timer(0, REFRESH_INTERVAL);
+      this.cache$ = timer$.pipe(
+        switchMap(_ => this.get()),
+        shareReplay(CACHE_SIZE)
+      );
+    }
+    return this.cache$;
   }
 
   public idExists(id: number): Observable<any> {
@@ -57,15 +71,15 @@ export class CandidateService extends BaseService<Candidate> implements ICandida
         catchError(this.handleErrors)
       );
   }
-  
-  public bulkAdd(data): Observable<any>{
+
+  public bulkAdd(data): Observable<any> {
     const headers = { Authorization: this.headersWithAuth.get("Authorization") }
-    return this.http.post<any>(this.apiUrl + '/BulkAdd', data , {
+    return this.http.post<any>(this.apiUrl + '/BulkAdd', data, {
       headers: headers
     })
-    .pipe(
-      tap(data => {}),
-      catchError(this.handleErrors)
-    )
+      .pipe(
+        tap(data => { }),
+        catchError(this.handleErrors)
+      )
   }
 }

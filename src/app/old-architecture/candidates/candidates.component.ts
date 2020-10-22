@@ -131,7 +131,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   getUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.users = res.sort((a, b) => ((a.firstName + " " + a.lastName).localeCompare(b.firstName + " " + b.lastName)));
       }, err => {

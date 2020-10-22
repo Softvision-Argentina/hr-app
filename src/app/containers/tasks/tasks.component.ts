@@ -36,8 +36,11 @@ export class TasksComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.facade.appService.startLoading();
     this.facade.appService.removeBgImage();
-    this.tasksSandbox.loadTasks(this.user.id);
-    this.tasksSandbox.tasks$.subscribe(tasks => this.toDoListDisplay = tasks);
+    this.tasksSandbox.loadTasks(this.user.role, this.user.username);
+    this.tasksSandbox.tasks$.subscribe(tasks => {
+      this.toDoListDisplay = tasks;
+      this.toDoList = tasks;
+    });
     this.getUsers();
     this.resetForm();
     this.loading = false;
@@ -59,7 +62,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   getUsers() {
-    this.facade.userService.get()
+    this.facade.userService.getUsers()
       .subscribe(res => {
         this.users = res.sort((a, b) => ((a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName)));
         this.currentUser = res.filter(c => this.isSameTextInLowerCase(c.username, this.user.username))[0];
@@ -313,7 +316,6 @@ export class TasksComponent implements OnInit, OnDestroy {
               }
 
               this.tasksSandbox.add(newTask);
-              this.toDoList.push(newTask);
               this.facade.toastrService.success('Task was successfully created !');
               modal.destroy();
             }

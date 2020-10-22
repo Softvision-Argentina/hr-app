@@ -12,7 +12,7 @@ export class SkillTypesEffects {
         this.action$.pipe(
             ofType(skillTypeActions.load),
             switchMap(() =>
-                this.skillTypeService.get()
+                this.skillTypeService.getSkillTypes()
                     .pipe(
                         map((skillTypes: SkillType[]) => skillTypeActions.loadSuccess({ skillTypes })),
                         catchError((errorMsg: any) => of(skillTypeActions.loadFailed({ errorMsg })))

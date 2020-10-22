@@ -3,10 +3,8 @@
     <nz-table #processTable nzTableLayout="fixed" [nzData]="listOfDisplayData" [nzPageSize]="10" nzShowSizeChanger>
       <thead class="tableHead">
         <tr>
-          <th *ngFor="let column of listOfColumns; trackBy: trackByName"
-          [nzFilters]="column.listOfFilter"
-          [nzFilterFn]="column.filterFn"
-          class="tableHead">
+          <th *ngFor="let column of listOfColumns; trackBy: trackByName" [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn" class="tableHead">
             {{ column.name }}
           </th>
         </tr>
@@ -26,7 +24,7 @@
             <td scope="row">
               {{ getCommunityName(process.candidate.community.id) }}
             </td>
-            <td scope="row" >
+            <td scope="row">
               <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
               {{ getStatus(process.status) }}
             </td>
@@ -44,8 +42,8 @@
               {{  getSeniority(process.seniority) }}
             </td>
             <td *ngIf="process.status !== 9">
-              <i nzTooltipTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon nzType="edit"
-                theme="outline"></i>
+              <i nzTooltipTitle="Edit" (click)="emitEdit(process.id)" style="cursor: pointer;" nz-tooltip nz-icon
+                nzType="edit" theme="outline"></i>
               <nz-divider nzType="vertical"></nz-divider>
               <i nzTooltipTitle="Delete" (click)="emitDelete(process)" style="cursor: pointer;" nz-tooltip nz-icon
                 nzType="delete" theme="outline"></i>
@@ -60,10 +58,9 @@
                 (click)="emitReject(process)"></i>
             </td>
             <td *ngIf="process.status === 9">
-            <i nzTooltipTitle="Reactivate process" nzTooltipContent="topLeft" nz-tooltip style="cursor: pointer;"
-             nz-icon nzType="redo" nzTheme="outline"
-            (click)="emitReactivate(process.id)"></i>
-          </td>
+              <i nzTooltipTitle="Reactivate process" nzTooltipContent="topLeft" nz-tooltip style="cursor: pointer;"
+                nz-icon nzType="redo" nzTheme="outline" (click)="emitReactivate(process.id)"></i>
+            </td>
 
           </tr>
 
@@ -77,20 +74,18 @@
                 {{ process.candidate.name }} {{ process.candidate.lastName }}
               </a>
             </td>
-<<<<<<< HEAD
             <td scope="row">
               {{ getCommunityName(process.candidate.community.id) }}
-=======
-            <td scope="row" *ngIf="process.candidate.profile === null">
+            </td>
+            <td scope="row" *ngIf="process.candidate.profile === null; else profile">
               N/A
             </td>
-            <td scope="row" *ngIf="process.candidate.profile !== null">
-              {{ process.candidate.profile.name }}
->>>>>>> develop
-            </td>
-            <td scope="row">
-              {{ getProfileName(process.candidate.profile?.id) }}
-            </td>
+            <ng-template #profile>
+              <td scope="row">
+                {{ getProfileName(process.candidate.profile?.id) }}
+              </td>
+
+            </ng-template>
             <td scope="row">
               <nz-badge style="margin-right: 3%; margin-top: -2%;"></nz-badge>
               {{ getStatus(process.status) }}

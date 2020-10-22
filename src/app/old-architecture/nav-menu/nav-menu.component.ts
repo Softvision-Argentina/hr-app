@@ -2,10 +2,11 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Candidate } from '@shared/models/candidate.model';
 import { User } from '@shared/models/user.model';
+import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { FacadeService } from '@shared/services/facade.service';
 import { ReferralsService } from '@shared/services/referrals.service';
-import { CandidateInfoService } from '@shared/services/candidate-info.service';
 import { GoogleSigninComponent } from '../login/google-signin.component';
+import { UserService } from '@shared/services/user.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -21,6 +22,7 @@ export class NavMenuComponent implements OnInit {
     private facade: FacadeService,
     private _referralsService: ReferralsService,
     private _candidateInfoService: CandidateInfoService,
+    private userService: UserService
   ) { }
   isExpanded: boolean = false;
   currentUser: User = null;
@@ -44,7 +46,11 @@ export class NavMenuComponent implements OnInit {
       this._referralsService.displayNavAndSideMenu(true);
     }
 
-    this._referralsService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+    this._candidateInfoService._candidateInfoSource.subscribe(info => this.candidateInfo = info);
+  }
+
+  emptyUserCache() {
+    this.userService.emptyCache()
   }
 
   logout() {
@@ -52,6 +58,7 @@ export class NavMenuComponent implements OnInit {
     this._candidateInfoService.sendCandidateInfo(emptyCandidate);
     this._referralsService.startReferralsModal(false);
     this.google.logout();
+    this.emptyUserCache();
   }
 
   showPreferencesModal(modalContent: TemplateRef<{}>) {

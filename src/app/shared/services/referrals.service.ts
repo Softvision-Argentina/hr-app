@@ -3,13 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AppConfig } from '@shared/utils/app.config';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, timer } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Candidate } from '@shared/models/candidate.model';
 import { ICandidate } from '../interfaces/ICandidate.service';
+import { shareReplay, switchMap } from 'rxjs/operators';
 
+const CACHE_SIZE = 1;
+const REFRESH_INTERVAL = 300000;
 @Injectable()
-export class ReferralsService extends BaseService<Candidate> implements ICandidate{
+export class ReferralsService extends BaseService<Candidate> implements ICandidate {
+  private cache$: Observable<any>;
   currentReferralList: Candidate[] = [];
   emptyReferredInfo: Candidate;
   isReferral = false;
@@ -50,7 +54,7 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
         catchError(this.handleErrors)
       );
   }
-  
+
   public idExists(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/exists/' + id, {
       headers: this.headersWithAuth
@@ -123,21 +127,27 @@ export class ReferralsService extends BaseService<Candidate> implements ICandida
       );
   }
 
-  public get(): Observable<any>{
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    return this.http.get(this.apiUrl + `/${currentUser.id}`)
-      .pipe(
-        tap(res => this.data.next(res.map(e => e.candidate)))
+  public get(): Observable<any> {
+    if (!this.cache$) {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const timer$ = timer(0, REFRESH_INTERVAL);
+      this.cache$ = timer$.pipe(
+        switchMap(_ => {
+          return this.http.get(this.apiUrl + `/${currentUser.id}`);
+        }),
+        shareReplay(CACHE_SIZE)
       );
+    }
+    return this.cache$;
   }
 
   public delete(referralId: number): Observable<any> {
     // Should we keep using candidate endpoint?
-    const referralApi  = this.apiUrl.replace('Referrals', `Candidates/${referralId}`);
+    const referralApi = this.apiUrl.replace('Referrals', `Candidates/${referralId}`);
     return this.http.delete<any>(referralApi)
-    .pipe(
-      tap(res => this.candidateDelete.next(referralId))
-    );
+      .pipe(
+        tap(res => this.candidateDelete.next(referralId))
+      );
   }
   
   public setIsReferral() {
