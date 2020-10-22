@@ -108,7 +108,8 @@
     </div>
     <div ngxSlickItem>
       <client-stage [_users]="users" [clientStage]="emptyProcess.clientStage"
-        [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async" [readdressReasonList]="processesSandbox.readdressReasons$ | async"
+      [readdressReasonTypeList]="processesSandbox.readdressReasonTypes$ | async" [readdressReasonList]="processesSandbox.readdressReasons$ | async"
+        [_processInterviews]="emptyProcess.clientStage.interviews"
         [processSaveEvent]="processesSandbox.currentProcessId$"></client-stage>
     </div>
     <div ngxSlickItem>

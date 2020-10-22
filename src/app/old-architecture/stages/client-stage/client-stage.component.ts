@@ -30,9 +30,14 @@ export class ClientStageComponent implements OnInit {
     this._users = value;
   }
 
-
   @Input()
-  processSaveEvent: Observable<number>;
+  private _processInterviews: Interview[];
+  public get processInterviews(): Interview[] {
+    return this._processInterviews;
+  }
+  public set processInterviews(value: Interview[]) {
+    this._processInterviews = value;
+  }
 
   clientForm: FormGroup = this.fb.group({
     id: [0],
@@ -113,20 +118,9 @@ export class ClientStageComponent implements OnInit {
       this.readdressStatus.id = this.clientStage.readdressStatus.id
     }
 
-    this.processSaveSubscription = this.processSaveEvent.subscribe((res) => this.saveChangesToInterviewListInDatabase(res))
     this.changeFormStatus(false);
-    this.getInterviews();
+    this.getProcessInterviews();
     if (this.clientStage) { this.fillForm(this.clientStage); }
-  }
-
-  saveChangesToInterviewListInDatabase(processId: number): void {
-    if (processId){
-      this.facade.processService.getByID(processId)
-        .subscribe(res => {
-          this.facade.InterviewSevice.updateMany(res.clientStage.id, this.interviews).subscribe();
-          this.processSaveSubscription.unsubscribe();
-        });
-    }
   }
 
   getFormControl(name: string): AbstractControl {
@@ -294,15 +288,12 @@ export class ClientStageComponent implements OnInit {
 
       this.updateEditCache();
     }
-  }
+  }  
 
-  getInterviews() {
-    this.facade.InterviewSevice.get()
-      .subscribe(res => {
-        this.editInterviewCounter = this.interviews.length
-        this.interviews = res.filter(i => i.clientStageId === this.clientStage.id)
-        this.updateEditCache();
-      })
+  getProcessInterviews() {
+    this.editInterviewCounter = this.processInterviews.length
+    this.interviews = this.processInterviews
+    this.updateEditCache();
   }
 
   showDeleteConfirmDialog(interviewId: number) {
