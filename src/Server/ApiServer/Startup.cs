@@ -119,6 +119,8 @@
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSignalR();
+
             // Add framework services.
             services.AddMvc()
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -215,12 +217,15 @@
                 migrator.Migrate(this.DatabaseConfigurations);
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<IviHub>("api/hub");
             });
         }
     }
